@@ -15,7 +15,7 @@ exports.get = (path, onEnd) => {
 
   var body = '';
 
-  console.log(getOptions(path));
+  //console.log(getOptions(path));
 
   var req = http.request(getOptions(path), function(res) {
 

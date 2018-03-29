@@ -1,0 +1,45 @@
+<html>
+
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/charts.css">
+  </head>
+
+
+  <body>
+    <% include menu %>
+
+      <div class="main-content ">
+
+        <div class="chart-item shadow">
+
+          <div class="chart-holder">
+
+            <% Object.keys(data).forEach(function(key,index) {%>
+
+              <div class="chart-bar-group">
+                <div class="avatar-holder">
+                  <img class="avatar-img circle shadow" src="img/avatar/<%=key%>.jpg" onerror="this.src='img/avatar/default.jpg';" />
+                  <span class="label shadow avatar-name"><%=data[key].userName%></span>
+                </div>
+
+                <div>
+
+                  <div class="bar" style=" background-color: red; height:">
+
+                  </div>
+
+                </div>
+              </div>
+
+
+              <% }); %>
+
+          </div>
+        </div>
+
+      </div>
+
+      <span><%=JSON.stringify(data)%></span>
+  </body>
+
+</html>

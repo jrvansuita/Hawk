@@ -1,0 +1,5 @@
+{"userId":149599067,"date":{"$$date":1522281600000},"type":"invoice","total":2000.3700000000001,"count":17,"_id":"JwRAMxTr6Gz41DVi"}
+{"userId":220296624,"date":{"$$date":1522281600000},"type":"invoice","total":1641.03,"count":16,"_id":"bXsZYZAUbqII1kNW"}
+{"userId":206514016,"date":{"$$date":1522281600000},"type":"invoice","total":4700.089999999999,"count":28,"_id":"uoWje2njsaaQ9gbn"}
+{"userId":143584529,"date":{"$$date":1522281600000},"type":"invoice","total":2711.0299999999997,"count":20,"_id":"usSxYuC97dHirbQG"}
+{"$$indexCreated":{"fieldName":"date","unique":false,"sparse":false}}

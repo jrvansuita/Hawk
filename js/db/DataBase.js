@@ -1,7 +1,10 @@
 var DataStore = require('nedb');
 
+
 function getCollection(name, indexes) {
-  var path = __dirname + "/.db/" + name;
+  var path = __appDir + "/.db/" + name;
+
+  console.log(path);
 
   var db = new DataStore({
     filename: path,
@@ -18,14 +21,17 @@ function getCollection(name, indexes) {
   return db;
 }
 
-const salesDb = getSalesDb();
+global.salesDb = getCollection('sales.data', [{
+  fieldName: 'number',
+  unique: true
+}]);
 
-function getSalesDb() {
-  return getCollection('sales.data');
-}
+global.usersDb = getCollection('users.data', [{
+  fieldName: 'id',
+  unique: true
+}]);
 
-module.exports = {
-  sales: function() {
-    return salesDb;
-  }
-};
+global.daysDb = getCollection('days.data', [{
+  fieldName: 'date',
+  unique: false
+}]);

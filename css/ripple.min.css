@@ -1,0 +1,78 @@
+/* Material Ripple effect */
+
+.material-ripple {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  user-select: none;
+}
+
+.material-ripple>span {
+  /* static positioned elements appear behind absolutely positioned siblings (.material-ink in this case)
+  so we will make the elements relatively positioned to bring them above .material-ink */
+  position: relative;
+  display: block;
+  padding: 15px 25px;
+}
+
+.red-ripple>.material-ink {
+  background-color: red;
+}
+
+/*
+.ink styles - the elements which will create the ripple effect.
+The size and position of these elements will be set by the JS code.
+Initially these elements will be scaled down to 0% and later animated to large fading circles on user click.
+*/
+
+.material-ink {
+  position: absolute;
+  background: #bdc3c7;
+  border-radius: 50%;
+  transform: scale(0);
+  opacity: 0.4;
+}
+
+/* animation effect */
+
+.material-ink.animate {
+  animation: ripple 0.6s linear;
+}
+
+@keyframes ripple {
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+/* Material Design Card and Box Shadow by Samuel Thornton
+https://codepen.io/sdthornton/pen/wBZdXq */
+
+.material-card {
+  position: relative;
+  left: 50%;
+  width: 180px;
+  margin-left: -90px;
+  margin-bottom: 20px;
+  background: #fff;
+  border-radius: 2px;
+  text-align: left;
+}
+
+.material-shadow-1 {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.2s ease-in-out;
+}
+
+.material-hover:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+a {
+  color: currentColor;
+}
+
+a>span {
+  color: #CD3632;
+}

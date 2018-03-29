@@ -1,0 +1,53 @@
+<html>
+
+  <head>
+    <link rel="stylesheet" type="text/css" href="css/home.css">
+    <link rel="stylesheet" type="text/css" href="css/general.css">
+    <link rel="stylesheet" type="text/css" href="css/ripple.min.css">
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/visual/ripple.min.js"></script>
+
+
+
+    <script>
+      $(document).ready(function() {
+        $('.menu-item').click(function() {
+          setTimeout(() => {
+            window.location.href = $(this).attr('href');
+          }, 200);
+        })
+      });
+    </script>
+  </head>
+
+  <body>
+
+    <nav id="main-menu">
+
+      <img src="img/icon/hawk.png" id="logo" />
+
+      <ul id="nav">
+        <li class="menu-item material-ripple" href="picking">
+          <div class="button title">
+            Picking
+          </div>
+
+        </li>
+        <li class="menu-item material-ripple" href="invoice">
+          <div class="button title">
+            Faturamento
+          </div>
+        </li>
+        <li class="menu-item material-ripple" href="outros">
+          <div class="button title">
+            Outros
+          </div>
+        </li>
+      </ul>
+    </nav>
+
+
+  </body>
+
+</html>

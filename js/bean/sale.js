@@ -17,7 +17,7 @@ module.exports = class Sale {
   }
 
   setUserId(userId) {
-    this.userId = userId;
+    this.userId = parseInt(userId);
   }
 
   getUserId() {
@@ -25,20 +25,14 @@ module.exports = class Sale {
   }
 
   setValue(value) {
-    this.value = value;
+    this.value = parseFloat(value);
   }
 
   getValue() {
     return this.value;
   }
 
-  setProductsCount() {
-    this.productsCount = productsCount;
-  }
 
-  getProductsCount() {
-    return this.productsCount;
-  }
 
 
 

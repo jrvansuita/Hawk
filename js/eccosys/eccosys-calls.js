@@ -8,11 +8,15 @@ module.exports = {
     var query = new Query('$');
 
     query.add('dataConsiderada', 'dataFaturamento');
-    query.addDate('from', from);
-    query.addDate('to', to);
+    query.addDate('fromDate', from);
+    query.addDate('toDate', to);
     query.add('count', page_count);
     query.add('offset', page_count * page);
 
     Eccosys.get('pedidos' + query.build(), callback);
+  },
+
+  getSale(number, callback) {
+    Eccosys.get('pedidos/' + number, callback);
   }
 };
