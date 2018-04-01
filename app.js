@@ -20,11 +20,13 @@ app.use('/js', express.static('js'));
 // });
 
 app.get('/invoice', (req, res) => {
-  require('./js/provider/InvoicesProvider.js').get(new Date(), new Date(), function(data) {
+
+  require('./js/builder/InvoiceChartBuilder.js').getLastMonth(function(chart) {
     res.render('invoice', {
-      data: data
+      chart: chart
     });
   });
+
 });
 
 

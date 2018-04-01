@@ -10,27 +10,38 @@
 
       <div class="main-content ">
 
-        <div class="chart-item shadow">
+        <div class="chart-group shadow">
+
+          <label class="chart-title"><%=chart.title%></label>
+
+
+          <label class="chart-label"><%=chart.label%></label>
 
           <div class="chart-holder">
 
-            <% Object.keys(data).forEach(function(key,index) {%>
+            <% chart.getItems().forEach(function(item) {%>
 
               <div class="chart-bar-group">
-                <div class="avatar-holder">
-                  <img class="avatar-img circle shadow" src="img/avatar/<%=key%>.jpg" onerror="this.src='img/avatar/default.jpg';" />
-                  <span class="label shadow avatar-name"><%=data[key].userName%></span>
-                </div>
+                <div class="inner-bar-group">
+                  <div class="avatar-holder">
+                    <img class="avatar-img circle shadow" src="img/avatar/<%=item.imgName%>.jpg" onerror="this.src='img/avatar/default.jpg';" />
+                    <span class="label shadow avatar-name"><%=item.label%></span>
+                  </div>
 
-                <div>
+                  <div class="bars-holder">
+                    <% item.getBars().forEach(function(bar){%>
+                      <div class="bar shadow grow-bar" data-height="<%=bar.getHeight()%>">
 
-                  <div class="bar" style=" background-color: red; height:">
+                        <span class="bar-value"><%=bar.getDisplayValue();%></span>
+
+                      </div>
+
+                      <%}); %>
 
                   </div>
 
                 </div>
               </div>
-
 
               <% }); %>
 
@@ -39,7 +50,19 @@
 
       </div>
 
-      <span><%=JSON.stringify(data)%></span>
+
   </body>
+
+
+  <script>
+    $(document).ready(function() {
+
+      $('.grow-bar').each(function() {
+        $(this).animate({
+          height: $(this).attr('data-height')
+        }, 600);
+      });
+    });
+  </script>
 
 </html>
