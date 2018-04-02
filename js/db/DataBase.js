@@ -4,7 +4,7 @@ var DataStore = require('nedb');
 function getCollection(name, indexes) {
   var path = __appDir + "/.db/" + name;
 
-  console.log(path);
+  //console.log(path);
 
   var db = new DataStore({
     filename: path,

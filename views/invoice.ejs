@@ -10,46 +10,47 @@
 
       <div class="main-content ">
 
-        <div class="chart-group shadow">
+        <% charts.forEach(function(chart) {%>
 
-          <label class="chart-title"><%=chart.title%></label>
+          <div class="chart-group shadow">
+
+            <label class="chart-title"><%=chart.title%></label>
 
 
-          <label class="chart-label"><%=chart.label%></label>
+            <label class="chart-label"><%=chart.label%></label>
 
-          <div class="chart-holder">
+            <div class="chart-holder">
 
-            <% chart.getItems().forEach(function(item) {%>
+              <% chart.getItems().forEach(function(item) {%>
 
-              <div class="chart-bar-group">
-                <div class="inner-bar-group">
-                  <div class="avatar-holder">
-                    <img class="avatar-img circle shadow" src="img/avatar/<%=item.imgName%>.jpg" onerror="this.src='img/avatar/default.jpg';" />
-                    <span class="label shadow avatar-name"><%=item.label%></span>
+                <div class="chart-bar-group">
+                  <div class="inner-bar-group">
+                    <div class="avatar-holder">
+                      <img class="avatar-img circle shadow" src="img/avatar/<%=item.imgName%>.jpg" onerror="this.src='img/avatar/default.jpg';" />
+                      <span class="label shadow avatar-name"><%=item.label%></span>
+                    </div>
+
+                    <div class="bars-holder">
+                      <% item.getBars().forEach(function(bar){%>
+                        <div class="bar shadow grow-bar" data-height="<%=bar.getHeight()%>">
+
+                          <span class="bar-value"><%=bar.getDisplayValue();%></span>
+
+                        </div>
+
+                        <%}); %>
+
+                    </div>
+
                   </div>
-
-                  <div class="bars-holder">
-                    <% item.getBars().forEach(function(bar){%>
-                      <div class="bar shadow grow-bar" data-height="<%=bar.getHeight()%>">
-
-                        <span class="bar-value"><%=bar.getDisplayValue();%></span>
-
-                      </div>
-
-                      <%}); %>
-
-                  </div>
-
                 </div>
-              </div>
 
-              <% }); %>
+                <% }); %>
 
+            </div>
           </div>
-        </div>
-
+          <% }); %>
       </div>
-
 
   </body>
 

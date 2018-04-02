@@ -6,20 +6,18 @@ var Day = require('../bean/day.js');
 module.exports = {
 
   run() {
-    teste();
+    salesDb.find({
+      synced: {
+        $exists: false
+      }
+    }, function(err, docs) {
+
+      console.log('--- Updating ' + docs.length + ' rows ---');
+      execute(docs, 0);
+    });
   }
 
 };
-
-function teste() {
-  salesDb.find({
-    synced: {
-      $exists: false
-    }
-  }, function(err, docs) {
-    execute(docs, 0);
-  });
-}
 
 
 function execute(list, index) {
@@ -45,6 +43,16 @@ function store(sale, callback) {
       insert(sale, callback);
     }
   });
+
+  salesDb.update({
+    number: sale.number
+  }, {
+    $set: {
+      synced: true
+    }
+  }, {
+    multi: false
+  }, function() {});
 }
 
 

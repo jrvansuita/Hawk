@@ -9,7 +9,7 @@ app.use('/css', express.static('css'));
 app.use('/img', express.static('img'));
 app.use('/js', express.static('js'));
 
-//require('./js/jobs/JobDays.js').run();
+
 
 // app.get('/', (req, res) => {
 //   res.send('This is the home');
@@ -21,9 +21,9 @@ app.use('/js', express.static('js'));
 
 app.get('/invoice', (req, res) => {
 
-  require('./js/builder/InvoiceChartBuilder.js').getLastMonth(function(chart) {
+  require('./js/builder/InvoiceChartBuilder.js').build(function(charts) {
     res.render('invoice', {
-      chart: chart
+      charts: charts
     });
   });
 

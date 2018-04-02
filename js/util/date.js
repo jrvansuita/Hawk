@@ -7,6 +7,27 @@ module.exports = {
     return (d <= 9 ? '0' + d : d) + '/' + (m <= 9 ? '0' + m : m) + '/' + y;
   },
 
+  today() {
+    return new Date();
+  },
+
+  yesterday() {
+    var d = new Date();
+    d.setDate(d.getDate() - 1);
+    return d;
+  },
+
+  firstDayCurrentWeek() {
+    var d = new Date();
+    return new Date(d.setDate(d.getDate() - d.getDay()));
+  },
+
+  lastDayCurrentWeek() {
+    var d = this.firstDayCurrentWeek();
+    d.setDate(7);
+    return d;
+  },
+
   firstDayOfMonth() {
     return new Date(Date.UTC(getCurrentYear(), getCurrentMonth(), 1));
   },
@@ -21,7 +42,11 @@ module.exports = {
 
   lastDayOfLastMonth() {
     return new Date(Date.UTC(getCurrentYear(), getCurrentMonth(), 0, 23));
-  }
+  },
+
+  firstDayOfYear() {
+    return new Date(Date.UTC(getCurrentYear(), 0, 1));
+  },
 };
 
 

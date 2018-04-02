@@ -2,23 +2,32 @@ var EccosysCalls = require('../eccosys/eccosys-calls.js');
 var Sale = require('../bean/sale.js');
 var User = require('../bean/user.js');
 
-
-
 var from;
 var to;
+var localUsers = {};
 
 module.exports = {
 
-  run() {
+  run(callback) {
 
-    this.from = new Date();
-    this.to = Date();
+    loadUsers();
 
-    handleSalePaging(0, () => {
-      console.log('---  Finished --- ');
+    //Find the last sale row date to set as from date sync
+    salesDb.findOne({}).sort({
+      _id: -1
+    }).limit(1).exec(function(err, doc) {
+      from = doc ? doc.billingDate : Dat.firstDayOfYear();
+      to = new Date();
+
+      console.log('---  From ' + Dat.format(from) + ' To ' + Dat.format(to) + ' ---');
+
+      handleSalePaging(0, () => {
+        if (callback)
+          callback();
+        console.log('---  Sale Sync Job Finished --- ');
+      });
     });
   }
-
 };
 
 function handleSalePaging(page, callback) {
@@ -26,10 +35,10 @@ function handleSalePaging(page, callback) {
     var list = JSON.parse(data);
 
     if (list instanceof Array) {
-      processSalesPage(list, 0, () => {
+      processSalesPage(list, -1, () => {
         page++;
 
-        console.log('--- ' + list.length + ' Sales were stored on page ' + page + ' --- ');
+        //console.log('--- ' + list.length + ' Sales were stored on page ' + page + ' --- ');
         handleSalePaging(page, callback);
       });
     } else {
@@ -40,29 +49,45 @@ function handleSalePaging(page, callback) {
 }
 
 function processSalesPage(list, index, callback) {
-  var item = list[index];
+  index++;
 
-  EccosysCalls.getSale(item.numeroPedido, function(pedido) {
-    handleSale(pedido);
+  if (index < list.length) {
 
-    index++;
+    var item = list[index];
 
-    if (index < list.length) {
-      processSalesPage(list, index, callback);
-    } else {
-      callback();
-    }
-  });
+    salesDb.findOne({
+      number: item.numeroPedido
+    }, function(err, doc) {
+      //If there isn't a sale stored on local db
+      if (!doc) {
+        //To to Eccosys and find the sale
+        EccosysCalls.getSale(item.numeroPedido, function(pedido) {
+          handleSale(pedido);
+          processSalesPage(list, index, callback);
+        });
+      } else {
+        processSalesPage(list, index, callback);
+      }
+
+    });
+  } else {
+    callback();
+  }
 }
 
 function handleSale(pedido) {
   pedido = JSON.parse(pedido)[0];
 
   var user = buildUser(pedido);
-  var sale = buildSale(user.id, pedido);
 
-  storeUser(user);
-  storeSale(sale);
+  if (user) {
+    var sale = buildSale(user.id, pedido);
+
+    if (localUsers[user.id] === undefined)
+      storeUser(user);
+
+    storeSale(sale);
+  }
 }
 
 function buildSale(idUser, pedido) {
@@ -86,7 +111,7 @@ function storeSale(sale) {
 
 function buildUser(pedido) {
   var actions = pedido._Ocorrencias.filter(item => item.descricao.indexOf('Nota Fiscal Gerada') > -1)[0];
-  return new User(actions.idProprietario, actions.nomeProprietario);
+  return !actions ? undefined : new User(actions.idProprietario, actions.nomeProprietario);
 }
 
 function storeUser(user) {
@@ -95,4 +120,15 @@ function storeUser(user) {
   }, user, {
     upsert: true
   });
+}
+
+function loadUsers() {
+  if (Object.keys(localUsers).length === 0) {
+
+    usersDb.find({}, function(err, docs) {
+      docs.forEach(function(item) {
+        localUsers[item.id] = item.name;
+      });
+    });
+  }
 }

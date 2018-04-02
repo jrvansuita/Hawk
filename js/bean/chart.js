@@ -61,6 +61,7 @@ class ChartItem {
 }
 
 const maxBarHeight = 200; //Pixels
+const minBarHeight = 30; //Pixels
 
 class Bar {
 
@@ -75,9 +76,9 @@ class Bar {
 
   getHeight() {
     var perc = (this.value * 100) / this.getMaxBarValue();
-    var hei = (perc * maxBarHeight) / 100;
+    var hei = (perc * (maxBarHeight * this.heightPerc)) / 100;
 
-    return hei * this.heightPerc;
+    return hei < minBarHeight ? minBarHeight : hei;
   }
 
   handlMax(name, value) {
