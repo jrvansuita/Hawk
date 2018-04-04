@@ -7,6 +7,7 @@ global.Util = require('../util/util.js');
 global.Num = require('../util/number.js');
 global.Dat = require('../util/date.js');
 global.Str = require('../util/string.js');
+global.Const = require('../const/const.js');
 
 
 require('../init/prototypes.js');

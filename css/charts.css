@@ -4,22 +4,39 @@
   margin: 8px;
 }
 
-.chart-title {
-  display: block;
+.title-holder {
+  background-color: #009587;
   padding: 8px 8px 8px 8px;
   border-top-left-radius: 4px !important;
   border-top-right-radius: 4px !important;
-  background-color: #009587;
+  display: block;
+}
+
+.chart-title {
+  display: inline-block;
+  margin-right: 10px;
   font-size: 13px;
   text-transform: uppercase;
   color: white;
 }
 
 .chart-label {
+  display: inline-block;
+  float: right;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: white;
+}
+
+.chart-hint {
+  position: relative;
+  float: left;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 11px;
+  text-transform: uppercase;
   color: gray;
-  padding: 4px 6px 4px 6px;
-  font-size: 12px;
-  display: block;
 }
 
 .avatar-name {

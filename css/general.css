@@ -26,6 +26,7 @@ html, body {
   display: block;
   position: relative;
   margin: 5px;
+  padding-top: 50px;
 }
 
 .shadow {

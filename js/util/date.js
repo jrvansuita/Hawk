@@ -7,6 +7,14 @@ module.exports = {
     return (d <= 9 ? '0' + d : d) + '/' + (m <= 9 ? '0' + m : m) + '/' + y;
   },
 
+  print(from, to) {
+    if (Math.ceil((to.getTime() - from.getTime()) / (1000 * 3600 * 24)) > 1) {
+      return Const.from_to.format(this.format(from), this.format(to));
+    } else {
+      return this.format(from);
+    }
+  },
+
   today() {
     return new Date(Date.UTC(getCurrentYear(), getCurrentMonth(), getCurrentDay()));
   },

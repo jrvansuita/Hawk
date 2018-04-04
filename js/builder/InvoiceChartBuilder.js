@@ -1,6 +1,6 @@
 var InvoicesProvider = require('../provider/InvoicesProvider.js');
 var Chart = require('../bean/chart.js');
-var Const = require('../const/const.js');
+
 
 var charts;
 var index;
@@ -63,7 +63,7 @@ function buildLastMonth() {
 function buildChart(from, to, title) {
   var callBuilder = function(data) {
 
-    chart = new Chart(title, Const.from_to.format(Dat.format(from), Dat.format(to)));
+    chart = new Chart(title, Dat.print(from, to));
 
     Object.keys(data).forEach(function(key, index) {
       var dataItem = data[key];
