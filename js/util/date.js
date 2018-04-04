@@ -8,28 +8,41 @@ module.exports = {
   },
 
   today() {
-    return new Date();
+    return new Date(Date.UTC(getCurrentYear(), getCurrentMonth(), getCurrentDay()));
   },
 
   yesterday() {
-    var d = new Date();
+    var d = this.today();
     d.setDate(d.getDate() - 1);
     return d;
   },
 
   firstDayCurrentWeek() {
-    var d = new Date();
-    return new Date(d.setDate(d.getDate() - d.getDay()));
+    var today = this.today();
+    today.setDate(today.getDate() - today.getDay() - 1);
+    return today;
   },
 
   lastDayCurrentWeek() {
     var d = this.firstDayCurrentWeek();
-    d.setDate(7);
+    d.setDate(d.getDate() + 6);
     return d;
   },
 
+  firstDayLastWeek() {
+    var oneWeekAgo = this.firstDayCurrentWeek();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+    return oneWeekAgo;
+  },
+
+  lastDayLastWeek() {
+    var lastWeek = this.firstDayLastWeek();
+    lastWeek.setDate(lastWeek.getDate() + 6);
+    return lastWeek;
+  },
+
   firstDayOfMonth() {
-    return new Date(Date.UTC(getCurrentYear(), getCurrentMonth(), 1));
+    return new Date(Date.UTC(getCurrentYear(), getCurrentMonth(), 1, 0));
   },
 
   lastDayOfMonth() {
@@ -37,7 +50,7 @@ module.exports = {
   },
 
   firstDayOfLastMonth() {
-    return new Date(Date.UTC(getCurrentYear(), getCurrentMonth() - 1, 1));
+    return new Date(Date.UTC(getCurrentYear(), getCurrentMonth() - 1, 1, 0));
   },
 
   lastDayOfLastMonth() {
@@ -45,9 +58,10 @@ module.exports = {
   },
 
   firstDayOfYear() {
-    return new Date(Date.UTC(getCurrentYear(), 0, 1));
+    return new Date(Date.UTC(getCurrentYear(), 0, 1, 0));
   },
 };
+
 
 
 function getCurrentYear() {
@@ -56,4 +70,8 @@ function getCurrentYear() {
 
 function getCurrentMonth() {
   return new Date().getMonth();
+}
+
+function getCurrentDay() {
+  return new Date().getDate();
 }

@@ -1,6 +1,7 @@
 .chart-group {
   background-color: white;
-  display: inline-block;
+  display: inline-table;
+  margin: 8px;
 }
 
 .chart-title {
@@ -43,20 +44,23 @@
 
 .chart-holder {
   position: relative;
-  height: 260px;
+  padding: 5px;
+  height: fit-content;
+  min-height: 290px;
+  max-height: 290px;
+  min-width: 340px;
+}
+
+.chart-bar-holder {
+  display: inline-table;
+  margin-left: 5px;
+  margin-right: 5px;
+  height: -webkit-fill-available;
 }
 
 .chart-bar-group {
-  display: inline-block;
-  margin-left: 8px;
-  margin-right: 14px;
-  min-width: 60px;
-}
-
-.inner-bar-group {
-  position: absolute;
-  padding-bottom: 8px;
-  bottom: 0;
+  display: table-cell;
+  vertical-align: bottom;
 }
 
 .bar {

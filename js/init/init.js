@@ -11,4 +11,4 @@ global.Str = require('../util/string.js');
 
 require('../init/prototypes.js');
 
-require('../jobs/Jobs.js').schedule();
+require('../jobs/Jobs.js').schedule(false);

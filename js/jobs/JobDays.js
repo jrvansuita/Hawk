@@ -12,8 +12,10 @@ module.exports = {
       }
     }, function(err, docs) {
 
-      console.log('--- Updating ' + docs.length + ' rows ---');
-      execute(docs, 0);
+      if (docs.length > 0) {
+        console.log('--- Updating ' + docs.length + ' rows ---');
+        execute(docs, 0);
+      }
     });
   }
 

@@ -1,55 +1,62 @@
-var onFinished;
-var data;
+module.exports = class InvoicesProvider {
 
-module.exports = {
-  get: function(from, to, callback) {
-    data = {};
+  constructor(callback) {
+    this.data = {};
+    this.callback = callback;
+  }
 
-    onFinished = () => {
-      callback(data);
+  onFinished() {
+    this.callback(this.data);
+  }
+
+  get(from, to) {
+    var _self = this;
+
+    daysDb.find(this.buildQuery(from, to), (err, items) => {
+      _self.handle(items, 0);
+    });
+  }
+
+
+  buildQuery(from, to) {
+    return {
+      'date': {
+        $gte: from.withoutTime(),
+        $lte: to.withoutTime()
+      }
     };
 
-    daysDb.find(buildQuery(from, to), (err, docs) => {
-      handle(docs, 0, onFinished);
-    });
+  }
+
+  handle(docs, index) {
+    if (docs.length > 0) {
+      var item = docs[index];
+
+      var _self = this;
+
+      usersDb.findOne({
+        id: item.userId
+      }, function(err, doc) {
+        item.userName = doc.name;
+        _self.handleItem(item);
+
+        if (index < docs.length - 1) {
+          _self.handle(docs, ++index);
+        } else {
+          _self.onFinished();
+        }
+      });
+    } else {
+      this.onFinished();
+    }
+  }
+
+  handleItem(item) {
+    if (this.data[item.userId]) {
+      this.data[item.userId].total += item.total;
+      this.data[item.userId].count += item.count;
+    } else {
+      this.data[item.userId] = item;
+    }
   }
 };
-
-function buildQuery(from, to) {
-  return {
-    'date': {
-      $gte: from.withoutTime(),
-      $lte: to.withoutTime()
-    }
-  };
-}
-
-function handle(docs, index, callback) {
-  if (docs.length > 0) {
-    var item = docs[index];
-
-    usersDb.findOne({
-      id: item.userId
-    }, function(err, doc) {
-      item.userName = doc.name;
-      handleItem(item);
-
-      if (index < docs.length - 1) {
-        handle(docs, ++index, callback);
-      } else {
-        callback();
-      }
-    });
-  } else {
-    callback();
-  }
-}
-
-function handleItem(item) {
-  if (data[item.userId]) {
-    data[item.userId].total += item.total;
-    data[item.userId].count += item.count;
-  } else {
-    data[item.userId] = item;
-  }
-}

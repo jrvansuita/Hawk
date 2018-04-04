@@ -2,6 +2,7 @@
 
   <head>
     <link rel="stylesheet" type="text/css" href="css/charts.css">
+    <script type="text/javascript" src="js/visual/img-loader.js"></script>
   </head>
 
 
@@ -21,31 +22,39 @@
 
             <div class="chart-holder">
 
-              <% chart.getItems().forEach(function(item) {%>
 
-                <div class="chart-bar-group">
-                  <div class="inner-bar-group">
-                    <div class="avatar-holder">
-                      <img class="avatar-img circle shadow" src="img/avatar/<%=item.imgName%>.jpg" onerror="this.src='img/avatar/default.jpg';" />
-                      <span class="label shadow avatar-name"><%=item.label%></span>
+              <% if (chart.getItems().length === 0){
+               %>
+                <label class="chart-label">Sem dados para apresentar.</label>
+
+                <% }else{
+
+              chart.getItems().forEach(function(item) {%>
+                  <div class="chart-bar-holder">
+                    <div class="chart-bar-group">
+
+
+                      <div class="avatar-holder">
+                        <img class="avatar-img circle shadow" data-src="img/avatar/<%=item.imgName%>.jpg" src="img/avatar/default.jpg" />
+                        <span class="label shadow avatar-name"><%=item.label%></span>
+                      </div>
+
+                      <div class="bars-holder">
+                        <% item.getBars().forEach(function(bar){%>
+                          <div class="bar shadow grow-bar" data-height="<%=bar.getHeight()%>">
+
+                            <span class="bar-value"><%=bar.getDisplayValue();%></span>
+
+                          </div>
+
+                          <%}); %>
+
+                      </div>
+
+
                     </div>
-
-                    <div class="bars-holder">
-                      <% item.getBars().forEach(function(bar){%>
-                        <div class="bar shadow grow-bar" data-height="<%=bar.getHeight()%>">
-
-                          <span class="bar-value"><%=bar.getDisplayValue();%></span>
-
-                        </div>
-
-                        <%}); %>
-
-                    </div>
-
                   </div>
-                </div>
-
-                <% }); %>
+                  <% }); }%>
 
             </div>
           </div>
@@ -58,11 +67,19 @@
   <script>
     $(document).ready(function() {
 
+      loadImages('avatar-img', 'data-src');
+
+
+
       $('.grow-bar').each(function() {
+        //$(this).height($(this).attr('data-height'));
+
         $(this).animate({
           height: $(this).attr('data-height')
         }, 600);
       });
+
+
     });
   </script>
 
