@@ -15,7 +15,10 @@ module.exports = {
     if (runNow)
       runJobs();
 
+    //teste();
+
   }
+
 };
 
 function runJobs() {
@@ -25,3 +28,26 @@ function runJobs() {
     require('../jobs/JobDays.js').run();
   });
 }
+
+// function teste() {
+//   salesDb.find({
+//     'billingDate': {
+//       $gte: Dat.today().withoutTime(),
+//       $lte: Dat.today().withoutTime()
+//     }
+//   }, function(err, docs) {
+//     var s = '';
+//     docs.forEach(function(item) {
+//       s += item.number + ';' + item.value + '\n';
+//     });
+//
+//     var fs = require('fs');
+//     fs.writeFile(__dirname + "/test.csv", s, function(err) {
+//       if (err) {
+//         return console.log(err);
+//       }
+//
+//       console.log("The file was saved!");
+//     });
+//   });
+// }

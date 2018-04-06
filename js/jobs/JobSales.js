@@ -14,9 +14,9 @@ module.exports = {
 
     //Find the last sale row date to set as from date sync
     salesDb.findOne({}).sort({
-      _id: -1
+      billingDate: -1
     }).limit(1).exec(function(err, doc) {
-      from = doc ? doc.billingDate : Dat.firstDayOfYear();
+      from = doc ? doc.billingDate : Dat.firstDayOfMonth();
       to = new Date();
 
       console.log('---  From ' + Dat.format(from) + ' To ' + Dat.format(to) + ' ---');
@@ -120,6 +120,8 @@ function storeUser(user) {
   }, user, {
     upsert: true
   });
+
+  localUsers[user.id] = user.name;
 }
 
 function loadUsers() {

@@ -1,86 +1,131 @@
 <html>
+  <% include menu %>
 
-  <head>
-    <link rel="stylesheet" type="text/css" href="css/charts.css">
-    <script type="text/javascript" src="js/visual/img-loader.js"></script>
-  </head>
+    <head>
+      <link rel="stylesheet" type="text/css" href="/css/charts.css">
+      <script type="text/javascript" src="/js/visual/image-loader.js"></script>
+      <script type="text/javascript" src="/js/visual/date-picker.js"></script>
+    </head>
 
 
-  <body>
-    <% include menu %>
+    <body>
+
+
 
       <div class="main-content">
 
-        <% charts.forEach(function(chart) {%>
+        <div class="sub-menu">
+          <nav class="sub-menu-nav">
+            <ul class="sub-menu-ul">
+              <li class="menu-item material-ripple" href="/invoice/overview">
+                <div class="button title">
+                  Geral
+                </div>
+              </li>
+              <li class="menu-item material-ripple" href="/invoice/by-date">
+                <div class="button title">
+                  Por Data
+                </div>
+              </li>
+            </ul>
+          </nav>
 
-          <div class="chart-group shadow">
+          <div class="chart-subtitles">
 
-            <div class="title-holder">
-              <label class="chart-title"><%=chart.title%></label>
-              <label class="chart-label"><%=chart.label%></label>
-            </div>
+            <% Util.getSubtitles(charts).forEach(function(bar){ %>
 
-            <div class="chart-holder">
+              <div class="chart-subtitle-item">
+                <div class="subtitle-color circle shadow" style="background-color: <%=bar.getBarColor()%>"> </div>
+                <label class="chart-subtitle-label"> <%=bar.name%> </label>
+              </div>
+
+              <% }); %>
+
+          </div>
+        </div>
+
+        <div class="charts-content">
+
+          <% charts.forEach(function(chart) {%>
+
+            <div class="chart-group shadow">
+
+              <div class="title-holder">
+                <label class="chart-title"><%=chart.title%></label>
+                <label class="chart-label datepicker"> <%=chart.label%></label>
+              </div>
 
 
-              <% if (chart.getItems().length === 0){
+              <% if (Object.keys(chart.getSums()).length > 0) { %>
+                <div class="chart-sum circle shadow">
+                  <% Object.keys(chart.getSums()).forEach(function(key){%>
+                    <label class="chart-sum-item"> <%=Num.format(chart.getSums()[key])%> </label>
+                    <%})%>
+
+                </div>
+                <%}%>
+                  <div class="chart-holder">
+
+
+                    <% if (chart.getItems().length === 0){
                %>
-                <label class="chart-hint">Sem dados para apresentar.</label>
+                      <label class="chart-hint">Sem dados para apresentar.</label>
 
-                <% }else{
+                      <% }else{
 
               chart.getItems().forEach(function(item) {%>
-                  <div class="chart-bar-holder">
-                    <div class="chart-bar-group">
+                        <div class="chart-bar-holder">
+                          <div class="chart-bar-group">
 
 
-                      <div class="avatar-holder">
-                        <img class="avatar-img circle shadow" data-src="img/avatar/<%=item.imgName%>.jpg" src="img/avatar/default.jpg" />
-                        <span class="label shadow avatar-name"><%=item.label%></span>
-                      </div>
+                            <div class="avatar-holder">
+                              <img class="avatar-img circle shadow" data-src="/img/avatar/<%=item.imgName%>.jpg" src="/img/avatar/default.jpg" />
+                              <span class="label shadow avatar-name"><%=item.label%></span>
+                            </div>
 
-                      <div class="bars-holder">
-                        <% item.getBars().forEach(function(bar){%>
-                          <div class="bar shadow grow-bar" data-height="<%=bar.getHeight()%>">
+                            <div class="bars-holder">
+                              <% item.getBars().forEach(function(bar){%>
+                                <div class="bar shadow grow-bar" data-height="<%=bar.getHeight()%>" data-name="<%=bar.name%>" style="background-color: #<%=bar.getBarColor()%>">
 
-                            <span class="bar-value"><%=bar.getDisplayValue();%></span>
+                                  <span class="bar-value"><%=Num.format(bar.getValue());%></span>
+
+                                </div>
+
+                                <%}); %>
+
+                            </div>
+
 
                           </div>
+                        </div>
+                        <% }); }%>
 
-                          <%}); %>
-
-                      </div>
-
-
-                    </div>
                   </div>
-                  <% }); }%>
-
             </div>
-          </div>
-          <% }); %>
+            <% }); %>
+
+        </div>
       </div>
 
-  </body>
+    </body>
 
 
-  <script>
-    $(document).ready(function() {
+    <script>
+      $(document).ready(function() {
 
-      loadImages('avatar-img', 'data-src');
+        loadImages('avatar-img', 'data-src');
 
 
 
-      $('.grow-bar').each(function() {
-        //$(this).height($(this).attr('data-height'));
+        $('.grow-bar').each(function() {
+          $(this).animate({
+            height: $(this).attr('data-height')
+          }, 600);
+        });
 
-        $(this).animate({
-          height: $(this).attr('data-height')
-        }, 600);
+        bindDatePickers();
+
       });
-
-
-    });
-  </script>
+    </script>
 
 </html>

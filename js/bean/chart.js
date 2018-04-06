@@ -3,8 +3,17 @@ module.exports = class Chart {
   constructor(title, label) {
     this.title = title;
     this.label = label;
+
+    //Charts items
     this.items = [];
+    //Chart maximum by bar
     this.maxs = {};
+    //Chart sum bars
+    this.sums = {};
+  }
+
+  getSums() {
+    return this.sums;
   }
 
   getMaxBarValue() {
@@ -36,8 +45,8 @@ class ChartItem {
     this.bars = [];
   }
 
-  addBar(label, value, heightPerc, type) {
-    var bar = new Bar(this.parent, label, value, heightPerc, type);
+  addBar(label, value, factor, barColor, doSum) {
+    var bar = new Bar(this.parent, label, value, factor, barColor, doSum);
     this.bars.push(bar);
     return bar;
   }
@@ -65,27 +74,33 @@ const minBarHeight = 30; //Pixels
 
 class Bar {
 
-  constructor(parent, name, value, heightPerc, type) {
+  constructor(parent, name, value, factor, barColor, doSum) {
     this.parent = parent;
     this.name = name;
     this.value = value;
-    this.type = type;
-    this.heightPerc = heightPerc;
-    this.handlMax(name, value);
+    this.factor = factor;
+    this.doSum = doSum;
+    this.barColor = barColor;
+    this.handleMaxAndSum(name, value);
   }
 
   getHeight() {
     var perc = (this.value * 100) / this.getMaxBarValue();
-    var hei = (perc * (maxBarHeight * this.heightPerc)) / 100;
+    var hei = (perc * (maxBarHeight * this.factor)) / 100;
 
     return hei < minBarHeight ? minBarHeight : hei;
   }
 
-  handlMax(name, value) {
+  handleMaxAndSum(name, value) {
     var maxs = this.parent.maxs;
 
     if (maxs[name] === undefined || maxs[name] < value)
       maxs[name] = value;
+
+    if (this.doSum) {
+      var sums = this.parent.sums;
+      sums[name] = sums[name] === undefined ? value : sums[name] + value;
+    }
   }
 
   getMaxBarValue() {
@@ -96,11 +111,8 @@ class Bar {
     return this.value;
   }
 
-  getDisplayValue() {
-    if (this.type === 'money') {
-      return Num.small_money(this.getValue());
-    } else if (this.type === 'int') {
-      return Num.int(this.getValue());
-    }
+  getBarColor() {
+    return this.barColor;
   }
+
 }

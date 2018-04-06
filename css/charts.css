@@ -1,7 +1,46 @@
+.charts-content {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  padding-top: 5px;
+}
+
 .chart-group {
   background-color: white;
-  display: inline-table;
   margin: 8px;
+  display: inline-grid;
+  width: fit-content;
+}
+
+.chart-subtitles {
+  position: absolute;
+  display: table;
+  height: 35px;
+  right: 0px;
+}
+
+.chart-subtitle-item {
+  vertical-align: middle;
+  display: table-cell;
+}
+
+.chart-subtitle-label {
+  padding: 2px 3px 2px 3px;
+  color: white;
+  font-size: 12px;
+  padding-left: 5px;
+  padding-right: 30px;
+  font-family: Roboto, sans-serif;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.subtitle-color {
+  height: 20px !important;
+  width: 20px !important;
+  display: inline-block;
+  display: table-cell;
+  vertical-align: middle;
 }
 
 .title-holder {
@@ -10,12 +49,14 @@
   border-top-left-radius: 4px !important;
   border-top-right-radius: 4px !important;
   display: block;
+  height: 13px;
 }
 
 .chart-title {
   display: inline-block;
   margin-right: 10px;
-  font-size: 13px;
+  font-size: 12px;
+  float: left;
   text-transform: uppercase;
   color: white;
 }
@@ -23,9 +64,36 @@
 .chart-label {
   display: inline-block;
   float: right;
-  font-size: 11px;
+  font-size: 10px;
+  text-align: right;
   text-transform: uppercase;
   color: white;
+}
+
+.chart-sum {
+  margin: 5px;
+  margin-top: 35px;
+  position: absolute;
+  background-color: #009587;
+  width: 55px !important;
+  height: 55px !important;
+  z-index: 2;
+}
+
+.chart-sum-item:first-child {
+  text-decoration-style: double;
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+.chart-sum-item {
+  display: inline-block;
+  font-size: 11px;
+  color: white;
+  position: relative;
+  width: 100%;
+  top: 10px;
+  text-align: center;
 }
 
 .chart-hint {
@@ -40,7 +108,7 @@
 }
 
 .avatar-name {
-  font-size: 12px;
+  font-size: 11px;
   text-align: center;
   width: fit-content;
   margin-left: auto;
@@ -61,36 +129,48 @@
 
 .chart-holder {
   position: relative;
-  padding: 5px;
   height: fit-content;
-  min-height: 290px;
-  max-height: 290px;
-  min-width: 340px;
+  height: 290px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  min-width: 500px;
+  max-width: 900px;
+  overflow: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  overflow-x: auto;
 }
 
 .chart-bar-holder {
   display: inline-table;
   margin-left: 5px;
   margin-right: 5px;
+  margin-bottom: 5px;
   height: -webkit-fill-available;
 }
 
 .chart-bar-group {
   display: table-cell;
   vertical-align: bottom;
+  padding-bottom: 5px;
 }
 
 .bar {
   position: relative;
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
-  display: inline-block;
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
   overflow: hidden;
   z-index: 1;
   background-color: #009587;
+  /* display: inline-block; */
+  /* display: table-cell; */
+  display: -webkit-inline-box;
+  vertical-align: bottom;
 }
 
 .bars-holder {

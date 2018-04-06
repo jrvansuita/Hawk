@@ -8,7 +8,8 @@ module.exports = {
 
 
   first_word: function(val) {
-    return val.split(' ')[0];
+    var names = val ? val.split(' ') : "";
+    return names.length > 0 ? names[0] : 'Desconhecido';
   }
 
 };

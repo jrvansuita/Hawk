@@ -6,6 +6,7 @@ module.exports = {
   invoice_last_week: 'Faturamento da última semana',
   invoice_last_month: 'Faturamento do último mês',
   invoice_current_month: 'Faturamento do mês atual',
+  invoice_by_date: 'Faturamento por período',
 
   from_to: 'De {0} Até {1}',
 

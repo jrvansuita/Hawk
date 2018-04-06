@@ -4,15 +4,21 @@ var Chart = require('../bean/chart.js');
 
 var charts;
 var index;
-
+var isfull;
 var onFinished;
+
+function init(full, callback) {
+  isfull = full;
+  onFinished = callback;
+  charts = [];
+  index = -1;
+}
 
 module.exports = {
 
-  build(callback) {
-    onFinished = callback;
-    charts = [];
-    index = -1;
+
+  buildOverview(full, callback) {
+    init(full, callback);
 
     charts.push(buildToday);
     charts.push(buildYesterday);
@@ -20,6 +26,16 @@ module.exports = {
     charts.push(buildLastWeek);
     charts.push(buildCurrentMonth);
     charts.push(buildLastMonth);
+
+    callNext();
+  },
+
+  buildByDate(from, to, full, callback) {
+    init(full, callback);
+
+    charts.push(function() {
+      buildByDate(from, to);
+    });
 
     callNext();
   }
@@ -59,6 +75,10 @@ function buildLastMonth() {
   buildChart(Dat.firstDayOfLastMonth(), Dat.lastDayOfLastMonth(), Const.invoice_last_month);
 }
 
+function buildByDate(from, to) {
+  buildChart(from, to, Const.invoice_by_date);
+}
+
 
 function buildChart(from, to, title) {
   var callBuilder = function(data) {
@@ -69,11 +89,16 @@ function buildChart(from, to, title) {
       var dataItem = data[key];
 
       var item = chart.addItem(Str.first_word(dataItem.userName, 10), key);
-      item.addBar('total', dataItem.total, 1, 'money');
-      item.addBar('count', dataItem.count, 0.6, 'int');
+
+
+      if (isfull)
+        item.addBar('Receita', dataItem.total, 1, '009587', true);
+
+      item.addBar('Pontos', (dataItem.count * dataItem.total) / 1000, isfull ? 0.8 : 1, '1da8b9', !isfull);
+      item.addBar('Pedidos', dataItem.count, 0.5, '14b5a6', true);
     });
 
-    chart.sort('total');
+    chart.sort('Pontos');
     charts.splice(index, 1, chart);
 
     callNext();

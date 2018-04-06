@@ -1,0 +1,48 @@
+.gj-datepicker {
+  visibility: hidden;
+}
+
+.gj-picker-md [role=header] {
+  background-color: #1c796b;
+}
+
+.gj-picker-md.datepicker [role=header] [role=year] {
+  font-size: 11px;
+}
+
+.gj-picker-md.datepicker [role=header] [role=date] {
+  font-size: 14px;
+}
+
+.gj-picker-md [role=footer] {
+  padding: 0px;
+}
+
+.gj-picker-md table tr td div, .gj-picker-md table tr th div {
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  font-size: 12px;
+}
+
+.gj-picker-md [role=footer] {
+  margin: 3px;
+}
+
+.gj-picker-md [role=footer] button.gj-button-md {
+  color: #1c796b;
+  font-weight: 1000;
+  height: 40px;
+  font-size: 12px;
+}
+
+.gj-picker-md table tr td.selected.gj-cursor-pointer div {
+  background: #1c796b;
+}
+
+.gj-picker-md table tr td.today div {
+  color: #1c796b;
+  font-weight: 1000;
+  background: #EEE;
+  border-radius: 50%;
+}
