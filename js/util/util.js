@@ -10,7 +10,7 @@ module.exports = {
     });
 
 
-    return subtitles[0].getItems()[0].getBars();
+    return subtitles.length > 0 ? subtitles[0].getItems()[0].getBars() : [];
   }
 
 

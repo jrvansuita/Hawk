@@ -22,16 +22,22 @@ app.use('/js', express.static('js'));
 app.get(['/', '/invoice', '/invoice/overview'], (req, res) => {
   require('./js/builder/InvoiceChartBuilder.js').buildOverview(req.query.full !== undefined, function(charts) {
     res.render('invoice', {
-      charts: charts
+      charts: charts,
+      page: req.originalUrl,
     });
   });
 });
 
 
 app.get('/invoice/by-date', (req, res) => {
-  require('./js/builder/InvoiceChartBuilder.js').buildByDate(new Date(), new Date(), req.query.full !== undefined, function(charts) {
+
+  var from = req.query.from ? new Date(parseInt(req.query.from)) : Dat.firstDayOfMonth();
+  var to = req.query.to ? new Date(parseInt(req.query.to)).maxTime() : Dat.lastDayOfMonth();
+
+  require('./js/builder/InvoiceChartBuilder.js').buildByDate(from, to, req.query.full !== undefined, function(charts) {
     res.render('invoice', {
-      charts: charts
+      charts: charts,
+      page: req.originalUrl,
     });
   });
 });
@@ -45,4 +51,4 @@ app.get('/picking', (req, res) => {
   res.render('picking');
 });
 
-app.listen(3000);
+app.listen(4000);

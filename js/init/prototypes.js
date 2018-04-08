@@ -4,6 +4,11 @@ Date.prototype.withoutTime = function() {
   return d;
 };
 
+Date.prototype.maxTime = function() {
+  var d = new Date(this);
+  d.setUTCHours(23, 59, 59, 0);
+  return d;
+};
 
 String.prototype.format = String.prototype.f = function() {
   var s = this,

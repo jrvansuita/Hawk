@@ -32,7 +32,7 @@
 .gj-picker-md [role=footer] button.gj-button-md {
   color: #1c796b;
   font-weight: 1000;
-  height: 40px;
+  height: inherit;
   font-size: 12px;
 }
 
@@ -45,4 +45,29 @@
   font-weight: 1000;
   background: #EEE;
   border-radius: 50%;
+}
+
+.gj-picker-md.datepicker [role=header] {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.gj-picker.gj-picker-md.datepicker.gj-unselectable {
+  margin-top: -20px;
+}
+
+.gj-picker-md [role=footer] {
+  margin-bottom: 3px;
+  margin-right: 3px;
+}
+
+.gj-picker.gj-picker-md.datepicker.gj-unselectable:last-child {
+  margin-left: -245px !important;
+  margin-top: -48px !important;
+}
+
+.gj-picker.gj-picker-md.datepicker.gj-unselectable:last-child>[role=footer] {
+  visibility: hidden;
 }

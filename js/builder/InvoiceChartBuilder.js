@@ -92,7 +92,7 @@ function buildChart(from, to, title) {
 
 
       if (isfull)
-        item.addBar('Receita', dataItem.total, 1, '009587', true);
+        item.addBar('Receita', dataItem.total, 1, '03c184', true);
 
       item.addBar('Pontos', (dataItem.count * dataItem.total) / 1000, isfull ? 0.8 : 1, '1da8b9', !isfull);
       item.addBar('Pedidos', dataItem.count, 0.5, '14b5a6', true);
