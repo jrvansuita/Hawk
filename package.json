@@ -1,14 +1,21 @@
 {
   "name": "hawk",
   "version": "1.0.0",
-  "description": "An great monitor",
+  "description": "A predatory bird",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Test\" && exit 1",
     "start": "node app.js"
   },
   "author": "Jr",
   "license": "ISC",
+  "engines": {
+    "node": "0.12.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jrvansuita/Hawk.git"
+  },
   "dependencies": {
     "dateformat": "^3.0.3",
     "dotenv": "^5.0.1",
