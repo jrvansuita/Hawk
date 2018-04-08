@@ -4,12 +4,9 @@ var dateFormat = require('dateformat');
 
 var exports = module.exports = {};
 
-//Url do Eccosys
-const host = "boutiqueinfantil.eccosys.com.br";
-// ApiKey do Eccosys
-const apiKey = 'b37f6a2583f10f369c549333b7c76cdaa4c56801';
-// secret da aplicação gerada no Eccosys
-const secret = '3986a24a30abc5e54c198444c289bf11f6c1a916';
+const host = process.env.ECCOSYS_HOST;
+const apiKey = process.env.ECCOSYS_API;
+const secret = process.env.ECCOSYS_SECRET;
 
 exports.get = (path, onEnd) => {
 
