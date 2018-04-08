@@ -3,6 +3,7 @@ require('./js/init/init.js');
 var express = require('express');
 
 var app = express();
+app.set('port', process.env.PORT || 5000);
 
 app.set('view engine', 'ejs');
 app.use('/css', express.static('css'));
@@ -51,4 +52,6 @@ app.get('/picking', (req, res) => {
   res.render('picking');
 });
 
-app.listen(4000);
+app.listen(app.get('port'), function() {
+  console.log('Node is running on port ', app.get('port'));
+});
