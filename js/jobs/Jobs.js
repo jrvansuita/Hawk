@@ -12,13 +12,16 @@ module.exports = {
       runJobs();
     });
 
-    if (runNow)
+    if (runNow) {
       runJobs();
-
-    //teste();
-
+    } else {
+      //No data found
+      salesDb.findOne({}, function(err, doc) {
+        if (!doc)
+          runJobs();
+      });
+    }
   }
-
 };
 
 function runJobs() {
