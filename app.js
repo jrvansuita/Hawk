@@ -1,21 +1,11 @@
 require('./js/init/init.js');
 
 var express = require('express');
-
 var app = express();
+
 app.set('port', process.env.PORT || 5000);
 
-// set up a route to redirect http to https if it's production
-// if (process.env.NODE_ENV)
-//   app.use(function(req, res, next) {
-//     console.log(req.secure);
-//     console.log(req.protocol.toString());
-//
-//     if (!req.protocol.includes('https')) {
-//       return res.redirect(['https://', req.get('Host'), req.url].join(''));
-//     }
-//     next();
-//   });
+
 
 app.set('view engine', 'ejs');
 app.use('/css', express.static('css'));
@@ -42,9 +32,6 @@ app.get(['/', '/invoice', '/invoice/overview'], (req, res) => {
 
 
 app.get('/invoice/by-date', (req, res) => {
-  console.log(req.secure);
-  console.log(req.protocol.toString());
-
   var from = req.query.from ? new Date(parseInt(req.query.from)) : Dat.firstDayOfMonth();
   var to = req.query.to ? new Date(parseInt(req.query.to)).maxTime() : Dat.lastDayOfMonth();
 
@@ -64,6 +51,7 @@ app.get('/outros', (req, res) => {
 app.get('/picking', (req, res) => {
   res.render('picking');
 });
+
 
 app.listen(app.get('port'), function() {
   console.log('Node is running on port ', app.get('port'));
