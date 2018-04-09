@@ -5,10 +5,11 @@ var express = require('express');
 var app = express();
 app.set('port', process.env.PORT || 5000);
 
-// set up a route to redirect http to https
-http.get('*', function(req, res) {
-  res.redirect('https://' + req.headers.host + req.url);
-});
+// set up a route to redirect http to https if it's production
+if (process.env.NODE_ENV)
+  app.get('*', function(req, res) {
+    res.redirect('https://' + req.headers.host + req.url);
+  });
 
 app.set('view engine', 'ejs');
 app.use('/css', express.static('css'));
