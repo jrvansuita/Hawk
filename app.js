@@ -7,8 +7,11 @@ app.set('port', process.env.PORT || 5000);
 
 // set up a route to redirect http to https if it's production
 if (process.env.NODE_ENV)
-  app.get('*', function(req, res) {
-    res.redirect('https://' + req.headers.host + req.url);
+  app.use(function(req, res, next) {
+    if (!req.secure) {
+      return res.redirect(['https://', req.get('Host'), req.url].join(''));
+    }
+    next();
   });
 
 app.set('view engine', 'ejs');
