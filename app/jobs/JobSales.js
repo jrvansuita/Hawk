@@ -4,7 +4,7 @@ var User = require('../bean/user.js');
 
 var from;
 var to;
-var localUsers = {};
+var localUsers;
 
 module.exports = {
 
@@ -125,12 +125,11 @@ function storeUser(user) {
 }
 
 function loadUsers() {
-  if (Object.keys(localUsers).length === 0) {
+  localUsers = {};
 
-    usersDb.find({}, function(err, docs) {
-      docs.forEach(function(item) {
-        localUsers[item.id] = item.name;
-      });
+  usersDb.find({}, function(err, docs) {
+    docs.forEach(function(item) {
+      localUsers[item.id] = item.name;
     });
-  }
+  });
 }

@@ -1,4 +1,4 @@
-require('./js/init/init.js');
+require('./app/init/init.js');
 
 var express = require('express');
 var app = express();
@@ -10,7 +10,9 @@ app.set('port', process.env.PORT || 5000);
 app.set('view engine', 'ejs');
 app.use('/css', express.static('css'));
 app.use('/img', express.static('img'));
-app.use('/js', express.static('js'));
+app.use('/visual', express.static('visual'));
+app.use('/control', express.static('control'));
+app.use('/libs', express.static('libs'));
 
 
 // app.get('/', (req, res) => {
@@ -22,7 +24,7 @@ app.use('/js', express.static('js'));
 // });
 
 app.get(['/', '/invoice', '/invoice/overview'], (req, res) => {
-  require('./js/builder/InvoiceChartBuilder.js').buildOverview(req.query.full !== undefined, function(charts) {
+  require('./app/builder/InvoiceChartBuilder.js').buildOverview(req.query.full !== undefined, function(charts) {
     res.render('invoice', {
       charts: charts,
       page: req.originalUrl,
@@ -35,7 +37,7 @@ app.get('/invoice/by-date', (req, res) => {
   var from = req.query.from ? new Date(parseInt(req.query.from)) : Dat.firstDayOfMonth();
   var to = req.query.to ? new Date(parseInt(req.query.to)).maxTime() : Dat.lastDayOfMonth();
 
-  require('./js/builder/InvoiceChartBuilder.js').buildByDate(from, to, req.query.full !== undefined, function(charts) {
+  require('./app/builder/InvoiceChartBuilder.js').buildByDate(from, to, req.query.full !== undefined, function(charts) {
     res.render('invoice', {
       charts: charts,
       page: req.originalUrl,

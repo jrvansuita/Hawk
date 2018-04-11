@@ -5,4 +5,11 @@ module.exports = class User {
     this.name = name;
   }
 
+  db() {
+    return Schema.Model(this);
+  }
+
+  save(callback) {
+    return Schema.Build(this).save(callback);
+  }
 };

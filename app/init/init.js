@@ -6,6 +6,9 @@ global.__appDir = require('path').dirname(require.main.filename);
 //Load all databases
 require('../db/DataBase.js');
 
+//Load all Mongoose
+require('../mongoose/mongoose.js');
+
 //Load all util code
 global.Util = require('../util/util.js');
 global.Num = require('../util/number.js');
@@ -17,4 +20,12 @@ global.Const = require('../const/const.js');
 require('../init/prototypes.js');
 
 //Trigger the scheduled jobs
-require('../jobs/Jobs.js').schedule(false);
+//require('../jobs/Jobs.js').schedule(false);
+
+var User = require('../bean/user.js');
+
+var x = new User(3434, 'teste');
+console.log(x);
+x.save(function(err) {
+  console.log(err);
+});
