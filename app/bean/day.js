@@ -1,6 +1,7 @@
-module.exports = class Day {
+module.exports = class Day extends DataAccess {
 
   constructor(userId, date, type, total, count) {
+    super();
     this.userId = parseInt(userId);
     this.date = date;
     this.type = type;
@@ -8,12 +9,17 @@ module.exports = class Day {
     this.count = count;
   }
 
-  static invoice(userId, date, total, count) {
-    return new Day(userId, date, 'invoice', total, count);
+  static invoice(sale) {
+    return new Day(sale.userId, sale.billingDate, 'invoice', sale.value, 1);
   }
 
   static picking(userId, date, count) {
     return new Day(userId, date, 'picking', total, count);
+  }
+
+
+  static getKey() {
+    return ['userId', 'date', 'type'];
   }
 
 

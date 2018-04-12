@@ -30,6 +30,8 @@ function runJobs() {
     //Handle the invoice by days
     require('../jobs/JobDays.js').run();
   });
+
+
 }
 
 // function teste() {

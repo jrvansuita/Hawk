@@ -1,39 +1,14 @@
-module.exports = class Sale {
+module.exports = class Sale extends DataAccess {
 
-  constructor(number) {
-    this.number = number;
+  constructor(number, billingDate, userId, value) {
+    super();
+    this.number = Str.def(number);
+    this.billingDate = Dat.def(billingDate);
+    this.userId = Num.def(userId);
+    this.value = Floa.def(value);
   }
 
-  getNumber() {
-    return this.number;
+  static getKey() {
+    return ['number'];
   }
-
-  setBillingDate(billingDate) {
-    this.billingDate = billingDate;
-  }
-
-  getBillingDate() {
-    return this.billingDate;
-  }
-
-  setUserId(userId) {
-    this.userId = parseInt(userId);
-  }
-
-  getUserId() {
-    return userId;
-  }
-
-  setValue(value) {
-    this.value = parseFloat(value);
-  }
-
-  getValue() {
-    return this.value;
-  }
-
-
-
-
-
 };

@@ -15,6 +15,10 @@ module.exports = {
     }
   },
 
+  def(date, def) {
+    return date instanceof Date === 'date' ? date : (def instanceof Date ? def : this.today());
+  },
+
   today() {
     return new Date(Date.UTC(getCurrentYear(), getCurrentMonth(), getCurrentDay()));
   },

@@ -13,9 +13,7 @@ module.exports = {
     loadUsers();
 
     //Find the last sale row date to set as from date sync
-    salesDb.findOne({}).sort({
-      billingDate: -1
-    }).limit(1).exec(function(err, doc) {
+    Sale.getLast(function(err, doc) {
       from = doc ? doc.billingDate : Dat.firstDayOfMonth();
       to = new Date();
 
@@ -44,7 +42,6 @@ function handleSalePaging(page, callback) {
     } else {
       callback();
     }
-
   });
 }
 
@@ -55,9 +52,7 @@ function processSalesPage(list, index, callback) {
 
     var item = list[index];
 
-    salesDb.findOne({
-      number: item.numeroPedido
-    }, function(err, doc) {
+    Sale.findByKey(item.numeroPedido, function(err, doc) {
       //If there isn't a sale stored on local db
       if (!doc) {
         //To to Eccosys and find the sale
@@ -82,31 +77,18 @@ function handleSale(pedido) {
 
   if (user) {
     var sale = buildSale(user.id, pedido);
-
-    if (localUsers[user.id] === undefined)
-      storeUser(user);
-
+    storeUser(user);
     storeSale(sale);
   }
 }
 
-function buildSale(idUser, pedido) {
-  var sale = new Sale(pedido.numeroPedido);
-  sale.setBillingDate(new Date(pedido.dataFaturamento));
-  sale.setValue(pedido.totalVenda);
-  sale.setUserId(idUser);
-
-  return sale;
+function buildSale(userId, pedido) {
+  return new Sale(pedido.numeroPedido, new Date(pedido.dataFaturamento), userId, pedido.totalVenda);
 }
 
 function storeSale(sale) {
   console.log('Sale ' + sale.number + ' stored');
-
-  salesDb.update({
-    number: sale.getNumber()
-  }, sale, {
-    upsert: true
-  });
+  sale.upsert();
 }
 
 function buildUser(pedido) {
@@ -115,21 +97,19 @@ function buildUser(pedido) {
 }
 
 function storeUser(user) {
-  usersDb.update({
-    id: user.id
-  }, user, {
-    upsert: true
-  });
+  if (localUsers[user.id] === undefined) {
+    user.upsert();
 
-  localUsers[user.id] = user.name;
+    localUsers[user.id] = user.name;
+  }
 }
 
 function loadUsers() {
   localUsers = {};
 
-  usersDb.find({}, function(err, docs) {
-    docs.forEach(function(item) {
-      localUsers[item.id] = item.name;
+  User.findAll(function(err, users) {
+    users.forEach(function(user) {
+      localUsers[user.id] = user.name;
     });
   });
 }

@@ -1,5 +1,8 @@
 module.exports = {
 
+  def(str, def) {
+    return typeof(str) === 'string' ? str : (typeof(def) == 'string' ? def : '');
+  },
 
   short: function(val, max) {
     var result = val.slice(0, max);

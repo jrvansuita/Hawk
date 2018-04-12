@@ -1,15 +1,13 @@
-module.exports = class User {
+module.exports = class User extends DataAccess {
 
   constructor(id, name) {
-    this.id = parseInt(id);
-    this.name = name;
+    super();
+    this.id = Num.def(id);
+    this.name = Str.def(name);
   }
 
-  db() {
-    return Schema.Model(this);
+  static getKey() {
+    return ['id'];
   }
 
-  save(callback) {
-    return Schema.Build(this).save(callback);
-  }
 };

@@ -33,6 +33,10 @@ module.exports = {
     }
   },
 
+  def(num, def) {
+    return ((num !== undefined) && (typeof(parseInt(num)) === 'number')) ? this.int(num) : (def === undefined ? 0 : def);
+  },
+
   int: function(val) {
     return Math.trunc(val);
   },

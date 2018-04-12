@@ -3,23 +3,48 @@ var User = require('../bean/user.js');
 var Day = require('../bean/day.js');
 
 
-module.exports = {
+var data;
 
+module.exports = {
   run() {
-    salesDb.find({
+
+
+    Sale.find({
       synced: {
         $exists: false
       }
-    }, function(err, docs) {
+    }, (err, sales) => {
+      if (sales.length > 0) {
+        console.log('--- Updating ' + sales.length + ' rows ---');
 
-      if (docs.length > 0) {
-        console.log('--- Updating ' + docs.length + ' rows ---');
-        execute(docs, 0);
+        data = {};
+
+        sales.forEach((sale) => {
+          var dayRow = data[getIndex(sale)];
+
+          if (dayRow === undefined) {
+            dayRow = Day.invoice(sale);
+          } else {
+            dayRow.total += sale.value;
+            dayRow.count++;
+          }
+
+          data[getIndex(sale)] = dayRow;
+        });
+
+        console.log(data);
+
+        //execute(docs, 0);
       }
     });
   }
 
 };
+
+
+function getIndex(sale) {
+  return sale.userId + '-invoie-' + sale.billingDate.getTime();
+}
 
 
 function execute(list, index) {
@@ -33,11 +58,11 @@ function execute(list, index) {
 }
 
 
-function store(sale, callback) {
-  daysDb.findOne({
-    date: sale.billingDate,
-    userId: sale.userId,
-    type: 'invoice',
+function store(dayRow, callback) {
+  Days.findOne({
+    date: dayRow.date,
+    userId: dayRow.userId,
+    type: dayRow.type,
   }, function(err, doc) {
     if (doc) {
       update(doc._id, sale, callback);
