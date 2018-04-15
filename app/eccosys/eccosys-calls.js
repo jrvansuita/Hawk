@@ -12,7 +12,6 @@ module.exports = {
     query.addDate('toDate', to);
     query.add('count', page_count);
     query.add('offset', page_count * page);
-
     Eccosys.get('pedidos' + query.build(), callback);
   },
 

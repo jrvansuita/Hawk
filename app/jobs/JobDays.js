@@ -1,109 +1,68 @@
-var Sale = require('../bean/sale.js');
-var User = require('../bean/user.js');
-var Day = require('../bean/day.js');
+const Sale = require('../bean/sale.js');
+const User = require('../bean/user.js');
+const Day = require('../bean/day.js');
 
 
 var data;
 
 module.exports = {
-  run() {
-
-
-    Sale.find({
-      synced: {
-        $exists: false
-      }
-    }, (err, sales) => {
-      if (sales.length > 0) {
-        console.log('--- Updating ' + sales.length + ' rows ---');
-
+  run(onFinished) {
+    Sale.findNotSynced((err, salesArr) => {
+      if (salesArr.length > 0) {
         data = {};
+        handleData(salesArr);
 
-        sales.forEach((sale) => {
-          var dayRow = data[getIndex(sale)];
+        var rows = Object.values(data);
+        console.log('--- Updating ' + rows.length + ' rows ---');
 
-          if (dayRow === undefined) {
-            dayRow = Day.invoice(sale);
-          } else {
-            dayRow.total += sale.value;
-            dayRow.count++;
-          }
-
-          data[getIndex(sale)] = dayRow;
+        execute(rows, 0, () => {
+          Sale.syncAll();
+          onFinished();
         });
-
-        console.log(data);
-
-        //execute(docs, 0);
+      } else {
+        onFinished();
       }
     });
   }
-
 };
 
+function handleData(sales) {
+  sales.forEach((sale) => {
+    var code = Sale.invoiceCode(sale);
+    var dayRow = data[code];
 
-function getIndex(sale) {
-  return sale.userId + '-invoie-' + sale.billingDate.getTime();
+    if (dayRow === undefined) {
+      dayRow = Day.invoice(sale);
+    } else {
+      dayRow.total += sale.value;
+      dayRow.count++;
+    }
+
+    data[code] = dayRow;
+  });
 }
 
+function execute(data, index, onFinished) {
+  console.log('Day ' + (index + 1));
 
-function execute(list, index) {
-  store(list[index], function() {
+  store(data[index], () => {
     index++;
 
-    if (index < list.length) {
-      execute(list, index);
+    if (index < data.length) {
+      execute(data, index, onFinished);
+    } else {
+      onFinished();
     }
   });
 }
-
 
 function store(dayRow, callback) {
-  Days.findOne({
-    date: dayRow.date,
-    userId: dayRow.userId,
-    type: dayRow.type,
-  }, function(err, doc) {
-    if (doc) {
-      update(doc._id, sale, callback);
-    } else {
-      insert(sale, callback);
+  Day.upsert(dayRow.getPKQuery(), {
+    $inc: {
+      count: dayRow.count,
+      total: dayRow.total
     }
-  });
-
-  salesDb.update({
-    number: sale.number
-  }, {
-    $set: {
-      synced: true
-    }
-  }, {
-    multi: false
-  }, function() {});
-}
-
-
-function update(id, sale, callback) {
-  daysDb.update({
-      _id: id
-    }, {
-      $inc: {
-        count: 1,
-        total: sale.value
-      }
-    },
-    function(err, docs) {
-      console.log('Updated ' + sale.number);
-      callback();
-    }
-  );
-}
-
-function insert(sale, callback) {
-  var invoice = Day.invoice(sale.userId, sale.billingDate, sale.value, 1);
-
-  daysDb.insert(invoice, function(err, doc) {
-    console.log('Inserted ' + sale.number);
+  }, (err, doc) => {
     callback();
   });
 }

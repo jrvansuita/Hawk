@@ -2,11 +2,11 @@ module.exports = class Day extends DataAccess {
 
   constructor(userId, date, type, total, count) {
     super();
-    this.userId = parseInt(userId);
-    this.date = date;
-    this.type = type;
-    this.total = total;
-    this.count = count;
+    this.userId = Num.def(userId);
+    this.date = Dat.def(date);
+    this.type = Str.def(type);
+    this.total = Floa.def(total);
+    this.count = Floa.def(count);
   }
 
   static invoice(sale) {

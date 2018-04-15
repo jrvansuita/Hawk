@@ -1,13 +1,14 @@
 <html>
 
   <head>
-    <link rel="stylesheet" type="text/css" href="/css/home.css">
+    <link rel="stylesheet" type="text/css" href="/css/menu.css">
     <link rel="stylesheet" type="text/css" href="/css/general.css">
     <link rel="stylesheet" type="text/css" href="/css/ripple.min.css">
 
 
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="/visual/ripple.min.js"></script>
+    <script type="text/javascript" src="/control/menu.js"></script>
     <link href="//fonts.googleapis.com/css?family=Roboto" rel='stylesheet' type='text/css'>
 
     <title>Hawk</title>
@@ -50,7 +51,16 @@
           </div>
         </li>
       </ul>
+
+      <div class="material-ripple run-jobs" onclick="startJobs()">
+        <div id="run-jobs-label" class="button title <%= global.jobsRunning ? 'gone' : '' %>">
+          Atualizar
+        </div>
+
+        <img id="run-jobs-img" src="/img/loader/loading.svg" class="<%= !global.jobsRunning ? 'gone' : '' %>" />
+      </div>
     </nav>
+
 
 
   </body>

@@ -3,7 +3,7 @@ require('./app/init/init.js');
 var express = require('express');
 var app = express();
 
-app.set('port', process.env.PORT || 5000);
+app.set('port', process.env.PORT || 3000);
 
 
 
@@ -22,6 +22,23 @@ app.use('/libs', express.static('libs'));
 // app.get('/home', (req, res) => {
 //   res.sendFile(__dirname + '/views/home.html');
 // });
+
+
+
+app.post('/run-jobs', (req, res) => {
+  //Trigger the scheduled jobs
+  require('./app/jobs/Jobs.js').run((runned) => {
+    var result = {
+      "was_running": runned
+    };
+
+    if (runned) {
+      res.status(200).send(result);
+    } else {
+      res.status(500).send(result);
+    }
+  });
+});
 
 app.get(['/', '/invoice', '/invoice/overview'], (req, res) => {
   require('./app/builder/InvoiceChartBuilder.js').buildOverview(req.query.full !== undefined, function(charts) {

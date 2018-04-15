@@ -1,3 +1,6 @@
+const Day = require('../bean/day.js');
+var UsersProvider = require('../provider/UsersProvider.js');
+
 module.exports = class InvoicesProvider {
 
   constructor(callback) {
@@ -12,7 +15,7 @@ module.exports = class InvoicesProvider {
   get(from, to) {
     var _self = this;
 
-    daysDb.find(this.buildQuery(from, to), (err, items) => {
+    Day.find(this.buildQuery(from, to), (err, items) => {
       _self.handle(items, 0);
     });
   }
@@ -32,20 +35,14 @@ module.exports = class InvoicesProvider {
     if (docs.length > 0) {
       var item = docs[index];
 
-      var _self = this;
+      item.userName = UsersProvider.get(item.userId).name;
+      this.handleItem(item);
 
-      usersDb.findOne({
-        id: item.userId
-      }, function(err, doc) {
-        item.userName = doc.name;
-        _self.handleItem(item);
-
-        if (index < docs.length - 1) {
-          _self.handle(docs, ++index);
-        } else {
-          _self.onFinished();
-        }
-      });
+      if (index < docs.length - 1) {
+        this.handle(docs, ++index);
+      } else {
+        this.onFinished();
+      }
     } else {
       this.onFinished();
     }

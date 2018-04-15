@@ -1,38 +1,57 @@
+var schedule;
+
 module.exports = {
-
-
   schedule: function(runNow) {
-    var schedule = require('node-schedule');
+    schedule = require('node-schedule');
 
-    var rule = new schedule.RecurrenceRule();
-    rule.dayOfWeek = new schedule.Range(1, 5);
-    rule.minute = 12;
-
-    var j = schedule.scheduleJob(rule, function() {
-      runJobs();
+    getSchedules([11, 13, 17]).forEach((rule) => {
+      schedule.scheduleJob(rule, function() {
+        runJobs();
+      });
     });
 
-    if (runNow) {
+    if (runNow)
       runJobs();
-    } else {
-      //No data found
-      salesDb.findOne({}, function(err, doc) {
-        if (!doc)
-          runJobs();
-      });
-    }
+  },
+
+  run(onFinished) {
+    runJobs(onFinished);
   }
 };
 
-function runJobs() {
-  //Update the local databse with the lasts sales order
-  require('../jobs/JobSales.js').run(function() {
-    //Handle the invoice by days
-    require('../jobs/JobDays.js').run();
+
+
+
+function runJobs(onFinished) {
+  if (global.jobsRunning) {
+    onFinished(false);
+  } else {
+    global.jobsRunning = true;
+    //Update the local databse with the lasts sales order
+    require('../jobs/JobSales.js').run(function() {
+      //Handle the invoice by days
+      require('../jobs/JobDays.js').run(() => {
+        global.jobsRunning = false;
+        if (onFinished)
+          onFinished(true);
+      });
+    });
+  }
+}
+
+function getSchedules(hours) {
+  var rules = [];
+  hours.forEach((hour) => {
+    var rule = new schedule.RecurrenceRule();
+    //Monday to Friday
+    rule.dayOfWeek = new schedule.Range(1, 5);
+    rule.hour = hour;
+    rules.push(rule);
   });
 
-
+  return rules;
 }
+
 
 // function teste() {
 //   salesDb.find({

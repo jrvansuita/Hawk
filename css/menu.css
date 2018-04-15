@@ -9,10 +9,31 @@
   width: 100%;
 }
 
-#logo {
+.run-jobs {
+  margin-left: auto;
+  margin-right: 0;
+  display: -webkit-box;
+}
+
+#run-jobs-label {
+  margin: 15px;
+  font-size: 15px;
+}
+
+#run-jobs-img {
+  padding-right: 25px;
+  padding-left: 25px;
   width: 35px;
   height: 35px;
-  margin: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px
+}
+
+#logo {
+  width: 30px;
+  height: 30px;
+  margin: 5px;
+  padding-top: 5px;
   padding-left: 10px;
   padding-right: 10px;
 }
@@ -37,7 +58,7 @@
 
 .sub-menu-ul>.menu-item {
   padding: 8px;
-  margin-right: 30px;
+  margin-right: 25px;
 }
 
 .sub-menu {
@@ -49,7 +70,7 @@
 }
 
 .sub-menu-nav {
-  padding-left: 80px;
+  padding-left: 70;
 }
 
 .sub-menu-ul {

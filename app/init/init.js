@@ -17,30 +17,9 @@ global.Dat = require('../util/date.js');
 global.Str = require('../util/string.js');
 global.Const = require('../const/const.js');
 
+
+//Load Local Users
+require('../provider/UsersProvider.js').loadAllUsers();
+
 //Build the prototypes
 require('../init/prototypes.js');
-
-//Trigger the scheduled jobs
-require('../jobs/Jobs.js').schedule(true);
-
-var Sale = require('../bean/sale.js');
-
-
-// Sale.getLast((err, doc) => {
-//   console.log(doc);
-// });
-//
-// Sale.findByKey("34", (err, doc) => {
-//   console.log(doc);
-// });
-//
-
-// var s = new Sale(0, new Date(), 2, parseFloat("1.45"));
-// s.raw();
-// s.upsert();
-
-//User.find();
-// var x = new User(3, 'teste');
-// x.upsert();
-
-//x.print();

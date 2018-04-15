@@ -31,7 +31,7 @@ module.exports = class DataAccess {
     var keys = this.getKey();
 
     keys.forEach((k, i) => {
-      query[k] = values[i];
+      query[k] = values instanceof Array ? values[i] : values;
     });
 
     return query;
@@ -74,6 +74,28 @@ module.exports = class DataAccess {
     }).limit(1).exec(callback);
   }
 
+  //Upsert using provided query and data
+  static upsert(query, data, callback) {
+    this.staticAccess().findOneAndUpdate(query, data, {
+      upsert: true
+    }, (err, doc) => {
+      if (callback)
+        callback(err, doc);
+    });
+  }
+
+  //Update using provided query and data
+  static updateAll(query, data, callback) {
+    this.staticAccess().update(query, data, {
+      multi: true
+    }, (err, doc) => {
+      if (callback)
+        callback(err, doc);
+    });
+  }
+
+
+
   // --- Class -- //
   //A class access to the class model
   classAccess() {
@@ -86,17 +108,31 @@ module.exports = class DataAccess {
   //   Schema.Build(this).save(callback);
   // }
 
+  getPKQuery() {
+    return this.constructor.getKeyQuery(this.constructor.getKeyVal(this));
+  }
+
   //Inserts the object or update based on the primary key
   upsert(callback) {
-    var query = this.constructor.getKeyQuery(this.constructor.getKeyVal(this));
-
-    this.classAccess().findOneAndUpdate(query, this, {
+    this.classAccess().findOneAndUpdate(this.getPKQuery(), this, {
       upsert: true
     }, (err, doc) => {
       if (callback)
         callback(err, doc);
     });
   }
+
+  update(callback) {
+    this.classAccess().update(this.getPKQuery(),
+      this, {
+        multi: false
+      }, (err) => {
+        if (callback)
+          callback(err);
+      });
+  }
+
+
 
 
 

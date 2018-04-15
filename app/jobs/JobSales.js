@@ -1,20 +1,19 @@
 var EccosysCalls = require('../eccosys/eccosys-calls.js');
+var UsersProvider = require('../provider/UsersProvider.js');
 var Sale = require('../bean/sale.js');
 var User = require('../bean/user.js');
 
 var from;
 var to;
-var localUsers;
+
 
 module.exports = {
 
   run(callback) {
 
-    loadUsers();
-
     //Find the last sale row date to set as from date sync
     Sale.getLast(function(err, doc) {
-      from = doc ? doc.billingDate : Dat.firstDayOfMonth();
+      from = doc ? doc.billingDate : Dat.rollDay(new Date(), -2);
       to = new Date();
 
       console.log('---  From ' + Dat.format(from) + ' To ' + Dat.format(to) + ' ---');
@@ -36,7 +35,6 @@ function handleSalePaging(page, callback) {
       processSalesPage(list, -1, () => {
         page++;
 
-        //console.log('--- ' + list.length + ' Sales were stored on page ' + page + ' --- ');
         handleSalePaging(page, callback);
       });
     } else {
@@ -77,7 +75,7 @@ function handleSale(pedido) {
 
   if (user) {
     var sale = buildSale(user.id, pedido);
-    storeUser(user);
+    UsersProvider.store(user);
     storeSale(sale);
   }
 }
@@ -87,29 +85,11 @@ function buildSale(userId, pedido) {
 }
 
 function storeSale(sale) {
-  console.log('Sale ' + sale.number + ' stored');
+  console.log('Sale ' + sale.number + ' from ' + Dat.format(sale.billingDate));
   sale.upsert();
 }
 
 function buildUser(pedido) {
   var actions = pedido._Ocorrencias.filter(item => item.descricao.indexOf('Nota Fiscal Gerada') > -1)[0];
   return !actions ? undefined : new User(actions.idProprietario, actions.nomeProprietario);
-}
-
-function storeUser(user) {
-  if (localUsers[user.id] === undefined) {
-    user.upsert();
-
-    localUsers[user.id] = user.name;
-  }
-}
-
-function loadUsers() {
-  localUsers = {};
-
-  User.findAll(function(err, users) {
-    users.forEach(function(user) {
-      localUsers[user.id] = user.name;
-    });
-  });
 }

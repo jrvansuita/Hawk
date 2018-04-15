@@ -1,5 +1,3 @@
-var dateFormat = require('dateformat');
-
 var prefix = '';
 
 module.exports = class Query {
@@ -13,7 +11,7 @@ module.exports = class Query {
   }
 
   addDate(key, value) {
-    this.add(key, dateFormat(value, "yyyy-mm-dd"));
+    this.add(key, Dat.api(value));
   }
 
   build() {

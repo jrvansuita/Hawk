@@ -25,7 +25,7 @@ html, body {
 .main-content {
   display: block;
   position: relative;
-  padding-top: 55px;
+  padding-top: 50px;
 }
 
 .shadow {
@@ -39,4 +39,8 @@ html, body {
   height: 50px;
   border: solid 2px white;
   border-radius: 50%;
+}
+
+.gone {
+  display: none;
 }
