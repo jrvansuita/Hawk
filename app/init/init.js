@@ -23,3 +23,6 @@ require('../provider/UsersProvider.js').loadAllUsers();
 
 //Build the prototypes
 require('../init/prototypes.js');
+
+//Trigger the scheduled jobs
+require('../jobs/jobs.js').schedule(true);

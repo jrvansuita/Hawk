@@ -26,7 +26,6 @@ app.use('/libs', express.static('libs'));
 
 
 app.post('/run-jobs', (req, res) => {
-  //Trigger the scheduled jobs
   require('./app/jobs/Jobs.js').run((runned) => {
     var result = {
       "was_running": runned

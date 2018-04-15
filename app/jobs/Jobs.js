@@ -27,15 +27,22 @@ function runJobs(onFinished) {
     onFinished(false);
   } else {
     global.jobsRunning = true;
+
+    var SaleJob = require('../jobs/JobSales.js');
     //Update the local databse with the lasts sales order
-    require('../jobs/JobSales.js').run(function() {
+    SaleJob.run(function() {
       //Handle the invoice by days
       require('../jobs/JobDays.js').run(() => {
         global.jobsRunning = false;
+
+        SaleJob.clear();
+
         if (onFinished)
           onFinished(true);
       });
     });
+
+
   }
 }
 

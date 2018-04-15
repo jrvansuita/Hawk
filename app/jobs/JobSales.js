@@ -24,6 +24,23 @@ module.exports = {
         console.log('---  Sale Sync Job Finished --- ');
       });
     });
+  },
+
+  clear() {
+    var cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - 7);
+
+    console.log(cutoff);
+
+    Sale.removeAll({
+      $and: [{
+        synced: true
+      }, {
+        billingDate: {
+          $lt: cutoff
+        }
+      }]
+    });
   }
 };
 

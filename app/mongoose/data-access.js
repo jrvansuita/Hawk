@@ -95,6 +95,13 @@ module.exports = class DataAccess {
   }
 
 
+  static removeAll(query, callback) {
+    this.staticAccess().remove(query, (err) => {
+      if (callback)
+        callback(err);
+    });
+  }
+
 
   // --- Class -- //
   //A class access to the class model

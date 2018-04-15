@@ -18,6 +18,8 @@ module.exports = {
         execute(rows, 0, () => {
           Sale.syncAll();
           onFinished();
+
+          console.log('--- Days Sync Job Finished ---');
         });
       } else {
         onFinished();
