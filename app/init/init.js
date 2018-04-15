@@ -25,4 +25,4 @@ require('../provider/UsersProvider.js').loadAllUsers();
 require('../init/prototypes.js');
 
 //Trigger the scheduled jobs
-require('../jobs/jobs.js').schedule(true);
+require('../jobs/Jobs.js').schedule(false);
