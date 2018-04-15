@@ -13,7 +13,7 @@ module.exports = {
 
     //Find the last sale row date to set as from date sync
     Sale.getLast(function(err, doc) {
-      from = doc ? doc.billingDate : Dat.rollDay(new Date(), -2);
+      from = doc ? doc.billingDate : Dat.firstDayOfMonth();
       to = new Date();
 
       console.log('---  From ' + Dat.format(from) + ' To ' + Dat.format(to) + ' ---');
