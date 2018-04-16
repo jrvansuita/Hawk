@@ -4,8 +4,18 @@ module.exports = {
   schedule: function(runNow) {
     schedule = require('node-schedule');
 
+    // var rule = new schedule.RecurrenceRule();
+    // rule.dayOfWeek = new schedule.Range(1, 5);
+    // rule.hour = 11;
+    //
+    // var j = schedule.scheduleJob(rule, function(fireDate) {
+    //   console.log('This job was supposed to run at ' + fireDate + ', but actually ran at ' + new Date());
+    // });
+
+
     getSchedules([11, 13, 17]).forEach((rule) => {
-      schedule.scheduleJob(rule, function() {
+      schedule.scheduleJob(rule, function(fireDate) {
+        console.log('This job was supposed to run at ' + fireDate + ', but actually ran at ' + new Date());
         runJobs();
       });
     });
@@ -24,7 +34,8 @@ module.exports = {
 
 function runJobs(onFinished) {
   if (global.jobsRunning) {
-    onFinished(false);
+    if (onFinished)
+      onFinished(false);
   } else {
     global.jobsRunning = true;
 
@@ -53,6 +64,7 @@ function getSchedules(hours) {
     //Monday to Friday
     rule.dayOfWeek = new schedule.Range(1, 5);
     rule.hour = hour;
+    rule.minute = 0;
     rules.push(rule);
   });
 

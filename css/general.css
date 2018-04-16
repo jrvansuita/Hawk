@@ -5,6 +5,15 @@ html, body {
   font-family: Roboto, sans-serif;
 }
 
+input {
+  font-family: Roboto, sans-serif;
+}
+
+::-webkit-input-placeholder {
+  /* Chrome/Opera/Safari */
+  font-family: Roboto, sans-serif;
+}
+
 .button {
   position: relative !important;
   cursor: pointer;
@@ -43,4 +52,8 @@ html, body {
 
 .gone {
   display: none;
+}
+
+.red {
+  background-color: #f3736a !important;
 }

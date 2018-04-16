@@ -43,25 +43,25 @@ module.exports = {
 
   firstDayCurrentWeek() {
     var today = this.today();
-    today.setDate(today.getDate() - today.getDay() - 1);
+    today.setDate(today.getUTCDate() - today.getUTCDay() - 1);
     return today;
   },
 
   lastDayCurrentWeek() {
     var d = this.firstDayCurrentWeek();
-    d.setDate(d.getDate() + 6);
+    d.setUTCDate(d.getUTCDate() + 6);
     return d;
   },
 
   firstDayLastWeek() {
     var oneWeekAgo = this.firstDayCurrentWeek();
-    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+    oneWeekAgo.setUTCDate(oneWeekAgo.getUTCDate() - 7);
     return oneWeekAgo;
   },
 
   lastDayLastWeek() {
     var lastWeek = this.firstDayLastWeek();
-    lastWeek.setDate(lastWeek.getDate() + 6);
+    lastWeek.setUTCDate(lastWeek.getUTCDate() + 6);
     return lastWeek;
   },
 

@@ -9,28 +9,18 @@
   width: 100%;
 }
 
-.run-jobs {
-  margin-left: auto;
-  margin-right: 0;
-  display: -webkit-box;
-}
-
-#run-jobs-label {
-  margin: 15px;
-  font-size: 15px;
-}
-
 #run-jobs-img {
-  padding-right: 25px;
-  padding-left: 25px;
+  padding-right: 10px;
+  padding-left: 10px;
   width: 35px;
   height: 35px;
-  padding-top: 5px;
+  padding-top: 8px;
   padding-bottom: 5px
 }
 
 #logo {
   width: 30px;
+  cursor: pointer;
   height: 30px;
   margin: 5px;
   padding-top: 5px;
@@ -80,4 +70,28 @@
   display: flex;
   list-style: none;
   -webkit-padding-start: 0;
+}
+
+.user-logged-holder {
+  margin-left: auto;
+  margin-right: 0;
+  display: inline-block;
+  height: 40px;
+  padding-top: 8px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.user-logged-img {
+  display: inline-block;
+  width: 35px !important;
+  height: 35px !important;
+}
+
+.user-logged-name {
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
+  padding-left: 2px;
+  font-size: 13px;
 }

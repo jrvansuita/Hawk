@@ -31,7 +31,12 @@
 
     <nav id="main-menu">
 
-      <img src="/img/icon/hawk.png" id="logo" />
+      <div class="material-ripple start-jobs">
+        <img src="/img/icon/hawk.png" id="logo" class="<%= global.jobsRunning ? 'gone' : '' %>" />
+        <img id="run-jobs-img" src="/img/loader/loading.svg" class="<%= !global.jobsRunning ? 'gone' : '' %>" />
+      </div>
+
+
 
       <ul id="nav">
         <li class="menu-item material-ripple" href="picking">
@@ -52,12 +57,13 @@
         </li>
       </ul>
 
-      <div class="material-ripple run-jobs" onclick="startJobs()">
-        <div id="run-jobs-label" class="button title <%= global.jobsRunning ? 'gone' : '' %>">
-          Atualizar
-        </div>
+      <div class="material-ripple user-logged-holder">
 
-        <img id="run-jobs-img" src="/img/loader/loading.svg" class="<%= !global.jobsRunning ? 'gone' : '' %>" />
+        <img src="/img/avatar/<%=user ? user.id : 'default' %>.jpg" class="user-logged-img circle shadow" />
+
+        <label class="title user-logged-name"><%= user ? user.name : 'No User' %> </label>
+
+
       </div>
     </nav>
 

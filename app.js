@@ -1,11 +1,26 @@
 require('./app/init/init.js');
 
 var express = require('express');
+var session = require('express-session');
+var bodyParser = require('body-parser');
+
 var app = express();
 
 app.set('port', process.env.PORT || 3000);
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
+// register the session with it's secret ID
+app.use(session({
+  secret: "hawk",
+  name: "hawk_cookie",
+  proxy: true,
+  resave: true,
+  saveUninitialized: true
+}));
 
 app.set('view engine', 'ejs');
 app.use('/css', express.static('css'));
@@ -25,6 +40,16 @@ app.use('/libs', express.static('libs'));
 
 
 
+//Keep a user variable for session in all ejs
+app.use(function(req, res, next) {
+  if (req.session.user || req.path === '/login') {
+    res.locals.user = req.session.user;
+    next();
+  } else {
+    res.redirect("/login");
+  }
+});
+
 app.post('/run-jobs', (req, res) => {
   require('./app/jobs/Jobs.js').run((runned) => {
     var result = {
@@ -34,9 +59,24 @@ app.post('/run-jobs', (req, res) => {
     if (runned) {
       res.status(200).send(result);
     } else {
-      res.status(500).send(result);
+      res.status(201).send(result);
     }
   });
+});
+
+app.get('/login', (req, res) => {
+  res.render('login');
+});
+
+app.post('/login', function(req, res) {
+  req.session.user = require('./app/provider/UsersProvider.js').get(req.body.userid);
+  console.log(req.session.user);
+
+  if (req.session.user) {
+    res.status(200).send(req.session.user);
+  } else {
+    res.status(505).send(null);
+  }
 });
 
 app.get(['/', '/invoice', '/invoice/overview'], (req, res) => {
