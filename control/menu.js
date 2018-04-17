@@ -1,6 +1,6 @@
 $(document).ready(() => {
 
-  $('.run-jobs').click(() => {
+  $('.start-jobs').click(() => {
     $('#logo').hide();
     $('#run-jobs-img').fadeIn();
 
