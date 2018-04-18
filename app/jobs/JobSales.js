@@ -30,8 +30,6 @@ module.exports = {
     var cutoff = new Date();
     cutoff.setDate(cutoff.getDate() - 7);
 
-    console.log(cutoff);
-
     Sale.removeAll({
       $and: [{
         synced: true

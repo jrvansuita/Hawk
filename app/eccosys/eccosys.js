@@ -50,7 +50,7 @@ var signature;
 
 function generateSignature() {
   if (!signature) {
-    signature = MD5.get(secret + ":" + Dat.api(new Date()));
+    signature = MD5.get(secret + ":" + Dat.format(new Date(), "dd-mm-yyyy"));
   }
 
   return signature;
