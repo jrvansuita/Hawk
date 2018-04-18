@@ -1,18 +1,20 @@
 module.exports = {
 
   format(date) {
-    var d = date.getUTCDate();
-    var m = date.getUTCMonth() + 1; //Month from 0 to 11
-    var y = date.getFullYear().toString().slice(2, 4);
-    return (d <= 9 ? '0' + d : d) + '/' + (m <= 9 ? '0' + m : m) + '/' + y;
+    var formated = fmt(date);
+    return formated.day + '/' + formated.month + '/' + formated.year.slice(2, 4);
   },
 
   api(date) {
-    var d = date.getUTCDate();
-    var m = date.getUTCMonth() + 1; //Month from 0 to 11
-    var y = date.getFullYear();
-    return y + '-' + (m <= 9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+    var formated = fmt(date);
+    return formated.year + '-' + formated.month + '-' + formated.day;
   },
+
+  signatureDate(date) {
+    var formated = fmt(date);
+    return formated.day + '-' + formated.month + '-' + formated.year;
+  },
+
 
   rollDay(date, n) {
     date.setDate(date.getDate() + n);
@@ -87,6 +89,18 @@ module.exports = {
 };
 
 
+function fmt(date) {
+  var formated = {
+    day: date.getUTCDate(),
+    month: date.getUTCMonth() + 1,
+    year: date.getFullYear().toString(),
+  };
+
+  formated.day = (formated.day <= 9 ? '0' + formated.day : formated.day);
+  formated.month = (formated.month <= 9 ? '0' + formated.month : formated.month);
+
+  return formated;
+}
 
 function getCurrentYear() {
   return new Date().getFullYear();

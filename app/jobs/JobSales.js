@@ -45,7 +45,6 @@ module.exports = {
 function handleSalePaging(page, callback) {
   EccosysCalls.getSales(from, to, page, function(data) {
     var list = JSON.parse(data);
-
     if (list instanceof Array) {
       processSalesPage(list, -1, () => {
         page++;
