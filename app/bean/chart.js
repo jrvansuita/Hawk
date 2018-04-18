@@ -111,8 +111,4 @@ class Bar {
     return this.value;
   }
 
-  getBarColor() {
-    return this.barColor;
-  }
-
 }

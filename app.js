@@ -103,6 +103,10 @@ app.get('/invoice/by-date', (req, res) => {
 });
 
 
+app.get('/achievements', (req, res) => {
+  res.render('achievements');
+});
+
 app.get('/outros', (req, res) => {
   res.render('outros');
 });

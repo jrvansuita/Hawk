@@ -11,6 +11,7 @@
 .chart-group {
   background-color: white;
   margin: 8px;
+  max-width: 90%;
   display: inline-grid;
   width: fit-content;
 }
@@ -138,7 +139,6 @@
   margin-right: auto;
   display: block;
   min-width: 500px;
-  max-width: 900px;
   overflow: auto;
   overflow-y: hidden;
   white-space: nowrap;

@@ -1,6 +1,5 @@
 const http = require('http');
 var MD5 = require('../util/md5.js');
-var dateFormat = require('dateformat');
 
 var exports = module.exports = {};
 
@@ -51,7 +50,7 @@ var signature;
 
 function generateSignature() {
   if (!signature) {
-    signature = MD5.get(secret + ":" + dateFormat(new Date(), "dd-mm-yyyy"));
+    signature = MD5.get(secret + ":" + Dat.api(new Date()));
   }
 
   return signature;
