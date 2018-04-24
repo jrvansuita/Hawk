@@ -2,6 +2,8 @@
 
   <head>
 
+    <link rel="stylesheet" type="text/css" href="/css/achiev.css">
+
   </head>
 
   <body>
@@ -13,26 +15,46 @@
         <% include invoice-menu %>
 
 
-
           <div class="achivments-holder">
-            <%
-               var data {
-                 "0": {
-                   "user": {
-                       id: 117566781,
-                       name: "Carlos"
-                   }
-                   bars: [{
-                     name: "pedidos",
-                     value: "123",
-                     barColor:""
 
-                   }]
+            <%data.forEach((item)=>{
+              %>
+
+              <div class="shadow grid-item">
 
 
-                 }
-               }
-             %>
+                <span class="label month-desc"><%=item.monthDesc%></span>
+
+                <div class="avatar-holder">
+                  <img class="avatar-img circle shadow" src="/img/avatar/<%=item.user.id%>.jpg" onerror="this.src='/img/avatar/default.jpg'" />
+                  <span class="label shadow avatar-name"><%=item.user.name || '...' %></span>
+                </div>
+
+                <div class="dots-holder">
+
+                  <%item.getBars().forEach((bar)=>{
+
+                   %>
+
+                    <div class="dot-item">
+                      <div class="dot circle shadow" style="background-color: #<%=bar.barColor%>"> </div>
+                      <label class="dot-value label"> <%=Num.format(bar.value)%> </label>
+                    </div>
+
+                    <%
+
+                    });%>
+
+
+
+                </div>
+
+              </div>
+
+              <%
+
+            });%>
+
 
           </div>
 

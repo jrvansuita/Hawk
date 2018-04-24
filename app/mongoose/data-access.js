@@ -74,6 +74,14 @@ module.exports = class DataAccess {
     }).limit(1).exec(callback);
   }
 
+  static aggregate(query, callback) {
+    this.staticAccess().aggregate(query,
+      function(err, res) {
+        if (callback)
+          callback(err, res);
+      });
+  }
+
   //Upsert using provided query and data
   static upsert(query, data, callback) {
     this.staticAccess().findOneAndUpdate(query, data, {

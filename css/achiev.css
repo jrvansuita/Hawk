@@ -1,0 +1,61 @@
+.achivments-holder {
+  display: grid;
+  padding: 20px;
+  text-align: center;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  grid-template-columns: repeat(4, 0fr);
+  grid-gap: 5px;
+}
+
+.grid-item {
+  flex-basis: 33%;
+  padding: 10px 20px 10px 20px;
+  margin: 5px;
+  display: inline-grid;
+  width: 200px;
+  height: 200px;
+}
+
+.avatar-holder {
+  padding-bottom: 10px;
+  display: block;
+}
+
+.avatar-img {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.avatar-name {
+  font-size: 11px;
+  text-align: center;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  min-width: 50px;
+}
+
+.month-desc {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.dot-item {
+  display: block;
+}
+
+.dot {
+  display: inline-block;
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.dot-value {
+  font-size: 13px;
+}

@@ -1,6 +1,5 @@
 $(document).ready(function() {
 
-  loadImgFiles('avatar-img', 'data-src');
 
   $('.grow-bar').each(function() {
     $(this).animate({

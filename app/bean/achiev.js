@@ -1,8 +1,10 @@
 module.exports = class Achievement {
 
-  constructor(month, user) {
+  constructor(month, year) {
     this.month = month;
-    this.user = user;
+    this.year = year;
+    this.monthDesc = Dat.monthDesc(month);
+    this.user = 'default ';
 
     //Charts items
     this.bars = [];

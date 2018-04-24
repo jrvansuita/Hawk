@@ -1,6 +1,6 @@
 require('./app/init/init.js');
 
-var cookieSession = require('cookie-session')
+var cookieSession = require('cookie-session');
 var express = require('express');
 var bodyParser = require('body-parser');
 
@@ -37,7 +37,6 @@ app.use('/libs', express.static('libs'));
 // app.get('/home', (req, res) => {
 //   res.sendFile(__dirname + '/views/home.html');
 // });
-
 
 
 app.post('/run-jobs', (req, res) => {
@@ -104,7 +103,16 @@ app.get('/invoice/by-date', (req, res) => {
 
 
 app.get('/achievements', (req, res) => {
-  res.render('achievements');
+  var AchievGridBuilder = require('./app/builder/AchievGridBuilder.js');
+  var builder = new AchievGridBuilder();
+  builder.init(
+    (data) => {
+      res.render('achievements', {
+        data: data
+      });
+    });
+
+  builder.build();
 });
 
 app.get('/outros', (req, res) => {

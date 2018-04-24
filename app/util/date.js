@@ -86,6 +86,11 @@ module.exports = {
   firstDayOfYear() {
     return new Date(Date.UTC(getCurrentYear(), 0, 1, 0));
   },
+
+  monthDesc(index) {
+    var m = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+    return m[index];
+  }
 };
 
 

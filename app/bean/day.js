@@ -17,6 +17,11 @@ module.exports = class Day extends DataAccess {
     return new Day(userId, date, 'picking', total, count);
   }
 
+  static pointsCalc(count, total) {
+    return (count * total) / 10000;
+  }
+
+
 
   static getKey() {
     return ['userId', 'date', 'type'];
