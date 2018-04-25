@@ -46,7 +46,7 @@ module.exports = class AchievGridBuilder {
             aItem.user = row.user;
             aItem.addBar('Pedidos', row.sum_count, '14b5a6');
             aItem.addBar('Pontos', row.sum_points, '1da8b9');
-            aItem.addBar('Receita', row.sum_total, '03c184');
+            //aItem.addBar('Receita', row.sum_total, '03c184');
           }
 
           month--;
