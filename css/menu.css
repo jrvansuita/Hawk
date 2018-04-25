@@ -95,3 +95,34 @@
   padding-left: 2px;
   font-size: 13px;
 }
+
+.subtitles {
+  position: absolute;
+  display: table;
+  height: 35px;
+  right: 0px;
+}
+
+.subtitle-item {
+  vertical-align: middle;
+  display: table-cell;
+}
+
+.subtitle-label {
+  padding: 2px 3px 2px 3px;
+  color: white;
+  font-size: 12px;
+  padding-left: 5px;
+  padding-right: 30px;
+  font-family: Roboto, sans-serif;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.subtitle-color {
+  height: 20px !important;
+  width: 20px !important;
+  display: inline-block;
+  display: table-cell;
+  vertical-align: middle;
+}

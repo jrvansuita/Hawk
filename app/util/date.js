@@ -84,7 +84,7 @@ module.exports = {
   },
 
   firstDayOfYear() {
-    return new Date(Date.UTC(getCurrentYear(), 0, 1, 0));
+    return new Date(Date.UTC(getCurrentYear(), 0, 2, 0));
   },
 
   monthDesc(index) {

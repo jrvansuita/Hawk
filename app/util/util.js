@@ -3,15 +3,25 @@ module.exports = {
 
   getSubtitles: function(charts) {
 
-    var subtitles = charts.filter((chart) => {
-      return chart.getItems().filter((item) => {
+    var arrItem;
+
+    charts.some((chart) => {
+
+      var arr = chart.getItems().filter((item) => {
         return item.getBars().length > 0;
-      }).length > 0;
+      });
+
+      if (arr.length > 0) {
+        arrItem = arr[0];
+        return true;
+      }
+
+      return false;
     });
 
 
-    return subtitles.length > 0 ? subtitles[0].getItems()[0].getBars() : [];
-  }
+    return arrItem ? arrItem.getBars() : [];
+  },
 
 
 };

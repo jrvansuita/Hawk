@@ -22,32 +22,41 @@ module.exports = class AchievGridBuilder {
       });
 
 
-      var month = 11;
-      var year = new Date().getFullYear();
+      var currentYear = new Date().getFullYear();
+      var year = currentYear;
 
-      while (month >= 0) {
+      while (year >= currentYear - 1) {
+        var month = 11;
 
-        var arr = res.filter((item) => {
-          return item._id.year == year && item._id.month == month;
-        }).sort((a, b) => {
-          return a[field] - b[field];
-        });
+        var achiev = new Achiev(year);
 
-        var row = arr[arr.length - 1];
+        while (month >= 0) {
 
-        var achiev = new Achiev(month, year);
+          var arr = res.filter((item) => {
+            return item._id.year == year && item._id.month == month;
+          }).sort((a, b) => {
+            return a[field] - b[field];
+          });
 
-        if (row) {
-          achiev.user = row.user;
-          achiev.addBar('Pedidos', row.sum_count, '14b5a6');
-          achiev.addBar('Pontos', row.sum_points, '1da8b9');
-          achiev.addBar('Receita', row.sum_total, '03c184');
+          var row = arr[arr.length - 1];
+
+          var aItem = achiev.addItem(month);
+
+          if (row) {
+            aItem.user = row.user;
+            aItem.addBar('Pedidos', row.sum_count, '14b5a6');
+            aItem.addBar('Pontos', row.sum_points, '1da8b9');
+            aItem.addBar('Receita', row.sum_total, '03c184');
+          }
+
+          month--;
         }
 
         _self.data.push(achiev);
 
-        month--;
+        year--;
       }
+
 
       _self.finalCallback(_self.data);
     });

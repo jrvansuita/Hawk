@@ -1,7 +1,6 @@
 .achivments-holder {
   display: grid;
   padding: 20px;
-  text-align: center;
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
@@ -12,15 +11,25 @@
 .grid-item {
   flex-basis: 33%;
   padding: 10px 20px 10px 20px;
-  margin: 5px;
+  margin: 2px;
   display: inline-grid;
   width: 200px;
-  height: 200px;
+  height: 150px;
+}
+
+.inner-achiev {
+  display: flex;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .avatar-holder {
-  padding-bottom: 10px;
   display: block;
+  vertical-align: middle;
+  margin-top: auto;
+  height: fit-content;
+  margin-bottom: auto;
 }
 
 .avatar-img {
@@ -47,7 +56,16 @@
 }
 
 .dot-item {
-  display: block;
+  display: flex;
+  padding: 2px;
+}
+
+.dots-holder {
+  margin-left: 10px;
+  vertical-align: middle;
+  margin-top: auto;
+  height: fit-content;
+  margin-bottom: auto;
 }
 
 .dot {
@@ -58,4 +76,21 @@
 
 .dot-value {
   font-size: 13px;
+}
+
+.crown {
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 100;
+  display: block;
+  margin-bottom: -3px;
+  height: 20px;
+}
+
+.year-title {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  margin-top: 20px;
 }

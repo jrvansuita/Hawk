@@ -12,51 +12,56 @@
     <div class="main-content">
       <% include menu %>
 
-        <% include invoice-menu %>
+        <%
 
-
-          <div class="achivments-holder">
-
-            <%data.forEach((item)=>{
-              %>
-
-              <div class="shadow grid-item">
-
-
-                <span class="label month-desc"><%=item.monthDesc%></span>
-
-                <div class="avatar-holder">
-                  <img class="avatar-img circle shadow" src="/img/avatar/<%=item.user.id%>.jpg" onerror="this.src='/img/avatar/default.jpg'" />
-                  <span class="label shadow avatar-name"><%=item.user.name || '...' %></span>
-                </div>
-
-                <div class="dots-holder">
-
-                  <%item.getBars().forEach((bar)=>{
-
-                   %>
-
-                    <div class="dot-item">
-                      <div class="dot circle shadow" style="background-color: #<%=bar.barColor%>"> </div>
-                      <label class="dot-value label"> <%=Num.format(bar.value)%> </label>
-                    </div>
-
-                    <%
-
-                    });%>
+        var subtitlesArr = Util.getSubtitles(data);
+        var curYear;
+        %>
+          <%include invoice-menu %>
 
 
 
-                </div>
 
-              </div>
+            <%data.forEach((achiev)=>{%>
+              <% if(curYear != achiev.year){
+                     curYear = achiev.year;
+                  %>
+                <label class="label year-title">
+                    <%=achiev.year%>
+                  </label>
 
-              <%
+                <%}%>
 
-            });%>
+                  <div class="achivments-holder">
 
 
-          </div>
+                    <%achiev.getItems().forEach((item)=>{%>
+                      <div class="shadow grid-item">
+                        <label class="label month-desc"><%=item.monthDesc%></label>
+
+                        <div class="inner-achiev">
+                          <div class="avatar-holder">
+                            <img class="crown" src="/img/crown.png" />
+                            <img class="avatar-img circle shadow" src="/img/avatar/<%=item.user.id%>.jpg" onerror="this.src='/img/avatar/default.jpg'" />
+                            <span class="label shadow avatar-name"><%=item.user.name || 'Indefinido' %></span>
+                          </div>
+
+                          <div class="dots-holder">
+
+                            <%item.getBars().forEach((bar)=>{%>
+
+                              <div class="dot-item">
+                                <div class="dot circle shadow" style="background-color: #<%=bar.barColor%>"> </div>
+                                <label class="dot-value label"> <%=Num.format(bar.value)%> </label>
+                              </div>
+
+                              <%});%>
+                          </div>
+                        </div>
+                      </div>
+                      <%});%>
+                  </div>
+                  <%});%>
 
     </div>
 

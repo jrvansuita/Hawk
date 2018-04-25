@@ -19,15 +19,15 @@
     </ul>
   </nav>
 
-  <div class="chart-subtitles">
+  <div class="subtitles">
 
     <%
     if (typeof subtitlesArr != "undefined")
       subtitlesArr.forEach(function(bar){ %>
 
-      <div class="chart-subtitle-item">
+      <div class="subtitle-item">
         <div class="subtitle-color circle shadow" style="background-color: #<%=bar.barColor%>"> </div>
-        <label class="chart-subtitle-label"> <%=bar.name%> </label>
+        <label class="subtitle-label"> <%=bar.name%> </label>
       </div>
 
       <% }); %>
