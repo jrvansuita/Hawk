@@ -12,6 +12,8 @@
     <script type="text/javascript" src="/control/login.js"></script>
     <link href="//fonts.googleapis.com/css?family=Roboto" rel='stylesheet' type='text/css'>
 
+    <script type="text/javascript" src="/visual/ripple.min.js"></script>
+
     <title>Hawk</title>
     <link rel="icon" href="/img/icon/favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="/img/icon/favicon.ico" type="image/x-icon" />
@@ -23,12 +25,19 @@
 
       <div class="login-form shadow">
         <div class="img-holder">
+
+
           <img src="/img/icon/hawk.png" class="shadow circle" id="logo" />
+
+          <img src="/img/avatar/default.jpg" class="shadow circle material-ripple" id="guest" title="Convidado" />
+
+
+          <span class="login-title">Hawk Login</span>
         </div>
 
+
+
         <div class="login-els">
-
-
 
           <div class="group input-group">
             <input type="text" id="user-id" required>

@@ -17,5 +17,11 @@ module.exports = {
 
   getSale(number, callback) {
     Eccosys.get('pedidos/' + number, callback);
+  },
+
+
+  getPickingSales(callback) {
+    //Pronto para picking
+    Eccosys.get('pedidos/situacao/3', callback);
   }
 };

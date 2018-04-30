@@ -5,7 +5,8 @@ var Day = require('../bean/day.js');
 
 module.exports = class AchievGridBuilder {
 
-  init(callback) {
+  init(full, callback) {
+    this.full = full;
     this.finalCallback = callback;
     this.data = [];
   }
@@ -46,7 +47,8 @@ module.exports = class AchievGridBuilder {
             aItem.user = row.user;
             aItem.addBar('Pedidos', row.sum_count, '14b5a6');
             aItem.addBar('Pontos', row.sum_points, '1da8b9');
-            //aItem.addBar('Receita', row.sum_total, '03c184');
+            if (_self.full)
+              aItem.addBar('Receita', row.sum_total, '03c184');
           }
 
           month--;
@@ -62,7 +64,6 @@ module.exports = class AchievGridBuilder {
     });
 
     this.provider.load();
-
 
   }
 

@@ -4,6 +4,7 @@ module.exports = class User extends DataAccess {
     super();
     this.id = Num.def(id);
     this.name = Str.def(name);
+    this.full = false;
   }
 
   static getKey() {

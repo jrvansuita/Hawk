@@ -56,8 +56,8 @@ app.post('/run-jobs', (req, res) => {
 //Keep a user variable for session in all ejs
 //Redirect if no user is logged-in
 app.use(function(req, res, next) {
-  if (req.session.user || req.path === '/login') {
-    res.locals.user = req.session.user;
+  if (req.session.loggedUser || req.path === '/login') {
+    res.locals.loggedUser = req.session.loggedUser;
     next();
   } else {
     res.redirect("/login");
@@ -69,10 +69,10 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', function(req, res) {
-  req.session.user = require('./app/provider/UsersProvider.js').get(req.body.userid);
+  req.session.loggedUser = require('./app/provider/UsersProvider.js').get(req.body.userid);
 
-  if (req.session.user) {
-    res.status(200).send(req.session.user);
+  if (req.session.loggedUser) {
+    res.status(200).send(req.session.loggedUser);
   } else {
     req.session = null;
     res.status(505).send(null);
@@ -80,7 +80,7 @@ app.post('/login', function(req, res) {
 });
 
 app.get(['/', '/invoice', '/invoice/overview'], (req, res) => {
-  require('./app/builder/InvoiceChartBuilder.js').buildOverview(req.query.full !== undefined, function(charts) {
+  require('./app/builder/InvoiceChartBuilder.js').buildOverview(res.locals.loggedUser.full, function(charts) {
     res.render('invoice', {
       charts: charts,
       page: req.originalUrl,
@@ -93,7 +93,7 @@ app.get('/invoice/by-date', (req, res) => {
   var from = req.query.from ? new Date(parseInt(req.query.from)) : Dat.firstDayOfMonth();
   var to = req.query.to ? new Date(parseInt(req.query.to)).maxTime() : Dat.lastDayOfMonth();
 
-  require('./app/builder/InvoiceChartBuilder.js').buildByDate(from, to, req.query.full !== undefined, function(charts) {
+  require('./app/builder/InvoiceChartBuilder.js').buildByDate(from, to, res.locals.loggedUser.full, function(charts) {
     res.render('invoice', {
       charts: charts,
       page: req.originalUrl,
@@ -105,7 +105,7 @@ app.get('/invoice/by-date', (req, res) => {
 app.get('/achievements', (req, res) => {
   var AchievGridBuilder = require('./app/builder/AchievGridBuilder.js');
   var builder = new AchievGridBuilder();
-  builder.init(
+  builder.init(res.locals.loggedUser.full,
     (data) => {
       res.render('achievements', {
         data: data
@@ -121,6 +121,12 @@ app.get('/outros', (req, res) => {
 
 app.get('/picking', (req, res) => {
   res.render('picking');
+});
+
+app.get('/picking-sale', (req, res) => {
+  new require('./app/provider/PickingProvider.js').initNext(req.query.userid, (result) => {
+    res.status(200).send(result);
+  });
 });
 
 
