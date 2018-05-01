@@ -2,14 +2,28 @@
   <% include menu %>
 
     <head>
+      <link rel="stylesheet" type="text/css" href="/css/picking.css">
       <script type="text/javascript" src="/control/picking.js"></script>
+      <link rel="stylesheet" type="text/css" href="/css/input-material.css">
     </head>
 
     <body>
 
 
       <div class="main-content">
-        <input value="117568973" id="user-id" />
+
+
+
+        <div class="find-next-holder shadow">
+
+          <div class="group input-group">
+            <input type="text" id="user-id" required>
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label>Código de Acesso</label>
+          </div>
+
+        </div>
       </div>
 
     </body>

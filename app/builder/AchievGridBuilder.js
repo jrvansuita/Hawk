@@ -20,6 +20,7 @@ module.exports = class AchievGridBuilder {
     this.provider = new AchievProvider((res) => {
       res.forEach((item) => {
         item.sum_points = Day.pointsCalc(item.sum_count, item.sum_total);
+        console.log(item);
       });
 
 
@@ -34,7 +35,7 @@ module.exports = class AchievGridBuilder {
         while (month >= 0) {
 
           var arr = res.filter((item) => {
-            return item._id.year == year && item._id.month == month;
+            return item._id.year == year && item._id.month == month + 1;
           }).sort((a, b) => {
             return a[field] - b[field];
           });
@@ -51,6 +52,8 @@ module.exports = class AchievGridBuilder {
               aItem.addBar('Receita', row.sum_total, '03c184');
           }
 
+
+
           month--;
         }
 
@@ -58,6 +61,7 @@ module.exports = class AchievGridBuilder {
 
         year--;
       }
+
 
 
       _self.finalCallback(_self.data);

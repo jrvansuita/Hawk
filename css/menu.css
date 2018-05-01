@@ -94,6 +94,7 @@
   height: 100%;
   padding-left: 2px;
   font-size: 13px;
+  position: static;
 }
 
 .subtitles {
