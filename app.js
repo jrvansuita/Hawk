@@ -119,14 +119,29 @@ app.get('/outros', (req, res) => {
   res.render('outros');
 });
 
+
+
+// --- Picking --- //
+var pickingProvider = new require('./app/provider/PickingProvider.js');
+
 app.get('/picking', (req, res) => {
-  res.render('picking');
+  pickingProvider.init(() => {
+    res.render('picking', {
+      upcoming: pickingProvider.upcomingSales(),
+      remaining: pickingProvider.remainingSales(),
+      inprogress: pickingProvider.inprogressPicking()
+    });
+  });
 });
 
 app.get('/picking-sale', (req, res) => {
-  new require('./app/provider/PickingProvider.js').initNext(req.query.userid, (result) => {
-    res.status(200).send(result);
-  });
+  try {
+    pickingProvider.nextSale(req.query.userid, (result) => {
+      res.status(200).send(result);
+    });
+  } catch (e) {
+    res.status(412).send(e);
+  }
 });
 
 

@@ -31,4 +31,13 @@ module.exports = class UsersProvider {
     return global.localUsers[userId];
   }
 
+
+  static checkUserExists(userId) {
+    if (global.localUsers[userId] == undefined) {
+      throw "Usuário não existe.";
+    }
+
+    return true;
+  }
+
 };

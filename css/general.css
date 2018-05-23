@@ -58,3 +58,10 @@ input, span, label {
 .red {
   background-color: #f3736a !important;
 }
+
+.error {
+  color: #e53935;
+  font-size: 12px;
+  padding: 2px;
+  display: none;
+}

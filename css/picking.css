@@ -2,4 +2,73 @@
   padding: 15px;
   width: fit-content;
   margin: 15px;
+  min-width: 250px;
+}
+
+.picking-title {
+  font-size: 16px;
+}
+
+.pick-box {
+  min-width: 250px;
+  min-height: 300px;
+  width: fit-content;
+  margin: 15px;
+  padding: 15px;
+  display: block;
+}
+
+.group.input-group {
+  max-width: 150px;
+  margin: auto;
+  margin-bottom: 40px;
+  margin-top: 40px;
+}
+
+.header-title {
+  display: inline-block;
+  color: #1c796b;
+  width: fit-content;
+  font-size: 12px;
+}
+
+.mini-item {
+  padding: 5px 8px 5px 8px;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.pick-value {
+  width: fit-content;
+  display: inline-block;
+  padding: 2px 5px 2px 5px;
+  font-size: 11px;
+}
+
+.green-title {
+  color: #1c796b;
+  font-size: 13px;
+}
+
+.header-count {
+  margin: auto;
+  display: inline-block;
+  font-size: 14px;
+  float: right;
+}
+
+.preview-header {
+  margin-bottom: 15px;
+}
+
+.col {
+  display: inline-table;
+}
+
+.pick-hint {
+  color: grey;
+  margin-top: 10px;
+  padding-left: 2px;
+  display: inline-block;
+  font-size: 11px;
 }

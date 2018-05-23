@@ -13,16 +13,114 @@
       <div class="main-content">
 
 
+        <div class="col">
+          <div class="find-next-holder shadow">
+            <span class="label picking-title"> Impressão de Picking </span>
 
-        <div class="find-next-holder shadow">
+            <div class="group input-group">
+              <input type="text" id="user-id" required>
+              <span class="highlight"></span>
+              <span class="bar"></span>
+              <label>Código de Acesso</label>
 
-          <div class="group input-group">
-            <input type="text" id="user-id" required>
-            <span class="highlight"></span>
-            <span class="bar"></span>
-            <label>Código de Acesso</label>
+              <p class="error">Código de Acesso</p>
+            </div>
           </div>
 
+          <div class="pick-box shadow">
+
+
+
+            <div class="preview-header">
+              <span class="label header-title"> Próximos Pedidos</span>
+              <span class="label header-count"> <%=remaining%></span>
+            </div>
+
+
+
+
+            <%
+            upcoming.forEach(function(preview){
+            %>
+
+              <div class="shadow label mini-item">
+                <div>
+                  <span class="pick-value green-title">
+                 <%=preview.numeroPedido %>
+                </span>
+
+                  <span class="pick-value" style="float:right">
+                 <%= Dat.format(new Date(preview.data))%>
+                </span>
+                </div>
+
+                <div>
+                  <span class="pick-value">
+                 <%=preview.itemsQuantity %> Itens
+                </span>
+
+                  <span class="pick-value" style="float:right">
+                 <%=Num.money(preview.totalProdutos) %>
+                </span>
+                </div>
+              </div>
+
+              <%
+            });
+            %>
+
+          </div>
+        </div>
+
+        <div class="col">
+
+          <div class="pick-box shadow">
+            <div class="inprogress-header">
+              <span class="label header-title"> Em Andamento</span>
+              <span class="label header-count"> <%=inprogress.length%></span>
+            </div>
+
+
+            <%
+
+            var progress = Object.keys(inprogress);
+
+
+            if (progress.length === 0){
+              %><span class="pick-hint">Nenhum picking em andamento </span>
+              <%
+            }
+
+
+              progress.forEach((key) => {
+                var sale = inprogress[key];
+
+                %>
+                <div class="shadow label mini-item">
+                  <div>
+                    <span class="pick-value green-title">
+               <%=sale.number %>
+              </span>
+
+                    <span class="pick-value" style="float:right">
+               <%= sale.begin%>
+              </span>
+                  </div>
+
+                  <div>
+                    <span class="pick-value">
+               <%=sale.itemsQuantity %> Itens
+              </span>
+
+                    <span class="pick-value" style="float:right">
+               <%=sale.itemsQuantity %>
+              </span>
+                  </div>
+                </div>
+                <%
+          });
+          %>
+          </div>
         </div>
       </div>
 

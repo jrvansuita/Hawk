@@ -4,18 +4,17 @@ $(document).ready(() => {
     var code = $('#user-id').val();
 
     if (code.length >= 9 && isNum(code)) {
-      console.log('chamou');
       $.ajax({
         url: "/picking-sale",
         type: "get",
         data: {
           userid: code
         },
-        success: function(response) {
-          window.open(response, "minhaJanela", );
+        success: function(url) {
+          window.open(url, "picking");
         },
         error: function(jqXHR, textStatus, errorThrown) {
-          console.log(errorThrown);
+          $('.error').text(jqXHR.responseText).fadeIn().delay(3000).fadeOut();
         }
       });
     }
