@@ -19,12 +19,20 @@ $(document).ready(() => {
         data: {
           userid: code
         },
-        success: function(url) {
-          window.open(url, "picking");
-          window.location.reload();
+        success: function(response) {
+          if (response.includes("end-picking")) {
+            $('.sucess').text("Picking encerrado com sucesso.").fadeIn().delay(1000).fadeOut();
+            var sale = response.split("-");
+            sale = sale[sale.length - 1];
+            $('div[data-sale="progress-' + sale + '"]').css('background-color', '#13bb7070').delay(1000).fadeOut();
+            $(".inprogress-count").text(parseInt($(".inprogress-count").text()) - 1);
+          } else {
+            window.open(response, "picking");
+            window.location.reload();
+          }
         },
         error: function(jqXHR, textStatus, errorThrown) {
-          $('.error').text(jqXHR.responseText).fadeIn().delay(3000).fadeOut();
+          $('.error').text(jqXHR.responseText).fadeIn().delay(1000).fadeOut();
         }
       });
     }

@@ -13,8 +13,8 @@ module.exports = class Day extends DataAccess {
     return new Day(sale.userId, sale.billingDate, 'invoice', sale.value, 1);
   }
 
-  static picking(userId, date, count) {
-    return new Day(userId, date, 'picking', total, count);
+  static picking(userId, date) {
+    return new Day(userId, date, 'picking');
   }
 
   static pointsCalc(count, total) {

@@ -10,7 +10,8 @@
 }
 
 .pick-box {
-  min-width: 250px;
+  max-width: 260px;
+  min-width: 260px;
   min-height: 300px;
   width: fit-content;
   margin: 15px;

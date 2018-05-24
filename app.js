@@ -136,7 +136,7 @@ app.get('/picking', (req, res) => {
 
 app.get('/picking-sale', (req, res) => {
   try {
-    pickingProvider.nextSale(req.query.userid, (result) => {
+    pickingProvider.handle(req.query.userid, (result) => {
       res.status(200).send(result);
     });
   } catch (e) {

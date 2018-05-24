@@ -66,6 +66,13 @@ input, span, label {
   display: none;
 }
 
+.sucess {
+  color: #2da961;
+  font-size: 12px;
+  padding: 2px;
+  display: none;
+}
+
 .avatar-name {
   font-size: 11px;
   text-align: center;

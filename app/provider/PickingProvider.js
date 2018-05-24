@@ -1,6 +1,6 @@
-var EccosysCalls = require('../eccosys/eccosys-calls.js');
-var UsersProvider = require('../provider/UsersProvider.js');
-var Pick = require('../bean/pick.js');
+const EccosysCalls = require('../eccosys/eccosys-calls.js');
+const UsersProvider = require('../provider/UsersProvider.js');
+const Day = require('../bean/day.js');
 
 
 global.staticPickingList = [];
@@ -29,13 +29,45 @@ module.exports = {
     }
   },
 
-  nextSale(userId, callback) {
+  handle(userId, callback) {
+    //Check User exists
+
     if (UsersProvider.checkUserExists(userId))
-      if (global.staticPickingList.length == 0) {
-        throw "Mais nenhum pedido no array de picking";
+      if (global.inprogressPicking[userId] != undefined) {
+        //In progress picking
+        this.endPicking(userId, callback);
       } else {
-        callback(buildResult(userId));
+        this.nextSale(userId, callback);
       }
+  },
+
+  nextSale(userId, callback) {
+    if (global.staticPickingList.length == 0) {
+      console.log();
+      throw "Mais nenhum pedido no array de picking";
+    } else {
+      callback(buildResult(userId));
+    }
+  },
+
+  endPicking(userId, callback) {
+    var sale = global.inprogressPicking[userId];
+    delete global.inprogressPicking[userId];
+    sale.end = new Date();
+    var day = Day.picking(userId, new Date());
+
+    var secDif = (sale.end.getTime() - sale.begin.getTime()) / 1000;
+    console.log(secDif);
+
+    Day.upsert(day.getPKQuery(), {
+      $inc: {
+        count: secDif,
+        total: sale.itemsQuantity
+      }
+    }, (err, doc) => {
+      callback("end-picking-" + sale.numeroPedido);
+      console.log(doc);
+    });
   },
 
   upcomingSales() {
