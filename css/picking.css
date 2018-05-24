@@ -27,7 +27,6 @@
 
 .header-title {
   display: inline-block;
-  color: #1c796b;
   width: fit-content;
   font-size: 12px;
 }
@@ -71,4 +70,34 @@
   padding-left: 2px;
   display: inline-block;
   font-size: 11px;
+}
+
+.inprogress-header {
+  margin-bottom: 15px;
+}
+
+.left-avatar {
+  width: fit-content;
+  display: inline-grid;
+}
+
+.inner-mini-item {
+  min-width: 150px;
+  vertical-align: middle;
+  padding: 3px;
+  display: inline-block;
+}
+
+.mini-avatar {
+  width: 40px;
+  height: 40px
+}
+
+.avatar-name {
+  margin-top: -5px;
+}
+
+.avatar-holder {
+  padding: 3px;
+  vertical-align: middle;
 }

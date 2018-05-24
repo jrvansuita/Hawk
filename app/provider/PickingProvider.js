@@ -67,8 +67,12 @@ var printUrl = "https://boutiqueinfantil.eccosys.com.br/relatorios/picking.impre
 
 function buildResult(userId) {
   var sale = getNextSale();
-  var pick = new Pick(sale.numeroPedido, userId, new Date(), null, sale.itemsQuantity);
-  global.inprogressPicking[userId] = pick;
+  sale.begin = new Date();
+  sale.end = null;
+  sale.pickUser = UsersProvider.get(userId);
+  global.inprogressPicking[userId] = sale;
+  global.staticPickingList.splice(0, 1);
+
   return printUrl + "&idsVendas=" + sale.id;
 }
 

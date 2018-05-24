@@ -80,26 +80,6 @@
   color: gray;
 }
 
-.avatar-name {
-  font-size: 11px;
-  text-align: center;
-  width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-}
-
-.avatar-img {
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-}
-
-.avatar-holder {
-  padding-bottom: 10px;
-  display: block;
-}
-
 .chart-holder {
   position: relative;
   height: 290px;
