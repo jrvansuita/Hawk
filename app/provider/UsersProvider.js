@@ -31,6 +31,11 @@ module.exports = class UsersProvider {
     return global.localUsers[userId];
   }
 
+  static getDefault(userId) {
+    var user = this.get(userId);
+    return user == undefined ? new User(404, 'Desconhecido') : user;
+  }
+
 
   static checkUserExists(userId) {
     if (global.localUsers[userId] == undefined) {
