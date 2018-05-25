@@ -115,9 +115,11 @@ app.get('/achievements', (req, res) => {
   builder.build();
 });
 
-app.get('/outros', (req, res) => {
-  res.render('outros');
+app.get('/estoque', (req, res) => {
+  res.render('estoque');
 });
+
+
 
 
 
@@ -125,11 +127,13 @@ app.get('/outros', (req, res) => {
 var pickingProvider = new require('./app/provider/PickingProvider.js');
 
 app.get('/picking', (req, res) => {
-  pickingProvider.init(() => {
+  pickingProvider.init(req.query.transp,() => {
     res.render('picking', {
       upcoming: pickingProvider.upcomingSales(),
       remaining: pickingProvider.remainingSales(),
-      inprogress: pickingProvider.inprogressPicking()
+      inprogress: pickingProvider.inprogressPicking(),
+      transportList: pickingProvider.getTransportList(),
+      selectedTransp: req.query.transp
     });
   });
 });

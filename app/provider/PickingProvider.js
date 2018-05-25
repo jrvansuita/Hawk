@@ -5,12 +5,18 @@ const Day = require('../bean/day.js');
 
 global.staticPickingList = [];
 global.inprogressPicking = {};
+global.transportList = {};
 
 var previewCount = 6;
+const unknow = 'Indefinido';
+var selectedTransp;
+
 
 module.exports = {
 
-  init(onFinished) {
+  init(selected, onFinished) {
+    selectedTransp = selected;
+
     if (global.staticPickingList.length == 0) {
       EccosysCalls.getPickingSales((data) => {
 
@@ -29,16 +35,20 @@ module.exports = {
     }
   },
 
+  getTransportList() {
+    return global.transportList;
+  },
+
   handle(userId, callback) {
     //Check User exists
 
     if (UsersProvider.checkUserExists(userId))
-      if (global.inprogressPicking[userId] != undefined) {
-        //In progress picking
-        this.endPicking(userId, callback);
-      } else {
-        this.nextSale(userId, callback);
-      }
+    if (global.inprogressPicking[userId] != undefined) {
+      //In progress picking
+      this.endPicking(userId, callback);
+    } else {
+      this.nextSale(userId, callback);
+    }
   },
 
   nextSale(userId, callback) {
@@ -71,11 +81,11 @@ module.exports = {
   },
 
   upcomingSales() {
-    return global.staticPickingList.slice(0, previewCount);
+    return assertTransport(global.staticPickingList).slice(0, previewCount);
   },
 
   remainingSales() {
-    return global.staticPickingList.length;
+    return assertTransport(global.staticPickingList).length;
   },
 
   inprogressPicking() {
@@ -91,7 +101,7 @@ module.exports = {
 
 
 function getNextSale() {
-  return global.staticPickingList[0];
+  return assertTransport(global.staticPickingList)[0];
 }
 
 
@@ -105,6 +115,8 @@ function buildResult(userId) {
   global.inprogressPicking[userId] = sale;
   global.staticPickingList.splice(0, 1);
 
+  console.log(sale);
+
   return printUrl + "&idsVendas=" + sale.id;
 }
 
@@ -113,6 +125,11 @@ function loadSaleItems(sales, index, preview, callback) {
   EccosysCalls.getSaleItems(sales[index].numeroPedido, (data) => {
     var items = JSON.parse(data);
 
+    var transp = Str.defStr(sales[index].transportador, unknow).split(' ')[0];
+
+    console.log(transp);
+    global.transportList[transp] = transp;
+    sales[index].transport = transp;
     sales[index].items = items;
     sales[index].itemsQuantity = items.reduce(function(a, b) {
       return a + parseFloat(b.quantidade);
@@ -133,4 +150,17 @@ function loadSaleItems(sales, index, preview, callback) {
       callback(sales);
     }
   });
+}
+
+
+function assertTransport(saleList){
+  if (selectedTransp){
+    if (saleList.length > 0) {
+      return saleList.filter(sale =>{
+        return Str.defStr(sale.transportador,unknow).includes(selectedTransp);
+      });
+    }
+  }
+
+  return saleList;
 }

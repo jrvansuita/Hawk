@@ -1,95 +1,105 @@
 <html>
-  <% include menu %>
+<% include menu %>
 
-    <head>
-      <link rel="stylesheet" type="text/css" href="/css/picking.css">
-      <script type="text/javascript" src="/control/picking.js"></script>
-      <link rel="stylesheet" type="text/css" href="/css/input-material.css">
-    </head>
+<head>
+  <link rel="stylesheet" type="text/css" href="/css/picking.css">
+  <script type="text/javascript" src="/control/picking.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/libs/material-input.css">
+  <link rel="stylesheet" type="text/css" href="/css/libs/material-select.css">
+</head>
 
-    <body>
-
-
-      <div class="main-content">
+<body>
 
 
-        <div class="col">
-          <div class="find-next-holder shadow">
-            <span class="label picking-title"> Impressão de Picking </span>
-
-            <div class="group input-group">
-              <input type="text" id="user-id" required>
-              <span class="highlight"></span>
-              <span class="bar"></span>
-              <label>Código de Acesso</label>
-
-              <p class="error">Erro</p>
-              <p class="sucess">Sucesso</p>
-            </div>
-          </div>
-
-          <div class="pick-box shadow">
+  <div class="main-content">
 
 
+    <div class="col">
+      <div class="find-next-holder shadow">
+        <span class="label picking-title"> Impressão de Picking </span>
 
-            <div class="preview-header">
-              <span class="label header-title"> Próximos Pedidos</span>
-              <span class="label header-count"> <%=remaining%></span>
-            </div>
+        <div class="material-input-holder group input-group">
+          <input type="text" id="user-id" required>
+          <span class="highlight"></span>
+          <span class="bar"></span>
+          <label>Código de Acesso</label>
+
+          <p class="error">Erro</p>
+          <p class="sucess">Sucesso</p>
+        </div>
+
+
+        <div class="dropdown">
+          <input id="tramsport-list" type="checkbox" name="checkbox" checked />
+          <label for="tramsport-list">
+            <div class="drop-ttl"><label><%=selectedTransp ? selectedTransp : 'Transportadora'%></label></div>
+            <ul>
+              <% Object.keys(transportList).forEach((key)=>{%>
+                <li><a href="/picking?transp=<%=key%>"><%=key%></a></li>
+                <%})%>
+            </ul>
+          </label>
+        </div>
+
+
+      </div>
+
+      <div class="pick-box shadow">
+
+
+
+        <div class="preview-header">
+          <span class="label header-title"> Próximos Pedidos</span>
+          <span class="label header-count"> <%=remaining%></span>
+        </div>
 
 
 
 
-            <%
+        <%
         upcoming.forEach(function(preview){
           %>
 
-              <div class="shadow label mini-item">
-                <div>
-                  <span class="pick-value green-title">
-                <%=preview.numeroPedido %>
-              </span>
+          <div class="shadow label mini-item">
 
-                  <span class="pick-value" style="float:right">
-                <%= Dat.format(new Date(preview.data))%>
-              </span>
-                </div>
+            <table width="100%">
+              <tr>
+                <td><span class="pick-value green-title"><%=preview.numeroPedido %></span></td>
+                <td><span class="pick-value"><%=preview.transport%></span></td>
+                <td><span class="pick-value" style="float:right"><%= Dat.format(new Date(preview.data))%></span></td>
+              </tr>
+              <tr>
+                <td><span class="pick-value"><%=preview.itemsQuantity %> Itens</span></td>
+                <td><span class="pick-value"></span></td>
+                <td><span class="pick-value" style="float:right"><%=Num.money(preview.totalProdutos) %></span></td>
+              </tr>
+            </table>
+          </div>
 
-                <div>
-                  <span class="pick-value">
-                <%=preview.itemsQuantity %> Itens
-              </span>
-
-                  <span class="pick-value" style="float:right">
-                <%=Num.money(preview.totalProdutos) %>
-              </span>
-                </div>
-              </div>
-
-              <%
+          <%
         });
         %>
 
-          </div>
+      </div>
+    </div>
+
+    <div class="col">
+
+      <div class="pick-box shadow">
+        <div class="inprogress-header">
+          <span class="label header-title"> Em Andamento</span>
+          <span class="label header-count inprogress-count"> <%=Object.keys(inprogress).length%></span>
         </div>
 
-        <div class="col">
 
-          <div class="pick-box shadow">
-            <div class="inprogress-header">
-              <span class="label header-title"> Em Andamento</span>
-              <span class="label header-count inprogress-count"> <%=Object.keys(inprogress).length%></span>
-            </div>
-
-
-            <%
+        <%
 
         var progress = Object.keys(inprogress);
 
 
         if (progress.length === 0){
           %><span class="pick-hint">Nenhum picking em andamento </span>
-              <%
+          <%
         }
 
 
@@ -97,32 +107,35 @@
           var sale = inprogress[key];
 
           %>
-                <div class="shadow label mini-item" data-sale="progress-<%=sale.numeroPedido %>">
-                  <div class="avatar-holder left-avatar">
-                    <img class="circle shadow avatar-img mini-avatar" src="/img/avatar/<%=sale.pickUser.id%>.jpg" onerror="this.src='/img/avatar/default.jpg'" />
+          <div class="shadow label mini-item" data-sale="progress-<%=sale.numeroPedido %>">
+            <div class="avatar-holder left-avatar">
+            </div>
 
-                  </div>
 
-                  <div class="inner-mini-item">
-                    <div>
-                      <span class="pick-value green-title"><%=sale.numeroPedido %></span>
-                      <span class="pick-value" style="float:right"><%=sale.itemsQuantity %> Itens</span>
-                    </div>
+            <table width="100%">
+              <tr>
+                <td rowspan="0">
+                  <img class="circle shadow avatar-img mini-avatar" src="/img/avatar/<%=sale.pickUser.id%>.jpg" onerror="this.src='/img/avatar/default.jpg'" />
+                </td>
+                <td><span class="pick-value green-title"><%=sale.numeroPedido %></span></td>
+                <td><span class="pick-value"><%=sale.transport %></span></td>
+                <td><span class="pick-value" style="float:right"><%=sale.itemsQuantity %> Itens</span></td>
+              </tr>
+              <tr>
+                <td><span class="pick-value"><%=sale.pickUser.name%></span></td>
+                <td></td>
+                <td><span class="pick-value inprogress-begin" style="float:right" data-begin="<%=sale.begin.getTime()%>"></span></td>
+              </tr>
+            </table>
 
-                    <div>
-                      <span class="pick-value"><%=sale.pickUser.name%></span>
-                      <span class="pick-value inprogress-begin" style="float:right" data-begin="<%=sale.begin.getTime()%>"></span>
-                    </div>
-                  </div>
-
-                </div>
-                <%
+          </div>
+          <%
         });
         %>
-          </div>
-        </div>
       </div>
+    </div>
+  </div>
 
-    </body>
+</body>
 
 </html>

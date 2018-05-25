@@ -26,9 +26,13 @@ $(document).ready(() => {
             sale = sale[sale.length - 1];
             $('div[data-sale="progress-' + sale + '"]').css('background-color', '#13bb7070').delay(1000).fadeOut();
             $(".inprogress-count").text(parseInt($(".inprogress-count").text()) - 1);
+            $('#user-id').val('');
           } else {
-            window.open(response, "picking");
-            window.location.reload();
+            $('.sucess').text("Aguardando impressão do pedido").fadeIn();
+            setTimeout(function() {
+              window.open(response, "picking");
+              window.location.reload();
+            }, 1000);
           }
         },
         error: function(jqXHR, textStatus, errorThrown) {

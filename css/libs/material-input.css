@@ -1,12 +1,12 @@
 .group {
   position: relative;
-  margin-bottom: 45px;
+  margin-bottom: 20px;
 }
 
-input {
+.material-input-holder>input {
   background: #FFF;
   font-family: 'Roboto';
-  margin: 30px auto 0;
+  margin: 20px auto 0;
   font-size: 13px;
   padding: 10px 10px 10px 5px;
   display: block;
@@ -14,13 +14,13 @@ input {
   border-bottom: 1px solid #757575;
 }
 
-input:focus {
+.material-input-holder>input:focus {
   outline: none;
 }
 
 /* LABEL ======================================= */
 
-label {
+.material-input-holder>label {
   color: #999;
   font-size: 13px;
   font-weight: normal;
@@ -35,7 +35,7 @@ label {
 
 /* active state */
 
-input:focus~label, input:valid~label {
+.material-input-holder>input:focus~label, material-input-holder>input:valid~label {
   top: -20px;
   font-size: 11px;
   color: #259587;
@@ -70,7 +70,7 @@ input:focus~label, input:valid~label {
 
 /* active state */
 
-input:focus~.bar:before, input:focus~.bar:after {
+.material-input-holder>input:focus~.bar:before, .material-input-holder>input:focus~.bar:after {
   width: 50%;
 }
 
@@ -88,7 +88,7 @@ input:focus~.bar:before, input:focus~.bar:after {
 
 /* active state */
 
-input:focus~.highlight {
+.material-input-holder>input:focus~.highlight {
   -webkit-animation: inputHighlighter 0.3s ease;
   -moz-animation: inputHighlighter 0.3s ease;
   animation: inputHighlighter 0.3s ease;
