@@ -35,7 +35,10 @@ module.exports = class InvoicesProvider {
     if (docs.length > 0) {
       var item = docs[index];
 
-      item.userName = UsersProvider.get(item.userId).name;
+      var user = UsersProvider.get(item.userId);
+      //checar....
+
+      item.userName = user == undefined ? 'Não encontrado' : user.name;
       this.handleItem(item);
 
       if (index < docs.length - 1) {
