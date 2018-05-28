@@ -12,11 +12,11 @@
 
 
   <div class="main-content">
-
+    <% include picking-menu %>
 
     <div class="col">
       <div class="find-next-holder shadow">
-        <span class="label picking-title"> Impressão de Picking </span>
+        <span class="picking-title"> Impressão de Picking </span>
 
         <div class="material-input-holder group input-group">
           <input type="text" id="user-id" required>
@@ -31,111 +31,107 @@
 
         <div class="dropdown">
           <input id="tramsport-list" type="checkbox" name="checkbox" checked />
-          <label for="tramsport-list">
-            <div class="drop-ttl"><label><%=selectedTransp ? selectedTransp : 'Transportadora'%></label></div>
+          <label class="label-transport" for="tramsport-list">
+            <div class="drop-ttl"><label class="inner-label"><%=selectedTransp ? selectedTransp : 'Transportadora'%></label></div>
             <ul>
               <% Object.keys(transportList).forEach((key)=>{%>
                 <li><a href="/picking?transp=<%=key%>"><%=key%></a></li>
                 <%})%>
-            </ul>
-          </label>
-        </div>
-
-
-      </div>
-
-      <div class="pick-box shadow">
-
-
-
-        <div class="preview-header">
-          <span class="label header-title"> Próximos Pedidos</span>
-          <span class="label header-count"> <%=remaining%></span>
-        </div>
-
-
-
-
-        <%
-        upcoming.forEach(function(preview){
-          %>
-
-          <div class="shadow label mini-item">
-
-            <table width="100%">
-              <tr>
-                <td><span class="pick-value green-title"><%=preview.numeroPedido %></span></td>
-                <td><span class="pick-value"><%=preview.transport%></span></td>
-                <td><span class="pick-value" style="float:right"><%= Dat.format(new Date(preview.data))%></span></td>
-              </tr>
-              <tr>
-                <td><span class="pick-value"><%=preview.itemsQuantity %> Itens</span></td>
-                <td><span class="pick-value"></span></td>
-                <td><span class="pick-value" style="float:right"><%=Num.money(preview.totalProdutos) %></span></td>
-              </tr>
-            </table>
+              </ul>
+            </label>
           </div>
 
-          <%
-        });
-        %>
 
-      </div>
-    </div>
-
-    <div class="col">
-
-      <div class="pick-box shadow">
-        <div class="inprogress-header">
-          <span class="label header-title"> Em Andamento</span>
-          <span class="label header-count inprogress-count"> <%=Object.keys(inprogress).length%></span>
         </div>
 
-
-        <%
-
-        var progress = Object.keys(inprogress);
+        <div class="pick-box shadow upcoming-box">
 
 
-        if (progress.length === 0){
-          %><span class="pick-hint">Nenhum picking em andamento </span>
+
+          <div class="preview-header">
+            <span class="label header-title"> Próximos Pedidos</span>
+            <span class="label header-count"> <%=remaining%></span>
+          </div>
+
+
+
+
           <%
-        }
+          upcoming.forEach(function(preview){
+            %>
 
+            <div class="shadow label mini-item">
 
-        progress.forEach((key) => {
-          var sale = inprogress[key];
-
-          %>
-          <div class="shadow label mini-item" data-sale="progress-<%=sale.numeroPedido %>">
-            <div class="avatar-holder left-avatar">
+              <table width="100%">
+                <tr>
+                  <td><span class="pick-value green-title"><%=preview.numeroPedido %></span></td>
+                  <td><span class="pick-value"><%=preview.transport%></span></td>
+                  <td><span class="pick-value" style="float:right"><%= Dat.format(new Date(preview.data))%></span></td>
+                </tr>
+                <tr>
+                  <td><span class="pick-value"><%=preview.itemsQuantity %> Itens</span></td>
+                  <td><span class="pick-value"></span></td>
+                  <td><span class="pick-value" style="float:right"><%=Num.money(preview.totalProdutos) %></span></td>
+                </tr>
+              </table>
             </div>
 
+            <%
+          });
+          %>
 
-            <table width="100%">
-              <tr>
-                <td rowspan="0">
-                  <img class="circle shadow avatar-img mini-avatar" src="/img/avatar/<%=sale.pickUser.id%>.jpg" onerror="this.src='/img/avatar/default.jpg'" />
-                </td>
-                <td><span class="pick-value green-title"><%=sale.numeroPedido %></span></td>
-                <td><span class="pick-value"><%=sale.transport %></span></td>
-                <td><span class="pick-value" style="float:right"><%=sale.itemsQuantity %> Itens</span></td>
-              </tr>
-              <tr>
-                <td><span class="pick-value"><%=sale.pickUser.name%></span></td>
-                <td></td>
-                <td><span class="pick-value inprogress-begin" style="float:right" data-begin="<%=sale.begin.getTime()%>"></span></td>
-              </tr>
-            </table>
+        </div>
+      </div>
 
+      <div class="col">
+
+        <div class="pick-box shadow inprogress-box">
+          <div class="inprogress-header">
+            <span class="label header-title"> Em Andamento</span>
+            <span class="label header-count inprogress-count"> <%=Object.keys(inprogress).length%></span>
           </div>
+
+
           <%
-        });
-        %>
+
+          var progress = Object.keys(inprogress);
+
+
+          if (progress.length === 0){
+            %><span class="pick-hint">Nenhum picking em andamento </span>
+            <%
+          }
+
+
+          progress.forEach((key) => {
+            var sale = inprogress[key];
+
+            %>
+            <div class="shadow label mini-item" data-sale="progress-<%=sale.numeroPedido %>">
+              <table width="100%">
+                <tr>
+                  <td rowspan="0">
+                    <img class="circle shadow avatar-img mini-avatar" src="/img/avatar/<%=sale.pickUser.id%>.jpg" onerror="this.src='/img/avatar/default.jpg'" />
+                  </td>
+                  <td><span class="pick-value green-title"><%=sale.numeroPedido %></span></td>
+                  <td><span class="pick-value"><%=sale.transport %></span></td>
+                  <td><span class="pick-value" style="float:right"><%=sale.itemsQuantity %> Itens</span></td>
+                </tr>
+                <tr>
+                  <td><span class="pick-value"><%=sale.pickUser.name ? sale.pickUser.name.split(" ")[0] : 'Desconhecido'%></span></td>
+                  <td></td>
+                  <td><span class="pick-value inprogress-begin" style="float:right" data-begin="<%=sale.begin.getTime()%>"></span></td>
+                </tr>
+              </table>
+
+            </div>
+            <%
+          });
+          %>
+        </div>
       </div>
     </div>
-  </div>
 
-</body>
+  </body>
 
-</html>
+  </html>

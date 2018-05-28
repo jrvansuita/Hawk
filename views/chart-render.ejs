@@ -1,0 +1,62 @@
+<div class="charts-content">
+
+  <% charts.forEach(function(chart) {%>
+
+    <div class="chart-group shadow <%=isByDate ? 'max-chart' : ''%>">
+
+      <div class="title-holder">
+        <label class="chart-title"><%=chart.title%></label>
+        <label class="chart-label <%= isByDate ? 'datepicker': ''%>">   <%=chart.label%></label>
+      </div>
+
+
+      <%if (Object.keys(chart.getSums()).length > 0) { %>
+        <div class="chart-sum">
+          <% Object.keys(chart.getSums()).forEach(function(key){
+            %>
+            <label class="chart-sum-item circle shadow" style="background-color: #<%=chart.getSums()[key].color%>"> <%=Num.format(chart.getSums()[key].value)%> </label>
+            <%})%>
+
+        </div>
+        <%}%>
+          <div class="chart-holder">
+
+
+            <% if (chart.getItems().length === 0){
+   %>
+              <label class="chart-hint">Sem dados para apresentar.</label>
+
+              <% }else{
+
+  chart.getItems().forEach(function(item) {%>
+                <div class="chart-bar-holder">
+                  <div class="chart-bar-group">
+
+
+                    <div class="avatar-holder">
+                      <img class="avatar-img circle shadow" src="/img/avatar/<%=item.imgName%>.jpg" onerror="this.src='/img/avatar/default.jpg'" />
+                      <span class="label shadow avatar-name"><%=item.label%></span>
+                    </div>
+
+                    <div class="bars-holder">
+                      <% item.getBars().forEach(function(bar){%>
+                        <div class="bar shadow grow-bar" data-height="<%=bar.getHeight()%>" data-name="<%=bar.name%>" style="background-color: #<%=bar.barColor%>">
+
+                          <span class="bar-value"><%=Num.format(bar.getValue());%></span>
+
+                        </div>
+
+                        <%}); %>
+
+                    </div>
+
+
+                  </div>
+                </div>
+                <% }); }%>
+
+          </div>
+    </div>
+    <% }); %>
+
+</div>

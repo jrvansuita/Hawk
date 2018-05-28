@@ -8,7 +8,7 @@ $(document).ready(function() {
   });
 
   bindDateRangePickers(function(from, to) {
-    window.location = '/invoice/by-date?from=' + from + "&to=" + to;
+    window.location = window.location.pathname + '?from=' + from + "&to=" + to;
   });
 
 });

@@ -17,10 +17,13 @@ module.exports = class Day extends DataAccess {
     return new Day(userId, date, 'picking');
   }
 
-  static pointsCalc(count, total) {
+  static invoicePoints(count, total) {
     return (count * total) / 10000;
   }
 
+  static pickingPoints(itens, itensByTime) {
+    return (itens) / itensByTime;
+  }
 
 
   static getKey() {

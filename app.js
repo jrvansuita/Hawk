@@ -69,14 +69,17 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', function(req, res) {
-  req.session.loggedUser = require('./app/provider/UsersProvider.js').get(req.body.userid);
+  var UsersProvider = require('./app/provider/UsersProvider.js');
+  UsersProvider.login(req.body.userId, req.body.userAccess, (user, msg)=>{
+    req.session.loggedUser = user;
 
-  if (req.session.loggedUser) {
-    res.status(200).send(req.session.loggedUser);
-  } else {
-    req.session = null;
-    res.status(505).send(null);
-  }
+    if (req.session.loggedUser) {
+      res.status(200).send(req.session.loggedUser);
+    } else {
+      req.session = null;
+      res.status(505).send(msg);
+    }
+  });
 });
 
 app.get(['/', '/invoice', '/invoice/overview'], (req, res) => {
@@ -102,6 +105,7 @@ app.get('/invoice/by-date', (req, res) => {
 });
 
 
+
 app.get('/achievements', (req, res) => {
   var AchievGridBuilder = require('./app/builder/AchievGridBuilder.js');
   var builder = new AchievGridBuilder();
@@ -112,43 +116,68 @@ app.get('/achievements', (req, res) => {
       });
     });
 
-  builder.build();
-});
+    builder.build();
+  });
 
-app.get('/estoque', (req, res) => {
-  res.render('estoque');
-});
-
-
+  app.get('/estoque', (req, res) => {
+    res.render('estoque');
+  });
 
 
 
-// --- Picking --- //
-var pickingProvider = new require('./app/provider/PickingProvider.js');
 
-app.get('/picking', (req, res) => {
-  pickingProvider.init(req.query.transp,() => {
-    res.render('picking', {
-      upcoming: pickingProvider.upcomingSales(),
-      remaining: pickingProvider.remainingSales(),
-      inprogress: pickingProvider.inprogressPicking(),
-      transportList: pickingProvider.getTransportList(),
-      selectedTransp: req.query.transp
+
+  // --- Picking --- //
+  var pickingProvider = new require('./app/provider/PickingProvider.js');
+
+  app.get('/picking', (req, res) => {
+    pickingProvider.init(req.query.transp,() => {
+      res.render('picking', {
+        upcoming: pickingProvider.upcomingSales(),
+        remaining: pickingProvider.remainingSales(),
+        inprogress: pickingProvider.inprogressPicking(),
+        transportList: pickingProvider.getTransportList(),
+        selectedTransp: req.query.transp
+      });
     });
   });
-});
 
-app.get('/picking-sale', (req, res) => {
-  try {
-    pickingProvider.handle(req.query.userid, (result) => {
-      res.status(200).send(result);
+  app.get('/picking-sale', (req, res) => {
+    try {
+      var UsersProvider = require('./app/provider/UsersProvider.js');
+      pickingProvider.handle(UsersProvider.get(req.query.userid).id, (result) => {
+        res.status(200).send(result);
+      });
+    } catch (e) {
+      res.status(412).send(e);
+    }
+  });
+
+
+  app.get(['/picking/overview'], (req, res) => {
+    require('./app/builder/PickingChartBuilder.js').buildOverview(res.locals.loggedUser.full, function(charts) {
+      res.render('picking-chart', {
+        charts: charts,
+        page: req.originalUrl,
+      });
     });
-  } catch (e) {
-    res.status(412).send(e);
-  }
-});
+  });
 
 
-app.listen(app.get('port'), function() {
-  console.log('Node is running on port ', app.get('port'));
-});
+  app.get(['/picking/by-date'], (req, res) => {
+    var from = req.query.from ? new Date(parseInt(req.query.from)) : Dat.firstDayOfMonth();
+    var to = req.query.to ? new Date(parseInt(req.query.to)).maxTime() : Dat.lastDayOfMonth();
+
+    require('./app/builder/PickingChartBuilder.js').buildByDate(from, to, res.locals.loggedUser.full, function(charts) {
+      res.render('picking-chart', {
+        charts: charts,
+        page: req.originalUrl,
+      });
+    });
+  });
+
+
+
+  app.listen(app.get('port'), function() {
+    console.log('Node is running on port ', app.get('port'));
+  });

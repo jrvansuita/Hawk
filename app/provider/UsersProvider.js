@@ -27,9 +27,21 @@ module.exports = class UsersProvider {
     }
   }
 
-  static get(userId) {
-    return global.localUsers[userId];
+  static get(code) {
+    if(global.localUsers[code]){
+      return global.localUsers[code];
+    }else{
+      for (var key in global.localUsers) {
+        if (global.localUsers.hasOwnProperty(key)) {
+          if (global.localUsers[key].access === code){
+            return global.localUsers[key];
+          }
+        }
+      }
+    }
   }
+
+
 
   static getDefault(userId) {
     var user = this.get(userId);
@@ -44,5 +56,38 @@ module.exports = class UsersProvider {
 
     return true;
   }
+
+  static updateUserAccess(userId, userAccess, callback){
+    User.findOne({access: userAccess}, (err, user)=>{
+      if (user){
+        callback(true, 'Código de acesso já está sendo usando pelo usuário ' + user.name);
+      }else{
+        user = UsersProvider.get(userId);
+        if (user != undefined && user.access){
+          callback(true, 'O usuário ' + user.name + ' já possui um código de acesso.');
+        }else{
+          User.updateAccess(userId, userAccess);
+          global.localUsers[userId].access = userAccess;
+          callback(false);
+        }
+      }
+    });
+  }
+
+
+  static login(userId, userAccess, callback){
+    if (userId){
+      UsersProvider.updateUserAccess(userId, userAccess, (err, msg)=>{
+        if (err){
+          callback(undefined, msg);
+        }else{
+          callback(UsersProvider.get(userId));
+        }
+      });
+    }else{
+      callback(UsersProvider.get(userAccess));
+    }
+  }
+
 
 };

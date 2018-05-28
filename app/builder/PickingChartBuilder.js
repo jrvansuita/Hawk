@@ -53,31 +53,31 @@ function callNext() {
 }
 
 function buildToday() {
-  buildChart(Dat.today(), Dat.today(), Const.invoice_today);
+  buildChart(Dat.today(), Dat.endToday(), Const.picking_today);
 }
 
 function buildYesterday() {
-  buildChart(Dat.yesterday(), Dat.yesterday(), Const.invoice_yesterday);
+  buildChart(Dat.yesterday(), Dat.yesterday(), Const.picking_yesterday);
 }
 
 function buildCurrentWeek() {
-  buildChart(Dat.firstDayCurrentWeek(), Dat.lastDayCurrentWeek(), Const.invoice_current_week);
+  buildChart(Dat.firstDayCurrentWeek(), Dat.lastDayCurrentWeek(), Const.picking_current_week);
 }
 
 function buildLastWeek() {
-  buildChart(Dat.firstDayLastWeek(), Dat.lastDayLastWeek(), Const.invoice_last_week);
+  buildChart(Dat.firstDayLastWeek(), Dat.lastDayLastWeek(), Const.picking_last_week);
 }
 
 function buildCurrentMonth() {
-  buildChart(Dat.firstDayOfMonth(), Dat.lastDayOfMonth(), Const.invoice_current_month);
+  buildChart(Dat.firstDayOfMonth(), Dat.lastDayOfMonth(), Const.picking_current_month);
 }
 
 function buildLastMonth() {
-  buildChart(Dat.firstDayOfLastMonth(), Dat.lastDayOfLastMonth(), Const.invoice_last_month);
+  buildChart(Dat.firstDayOfLastMonth(), Dat.lastDayOfLastMonth(), Const.picking_last_month);
 }
 
 function buildByDate(from, to) {
-  buildChart(from, to, Const.invoice_by_date);
+  buildChart(from, to, Const.picking_by_date);
 }
 
 
@@ -91,14 +91,17 @@ function buildChart(from, to, title) {
 
       var item = chart.addItem(Str.first_word(dataItem.userName, 10), key);
 
+      item.addBar('Itens', dataItem.total, 0.8, '03c184', true);
+      //item.addBar('Tempo', dataItem.count, 0.7, '14b5a6', true);
 
-      if (isfull)
-        item.addBar('Receita', dataItem.total, 1, '03c184', true);
+      var itensPerSeg = dataItem.count/dataItem.total;
 
-      var points = Day.invoicePoints(dataItem.count, dataItem.total);
-      item.addBar('Pontos', points, isfull ? 0.8 : 1, '1da8b9', !isfull);
+      item.addBar('Segundos/Item', itensPerSeg, 0.7, '5f7ce8', false);
 
-      item.addBar('Pedidos', dataItem.count, 0.5, '14b5a6', true);
+      var points = Day.pickingPoints(dataItem.total, itensPerSeg);
+      if (points > 0)
+      item.addBar('Pontos', points, 1, '1da8b9', false);
+
     });
 
     chart.sort('Pontos');
@@ -107,5 +110,5 @@ function buildChart(from, to, title) {
     callNext();
   };
 
-  new DaysChartProvider('invoice', callBuilder).get(from, to);
+  new DaysChartProvider('picking', callBuilder).get(from, to);
 }

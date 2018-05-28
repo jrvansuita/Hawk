@@ -62,7 +62,7 @@ class ChartItem {
   getBar(barName) {
     for (var i = 0; i < this.bars.length; i++) {
       if (this.bars[i].name === barName)
-        return this.bars[i];
+      return this.bars[i];
     }
 
     return null;
@@ -81,7 +81,7 @@ class Bar {
     this.factor = factor;
     this.doSum = doSum;
     this.barColor = barColor;
-    this.handleMaxAndSum(name, value);
+    this.handleMaxAndSum(name, value, barColor);
   }
 
   getHeight() {
@@ -91,15 +91,21 @@ class Bar {
     return hei < minBarHeight ? minBarHeight : hei;
   }
 
-  handleMaxAndSum(name, value) {
+  handleMaxAndSum(pName, pValue, pColor) {
     var maxs = this.parent.maxs;
 
-    if (maxs[name] === undefined || maxs[name] < value)
-      maxs[name] = value;
+    if (maxs[pName] === undefined || maxs[pName] < pValue)
+    maxs[pName] = pValue;
 
     if (this.doSum) {
       var sums = this.parent.sums;
-      sums[name] = sums[name] === undefined ? value : sums[name] + value;
+
+      if (sums[pName]){
+        sums[pName].value += pValue;
+      }else{
+        sums[pName] = {"value":pValue,
+        "color":pColor};
+      }
     }
   }
 

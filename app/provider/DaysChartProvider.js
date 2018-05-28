@@ -1,10 +1,11 @@
 const Day = require('../bean/day.js');
 var UsersProvider = require('../provider/UsersProvider.js');
 
-module.exports = class InvoicesProvider {
+module.exports = class DaysChartProvider {
 
-  constructor(callback) {
+  constructor(type, callback) {
     this.data = {};
+    this.type = type;
     this.callback = callback;
   }
 
@@ -23,6 +24,7 @@ module.exports = class InvoicesProvider {
 
   buildQuery(from, to) {
     return {
+      'type': this.type,
       'date': {
         $gte: from.withoutTime(),
         $lte: to.withoutTime()

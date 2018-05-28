@@ -1,0 +1,41 @@
+<div class="sub-menu">
+  <nav class="sub-menu-nav">
+    <ul class="sub-menu-ul">
+      <li class="menu-item material-ripple" href="/picking">
+        <div class="button title">
+          Em Aberto
+        </div>
+      </li>
+      <li class="menu-item material-ripple" href="/picking/overview">
+        <div class="button title">
+          Geral
+        </div>
+      </li>
+      <li class="menu-item material-ripple" href="/picking/by-date">
+        <div class="button title">
+          Por Data
+        </div>
+      </li>
+      <li class="menu-item material-ripple" href="/achievements">
+        <div class="button title">
+          Conquistas
+        </div>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="subtitles">
+
+    <%
+    if (typeof subtitlesArr != "undefined")
+      subtitlesArr.forEach(function(bar){ %>
+
+      <div class="subtitle-item">
+        <div class="subtitle-color circle shadow" style="background-color: #<%=bar.barColor%>"> </div>
+        <label class="subtitle-label"> <%=bar.name%> </label>
+      </div>
+
+      <% }); %>
+
+  </div>
+</div>

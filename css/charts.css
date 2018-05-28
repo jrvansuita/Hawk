@@ -47,25 +47,19 @@
   margin: 5px;
   margin-top: 35px;
   position: absolute;
-  background-color: #009587;
-  width: 55px !important;
-  height: 55px !important;
   z-index: 2;
 }
 
-.chart-sum-item:first-child {
-  text-decoration-style: double;
-  font-size: 12px;
-  margin-top: 3px;
-}
 
 .chart-sum-item {
-  display: inline-block;
-  font-size: 11px;
+  display: block;
+  font-size: 10px;
+  margin-bottom: 3px;
+  padding: 10px 1px;
   color: white;
+  width: 35px;
+  height: 35px;
   position: relative;
-  width: 100%;
-  top: 10px;
   text-align: center;
 }
 
@@ -105,7 +99,7 @@
 .chart-bar-group {
   display: table-cell;
   vertical-align: bottom;
-  padding-bottom: 5px;
+  padding-bottom: 8px;
 }
 
 .bar {

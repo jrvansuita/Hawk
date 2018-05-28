@@ -2,7 +2,7 @@
 
   <head>
     <link rel="stylesheet" type="text/css" href="/css/general.css">
-    <link rel="stylesheet" type="text/css" href="/css/input-material.css">
+    <link rel="stylesheet" type="text/css" href="/css/libs/material-input.css">
     <link rel="stylesheet" type="text/css" href="/css/ripple.min.css">
     <link rel="stylesheet" type="text/css" href="/css/login.css">
 
@@ -39,12 +39,28 @@
 
         <div class="login-els">
 
-          <div class="group input-group">
-            <input type="text" id="user-id" required>
+          <span class="error">Erro</span>
+
+          <div class="material-input-holder group input-group">
+            <input type="text" id="user-access" required>
             <span class="highlight"></span>
             <span class="bar"></span>
             <label>Código de Acesso</label>
           </div>
+
+
+          <div class="material-input-holder group input-group user-id-holder" style="margin-top:30px;display:none" >
+            <input type="text" id="user-id" required>
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label>Código de Usuário</label>
+          </div>
+
+         <div>
+          <label class="button new-user shadow">Novo</label>
+          <label class="button new-cancel shadow" style="display:none">Cancelar</label>
+        </div>
+
 
         </div>
 

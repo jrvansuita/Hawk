@@ -2,11 +2,12 @@
   padding: 15px;
   width: fit-content;
   margin: 15px;
-  min-width: 250px;
+  min-width: 260px;
 }
 
 .picking-title {
   font-size: 16px;
+  color: gray;
 }
 
 .pick-box {
@@ -30,6 +31,7 @@
   display: inline-block;
   width: fit-content;
   font-size: 12px;
+  background-color: transparent;
 }
 
 .mini-item {
@@ -42,7 +44,7 @@
   color: gray;
   width: fit-content;
   display: inline-block;
-  padding: 2px 5px 2px 5px;
+  padding: 3px 1px;
   font-size: 11px;
 }
 
@@ -56,6 +58,7 @@
   display: inline-block;
   font-size: 14px;
   float: right;
+  background-color: transparent;
 }
 
 .preview-header {
@@ -92,7 +95,8 @@
 
 .mini-avatar {
   width: 40px;
-  height: 40px
+  height: 40px;
+  margin-left:0px;
 }
 
 .avatar-name {

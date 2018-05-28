@@ -19,16 +19,8 @@ module.exports = {
 
     if (global.staticPickingList.length == 0) {
       EccosysCalls.getPickingSales((data) => {
-
-        var sales = JSON.parse(data);
-        global.staticPickingList = sales;
-
-        loadSaleItems(sales, 0, (sales) => {
-          global.staticPickingList = sales;
-          onFinished();
-        }, () => {
-          global.staticPickingList = sales;
-        });
+        global.staticPickingList = JSON.parse(data);
+        loadSaleItems(0, onFinished);
       });
     } else {
       onFinished();
@@ -53,7 +45,7 @@ module.exports = {
 
   nextSale(userId, callback) {
     if (global.staticPickingList.length == 0) {
-      console.log();
+      console.log(global.staticPickingList.length);
       throw "Mais nenhum pedido no array de picking";
     } else {
       callback(buildResult(userId));
@@ -64,10 +56,9 @@ module.exports = {
     var sale = global.inprogressPicking[userId];
     delete global.inprogressPicking[userId];
     sale.end = new Date();
-    var day = Day.picking(userId, new Date());
+    var day = Day.picking(userId, Dat.today());
 
     var secDif = (sale.end.getTime() - sale.begin.getTime()) / 1000;
-    console.log(secDif);
 
     Day.upsert(day.getPKQuery(), {
       $inc: {
@@ -76,7 +67,6 @@ module.exports = {
       }
     }, (err, doc) => {
       callback("end-picking-" + sale.numeroPedido);
-      console.log(doc);
     });
   },
 
@@ -108,46 +98,39 @@ function getNextSale() {
 var printUrl = "https://boutiqueinfantil.eccosys.com.br/relatorios/picking.impressao.romaneio.php?imprimeAbertos=N";
 
 function buildResult(userId) {
+  //Get the next sale from list
   var sale = getNextSale();
-  sale.begin = new Date();
-  sale.end = null;
-  sale.pickUser = UsersProvider.get(userId);
-  global.inprogressPicking[userId] = sale;
-  global.staticPickingList.splice(0, 1);
-
-  console.log(sale);
-
+  removeFromPickingList(sale);
+  initSalePicking(sale, userId);
   return printUrl + "&idsVendas=" + sale.id;
 }
 
 
-function loadSaleItems(sales, index, preview, callback) {
-  EccosysCalls.getSaleItems(sales[index].numeroPedido, (data) => {
+function loadSaleItems(index, callback) {
+  EccosysCalls.getSaleItems(global.staticPickingList[index].numeroPedido, (data) => {
     var items = JSON.parse(data);
+    var currentSale = global.staticPickingList[index];
+    var currentLength = global.staticPickingList.length;
 
-    var transp = Str.defStr(sales[index].transportador, unknow).split(' ')[0];
+    var transp = Str.defStr(currentSale.transportador, unknow).split(' ')[0];
 
-    console.log(transp);
     global.transportList[transp] = transp;
-    sales[index].transport = transp;
-    sales[index].items = items;
-    sales[index].itemsQuantity = items.reduce(function(a, b) {
+    currentSale.transport = transp;
+    currentSale.items = items;
+    currentSale.itemsQuantity = items.reduce(function(a, b) {
       return a + parseFloat(b.quantidade);
     }, 0);
 
+    global.staticPickingList[index] = currentSale;
 
     index++;
+    console.log(index + '/' + (currentLength));
 
-    //console.log(index + '/' + (sales.length));
-
-    if (index < sales.length) {
-      loadSaleItems(sales, index, preview, callback);
-
+    if (index < currentLength) {
+      loadSaleItems(index, callback);
       if (index == previewCount) {
-        preview(sales);
+        callback();
       }
-    } else {
-      callback(sales);
     }
   });
 }
@@ -163,4 +146,15 @@ function assertTransport(saleList){
   }
 
   return saleList;
+}
+
+function removeFromPickingList(inputSale){
+  global.staticPickingList = global.staticPickingList.filter(sale => sale.id != inputSale.id);
+}
+
+function initSalePicking(sale, userId){
+  sale.begin = new Date();
+  sale.end = null;
+  sale.pickUser = UsersProvider.get(userId);
+  global.inprogressPicking[userId] = sale;
 }

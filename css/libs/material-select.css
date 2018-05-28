@@ -10,6 +10,7 @@
   border-radius: 5px;
   font-size: 12px;
   background: #26A69A;
+  cursor: pointer;
   color: #FFF;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
 }
@@ -18,16 +19,25 @@
   display: none;
   position: fixed;
   z-index: -2;
+  cursor: pointer;
 }
 
 .dropdown>label {
+  cursor: pointer;
   display: inline-block;
   max-width: 100%;
-  margin-bottom: 2px;
+  padding-bottom: 2px;
+  width: 100px;
 }
 
 .drop-ttl {
-  padding: 5px 10px;
+  text-align: center;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.drop-ttl>label{
+  cursor: pointer;
 }
 
 .dropdown ul {
@@ -39,24 +49,39 @@
   text-align: center;
   list-style-type: none;
   background: #FFF;
+  cursor: pointer;
   color: #26A69A;
   box-shadow: 0px 8px 17px 0px rgba(0, 0, 0, 0.2), 0px 6px 20px 0px rgba(0, 0, 0, 0.19);
   border-radius: 5px;
 }
 
 .dropdown ul>li {
-  padding: 5px 20px;
+  cursor: pointer;
 }
 
 .dropdown ul>li>a {
+  display: block;
+  padding: 5px 20px;
   color: inherit;
   outline: 0;
   text-decoration: none;
+  cursor: pointer;
   cursor: pointer;
 }
 
 .dropdown ul>li:hover {
   background: #DEDEDE;
+  cursor: pointer;
+}
+
+.dropdown ul>li:hover:first-child {
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+}
+
+.dropdown ul>li:hover:last-child {
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
 
 input[type="checkbox"]:checked~label>ul {
