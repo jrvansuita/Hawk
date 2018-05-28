@@ -19,7 +19,7 @@ module.exports = class AchievGridBuilder {
 
     this.provider = new AchievProvider((res) => {
       res.forEach((item) => {
-        item.sum_points = Day.pointsCalc(item.sum_count, item.sum_total);
+        item.sum_points = Day.invoicePoints(item.sum_count, item.sum_total);
         console.log(item);
       });
 

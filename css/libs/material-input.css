@@ -11,6 +11,7 @@
   padding: 10px 10px 10px 5px;
   display: block;
   border: none;
+  margin-bottom: 2px;
   border-bottom: 1px solid #757575;
 }
 
@@ -35,7 +36,7 @@
 
 /* active state */
 
-.material-input-holder>input:focus~label, material-input-holder>input:valid~label {
+.material-input-holder>input:focus~label, .material-input-holder>input:valid~label {
   top: -20px;
   font-size: 11px;
   color: #259587;
