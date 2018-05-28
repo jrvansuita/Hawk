@@ -59,12 +59,12 @@ function onSucess() {
   location.href = "/";
 }
 
-function login() {
+function login(code) {
   $.ajax({
     url: "/login",
     type: "post",
     data: {
-      userAccess: $('#user-access').val(),
+      userAccess: code ? code : $('#user-access').val(),
       userId: $('#user-id').val()
     },
     success: function(response) {
