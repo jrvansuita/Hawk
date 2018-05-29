@@ -145,7 +145,7 @@ app.get('/achievements', (req, res) => {
   app.get('/picking-sale', (req, res) => {
     try {
       var UsersProvider = require('./app/provider/UsersProvider.js');
-      pickingProvider.handle(UsersProvider.get(req.query.userid).id, (result) => {
+      pickingProvider.handle(req.query.userid, (result) => {
         res.status(200).send(result);
       });
     } catch (e) {

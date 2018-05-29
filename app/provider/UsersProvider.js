@@ -50,7 +50,7 @@ module.exports = class UsersProvider {
 
 
   static checkUserExists(userId) {
-    if (global.localUsers[userId] == undefined) {
+    if (UsersProvider.get(userId) == undefined) {
       throw "Usuário não existe.";
     }
 
@@ -76,8 +76,6 @@ module.exports = class UsersProvider {
 
 
   static login(userId, userAccess, callback){
-    console.log(userId);
-    console.log(userAccess);
     if (userId){
       UsersProvider.updateUserAccess(userId, userAccess, (err, msg)=>{
         if (err){

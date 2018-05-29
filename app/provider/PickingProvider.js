@@ -32,15 +32,16 @@ module.exports = {
   },
 
   handle(userId, callback) {
-    //Check User exists
-
-    if (UsersProvider.checkUserExists(userId))
-    if (global.inprogressPicking[userId] != undefined) {
-      //In progress picking
-      this.endPicking(userId, callback);
-    } else {
-      this.nextSale(userId, callback);
-    }
+      if (UsersProvider.checkUserExists(userId)){
+          //Convert from access or id
+          userId = UsersProvider.get(userId).id;
+        if (global.inprogressPicking[userId] != undefined) {
+          //In progress picking
+          this.endPicking(userId, callback);
+        } else {
+          this.nextSale(userId, callback);
+        }
+      }
   },
 
   nextSale(userId, callback) {
