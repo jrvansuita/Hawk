@@ -120,7 +120,7 @@
                 <tr>
                   <td><span class="pick-value"><%=sale.pickUser.name ? sale.pickUser.name.split(" ")[0] : 'Desconhecido'%></span></td>
                   <td></td>
-                  <td><span class="pick-value inprogress-begin" style="float:right" data-begin="<%=sale.begin.getTime()%>" data-now="<%=new Date().getTime()%>"></span></td>
+                  <td><span class="pick-value inprogress-begin" style="float:right" diftime="<%=new Date().getTime() - sale.begin.getTime()%>"></span></td>
                 </tr>
               </table>
 

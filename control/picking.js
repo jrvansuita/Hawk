@@ -1,23 +1,14 @@
 $(document).ready(() => {
    $( "#user-id" ).focus();
 
-   $(".inprogress-begin").each(function(index, item) {
-     var nowServer = parseInt($(item).data("begin"));
-     var nowClient = new Date().getTime();
-
-     $(item).attr('data-dif', nowClient - nowServer);
-   });
-
 
   window.setInterval(function() {
     $(".inprogress-begin").each(function(index, item) {
-      var begin = parseInt($(item).data("begin"));
-      var dif = parseInt($(item).data("dif"));
-      var now = new Date().getTime();
+      var diftime = parseInt($(item).attr("diftime"));
+      diftime+= 1000;
 
-    console.log(dif);
-      var lapse = (now - (begin - dif)) / 1000;
-      $(item).text(lapse.toString().toMMSS());
+      $(item).text((diftime/1000).toString().toMMSS());
+      $(item).attr('diftime', diftime);
     });
   }, 1000);
 
