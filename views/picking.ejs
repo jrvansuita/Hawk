@@ -10,6 +10,10 @@
 
 <body>
 
+  <script>
+  window.inprogress = <%- JSON.stringify(inprogress || null) %>
+  </script>
+
 
   <div class="main-content">
     <% include picking-menu %>
@@ -85,7 +89,7 @@
 
       <div class="col">
 
-        <div class="pick-box shadow inprogress-box">
+        <div class="pick-box shadow">
           <div class="inprogress-header">
             <span class="label header-title"> Em Andamento</span>
             <span class="label header-count inprogress-count"> <%=Object.keys(inprogress).length%></span>
@@ -107,7 +111,7 @@
             var sale = inprogress[key];
 
             %>
-            <div class="shadow label mini-item" data-sale="progress-<%=sale.numeroPedido %>">
+            <div class="shadow label mini-item inprogress-item" data-sale="progress-<%=sale.numeroPedido %>">
               <table width="100%">
                 <tr>
                   <td rowspan="0">
@@ -130,8 +134,52 @@
           %>
         </div>
       </div>
-    </div>
 
-  </body>
 
-  </html>
+
+      <div class="col opened-sale-box">
+
+        <div class="pick-box shadow">
+          <div class="inprogress-header">
+            <span class="label header-title">Pedido</span>
+            <span class="label header-count green-title sale-number">234343</span>
+          </div>
+
+         <div class="pending-button">
+            <label class="button send-pending shadow">Pendência</label>
+         </div>
+
+          <div class="items-holder">
+            <table id="opened-sale" width="100%">
+              <tr>
+                <td colspan="4">
+                  <table width="100%">
+                    <tr>
+                      <td><span class="pick-value" id="sale-transport"><span></td>
+                      <td><span class="pick-value" id="sale-date"> </span></td>
+                      <td><span class="pick-value" id="sale-itens"> </span></td>
+                      <td><span class="pick-value right" id="sale-value">  </span></td>
+                    </tr>
+                  </table>
+                </tr>
+
+                <tr class="line space-top">
+                  <td><span class="pick-value">Produto</span></td>
+                  <td><span class="pick-value">Quant.</span></td>
+                  <td><span class="pick-value">Preço</span></td>
+                  <td><span class="pick-value">Pend.</span></td>
+                </tr>
+
+              </table>
+
+            </div>
+
+
+
+          </div>
+        </div>
+      </div>
+
+    </body>
+
+    </html>

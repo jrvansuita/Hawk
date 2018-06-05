@@ -1,4 +1,6 @@
-module.exports = {
+
+
+var Util = {
 
 
   getSubtitles: function(charts) {
@@ -25,3 +27,8 @@ module.exports = {
 
 
 };
+
+
+
+if (typeof module != 'undefined')
+module.exports = Util;

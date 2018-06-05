@@ -1,4 +1,4 @@
-module.exports = {
+var Num = {
 
   money: function(val) {
     return 'R$ ' + parseFloat(val).toFixed(2).toString().replace('.', ',');
@@ -46,3 +46,10 @@ module.exports = {
   }
 
 };
+
+
+
+
+
+if (typeof module != 'undefined')
+module.exports = Num;

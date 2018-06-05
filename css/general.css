@@ -14,10 +14,23 @@ input, span, label {
   font-family: Roboto, sans-serif;
 }
 
-.button {
+.menu-button {
   position: relative !important;
   cursor: pointer;
 }
+
+.button{
+  margin: 5px 1px;
+  display: inline-block;
+  background-color: #1c796b !important;
+  color: white !important;
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  float: right;
+  cursor: pointer;
+}
+
 
 .label {
   padding: 2px 3px 2px 3px;
@@ -81,6 +94,9 @@ input, span, label {
   margin-right: auto;
   display: block;
 }
+.right{
+  float: right;
+}
 
 .avatar-img {
   margin-left: auto;
@@ -91,4 +107,9 @@ input, span, label {
 .avatar-holder {
   padding-bottom: 10px;
   display: block;
+}
+
+
+tr.line td{
+  border-bottom: 1pt solid #80808033;
 }

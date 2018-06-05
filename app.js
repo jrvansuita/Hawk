@@ -27,6 +27,7 @@ app.use('/css', express.static('css'));
 app.use('/img', express.static('img'));
 app.use('/visual', express.static('visual'));
 app.use('/control', express.static('control'));
+app.use('/util', express.static('app/util'));
 app.use('/libs', express.static('libs'));
 
 

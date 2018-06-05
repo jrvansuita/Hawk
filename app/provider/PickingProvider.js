@@ -10,11 +10,14 @@ global.transportList = {};
 var previewCount = 6;
 const unknow = 'Indefinido';
 var selectedTransp;
+var maxPickingSales;
 
 
 module.exports = {
 
   init(selected, onFinished) {
+    maxPickingSales = 10;
+
     selectedTransp = selected;
 
     if (global.staticPickingList.length == 0) {
@@ -126,8 +129,9 @@ function loadSaleItems(index, callback) {
 
     index++;
     console.log(index + '/' + (currentLength));
-
-    if (index < currentLength) {
+    maxPickingSales--;
+    
+    if (index < currentLength && maxPickingSales > 0) {
       loadSaleItems(index, callback);
       if (index == previewCount) {
         callback();

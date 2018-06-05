@@ -1,4 +1,6 @@
-module.exports = {
+
+
+var Dat = {
 
   format(date) {
     var formated = fmt(date);
@@ -140,3 +142,6 @@ function getCurrentMinutes() {
 function getCurrentSecondes() {
   return new Date().getSecondes();
 }
+
+if (typeof module != 'undefined')
+  module.exports = Dat;
