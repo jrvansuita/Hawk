@@ -59,9 +59,31 @@ $(document).ready(() => {
   $('.inprogress-item').click(function(){
     var saleNumber = $(this).data('sale').split('-')[1];
     var sale = getInProgressSale(saleNumber);
+    $('.opened-sale-box').css('display','-webkit-inline-box').fadeIn(200);
     loadSale(sale);
+  });
 
-    $('.opened-sale-box').fadeIn(200);
+  $('.pending-item').click(function(){
+    var index = $(this).data('index').split('-')[1];
+    loadPendingSaleItems($(this), pendingSales[index]);
+  });
+
+
+  $('.pending-button').click(function(){
+    $.ajax({
+      url: "/picking-pending",
+      type: "post",
+      data: {
+        pendingSale: selectedPendingSale
+      },
+      success: function(response) {
+        window.location.reload();
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR);
+        $('.error').text(jqXHR.responseText).fadeIn().delay(1000).fadeOut();
+      }
+    });
   });
 });
 
@@ -78,74 +100,32 @@ function getInProgressSale(number){
 }
 
 
+
+var selectedPendingSale;
+
 function loadSale(sale){
-  $('.sale-number').text(sale.numeroPedido);
-  $('#sale-transport').text(sale.transport);
-  $('#sale-date').text(Dat.format(new Date(sale.data)));
-  $('#sale-itens').text(sale.itemsQuantity + ' Itens');
-  $('#sale-value').text(Num.money(sale.totalProdutos));
+  if (selectedPendingSale != sale){
+    selectedPendingSale = sale;
+    $('.sale-number').text(sale.numeroPedido);
+    $('#sale-transport').text(sale.transport);
+    $('#sale-date').text(Dat.format(new Date(sale.data)));
+    $('#sale-itens').text(sale.itemsQuantity + ' Itens');
+    $('#sale-value').text(Num.money(sale.totalProdutos));
 
+    sale.items.forEach(item => {
+      var row = $('<tr>').addClass('row-padding');
 
+      row.append($('<td>').append(buildProductFirstCol(item)));
+      row.append($('<td>').append(buildProductSecondCol(item)));
+      row.append($('<td>').append(buildProductThirdCol(item)));
+      row.append($('<td>').append(buildProductFourthCol(item)));
 
-  sale.items.forEach(item => {
-    var row = $('<tr>').addClass('row-padding');
-
-    var desc = item.descricao.split('-')[0];
-    var brand = item.descricao.split('-')[1].trim().split(' ')[0];
-
-    desc = desc.trim().split(' ');
-
-    if (desc.length >= 3){
-      desc = desc[0] +  ' ' + desc[desc.length-1] + ' ' + brand;
-    }
-
-    var first = $('<div>').addClass('vertical-content');
-
-    var div = $('<div>').addClass('nobreak');
-    div.append($('<label>').addClass('pick-value sku').text(item.codigo));
-    div.append($('<span>').addClass('pick-value right').text(item.gtin.slice(9,item.gtin.length)));
-    first.append(div);
-    first.append($('<label>').addClass('pick-value desc no-wrap').text(desc));
-
-    var second = $('<div>');
-    second.append($('<span>').addClass('pick-value center').text(parseInt(item.quantidade)));
-
-    var third = $('<div>');
-    third.append($('<span>').addClass('pick-value no-wrap').text(Num.money(item.valor)));
-
-    var fourth = $('<div>');
-    var img = $('<div>').addClass('checked pick-icon');
-
-    pendingCount = 0;
-    img.click(function(){
-
-      togglePending(item);
-
-      $(this).toggleClass('pending');
-      $(this).toggleClass('checked');
-
-      pendingCount += item.pending ? 1 : -1;
-
-      if (pendingCount){
-        $('.pending-button').fadeIn();
-      }else{
-        $('.pending-button').fadeOut();
-      }
+      $('#opened-sale').append(row);
+      row.hide().fadeIn();
     });
-
-    fourth.append(img);
-
-    row.append($('<td>').append(first));
-    row.append($('<td>').append(second));
-    row.append($('<td>').append(third));
-    row.append($('<td>').append(fourth));
-
-    $('#opened-sale').append(row);
-    row.hide().fadeIn();
-  });
+  }
 }
 
-var pendingCount;
 
 function isNum(v) {
   return /^\d+$/.test(v);
@@ -171,4 +151,167 @@ String.prototype.toMMSS = function() {
 
 function togglePending(item){
   item.pending = !item.pending;
+}
+
+
+function loadPendingSaleItems(el, pending){
+  var table = el.find('table');
+  if (!table.hasClass('opened')){
+    table.toggleClass('opened');
+
+    var row = $('<tr>').addClass('row-padding dotted-line');
+
+    row.append($('<td>').attr('colspan','2').append($('<span>').addClass('pick-value').append('Produto')));
+    row.append($('<td>').append($('<span>').addClass('pick-value').append('Quant.')));
+    row.append($('<td>').append($('<span>').addClass('pick-value').css('margin-left', '5px').append('Preço')));
+    table.append(row);
+
+    pending.sale.items.forEach(function(item){
+      if (item.pending){
+        var row = $('<tr>').addClass('row-padding ');
+
+        row.append($('<td>').attr('colspan','2').append(buildProductFirstCol(item)));
+        row.append($('<td>').append(buildProductSecondCol(item)));
+        row.append($('<td>').append(buildProductThirdCol(item)));
+
+        table.append(row);
+      }
+    });
+
+    table.find('tr').last().addClass('dotted-line');
+    var last = $('<tr>').addClass('row-padding');
+
+    var solve = $('<label>').addClass('button shadow solve-pending').append(pending.solved ? 'Reiniciar' : 'Resolver').click(function(){
+      if (pending.solved){
+        restartPendingSale(pending);
+      }else{
+        solvePendingSale(pending);
+      }
+    });
+
+    last.append($('<td>').attr('colspan','4').append(solve));
+    table.append(last);
+  }
+
+}
+
+
+function buildProductFirstCol(item){
+  var desc = item.descricao.split('-')[0];
+  var brand = item.descricao.split('-')[1].trim();
+
+  if (brand.length > 10){
+    brand = brand.split(' ')[0];
+  }
+
+  desc = desc.trim().split(' ');
+
+  if (desc.length >= 3){
+    desc = desc[0] +  ' ' + desc[desc.length-1] + ' ' + brand;
+  }
+
+  var first = $('<div>').addClass('vertical-content');
+
+  var div = $('<div>').addClass('nobreak');
+  div.append($('<label>').addClass('pick-value sku').text(item.codigo));
+  div.append($('<span>').addClass('pick-value right').text(item.gtin.slice(9,item.gtin.length)));
+  first.append(div);
+  first.append($('<label>').addClass('pick-value desc no-wrap').text(desc));
+
+  return first;
+}
+
+
+function buildProductSecondCol(item){
+  var second = $('<div>');
+  second.append($('<span>').addClass('pick-value center').text(parseInt(item.quantidade)));
+  return second;
+}
+
+function buildProductThirdCol(item){
+  var third = $('<div>');
+  third.append($('<span>').addClass('pick-value no-wrap').text(Num.money(item.valor)));
+  return third;
+}
+
+
+
+var pendingCount;
+
+function buildProductFourthCol(item){
+  var fourth = $('<div>');
+  var img = $('<div>').addClass('checked pick-icon');
+
+  pendingCount = 0;
+  img.click(function(){
+
+    togglePending(item);
+
+    $(this).toggleClass('pending');
+    $(this).toggleClass('checked');
+
+    pendingCount += item.pending ? 1 : -1;
+
+    if (pendingCount){
+      $('.pending-button').fadeIn();
+    }else{
+      $('.pending-button').fadeOut();
+    }
+  });
+
+  fourth.append(img);
+  return fourth;
+}
+
+
+function solvePendingSale(sale){
+  $.ajax({
+    url: "/picking-pending-solve",
+    type: "post",
+    data: {
+      pendingSale: sale
+    },
+    success: function(response) {
+      window.location.reload();
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log(jqXHR);
+      $('.error').text(jqXHR.responseText).fadeIn().delay(1000).fadeOut();
+    }
+  });
+}
+
+function solvePendingSale(pending){
+  executePendingAjax("/picking-pending-solve",pending);
+}
+
+function restartPendingSale(pending){
+  executePendingAjax("/picking-pending-restart", pending, function(printUrl){
+    $('.sucess').text("Aguardando impressão do pedido").fadeIn();
+    setTimeout(function() {
+      window.open(printUrl, "picking");
+      window.location.reload();
+    }, 1000);
+  });
+}
+
+function executePendingAjax(path, pending, onSucess){
+  $.ajax({
+    url: path,
+    type: "post",
+    data: {
+      pendingSale: pending
+    },
+    success: function(response) {
+      if (onSucess){
+        onSucess(response);
+      }else{
+        window.location.reload();
+      }
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log(jqXHR);
+      $('.error').text(jqXHR.responseText).fadeIn().delay(1000).fadeOut();
+    }
+  });
 }

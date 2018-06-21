@@ -1,29 +1,39 @@
 const EccosysCalls = require('../eccosys/eccosys-calls.js');
 const UsersProvider = require('../provider/UsersProvider.js');
 const Day = require('../bean/day.js');
+const Pending = require('../bean/pending.js');
 
 
 global.staticPickingList = [];
 global.inprogressPicking = {};
 global.transportList = {};
+global.staticPendingSales = [];
 
 var previewCount = 6;
 const unknow = 'Indefinido';
 var selectedTransp;
-var maxPickingSales;
+var maxPickingSalesForTest;
 
 
 module.exports = {
 
   init(selected, onFinished) {
-    maxPickingSales = 10;
+    maxPickingSalesForTest = 10;
 
     selectedTransp = selected;
 
     if (global.staticPickingList.length == 0) {
-      EccosysCalls.getPickingSales((data) => {
-        global.staticPickingList = JSON.parse(data);
-        loadSaleItems(0, onFinished);
+      loadAllPendingSales(()=>{
+        EccosysCalls.getPickingSales((data) => {
+          try{
+            global.staticPickingList = JSON.parse(data);
+            removePendingSalesFromPickingSalesList();
+            loadSaleItems(0, onFinished);
+          }catch(e){
+            onFinished();
+            console.log('Erro ao buscar pedidos no eccosys.');
+          }
+        });
       });
     } else {
       onFinished();
@@ -35,16 +45,16 @@ module.exports = {
   },
 
   handle(userId, callback) {
-      if (UsersProvider.checkUserExists(userId)){
-          //Convert from access or id
-          userId = UsersProvider.get(userId).id;
-        if (global.inprogressPicking[userId] != undefined) {
-          //In progress picking
-          this.endPicking(userId, callback);
-        } else {
-          this.nextSale(userId, callback);
-        }
+    if (UsersProvider.checkUserExists(userId)){
+      //Convert from access or id
+      userId = UsersProvider.get(userId).id;
+      if (global.inprogressPicking[userId] != undefined) {
+        //In progress picking
+        this.endPicking(userId, callback);
+      } else {
+        this.nextSale(userId, callback);
       }
+    }
   },
 
   nextSale(userId, callback) {
@@ -84,13 +94,66 @@ module.exports = {
 
   inprogressPicking() {
     return global.inprogressPicking;
+  },
+
+  pendingSales() {
+    return global.staticPendingSales;
+  },
+
+  storePendingSale(sale, callback){
+    var pending = new Pending(sale.numeroPedido, sale);
+
+    pending.upsert(()=>{
+      //Remove From picking List
+      global.staticPickingList = global.staticPickingList.filter((i)=>{
+        return i.numeroPedido != sale.numeroPedido;
+      });
+
+      //Remove from inprogress sales
+      for (var key in global.inprogressPicking) {
+        if (global.inprogressPicking.hasOwnProperty(key)) {
+          if (global.inprogressPicking[key].numeroPedido === pending.number){
+            delete global.inprogressPicking[key];
+          }
+        }
+      }
+
+      //Add new pending sale
+      global.staticPendingSales.push(pending);
+      callback();
+    });
+  },
+
+  solvePendingSale(pending, callback){
+    pending.solved = true;
+    Pending.upsert(Pending.getKeyQuery(pending.number),pending, function(err, doc){
+      global.staticPendingSales.filter((i)=>{
+        if (i.number == doc.number){
+          i.solved = true;
+        }
+        return true;
+      });
+
+      callback();
+    });
+  },
+
+  restartPendingSale(pending, callback){
+    if (global.inprogressPicking[pending.sale.pickUser.id] != undefined) {
+      throw pending.sale.pickUser.name + ' já tem um pedido em processo de picking.';
+    }else{
+      Pending.removeAll(Pending.getKeyQuery(pending.number));
+      global.staticPendingSales = global.staticPendingSales.filter((i)=>{
+        return i.number != pending.number;
+      });
+
+      delete pending.solved;
+      delete pending.sale.pending;
+
+      initSalePicking(pending.sale, pending.sale.pickUser.id);
+      callback(getPrintUrl(pending.sale));
+    }
   }
-
-
-
-
-
-
 };
 
 
@@ -106,6 +169,10 @@ function buildResult(userId) {
   var sale = getNextSale();
   removeFromPickingList(sale);
   initSalePicking(sale, userId);
+  return getPrintUrl(sale);
+}
+
+function getPrintUrl(sale){
   return printUrl + "&idsVendas=" + sale.id;
 }
 
@@ -129,9 +196,9 @@ function loadSaleItems(index, callback) {
 
     index++;
     console.log(index + '/' + (currentLength));
-    maxPickingSales--;
-    
-    if (index < currentLength && maxPickingSales > 0) {
+    maxPickingSalesForTest--;
+
+    if (index < currentLength && maxPickingSalesForTest > 0) {
       loadSaleItems(index, callback);
       if (index == previewCount) {
         callback();
@@ -162,4 +229,19 @@ function initSalePicking(sale, userId){
   sale.end = null;
   sale.pickUser = UsersProvider.get(userId);
   global.inprogressPicking[userId] = sale;
+}
+
+function loadAllPendingSales(callback){
+  Pending.findAll(function(err, all){
+    global.staticPendingSales = all;
+    callback();
+  });
+}
+
+function removePendingSalesFromPickingSalesList(){
+  global.staticPickingList = global.staticPickingList.filter(function(i){
+    return !global.staticPendingSales.some(function(j){
+      return j.number == i.numeroPedido;
+    });
+  });
 }

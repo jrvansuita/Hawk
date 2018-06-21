@@ -138,6 +138,7 @@ app.get('/achievements', (req, res) => {
         remaining: pickingProvider.remainingSales(),
         inprogress: pickingProvider.inprogressPicking(),
         transportList: pickingProvider.getTransportList(),
+        pendingSales: pickingProvider.pendingSales(),
         selectedTransp: req.query.transp
       });
     });
@@ -145,7 +146,6 @@ app.get('/achievements', (req, res) => {
 
   app.get('/picking-sale', (req, res) => {
     try {
-      var UsersProvider = require('./app/provider/UsersProvider.js');
       pickingProvider.handle(req.query.userid, (result) => {
         res.status(200).send(result);
       });
@@ -154,6 +154,39 @@ app.get('/achievements', (req, res) => {
     }
   });
 
+  app.post('/picking-pending', (req, res) => {
+    try {
+      pickingProvider.storePendingSale(req.body.pendingSale, (printUrl) => {
+        res.status(200).send(printUrl);
+      });
+    } catch (e) {
+      console.log(e);
+      res.status(500).send(e);
+    }
+  });
+
+  app.post('/picking-pending-solve', (req, res) => {
+    try {
+      pickingProvider.solvePendingSale(req.body.pendingSale, (result) => {
+        res.status(200).send(result);
+      });
+    } catch (e) {
+      console.log(e);
+      res.status(500).send(e);
+    }
+  });
+
+
+  app.post('/picking-pending-restart', (req, res) => {
+    try {
+      pickingProvider.restartPendingSale(req.body.pendingSale, (printUrl) => {
+        res.status(200).send(printUrl);
+      });
+    } catch (e) {
+      console.log(e);
+      res.status(500).send(e);
+    }
+  });
 
   app.get(['/picking/overview'], (req, res) => {
     require('./app/builder/PickingChartBuilder.js').buildOverview(res.locals.loggedUser.full, function(charts) {

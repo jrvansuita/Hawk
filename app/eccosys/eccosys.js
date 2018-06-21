@@ -1,4 +1,4 @@
-const http = require('http');
+const https = require('https');
 var MD5 = require('../util/md5.js');
 
 var exports = module.exports = {};
@@ -11,9 +11,7 @@ exports.get = (path, onEnd) => {
 
   var body = '';
 
-  //console.log(getOptions(path));
-
-  var req = http.request(getOptions(path), function(res) {
+  var req = https.request(getOptions(path), function(res) {
 
     res.on('data', function(chunk) {
       body += chunk;
@@ -35,6 +33,7 @@ exports.get = (path, onEnd) => {
 function getOptions(path) {
   return {
     host: host,
+    port: 443,
     path: '/api/' + path,
     method: 'GET',
     headers: {

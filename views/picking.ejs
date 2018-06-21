@@ -12,174 +12,227 @@
 
   <script>
   window.inprogress = <%- JSON.stringify(inprogress || null) %>
+  window.pendingSales = <%- JSON.stringify(pendingSales || null) %>
   </script>
 
 
   <div class="main-content">
     <% include picking-menu %>
 
-    <div class="col">
-      <div class="find-next-holder shadow">
-        <span class="picking-title label header-title"> Impressão de Picking </span>
+    <div class="main-pick">
+      <div class="col dotted">
+        <div class="find-next-holder shadow">
+          <span class="picking-title label header-title"> Impressão de Picking </span>
 
-        <div class="material-input-holder group input-group">
-          <input type="text" id="user-id" required>
-          <span class="highlight"></span>
-          <span class="bar"></span>
-          <label>Código de Acesso</label>
+          <div class="material-input-holder group input-group">
+            <input type="text" id="user-id" required>
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label>Código de Acesso</label>
 
-          <p class="error">Erro</p>
-          <p class="sucess">Sucesso</p>
-        </div>
-
-
-        <div class="dropdown">
-          <input id="tramsport-list" type="checkbox" name="checkbox" checked />
-          <label class="label-transport" for="tramsport-list">
-            <div class="drop-ttl"><label class="inner-label"><%=selectedTransp ? selectedTransp : 'Transportadora'%></label></div>
-            <ul>
-              <% Object.keys(transportList).forEach((key)=>{%>
-                <li><a href="/picking?transp=<%=key%>"><%=key%></a></li>
-                <%})%>
-              </ul>
-            </label>
+            <p class="error">Erro</p>
+            <p class="sucess">Sucesso</p>
           </div>
 
 
-        </div>
-
-        <div class="pick-box shadow upcoming-box">
-
-
-
-          <div class="preview-header">
-            <span class="label header-title"> Próximos Pedidos</span>
-            <span class="label header-count"> <%=remaining%></span>
-          </div>
-
-
-
-
-          <%
-          upcoming.forEach(function(preview){
-            %>
-
-            <div class="shadow label mini-item">
-
-              <table width="100%">
-                <tr>
-                  <td><span class="pick-value green-title"><%=preview.numeroPedido %></span></td>
-                  <td><span class="pick-value"><%=preview.transport%></span></td>
-                  <td><span class="pick-value" style="float:right"><%= Dat.format(new Date(preview.data))%></span></td>
-                </tr>
-                <tr>
-                  <td><span class="pick-value"><%=preview.itemsQuantity %> Itens</span></td>
-                  <td><span class="pick-value"></span></td>
-                  <td><span class="pick-value" style="float:right"><%=Num.money(preview.totalProdutos) %></span></td>
-                </tr>
-              </table>
+          <div class="dropdown">
+            <input id="tramsport-list" type="checkbox" name="checkbox" checked />
+            <label class="label-transport" for="tramsport-list">
+              <div class="drop-ttl"><label class="inner-label"><%=selectedTransp ? selectedTransp : 'Transportadora'%></label></div>
+              <ul>
+                <% Object.keys(transportList).forEach((key)=>{%>
+                  <li><a href="/picking?transp=<%=key%>"><%=key%></a></li>
+                  <%})%>
+                </ul>
+              </label>
             </div>
 
-            <%
-          });
-          %>
 
-        </div>
-      </div>
-
-      <div class="col">
-
-        <div class="pick-box shadow">
-          <div class="inprogress-header">
-            <span class="label header-title"> Em Andamento</span>
-            <span class="label header-count inprogress-count"> <%=Object.keys(inprogress).length%></span>
           </div>
 
-
-          <%
-
-          var progress = Object.keys(inprogress);
+          <div class="pick-box shadow upcoming-box">
 
 
-          if (progress.length === 0){
-            %><span class="pick-hint">Nenhum picking em andamento </span>
-            <%
-          }
 
-
-          progress.forEach((key) => {
-            var sale = inprogress[key];
-
-            %>
-            <div class="shadow label mini-item inprogress-item" data-sale="progress-<%=sale.numeroPedido %>">
-              <table width="100%">
-                <tr>
-                  <td rowspan="0">
-                    <img class="circle shadow avatar-img mini-avatar" src="/img/avatar/<%=sale.pickUser.id%>.jpg" onerror="this.src='/img/avatar/default.jpg'" />
-                  </td>
-                  <td><span class="pick-value green-title"><%=sale.numeroPedido %></span></td>
-                  <td><span class="pick-value"><%=sale.transport %></span></td>
-                  <td><span class="pick-value" style="float:right"><%=sale.itemsQuantity %> Itens</span></td>
-                </tr>
-                <tr>
-                  <td><span class="pick-value"><%=sale.pickUser.name ? sale.pickUser.name.split(" ")[0] : 'Desconhecido'%></span></td>
-                  <td></td>
-                  <td><span class="pick-value inprogress-begin" style="float:right" diftime="<%=new Date().getTime() - sale.begin.getTime()%>"></span></td>
-                </tr>
-              </table>
-
+            <div class="pick-header">
+              <span class="label header-title"> Próximos Pedidos</span>
+              <span class="label header-count"> <%=remaining%></span>
             </div>
+
+
+
+
             <%
-          });
-          %>
-        </div>
-      </div>
+            upcoming.forEach(function(preview){
+              %>
 
+              <div class="shadow label mini-item solved">
 
+                <table width="100%">
+                  <tr>
+                    <td><span class="pick-value green-title"><%=preview.numeroPedido %></span></td>
+                    <td><span class="pick-value"><%=preview.transport%></span></td>
+                    <td><span class="pick-value" style="float:right"><%= Dat.format(new Date(preview.data))%></span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="pick-value"><%=preview.itemsQuantity %> Itens</span></td>
+                    <td><span class="pick-value"></span></td>
+                    <td><span class="pick-value" style="float:right"><%=Num.money(preview.totalProdutos) %></span></td>
+                  </tr>
+                </table>
+              </div>
 
-      <div class="col opened-sale-box">
+              <%
+            });
+            %>
 
-        <div class="pick-box shadow">
-          <div class="inprogress-header">
-            <span class="label header-title">Pedido</span>
-            <span class="label header-count green-title sale-number">234343</span>
           </div>
+        </div>
 
-         <div class="pending-button">
-            <label class="button send-pending shadow">Pendência</label>
-         </div>
 
-          <div class="items-holder">
-            <table id="opened-sale" width="100%">
-              <tr>
-                <td colspan="4">
-                  <table width="100%">
-                    <tr>
-                      <td><span class="pick-value" id="sale-transport"><span></td>
-                      <td><span class="pick-value" id="sale-date"> </span></td>
-                      <td><span class="pick-value" id="sale-itens"> </span></td>
-                      <td><span class="pick-value right" id="sale-value">  </span></td>
+        <div class="col">
+
+          <div class="pick-box shadow">
+            <div class="pick-header">
+              <span class="label header-title"> Em Andamento</span>
+              <span class="label header-count inprogress-count"> <%=Object.keys(inprogress).length%></span>
+            </div>
+
+
+            <%
+
+            var progress = Object.keys(inprogress);
+
+
+            if (progress.length === 0){
+              %><span class="pick-hint">Nenhum picking em andamento </span>
+              <%
+            }
+
+
+            progress.forEach((key) => {
+              var sale = inprogress[key];
+
+              %>   
+              <div class="shadow label mini-item inprogress-item clickable-mini-item solved" data-sale="progress-<%=sale.numeroPedido %>">
+                <table width="100%">
+                  <tr>
+                    <td rowspan="2">
+                      <img class="circle shadow avatar-img mini-avatar" src="/img/avatar/<%=sale.pickUser.id%>.jpg" onerror="this.src='/img/avatar/default.jpg'" />
+                    </td>
+                    <td><span class="pick-value green-title"><%=sale.numeroPedido %></span></td>
+                    <td><span class="pick-value"><%=sale.transport %></span></td>
+                    <td><span class="pick-value" style="float:right"><%=sale.itemsQuantity %> Itens</span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="pick-value"><%=sale.pickUser.name ? sale.pickUser.name.split(" ")[0] : 'Desconhecido'%></span></td>
+                    <td></td>
+                    <td><span class="pick-value inprogress-begin" style="float:right" diftime="<%=new Date().getTime() - sale.begin.getTime()%>"></span></td>
+                  </tr>
+                </table>
+
+              </div>
+              <%
+            });
+            %>
+          </div>
+        </div>
+
+
+
+        <div class="col opened-sale-box">
+
+          <div class="pick-box shadow">
+            <div class="pick-header">
+              <span class="label header-title">Pedido</span>
+              <span class="label header-count green-title sale-number"></span>
+              <label class="button pending-button shadow">Pendência</label>
+            </div>
+
+
+            <div class="items-holder">
+              <table id="opened-sale" width="100%">
+                <tr>
+                  <td colspan="4">
+                    <table width="100%">
+                      <tr>
+                        <td><span class="pick-value" id="sale-transport"><span></td>
+                          <td><span class="pick-value" id="sale-date"> </span></td>
+                          <td><span class="pick-value" id="sale-itens"> </span></td>
+                          <td><span class="pick-value right" id="sale-value">  </span></td>
+                        </tr>
+                      </table>
                     </tr>
+
+                    <tr class="dotted-line">
+                      <td><span class="pick-value">Produto</span></td>
+                      <td><span class="pick-value">Quant.</span></td>
+                      <td><span class="pick-value">Preço</span></td>
+                      <td><span class="pick-value">Pend.</span></td>
+                    </tr>
+
                   </table>
-                </tr>
 
-                <tr class="line space-top">
-                  <td><span class="pick-value">Produto</span></td>
-                  <td><span class="pick-value">Quant.</span></td>
-                  <td><span class="pick-value">Preço</span></td>
-                  <td><span class="pick-value">Pend.</span></td>
-                </tr>
+                </div>
 
-              </table>
 
+
+              </div>
             </div>
 
 
 
+            <div class="col pending-sales">
+
+              <div class="pick-box shadow pending-box">
+                <div class="pick-header">
+                  <span class="label header-title">Pendências</span>
+                  <span class="label header-count green-title"><%=pendingSales.length%> </span>
+                </div>
+
+
+                <%if (pendingSales.length === 0){
+                  %><span class="pick-hint">Nenhuma pendência a resolver</span>
+                  <%
+                }%>
+
+
+                <%
+                pendingSales.forEach(function(pending, index){
+                  var sale = pending.sale;
+                  %>
+
+                  <div class="shadow label mini-item clickable-mini-item pending-item <%= pending.solved ? 'solved' : 'not-solved'%>"  data-index="pending-<%=index%>">
+
+                    <table width="100%">
+                      <tr>
+                        <td rowspan="2">
+                          <img class="circle shadow avatar-img mini-avatar" src="/img/avatar/<%=sale.pickUser.id%>.jpg" onerror="this.src='/img/avatar/default.jpg'" />
+                        </td>
+                        <td><span class="pick-value green-title"><%=sale.numeroPedido %></span></td>
+                        <td><span class="pick-value"><%=sale.transport %></span></td>
+                        <td><span class="pick-value" style="float:right"><%=sale.items.filter((i)=>{
+                          return i.pending;
+                        }).length %> Itens</span></td>
+                      </tr>
+                      <tr>
+                        <td><span class="pick-value"><%=sale.pickUser.name ? sale.pickUser.name.split(" ")[0] : 'Desconhecido'%></span></td>
+                        <td><span class="pick-value" ><%= Dat.format(new Date(sale.data))%></span></td>
+                        <td><span class="pick-value" style="float:right"><%=Dat.daysDif(new Date(sale.data), new Date()) + ' Dias'%></span></td>
+                      </tr>
+                    </table>
+                  </div>
+
+                  <%
+                });
+                %>
+
+
+
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </body>
 
-    </body>
-
-    </html>
+      </html>
