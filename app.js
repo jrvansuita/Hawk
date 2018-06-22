@@ -139,6 +139,7 @@ app.get('/achievements', (req, res) => {
         inprogress: pickingProvider.inprogressPicking(),
         transportList: pickingProvider.getTransportList(),
         pendingSales: pickingProvider.pendingSales(),
+        donePickings: pickingProvider.donePickings(),
         selectedTransp: req.query.transp,
         printPickingUrl: global.pickingPrintUrl
       });

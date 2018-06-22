@@ -92,7 +92,7 @@
 
         <div class="col">
 
-          <div class="pick-box shadow">
+          <div class="pick-box shadow green-top">
             <div class="pick-header">
               <span class="label header-title"> Em Andamento</span>
               <span class="label header-count inprogress-count"> <%=Object.keys(inprogress).length%></span>
@@ -122,7 +122,7 @@
                     </td>
                     <td><span class="pick-value green-title"><%=sale.numeroPedido %></span></td>
                     <td><span class="pick-value"><%=sale.itemsQuantity %> Itens</span></td>
-                    <td><div class="print-sale-holder" title="Reimprimir" data-print="url-<%=printPickingUrl%>" data-sale="progress-<%=sale.numeroPedido %>"><img class="print-sale" src="/img/print.png" /></div></td>
+                    <td><a href="<%=printPickingUrl + sale.id %>" target="_blank"><div class="print-sale-holder" title="Reimprimir" ><img class="print-sale" src="/img/print.png" /></div></a></td>
                   </tr>
                   <tr>
                     <td><span class="pick-value"><%=sale.pickUser.name ? sale.pickUser.name.split(" ")[0] : 'Desconhecido'%></span></td>
@@ -142,7 +142,7 @@
 
         <div class="col opened-sale-box">
 
-          <div class="pick-box shadow">
+          <div class="pick-box shadow orange-top">
             <div class="pick-header">
               <span class="label header-title">Pedido</span>
               <span class="label header-count green-title sale-number"></span>
@@ -181,10 +181,47 @@
             </div>
 
 
+            <div class="col">
+              <div class="pick-box shadow blue-top">
+                <div class="pick-header">
+                  <span class="label header-title">Pronto</span>
+                  <span class="label header-count green-title sale-number"><%=donePickings.length%></span>
+                </div>
 
-            <div class="col pending-sales">
+                <%if (donePickings.length === 0){
+                  %><span class="pick-hint">Nenhum picking pronto</span>
+                  <%
+                }%>
 
-              <div class="pick-box shadow pending-box">
+                <table width="100%">
+                  <tr class="dotted-line">
+                    <td><span class="pick-value">Pedido</span></td>
+                    <td><span class="pick-value">Transp.</span></td>
+                    <td><span class="pick-value">Data</span></td>
+                    <td><span class="pick-value" style="float:right">Em aberto</span></td>
+                  </tr>
+                  <%
+                  donePickings.forEach(function(sale, index){
+                    %>
+
+                    <tr >
+                      <td class="clickable-mini-item"><a href="<%=printPickingUrl + sale.id %>" target="_blank"><span class="pick-value green-title"><%=sale.numeroPedido %></a></span></td>
+                      <td><span class="pick-value"><%=sale.transportador ? sale.transportador.split(' ')[0] : 'Retirada' %> </span></td>
+                      <td><span class="pick-value" ><%= Dat.format(new Date(sale.data))%></span></td>
+                      <td><span class="pick-value" style="float:right"><%=Dat.daysDif(new Date(sale.data), new Date()) + ' Dias'%></span></td>
+                    </tr>
+
+                    <%
+                  });
+                  %>
+
+                </table>
+              </div>
+            </div>
+
+            <div class="col pending-sales ">
+
+              <div class="pick-box shadow pending-box red-top">
                 <div class="pick-header">
                   <span class="label header-title">Pendências</span>
                   <span class="label header-count green-title"><%=pendingSales.length%> </span>

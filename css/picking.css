@@ -212,7 +212,7 @@ tr.row-padding td{
   display: none;
   width: 40%;
   float: right;
-  margin-right: 10%;
+  margin-right: 8%;
   text-align: center;
   margin-left: auto;
   margin-top: -5px;
@@ -238,6 +238,23 @@ tr.row-padding td{
 .solved{
   border-left: 3px solid #4ac6aa;
 }
+
+.blue-top{
+  border-top: 3px solid #6aabf1;
+}
+
+.green-top{
+  border-top: 3px solid #4ac6aa;
+}
+
+.orange-top{
+  border-top: 3px solid #f1d26a;
+}
+
+.red-top{
+  border-top: 3px solid #f16d6f;
+}
+
 
 
 .print-sale{

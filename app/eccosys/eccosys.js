@@ -17,7 +17,7 @@ exports.get = (path, onEnd) => {
       body += chunk;
     });
 
-    res.on('end', function() {
+    res.on('end', function() { 
       onEnd(body);
     });
   });
@@ -53,4 +53,6 @@ function generateSignature() {
   }
 
   return signature;
+
+
 }

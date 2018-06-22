@@ -54,22 +54,12 @@ $(document).ready(() => {
     $('.drop-ttl').click();
   });
 
-  $('.print-sale-holder').click(function(){
-    var url = $(this).data('print').split('-')[1];
-    var saleNumber = $(this).data('sale').split('-')[1];
-
-    url = url + getInProgressSale(saleNumber).id;
-
-    window.open(url, "picking");
-
-    window.event.cancelBubble = true;
-  });
+  
 
 
   $('.inprogress-item').click(function(){
     var saleNumber = $(this).data('sale').split('-')[1];
     var sale = getInProgressSale(saleNumber);
-    $('.opened-sale-box').css('display','-webkit-inline-box').fadeIn(200);
     loadSale(sale);
   });
 
@@ -114,7 +104,9 @@ function getInProgressSale(number){
 var selectedPendingSale;
 
 function loadSale(sale){
-  if (selectedPendingSale != sale){
+  if ((selectedPendingSale != sale) || !$('.opened-sale-box').is(':visible')){
+    $('.opened-sale-box').css('display','-webkit-inline-box').fadeIn(200);
+
     selectedPendingSale = sale;
     $('.sale-number').text(sale.numeroPedido);
     $('#sale-transport').text(sale.transport);
@@ -134,6 +126,8 @@ function loadSale(sale){
       $('#opened-sale').append(row);
       row.hide().fadeIn();
     });
+  }else{
+    $('.opened-sale-box').fadeOut(200);
   }
 }
 

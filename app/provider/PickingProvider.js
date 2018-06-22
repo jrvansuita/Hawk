@@ -4,21 +4,25 @@ const Day = require('../bean/day.js');
 const Pending = require('../bean/pending.js');
 
 
-global.staticPickingList = [];
-global.inprogressPicking = {};
 global.transportList = {};
+
+//Nexts sales to pick
+global.staticPickingList = [];
+//Current picking
+global.inprogressPicking = {};
+//All sales on pending
 global.staticPendingSales = [];
+//All ready picking sales
+global.staticDonePicking = [];
 
 var previewCount = 6;
-const unknow = 'Indefinido';
+const unknow = 'Retirada';
 var selectedTransp;
-var maxPickingSalesForTest;
 
 
 module.exports = {
 
   init(selected, onFinished) {
-    maxPickingSalesForTest = 10000;
 
     selectedTransp = selected;
 
@@ -28,6 +32,7 @@ module.exports = {
           try{
             global.staticPickingList = JSON.parse(data);
             removePendingSalesFromPickingSalesList();
+            handleAllDonePickingSales();
             loadSaleItems(0, onFinished);
           }catch(e){
             onFinished();
@@ -98,6 +103,10 @@ module.exports = {
 
   pendingSales() {
     return global.staticPendingSales;
+  },
+
+  donePickings(){
+    return global.staticDonePicking;
   },
 
   storePendingSale(sale, callback){
@@ -196,13 +205,15 @@ function loadSaleItems(index, callback) {
 
     index++;
     console.log(index + '/' + (currentLength));
-    maxPickingSalesForTest--;
 
-    if (index < currentLength && maxPickingSalesForTest > 0) {
+    if (index < currentLength) {
       loadSaleItems(index, callback);
+
       if (index == previewCount) {
         callback();
       }
+    } else if (index == currentLength) {
+      callback();
     }
   });
 }
@@ -243,5 +254,18 @@ function removePendingSalesFromPickingSalesList(){
     return !global.staticPendingSales.some(function(j){
       return j.number == i.numeroPedido;
     });
+  });
+}
+
+//pickingRealizado = N -> All Sales to pick
+//pickingRealizado = A -> Picking done
+//pickingRealizado = S -> Invoice done
+function handleAllDonePickingSales(){
+  global.staticDonePicking = global.staticPickingList.filter(function(i){
+    return i.pickingRealizado != "N";
+  });
+
+  global.staticPickingList = global.staticPickingList.filter(function(i){
+    return i.pickingRealizado == "N";
   });
 }
