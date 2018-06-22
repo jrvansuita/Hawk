@@ -79,6 +79,9 @@ module.exports = {
 
     var secDif = (sale.end.getTime() - sale.begin.getTime()) / 1000;
 
+    //Done picking
+    global.staticDonePicking.push(sale);
+
     Day.upsert(day.getPKQuery(), {
       $inc: {
         count: secDif,
