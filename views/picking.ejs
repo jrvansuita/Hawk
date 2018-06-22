@@ -113,7 +113,7 @@
             progress.forEach((key) => {
               var sale = inprogress[key];
 
-              %>   
+              %>
               <div class="shadow label mini-item inprogress-item clickable-mini-item solved" data-sale="progress-<%=sale.numeroPedido %>">
                 <table width="100%">
                   <tr>
@@ -121,12 +121,12 @@
                       <img class="circle shadow avatar-img mini-avatar" src="/img/avatar/<%=sale.pickUser.id%>.jpg" onerror="this.src='/img/avatar/default.jpg'" />
                     </td>
                     <td><span class="pick-value green-title"><%=sale.numeroPedido %></span></td>
-                    <td><span class="pick-value"><%=sale.transport %></span></td>
-                    <td><span class="pick-value" style="float:right"><%=sale.itemsQuantity %> Itens</span></td>
+                    <td><span class="pick-value"><%=sale.itemsQuantity %> Itens</span></td>
+                    <td><div class="print-sale-holder" title="Reimprimir" data-print="url-<%=printPickingUrl%>" data-sale="progress-<%=sale.numeroPedido %>"><img class="print-sale" src="/img/print.png" /></div></td>
                   </tr>
                   <tr>
                     <td><span class="pick-value"><%=sale.pickUser.name ? sale.pickUser.name.split(" ")[0] : 'Desconhecido'%></span></td>
-                    <td></td>
+                    <td><span class="pick-value"><%=sale.transport %></span></td>
                     <td><span class="pick-value inprogress-begin" style="float:right" diftime="<%=new Date().getTime() - sale.begin.getTime()%>"></span></td>
                   </tr>
                 </table>

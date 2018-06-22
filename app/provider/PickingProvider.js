@@ -18,7 +18,7 @@ var maxPickingSalesForTest;
 module.exports = {
 
   init(selected, onFinished) {
-    maxPickingSalesForTest = 10;
+    maxPickingSalesForTest = 10000;
 
     selectedTransp = selected;
 
@@ -162,7 +162,7 @@ function getNextSale() {
 }
 
 
-var printUrl = "https://boutiqueinfantil.eccosys.com.br/relatorios/picking.impressao.romaneio.php?imprimeAbertos=N";
+global.pickingPrintUrl =  "https://" + process.env.ECCOSYS_HOST + "/relatorios/picking.impressao.romaneio.php?imprimeAbertos=N&idsVendas=";
 
 function buildResult(userId) {
   //Get the next sale from list
@@ -173,7 +173,7 @@ function buildResult(userId) {
 }
 
 function getPrintUrl(sale){
-  return printUrl + "&idsVendas=" + sale.id;
+  return global.pickingPrintUrl + sale.id;
 }
 
 

@@ -2,7 +2,6 @@
 
 var Util = {
 
-
   getSubtitles: function(charts) {
 
     var arrItem;

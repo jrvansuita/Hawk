@@ -122,7 +122,7 @@ table{
 
 .clickable-mini-item:hover{
   cursor: pointer;
-  background-color: #1d1d1d0a;
+  background-color: #1d1d1d1a;
 }
 
 
@@ -237,4 +237,24 @@ tr.row-padding td{
 
 .solved{
   border-left: 3px solid #4ac6aa;
+}
+
+
+.print-sale{
+  width: 18px;
+  height: 18px;
+}
+
+.print-sale-holder{
+  margin-left: 15px;
+  float: right;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 50%;
+  padding: 4px;
+}
+
+.print-sale-holder:hover{
+  background-color: white;
+  cursor: pointer;
 }

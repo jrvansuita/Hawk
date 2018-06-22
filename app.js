@@ -19,7 +19,7 @@ app.use(cookieSession({
   secret: process.env.SESSION_SECRET || 'secret',
 
   // Cookie Options
-  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  maxAge: 30 /*30 dias*/ * (24 * 60 * 60 * 1000) // 24 hours
 }));
 
 app.set('view engine', 'ejs');
@@ -139,7 +139,8 @@ app.get('/achievements', (req, res) => {
         inprogress: pickingProvider.inprogressPicking(),
         transportList: pickingProvider.getTransportList(),
         pendingSales: pickingProvider.pendingSales(),
-        selectedTransp: req.query.transp
+        selectedTransp: req.query.transp,
+        printPickingUrl: global.pickingPrintUrl
       });
     });
   });

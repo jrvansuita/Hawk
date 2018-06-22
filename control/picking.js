@@ -54,6 +54,16 @@ $(document).ready(() => {
     $('.drop-ttl').click();
   });
 
+  $('.print-sale-holder').click(function(){
+    var url = $(this).data('print').split('-')[1];
+    var saleNumber = $(this).data('sale').split('-')[1];
+
+    url = url + getInProgressSale(saleNumber).id;
+
+    window.open(url, "picking");
+
+    window.event.cancelBubble = true;
+  });
 
 
   $('.inprogress-item').click(function(){
@@ -112,6 +122,7 @@ function loadSale(sale){
     $('#sale-itens').text(sale.itemsQuantity + ' Itens');
     $('#sale-value').text(Num.money(sale.totalProdutos));
 
+    $('#opened-sale').find('.row-padding').remove();
     sale.items.forEach(item => {
       var row = $('<tr>').addClass('row-padding');
 
