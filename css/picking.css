@@ -11,6 +11,7 @@
 .main-pick{
   padding-bottom: 35px;
   padding-top: 15px;
+  max-height: 100%;
 }
 
 table{
@@ -24,6 +25,7 @@ table{
 
 .pick-box {
   max-width: 400px;
+  max-height: 100%;
   min-width: 260px;
   min-height: 300px;
   width: fit-content;
@@ -77,7 +79,7 @@ table{
 }
 
 .col {
-  display: inline-table;
+  display: inline-flex;
 }
 
 .pick-hint {
@@ -122,7 +124,18 @@ table{
 
 .clickable-mini-item:hover{
   cursor: pointer;
+  border-radius: 4px;
   background-color: #1d1d1d1a;
+}
+
+.clickable-mini-item td:first-child{
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.clickable-mini-item td:last-child{
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 
 
@@ -274,4 +287,16 @@ tr.row-padding td{
 .print-sale-holder:hover{
   background-color: white;
   cursor: pointer;
+}
+
+.scrollable-table{
+  display: block;
+  width: 100%;
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+.scrollable-table tr td{
+  padding-left: 8px;
+  padding-right: 5px;
 }

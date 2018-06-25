@@ -165,6 +165,27 @@ module.exports = {
       initSalePicking(pending.sale, pending.sale.pickUser.id);
       callback(getPrintUrl(pending.sale));
     }
+  },
+
+  restartDoneSale(user, doneSale, callback){
+    var sale = global.staticDonePicking.filter(function(i){
+      return i.numeroPedido == doneSale;
+    })[0];
+
+    if (global.inprogressPicking[user.id] != undefined) {
+      throw 'Você já tem um pedido em processo de picking.';
+    }else{
+      callLoadSaleItems(sale, function(){
+        initSalePicking(sale, user.id);
+        //Remove from Done List
+        global.staticDonePicking = global.staticDonePicking.filter(function(i){
+          return i.numeroPedido !== doneSale;
+        });
+
+        callback();
+
+      });
+    }
   }
 };
 
@@ -190,21 +211,11 @@ function getPrintUrl(sale){
 
 
 function loadSaleItems(index, callback) {
-  EccosysCalls.getSaleItems(global.staticPickingList[index].numeroPedido, (data) => {
-    var items = JSON.parse(data);
-    var currentSale = global.staticPickingList[index];
+  var sale = global.staticPickingList[index];
+
+  callLoadSaleItems(sale, function(sale, items){
     var currentLength = global.staticPickingList.length;
-
-    var transp = Str.defStr(currentSale.transportador, unknow).split(' ')[0];
-
-    global.transportList[transp] = transp;
-    currentSale.transport = transp;
-    currentSale.items = items;
-    currentSale.itemsQuantity = items.reduce(function(a, b) {
-      return a + parseFloat(b.quantidade);
-    }, 0);
-
-    global.staticPickingList[index] = currentSale;
+    global.staticPickingList[index] = sale;
 
     index++;
     console.log(index + '/' + (currentLength));
@@ -216,9 +227,32 @@ function loadSaleItems(index, callback) {
         callback();
       }
     } else if (index == currentLength) {
-      callback();
+      if (currentLength <= previewCount){
+        callback();
+      }
     }
   });
+}
+
+function callLoadSaleItems(sale, callback){
+  EccosysCalls.getSaleItems(sale.numeroPedido, (data) => {
+    var items = JSON.parse(data);
+    var saleResult = loadSingleAttrs(sale, items);
+    callback(saleResult, items);
+  });
+}
+
+function loadSingleAttrs(sale, items){
+  var transp = Str.defStr(sale.transportador, unknow).split(' ')[0];
+
+  global.transportList[transp] = transp;
+  sale.transport = transp;
+  sale.items = items;
+  sale.itemsQuantity = items.reduce(function(a, b) {
+    return a + parseFloat(b.quantidade);
+  }, 0);
+
+  return sale;
 }
 
 

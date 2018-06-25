@@ -133,16 +133,18 @@ app.get('/achievements', (req, res) => {
 
   app.get('/picking', (req, res) => {
     pickingProvider.init(req.query.transp,() => {
-      res.render('picking', {
-        upcoming: pickingProvider.upcomingSales(),
-        remaining: pickingProvider.remainingSales(),
-        inprogress: pickingProvider.inprogressPicking(),
-        transportList: pickingProvider.getTransportList(),
-        pendingSales: pickingProvider.pendingSales(),
-        donePickings: pickingProvider.donePickings(),
-        selectedTransp: req.query.transp,
-        printPickingUrl: global.pickingPrintUrl
-      });
+      if (!res.headersSent){
+        res.render('picking', {
+          upcoming: pickingProvider.upcomingSales(),
+          remaining: pickingProvider.remainingSales(),
+          inprogress: pickingProvider.inprogressPicking(),
+          transportList: pickingProvider.getTransportList(),
+          pendingSales: pickingProvider.pendingSales(),
+          donePickings: pickingProvider.donePickings(),
+          selectedTransp: req.query.transp,
+          printPickingUrl: global.pickingPrintUrl
+        });
+      }
     });
   });
 
@@ -186,6 +188,16 @@ app.get('/achievements', (req, res) => {
       });
     } catch (e) {
       console.log(e);
+      res.status(500).send(e);
+    }
+  });
+
+  app.post('/picking-done-restart', (req, res) => {
+    try {
+      pickingProvider.restartDoneSale(req.session.loggedUser, req.body.sale, (result) => {
+        res.status(200).send(result);
+      });
+    } catch (e) {
       res.status(500).send(e);
     }
   });

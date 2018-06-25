@@ -1,6 +1,10 @@
 $(document).ready(() => {
   $( "#user-id" ).focus();
 
+  $(".print-progress").click(function(e) {
+    //do something
+    e.stopPropagation();
+  });
 
   window.setInterval(function() {
     $(".inprogress-begin").each(function(index, item) {
@@ -32,6 +36,8 @@ $(document).ready(() => {
               sale = sale[sale.length - 1];
               $('div[data-sale="progress-' + sale + '"]').css('background-color', '#13bb7070').delay(1000).fadeOut();
               $(".inprogress-count").text(parseInt($(".inprogress-count").text()) - 1);
+              //Inicia um novo picking
+              $('#user-id').trigger(jQuery.Event( 'keyup', { which: 13 } ));
               $('#user-id').val('');
             } else {
               $('.sucess').text("Aguardando impressão do pedido").fadeIn();
@@ -54,7 +60,7 @@ $(document).ready(() => {
     $('.drop-ttl').click();
   });
 
-  
+
 
 
   $('.inprogress-item').click(function(){
@@ -85,6 +91,42 @@ $(document).ready(() => {
       }
     });
   });
+
+  $('.done-sale-item').click(function(e){
+    var saleId = $(this).data('saleid').split('-')[1];
+    var sale = $(this).data('sale').split('-')[1];
+    $('.md-dropdown').remove();
+
+    $div = $('<div>').addClass('md-dropdown');
+    $ul = $('<ul>').css('left', e.pageX).css('top', e.pageY -10);
+
+    $printIcon = $('<img>').attr('src','/img/print.png');
+    $pendingIcon = $('<img>').attr('src','/img/back.png');
+
+    $aPrint = $('<li>').append($('<a>').attr('href',printPickingUrl + saleId).attr('target','_blank').append($printIcon,'Imprimir'));
+    $aRestart = $('<a>').attr('href','#').append($pendingIcon,'Reseparar');
+
+    $aRestart.click(function(){
+      doneSaleRestart(sale);
+    });
+
+    $ul.append($('<li>').append($aPrint));
+    $ul.append($('<li>').append($aRestart));
+
+    $div.append($ul);
+    $(this).append($div);
+    $ul.hide().fadeIn(400);
+
+    $div.mouseleave(function(){
+      $div.remove();
+    });
+
+    $('.md-dropdown a').click(function(e){
+      e.stopPropagation();
+    });
+
+
+  });
 });
 
 
@@ -99,6 +141,25 @@ function getInProgressSale(number){
   }
 }
 
+
+function doneSaleRestart(saleNumber){
+
+  $.ajax({
+    url: "/picking-done-restart",
+    type: "post",
+    data: {
+      sale: saleNumber
+    },
+    success: function(response) {
+      window.location.reload();
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log(jqXHR);
+      $('.error').text(jqXHR.responseText).fadeIn().delay(1000).fadeOut();
+    }
+  });
+
+}
 
 
 var selectedPendingSale;
