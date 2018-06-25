@@ -6,6 +6,7 @@ module.exports = class User extends DataAccess {
     this.name = Str.def(name);
     this.full = false;
     this.access = '';
+    this.avatar = '';
   }
 
   static getKey() {

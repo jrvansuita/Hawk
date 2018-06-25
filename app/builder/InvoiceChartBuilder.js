@@ -89,7 +89,7 @@ function buildChart(from, to, title) {
     Object.keys(data).forEach(function(key, index) {
       var dataItem = data[key];
 
-      var item = chart.addItem(Str.first_word(dataItem.userName, 10), key);
+      var item = chart.addItem(Str.first_word(dataItem.userName, 10), dataItem.userImg);
 
 
       if (isfull)

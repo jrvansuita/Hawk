@@ -37,7 +37,10 @@ module.exports = class DaysChartProvider {
     if (docs.length > 0) {
       var item = docs[index];
 
-      item.userName = UsersProvider.getDefault(item.userId).name;
+      var user = UsersProvider.getDefault(item.userId);
+
+      item.userName = user.name;
+      item.userImg = user.avatar;
       this.handleItem(item);
 
       if (index < docs.length - 1) {

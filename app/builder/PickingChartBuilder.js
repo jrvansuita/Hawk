@@ -89,7 +89,7 @@ function buildChart(from, to, title) {
     Object.keys(data).forEach(function(key, index) {
       var dataItem = data[key];
 
-      var item = chart.addItem(Str.first_word(dataItem.userName, 10), key);
+      var item = chart.addItem(Str.first_word(dataItem.userName, 10), dataItem.userImg);
 
       item.addBar('Itens', dataItem.total, 0.8, '03c184', true);
       //item.addBar('Tempo', dataItem.count, 0.7, '14b5a6', true);

@@ -63,7 +63,7 @@
 
       <div class="material-ripple user-logged-holder">
 
-        <img src="/img/avatar/<%=loggedUser ? loggedUser.id : 'default' %>.jpg" class="user-logged-img circle shadow" onerror="this.src='/img/avatar/default.jpg'" />
+        <img src="<%=loggedUser ? loggedUser.avatar : 'default' %>" class="user-logged-img circle shadow" onerror="this.src='/img/avatar/default.jpg'" />
 
         <label class="title user-logged-name"><%= loggedUser ? loggedUser.name : 'No User' %> </label>
 
