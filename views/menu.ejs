@@ -40,8 +40,6 @@
         <img id="run-jobs-img" src="/img/loader/loading.svg" class="<%= !global.jobsRunning ? 'gone' : '' %>" />
       </div>
 
-
-
       <ul id="nav">
         <li class="menu-item material-ripple" href="/picking">
           <div class="menu-button title">
@@ -63,7 +61,7 @@
 
       <div class="material-ripple user-logged-holder">
 
-        <img src="<%=loggedUser ? loggedUser.avatar : 'default' %>" class="user-logged-img circle shadow" onerror="this.src='/img/avatar/default.jpg'" />
+        <img src="<%=loggedUser ? loggedUser.avatar : 'default' %>" class="user-logged-img circle shadow" onerror="this.src='/img/avatar.png'" />
 
         <label class="title user-logged-name"><%= loggedUser ? loggedUser.name : 'No User' %> </label>
 
