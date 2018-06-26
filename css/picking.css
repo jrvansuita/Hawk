@@ -243,6 +243,9 @@ tr.row-padding td{
   border-bottom: 1px dashed #e6e7e6;
 }
 
+.blue-left{
+  border-left: 3px solid #6aabf1;
+}
 
 .not-solved{
   border-left: 3px solid #f16d6f;
@@ -293,10 +296,19 @@ tr.row-padding td{
   display: block;
   width: 100%;
   max-height: 80%;
-  overflow-y: auto;
+  overflow-y: overlay;
 }
 
 .scrollable-table tr td{
   padding-left: 8px;
   padding-right: 5px;
+}
+
+
+.pending-inner{
+  display: block;
+  max-height: 80%;
+  overflow-y: overlay;
+  padding-right: 5px;
+  padding-top: 5px;
 }

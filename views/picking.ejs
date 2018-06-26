@@ -116,7 +116,7 @@
               var sale = inprogress[key];
 
               %>
-              <div class="shadow label mini-item inprogress-item clickable-mini-item solved" data-sale="progress-<%=sale.numeroPedido %>">
+              <div class="shadow label mini-item inprogress-item clickable-mini-item blue-left" data-sale="progress-<%=sale.numeroPedido %>">
                 <table width="100%">
                   <tr>
                     <td rowspan="2">
@@ -235,38 +235,38 @@
                   <%
                 }%>
 
+                <div class="pending-inner">
+                  <%
+                  pendingSales.forEach(function(pending, index){
+                    var sale = pending.sale;
+                    %>
 
-                <%
-                pendingSales.forEach(function(pending, index){
-                  var sale = pending.sale;
+                    <div class="shadow label mini-item clickable-mini-item pending-item <%= pending.solved ? 'solved' : 'not-solved'%>"  data-index="pending-<%=index%>">
+
+                      <table width="100%">
+                        <tr>
+                          <td rowspan="2">
+                            <img class="circle shadow avatar-img mini-avatar" src="<%=sale.pickUser.avatar%>" onerror="this.src='/img/avatar/default.jpg'" />
+                          </td>
+                          <td><span class="pick-value green-title"><%=sale.numeroPedido %></span></td>
+                          <td><span class="pick-value"><%=sale.transport %></span></td>
+                          <td><span class="pick-value" style="float:right"><%=sale.items.filter((i)=>{
+                            return i.pending;
+                          }).length %> Itens</span></td>
+                        </tr>
+                        <tr>
+                          <td><span class="pick-value"><%=sale.pickUser.name ? sale.pickUser.name.split(" ")[0] : 'Desconhecido'%></span></td>
+                          <td><span class="pick-value" ><%= Dat.format(new Date(sale.data))%></span></td>
+                          <td><span class="pick-value" style="float:right"><%=Dat.daysDif(new Date(sale.data), new Date()) + ' Dias'%></span></td>
+                        </tr>
+                      </table>
+                    </div>
+
+                    <%
+                  });
                   %>
 
-                  <div class="shadow label mini-item clickable-mini-item pending-item <%= pending.solved ? 'solved' : 'not-solved'%>"  data-index="pending-<%=index%>">
-
-                    <table width="100%">
-                      <tr>
-                        <td rowspan="2">
-                          <img class="circle shadow avatar-img mini-avatar" src="<%=sale.pickUser.avatar%>" onerror="this.src='/img/avatar/default.jpg'" />
-                        </td>
-                        <td><span class="pick-value green-title"><%=sale.numeroPedido %></span></td>
-                        <td><span class="pick-value"><%=sale.transport %></span></td>
-                        <td><span class="pick-value" style="float:right"><%=sale.items.filter((i)=>{
-                          return i.pending;
-                        }).length %> Itens</span></td>
-                      </tr>
-                      <tr>
-                        <td><span class="pick-value"><%=sale.pickUser.name ? sale.pickUser.name.split(" ")[0] : 'Desconhecido'%></span></td>
-                        <td><span class="pick-value" ><%= Dat.format(new Date(sale.data))%></span></td>
-                        <td><span class="pick-value" style="float:right"><%=Dat.daysDif(new Date(sale.data), new Date()) + ' Dias'%></span></td>
-                      </tr>
-                    </table>
-                  </div>
-
-                  <%
-                });
-                %>
-
-
+                </div>
 
               </div>
             </div>

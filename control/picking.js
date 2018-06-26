@@ -280,7 +280,14 @@ function buildProductFirstCol(item){
   var first = $('<div>').addClass('vertical-content');
 
   var div = $('<div>').addClass('nobreak');
-  div.append($('<label>').addClass('pick-value sku').text(item.codigo));
+  var sku = $('<label>').addClass('pick-value sku copiable').text(item.codigo);
+
+  sku.click(function(){
+    Util.selectContent(this);
+    Util.copySeleted();
+  });
+
+  div.append(sku);
   div.append($('<span>').addClass('pick-value right').text(item.gtin.slice(9,item.gtin.length)));
   first.append(div);
   first.append($('<label>').addClass('pick-value desc no-wrap').text(desc));

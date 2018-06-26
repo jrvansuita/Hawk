@@ -113,3 +113,7 @@ input, span, label {
 tr.line td{
   border-bottom: 1pt solid #80808033;
 }
+
+.copiable {
+  cursor: copy !important;
+}
