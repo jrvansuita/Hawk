@@ -264,7 +264,8 @@ function loadPendingSaleItems(el, pending){
 
 function buildProductFirstCol(item){
   var desc = item.descricao.split('-')[0];
-  var brand = item.descricao.split('-')[1].trim();
+  var b = item.descricao.split('-');
+  var brand = b.length >=2 ? b[1].trim() : "";
 
   if (brand.length > 10){
     brand = brand.split(' ')[0];
