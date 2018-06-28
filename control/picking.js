@@ -37,7 +37,7 @@ $(document).ready(() => {
               $('div[data-sale="progress-' + sale + '"]').css('background-color', '#13bb7070').delay(1000).fadeOut();
               $(".inprogress-count").text(parseInt($(".inprogress-count").text()) - 1);
               //Inicia um novo picking
-              $('#user-id').trigger(jQuery.Event( 'keyup', { which: 13 } ));
+              //$('#user-id').trigger(jQuery.Event( 'keyup', { which: 13 } ));
               $('#user-id').val('');
             } else {
               $('.sucess').text("Aguardando impressão do pedido").fadeIn();
