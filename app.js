@@ -169,9 +169,20 @@ app.get('/achievements', (req, res) => {
     }
   });
 
-  app.post('/picking-pending-solve', (req, res) => {
+  app.post('/picking-pending-solving', (req, res) => {
     try {
-      pickingProvider.solvePendingSale(req.body.pendingSale, (result) => {
+      pickingProvider.solvingPendingSale(req.body.pendingSale, (result) => {
+        res.status(200).send(result);
+      });
+    } catch (e) {
+      console.log(e);
+      res.status(500).send(e);
+    }
+  });
+
+  app.post('/picking-pending-solved', (req, res) => {
+    try {
+      pickingProvider.solvedPendingSale(req.body.pendingSale, (result) => {
         res.status(200).send(result);
       });
     } catch (e) {

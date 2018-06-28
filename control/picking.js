@@ -6,6 +6,11 @@ $(document).ready(() => {
     e.stopPropagation();
   });
 
+  $('.copiable').click(function(){
+    Util.selectContent(this);
+    Util.copySeleted();
+  });
+
   window.setInterval(function() {
     $(".inprogress-begin").each(function(index, item) {
       var diftime = parseInt($(item).attr("diftime"));
@@ -247,12 +252,18 @@ function loadPendingSaleItems(el, pending){
     table.find('tr').last().addClass('dotted-line');
     var last = $('<tr>').addClass('row-padding');
 
-    var solve = $('<label>').addClass('button shadow solve-pending').append(pending.solved ? 'Reiniciar' : 'Resolver').click(function(){
-      if (pending.solved){
-        restartPendingSale(pending);
-      }else{
-        solvePendingSale(pending);
+    var solve = $('<label>').addClass('button shadow solve-pending').append(pending.solved ? 'Reiniciar' : (pending.solving ? 'Resolver' : 'Atender')).click(function(){
+      if (pending.solving){
+        if (pending.solved){
+          restartPendingSale(pending);
+        }else{
+          solvedPendingSale(pending);
+        }
       }
+      else{
+        solvingPendingSale(pending);
+      }
+
     });
 
     last.append($('<td>').attr('colspan','4').append(solve));
@@ -355,18 +366,16 @@ function solvePendingSale(sale){
   });
 }
 
-function solvePendingSale(pending){
-  executePendingAjax("/picking-pending-solve",pending);
+function solvingPendingSale(pending){
+  executePendingAjax("/picking-pending-solving", pending);
+}
+
+function solvedPendingSale(pending){
+  executePendingAjax("/picking-pending-solved", pending);
 }
 
 function restartPendingSale(pending){
-  executePendingAjax("/picking-pending-restart", pending, function(printUrl){
-    $('.sucess').text("Aguardando impressão do pedido").fadeIn();
-    setTimeout(function() {
-      window.open(printUrl, "picking");
-      window.location.reload();
-    }, 1000);
-  });
+  executePendingAjax("/picking-pending-restart", pending);
 }
 
 function executePendingAjax(path, pending, onSucess){

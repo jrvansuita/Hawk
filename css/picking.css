@@ -255,6 +255,10 @@ tr.row-padding td{
   border-left: 3px solid #4ac6aa;
 }
 
+.solving{
+  border-left: 3px solid #f1d26a;
+}
+
 .blue-top{
   border-top: 3px solid #6aabf1;
 }
@@ -309,6 +313,21 @@ tr.row-padding td{
   display: block;
   max-height: 80%;
   overflow-y: overlay;
-  padding-right: 5px;
+  padding-right: 12px;
   padding-top: 5px;
+}
+
+.circle-pending{
+  margin-left: 8px;
+  background-color: #bd48008a;
+  border-radius: 50%;
+  width: 10px;
+  padding: 3px;
+  font-size: 9px;
+  text-align: center;
+  color: white;
+  height: 10px;
+  z-index: 10;
+  position: relative;
+  margin-bottom: -10px;
 }

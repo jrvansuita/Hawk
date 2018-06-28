@@ -135,8 +135,22 @@ module.exports = {
       callback();
     });
   },
+  solvingPendingSale(pending, callback){
+    pending.solving = true;
+    Pending.upsert(Pending.getKeyQuery(pending.number),pending, function(err, doc){
+      global.staticPendingSales.filter((i)=>{
+        if (i.number == doc.number){
+          i.solving = true;
+        }
+        return true;
+      });
 
-  solvePendingSale(pending, callback){
+      callback();
+    });
+  },
+
+
+  solvedPendingSale(pending, callback){
     pending.solved = true;
     Pending.upsert(Pending.getKeyQuery(pending.number),pending, function(err, doc){
       global.staticPendingSales.filter((i)=>{
