@@ -6,9 +6,10 @@ $(document).ready(() => {
     e.stopPropagation();
   });
 
-  $('.copiable').click(function(){
+  $('.copiable').click(function(e){
     Util.selectContent(this);
     Util.copySeleted();
+    e.stopPropagation();
   });
 
   window.setInterval(function() {
@@ -74,9 +75,10 @@ $(document).ready(() => {
     loadSale(sale);
   });
 
-  $('.pending-item').click(function(){
+  $('.pending-item').click(function(e){
     var index = $(this).data('index').split('-')[1];
     loadPendingSaleItems($(this), pendingSales[index]);
+    e.stopPropagation();
   });
 
 
@@ -184,7 +186,7 @@ function loadSale(sale){
     sale.items.forEach(item => {
       var row = $('<tr>').addClass('row-padding');
 
-      row.append($('<td>').append(buildProductFirstCol(item)));
+      row.append($('<td>').append(buildProductFirstCol(item, true)));
       row.append($('<td>').append(buildProductSecondCol(item)));
       row.append($('<td>').append(buildProductThirdCol(item)));
       row.append($('<td>').append(buildProductFourthCol(item)));
@@ -226,54 +228,85 @@ function togglePending(item){
 
 
 function loadPendingSaleItems(el, pending){
-  var table = el.find('table');
-  if (!table.hasClass('opened')){
-    table.toggleClass('opened');
+  if (!el.hasClass('mini-item-modal')){
+    var table = el.find('table');
+    if (table.find('.closable').length == 0){
+      buildPendingItemsViews(el, pending);
+    }
 
-    var row = $('<tr>').addClass('row-padding dotted-line');
-
-    row.append($('<td>').attr('colspan','2').append($('<span>').addClass('pick-value').append('Produto')));
-    row.append($('<td>').append($('<span>').addClass('pick-value').append('Quant.')));
-    row.append($('<td>').append($('<span>').addClass('pick-value').css('margin-left', '5px').append('Preço')));
-    table.append(row);
-
-    pending.sale.items.forEach(function(item){
-      if (item.pending){
-        var row = $('<tr>').addClass('row-padding ');
-
-        row.append($('<td>').attr('colspan','2').append(buildProductFirstCol(item)));
-        row.append($('<td>').append(buildProductSecondCol(item)));
-        row.append($('<td>').append(buildProductThirdCol(item)));
-
-        table.append(row);
-      }
-    });
-
-    table.find('tr').last().addClass('dotted-line');
-    var last = $('<tr>').addClass('row-padding');
-
-    var solve = $('<label>').addClass('button shadow solve-pending').append(pending.solved ? 'Reiniciar' : (pending.solving ? 'Resolver' : 'Atender')).click(function(){
-      if (pending.solving){
-        if (pending.solved){
-          restartPendingSale(pending);
-        }else{
-          solvedPendingSale(pending);
-        }
-      }
-      else{
-        solvingPendingSale(pending);
-      }
-
-    });
-
-    last.append($('<td>').attr('colspan','4').append(solve));
-    table.append(last);
+    showPendingItemModal(el);
   }
-
 }
 
+function showPendingItemModal(el){
+  el.parent().addClass('modal');
+  el.addClass('mini-item-modal dense-shadow');
+  el.find('.closable').fadeIn(200);
 
-function buildProductFirstCol(item){
+
+  changeFontSize(el,2);
+
+  el.parent().unbind('click').click(function(e){
+    el.parent().removeClass('modal');
+    el.removeClass('mini-item-modal dense-shadow');
+    el.find('.closable').hide();
+    changeFontSize(el,-2);
+    e.stopPropagation();
+  });
+}
+
+function buildPendingItemsViews(el, pending){
+  var table = el.find('table');
+  var row = $('<tr>').addClass('row-padding dotted-line closable');
+
+  row.append($('<td>').attr('colspan','2').append($('<span>').addClass('pick-value').append('Produto')));
+  row.append($('<td>').append($('<span>').addClass('pick-value center').append('Quant.')));
+  row.append($('<td>').append($('<span>').addClass('pick-value').css('float', 'right').append('Preço')));
+  table.append(row);
+
+  pending.sale.items.forEach(function(item){
+    if (item.pending){
+      var row = $('<tr>').addClass('row-padding closable hover-pending-item');
+
+      row.append($('<td>').attr('colspan','2').append(buildProductFirstCol(item, false)));
+      row.append($('<td>').append(buildProductSecondCol(item)));
+      row.append($('<td>').addClass('right-align').append(buildProductThirdCol(item)));
+
+      table.append(row);
+    }
+  });
+
+  table.find('tr').last().addClass('dotted-line');
+
+  var last = $('<tr>').addClass('closable');
+
+  var solve = $('<label>').addClass('button shadow solve-pending').append(getPendingItemButtonLabel(pending)).click(function(){
+    onPendingItemButtonClicked(pending);
+  });
+
+  last.append($('<td>').attr('colspan','2').append($('<span>').addClass('pick-value small-font').append('Última alteração: ' + (pending.updateDate ? Dat.format(pending.updateDate): ''))));
+  last.append($('<td>').attr('colspan','2').append(solve));
+  table.append(last);
+}
+
+function onPendingItemButtonClicked(pending){
+  if (pending.solving){
+    if (pending.solved){
+      restartPendingSale(pending);
+    }else{
+      solvedPendingSale(pending);
+    }
+  }
+  else{
+    solvingPendingSale(pending);
+  }
+}
+
+function getPendingItemButtonLabel(pending){
+  return pending.solved ? 'Reiniciar' : (pending.solving ? 'Resolver' : 'Atender');
+}
+
+function buildProductFirstCol(item, slim){
   var desc = item.descricao.split('-')[0];
   var b = item.descricao.split('-');
   var brand = b.length >=2 ? b[1].trim() : "";
@@ -285,7 +318,12 @@ function buildProductFirstCol(item){
   desc = desc.trim().split(' ');
 
   if (desc.length >= 3){
-    desc = desc[0] +  ' ' + desc[desc.length-1] + ' ' + brand;
+    if (slim){
+      desc = desc[0] +  ' ' + desc[desc.length-1];
+    }else{
+      desc.splice(5,desc.length -5);
+      desc = desc.join(' ');
+    }
   }
 
   var first = $('<div>').addClass('vertical-content');
@@ -293,15 +331,23 @@ function buildProductFirstCol(item){
   var div = $('<div>').addClass('nobreak');
   var sku = $('<label>').addClass('pick-value sku copiable').text(item.codigo);
 
-  sku.click(function(){
+  sku.click(function(e){
     Util.selectContent(this);
     Util.copySeleted();
+    e.stopPropagation();
   });
 
   div.append(sku);
-  div.append($('<span>').addClass('pick-value right').text(item.gtin.slice(9,item.gtin.length)));
+  div.append($('<span>').addClass('pick-value right').text(slim ? item.gtin.slice(9, item.gtin.length) : item.gtin));
   first.append(div);
-  first.append($('<label>').addClass('pick-value desc no-wrap').text(desc));
+
+
+  div = $('<div>').addClass('nobreak');
+  var descHolder = $('<label>').addClass('pick-value desc no-wrap').text(desc);
+  div.append(descHolder);
+  div.append($('<span>').addClass('pick-value right').text(brand));
+
+  first.append(div);
 
   return first;
 }
@@ -314,12 +360,8 @@ function buildProductSecondCol(item){
 }
 
 function buildProductThirdCol(item){
-  var third = $('<div>');
-  third.append($('<span>').addClass('pick-value no-wrap').text(Num.money(item.valor)));
-  return third;
+  return $('<span>').addClass('pick-value no-wrap').text(Num.money(item.valor));
 }
-
-
 
 var pendingCount;
 
@@ -397,4 +439,22 @@ function executePendingAjax(path, pending, onSucess){
       $('.error').text(jqXHR.responseText).fadeIn().delay(1000).fadeOut();
     }
   });
+}
+
+
+function changeFontSize(els, direction){
+
+  els.find('span,label').each(function(i, e){
+    $(e).css("font-size", parseInt($(e).css("font-size"))+direction);
+  });
+
+  els.find('.avatar-img').each(function(i, e){
+    $(e).css("width", parseInt($(e).css("width"))+(direction * 4));
+    $(e).css("height", parseInt($(e).css("height"))+(direction * 4));
+  });
+
+  els.css("padding-left",  parseInt(els.css("padding-left"))+(direction * 4));
+  els.css("padding-right",  parseInt(els.css("padding-right"))+(direction * 4));
+  els.css("padding-top",  parseInt(els.css("padding-top"))+(direction * 2));
+
 }

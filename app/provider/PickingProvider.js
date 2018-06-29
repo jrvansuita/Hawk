@@ -135,8 +135,10 @@ module.exports = {
       callback();
     });
   },
+  
   solvingPendingSale(pending, callback){
     pending.solving = true;
+    pending.updateDate = new Date();
     Pending.upsert(Pending.getKeyQuery(pending.number),pending, function(err, doc){
       global.staticPendingSales.filter((i)=>{
         if (i.number == doc.number){
@@ -152,6 +154,7 @@ module.exports = {
 
   solvedPendingSale(pending, callback){
     pending.solved = true;
+    pending.updateDate = new Date();
     Pending.upsert(Pending.getKeyQuery(pending.number),pending, function(err, doc){
       global.staticPendingSales.filter((i)=>{
         if (i.number == doc.number){
@@ -174,6 +177,8 @@ module.exports = {
       });
 
       delete pending.solved;
+      delete pending.solving;
+      delete pending.updateDate;
       delete pending.sale.pending;
 
       initSalePicking(pending.sale, pending.sale.pickUser.id);

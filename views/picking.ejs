@@ -223,7 +223,7 @@
 
             <div class="col pending-sales ">
 
-              <div class="pick-box shadow pending-box red-top" style="padding-right:3px;">
+              <div class="pick-box shadow pending-box red-top">
                 <div class="pick-header" style="padding-right: 18px;">
                   <span class="label header-title">Pendências</span>
                   <span class="label header-count green-title"><%=pendingSales.length%> </span>
@@ -240,33 +240,33 @@
                   pendingSales.forEach(function(pending, index){
                     var sale = pending.sale;
                     %>
+                    <div class="modal-holder">
+                      <div class="shadow label mini-item clickable-mini-item pending-item <%= pending.solved ? 'solved' : (pending.solving ? 'solving' : 'not-solved')%>"  data-index="pending-<%=index%>">
 
-                    <div class="shadow label mini-item clickable-mini-item pending-item <%= pending.solved ? 'solved' : (pending.solving ? 'solving' : 'not-solved')%>"  data-index="pending-<%=index%>">
+                        <table width="100%">
+                          <tr>
+                            <td rowspan="2" style="max-width: 38px;">
+                              <img class="circle shadow avatar-img mini-avatar" src="<%=sale.pickUser.avatar%>" onerror="this.src='/img/avatar/default.jpg'" />
+                            </td>
+                            <td><span class="pick-value green-title copiable"><%=sale.numeroPedido %></span>
 
-                      <table width="100%">
-                        <tr>
-                          <td rowspan="2">
-                            <img class="circle shadow avatar-img mini-avatar" src="<%=sale.pickUser.avatar%>" onerror="this.src='/img/avatar/default.jpg'" />
-                          </td>
-                          <td><span class="pick-value green-title copiable"><%=sale.numeroPedido %></span>
-
-                          </td>
-                          <td><span class="pick-value"><%=sale.transport %></span></td>
-                          <td><span class="pick-value copiable" style="float:right"><%=sale.numeroDaOrdemDeCompra%></span></td>
-                        </tr>
-                        <tr>
-                          <td><span class="pick-value"><%=(sale.pickUser.name ? sale.pickUser.name.split(" ")[0] : 'Desconhecido') %></span></td>
-                          <td><span class="pick-value" ><%= Dat.format(new Date(sale.data))%></span></td>
-                          <td>
-                            <span class="pick-value circle-pending " style="float:right"><%=sale.items.filter((i)=>{
-                              return i.pending;
-                            }).length %></span>
-                            <span class="pick-value" style="float:right"><%=Dat.daysDif(new Date(sale.data), new Date()) + ' Dias'%></span>
-                          </td>
-                        </tr>
-                      </table>
+                            </td>
+                            <td><span class="pick-value"><%=sale.transport %></span></td>
+                            <td><span class="pick-value copiable" style="float:right"><%=sale.numeroDaOrdemDeCompra%></span></td>
+                          </tr>
+                          <tr>
+                            <td><span class="pick-value"><%=(sale.pickUser.name ? sale.pickUser.name.split(" ")[0] : 'Desconhecido') %></span></td>
+                            <td><span class="pick-value" ><%= Dat.format(new Date(sale.data))%></span></td>
+                            <td>
+                              <span class="pick-value circle-pending " style="float:right"><%=sale.items.filter((i)=>{
+                                return i.pending;
+                              }).length %></span>
+                              <span class="pick-value" style="float:right"><%=Dat.daysDif(new Date(sale.data), new Date()) + ' Dias'%></span>
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
                     </div>
-
                     <%
                   });
                   %>

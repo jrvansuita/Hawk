@@ -7,6 +7,7 @@ module.exports = class Pending extends DataAccess {
     this.solving = false;
     this.solved = false;
     this.sale = sale == undefined ? {} : sale;
+    this.updateDate = new Date();
   }
 
   static getKey() {
