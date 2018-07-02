@@ -284,7 +284,7 @@ function buildPendingItemsViews(el, pending){
     onPendingItemButtonClicked(pending);
   });
 
-  last.append($('<td>').attr('colspan','2').append($('<span>').addClass('pick-value small-font').append('Última alteração: ' + (pending.updateDate ? Dat.format(pending.updateDate): ''))));
+  last.append($('<td>').attr('colspan','2').append($('<span>').addClass('pick-value small-font').append('Última alteração: ' + (pending.updateDate ? Dat.format(new Date(pending.updateDate)): ''))));
   last.append($('<td>').attr('colspan','2').append(solve));
   table.append(last);
 }
