@@ -11,8 +11,6 @@ exports.get = (path, onEnd) => {
 
   var body = '';
 
-  console.log(getOptions(path));
-
   var req = https.request(getOptions(path), function(res) {
 
     res.on('data', function(chunk) {

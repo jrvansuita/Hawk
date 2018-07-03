@@ -11,7 +11,8 @@ app.set('port', process.env.PORT || 3000);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true,
-  limit: '5mb'
+  limit: '5mb',
+  parameterLimit: 1000000
 }));
 
 // register the session with it's secret ID
