@@ -5,13 +5,13 @@ module.exports= class PendingEmailTemplate {
   constructor(){
     this.head = "<p>Olá ?Name?, tudo bem?<br><br>Devido a um erro de sistema, alguns dos itens do seu pedido acabaram faltando no estoque. Tentamos reposição desses produtos com o fornecedor, porém não foi possível :( Os itens pendentes estão relacionados abaixo:</p></br></br>";
     this.url = '<p><br>Para que você receba o seu pedido dentro do prazo, estou lhe enviando opções de troca abaixo.<br><a href="?Url?" rel="noreferrer" target="_blank">https://www.boutiqueinfantil.com.br/</a><br><br>Assim que escolher os itens da troca peço que me envie os links dos produtos que eu irei trocar no seu pedido para você. Não se esqueça de especificar o tamanho.<br>Não haverá qualquer acréscimo a pagar sobre o seu pedido, caso haja uma PEQUENA diferença de preço entre os produtos. O ideal é só não ser mais barato que o valor já pago.</p>';
-    this.tail = "<p><br>Esperarei um tempinho pelo seu retorno, caso contrário eu irei escolher algo com muito carinho para substituir os itens faltantes.<br><br>Caso deseje trocá-lo, basta entrar em contato.<br>Dúvidas estamos a disposição!<br><br></p>";
+    this.tail = "<p><br>Esperarei um tempinho pelo seu retorno, caso contrário eu irei escolher algo com muito carinho para substituir os itens faltantes.<br><br>Caso deseje trocá-lo, basta entrar em contato.<br>Dúvidas estamos a disposição!<br><br>Equipe Boutique Infantil.</p>";
 
     this.maxPrice = 0;
   }
 
   name(name){
-    this.head= this.head.replace('?Name?', name);
+    this.head = this.head.replace('?Name?', name);
   }
 
   items(items){
@@ -27,26 +27,28 @@ module.exports= class PendingEmailTemplate {
     head("Preço") +
     head("Total"));
 
+    var _self = this;
+
     this.items.forEach(function(i){
-      if (items.pending){
+      if (i.pending){
         body+= row(col(i.codigo) +
         col(i.descricao) +
-        col(Num.money(i.quantidade)) +
+        col(Num.int(parseFloat(i.quantidade))) +
         col(Num.money(i.precoLista)) +
         col(Num.money(parseFloat(i.precoLista) * parseFloat(i.quantidade))));
 
-        if (this.maxPrice < i.precoLista){
-          this.maxPrice = i.precoLista;
+        if (_self.maxPrice < i.precoLista){
+          _self.maxPrice = i.precoLista;
         }
       }
     });
 
-    return '<table class="w3-table w3-striped w3-border">' + body + '</table>';
+    return '<table border=1 style="border-collapse: collapse;border-color: grey;">' + body + '</table>';
   }
 
   build(){
     var result = this.head;
-    result+= buildItems();
+    result+= this.buildItems();
     result+= this.url.replace('?Url?',getUrl(this.maxPrice));
     result+= this.tail;
     return result;
@@ -56,15 +58,15 @@ module.exports= class PendingEmailTemplate {
 
 
 function row(text){
-  return "<tr>" + text + "<tr>";
+  return '<tr style="height: 30px;">' + text + '<tr>';
 }
 
 function col(text){
-  return "<td>"+text+"</td>";
+  return '<td style="padding:4px;min-width:100px;text-align: center;">'+text+'</td>';
 }
 
 function head(text){
-  return "<th>"+text+"</th>";
+  return '<th style="padding:4px;min-width:100px;text-align: center;">'+text+'</th>';
 }
 
 

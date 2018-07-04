@@ -19,18 +19,18 @@ module.exports= class PendingEmailSender{
     this.clientEmail = email;
   }
 
-  send(){
+  send(callback){
     //this.sender.to([this.clientEmail, this.defaultEmail]);
-    this.sender.to(["vansuita.jr@gmail.com", this.defaultEmail]);
+    this.sender.to(["vansuita.jr@gmail.com"]);
     this.sender.from(this.defaultName, this.defaultEmail);
     this.sender.replyTo(this.defaultName, this.defaultEmail);
 
     this.template.name(this.clientName);
-    this.template.items(sale.items);
+    this.template.items(this.sale.items);
 
-    email.subject("[Requisição de Troca] - Pedido " + this.sale.numeroPedido);
-    email.html(this.template.build());
-    email.send();
+    this.sender.subject("[Requisição de Troca] - Pedido " + this.sale.numeroPedido + " - OC " + this.sale.numeroDaOrdemDeCompra);
+    this.sender.html(this.template.build());
+    this.sender.send(callback);
   }
 
 };

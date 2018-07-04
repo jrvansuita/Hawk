@@ -2,6 +2,7 @@ const EccosysCalls = require('../eccosys/eccosys-calls.js');
 const UsersProvider = require('../provider/UsersProvider.js');
 const Day = require('../bean/day.js');
 const Pending = require('../bean/pending.js');
+const PendingHandler = require('../handler/pending-handler.js');
 
 
 global.transportList = {};
@@ -23,7 +24,6 @@ var selectedTransp;
 module.exports = {
 
   init(selected, onFinished) {
-
     selectedTransp = selected;
 
     if (global.staticPickingList.length == 0) {
@@ -82,14 +82,18 @@ module.exports = {
     //Done picking
     global.staticDonePicking.push(sale);
 
-    Day.upsert(day.getPKQuery(), {
-      $inc: {
-        count: secDif,
-        total: sale.itemsQuantity
-      }
-    }, (err, doc) => {
+    if(pending.sale.doNotCount){
       callback("end-picking-" + sale.numeroPedido);
-    });
+    }else{
+      Day.upsert(day.getPKQuery(), {
+        $inc: {
+          count: secDif,
+          total: sale.itemsQuantity
+        }
+      }, (err, doc) => {
+        callback("end-picking-" + sale.numeroPedido);
+      });
+    }
   },
 
   upcomingSales() {
@@ -135,35 +139,38 @@ module.exports = {
       callback();
     });
   },
-  
+
   solvingPendingSale(pending, callback){
+    if (pending.sendEmail == true || pending.sendEmail.toString() == "true"){
+      var _self = this;
+      PendingHandler.sendEmail(pending, function(err, emailId){
+        if (err){
+          callback(err, null);
+        }else{
+          _self._solvingPendingSaleInternal(pending, callback);
+        }
+      });
+    }else{
+      this._solvingPendingSaleInternal(pending, callback);
+    }
+  },
+
+  _solvingPendingSaleInternal(pending, callback){
     pending.solving = true;
     pending.updateDate = new Date();
-    Pending.upsert(Pending.getKeyQuery(pending.number),pending, function(err, doc){
-      global.staticPendingSales.filter((i)=>{
-        if (i.number == doc.number){
-          i.solving = true;
-        }
-        return true;
-      });
-
-      callback();
+    Pending.upsert(Pending.getKeyQuery(pending.number), pending, function(err, doc){
+      global.staticPendingSales = global.staticPendingSales.map(function(i) { return i.sale.numeroPedido == pending.sale.number ? pending : i; });
+      callback(null, pending);
     });
   },
 
-
   solvedPendingSale(pending, callback){
     pending.solved = true;
+    delete pending.solving;
     pending.updateDate = new Date();
     Pending.upsert(Pending.getKeyQuery(pending.number),pending, function(err, doc){
-      global.staticPendingSales.filter((i)=>{
-        if (i.number == doc.number){
-          i.solved = true;
-        }
-        return true;
-      });
-
-      callback();
+      global.staticPendingSales = global.staticPendingSales.map(function(i) { return i.sale.numeroPedido == pending.sale.number ? pending : i; });
+      callback(pending);
     });
   },
 
@@ -180,6 +187,8 @@ module.exports = {
       delete pending.solving;
       delete pending.updateDate;
       delete pending.sale.pending;
+
+      pending.sale.doNotCount = true;
 
       initSalePicking(pending.sale, pending.sale.pickUser.id);
       callback(getPrintUrl(pending.sale));

@@ -126,17 +126,14 @@ $(document).ready(() => {
 
     $div.mouseleave(function(){
       $div.remove();
+      $( "#user-id" ).focus();
     });
 
     $('.md-dropdown a').click(function(e){
       e.stopPropagation();
     });
-
-
   });
 });
-
-
 
 function getInProgressSale(number){
   for (var key in inprogress) {
@@ -147,7 +144,6 @@ function getInProgressSale(number){
     }
   }
 }
-
 
 function doneSaleRestart(saleNumber){
 
@@ -204,8 +200,6 @@ function isNum(v) {
   return /^\d+$/.test(v);
 }
 
-
-
 String.prototype.toMMSS = function() {
   var sec_num = parseInt(this, 10); // don't forget the second param
   var hours = Math.floor(sec_num / 3600);
@@ -226,7 +220,6 @@ function togglePending(item){
   item.pending = !item.pending;
 }
 
-
 function loadPendingSaleItems(el, pending){
   if (!el.hasClass('mini-item-modal')){
     var table = el.find('table');
@@ -243,16 +236,21 @@ function showPendingItemModal(el){
   el.addClass('mini-item-modal dense-shadow');
   el.find('.closable').fadeIn(200);
 
-
   changeFontSize(el,2);
 
   el.parent().unbind('click').click(function(e){
-    el.parent().removeClass('modal');
-    el.removeClass('mini-item-modal dense-shadow');
-    el.find('.closable').hide();
-    changeFontSize(el,-2);
+    hidePedingItemModal(e);
     e.stopPropagation();
   });
+}
+
+function hidePedingItemModal(){
+  var el = $('.mini-item-modal');
+  el.parent().removeClass('modal');
+  el.removeClass('mini-item-modal dense-shadow');
+  el.find('.closable').remove();
+  changeFontSize(el, -2);
+  $( "#user-id" ).focus();
 }
 
 function buildPendingItemsViews(el, pending){
@@ -281,29 +279,52 @@ function buildPendingItemsViews(el, pending){
   var last = $('<tr>').addClass('closable');
 
   var solve = $('<label>').addClass('button shadow solve-pending').append(getPendingItemButtonLabel(pending)).click(function(){
-    onPendingItemButtonClicked(pending);
+    onPendingItemButtonClicked($(this), pending);
   });
 
   last.append($('<td>').attr('colspan','2').append($('<span>').addClass('pick-value small-font').append('Última alteração: ' + (pending.updateDate ? Dat.format(new Date(pending.updateDate)): ''))));
-  last.append($('<td>').attr('colspan','2').append(solve));
+  last.append($('<td>').attr('colspan','1').append(!pending.solving && !pending.solved? getEmailSwitch(): ((pending.sendEmail == true || pending.sendEmail == "true") ? getEmailImage(): '')));
+  last.append($('<td>').attr('colspan','1').append(solve));
   table.append(last);
 }
 
-function onPendingItemButtonClicked(pending){
+function getEmailSwitch(){
+
+  var input = $('<input>').attr('type', 'checkbox').addClass('switch-input').attr('id','send-email-switch').attr('checked','checked');
+  var title = $('<span>').addClass('pick-value').append('Email');
+  var label = $('<label>').attr('type', 'checkbox').addClass('switch-label').attr('for','send-email-switch').append(title, $('<span>').addClass('toggle--on'), $('<span>').addClass('toggle--off'));
+
+  var holder = $('<div>').append(input, label);
+
+  holder.click(function(e){
+    $('#send-email-switch').prop("checked", !$('#send-email-switch').prop('checked'));
+    e.stopPropagation();
+  });
+
+  return holder;
+}
+
+function getEmailImage(){
+  var img = $('<img>').addClass('icon').attr('src','/img/envelop.png');
+  var span = $('<span>').addClass('right').append(img);
+  return span;
+}
+
+function onPendingItemButtonClicked(button, pending){
   if (pending.solving){
-    if (pending.solved){
+    if (pending.solved == true || pending.solved == "true" ){
       restartPendingSale(pending);
     }else{
-      solvedPendingSale(pending);
+      solvedPendingSale(button,pending);
     }
   }
   else{
-    solvingPendingSale(pending);
+    solvingPendingSale(button,pending);
   }
 }
 
 function getPendingItemButtonLabel(pending){
-  return pending.solved ? 'Reiniciar' : (pending.solving ? 'Resolver' : 'Atender');
+  return (pending.solved == true || pending.solved == "true") ? 'Reiniciar' : (pending.solving ? 'Resolver' : 'Atender');
 }
 
 function buildProductFirstCol(item, slim){
@@ -408,16 +429,29 @@ function solvePendingSale(sale){
   });
 }
 
-function solvingPendingSale(pending){
-  executePendingAjax("/picking-pending-solving", pending);
+function solvingPendingSale(button, pending){
+  showLoadingButton(button); 
+  pending.sendEmail = $('#send-email-switch').prop('checked');
+  executePendingAjax("/picking-pending-solving", pending, function(resultPending){
+    rebuildSpawItem('not-solved', 'solving', resultPending);
+  });
 }
 
-function solvedPendingSale(pending){
-  executePendingAjax("/picking-pending-solved", pending);
+function solvedPendingSale(button, pending){
+  showLoadingButton(button);
+  executePendingAjax("/picking-pending-solved", pending,  function(resultPending){
+    rebuildSpawItem('solving','solved', resultPending);
+  });
 }
 
 function restartPendingSale(pending){
   executePendingAjax("/picking-pending-restart", pending);
+}
+
+function rebuildSpawItem(actualClass, nextClass , resultPending){
+  updatePendingSales(resultPending);
+  $('.'+actualClass+'.mini-item-modal').removeClass(actualClass).addClass(nextClass);
+  hidePedingItemModal();
 }
 
 function executePendingAjax(path, pending, onSucess){
@@ -434,9 +468,9 @@ function executePendingAjax(path, pending, onSucess){
         window.location.reload();
       }
     },
-    error: function(jqXHR, textStatus, errorThrown) {
-      console.log(jqXHR);
-      $('.error').text(jqXHR.responseText).fadeIn().delay(1000).fadeOut();
+    error: function (request, status, error) {
+        console.log(request.responseText);
+        $('.error').text(request.responseText).fadeIn().delay(1000).fadeOut();
     }
   });
 }
@@ -456,5 +490,13 @@ function changeFontSize(els, direction){
   els.css("padding-left",  parseInt(els.css("padding-left"))+(direction * 4));
   els.css("padding-right",  parseInt(els.css("padding-right"))+(direction * 4));
   els.css("padding-top",  parseInt(els.css("padding-top"))+(direction * 2));
+}
 
+function showLoadingButton(el){
+  el.prepend($('<img>').addClass('loading-circle').attr('src','/img/loader/circle.svg'));
+}
+
+
+function updatePendingSales(pending){
+  pendingSales = pendingSales.map(function(i) { return i.sale.numeroPedido == pending.sale.numeroPedido ? pending : i; });
 }

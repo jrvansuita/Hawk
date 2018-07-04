@@ -166,15 +166,19 @@ app.get('/achievements', (req, res) => {
         res.status(200).send(printUrl);
       });
     } catch (e) {
-      console.log(e);
-      res.status(500).send(e);
+      console.log(e.message);
+      res.status(500).send(new Error(e.message));
     }
   });
 
   app.post('/picking-pending-solving', (req, res) => {
     try {
-      pickingProvider.solvingPendingSale(req.body.pendingSale, (result) => {
-        res.status(200).send(result);
+      pickingProvider.solvingPendingSale(req.body.pendingSale, (err, result) => {
+        if (err){
+          res.status(500).send(err);
+        }else{
+          res.status(200).send(result);
+        }
       });
     } catch (e) {
       console.log(e);

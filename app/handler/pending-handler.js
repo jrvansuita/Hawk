@@ -5,16 +5,15 @@ const PendingEmailSender = require('../email/sender/pending-email-sender.js');
 
 module.exports = {
 
-  sendPendingEmail(pending){
+  sendEmail(pending, callback){
     var sale = pending.sale;
 
      EccosysCalls.getClient(sale.idContato, (data)=>{
-        var client = JSON.parse(data);
-        console.log(client);
+        var client = JSON.parse(data)[0];
         var pendingEmailSender = new PendingEmailSender();
         pendingEmailSender.client(client.nome, client.email);
         pendingEmailSender.sale(sale);
-        pendingEmailSender.send();
+        pendingEmailSender.send(callback);
      });
   }
 

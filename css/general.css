@@ -21,6 +21,8 @@ input, span, label {
 
 .button{
   margin: 5px 1px;
+  text-align: center;
+  min-width: 80px;
   display: inline-block;
   background-color: #1c796b !important;
   color: white !important;
@@ -72,6 +74,12 @@ input, span, label {
   background-color: #f3736a !important;
 }
 
+.icon{
+  width: 18px;
+  height: 18px;
+  margin-left: 8px;
+  margin-right: 8px;
+}
 .error {
   color: #e53935;
   font-size: 12px;
@@ -120,6 +128,17 @@ tr.line td{
 
 .dense-shadow{
   -webkit-box-shadow: 2px 2px 24px 0px rgba(0,0,0,0.75);
--moz-box-shadow: 2px 2px 24px 0px rgba(0,0,0,0.75);
-box-shadow: 2px 2px 24px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 2px 2px 24px 0px rgba(0,0,0,0.75);
+  box-shadow: 2px 2px 24px 0px rgba(0,0,0,0.75);
+}
+
+.loading-circle{
+  max-width: 18px;
+  max-height: 18px;
+  text-align: center;
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 4px;
+  opacity: 0.8;
 }

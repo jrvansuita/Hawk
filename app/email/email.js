@@ -42,15 +42,18 @@ module.exports = class Email{
     this.mailOptions.html = html;
   }
 
-  send(){
+  send(callback){
     // send mail with defined transport object
     this.transporter.sendMail(this.mailOptions, (error, info) => {
       if (error) {
+        callback(error, null);
         return console.log(error);
       }
+
+      callback(null, info.messageId);
       console.log('Message sent: %s', info.messageId);
       // Preview only available when sending through an Ethereal account
-      console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+//      console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
 
       // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
       // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
