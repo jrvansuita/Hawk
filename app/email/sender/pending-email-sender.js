@@ -20,8 +20,8 @@ module.exports= class PendingEmailSender{
   }
 
   send(callback){
-    //this.sender.to([this.clientEmail, this.defaultEmail]);
-    this.sender.to(["vansuita.jr@gmail.com"]);
+    this.sender.to([this.clientEmail, this.defaultEmail]);
+    //this.sender.to(["vansuita.jr@gmail.com"]);
     this.sender.from(this.defaultName, this.defaultEmail);
     this.sender.replyTo(this.defaultName, this.defaultEmail);
 

@@ -311,15 +311,12 @@ function getEmailImage(){
 }
 
 function onPendingItemButtonClicked(button, pending){
-  if (pending.solving){
-    if (pending.solved == true || pending.solved == "true" ){
-      restartPendingSale(pending);
-    }else{
-      solvedPendingSale(button,pending);
-    }
-  }
-  else{
-    solvingPendingSale(button,pending);
+  if (pending.solved == true || pending.solved == "true"){
+    restartPendingSale(pending);
+  }else if (pending.solving == true || pending.solving == "true"){
+    solvedPendingSale(button,pending);
+  }else{
+    solvingPendingSale(button, pending);
   }
 }
 
@@ -430,7 +427,7 @@ function solvePendingSale(sale){
 }
 
 function solvingPendingSale(button, pending){
-  showLoadingButton(button); 
+  showLoadingButton(button);
   pending.sendEmail = $('#send-email-switch').prop('checked');
   executePendingAjax("/picking-pending-solving", pending, function(resultPending){
     rebuildSpawItem('not-solved', 'solving', resultPending);
@@ -469,8 +466,8 @@ function executePendingAjax(path, pending, onSucess){
       }
     },
     error: function (request, status, error) {
-        console.log(request.responseText);
-        $('.error').text(request.responseText).fadeIn().delay(1000).fadeOut();
+      console.log(request.responseText);
+      $('.error').text(request.responseText).fadeIn().delay(1000).fadeOut();
     }
   });
 }
