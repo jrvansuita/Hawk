@@ -242,7 +242,7 @@
                     var sale = pending.sale;
                     %>
                     <div class="modal-holder">
-                      <div class="shadow label mini-item clickable-mini-item pending-item <%= pending.solved ? 'solved' : (pending.solving ? 'solving' : 'not-solved')%>"  data-index="pending-<%=index%>">
+                      <div class="shadow label mini-item clickable-mini-item pending-item <%= pending.solved.toString() == 'true' ? 'solved' : (pending.solving.toString() == 'true' ? 'solving' : 'not-solved')%>"  data-index="pending-<%=index%>">
 
                         <table width="100%">
                           <tr>

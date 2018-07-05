@@ -311,9 +311,9 @@ function getEmailImage(){
 }
 
 function onPendingItemButtonClicked(button, pending){
-  if (pending.solved == true || pending.solved == "true"){
+  if (isTrueStr(pending.solved)){
     restartPendingSale(pending);
-  }else if (pending.solving == true || pending.solving == "true"){
+  }else if (isTrueStr(pending.solving)){
     solvedPendingSale(button,pending);
   }else{
     solvingPendingSale(button, pending);
@@ -321,7 +321,23 @@ function onPendingItemButtonClicked(button, pending){
 }
 
 function getPendingItemButtonLabel(pending){
-  return (pending.solved == true || pending.solved == "true") ? 'Reiniciar' : (pending.solving ? 'Resolver' : 'Atender');
+   if (isTrueStr(pending.solved) && !isTrueStr(pending.solving)){
+     return "Reiniciar";
+   }else if (isTrueStr(pending.solving) && !isTrueStr(pending.solved)){
+    return "Resolver";
+  }else{
+    return 'Atender';
+  }
+}
+
+function getPendingItemColor(pending){
+   if (isTrueStr(pending.solved) && !isTrueStr(pending.solving)){
+     return "Reiniciar";
+   }else if (isTrueStr(pending.solving) && !isTrueStr(pending.solved)){
+    return "Resolver";
+  }else{
+    return 'Atender';
+  }
 }
 
 function buildProductFirstCol(item, slim){
@@ -496,4 +512,9 @@ function showLoadingButton(el){
 
 function updatePendingSales(pending){
   pendingSales = pendingSales.map(function(i) { return i.sale.numeroPedido == pending.sale.numeroPedido ? pending : i; });
+}
+
+
+function isTrueStr(val){
+  return val == true || val == "true";
 }

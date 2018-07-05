@@ -159,7 +159,7 @@ module.exports = {
     pending.solving = true;
     pending.updateDate = new Date();
     Pending.upsert(Pending.getKeyQuery(pending.number), pending, function(err, doc){
-      global.staticPendingSales = global.staticPendingSales.map(function(i) { return i.sale.numeroPedido == pending.sale.number ? pending : i; });
+      updatePendingSale(pending);
       callback(null, pending);
     });
   },
@@ -169,10 +169,10 @@ module.exports = {
     delete pending.solving;
     pending.updateDate = new Date();
     Pending.upsert(Pending.getKeyQuery(pending.number),pending, function(err, doc){
-      global.staticPendingSales = global.staticPendingSales.map(function(i) { return i.sale.numeroPedido == pending.sale.number ? pending : i; });
+      updatePendingSale(pending);
       callback(pending);
     });
-  },
+  }, 
 
   restartPendingSale(pending, callback){
     if (global.inprogressPicking[pending.sale.pickUser.id] != undefined) {
@@ -333,4 +333,8 @@ function handleAllDonePickingSales(){
   global.staticPickingList = global.staticPickingList.filter(function(i){
     return i.pickingRealizado == "N";
   });
+}
+
+function updatePendingSale(pending){
+  global.staticPendingSales = global.staticPendingSales.map(function(i) { return i.sale.numeroPedido == pending.sale.numeroPedido ? pending : i; });
 }
