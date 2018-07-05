@@ -82,7 +82,7 @@ module.exports = {
     //Done picking
     global.staticDonePicking.push(sale);
 
-    if(pending.sale.doNotCount){
+    if(sale.doNotCount){
       callback("end-picking-" + sale.numeroPedido);
     }else{
       Day.upsert(day.getPKQuery(), {

@@ -156,6 +156,7 @@ app.get('/achievements', (req, res) => {
         res.status(200).send(result);
       });
     } catch (e) {
+      console.log(e);
       res.status(412).send(e);
     }
   });
