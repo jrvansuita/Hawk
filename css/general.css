@@ -142,3 +142,7 @@ tr.line td{
   margin-right: 4px;
   opacity: 0.8;
 }
+
+.hidden{
+  visibility: hidden;
+}

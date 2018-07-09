@@ -94,11 +94,9 @@ function buildChart(from, to, title) {
       item.addBar('Itens', dataItem.total, 0.8, '03c184', true);
       //item.addBar('Tempo', dataItem.count, 0.7, '14b5a6', true);
 
-      var itensPerSeg = dataItem.count/dataItem.total;
+      item.addBar('Segundos/Item', dataItem.count/dataItem.total, 0.7, '5f7ce8', false);
 
-      item.addBar('Segundos/Item', itensPerSeg, 0.7, '5f7ce8', false);
-
-      var points = Day.pickingPoints(dataItem.total, itensPerSeg);
+      var points = Day.pickingPoints(dataItem.count, dataItem.total);
       if (points > 0)
       item.addBar('Pontos', points, 1, '1da8b9', false);
 

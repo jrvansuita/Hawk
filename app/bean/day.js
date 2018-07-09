@@ -21,8 +21,9 @@ module.exports = class Day extends DataAccess {
     return (count * total) / 10000;
   }
 
-  static pickingPoints(itens, itensByTime) {
-    return (itens) / itensByTime;
+  //itens / itensByTime
+  static pickingPoints(count, total) {
+    return ((total) / (count/total)) * 4;
   }
 
 

@@ -10,15 +10,10 @@
 
 
     <div class="main-content">
-      <% include menu %>
-
+ 
         <%
-
-        var subtitlesArr = Util.getSubtitles(data);
         var curYear;
         %>
-          <%include invoice-menu %>
-
 
 
 
@@ -41,9 +36,9 @@
 
                         <div class="inner-achiev">
                           <div class="avatar-holder">
-                            <img class="crown" src="/img/crown.png" />
-                            <img class="avatar-img circle shadow" src="<%=item.user.avatar%>" onerror="this.src='/img/avatar.png'" />
-                            <span class="label shadow avatar-name"><%=item.user.name || 'Indefinido' %></span>
+                            <img class="crown <%= (!item.user || !item.user.avatar) ? 'hidden' : ''%>" src="/img/crown.png" />
+                            <img class="avatar-img circle shadow" src="<%=item.user ? item.user.avatar : ''%>" onerror="this.src='/img/avatar.png'" />
+                            <span class="label shadow avatar-name"><%=item.user ? item.user.name || 'Indefinido' : 'Indefinido' %></span>
                           </div>
 
                           <div class="dots-holder">

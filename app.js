@@ -87,7 +87,7 @@ app.post('/login', function(req, res) {
 
 app.get(['/', '/invoice', '/invoice/overview'], (req, res) => {
   require('./app/builder/InvoiceChartBuilder.js').buildOverview(res.locals.loggedUser.full, function(charts) {
-    res.render('invoice', {
+    res.render('invoice-chart', {
       charts: charts,
       page: req.originalUrl,
     });
@@ -100,7 +100,7 @@ app.get('/invoice/by-date', (req, res) => {
   var to = req.query.to ? new Date(parseInt(req.query.to)).maxTime() : Dat.lastDayOfMonth();
 
   require('./app/builder/InvoiceChartBuilder.js').buildByDate(from, to, res.locals.loggedUser.full, function(charts) {
-    res.render('invoice', {
+    res.render('invoice-chart', {
       charts: charts,
       page: req.originalUrl,
     });
@@ -109,18 +109,31 @@ app.get('/invoice/by-date', (req, res) => {
 
 
 
-app.get('/achievements', (req, res) => {
-  var AchievGridBuilder = require('./app/builder/AchievGridBuilder.js');
-  var builder = new AchievGridBuilder();
+app.get('/invoice/achievements', (req, res) => {
+  var InvoiceAchievGridBuilder = require('./app/builder/InvoiceAchievGridBuilder.js');
+  var builder = new InvoiceAchievGridBuilder();
   builder.init(res.locals.loggedUser.full,
     (data) => {
-      res.render('achievements', {
+      res.render('invoice-achiev', {
         data: data
       });
     });
 
     builder.build();
   });
+
+  app.get('/picking/achievements', (req, res) => {
+    var PickingAchievGridBuilder = require('./app/builder/PickingAchievGridBuilder.js');
+    var builder = new PickingAchievGridBuilder();
+    builder.init(res.locals.loggedUser.full,
+      (data) => {
+        res.render('picking-achiev', {
+          data: data
+        });
+      });
+
+      builder.build();
+    });
 
   app.get('/estoque', (req, res) => {
     res.render('estoque');

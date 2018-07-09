@@ -1,0 +1,17 @@
+<html>
+<% include menu %>
+
+<body>
+  <%
+  var subtitlesArr = Util.getSubtitles(data);
+  %>
+  
+  <div class="main-content">
+    <% include picking-menu %>
+
+    <% include achievements-render %>
+  </div>
+
+</body>
+
+</html>
