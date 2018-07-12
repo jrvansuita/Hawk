@@ -36,7 +36,7 @@
     <nav id="main-menu">
 
       <div class="material-ripple start-jobs">
-        <img src="/img/icon/hawk.png" id="logo" class="<%= global.jobsRunning ? 'gone' : '' %>" />
+        <img src="<%=process.env.NODE_ENV ? '/img/icon/hawk.png' : '/img/maintenance.png'%>" id="logo" class="<%= global.jobsRunning ? 'gone' : '' %>" />
         <img id="run-jobs-img" src="/img/loader/loading.svg" class="<%= !global.jobsRunning ? 'gone' : '' %>" />
       </div>
 

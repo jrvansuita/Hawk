@@ -12,6 +12,23 @@ $(document).ready(() => {
     e.stopPropagation();
   });
 
+  $(".checkable-avatar").change(function() {
+    var $img = $(this).parent().find('img');
+    if(this.checked) {
+      $img.attr('src', '../img/selected.png').hide().fadeIn(300);
+    }else{
+      $img.attr('src', $img.data('src')).hide().fadeIn(300);
+    }
+
+    var count = $('#pending-count').data('count');
+    var selecteds = $('.checkable-avatar:checkbox:checked').length;
+    $('#pending-count').text(selecteds == 0 ?  count : selecteds + '/' + count);
+  });
+
+  $('.label-for-avatar').click(function(e){
+    e.stopPropagation();
+  });
+
   window.setInterval(function() {
     $(".inprogress-begin").each(function(index, item) {
       var diftime = parseInt($(item).attr("diftime"));
@@ -321,9 +338,9 @@ function onPendingItemButtonClicked(button, pending){
 }
 
 function getPendingItemButtonLabel(pending){
-   if (isTrueStr(pending.solved) && !isTrueStr(pending.solving)){
-     return "Reiniciar";
-   }else if (isTrueStr(pending.solving) && !isTrueStr(pending.solved)){
+  if (isTrueStr(pending.solved) && !isTrueStr(pending.solving)){
+    return "Reiniciar";
+  }else if (isTrueStr(pending.solving) && !isTrueStr(pending.solved)){
     return "Resolver";
   }else{
     return 'Atender';
@@ -331,9 +348,9 @@ function getPendingItemButtonLabel(pending){
 }
 
 function getPendingItemColor(pending){
-   if (isTrueStr(pending.solved) && !isTrueStr(pending.solving)){
-     return "Reiniciar";
-   }else if (isTrueStr(pending.solving) && !isTrueStr(pending.solved)){
+  if (isTrueStr(pending.solved) && !isTrueStr(pending.solving)){
+    return "Reiniciar";
+  }else if (isTrueStr(pending.solving) && !isTrueStr(pending.solved)){
     return "Resolver";
   }else{
     return 'Atender';

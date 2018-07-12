@@ -33,6 +33,7 @@ module.exports = {
             global.staticPickingList = JSON.parse(data);
             removePendingSalesFromPickingSalesList();
             handleAllDonePickingSales();
+            checkIsInDevMode();
             loadSaleItems(0, onFinished);
           }catch(e){
             onFinished();
@@ -172,7 +173,7 @@ module.exports = {
       updatePendingSale(pending);
       callback(pending);
     });
-  }, 
+  },
 
   restartPendingSale(pending, callback){
     if (global.inprogressPicking[pending.sale.pickUser.id] != undefined) {
@@ -254,12 +255,16 @@ function loadSaleItems(index, callback) {
       if (index == previewCount) {
         callback();
       }
-    } else if (index == currentLength) {
+    } /*else if (index == currentLength) {
       if (currentLength <= previewCount){
-        callback();
-      }
+      callback();
     }
-  });
+  }*/
+  //No Sales to pick
+  else if (currentLength == 0){
+    callback();
+  }
+});
 }
 
 function callLoadSaleItems(sale, callback){
@@ -337,4 +342,15 @@ function handleAllDonePickingSales(){
 
 function updatePendingSale(pending){
   global.staticPendingSales = global.staticPendingSales.map(function(i) { return i.sale.numeroPedido == pending.sale.numeroPedido ? pending : i; });
+}
+
+
+function checkIsInDevMode(){
+  //If this Env Var is not defined, it's on development mode
+  //Not necessary to load all sales for tests porpouse
+  if (!process.env.NODE_ENV){
+    if (global.staticPickingList.length > 10){
+      global.staticPickingList.splice(10);
+    }
+  }
 }

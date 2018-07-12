@@ -227,7 +227,7 @@
               <div class="pick-box shadow pending-box red-top">
                 <div class="pick-header" style="padding-right: 18px;">
                   <span class="label header-title">Pendências</span>
-                  <span class="label header-count green-title"><%=pendingSales.length%> </span>
+                  <span class="label header-count green-title" id="pending-count" data-count="<%=pendingSales.length%>"><%=pendingSales.length%> </span>
                 </div>
 
 
@@ -247,7 +247,10 @@
                         <table width="100%">
                           <tr>
                             <td rowspan="2" style="max-width: 38px;">
-                              <img class="circle shadow avatar-img mini-avatar" src="<%=sale.pickUser.avatar%>" onerror="this.src='/img/avatar/default.jpg'" />
+                              <label for="pending-checker-<%=index%>" class="label-for-avatar">
+                                <input type="checkbox" id="pending-checker-<%=index%>" class="checkable-avatar" style="display:none"/>
+                                <img class="circle shadow avatar-img mini-avatar" src="<%=sale.pickUser.avatar%>" data-src="<%=sale.pickUser.avatar%>"onerror="this.src='/img/avatar/default.jpg'" />
+                              </label>
                             </td>
                             <td><span class="pick-value green-title copiable"><%=sale.numeroPedido %></span>
 

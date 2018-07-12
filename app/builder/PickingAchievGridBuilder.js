@@ -18,7 +18,7 @@ module.exports = class PickingAchievGridBuilder {
     this.provider.onAddRowListener(function(row, achievItem){
       achievItem.user = row.user;
       achievItem.addBar('Segundos/Item', row.sum_count/row.sum_total, '5f7ce8');
-      achievItem.addBar('Pontos', row.sum_points, '1da8b9');
+      achievItem.addBar('Pontos', row.sum_points, '1da8b9', true);
       achievItem.addBar('Itens', row.sum_total, '03c184');
     });
 

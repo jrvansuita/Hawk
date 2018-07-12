@@ -17,7 +17,7 @@ module.exports = class InvoiceAchievGridBuilder {
     this.provider.onAddRowListener(function(row, achievItem){
       achievItem.user = row.user;
       achievItem.addBar('Pedidos', row.sum_count, '14b5a6');
-      achievItem.addBar('Pontos', row.sum_points, '1da8b9');
+      achievItem.addBar('Pontos', row.sum_points, '1da8b9', true);
       if (_self.full){
         achievItem.addBar('Receita', row.sum_total, '03c184');
       }
