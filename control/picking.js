@@ -15,7 +15,7 @@ $(document).ready(() => {
   $(".checkable-avatar").change(function() {
     var $img = $(this).parent().find('img');
     if(this.checked) {
-      $img.attr('src', '../img/selected.png').hide().fadeIn(300);
+      $img.attr('src', '../img/checked.png').hide().fadeIn(300);
     }else{
       $img.attr('src', $img.data('src')).hide().fadeIn(300);
     }
@@ -199,8 +199,10 @@ function loadSale(sale){
     sale.items.forEach(item => {
       var row = $('<tr>').addClass('row-padding');
 
+      item.quantidade = parseInt(item.quantidade);
+
       row.append($('<td>').append(buildProductFirstCol(item, true)));
-      row.append($('<td>').append(buildProductSecondCol(item)));
+      row.append($('<td>').append(buildProductSecondCol(item, true)));
       row.append($('<td>').append(buildProductThirdCol(item)));
       row.append($('<td>').append(buildProductFourthCol(item)));
 
@@ -284,7 +286,7 @@ function buildPendingItemsViews(el, pending){
       var row = $('<tr>').addClass('row-padding closable hover-pending-item');
 
       row.append($('<td>').attr('colspan','2').append(buildProductFirstCol(item, false)));
-      row.append($('<td>').append(buildProductSecondCol(item)));
+      row.append($('<td>').append(buildProductSecondCol(item, false)));
       row.append($('<td>').addClass('right-align').append(buildProductThirdCol(item)));
 
       table.append(row);
@@ -299,10 +301,26 @@ function buildPendingItemsViews(el, pending){
     onPendingItemButtonClicked($(this), pending);
   });
 
-  last.append($('<td>').attr('colspan','2').append($('<span>').addClass('pick-value small-font').append('Última alteração: ' + (pending.updateDate ? Dat.format(new Date(pending.updateDate)): ''))));
+  last.append($('<td>').attr('colspan','2').append(getFirstBottomBarOptions(pending)));
   last.append($('<td>').attr('colspan','1').append(!pending.solving && !pending.solved? getEmailSwitch(): ((pending.sendEmail == true || pending.sendEmail == "true") ? getEmailImage(): '')));
   last.append($('<td>').attr('colspan','1').append(solve));
   table.append(last);
+}
+
+function getFirstBottomBarOptions(pending){
+  var div = $('<div>');
+
+  var span = $('<span>').addClass('pick-value small-font last-update').append('Última alteração: ' + (pending.updateDate ? Dat.format(new Date(pending.updateDate)): ''));
+  div.append(span);
+
+  if (!isTrueStr(pending.solved) &&  !isTrueStr(pending.solving)){
+    var lamp = $('<img>').addClass('lamp').attr('src', '/img/lamp.png').attr('title','Encontrei!').click(function(){
+      restartPendingSale(pending);
+    });
+    div.append(lamp);
+  }
+
+  return div;
 }
 
 function getEmailSwitch(){
@@ -404,9 +422,30 @@ function buildProductFirstCol(item, slim){
 }
 
 
-function buildProductSecondCol(item){
+function buildProductSecondCol(item, slim){
+
   var second = $('<div>');
   second.append($('<span>').addClass('pick-value center').text(parseInt(item.quantidade)));
+
+  if (slim){
+    var minQuantity = 1;
+    var maxQuantity = item.quantidade;
+
+    second.addClass('quantity-click');
+
+    second.click(function(e){
+      item.quantidade = (item.quantidade -1) > 0 ? item.quantidade -1 : minQuantity;
+      second.find('span').text(item.quantidade);
+    });
+
+    second.bind('contextmenu', function(e){
+      e.preventDefault();
+      item.quantidade = (item.quantidade +1) > maxQuantity ? maxQuantity : item.quantidade +1;
+      second.find('span').text(item.quantidade);
+      return true;
+    });
+  }
+
   return second;
 }
 
