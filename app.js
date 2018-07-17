@@ -43,17 +43,28 @@ app.use('/libs', express.static('libs'));
 
 
 app.post('/run-jobs', (req, res) => {
-  require('./app/jobs/Jobs.js').run((runned) => {
-    var result = {
-      "was_running": runned
-    };
+  var jobsRunner = require('./app/jobs/Jobs.js');
 
-    if (runned) {
-      res.status(200).send(result);
-    } else {
-      res.status(201).send(result);
-    }
-  });
+  var dataResult = {
+    "was_running": true
+  };
+
+  if (req.headers.referer.includes('picking')){
+    jobsRunner.runPicking(()=>{
+      res.status(200).send(dataResult);
+    });
+  }else{
+    jobsRunner.runInvoice((runned) => {
+      dataResult.was_running = runned;
+
+      if (runned) {
+        res.status(200).send(dataResult);
+      } else {
+        res.status(201).send(dataResult);
+      }
+    });
+  }
+
 });
 
 //Keep a user variable for session in all ejs
@@ -135,128 +146,128 @@ app.get('/invoice/achievements', (req, res) => {
       builder.build();
     });
 
-  app.get('/estoque', (req, res) => {
-    res.render('estoque');
-  });
-
-
-
-
-
-  // --- Picking --- //
-  var pickingProvider = new require('./app/provider/PickingProvider.js');
-
-  app.get('/picking', (req, res) => {
-    pickingProvider.init(req.query.transp,() => {
-      if (!res.headersSent){
-        res.render('picking', {
-          upcoming: pickingProvider.upcomingSales(),
-          remaining: pickingProvider.remainingSales(),
-          inprogress: pickingProvider.inprogressPicking(),
-          transportList: pickingProvider.getTransportList(),
-          pendingSales: pickingProvider.pendingSales(),
-          donePickings: pickingProvider.donePickings(),
-          selectedTransp: req.query.transp,
-          printPickingUrl: global.pickingPrintUrl
-        });
-      }
+    app.get('/estoque', (req, res) => {
+      res.render('estoque');
     });
-  });
 
-  app.get('/picking-sale', (req, res) => {
-    try {
-      pickingProvider.handle(req.query.userid, (result) => {
-        res.status(200).send(result);
-      });
-    } catch (e) {
-      console.log(e);
-      res.status(412).send(e);
-    }
-  });
 
-  app.post('/picking-pending', (req, res) => {
-    try {
-      pickingProvider.storePendingSale(req.body.pendingSale, (printUrl) => {
-        res.status(200).send(printUrl);
-      });
-    } catch (e) {
-      console.log(e.message);
-      res.status(500).send(new Error(e.message));
-    }
-  });
 
-  app.post('/picking-pending-solving', (req, res) => {
-    try {
-      pickingProvider.solvingPendingSale(req.body.pendingSale, (err, result) => {
-        if (err){
-          res.status(500).send(err);
-        }else{
-          res.status(200).send(result);
+
+
+    // --- Picking --- //
+    var pickingProvider = new require('./app/provider/PickingProvider.js');
+
+    app.get('/picking', (req, res) => {
+      pickingProvider.init(req.query.transp,() => {
+        if (!res.headersSent){
+          res.render('picking', {
+            upcoming: pickingProvider.upcomingSales(),
+            remaining: pickingProvider.remainingSales(),
+            inprogress: pickingProvider.inprogressPicking(),
+            transportList: pickingProvider.getTransportList(),
+            pendingSales: pickingProvider.pendingSales(),
+            donePickings: pickingProvider.donePickings(),
+            selectedTransp: req.query.transp,
+            printPickingUrl: global.pickingPrintUrl
+          });
         }
       });
-    } catch (e) {
-      console.log(e);
-      res.status(500).send(e);
-    }
-  });
+    });
 
-  app.post('/picking-pending-solved', (req, res) => {
-    try {
-      pickingProvider.solvedPendingSale(req.body.pendingSale, (result) => {
-        res.status(200).send(result);
-      });
-    } catch (e) {
-      console.log(e);
-      res.status(500).send(e);
-    }
-  });
+    app.get('/picking-sale', (req, res) => {
+      try {
+        pickingProvider.handle(req.query.userid, (result) => {
+          res.status(200).send(result);
+        });
+      } catch (e) {
+        console.log(e);
+        res.status(412).send(e);
+      }
+    });
+
+    app.post('/picking-pending', (req, res) => {
+      try {
+        pickingProvider.storePendingSale(req.body.pendingSale, (printUrl) => {
+          res.status(200).send(printUrl);
+        });
+      } catch (e) {
+        console.log(e.message);
+        res.status(500).send(new Error(e.message));
+      }
+    });
+
+    app.post('/picking-pending-solving', (req, res) => {
+      try {
+        pickingProvider.solvingPendingSale(req.body.pendingSale, (err, result) => {
+          if (err){
+            res.status(500).send(err);
+          }else{
+            res.status(200).send(result);
+          }
+        });
+      } catch (e) {
+        console.log(e);
+        res.status(500).send(e);
+      }
+    });
+
+    app.post('/picking-pending-solved', (req, res) => {
+      try {
+        pickingProvider.solvedPendingSale(req.body.pendingSale, (result) => {
+          res.status(200).send(result);
+        });
+      } catch (e) {
+        console.log(e);
+        res.status(500).send(e);
+      }
+    });
 
 
-  app.post('/picking-pending-restart', (req, res) => {
-    try {
-      pickingProvider.restartPendingSale(req.body.pendingSale, (printUrl) => {
-        res.status(200).send(printUrl);
-      });
-    } catch (e) {
-      console.log(e);
-      res.status(500).send(e);
-    }
-  });
+    app.post('/picking-pending-restart', (req, res) => {
+      try {
+        pickingProvider.restartPendingSale(req.body.pendingSale, (printUrl) => {
+          res.status(200).send(printUrl);
+        });
+      } catch (e) {
+        console.log(e);
+        res.status(500).send(e);
+      }
+    });
 
-  app.post('/picking-done-restart', (req, res) => {
-    try {
-      pickingProvider.restartDoneSale(req.session.loggedUser, req.body.sale, (result) => {
-        res.status(200).send(result);
-      });
-    } catch (e) {
-      res.status(500).send(e);
-    }
-  });
+    app.post('/picking-done-restart', (req, res) => {
+      try {
+        pickingProvider.restartDoneSale(req.session.loggedUser, req.body.sale, (result) => {
+          res.status(200).send(result);
+        });
+      } catch (e) {
+        res.status(500).send(e);
+      }
+    });
 
-  app.get(['/picking/overview'], (req, res) => {
-    require('./app/builder/PickingChartBuilder.js').buildOverview(res.locals.loggedUser.full, function(charts) {
-      res.render('picking-chart', {
-        charts: charts,
-        page: req.originalUrl,
+    app.get(['/picking/overview'], (req, res) => {
+      require('./app/builder/PickingChartBuilder.js').buildOverview(res.locals.loggedUser.full, function(charts) {
+        res.render('picking-chart', {
+          charts: charts,
+          page: req.originalUrl,
+        });
       });
     });
-  });
 
 
-  app.get(['/picking/by-date'], (req, res) => {
-    var from = req.query.from ? new Date(parseInt(req.query.from)) : Dat.firstDayOfMonth();
-    var to = req.query.to ? new Date(parseInt(req.query.to)).maxTime() : Dat.lastDayOfMonth();
+    app.get(['/picking/by-date'], (req, res) => {
+      var from = req.query.from ? new Date(parseInt(req.query.from)) : Dat.firstDayOfMonth();
+      var to = req.query.to ? new Date(parseInt(req.query.to)).maxTime() : Dat.lastDayOfMonth();
 
-    require('./app/builder/PickingChartBuilder.js').buildByDate(from, to, res.locals.loggedUser.full, function(charts) {
-      res.render('picking-chart', {
-        charts: charts,
-        page: req.originalUrl,
+      require('./app/builder/PickingChartBuilder.js').buildByDate(from, to, res.locals.loggedUser.full, function(charts) {
+        res.render('picking-chart', {
+          charts: charts,
+          page: req.originalUrl,
+        });
       });
     });
-  });
 
 
 
-  app.listen(app.get('port'), function() {
-    console.log('Node is running on port ', app.get('port'));
-  });
+    app.listen(app.get('port'), function() {
+      console.log('Node is running on port ', app.get('port'));
+    });

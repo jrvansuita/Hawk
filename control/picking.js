@@ -356,24 +356,15 @@ function onPendingItemButtonClicked(button, pending){
 }
 
 function getPendingItemButtonLabel(pending){
-  if (isTrueStr(pending.solved) && !isTrueStr(pending.solving)){
+  if (isTrueStr(pending.solved)){
     return "Reiniciar";
-  }else if (isTrueStr(pending.solving) && !isTrueStr(pending.solved)){
+  }else if (isTrueStr(pending.solving)){
     return "Resolver";
   }else{
     return 'Atender';
   }
 }
 
-function getPendingItemColor(pending){
-  if (isTrueStr(pending.solved) && !isTrueStr(pending.solving)){
-    return "Reiniciar";
-  }else if (isTrueStr(pending.solving) && !isTrueStr(pending.solved)){
-    return "Resolver";
-  }else{
-    return 'Atender';
-  }
-}
 
 function buildProductFirstCol(item, slim){
   var desc = item.descricao.split('-')[0];

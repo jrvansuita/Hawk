@@ -52,9 +52,11 @@
 }
 
 .sub-menu {
-  position: relative;
+  position: fixed;
   width: 100%;
+  top: 50px;
   text-align: center;
+  z-index: 2;
   display: flex;
   background-color: #009587;
 }

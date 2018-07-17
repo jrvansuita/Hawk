@@ -16,23 +16,29 @@ module.exports = {
     getSchedules([11, 13, 17]).forEach((rule) => {
       schedule.scheduleJob(rule, function(fireDate) {
         console.log('This job was supposed to run at ' + fireDate + ', but actually ran at ' + new Date());
-        runJobs();
+        runJobsInvoice();
       });
     });
 
     if (runNow)
-      runJobs();
+      runJobsInvoice();
   },
 
-  run(onFinished) {
-    runJobs(onFinished);
+  runInvoice(onFinished) {
+    runJobsInvoice(onFinished);
+  },
+
+  runPicking(onFinished) {
+    global.staticPickingList = [];
+    onFinished();
   }
+
 };
 
 
 
 
-function runJobs(onFinished) {
+function runJobsInvoice(onFinished) {
   if (global.jobsRunning) {
     if (onFinished)
       onFinished(false);
@@ -70,27 +76,3 @@ function getSchedules(hours) {
 
   return rules;
 }
-
-
-// function teste() {
-//   salesDb.find({
-//     'billingDate': {
-//       $gte: Dat.today().withoutTime(),
-//       $lte: Dat.today().withoutTime()
-//     }
-//   }, function(err, docs) {
-//     var s = '';
-//     docs.forEach(function(item) {
-//       s += item.number + ';' + item.value + '\n';
-//     });
-//
-//     var fs = require('fs');
-//     fs.writeFile(__dirname + "/test.csv", s, function(err) {
-//       if (err) {
-//         return console.log(err);
-//       }
-//
-//       console.log("The file was saved!");
-//     });
-//   });
-// }
