@@ -66,19 +66,23 @@
 
 
             <%
-            upcoming.forEach(function(preview){
+            upcoming.forEach(function(preview){  
               %>
 
               <div class="shadow label mini-item solved">
 
                 <table width="100%">
                   <tr>
+                    <td rowspan="2" style="max-width: 38px;">
+                        <img class="circle shadow box-img" src="/img/transport/<%=preview.transport.toLowerCase()%>.png" onerror="this.src='/img/box.png'" />
+                    </td>
+
                     <td><span class="pick-value green-title"><%=preview.numeroPedido %></span></td>
-                    <td><span class="pick-value"><%=preview.transport%></span></td>
+                    <td><span class="pick-value"><%=preview.itemsQuantity %> Itens</span></td>
                     <td><span class="pick-value" style="float:right"><%= Dat.format(new Date(preview.data))%></span></td>
                   </tr>
                   <tr>
-                    <td><span class="pick-value"><%=preview.itemsQuantity %> Itens</span></td>
+                    <td><span class="pick-value"><%=preview.transport%></span></td>
                     <td><span class="pick-value"></span></td>
                     <td><span class="pick-value" style="float:right"><%=Num.money(preview.totalProdutos) %></span></td>
                   </tr>

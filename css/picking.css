@@ -131,7 +131,7 @@ table{
   top: -10%;
   bottom: 0;
   margin: auto;
-  position:absolute;
+  position:fixed;
 }
 
 .hover-pending-item:hover{
@@ -369,7 +369,7 @@ tr.row-padding td{
 }
 
 .modal{
-  position: absolute;
+  position: fixed;
   width: 100%;
   background-color: rgba(0,0,0,.6);
   height: 100%;
@@ -406,4 +406,10 @@ tr.row-padding td{
   transform: scale(1.2);
   cursor: pointer;
   border-radius: 50%;
+}
+
+.box-img{
+  width: 40px;
+height: 40px;
+padding: 1px;
 }
