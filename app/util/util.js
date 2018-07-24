@@ -23,7 +23,7 @@ var Util = {
 
     return arrItem ? arrItem.getBars() : [];
   },
-  
+
   selectContent: function(element) {
     var range = document.createRange();
     range.selectNodeContents(element);
@@ -48,6 +48,10 @@ var Util = {
     }
 
     return document.execCommand('copy');
+  },
+
+  isTrueStr: function(val){
+    return val == true || val == "true";
   }
 
 

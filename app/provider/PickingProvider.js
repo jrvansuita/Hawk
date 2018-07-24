@@ -158,6 +158,7 @@ module.exports = {
 
   _solvingPendingSaleInternal(pending, callback){
     pending.solving = true;
+    delete pending.solved;
     pending.updateDate = new Date();
     Pending.upsert(Pending.getKeyQuery(pending.number), pending, function(err, doc){
       updatePendingSale(pending);

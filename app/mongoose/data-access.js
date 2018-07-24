@@ -84,6 +84,7 @@ module.exports = class DataAccess {
 
   //Upsert using provided query and data
   static upsert(query, data, callback) {
+    delete data.__v;
     this.staticAccess().findOneAndUpdate(query, data, {
       upsert: true
     }, (err, doc) => {
@@ -94,6 +95,7 @@ module.exports = class DataAccess {
 
   //Update using provided query and data
   static updateAll(query, data, callback) {
+    delete data.__v;
     this.staticAccess().update(query, data, {
       multi: true
     }, (err, doc) => {
@@ -129,6 +131,7 @@ module.exports = class DataAccess {
 
   //Inserts the object or update based on the primary key
   upsert(callback) {
+    delete this.__v;
     this.classAccess().findOneAndUpdate(this.getPKQuery(), this, {
       upsert: true
     }, (err, doc) => {

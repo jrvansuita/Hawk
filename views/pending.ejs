@@ -1,0 +1,71 @@
+<html>
+<% include menu %>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="/css/picking.css">
+  <script type="text/javascript" src="/control/picking-pendings.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/libs/material-switch.css">
+</head>
+
+<body>
+  <% include picking-menu %>
+
+  <script>
+  window.pendingSales = <%- JSON.stringify(pendingSales || null) %>
+  window.wideOpen = <%- wideOpen %>
+  </script>
+
+  <%
+  if (wideOpen){
+    var open = [];
+    var solving = [];
+    var solved = [];
+
+    pendingSales.forEach(function(pending){
+      if (!Util.isTrueStr(pending.solving) && !Util.isTrueStr(pending.solved)){
+        open.push(pending);
+      }
+
+      if (Util.isTrueStr(pending.solved)){
+        solved.push(pending);
+      }
+
+      if (Util.isTrueStr(pending.solving) && !Util.isTrueStr(pending.solved)){
+        solving.push(pending);
+      }
+
+    });
+
+  }
+  %>
+
+
+  <div class="main-content no-scroll" style="padding-top:15px;">
+    <% if (wideOpen){%>
+      <% pendingSales = open;
+         var label = 'Não Atendido';
+         var topClass = 'red-top';
+      %>
+      <% include picking-pendings %>
+
+      <% pendingSales =solving
+         var label = 'Em Atendimento';
+         var topClass = 'orange-top';
+      %>
+      <% include picking-pendings %>
+
+      <% pendingSales =solved
+         var label = 'Resolvido';
+         var topClass = 'green-top';
+      %>
+      <% include picking-pendings %>
+    <%}else{%>
+      <% include picking-pendings %>
+    <%}%>
+
+
+  </div>
+
+
+</body>
+</html>

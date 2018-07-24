@@ -174,6 +174,13 @@ app.get('/invoice/achievements', (req, res) => {
       });
     });
 
+    app.get(['/pending'], (req, res) => {
+      res.render('pending',{
+        wideOpen : true,
+        pendingSales: pickingProvider.pendingSales()});
+    });
+
+
     app.get('/picking-sale', (req, res) => {
       try {
         pickingProvider.handle(req.query.userid, (result) => {
@@ -265,6 +272,7 @@ app.get('/invoice/achievements', (req, res) => {
         });
       });
     });
+
 
 
 

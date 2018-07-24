@@ -1,0 +1,62 @@
+
+
+
+  <div class="col pending-sales">
+
+    <div class="pick-box shadow pending-box <%= typeof topClass == "undefined" ? 'red-top' : topClass %>">
+      <div class="pick-header" style="padding-right: 18px;">
+        <span class="label header-title"><%= typeof label == "undefined" ? 'Pendências' :  label %></span>
+        <span class="label header-count green-title pending-count" data-count="<%=pendingSales.length%>"><%=pendingSales.length%> </span>
+      </div>
+
+
+      <%if (pendingSales.length === 0){
+        %><span class="pick-hint">Nenhuma pendência a resolver</span>
+        <%
+      }%>
+
+      <div class="pending-inner">
+        <%
+        pendingSales.forEach(function(pending){
+          var sale = pending.sale;
+          %>
+          <div class="modal-holder">
+            <div class="shadow label mini-item clickable-mini-item pending-item <%= Util.isTrueStr(pending.solved) ? 'solved' : Util.isTrueStr(pending.solving) ? 'solving' : 'not-solved'%>"  data-sale="pending-<%=sale.numeroPedido%>">
+
+              <table width="100%">
+                <tr>
+                  <td rowspan="2" style="max-width: 38px;">
+                    <label for="pending-checker-<%=sale.numeroPedido%>" class="label-for-avatar">
+                      <input type="checkbox" id="pending-checker-<%=sale.numeroPedido%>" class="checkable-avatar" style="display:none"/>
+                      <img class="circle shadow avatar-img mini-avatar" src="<%=sale.pickUser.avatar%>" data-src="<%=sale.pickUser.avatar%>"onerror="this.src='/img/avatar/default.jpg'" />
+                    </label>
+                  </td>
+                  <td><span class="pick-value green-title copiable"><%=sale.numeroPedido %></span>
+
+                  </td>
+                  <td><span class="pick-value"><%=sale.transport %></span></td>
+                  <td><span class="pick-value copiable" style="float:right"><%=sale.numeroDaOrdemDeCompra%></span></td>
+                </tr>
+                <tr>
+                  <td><span class="pick-value"><%=(sale.pickUser.name ? sale.pickUser.name.split(" ")[0] : 'Desconhecido') %></span></td>
+                  <td><span class="pick-value" ><%= Dat.format(new Date(sale.data))%></span></td>
+                  <td>
+                    <span class="pick-value circle-pending " style="float:right"><%=sale.items.filter((i)=>{
+                      return i.pending;
+                    }).length %></span>
+
+                    <%var difDays = Dat.daysDif(new Date(sale.data), new Date()) %>
+                    <span class="pick-value <%=difDays >=5 ? 'pulse' : '' %>" style="float:right"><%=difDays + ' Dias'%></span>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <%
+        });
+        %>
+
+      </div>
+
+    </div>
+  </div>
