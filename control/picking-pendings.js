@@ -85,7 +85,7 @@ function buildPendingItemsViews(el, pending){
 
   last.append($('<td>').attr('colspan','2').append(getFirstBottomBarOptions(pending)));
   last.append($('<td>').attr('colspan','1').append(getMiddleBottomBarOptions(pending)));
-  last.append($('<td>').attr('colspan','1').append(getLastBottomBarOption($(this), pending)));
+  last.append($('<td>').attr('colspan','1').append(getLastBottomBarOption(pending)));
   table.append(last);
 }
 
@@ -123,9 +123,9 @@ function getMiddleBottomBarOptions(pending){
   }
 }
 
-function getLastBottomBarOption(buttom, pending){
+function getLastBottomBarOption(pending){
   var solve = $('<label>').addClass('button shadow solve-pending').append(getPendingItemButtonLabel(pending)).click(function(){
-    onPendingItemButtonClicked(buttom, pending);
+    onPendingItemButtonClicked($(this), pending);
   });
 
   solve.css('visibility', 'hidden');
