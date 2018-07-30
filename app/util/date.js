@@ -24,7 +24,15 @@ var Dat = {
   },
 
   hoursDif(date1, date2) {
-    return Math.abs(date1 - date2) / 36e5;
+    var dt1 = new Date(date1);
+    var dt2 = new Date(date2);
+
+    dt1 = Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate(), dt1.getUTCHours(), dt1.getMinutes());
+    dt2 = Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate(), dt2.getHours(), dt2.getMinutes());
+
+    var dif = Math.abs(dt1 - dt2) / 36e5;
+
+    return dif;
   },
 
   rollDay(date, n) {

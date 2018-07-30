@@ -130,6 +130,8 @@ function getLastBottomBarOption(pending){
 
   solve.css('visibility', 'hidden');
 
+  console.log(pending);
+
   if(isBlocked(pending)){
     solve.addClass('blocked');
   }
@@ -406,5 +408,5 @@ function updatePendingSales(pending){
 }
 
 function isBlocked(pending){
-  return Dat.hoursDif(pending.updateDate) <= 1;
+  return Dat.hoursDif(pending.updateDate, new Date()) <= 1;
 }

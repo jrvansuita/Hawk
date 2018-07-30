@@ -312,7 +312,7 @@ tr.row-padding td{
 }
 
 .blocked{
-  background-color: #6a6d6d;
+  background-color: #6a6d6d !important;
 
 }
 
