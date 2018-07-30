@@ -123,6 +123,9 @@ module.exports = {
   storePendingSale(sale, callback){
     var pending = new Pending(sale.numeroPedido, sale);
 
+    console.log(pending);
+    console.log(pending.updateDate);
+
     pending.upsert(()=>{
       //Remove From picking List
       global.staticPickingList = global.staticPickingList.filter((i)=>{
@@ -140,6 +143,7 @@ module.exports = {
 
       //Add new pending sale
       global.staticPendingSales.push(pending);
+      console.log(pending.updateDate);
       callback();
     });
   },

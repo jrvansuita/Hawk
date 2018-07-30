@@ -8,6 +8,9 @@ module.exports = class Pending extends DataAccess {
     this.solved = false;
     this.sale = sale == undefined ? {} : sale;
     this.updateDate = Dat.now();
+    console.log('Testeee');
+    console.log(Dat.now());
+    console.log(new Date());
     this.sendEmail = false;
   }
 

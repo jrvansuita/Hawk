@@ -130,8 +130,6 @@ function getLastBottomBarOption(pending){
 
   solve.css('visibility', 'hidden');
 
-  console.log(pending.updateDate);
-
   if(isBlocked(pending)){
     solve.addClass('blocked');
   }
