@@ -311,6 +311,11 @@ tr.row-padding td{
   border-top: 3px solid #f16d6f;
 }
 
+.blocked{
+  background-color: #6a6d6d;
+
+}
+
 
 
 .print-sale{

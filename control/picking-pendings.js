@@ -130,6 +130,12 @@ function getLastBottomBarOption(pending){
 
   solve.css('visibility', 'hidden');
 
+  console.log(pending.updateDate);
+
+  if(isBlocked(pending)){
+    solve.addClass('blocked');
+  }
+
   if (showOption(pending)){
     solve.css('visibility', 'visible');
   }
@@ -165,7 +171,9 @@ function getEmailImage(){
 }
 
 function onPendingItemButtonClicked(button, pending){
-  if (isTrueStr(pending.solved)){
+  if (isBlocked(pending)){
+
+  }else if (isTrueStr(pending.solved)){
     restartPendingSale(pending);
   }else if (isTrueStr(pending.solving)){
     solvedPendingSale(button,pending);
@@ -175,7 +183,9 @@ function onPendingItemButtonClicked(button, pending){
 }
 
 function getPendingItemButtonLabel(pending){
-  if (isTrueStr(pending.solved)){
+  if (isBlocked(pending)){
+    return "Bloqueado";
+  }else if (isTrueStr(pending.solved)){
     return "Reiniciar";
   }else if (isTrueStr(pending.solving)){
     return "Resolver";
@@ -395,4 +405,8 @@ function showLoadingButton(el){
 
 function updatePendingSales(pending){
   pendingSales = pendingSales.map(function(i) { return i.sale.numeroPedido == pending.sale.numeroPedido ? pending : i; });
+}
+
+function isBlocked(pending){
+  return Dat.hoursDif(pending.updateDate) <= 1;
 }

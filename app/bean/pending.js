@@ -6,8 +6,8 @@ module.exports = class Pending extends DataAccess {
     this.number = Str.def(number);
     this.solving = false;
     this.solved = false;
-    this.sale = sale == undefined ? {} : sale;  
-    this.updateDate = new Date();
+    this.sale = sale == undefined ? {} : sale;
+    this.updateDate = Dat.now();
     this.sendEmail = false;
   }
 

@@ -1,4 +1,5 @@
 var schedule;
+var lastPickingRunned = 0;
 
 module.exports = {
   schedule: function(runNow) {
@@ -29,7 +30,15 @@ module.exports = {
   },
 
   runPicking(onFinished) {
-    global.staticPickingList = [];
+    var now = new Date().getTime();
+
+    if ((global.staticPickingList.length == 0) || (lastPickingRunned + 3600000) < now){
+      lastPickingRunned = now;
+      global.staticPickingList = [];
+    }else{
+      console.log('Picking refreshed to frequently.');
+    }
+
     onFinished();
   }
 

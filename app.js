@@ -49,11 +49,7 @@ app.post('/run-jobs', (req, res) => {
     "was_running": true
   };
 
-  if (req.headers.referer.includes('picking')){
-    jobsRunner.runPicking(()=>{
-      res.status(200).send(dataResult);
-    });
-  }else{
+  if (req.headers.referer.includes('invoice')){
     jobsRunner.runInvoice((runned) => {
       dataResult.was_running = runned;
 
@@ -62,6 +58,10 @@ app.post('/run-jobs', (req, res) => {
       } else {
         res.status(201).send(dataResult);
       }
+    });
+  }else{
+    jobsRunner.runPicking(()=>{
+      res.status(200).send(dataResult);
     });
   }
 

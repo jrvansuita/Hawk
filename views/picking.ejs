@@ -75,7 +75,7 @@
                 <table width="100%">
                   <tr>
                     <td rowspan="2" style="max-width: 38px;">
-                        <img class="circle shadow box-img" src="/img/transport/<%=preview.transport ? preview.transport.toLowerCase(): ''%>.png" onerror="this.src='/img/box.png'" />
+                        <img class="circle shadow box-img" data-transp="<%=preview.transport%>" src="/img/transport/<%=preview.transport ? preview.transport.toLowerCase(): ''%>.png" onerror="this.src='/img/box.png'" />
                     </td>
 
                     <td><span class="pick-value green-title"><%=preview.numeroPedido %></span></td>
