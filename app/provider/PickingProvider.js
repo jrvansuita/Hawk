@@ -64,11 +64,14 @@ module.exports = {
   },
 
   nextSale(userId, callback) {
-    if (global.staticPickingList.length == 0) {
-      console.log(global.staticPickingList.length);
+    try{
+      if (global.staticPickingList.length == 0) {
+        throw new Error();
+      } else {
+        callback(buildResult(userId));
+      }
+    }catch(e){
       throw "Mais nenhum pedido no array de picking";
-    } else {
-      callback(buildResult(userId));
     }
   },
 
