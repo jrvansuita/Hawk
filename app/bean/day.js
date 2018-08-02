@@ -18,7 +18,7 @@ module.exports = class Day extends DataAccess {
   }
 
   static invoicePoints(count, total) {
-    return (count * total) / 10000;
+    return (count * (total/6)) / 10000;
   }
 
   //itens / itensByTime

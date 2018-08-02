@@ -130,8 +130,6 @@ function getLastBottomBarOption(pending){
 
   solve.css('visibility', 'hidden');
 
-  console.log(pending);
-
   if(isBlocked(pending)){
     solve.addClass('blocked');
   }
@@ -171,10 +169,10 @@ function getEmailImage(){
 }
 
 function onPendingItemButtonClicked(button, pending){
-  if (isBlocked(pending)){
-
-  }else if (isTrueStr(pending.solved)){
+ if (isTrueStr(pending.solved)){
     restartPendingSale(pending);
+  }else if (isBlocked(pending)){
+
   }else if (isTrueStr(pending.solving)){
     solvedPendingSale(button,pending);
   }else{
@@ -183,10 +181,10 @@ function onPendingItemButtonClicked(button, pending){
 }
 
 function getPendingItemButtonLabel(pending){
-  if (isBlocked(pending)){
-    return "Bloqueado";
-  }else if (isTrueStr(pending.solved)){
+  if (isTrueStr(pending.solved)){
     return "Reiniciar";
+  }else if (isBlocked(pending)){
+    return "Bloqueado";
   }else if (isTrueStr(pending.solving)){
     return "Resolver";
   }else{
@@ -408,5 +406,5 @@ function updatePendingSales(pending){
 }
 
 function isBlocked(pending){
-  return Dat.hoursDif(pending.updateDate, new Date()) <= 1;
+  return !isTrueStr(pending.solved) && Dat.hoursDif(pending.updateDate, new Date()) <= 1;
 }
