@@ -158,7 +158,7 @@ var selectedPendingSale;
 
 function loadSale(sale){
   if ((selectedPendingSale != sale) || !$('.opened-sale-box').is(':visible')){
-    $('.opened-sale-box').css('display','-webkit-inline-box').fadeIn(200);
+    $('.opened-sale-box').css('display','inline-flex').fadeIn(200);
 
     selectedPendingSale = sale;
     $('.sale-number').text(sale.numeroPedido);

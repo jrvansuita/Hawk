@@ -170,8 +170,8 @@ table{
 .items-holder{
   overflow-x: hidden;
   overflow-y: auto;
-  max-height: 80vh;
-  display: inline;
+  max-height: 80%;
+  display: block;
 }
 
 .small-font{
