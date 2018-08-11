@@ -32,6 +32,8 @@ app.use('/control', express.static('control'));
 app.use('/util', express.static('app/util'));
 app.use('/libs', express.static('libs'));
 
+app.use('/chart', express.static('views/chart'));
+
 
 // app.get('/', (req, res) => {
 //   res.send('This is the home');
@@ -49,8 +51,8 @@ app.post('/run-jobs', (req, res) => {
     "was_running": true
   };
 
-  if (req.headers.referer.includes('invoice')){
-    jobsRunner.runInvoice((runned) => {
+  if (req.headers.referer.includes('packing')){
+    jobsRunner.runPacking((runned) => {
       dataResult.was_running = runned;
 
       if (runned) {
@@ -96,7 +98,7 @@ app.post('/login', function(req, res) {
   });
 });
 
-app.get(['/', '/invoice', '/invoice/overview'], (req, res) => {
+app.get(['/', '/packing', '/packing/overview'], (req, res) => {
   require('./app/builder/InvoiceChartBuilder.js').buildOverview(res.locals.loggedUser.full, function(charts) {
     res.render('invoice-chart', {
       charts: charts,
@@ -106,7 +108,7 @@ app.get(['/', '/invoice', '/invoice/overview'], (req, res) => {
 });
 
 
-app.get('/invoice/by-date', (req, res) => {
+app.get('/packing/by-date', (req, res) => {
   var from = req.query.from ? new Date(parseInt(req.query.from)) : Dat.firstDayOfMonth();
   var to = req.query.to ? new Date(parseInt(req.query.to)).maxTime() : Dat.lastDayOfMonth();
 
@@ -114,13 +116,14 @@ app.get('/invoice/by-date', (req, res) => {
     res.render('invoice-chart', {
       charts: charts,
       page: req.originalUrl,
+      showCalendarFilter : true
     });
   });
 });
 
 
 
-app.get('/invoice/achievements', (req, res) => {
+app.get('/packing/achievements', (req, res) => {
   var InvoiceAchievGridBuilder = require('./app/builder/InvoiceAchievGridBuilder.js');
   var builder = new InvoiceAchievGridBuilder();
   builder.init(res.locals.loggedUser.full,
@@ -175,9 +178,11 @@ app.get('/invoice/achievements', (req, res) => {
     });
 
     app.get(['/pending'], (req, res) => {
-      res.render('pending',{
-        wideOpen : true,
-        pendingSales: pickingProvider.pendingSales()});
+      pickingProvider.onPending(()=>{
+        res.render('pending',{
+          wideOpen : true,
+          pendingSales: pickingProvider.pendingSales()});
+      });
     });
 
 
@@ -269,9 +274,27 @@ app.get('/invoice/achievements', (req, res) => {
         res.render('picking-chart', {
           charts: charts,
           page: req.originalUrl,
+          showCalendarFilter : true
         });
       });
     });
+
+  app.get(['/profile/performance'], (req, res) => {
+   var from = req.query.from ? new Date(parseInt(req.query.from)) : Dat.firstDayOfMonth();
+   var to = req.query.to ? new Date(parseInt(req.query.to)).maxTime() : Dat.lastDayOfMonth();
+   var userId = req.query.userid || req.session.loggedUser.id;
+
+   require('./app/provider/ProfilePerformanceProvider.js').onUserPerformance(from, to, userId, function(user, charts) {
+     res.render('profile-performance', {
+       user: user,
+       charts: charts,
+       showCalendarFilter : true,
+       hideEmptyCharts : true
+     });
+   });
+  });
+
+
 
 
 

@@ -7,23 +7,32 @@ module.exports = class DaysChartProvider {
     this.data = {};
     this.type = type;
     this.callback = callback;
+    this.groupBy = 'userId';
   }
 
   onFinished() {
     this.callback(this.data);
   }
 
-  get(from, to) {
+  getDaysByUser(from, to, userId) {
+    this.groupBy = 'date';
+    this.get(from, to, userId);
+  }
+
+
+  get(from, to, userId) {
     var _self = this;
 
-    Day.find(this.buildQuery(from, to), (err, items) => {
+    Day.find(this.buildQuery(from, to, userId), (err, items) => {
       _self.handle(items, 0);
     });
   }
 
 
-  buildQuery(from, to) {
-    return {
+
+
+  buildQuery(from, to, userId) {
+    var query = {
       'type': this.type,
       'date': {
         $gte: from.withoutTime(),
@@ -31,16 +40,17 @@ module.exports = class DaysChartProvider {
       }
     };
 
+    if (userId > 0){
+      query.userId = userId;
+    }
+
+    return query;
+
   }
 
   handle(docs, index) {
     if (docs.length > 0) {
-      var item = docs[index];
-
-      var user = UsersProvider.getDefault(item.userId);
-
-      item.userName = user.name;
-      item.userImg = user.avatar;
+      var item = this.putGroupInfo(docs[index]);
       this.handleItem(item);
 
       if (index < docs.length - 1) {
@@ -54,11 +64,28 @@ module.exports = class DaysChartProvider {
   }
 
   handleItem(item) {
-    if (this.data[item.userId]) {
-      this.data[item.userId].total += item.total;
-      this.data[item.userId].count += item.count;
+    if (this.data[this.getGroupByValue(item)]) {
+      this.data[this.getGroupByValue(item)].total += item.total;
+      this.data[this.getGroupByValue(item)].count += item.count;
     } else {
-      this.data[item.userId] = item;
+      this.data[this.getGroupByValue(item)] = item;
     }
+  }
+
+  getGroupByValue(item){
+    return item[this.groupBy];
+  }
+
+  putGroupInfo(item){
+    if (this.groupBy === 'userId'){
+      var user = UsersProvider.getDefault(item.userId);
+      item.label = user.name;
+      item.img = user.avatar;
+      item.tag = user.id;
+    }else if (this.groupBy === 'date'){
+      item.label = Dat.format(item.date).split('/')[0];
+    }
+
+    return item;
   }
 };

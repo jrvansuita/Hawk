@@ -26,7 +26,6 @@ module.exports = class Day extends DataAccess {
     return ((total) / (count/total)) * 4;
   }
 
-
   static getKey() {
     return ['userId', 'date', 'type'];
   }

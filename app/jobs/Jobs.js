@@ -17,16 +17,16 @@ module.exports = {
     getSchedules([11, 13, 17]).forEach((rule) => {
       schedule.scheduleJob(rule, function(fireDate) {
         console.log('This job was supposed to run at ' + fireDate + ', but actually ran at ' + new Date());
-        runJobsInvoice();
+        runJobsPacking();
       });
     });
 
     if (runNow)
-      runJobsInvoice();
+      runJobsPacking();
   },
 
-  runInvoice(onFinished) {
-    runJobsInvoice(onFinished);
+  runPacking(onFinished) {
+    runJobsPacking(onFinished);
   },
 
   runPicking(onFinished) {
@@ -47,7 +47,7 @@ module.exports = {
 
 
 
-function runJobsInvoice(onFinished) {
+function runJobsPacking(onFinished) {
   if (global.jobsRunning) {
     if (onFinished)
       onFinished(false);
@@ -57,7 +57,7 @@ function runJobsInvoice(onFinished) {
     var SaleJob = require('../jobs/JobSales.js');
     //Update the local databse with the lasts sales order
     SaleJob.run(function() {
-      //Handle the invoice by days
+      //Handle the Packing by days
       require('../jobs/JobDays.js').run(() => {
         global.jobsRunning = false;
 

@@ -77,12 +77,12 @@
 .chart-holder {
   position: relative;
   height: 290px;
-  width: fit-content;
   margin-left: auto;
   margin-right: auto;
   display: block;
-  min-width: 500px;
-  overflow: auto;
+  max-width: 98%;
+  min-width: 600px;
+  overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
   overflow-x: auto;

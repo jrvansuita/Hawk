@@ -20,8 +20,8 @@ module.exports = class Chart {
     return maxBarValue;
   }
 
-  addItem(label, imgName) {
-    var item = new ChartItem(this, label, imgName);
+  addItem(label, imgName, tag) {
+    var item = new ChartItem(this, label, imgName, tag);
     this.items.push(item);
     return item;
   }
@@ -38,10 +38,11 @@ module.exports = class Chart {
 };
 
 class ChartItem {
-  constructor(parent, label, imgName) {
+  constructor(parent, label, imgName, tag) {
     this.parent = parent;
     this.label = label;
     this.imgName = imgName;
+    this.tag = tag;
     this.bars = [];
   }
 

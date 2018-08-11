@@ -116,29 +116,32 @@ function getMiddleBottomBarOptions(pending){
     }
 
     return "";
-  }else if (isTrueStr(pending.sendEmail) ){
-    return getEmailImage();
   }else{
     return "";
   }
 }
 
 function getLastBottomBarOption(pending){
-  var solve = $('<label>').addClass('button shadow solve-pending').append(getPendingItemButtonLabel(pending)).click(function(){
-    onPendingItemButtonClicked($(this), pending);
-  });
+  var div = $('<div>');
 
-  solve.css('visibility', 'hidden');
-
-  if(isBlocked(pending)){
-    solve.addClass('blocked');
+  if (isTrueStr(pending.sendEmail) ){
+    div.append(getEmailImage());
   }
 
   if (showOption(pending)){
-    solve.css('visibility', 'visible');
+
+    var solve = $('<label>').addClass('button shadow solve-pending').append(getPendingItemButtonLabel(pending)).click(function(){
+      onPendingItemButtonClicked($(this), pending);
+    });
+
+    if(isBlocked(pending)){
+      solve.addClass('blocked');
+    }
+
+    div.prepend(solve);
   }
 
-  return solve;
+  return div;
 }
 
 function getEmailSwitch(){
@@ -165,11 +168,12 @@ function showOption(pending){
 function getEmailImage(){
   var img = $('<img>').addClass('icon').attr('src','/img/envelop.png');
   var span = $('<span>').addClass('right').append(img);
+  span.css('margin','10px 3px');
   return span;
 }
 
 function onPendingItemButtonClicked(button, pending){
- if (isTrueStr(pending.solved)){
+  if (isTrueStr(pending.solved)){
     restartPendingSale(pending);
   }else if (isBlocked(pending)){
 

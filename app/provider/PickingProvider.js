@@ -46,6 +46,16 @@ module.exports = {
     }
   },
 
+  onPending(callback){
+    if (global.staticPendingSales.length == 0){
+      loadAllPendingSales(()=>{
+        callback();
+      });
+    }else{
+      callback();
+    }
+  },
+
   getTransportList() {
     return global.transportList;
   },

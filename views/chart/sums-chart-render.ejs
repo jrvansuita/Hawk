@@ -1,0 +1,9 @@
+<%if (Object.keys(chart.getSums()).length > 0) { %>
+  <div class="chart-sum">
+    <% Object.keys(chart.getSums()).forEach(function(key){
+      %>
+      <label class="chart-sum-item circle shadow" style="background-color: #<%=chart.getSums()[key].color%>"> <%=Num.format(chart.getSums()[key].value)%> </label>
+      <%})%>
+
+  </div>
+  <%}%>

@@ -1,0 +1,9 @@
+<div class="bars-holder">
+  <% item.getBars().forEach(function(bar){%>
+    <div class="bar shadow grow-bar" data-height="<%=bar.getHeight()%>" data-name="<%=bar.name%>" style="background-color: #<%=bar.barColor%>">
+      <span class="bar-value"><%=Num.format(bar.getValue());%></span>
+    </div>
+
+  <%}); %>
+
+</div>

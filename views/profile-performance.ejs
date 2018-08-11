@@ -1,0 +1,37 @@
+<html>
+<% include menu %>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="/css/charts.css">
+  <link rel="stylesheet" type="text/css" href="/css/performance.css">
+  <script type="text/javascript" src="/visual/file-loader.js"></script>
+  <script type="text/javascript" src="/visual/date-picker.js"></script>
+  <script type="text/javascript" src="/control/chart-page.js"></script>
+</head>
+
+<body>
+  <div class="main-content">
+    <div class="panels">
+      <div class="left-panel shadow">
+
+
+        <div class="avatar-holder">
+          <img class="avatar-img circle shadow zoomed-avatar" src="<%=user.avatar%>" onerror="this.src='/img/avatar.png'" />
+          <span class="label shadow avatar-name zoomed-avatar-name"><%=user.name%></span>
+        </div>
+
+
+
+      </div>
+
+      <div class="main-panel" >
+         <%include group-chart-render%>
+
+      </div>
+    </div>
+
+  </div>
+
+</body>
+
+</html>

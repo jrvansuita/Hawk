@@ -1,12 +1,12 @@
 module.exports = {
 
-  invoice_today: 'Faturamento Hoje',
-  invoice_yesterday: 'Faturamento Ontem',
-  invoice_current_week: 'Faturamento da semana atual',
-  invoice_last_week: 'Faturamento da última semana',
-  invoice_last_month: 'Faturamento do último mês',
-  invoice_current_month: 'Faturamento do mês atual',
-  invoice_by_date: 'Faturamento por período',
+  invoice_today: 'Packing Hoje',
+  invoice_yesterday: 'Packing Ontem',
+  invoice_current_week: 'Packing da semana atual',
+  invoice_last_week: 'Packing da última semana',
+  invoice_last_month: 'Packing do último mês',
+  invoice_current_month: 'Packing do mês atual',
+  invoice_by_date: 'Packing por período',
 
   picking_today: 'Picking Hoje',
   picking_yesterday: 'Picking Ontem',
