@@ -340,7 +340,11 @@ tr.row-padding td{
 .scrollable-table{
   display: block;
   width: 100%;
+  overflow: hidden;
   max-height: 80%;
+}
+
+.scrollable-table:hover{
   overflow-y: overlay;
 }
 
@@ -349,13 +353,16 @@ tr.row-padding td{
   padding-right: 5px;
 }
 
-
 .pending-inner{
   display: block;
   max-height: 80%;
-  overflow-y: overlay;
+  overflow-y: hidden;
   padding-right: 12px;
   padding-top: 5px;
+}
+
+.pending-inner:hover{
+  overflow-y: overlay;
 }
 
 .circle-pending{
