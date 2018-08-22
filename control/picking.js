@@ -12,7 +12,10 @@ $(document).ready(() => {
       var diftime = parseInt($(item).attr("diftime"));
       diftime+= 1000;
 
-      $(item).text((diftime/1000).toString().toMMSS());
+      if (diftime > 0){
+        $(item).text((diftime/1000).toString().toMMSS());
+      }
+
       $(item).attr('diftime', diftime);
     });
   }, 1000);
@@ -72,20 +75,23 @@ $(document).ready(() => {
 
 
   $('.pending-button').click(function(){
-    $.ajax({
-      url: "/picking-pending",
-      type: "post",
-      data: {
-        pendingSale: selectedPendingSale
-      },
-      success: function(response) {
-        window.location.reload();
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        console.log(jqXHR);
-        $('.error').text(jqXHR.responseText).fadeIn().delay(1000).fadeOut();
-      }
-    });
+    if (checkIsLocalFilled(true)){
+      $.ajax({
+        url: "/picking-pending",
+        type: "post",
+        data: {
+          pendingSale: selectedPendingSale,
+          local: $('#pending-local').val()
+        },
+        success: function(response) {
+          window.location.reload();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          console.log(jqXHR);
+          $('.error').text(jqXHR.responseText).fadeIn().delay(1000).fadeOut();
+        }
+      });
+    }
   });
 
   $('.done-sale-item').click(function(e){
@@ -205,3 +211,24 @@ String.prototype.toMMSS = function() {
   }
   return minutes + ':' + seconds;
 };
+
+
+function checkIsLocalFilled(shake){
+  var isFilled = $('#pending-local').val().length > 0;
+
+  if (shake && !isFilled){
+     $('#pending-local').shake({
+       interval: 80,
+       distance: 8,
+       times: 4
+     });
+
+     $('#pending-local').addClass("pending-local-error").delay(1000).queue(function(next){
+         $(this).removeClass("pending-local-error");
+         next();
+     });
+
+  }
+
+  return isFilled;
+}

@@ -52,7 +52,9 @@ var Util = {
 
   isTrueStr: function(val){
     return val == true || val == "true";
-  }
+  },
+
+
 
 
 };

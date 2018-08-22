@@ -169,6 +169,7 @@ table{
 
 .items-holder{
   overflow-x: hidden;
+  width: 100%;
   overflow-y: auto;
   max-height: 80%;
   display: block;
@@ -256,14 +257,12 @@ tr.row-padding td{
   opacity: 0.8;
   cursor: pointer;
 }
+.pending-button-holder{
+  display: none;
+}
 
 .pending-button{
-  display: none;
-  width: 40%;
   float: right;
-  margin-right: 8%;
-  text-align: center;
-  margin-left: auto;
   margin-top: -5px;
 }
 
@@ -422,6 +421,38 @@ tr.row-padding td{
 
 .box-img{
   width: 40px;
-height: 40px;
-padding: 1px;
+  height: 40px;
+  padding: 1px;
+}
+
+
+.pending-local{
+  outline: none;
+  height: 26px;
+  width: 90px;
+  display: block;
+  margin-top: -5px;
+  border: 2px #e4e4e4;
+  border-style: none none solid none;
+}
+
+.pending-local:focus{
+  border: 2px #1c796b;
+  border-style: none none solid none;
+}
+
+.pending-local-error{
+  border: 2px #e25952;
+  border-style: none none solid none;
+}
+
+
+.local-label{
+  border-radius: 2px;
+  background-color:#9e9a9a;
+  color: white;
+  padding: 3px 8px;
+  margin-top: 4px;
+  display: -webkit-inline-box;
+  font-size: 10px;
 }

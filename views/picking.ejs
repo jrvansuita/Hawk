@@ -5,10 +5,13 @@
   <link rel="stylesheet" type="text/css" href="/css/picking.css">
   <script type="text/javascript" src="/control/picking.js"></script>
   <script type="text/javascript" src="/control/picking-pendings.js"></script>
+<script type="text/javascript" src="/visual/shake.js"></script>
+
   <link rel="stylesheet" type="text/css" href="/css/libs/material-input.css">
   <link rel="stylesheet" type="text/css" href="/css/libs/material-select.css">
   <link rel="stylesheet" type="text/css" href="/css/libs/material-dropdown.css">
   <link rel="stylesheet" type="text/css" href="/css/libs/material-switch.css">
+
 </head>
 
 <body>
@@ -19,7 +22,7 @@
   window.printPickingUrl = "<%- printPickingUrl || "undefined" %>"
   </script>
 
-<% include picking-menu %>
+  <% include picking-menu %>
   <div class="main-content no-scroll">
 
 
@@ -75,7 +78,7 @@
                 <table width="100%">
                   <tr>
                     <td rowspan="2" style="max-width: 38px;">
-                        <img class="circle shadow box-img" data-transp="<%=preview.transport%>" src="/img/transport/<%=preview.transport ? preview.transport.toLowerCase(): ''%>.png" onerror="this.src='/img/box.png'" />
+                      <img class="circle shadow box-img" data-transp="<%=preview.transport%>" src="/img/transport/<%=preview.transport ? preview.transport.toLowerCase(): ''%>.png" onerror="this.src='/img/box.png'" />
                     </td>
 
                     <td><span class="pick-value green-title"><%=preview.numeroPedido %></span></td>
@@ -152,11 +155,16 @@
 
           <div class="pick-box shadow orange-top">
             <div class="pick-header">
+
               <span class="label header-title">Pedido</span>
               <span class="label header-count green-title sale-number"></span>
-              <label class="button pending-button shadow">Pendência</label>
+
             </div>
 
+            <div class="pending-button-holder">
+              <label class="button pending-button shadow">Pendência</label>
+              <input type="text" id="pending-local" class="pending-local" placeholder="Localização"/>
+            </div>
 
             <div class="items-holder">
               <table id="opened-sale" width="100%">
@@ -180,10 +188,7 @@
                     </tr>
 
                   </table>
-
                 </div>
-
-
 
               </div>
             </div>

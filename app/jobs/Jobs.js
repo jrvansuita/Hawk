@@ -32,7 +32,7 @@ module.exports = {
   runPicking(onFinished) {
     var now = new Date().getTime();
 
-    if ((global.staticPickingList.length == 0) || (lastPickingRunned + 3600000) < now){
+    if ((global.staticPickingList.length <= 50) || (lastPickingRunned + 3600000) < now){
       lastPickingRunned = now;
       global.staticPickingList = [];
     }else{

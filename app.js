@@ -199,7 +199,7 @@ app.get('/packing/achievements', (req, res) => {
 
     app.post('/picking-pending', (req, res) => {
       try {
-        pickingProvider.storePendingSale(req.body.pendingSale, (printUrl) => {
+        pickingProvider.storePendingSale(req.body.pendingSale, req.body.local, (printUrl) => {
           res.status(200).send(printUrl);
         });
       } catch (e) {

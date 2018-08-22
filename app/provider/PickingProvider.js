@@ -27,13 +27,29 @@ module.exports = {
     selectedTransp = selected;
 
     if (global.staticPickingList.length == 0) {
+
+      console.log('Loading pendings');
+      Dat.logTime();
+
       loadAllPendingSales(()=>{
+
+        console.log('Getting Pickings');
+        Dat.logTime();
+
         EccosysCalls.getPickingSales((data) => {
           try{
+
+            console.log('Handle Lists');
+            Dat.logTime();
+
             global.staticPickingList = JSON.parse(data);
             removePendingSalesFromPickingSalesList();
             handleAllDonePickingSales();
             checkIsInDevMode();
+
+            console.log('Loading Items');
+            Dat.logTime();
+
             loadSaleItems(0, onFinished);
           }catch(e){
             onFinished();
@@ -68,6 +84,7 @@ module.exports = {
         //In progress picking
         this.endPicking(userId, callback);
       } else {
+        console.log('--- Vai iniciar um novo picking ---');
         this.nextSale(userId, callback);
       }
     }
@@ -130,8 +147,10 @@ module.exports = {
     return global.staticDonePicking;
   },
 
-  storePendingSale(sale, callback){
-    var pending = new Pending(sale.numeroPedido, sale);
+  storePendingSale(sale, local, callback){
+    sale = removeUnpendingItems(sale);
+
+    var pending = new Pending(sale.numeroPedido, sale, local);
 
     pending.upsert(()=>{
       //Remove From picking List
@@ -198,15 +217,11 @@ module.exports = {
         return i.number != pending.number;
       });
 
-      delete pending.solved;
-      delete pending.solving;
-      delete pending.updateDate;
-      delete pending.sale.pending;
-
-      pending.sale.doNotCount = true;
-
-      initSalePicking(pending.sale, pending.sale.pickUser.id);
-      callback(getPrintUrl(pending.sale));
+     callLoadSaleItems(pending.sale, function(sale, items){
+        sale.doNotCount = true;
+        initSalePicking(sale, pending.sale.pickUser.id);
+        callback(getPrintUrl(sale));
+     });
     }
   },
 
@@ -244,7 +259,8 @@ function buildResult(userId) {
   //Get the next sale from list
   var sale = getNextSale();
   removeFromPickingList(sale);
-  initSalePicking(sale, userId);
+  initSalePicking(sale, userId, true);
+  console.log('--- Iniciou picking para ' + UsersProvider.get(userId).name  + ' pedido ' + sale.numeroPedido + ' ---');
   return getPrintUrl(sale);
 }
 
@@ -269,11 +285,7 @@ function loadSaleItems(index, callback) {
       if (index == previewCount) {
         callback();
       }
-    } /*else if (index == currentLength) {
-      if (currentLength <= previewCount){
-      callback();
     }
-  }*/
   //No Sales to pick
   else if (currentLength == 0){
     callback();
@@ -319,8 +331,14 @@ function removeFromPickingList(inputSale){
   global.staticPickingList = global.staticPickingList.filter(sale => sale.id != inputSale.id);
 }
 
-function initSalePicking(sale, userId){
-  sale.begin = new Date();
+function initSalePicking(sale, userId, addPrintTime){
+  var begin = new Date();
+
+  if (addPrintTime){
+    begin.setSeconds(begin.getSeconds() + 10);
+  }
+
+  sale.begin = begin;
   sale.end = null;
   sale.pickUser = UsersProvider.get(userId);
   global.inprogressPicking[userId] = sale;
@@ -367,4 +385,12 @@ function checkIsInDevMode(){
       global.staticPickingList.splice(10);
     }
   }
+}
+
+
+function removeUnpendingItems(sale){
+  sale.items = sale.items.filter(function (item){
+    return item.pending !== undefined && item.pending.toString() == "true";
+  });
+  return sale;
 }

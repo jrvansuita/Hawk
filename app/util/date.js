@@ -119,9 +119,19 @@ var Dat = {
   monthDesc(index) {
     var m = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
     return m[index];
+  },
+
+  logTime: function(){
+    var time = last || new Date();
+    var now = new Date();
+
+    console.log((now - time)/1000 + 's | ' + now.getMinutes() + ":" + now.getSeconds());
+
+    last = now;
   }
 };
 
+var last;
 
 function fmt(date) {
   var formated = {
