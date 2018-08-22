@@ -28,27 +28,16 @@ module.exports = {
 
     if (global.staticPickingList.length == 0) {
 
-      console.log('Loading pendings');
-      Dat.logTime();
-
       loadAllPendingSales(()=>{
-
-        console.log('Getting Pickings');
-        Dat.logTime();
 
         EccosysCalls.getPickingSales((data) => {
           try{
-
-            console.log('Handle Lists');
-            Dat.logTime();
 
             global.staticPickingList = JSON.parse(data);
             removePendingSalesFromPickingSalesList();
             handleAllDonePickingSales();
             checkIsInDevMode();
 
-            console.log('Loading Items');
-            Dat.logTime();
 
             loadSaleItems(0, onFinished);
           }catch(e){
@@ -84,7 +73,6 @@ module.exports = {
         //In progress picking
         this.endPicking(userId, callback);
       } else {
-        console.log('--- Vai iniciar um novo picking ---');
         this.nextSale(userId, callback);
       }
     }
@@ -112,6 +100,8 @@ module.exports = {
 
     //Done picking
     global.staticDonePicking.push(sale);
+
+    console.log('[Fechou] picking ' + UsersProvider.get(userId).name  + ' - ' + sale.numeroPedido);
 
     if(sale.doNotCount){
       callback("end-picking-" + sale.numeroPedido);
@@ -260,7 +250,7 @@ function buildResult(userId) {
   var sale = getNextSale();
   removeFromPickingList(sale);
   initSalePicking(sale, userId, true);
-  console.log('--- Iniciou picking para ' + UsersProvider.get(userId).name  + ' pedido ' + sale.numeroPedido + ' ---');
+  console.log('[Abriu] picking ' + UsersProvider.get(userId).name  + ' - ' + sale.numeroPedido);
   return getPrintUrl(sale);
 }
 
