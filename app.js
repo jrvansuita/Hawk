@@ -161,7 +161,10 @@ app.get('/packing/achievements', (req, res) => {
     var pickingProvider = new require('./app/provider/PickingProvider.js');
 
     app.get('/picking', (req, res) => {
+
       pickingProvider.init(req.query.transp,() => {
+
+
         if (!res.headersSent){
           res.render('picking', {
             upcoming: pickingProvider.upcomingSales(),
@@ -170,6 +173,7 @@ app.get('/packing/achievements', (req, res) => {
             transportList: pickingProvider.getTransportList(),
             pendingSales: pickingProvider.pendingSales(),
             donePickings: pickingProvider.donePickings(),
+            blockedSales: pickingProvider.blockedPickings(),
             selectedTransp: req.query.transp,
             printPickingUrl: global.pickingPrintUrl
           });
@@ -295,6 +299,17 @@ app.get('/packing/achievements', (req, res) => {
   });
 
 
+  app.post(['/picking/toggle-block-sale'], (req, res) => {
+    try {
+
+      pickingProvider.toggleBlockedSale(req.body.saleNumber, req.session.loggedUser, (result) => {
+        res.status(200).send(result);
+      });
+    } catch (e) {
+      console.log(e);
+      res.status(500).send(e);
+    }
+  });
 
 
 

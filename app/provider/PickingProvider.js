@@ -2,6 +2,7 @@ const EccosysCalls = require('../eccosys/eccosys-calls.js');
 const UsersProvider = require('../provider/UsersProvider.js');
 const Day = require('../bean/day.js');
 const Pending = require('../bean/pending.js');
+const BlockedSale = require('../bean/blocked-sale.js');
 const PendingHandler = require('../handler/pending-handler.js');
 
 
@@ -15,6 +16,8 @@ global.inprogressPicking = {};
 global.staticPendingSales = [];
 //All ready picking sales
 global.staticDonePicking = [];
+//All Blocked Sales wich can't be picking now
+global.staticBlockedSales = [];
 
 var previewCount = 6;
 const unknow = 'Retirada';
@@ -29,21 +32,27 @@ module.exports = {
     if (global.staticPickingList.length == 0) {
 
       loadAllPendingSales(()=>{
+        loadAllBlockedSales(()=>{
 
-        EccosysCalls.getPickingSales((data) => {
-          try{
+          EccosysCalls.getPickingSales((data) => {
+            try{
+              global.staticPickingList = JSON.parse(data);
+              removePendingSalesFromPickingSalesList();
+              handleBlockedSales();
+              handleAllDonePickingSales();
+              checkIsInDevMode();
 
-            global.staticPickingList = JSON.parse(data);
-            removePendingSalesFromPickingSalesList();
-            handleAllDonePickingSales();
-            checkIsInDevMode();
+              if (areThereSalesToLoadItems()){
+                loadSaleItems(0, onFinished);
+              }else{
+                onFinished();
+              }
 
-
-            loadSaleItems(0, onFinished);
-          }catch(e){
-            onFinished();
-            console.log('Erro ao buscar pedidos no eccosys.');
-          }
+            }catch(e){
+              onFinished();
+              console.log(e);
+            }
+          });
         });
       });
     } else {
@@ -137,6 +146,11 @@ module.exports = {
     return global.staticDonePicking;
   },
 
+
+  blockedPickings(){
+    return global.staticBlockedSales;
+  },
+
   storePendingSale(sale, local, callback){
     sale = removeUnpendingItems(sale);
 
@@ -207,11 +221,11 @@ module.exports = {
         return i.number != pending.number;
       });
 
-     callLoadSaleItems(pending.sale, function(sale, items){
+      callLoadSaleItems(pending.sale, function(sale, items){
         sale.doNotCount = true;
         initSalePicking(sale, pending.sale.pickUser.id);
         callback(getPrintUrl(sale));
-     });
+      });
     }
   },
 
@@ -231,11 +245,39 @@ module.exports = {
         });
 
         callback();
+      });
+    }
+  },
 
+
+  toggleBlockedSale(saleNumber, user, callback){
+    var found = false;
+
+    global.staticBlockedSales.forEach((blocked, index, array)=>{
+      if (!found && blocked.number == saleNumber){
+
+        if (blocked.sale){
+          global.staticPickingList.push(blocked.sale);
+        }
+
+        array.splice(index,1);
+        found = true;
+        blocked.remove();
+        callback();
+      }
+    });
+
+    if (!found){
+      var blockedSale = new BlockedSale(saleNumber, user.id, new Date());
+      blockedSale.upsert(()=>{
+        global.staticBlockedSales.push(blockedSale);
+        handleBlockedSales(saleNumber);
+        callback();
       });
     }
   }
 };
+
 
 
 function getNextSale() {
@@ -258,6 +300,9 @@ function getPrintUrl(sale){
   return global.pickingPrintUrl + sale.id;
 }
 
+function areThereSalesToLoadItems(){
+  return global.staticPickingList.length > 0;
+}
 
 function loadSaleItems(index, callback) {
   var sale = global.staticPickingList[index];
@@ -276,11 +321,11 @@ function loadSaleItems(index, callback) {
         callback();
       }
     }
-  //No Sales to pick
-  else if (currentLength == 0){
-    callback();
-  }
-});
+    //No Sales to pick
+    else if (currentLength == index){
+      callback();
+    }
+  });
 }
 
 function callLoadSaleItems(sale, callback){
@@ -341,6 +386,14 @@ function loadAllPendingSales(callback){
   });
 }
 
+function loadAllBlockedSales(callback){
+  BlockedSale.findAll(function(err, all){
+    global.staticBlockedSales = all;
+    callback();
+  });
+}
+
+
 function removePendingSalesFromPickingSalesList(){
   global.staticPickingList = global.staticPickingList.filter(function(i){
     return !global.staticPendingSales.some(function(j){
@@ -349,18 +402,49 @@ function removePendingSalesFromPickingSalesList(){
   });
 }
 
+
+function handleBlockedSales(forThisSale){
+  //Remove and save the sale blocked
+  global.staticBlockedSales.forEach((blocked)=>{
+
+    blocked.user = UsersProvider.get(blocked.userId);
+
+    if (forThisSale == undefined || forThisSale == blocked.number){
+      global.staticPickingList.forEach((sale, index, array)=>{
+        if (blocked.number == sale.numeroPedido){
+          blocked.sale = sale;
+          array.splice(index, 1);
+        }
+      });
+    }
+  });
+}
+
 //pickingRealizado = N -> All Sales to pick
 //pickingRealizado = A -> Picking done
 //pickingRealizado = S -> Invoice done
 function handleAllDonePickingSales(){
+
+  //Todas as Sales com picking realizado, vão para o array staticDonePicking
   global.staticDonePicking = global.staticPickingList.filter(function(i){
     return i.pickingRealizado != "N";
   });
 
+  //Todas as Sales que não foi feito picking, ficam no array staticPickingList
   global.staticPickingList = global.staticPickingList.filter(function(i){
     return i.pickingRealizado == "N";
   });
+
+  //Qualquer Picking em andamento, não conta para o picking realizado
+  //Super importante pra quando terminou todos os pickings e volta algum de pendencia ou dos separados
+  if (global.staticPickingList == 0){
+    var inprogress = JSON.stringify(global.inprogressPicking);
+    global.staticDonePicking = global.staticDonePicking.filter(function(i){
+      return !inprogress.includes(i.numeroPedido);
+    });
+  }
 }
+
 
 function updatePendingSale(pending){
   global.staticPendingSales = global.staticPendingSales.map(function(i) { return i.sale.numeroPedido == pending.sale.numeroPedido ? pending : i; });
@@ -368,14 +452,15 @@ function updatePendingSale(pending){
 
 
 function checkIsInDevMode(){
+  var maxSalesOnDevMove = 6;
   //If this Env Var is not defined, it's on development mode
   //Not necessary to load all sales for tests porpouse
   if (!process.env.NODE_ENV){
-    if (global.staticPickingList.length > 10){
-      global.staticPickingList.splice(10);
+    if (global.staticPickingList.length > maxSalesOnDevMove){
+      global.staticPickingList.splice(maxSalesOnDevMove);
     }
   }
-}
+} 
 
 
 function removeUnpendingItems(sale){

@@ -10,6 +10,7 @@
   padding-bottom: 35px;
   padding-top: 15px;
   padding-right: 15px;
+  display: flex;
   height: 100%;
   width: max-content;
 }
@@ -426,25 +427,13 @@ tr.row-padding td{
 }
 
 
-.pending-local{
-  outline: none;
+#pending-local{
   height: 26px;
   width: 90px;
   display: block;
   margin-top: -5px;
-  border: 2px #e4e4e4;
-  border-style: none none solid none;
 }
 
-.pending-local:focus{
-  border: 2px #1c796b;
-  border-style: none none solid none;
-}
-
-.pending-local-error{
-  border: 2px #e25952;
-  border-style: none none solid none;
-}
 
 
 .local-label{
@@ -452,7 +441,48 @@ tr.row-padding td{
   background-color:#9e9a9a;
   color: white;
   padding: 3px 8px;
-  margin-top: 4px;
+  margin-top: 12px;
+  margin-bottom: 8px;
   display: -webkit-inline-box;
   font-size: 10px;
+}
+
+.middle-option-holder{
+  display: -webkit-box;
+}
+
+
+.blocked-box{
+  margin-top: 20px;
+  max-height: 300px;
+  min-height: fit-content;
+}
+
+
+.blocked-sales-holder{
+  padding-top: 12px;
+  display: flex;
+}
+
+.table-sale-holder{
+  display: block;
+  margin-left: 5px;
+  margin-bottom: 5px;
+  width: fit-content;
+  margin-top: 8px;
+}
+
+.super-mini-avatar{
+  width: 30px;
+  height: 30px;
+  margin: 4px 4px;
+  cursor: pointer;
+}
+
+.blocked-sale-label{
+  padding: 3px 5px;
+  display: block;
+  color: #1C7974;
+  font-size: 12px;
+  width: fit-content;
 }

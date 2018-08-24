@@ -179,3 +179,26 @@ tr.line td{
   -webkit-animation-timing-function: ease-in-out;
   -webkit-animation-iteration-count: infinite
 }
+
+
+
+
+.simple-material-input{
+  outline: none;
+  height: 26px;
+  width: fit-content;
+  display: block;
+  margin-top: -5px;
+  border: 2px #e4e4e4;
+  border-style: none none solid none;
+}
+
+.simple-material-input:focus{
+  border: 2px #1c796b;
+  border-style: none none solid none;
+}
+
+.simple-material-input-error{
+  border: 2px #e25952;
+  border-style: none none solid none;
+}

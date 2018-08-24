@@ -20,6 +20,29 @@ $(document).ready(() => {
     });
   }, 1000);
 
+  $('#blocked-sale-input').on("keyup", function(e) {
+    var key = e.which;
+    if (key == 13){
+      var saleNumber = $('#blocked-sale-input').val();
+
+      if (saleNumber.length >= 5 && isNum(saleNumber)) {
+        $.ajax({
+          url: "/picking/toggle-block-sale",
+          type: "post",
+          data: {
+            saleNumber: saleNumber
+          }, 
+          success: function(response) {
+            window.location.reload();
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            onSimpleMaterialInputError( $('#blocked-sale-input'));
+          }
+        });
+      }
+    }
+  });
+
 
   $('#user-id').on("keyup", function(e) {
     var key = e.which;
@@ -152,7 +175,6 @@ function doneSaleRestart(saleNumber){
       window.location.reload();
     },
     error: function(jqXHR, textStatus, errorThrown) {
-      console.log(jqXHR);
       $('.error').text(jqXHR.responseText).fadeIn().delay(1000).fadeOut();
     }
   });
@@ -217,17 +239,13 @@ function checkIsLocalFilled(shake){
   var isFilled = $('#pending-local').val().length > 0;
 
   if (shake && !isFilled){
-     $('#pending-local').shake({
-       interval: 80,
-       distance: 8,
-       times: 4
-     });
+    $('#pending-local').shake({
+      interval: 80,
+      distance: 8,
+      times: 4
+    });
 
-     $('#pending-local').addClass("pending-local-error").delay(1000).queue(function(next){
-         $(this).removeClass("pending-local-error");
-         next();
-     });
-
+    onSimpleMaterialInputError($('#pending-local'));
   }
 
   return isFilled;

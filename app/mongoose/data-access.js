@@ -150,7 +150,12 @@ module.exports = class DataAccess {
       });
   }
 
-
+  remove(callback) {
+    this.classAccess().findOneAndRemove(this.getPKQuery(), (err) => {
+      if (callback)
+        callback(err);
+    });
+  }
 
 
 
