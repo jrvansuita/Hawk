@@ -6,6 +6,7 @@
   <script type="text/javascript" src="/control/picking.js"></script>
   <script type="text/javascript" src="/control/picking-pendings.js"></script>
   <script type="text/javascript" src="/visual/shake.js"></script>
+  <script type="text/javascript" src="/visual/dropdown.js"></script>
 
   <link rel="stylesheet" type="text/css" href="/css/libs/material-input.css">
   <link rel="stylesheet" type="text/css" href="/css/libs/material-select.css">
@@ -160,7 +161,7 @@
 
               <div class="blocked-sales-holder">
                 <%  blockedSales.forEach((blocked) => {%>
-                  <table class="table-sale-holder shadow">
+                  <table class="table-sale-holder shadow" data-sale="<%=blocked.number%>">
                     <tr>
                       <td>
                         <%var userName = (blocked.user.name ? blocked.user.name.split(" ")[0] : 'Desconhecido') %>
@@ -168,7 +169,12 @@
                       </td>
                       <td>
                         <label class="blocked-sale-label copiable"><%=blocked.number%></label>
-                        <label class="blocked-sale-label" style="font-size:11px;"><%=Dat.format(new Date(blocked.blockDate))%></span>
+
+                        <%
+                        var blockDate = new Date(blocked.blockDate);
+                        var dif = Dat.daysDif(new Date(), blockDate);
+                        var days = dif > 0 ? dif + ' Dias' : Dat.format(blockDate);%>
+                        <label class="blocked-sale-label" style="font-size:11px;"><%= days%></span>
                         </td>
                       </tr>
                     </table>
@@ -189,23 +195,24 @@
 
                   </div>
 
-                  <div class="pending-button-holder">
-                    <label class="button pending-button shadow">Pendência</label>
-                    <input type="text" id="pending-local" class="simple-material-input" placeholder="Localização"/>
-                  </div>
-
                   <div class="items-holder">
                     <table id="opened-sale" width="100%">
                       <tr>
                         <td colspan="4">
                           <table width="100%">
-                            <tr>
+                            <tr class="dotted-line">
                               <td><span class="pick-value" id="sale-transport"><span></td>
                                 <td><span class="pick-value" id="sale-date"> </span></td>
                                 <td><span class="pick-value" id="sale-itens"> </span></td>
                                 <td><span class="pick-value right" id="sale-value">  </span></td>
                               </tr>
                             </table>
+                          </tr>
+
+                          <tr class="dotted-line pending-button-holder">
+                            <td><input type="text" id="pending-local" class="simple-material-input" placeholder="Localização"/></td>
+                            <td></td>
+                            <td colspan="2"><label class="button pending-button shadow">Pendência</label></td>
                           </tr>
 
                           <tr class="dotted-line">

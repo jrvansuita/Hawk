@@ -26,19 +26,7 @@ $(document).ready(() => {
       var saleNumber = $('#blocked-sale-input').val();
 
       if (saleNumber.length >= 5 && isNum(saleNumber)) {
-        $.ajax({
-          url: "/picking/toggle-block-sale",
-          type: "post",
-          data: {
-            saleNumber: saleNumber
-          }, 
-          success: function(response) {
-            window.location.reload();
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-            onSimpleMaterialInputError( $('#blocked-sale-input'));
-          }
-        });
+        callToggleBlockedSale(saleNumber);
       }
     }
   });
@@ -117,39 +105,32 @@ $(document).ready(() => {
     }
   });
 
+  $('.table-sale-holder').click(function(e){
+     var saleNumber = $(this).data('sale');
+
+     var drop = new MaterialDropdown($(this), e);
+     drop.addItem('/img/delete.png', 'Desbloquear', function(){
+       callToggleBlockedSale(saleNumber);
+     });
+
+     drop.show();
+  });
+
   $('.done-sale-item').click(function(e){
     var saleId = $(this).data('saleid').split('-')[1];
     var sale = $(this).data('sale').split('-')[1];
-    $('.md-dropdown').remove();
 
-    $div = $('<div>').addClass('md-dropdown');
-    $ul = $('<ul>').css('left', e.pageX).css('top', e.pageY -10);
-
-    $printIcon = $('<img>').attr('src','/img/print.png');
-    $pendingIcon = $('<img>').attr('src','/img/back.png');
-
-    $aPrint = $('<li>').append($('<a>').attr('href',printPickingUrl + saleId).attr('target','_blank').append($printIcon,'Imprimir'));
-    $aRestart = $('<a>').attr('href','#').append($pendingIcon,'Reseparar');
-
-    $aRestart.click(function(){
+    var drop = new MaterialDropdown($(this), e);
+    drop.addItem('/img/print.png', 'Imprimir', null, printPickingUrl + saleId, '_blank');
+    drop.addItem('/img/back.png', 'Reseparar', function(){
       doneSaleRestart(sale);
     });
 
-    $ul.append($('<li>').append($aPrint));
-    $ul.append($('<li>').append($aRestart));
-
-    $div.append($ul);
-    $(this).append($div);
-    $ul.hide().fadeIn(400);
-
-    $div.mouseleave(function(){
-      $div.remove();
+    drop.onMouseLeave(()=>{
       $( "#user-id" ).focus();
     });
 
-    $('.md-dropdown a').click(function(e){
-      e.stopPropagation();
-    });
+    drop.show();
   });
 });
 
@@ -186,7 +167,7 @@ var selectedPendingSale;
 
 function loadSale(sale){
   if ((selectedPendingSale != sale) || !$('.opened-sale-box').is(':visible')){
-    $('.opened-sale-box').css('display','inline-flex').fadeIn(200);
+    $('.opened-sale-box').css('display','inline-block').fadeIn(200);
 
     selectedPendingSale = sale;
     $('.sale-number').text(sale.numeroPedido);
@@ -249,4 +230,21 @@ function checkIsLocalFilled(shake){
   }
 
   return isFilled;
+}
+
+
+function callToggleBlockedSale(saleNumber){
+  $.ajax({
+    url: "/picking/toggle-block-sale",
+    type: "post",
+    data: {
+      saleNumber: saleNumber
+    },
+    success: function(response) {
+      window.location.reload();
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      onSimpleMaterialInputError( $('#blocked-sale-input'));
+    }
+  });
 }

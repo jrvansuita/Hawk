@@ -258,9 +258,16 @@ tr.row-padding td{
   opacity: 0.8;
   cursor: pointer;
 }
+
 .pending-button-holder{
   display: none;
 }
+
+.pending-button-holder > td{
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
 
 .pending-button{
   float: right;
@@ -455,6 +462,7 @@ tr.row-padding td{
 .blocked-box{
   margin-top: 20px;
   max-height: 300px;
+  width: min-content;
   min-height: fit-content;
 }
 
@@ -462,20 +470,23 @@ tr.row-padding td{
 .blocked-sales-holder{
   padding-top: 12px;
   display: flex;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 .table-sale-holder{
   display: block;
-  margin-left: 5px;
+  margin-left: 8px;
   margin-bottom: 5px;
   width: fit-content;
   margin-top: 8px;
+  cursor: pointer;
 }
 
 .super-mini-avatar{
   width: 30px;
   height: 30px;
-  margin: 4px 4px;
+  margin: 4px 6px;
   cursor: pointer;
 }
 
