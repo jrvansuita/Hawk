@@ -74,11 +74,26 @@ app.post('/run-jobs', (req, res) => {
 app.use(function(req, res, next) {
   if (req.session.loggedUser || req.path === '/login') {
     res.locals.loggedUser = req.session.loggedUser;
+
+    if (req._parsedUrl.path != '/'){
+       req.session.lastpath = req._parsedUrl.path;
+    }
+
     next();
   } else {
     res.redirect("/login");
   }
 });
+
+
+app.get(['/'], (req, res)=>{
+  if (req.session.lastpath){
+    res.redirect(req.session.lastpath);
+  }else{
+    res.redirect('/packing');
+  }
+});
+
 
 app.get('/login', (req, res) => {
   res.render('login');
@@ -98,7 +113,8 @@ app.post('/login', function(req, res) {
   });
 });
 
-app.get(['/', '/packing', '/packing/overview'], (req, res) => {
+
+app.get(['/packing', '/packing/overview'], (req, res) => {
   require('./app/builder/InvoiceChartBuilder.js').buildOverview(res.locals.loggedUser.full, function(charts) {
     res.render('invoice-chart', {
       charts: charts,
