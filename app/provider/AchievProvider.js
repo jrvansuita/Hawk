@@ -7,10 +7,8 @@ const sum_field = "sum_points";
 
 module.exports = class AchievProvider {
 
-  constructor(type, pointsFunc) {
+  constructor(type) {
     this.type = type;
-    this.pointsFunc = pointsFunc;
-    this.data = {};
   }
 
   onAddRowListener(func){
@@ -22,12 +20,9 @@ module.exports = class AchievProvider {
   }
 
   load(onAddRowFunc) {
-    var _self = this;
-
     runAggregate(this.type, (err, res) => {
       loadUsers(res);
-      _self.data = calcPoints(res, this.pointsFunc);
-      loadEveryMonth(_self.data, this.onAddRowFunc, this.onResultFunc);
+      loadEveryMonth(res, this.onAddRowFunc, this.onResultFunc);
     });
   }
 };
@@ -69,15 +64,6 @@ function loadEveryMonth(res, onAddRowFunc, onResultFunc){
   onResultFunc(resultData);
 }
 
-
-function calcPoints(data, func){
-  data.forEach((item) => {
-    item.sum_points = func(item.sum_count, item.sum_total);
-  });
-
-  return data;
-}
-
 function runAggregate(_type, callback) {
   Day.aggregate([{
       $match: {
@@ -99,6 +85,9 @@ function runAggregate(_type, callback) {
         },
         sum_total: {
           $sum: "$total"
+        },
+        sum_points: {
+          $sum: "$points"
         }
       }
     }],

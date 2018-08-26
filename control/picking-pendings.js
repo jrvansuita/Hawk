@@ -23,6 +23,13 @@ $(document).ready(() => {
     loadPendingSaleItems($(this), getPendingSale(saleNumber));
     e.stopPropagation();
   });
+
+  if (isWideOpen() && ($('.pending-item.not-solved').length > 0)){
+    var $icon = $('<img>').addClass('small-icon-button').attr('title','Enviar todos os emails!').css('position','absolute').css('margin-top','-5px').attr('src', '/img/send-mass-email.png').click(()=>{
+      doallSolvingPendingSale($icon);
+    });
+    $('.pending-box.red-top>.pick-header>.header-title').after($icon);
+  }
 });
 
 
@@ -99,7 +106,7 @@ function getFirstBottomBarOptions(pending){
 
   if (!isTrueStr(pending.solved) && !isTrueStr(pending.solving)){
     if (typeof wideOpen == "undefined"){
-      var lamp = $('<img>').addClass('lamp').attr('src', '/img/lamp.png').attr('title','Encontrei!').click(function(){
+      var lamp = $('<img>').addClass('small-icon-button').attr('src', '/img/lamp.png').attr('title','Encontrei!').click(function(){
         restartPendingSale(pending);
       });
       div.append(lamp);
@@ -163,9 +170,12 @@ function getEmailSwitch(){
   return holder;
 }
 
+function isWideOpen(){
+  return typeof wideOpen !== "undefined";
+}
+
 function showOption(pending){
-  var isWideOpen = typeof wideOpen !== "undefined";
-  var showOption = (isWideOpen && !isTrueStr(pending.solved)) || (!isWideOpen && isTrueStr(pending.solved));
+  var showOption = (isWideOpen() && !isTrueStr(pending.solved)) || (!isWideOpen() && isTrueStr(pending.solved));
   return showOption;
 }
 
@@ -336,9 +346,35 @@ function solvePendingSale(sale){
 
 function solvingPendingSale(button, pending){
   showLoadingButton(button);
-  pending.sendEmail = $('#send-email-switch').prop('checked');
-  executePendingAjax("/picking-pending-solving", pending, function(resultPending){
+  innerSolvingPendingSale(pending, $('#send-email-switch').prop('checked'), (resultPending)=>{
     rebuildSpawItem('not-solved', 'solving', resultPending);
+  });
+}
+
+
+function doallSolvingPendingSale(icon){
+  icon.attr('src','/img/loader/circle.svg');
+
+  $('.pending-item.not-solved').each(function(index, item){
+    var pending =  getPendingSale($(item).data('sale').split('-')[1]);
+    innerSolvingPendingSale(pending, true, (res)=>{
+
+      $(item).fadeOut(400, function() {
+        $(item).remove();
+        if ($('.pending-item.not-solved').length == 0){
+          window.location.reload();
+        }
+      });
+
+    });
+  });
+}
+
+
+function innerSolvingPendingSale(pending, sendEmail, callback){
+  pending.sendEmail = sendEmail;
+  executePendingAjax("/picking-pending-solving", pending, function(r){
+    callback(r);
   });
 }
 
@@ -400,7 +436,6 @@ function changeFontSize(els, direction){
 function showLoadingButton(el){
   el.prepend($('<img>').addClass('loading-circle').attr('src','/img/loader/circle.svg'));
 }
-
 
 function updatePendingSales(pending){
   pendingSales = pendingSales.map(function(i) { return i.sale.numeroPedido == pending.sale.numeroPedido ? pending : i; });

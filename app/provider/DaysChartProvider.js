@@ -67,6 +67,7 @@ module.exports = class DaysChartProvider {
     if (this.data[this.getGroupByValue(item)]) {
       this.data[this.getGroupByValue(item)].total += item.total;
       this.data[this.getGroupByValue(item)].count += item.count;
+      this.data[this.getGroupByValue(item)].points += item.points;
     } else {
       this.data[this.getGroupByValue(item)] = item;
     }

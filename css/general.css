@@ -202,3 +202,15 @@ tr.line td{
   border: 2px #e25952;
   border-style: none none solid none;
 }
+
+.dotted {
+  border-right: 1px dashed #e6e7e6;
+}
+
+.dotted-line{
+  border-bottom: 1px dashed #e6e7e6;
+}
+
+.dotted-top{
+  border-top: 1px dashed #e6e7e6;
+}

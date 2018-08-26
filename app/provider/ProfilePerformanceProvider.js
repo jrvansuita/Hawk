@@ -1,18 +1,22 @@
 const UsersProvider = require('../provider/UsersProvider.js');
 const Day = require('../bean/day.js');
-
+const performanceChartBuilder = require('../builder/PerformanceChartBuilder.js');
+const IndicatorsBuilder = require('../builder/IndicatorsBuilder.js');
 
 
 
 module.exports = {
 
-  onUserPerformance(from, to, idUser, callback){
-
+  onUserPerformance(from, to, idUser, isFull, callback){
     var user = UsersProvider.get(idUser);
-
-    require('../builder/PerformanceChartBuilder.js').build(from, to, idUser, function(charts) {
-       callback(user, charts);
+    performanceChartBuilder.build(from, to, idUser, function(charts) {
+       var indicatorsBuilder = new IndicatorsBuilder(idUser, isFull);
+       indicatorsBuilder.build((indicators)=>{
+        callback(user, charts, indicators);
+       });
     });
   }
+
+
 
 };

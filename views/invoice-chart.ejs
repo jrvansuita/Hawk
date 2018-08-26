@@ -1,5 +1,11 @@
 <html>
 <% include menu %>
+<%
+
+var isByDate = page.includes('by-date');
+var subtitlesArr = Util.getSubtitles(charts);
+
+%>
 
 <head>
   <link rel="stylesheet" type="text/css" href="/css/charts.css">

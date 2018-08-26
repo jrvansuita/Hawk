@@ -13,7 +13,7 @@ module.exports = class InvoiceAchievGridBuilder {
   build() {
     var _self = this;
 
-    this.provider = new AchievProvider("invoice", Day.invoicePoints);
+    this.provider = new AchievProvider("invoice");
     this.provider.onAddRowListener(function(row, achievItem){
       achievItem.user = row.user;
       achievItem.addBar('Pedidos', row.sum_count, '14b5a6');

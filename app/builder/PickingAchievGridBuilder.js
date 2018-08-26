@@ -13,7 +13,7 @@ module.exports = class PickingAchievGridBuilder {
   build() {
     var _self = this;
 
-    this.provider = new AchievProvider("picking", Day.pickingPoints);
+    this.provider = new AchievProvider("picking");
 
     this.provider.onAddRowListener(function(row, achievItem){
       achievItem.user = row.user;

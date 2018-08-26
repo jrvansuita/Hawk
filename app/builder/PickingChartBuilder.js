@@ -96,9 +96,9 @@ function buildChart(from, to, title) {
 
       item.addBar('Segundos/Item', dataItem.count/dataItem.total, 0.7, '5f7ce8', false);
 
-      var points = Day.pickingPoints(dataItem.count, dataItem.total);
-      if (points > 0)
-      item.addBar('Pontos', points, 1, '1da8b9', false);
+      if (dataItem.points > 0){
+        item.addBar('Pontos', dataItem.points, 1, '1da8b9', false);
+      }
 
     });
 

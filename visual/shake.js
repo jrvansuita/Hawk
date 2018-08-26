@@ -58,21 +58,3 @@
     }, settings.interval, settings.complete);
   };
 })(jQuery);
-//
-// $(document).ready(function() {
-//   $('button.shake').click(function(e) {
-//     $(this).shake({
-//       interval: 100,
-//       distance: 20,
-//       times: 5
-//     });
-//   });
-//
-//   $('button.bounce').click(function(e) {
-//     $(this).bounce({
-//       interval: 100,
-//       distance: 20,
-//       times: 5
-//     });
-//   });
-// });

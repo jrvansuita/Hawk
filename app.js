@@ -304,10 +304,16 @@ app.get('/packing/achievements', (req, res) => {
    var to = req.query.to ? new Date(parseInt(req.query.to)).maxTime() : Dat.lastDayOfMonth();
    var userId = req.query.userid || req.session.loggedUser.id;
 
-   require('./app/provider/ProfilePerformanceProvider.js').onUserPerformance(from, to, userId, function(user, charts) {
+   require('./app/provider/ProfilePerformanceProvider.js').onUserPerformance(
+     from,
+     to,
+     userId,
+     res.locals.loggedUser.full,
+     function(user, charts, indicators) {
      res.render('profile-performance', {
        user: user,
        charts: charts,
+       indicators: indicators,
        showCalendarFilter : true,
        hideEmptyCharts : true
      });

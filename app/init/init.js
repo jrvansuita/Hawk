@@ -19,9 +19,14 @@ global.Const = require('../const/const.js');
 
 //Load Local Users
 require('../provider/UsersProvider.js').loadAllUsers();
+console.log('Loaded All Users...');
 
 //Build the prototypes
 require('../init/prototypes.js');
 
 //Trigger the scheduled jobs
 require('../jobs/Jobs.js').schedule(false);
+
+
+//Ajust $points
+//require('../init/assert-points.js');

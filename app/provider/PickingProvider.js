@@ -103,9 +103,11 @@ module.exports = {
     var sale = global.inprogressPicking[userId];
     delete global.inprogressPicking[userId];
     sale.end = new Date();
-    var day = Day.picking(userId, Dat.today());
 
     var secDif = (sale.end.getTime() - sale.begin.getTime()) / 1000;
+    var totalItems = parseInt(sale.itemsQuantity);
+
+    var day = Day.picking(userId, Dat.today(), secDif, totalItems);
 
     //Done picking
     global.staticDonePicking.push(sale);
@@ -115,12 +117,7 @@ module.exports = {
     if(sale.doNotCount){
       callback("end-picking-" + sale.numeroPedido);
     }else{
-      Day.upsert(day.getPKQuery(), {
-        $inc: {
-          count: secDif,
-          total: sale.itemsQuantity
-        }
-      }, (err, doc) => {
+      Day.sync(day, (err, doc) => {
         callback("end-picking-" + sale.numeroPedido);
       });
     }
@@ -381,6 +378,13 @@ function initSalePicking(sale, userId, addPrintTime){
 
 function loadAllPendingSales(callback){
   Pending.findAll(function(err, all){
+
+    /*all.sort(function(a, b) {
+
+
+
+    });*/
+
     global.staticPendingSales = all;
     callback();
   });
@@ -460,7 +464,7 @@ function checkIsInDevMode(){
       global.staticPickingList.splice(maxSalesOnDevMove);
     }
   }
-} 
+}
 
 
 function removeUnpendingItems(sale){

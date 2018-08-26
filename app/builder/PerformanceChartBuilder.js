@@ -37,12 +37,16 @@ function buildChart(type, title, from, to, userId, callback) {
 
       var item = chart.addItem(dataItem.label, 'none');
 
-      //item.addBar('Itens', dataItem.total, 0.8, '03c184', true);
-      //item.addBar('Segundos/Item', dataItem.count/dataItem.total, 0.7, '5f7ce8', false);
+      if (type == 'picking'){
+        item.addBar('Itens',dataItem.total, 0.8, '03c184', true);
+      }
 
-      var points = Day[type + 'Points'](dataItem.count, dataItem.total);
-      if (points > 0)
-      item.addBar('Pontos', points, 1, '1da8b9', true);
+      if (type == 'invoice'){
+       item.addBar('Pedidos', dataItem.count, 0.8, '14b5a6', true);
+       }
+      //item.addBar('Segundos/Item', dataItem.count/dataItem.total, 0.7, '5f7ce8', false);
+      if (dataItem.points > 0)
+      item.addBar('Pontos', dataItem.points, 1, '1da8b9', true);
     });
 
     //chart.sort('Pontos');

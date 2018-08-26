@@ -36,7 +36,10 @@ function handleData(sales) {
     if (dayRow === undefined) {
       dayRow = Day.invoice(sale);
     } else {
-      dayRow.total += sale.value;
+      var day = Day.invoice(sale);
+
+      dayRow.total += day.total;
+      dayRow.points = day.points;
       dayRow.count++;
     }
 
@@ -59,12 +62,7 @@ function execute(data, index, onFinished) {
 }
 
 function store(dayRow, callback) {
-  Day.upsert(dayRow.getPKQuery(), {
-    $inc: {
-      count: dayRow.count,
-      total: dayRow.total
-    }
-  }, (err, doc) => {
+  Day.sync(dayRow, (err, doc) => {
     callback();
   });
 }
