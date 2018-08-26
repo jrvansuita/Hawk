@@ -22,18 +22,13 @@
     var solved = [];
 
     pendingSales.forEach(function(pending){
-      if (!Util.isTrueStr(pending.solving) && !Util.isTrueStr(pending.solved)){
+      if (pending.status == 0){
         open.push(pending);
-      }
-
-      if (Util.isTrueStr(pending.solved)){
+      }else if (pending.status == 1){
+        solving.push(pending);
+      }else if (pending.status == 2){
         solved.push(pending);
       }
-
-      if (Util.isTrueStr(pending.solving) && !Util.isTrueStr(pending.solved)){
-        solving.push(pending);
-      }
-
     });
 
   }
@@ -69,3 +64,4 @@
 
 </body>
 </html>
+ 

@@ -190,8 +190,7 @@ module.exports = {
   },
 
   _solvingPendingSaleInternal(pending, callback){
-    pending.solving = true;
-    delete pending.solved;
+    pending.status = 1;
     pending.updateDate = new Date();
     Pending.upsert(Pending.getKeyQuery(pending.number), pending, function(err, doc){
       updatePendingSale(pending);
@@ -200,8 +199,7 @@ module.exports = {
   },
 
   solvedPendingSale(pending, callback){
-    pending.solved = true;
-    delete pending.solving;
+    pending.status = 2;
     pending.updateDate = new Date();
     Pending.upsert(Pending.getKeyQuery(pending.number),pending, function(err, doc){
       updatePendingSale(pending);
@@ -379,11 +377,9 @@ function initSalePicking(sale, userId, addPrintTime){
 function loadAllPendingSales(callback){
   Pending.findAll(function(err, all){
 
-    /*all.sort(function(a, b) {
-
-
-
-    });*/
+    all.sort(function(a, b) {
+      return a.status < b.status ? 1 : a.status > b.status ? -1 : 0;
+    });
 
     global.staticPendingSales = all;
     callback();

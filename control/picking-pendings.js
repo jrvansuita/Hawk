@@ -104,7 +104,7 @@ function getFirstBottomBarOptions(pending){
   var span = $('<span>').addClass('pick-value small-font last-update').append('Última alteração: ' + (pending.updateDate ? Dat.format(new Date(pending.updateDate)): ''));
   div.append(span);
 
-  if (!isTrueStr(pending.solved) && !isTrueStr(pending.solving)){
+  if (pending.status == 0){
     if (typeof wideOpen == "undefined"){
       var lamp = $('<img>').addClass('small-icon-button').attr('src', '/img/lamp.png').attr('title','Encontrei!').click(function(){
         restartPendingSale(pending);
@@ -121,10 +121,8 @@ function getMiddleBottomBarOptions(pending){
 
   els.push(getPendingLocal(pending));
 
-  if (!pending.solving && !pending.solved){
-    if (showOption(pending)){
-      els.push(getEmailSwitch());
-    }
+  if (pending.status==0 && isWideOpen()){
+    els.push(getEmailSwitch());
 
     return els;
   }else{
@@ -139,8 +137,7 @@ function getLastBottomBarOption(pending){
     div.append(getEmailImage());
   }
 
-  if (showOption(pending)){
-
+  if (pending.status < 2 && isWideOpen()){
     var solve = $('<label>').addClass('button shadow solve-pending').append(getPendingItemButtonLabel(pending)).click(function(){
       onPendingItemButtonClicked($(this), pending);
     });
@@ -174,11 +171,6 @@ function isWideOpen(){
   return typeof wideOpen !== "undefined";
 }
 
-function showOption(pending){
-  var showOption = (isWideOpen() && !isTrueStr(pending.solved)) || (!isWideOpen() && isTrueStr(pending.solved));
-  return showOption;
-}
-
 function getEmailImage(){
   var img = $('<img>').addClass('icon').attr('src','/img/envelop.png');
   var span = $('<span>').addClass('right').append(img);
@@ -187,11 +179,11 @@ function getEmailImage(){
 }
 
 function onPendingItemButtonClicked(button, pending){
-  if (isTrueStr(pending.solved)){
+  if (pending.status == 2){
     restartPendingSale(pending);
   }else if (isBlocked(pending)){
 
-  }else if (isTrueStr(pending.solving)){
+  }else if (pending.status == 1){
     solvedPendingSale(button,pending);
   }else{
     solvingPendingSale(button, pending);
@@ -199,11 +191,11 @@ function onPendingItemButtonClicked(button, pending){
 }
 
 function getPendingItemButtonLabel(pending){
-  if (isTrueStr(pending.solved)){
+  if (pending.status == 2){
     return "Reiniciar";
   }else if (isBlocked(pending)){
     return "Bloqueado";
-  }else if (isTrueStr(pending.solving)){
+  }else if (pending.status == 1){
     return "Resolver";
   }else{
     return 'Atender';
@@ -391,7 +383,14 @@ function restartPendingSale(pending){
 
 function rebuildSpawItem(actualClass, nextClass , resultPending){
   updatePendingSales(resultPending);
-  $('.'+actualClass+'.mini-item-modal').removeClass(actualClass).addClass(nextClass);
+  var $this = $('.'+actualClass+'.mini-item-modal');
+
+  $this.removeClass(actualClass).addClass(nextClass);
+
+  $this.delay(1000).fadeOut(400, function() {
+    $this.remove();
+  });
+
   hidePedingItemModal();
 }
 
@@ -418,7 +417,6 @@ function executePendingAjax(path, pending, onSucess){
 
 
 function changeFontSize(els, direction){
-
   els.find('span,label').each(function(i, e){
     $(e).css("font-size", parseInt($(e).css("font-size"))+direction);
   });
@@ -442,7 +440,7 @@ function updatePendingSales(pending){
 }
 
 function isBlocked(pending){
-  return !isTrueStr(pending.solved) && Dat.hoursDif(pending.updateDate, new Date()) <= 1;
+  return pending.status == 0 && Dat.hoursDif(pending.updateDate, new Date()) <= 1;
 }
 
 

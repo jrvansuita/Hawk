@@ -14,7 +14,7 @@ Day.findAll((err, docs)=>{
   Day.updateAll({_id: doc._id}, doc, function(err, numberAffected){
     console.log(doc.points);
   });
-
+ 
 
   });
 

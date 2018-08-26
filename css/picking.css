@@ -433,6 +433,7 @@ tr.row-padding td{
   width: 90px;
   display: block;
   margin-top: -5px;
+  text-transform: uppercase;
 }
 
 
