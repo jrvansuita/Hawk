@@ -69,13 +69,16 @@ app.post('/run-jobs', (req, res) => {
 
 });
 
+
+const ignorePaths = ['/login', '/'];
+
 //Keep a user variable for session in all ejs
 //Redirect if no user is logged-in
 app.use(function(req, res, next) {
   if (req.session.loggedUser || req.path === '/login') {
     res.locals.loggedUser = req.session.loggedUser;
 
-    if (req._parsedUrl.path != '/'){
+    if (!ignorePaths.includes(req._parsedUrl.path)){
        req.session.lastpath = req._parsedUrl.path;
     }
 
@@ -88,6 +91,7 @@ app.use(function(req, res, next) {
 
 app.get(['/'], (req, res)=>{
   if (req.session.lastpath){
+
     res.redirect(req.session.lastpath);
   }else{
     res.redirect('/packing');

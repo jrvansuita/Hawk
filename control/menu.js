@@ -13,7 +13,7 @@ $(document).ready(() => {
 
   $('.user-logged-holder').click(() => {
     $.ajax({
-      url: "login",
+      url: "/login",
       type: "post",
       data: {
 
