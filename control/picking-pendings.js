@@ -349,16 +349,19 @@ function doallSolvingPendingSale(icon){
 
   $('.pending-item.not-solved').each(function(index, item){
     var pending =  getPendingSale($(item).data('sale').split('-')[1]);
-    innerSolvingPendingSale(pending, true, (res)=>{
 
-      $(item).fadeOut(400, function() {
-        $(item).remove();
-        if ($('.pending-item.not-solved').length == 0){
-          window.location.reload();
-        }
+    if(!isBlocked(pending)){
+      innerSolvingPendingSale(pending, true, (res)=>{
+
+        $(item).fadeOut(400, function() {
+          $(item).remove();
+          if ($('.pending-item.not-solved').length == 0){
+            window.location.reload();
+          }
+        });
+
       });
-
-    });
+    }
   });
 }
 
