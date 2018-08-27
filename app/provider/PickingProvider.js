@@ -107,7 +107,7 @@ module.exports = {
     var secDif = (sale.end.getTime() - sale.begin.getTime()) / 1000;
     var totalItems = parseInt(sale.itemsQuantity);
 
-    var day = Day.picking(userId, Dat.today(), secDif, totalItems);
+    var day = Day.picking(userId, Dat.today(), totalItems, secDif);
 
     //Done picking
     global.staticDonePicking.push(sale);

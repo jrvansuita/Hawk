@@ -26,7 +26,7 @@ var Num = {
   },
 
   format(n) {
-    if (n < 1000) {
+    if (this.def(n) < 1000) {
       return this.int(n);
     } else {
       return this.reduceFloat(n);
