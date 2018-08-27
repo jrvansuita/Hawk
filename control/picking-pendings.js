@@ -137,7 +137,7 @@ function getLastBottomBarOption(pending){
     div.append(getEmailImage());
   }
 
-  if (pending.status < 2 && isWideOpen()){
+  if ((pending.status < 2 && isWideOpen()) || (pending.status == 2 && !isWideOpen()) ){
     var solve = $('<label>').addClass('button shadow solve-pending').append(getPendingItemButtonLabel(pending)).click(function(){
       onPendingItemButtonClicked($(this), pending);
     });

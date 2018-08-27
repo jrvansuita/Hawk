@@ -40,6 +40,7 @@ function handleData(sales) {
 
       dayRow.total += day.total;
       dayRow.points = day.points;
+      console.log(dayRow.points);
       dayRow.count++;
     }
 

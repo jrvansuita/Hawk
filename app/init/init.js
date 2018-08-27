@@ -30,28 +30,3 @@ require('../jobs/Jobs.js').schedule(false);
 
 //Ajust $points
 //require('../init/assert-points.js');
-
-/*const Pending = require('../bean/pending.js');
-
-
-Pending.findAll((err, docs)=>{
-  docs.forEach((doc, index)=>{
-
-  if (doc.solved.toString() == 'true'){
-    doc.status = 2;
-  }else
-  if (doc.solving.toString() == 'true'){
-    doc.status = 1;
-  }else{
-    doc.status = 0;
-  }
-
-
-  Pending.updateAll({_id: doc._id}, doc, function(err, numberAffected){
-    console.log('ok');
-  });
-
-
-  });
-
-});*/

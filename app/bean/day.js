@@ -8,14 +8,12 @@ module.exports = class Day extends DataAccess {
     this.total = Floa.def(total);
     this.count = Floa.def(count);
 
-    this.points = Num.def(this.calcPoints(this));
+    this.points = Day.calcPoints(this);
   }
 
-  calcPoints(){
-    var day = this;
-
+  static calcPoints(day){
     if (day.type == 'invoice'){
-      return (day.count * (day.total/2)) / 10000;
+      return ((day.total)/1000) * 7;
     }else if (day.type == 'picking'){
       return ((day.total) / (day.count/day.total)) * 4;
     }
