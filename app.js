@@ -70,7 +70,7 @@ app.post('/run-jobs', (req, res) => {
 });
 
 
-const ignorePaths = ['/login', '/'];
+const ignorePaths = ['/login', '/', '.png', '.jpg'];
 
 //Keep a user variable for session in all ejs
 //Redirect if no user is logged-in
@@ -78,9 +78,11 @@ app.use(function(req, res, next) {
   if (req.session.loggedUser || req.path === '/login') {
     res.locals.loggedUser = req.session.loggedUser;
 
-    if (!ignorePaths.includes(req._parsedUrl.path)){
+    if (Util.notIn(ignorePaths, req._parsedUrl.path)){
        req.session.lastpath = req._parsedUrl.path;
     }
+
+
 
     next();
   } else {
@@ -343,3 +345,11 @@ app.get('/packing/achievements', (req, res) => {
     app.listen(app.get('port'), function() {
       console.log('Node is running on port ', app.get('port'));
     });
+
+
+
+
+    /*console.log(app._router.stack          // registered routes
+  .filter(r => r.route && r.route.methods.get)    // take out all the middleware
+  .map(r => r.route.path)  // get all the paths
+);*/

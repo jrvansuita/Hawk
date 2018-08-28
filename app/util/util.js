@@ -54,6 +54,16 @@ var Util = {
     return val == true || val == "true";
   },
 
+  notIn(array, str){
+    var n = false;
+
+    array.forEach((s)=>{
+      n = n || str.includes(s);
+    });
+
+    return !n;
+  }
+
 
 
 
