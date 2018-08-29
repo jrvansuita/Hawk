@@ -6,7 +6,13 @@ Day.findAll((err, docs)=>{
 
 
     if (doc.type == 'invoice'){
-      doc.points = (doc.count * (doc.total/3)) / 10000;
+      //doc.points = (doc.count * (doc.total/3)) / 10000;
+
+
+
+    }else{
+      doc.points = (doc.total / (doc.count/doc.total)) * 4;
+      
 
       Day.updateAll({_id: doc._id}, doc, function(err, numberAffected){
         console.log(doc.points);

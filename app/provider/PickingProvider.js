@@ -109,6 +109,10 @@ module.exports = {
 
     var day = Day.picking(userId, Dat.today(), totalItems, secDif);
 
+    //console.log("Total Items: " + totalItems);
+    //console.log("Secs: " + secDif);
+    //console.log("("+ secDif + "/(" + totalItems + "/"+ secDif + ")) * 4 = " +  day.points);
+
     //Done picking
     global.staticDonePicking.push(sale);
 

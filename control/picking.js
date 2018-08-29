@@ -54,12 +54,14 @@ $(document).ready(() => {
               //Inicia um novo picking
               //$('#user-id').trigger(jQuery.Event( 'keyup', { which: 13 } ));
               $('#user-id').val('');
+
             } else {
               $('.sucess').text("Aguardando impressão do pedido").fadeIn();
               setTimeout(function() {
                 window.open(response, "picking");
                 window.location.reload();
               }, 1000);
+
             }
           },
           error: function(jqXHR, textStatus, errorThrown) {
@@ -74,8 +76,6 @@ $(document).ready(() => {
   $('.inner-label').click(()=>{
     $('.drop-ttl').click();
   });
-
-
 
 
   $('.inprogress-item').click(function(){
@@ -106,14 +106,14 @@ $(document).ready(() => {
   });
 
   $('.table-sale-holder').click(function(e){
-     var saleNumber = $(this).data('sale');
+    var saleNumber = $(this).data('sale');
 
-     var drop = new MaterialDropdown($(this), e);
-     drop.addItem('/img/delete.png', 'Desbloquear', function(){
-       callToggleBlockedSale(saleNumber);
-     });
+    var drop = new MaterialDropdown($(this), e);
+    drop.addItem('/img/delete.png', 'Desbloquear', function(){
+      callToggleBlockedSale(saleNumber);
+    });
 
-     drop.show();
+    drop.show();
   });
 
   $('.done-sale-item').click(function(e){

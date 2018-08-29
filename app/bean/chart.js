@@ -57,7 +57,9 @@ class ChartItem {
   }
 
   getBarValue(barName) {
-    return this.getBar(barName).value;
+    var bar = this.getBar(barName);
+
+    return bar != null ? bar.value : 0;
   }
 
   getBar(barName) {

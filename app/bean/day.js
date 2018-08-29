@@ -1,6 +1,6 @@
 module.exports = class Day extends DataAccess {
 
-  constructor(userId, date, type, total, count, points) {
+  constructor(userId, date, type, total, count) {
     super();
     this.userId = Num.def(userId);
     this.date = Dat.def(date);
@@ -9,14 +9,17 @@ module.exports = class Day extends DataAccess {
     this.count = Floa.def(count);
 
     this.points = Day.calcPoints(this);
+
   }
 
   static calcPoints(day){
     if (day.type == 'invoice'){
       return ((day.total)/1000) * 7;
     }else if (day.type == 'picking'){
-      return ((day.total) / (day.count/day.total)) * 4;
+      return ((day.total) / (day.count/day.total)) * 2;
     }
+
+
 
     return 0;
   }
@@ -25,6 +28,7 @@ module.exports = class Day extends DataAccess {
   return (count * (total/6)) / 10000;
 }
 
+//itens / secs
 static pickingPoints(count, total){
   return ((total) / (count/total)) * 4;
 }*/
@@ -33,8 +37,8 @@ static pickingPoints(count, total){
     return new Day(sale.userId, sale.billingDate, 'invoice', sale.value, 1);
   }
 
-  static picking(userId, date, secs, items) {
-    return new Day(userId, date, 'picking', secs, items);
+  static picking(userId, date, items, secs) {
+    return new Day(userId, date, 'picking', items, secs);
   }
 
 
