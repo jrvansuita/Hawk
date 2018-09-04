@@ -1,9 +1,8 @@
 const EccosysCalls = require('../eccosys/eccosys-calls.js');
 const UsersProvider = require('../provider/UsersProvider.js');
 const Day = require('../bean/day.js');
-const Pending = require('../bean/pending.js');
-const BlockedSale = require('../bean/blocked-sale.js');
-const PendingHandler = require('../handler/pending-handler.js');
+const PendingLaws = require('../laws/pending-laws.js');
+const BlockedLaws = require('../laws/blocked-laws.js');
 
 
 global.transportList = {};
@@ -12,12 +11,8 @@ global.transportList = {};
 global.staticPickingList = [];
 //Current picking
 global.inprogressPicking = {};
-//All sales on pending
-global.staticPendingSales = [];
 //All ready picking sales
 global.staticDonePicking = [];
-//All Blocked Sales wich can't be picking now
-global.staticBlockedSales = [];
 
 var previewCount = 6;
 const unknow = 'Retirada';
@@ -31,14 +26,13 @@ module.exports = {
 
     if (global.staticPickingList.length == 0) {
 
-      loadAllPendingSales(()=>{
-        loadAllBlockedSales(()=>{
+      PendingLaws.loadAll(true, ()=>{
+        BlockedLaws.load(()=>{
 
           EccosysCalls.getPickingSales((data) => {
             try{
               global.staticPickingList = JSON.parse(data);
               removePendingSalesFromPickingSalesList();
-              handleBlockedSales();
               handleAllDonePickingSales();
               checkIsInDevMode();
 
@@ -61,13 +55,7 @@ module.exports = {
   },
 
   onPending(callback){
-    if (global.staticPendingSales.length == 0){
-      loadAllPendingSales(()=>{
-        callback();
-      });
-    }else{
-      callback();
-    }
+    PendingLaws.loadAll(false, callback);
   },
 
   getTransportList() {
@@ -95,7 +83,7 @@ module.exports = {
         callback(buildResult(userId));
       }
     }catch(e){
-      throw "Mais nenhum pedido no array de picking";
+      throw "Nenhum pedido encontrado";
     }
   },
 
@@ -108,10 +96,6 @@ module.exports = {
     var totalItems = parseInt(sale.itemsQuantity);
 
     var day = Day.picking(userId, Dat.today(), totalItems, secDif);
-
-    //console.log("Total Items: " + totalItems);
-    //console.log("Secs: " + secDif);
-    //console.log("("+ secDif + "/(" + totalItems + "/"+ secDif + ")) * 4 = " +  day.points);
 
     //Done picking
     global.staticDonePicking.push(sale);
@@ -127,20 +111,25 @@ module.exports = {
     }
   },
 
+  getPickingSales(){
+    return assertPickingList(global.staticPickingList);
+  },
+
   upcomingSales() {
-    return assertTransport(global.staticPickingList).slice(0, previewCount);
+    return assertPickingList(global.staticPickingList).slice(0, previewCount);
   },
 
   remainingSales() {
-    return assertTransport(global.staticPickingList).length;
+    return assertPickingList(global.staticPickingList).length;
   },
+
 
   inprogressPicking() {
     return global.inprogressPicking;
   },
 
   pendingSales() {
-    return global.staticPendingSales;
+    return PendingLaws.list();
   },
 
   donePickings(){
@@ -149,15 +138,11 @@ module.exports = {
 
 
   blockedPickings(){
-    return global.staticBlockedSales;
+    return BlockedLaws.list();
   },
 
   storePendingSale(sale, local, callback){
-    sale = removeUnpendingItems(sale);
-
-    var pending = new Pending(sale.numeroPedido, sale, local);
-
-    pending.upsert(()=>{
+    PendingLaws.store(sale, local, ()=>{
       //Remove From picking List
       global.staticPickingList = global.staticPickingList.filter((i)=>{
         return i.numeroPedido != sale.numeroPedido;
@@ -166,63 +151,31 @@ module.exports = {
       //Remove from inprogress sales
       for (var key in global.inprogressPicking) {
         if (global.inprogressPicking.hasOwnProperty(key)) {
-          if (global.inprogressPicking[key].numeroPedido === pending.number){
+          if (global.inprogressPicking[key].numeroPedido === sale.numeroPedido){
             delete global.inprogressPicking[key];
           }
         }
       }
 
-      //Add new pending sale
-      global.staticPendingSales.push(pending);
       callback();
     });
   },
 
-  solvingPendingSale(pending, callback){
-    if (pending.sendEmail == true || pending.sendEmail.toString() == "true"){
-      var _self = this;
-      PendingHandler.sendEmail(pending, function(err, emailId){
-        if (err){
-          callback(err, null);
-        }else{
-          _self._solvingPendingSaleInternal(pending, callback);
-        }
-      });
+  pendingStatus(pending, callback){
+    PendingLaws.incrementStatus(pending, callback);
+  },
+
+  restartPendingSale(pending, loggerdUser, callback){
+    var user = loggerdUser;
+
+    if (global.inprogressPicking[user.id] != undefined) {
+      throw user.id + ' já tem um pedido em processo de picking.';
     }else{
-      this._solvingPendingSaleInternal(pending, callback);
-    }
-  },
-
-  _solvingPendingSaleInternal(pending, callback){
-    pending.status = 1;
-    pending.updateDate = new Date();
-    Pending.upsert(Pending.getKeyQuery(pending.number), pending, function(err, doc){
-      updatePendingSale(pending);
-      callback(null, pending);
-    });
-  },
-
-  solvedPendingSale(pending, callback){
-    pending.status = 2;
-    pending.updateDate = new Date();
-    Pending.upsert(Pending.getKeyQuery(pending.number),pending, function(err, doc){
-      updatePendingSale(pending);
-      callback(pending);
-    });
-  },
-
-  restartPendingSale(pending, callback){
-    if (global.inprogressPicking[pending.sale.pickUser.id] != undefined) {
-      throw pending.sale.pickUser.name + ' já tem um pedido em processo de picking.';
-    }else{
-      Pending.removeAll(Pending.getKeyQuery(pending.number));
-      global.staticPendingSales = global.staticPendingSales.filter((i)=>{
-        return i.number != pending.number;
-      });
+      PendingLaws.remove(pending.number);
 
       callLoadSaleItems(pending.sale, function(sale, items){
         sale.doNotCount = true;
-        initSalePicking(sale, pending.sale.pickUser.id);
+        initSalePicking(sale, user.id);
         callback(getPrintUrl(sale));
       });
     }
@@ -232,6 +185,8 @@ module.exports = {
     var sale = global.staticDonePicking.filter(function(i){
       return i.numeroPedido == doneSale;
     })[0];
+
+
 
     if (global.inprogressPicking[user.id] != undefined) {
       throw 'Você já tem um pedido em processo de picking.';
@@ -243,6 +198,7 @@ module.exports = {
           return i.numeroPedido !== doneSale;
         });
 
+
         callback();
       });
     }
@@ -250,36 +206,12 @@ module.exports = {
 
 
   toggleBlockedSale(saleNumber, user, callback){
-    var found = false;
-
-    global.staticBlockedSales.forEach((blocked, index, array)=>{
-      if (!found && blocked.number == saleNumber){
-
-        if (blocked.sale){
-          global.staticPickingList.push(blocked.sale);
-        }
-
-        array.splice(index,1);
-        found = true;
-        blocked.remove();
-        callback();
-      }
-    });
-
-    if (!found){
-      var blockedSale = new BlockedSale(saleNumber, user.id, new Date());
-      blockedSale.upsert(()=>{
-        global.staticBlockedSales.push(blockedSale);
-        handleBlockedSales(saleNumber);
-        callback();
-      });
-    }
+    BlockedLaws.toggleBlock(saleNumber, user, callback);
   }
 };
 
 
-
-function getNextSale() {
+function getNextSale(){
   return assertTransport(global.staticPickingList)[0];
 }
 
@@ -349,16 +281,26 @@ function loadSingleAttrs(sale, items){
 }
 
 
-function assertTransport(saleList){
+function assertPickingList(saleList){
+  var resultList = saleList;
+
   if (selectedTransp){
     if (saleList.length > 0) {
-      return saleList.filter(sale =>{
+      resultList = resultList.filter(sale =>{
         return Str.defStr(sale.transportador,unknow).includes(selectedTransp);
       });
     }
   }
 
-  return saleList;
+  var blocks = BlockedLaws.getAllBlocks();
+
+  if (blocks){
+    resultList = resultList.filter(sale =>{
+      return !blocks.includes(sale.numeroPedido);
+    });
+  }
+
+  return resultList;
 }
 
 function removeFromPickingList(inputSale){
@@ -378,51 +320,17 @@ function initSalePicking(sale, userId, addPrintTime){
   global.inprogressPicking[userId] = sale;
 }
 
-function loadAllPendingSales(callback){
-  Pending.findAll(function(err, all){
-
-    all.sort(function(a, b) {
-      return a.status < b.status ? 1 : a.status > b.status ? -1 : 0;
-    });
-
-    global.staticPendingSales = all;
-    callback();
-  });
-}
-
-function loadAllBlockedSales(callback){
-  BlockedSale.findAll(function(err, all){
-    global.staticBlockedSales = all;
-    callback();
-  });
-}
-
 
 function removePendingSalesFromPickingSalesList(){
   global.staticPickingList = global.staticPickingList.filter(function(i){
-    return !global.staticPendingSales.some(function(j){
+    return !PendingLaws.list().some(function(j){
       return j.number == i.numeroPedido;
     });
   });
 }
 
 
-function handleBlockedSales(forThisSale){
-  //Remove and save the sale blocked
-  global.staticBlockedSales.forEach((blocked)=>{
 
-    blocked.user = UsersProvider.get(blocked.userId);
-
-    if (forThisSale == undefined || forThisSale == blocked.number){
-      global.staticPickingList.forEach((sale, index, array)=>{
-        if (blocked.number == sale.numeroPedido){
-          blocked.sale = sale;
-          array.splice(index, 1);
-        }
-      });
-    }
-  });
-}
 
 //pickingRealizado = N -> All Sales to pick
 //pickingRealizado = A -> Picking done
@@ -450,9 +358,6 @@ function handleAllDonePickingSales(){
 }
 
 
-function updatePendingSale(pending){
-  global.staticPendingSales = global.staticPendingSales.map(function(i) { return i.sale.numeroPedido == pending.sale.numeroPedido ? pending : i; });
-}
 
 
 function checkIsInDevMode(){
@@ -464,12 +369,4 @@ function checkIsInDevMode(){
       global.staticPickingList.splice(maxSalesOnDevMove);
     }
   }
-}
-
-
-function removeUnpendingItems(sale){
-  sale.items = sale.items.filter(function (item){
-    return item.pending !== undefined && item.pending.toString() == "true";
-  });
-  return sale;
 }

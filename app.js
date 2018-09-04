@@ -31,43 +31,8 @@ app.use('/visual', express.static('visual'));
 app.use('/control', express.static('control'));
 app.use('/util', express.static('app/util'));
 app.use('/libs', express.static('libs'));
-
 app.use('/chart', express.static('views/chart'));
 
-
-// app.get('/', (req, res) => {
-//   res.send('This is the home');
-// });
-//
-// app.get('/home', (req, res) => {
-//   res.sendFile(__dirname + '/views/home.html');
-// });
-
-
-app.post('/run-jobs', (req, res) => {
-  var jobsRunner = require('./app/jobs/Jobs.js');
-
-  var dataResult = {
-    "was_running": true
-  };
-
-  if (req.headers.referer.includes('packing')){
-    jobsRunner.runPacking((runned) => {
-      dataResult.was_running = runned;
-
-      if (runned) {
-        res.status(200).send(dataResult);
-      } else {
-        res.status(201).send(dataResult);
-      }
-    });
-  }else{
-    jobsRunner.runPicking(()=>{
-      res.status(200).send(dataResult);
-    });
-  }
-
-});
 
 
 const ignorePaths = ['/login', '/', '.png', '.jpg'];
@@ -79,10 +44,8 @@ app.use(function(req, res, next) {
     res.locals.loggedUser = req.session.loggedUser;
 
     if (Util.notIn(ignorePaths, req._parsedUrl.path)){
-       req.session.lastpath = req._parsedUrl.path;
+      req.session.lastpath = req._parsedUrl.path;
     }
-
-
 
     next();
   } else {
@@ -93,263 +56,27 @@ app.use(function(req, res, next) {
 
 app.get(['/'], (req, res)=>{
   if (req.session.lastpath){
-
     res.redirect(req.session.lastpath);
   }else{
     res.redirect('/packing');
   }
 });
 
+var routes = [];
+routes.push('login-routes.js');
+routes.push('jobs-routes.js');
+routes.push('packing-routes.js');
+routes.push('picking-routes.js');
+routes.push('pending-routes.js');
+routes.push('performance-routes.js');
 
-app.get('/login', (req, res) => {
-  res.render('login');
-});
-
-app.post('/login', function(req, res) {
-  var UsersProvider = require('./app/provider/UsersProvider.js');
-  UsersProvider.login(req.body.userId, req.body.userAccess, (user, msg)=>{
-    req.session.loggedUser = user;
-
-    if (req.session.loggedUser) {
-      res.status(200).send(req.session.loggedUser);
-    } else {
-      req.session = null;
-      res.status(505).send(msg);
-    }
-  });
+// -- Run Routes -- //
+routes.forEach((r)=>{
+  var Clazz = require('./app/redirects/' + r);
+  new Clazz(app).attach();
 });
 
 
-app.get(['/packing', '/packing/overview'], (req, res) => {
-  require('./app/builder/InvoiceChartBuilder.js').buildOverview(res.locals.loggedUser.full, function(charts) {
-    res.render('invoice-chart', {
-      charts: charts,
-      page: req.originalUrl,
-    });
-  });
+app.listen(app.get('port'), function() {
+  console.log('Node is running on port ', app.get('port'));
 });
-
-
-app.get('/packing/by-date', (req, res) => {
-  var from = req.query.from ? new Date(parseInt(req.query.from)) : Dat.firstDayOfMonth();
-  var to = req.query.to ? new Date(parseInt(req.query.to)).maxTime() : Dat.lastDayOfMonth();
-
-  require('./app/builder/InvoiceChartBuilder.js').buildByDate(from, to, res.locals.loggedUser.full, function(charts) {
-    res.render('invoice-chart', {
-      charts: charts,
-      page: req.originalUrl,
-      showCalendarFilter : true
-    });
-  });
-});
-
-
-
-app.get('/packing/achievements', (req, res) => {
-  var InvoiceAchievGridBuilder = require('./app/builder/InvoiceAchievGridBuilder.js');
-  var builder = new InvoiceAchievGridBuilder();
-  builder.init(res.locals.loggedUser.full,
-    (data) => {
-      res.render('invoice-achiev', {
-        data: data
-      });
-    });
-
-    builder.build();
-  });
-
-  app.get('/picking/achievements', (req, res) => {
-    var PickingAchievGridBuilder = require('./app/builder/PickingAchievGridBuilder.js');
-    var builder = new PickingAchievGridBuilder();
-    builder.init(res.locals.loggedUser.full,
-      (data) => {
-        res.render('picking-achiev', {
-          data: data
-        });
-      });
-
-      builder.build();
-    });
-
-    app.get('/estoque', (req, res) => {
-      res.render('estoque');
-    });
-
-
-
-
-
-    // --- Picking --- //
-    var pickingProvider = new require('./app/provider/PickingProvider.js');
-
-    app.get('/picking', (req, res) => {
-
-      pickingProvider.init(req.query.transp,() => {
-
-
-        if (!res.headersSent){
-          res.render('picking', {
-            upcoming: pickingProvider.upcomingSales(),
-            remaining: pickingProvider.remainingSales(),
-            inprogress: pickingProvider.inprogressPicking(),
-            transportList: pickingProvider.getTransportList(),
-            pendingSales: pickingProvider.pendingSales(),
-            donePickings: pickingProvider.donePickings(),
-            blockedSales: pickingProvider.blockedPickings(),
-            selectedTransp: req.query.transp,
-            printPickingUrl: global.pickingPrintUrl
-          });
-        }
-      });
-    });
-
-    app.get(['/pending'], (req, res) => {
-      pickingProvider.onPending(()=>{
-        res.render('pending',{
-          wideOpen : true,
-          pendingSales: pickingProvider.pendingSales()});
-      });
-    });
-
-
-    app.get('/picking-sale', (req, res) => {
-      try {
-        pickingProvider.handle(req.query.userid, (result) => {
-          res.status(200).send(result);
-        });
-      } catch (e) {
-        console.log(e);
-        res.status(412).send(e);
-      }
-    });
-
-    app.post('/picking-pending', (req, res) => {
-      try {
-        pickingProvider.storePendingSale(req.body.pendingSale, req.body.local, (printUrl) => {
-          res.status(200).send(printUrl);
-        });
-      } catch (e) {
-        console.log(e.message);
-        res.status(500).send(new Error(e.message));
-      }
-    });
-
-    app.post('/picking-pending-solving', (req, res) => {
-      try {
-        pickingProvider.solvingPendingSale(req.body.pendingSale, (err, result) => {
-          if (err){
-            res.status(500).send(err);
-          }else{
-            res.status(200).send(result);
-          }
-        });
-      } catch (e) {
-        console.log(e);
-        res.status(500).send(e);
-      }
-    });
-
-    app.post('/picking-pending-solved', (req, res) => {
-      try {
-        pickingProvider.solvedPendingSale(req.body.pendingSale, (result) => {
-          res.status(200).send(result);
-        });
-      } catch (e) {
-        console.log(e);
-        res.status(500).send(e);
-      }
-    });
-
-
-    app.post('/picking-pending-restart', (req, res) => {
-      try {
-        pickingProvider.restartPendingSale(req.body.pendingSale, (printUrl) => {
-          res.status(200).send(printUrl);
-        });
-      } catch (e) {
-        console.log(e);
-        res.status(500).send(e);
-      }
-    });
-
-    app.post('/picking-done-restart', (req, res) => {
-      try {
-        pickingProvider.restartDoneSale(req.session.loggedUser, req.body.sale, (result) => {
-          res.status(200).send(result);
-        });
-      } catch (e) {
-        res.status(500).send(e);
-      }
-    });
-
-    app.get(['/picking/overview'], (req, res) => {
-      require('./app/builder/PickingChartBuilder.js').buildOverview(res.locals.loggedUser.full, function(charts) {
-        res.render('picking-chart', {
-          charts: charts,
-          page: req.originalUrl,
-        });
-      });
-    });
-
-
-    app.get(['/picking/by-date'], (req, res) => {
-      var from = req.query.from ? new Date(parseInt(req.query.from)) : Dat.firstDayOfMonth();
-      var to = req.query.to ? new Date(parseInt(req.query.to)).maxTime() : Dat.lastDayOfMonth();
-
-      require('./app/builder/PickingChartBuilder.js').buildByDate(from, to, res.locals.loggedUser.full, function(charts) {
-        res.render('picking-chart', {
-          charts: charts,
-          page: req.originalUrl,
-          showCalendarFilter : true
-        });
-      });
-    });
-
-  app.get(['/profile/performance'], (req, res) => {
-   var from = req.query.from ? new Date(parseInt(req.query.from)) : Dat.firstDayOfMonth();
-   var to = req.query.to ? new Date(parseInt(req.query.to)).maxTime() : Dat.lastDayOfMonth();
-   var userId = req.query.userid || req.session.loggedUser.id;
-
-   require('./app/provider/ProfilePerformanceProvider.js').onUserPerformance(
-     from,
-     to,
-     userId,
-     res.locals.loggedUser.full,
-     function(user, charts, indicators) {
-     res.render('profile-performance', {
-       user: user,
-       charts: charts,
-       indicators: indicators,
-       showCalendarFilter : true,
-       hideEmptyCharts : true
-     });
-   });
-  });
-
-
-  app.post(['/picking/toggle-block-sale'], (req, res) => {
-    try {
-
-      pickingProvider.toggleBlockedSale(req.body.saleNumber, req.session.loggedUser, (result) => {
-        res.status(200).send(result);
-      });
-    } catch (e) {
-      console.log(e);
-      res.status(500).send(e);
-    }
-  });
-
-
-
-
-    app.listen(app.get('port'), function() {
-      console.log('Node is running on port ', app.get('port'));
-    });
-
-
-
-
-    /*console.log(app._router.stack          // registered routes
-  .filter(r => r.route && r.route.methods.get)    // take out all the middleware
-  .map(r => r.route.path)  // get all the paths
-);*/

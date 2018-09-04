@@ -11,12 +11,10 @@ Pending status
     super();
     this.number = Str.def(number);
     this.status = 0;
-    this.solving = false;
-    this.solved = false;
     this.sale = sale == undefined ? {} : sale;
     this.updateDate = Dat.now();
     this.sendEmail = false;
-    this.local = Str.def(local);
+    this.local = Str.def(local ? local.toUpperCase() : "");
   }
 
   static getKey() {

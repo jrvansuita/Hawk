@@ -7,6 +7,11 @@ var Dat = {
     return formated.day + '/' + formated.month + '/' + formated.year.slice(2, 4);
   },
 
+  formatwTime(date) {
+    var formated = fmt(date);
+    return formated.day + '/' + formated.month + '/' + formated.year.slice(2, 4) + " " + formated.hour + ":" + formated.min;
+  },
+
   api(date) {
     var formated = fmt(date);
     return formated.year + '-' + formated.month + '-' + formated.day;
@@ -138,6 +143,8 @@ function fmt(date) {
     day: date.getUTCDate(),
     month: date.getUTCMonth() + 1,
     year: date.getFullYear().toString(),
+    hour: date.getHours(),
+    min: date.getMinutes()
   };
 
   formated.day = (formated.day <= 9 ? '0' + formated.day : formated.day);

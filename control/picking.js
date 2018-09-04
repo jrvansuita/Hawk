@@ -88,7 +88,7 @@ $(document).ready(() => {
   $('.pending-button').click(function(){
     if (checkIsLocalFilled(true)){
       $.ajax({
-        url: "/picking-pending",
+        url: "/start-pending",
         type: "post",
         data: {
           pendingSale: selectedPendingSale,

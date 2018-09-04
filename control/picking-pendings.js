@@ -101,8 +101,12 @@ function buildPendingItemsViews(el, pending){
 function getFirstBottomBarOptions(pending){
   var div = $('<div>');
 
-  var span = $('<span>').addClass('pick-value small-font last-update').append('Última alteração: ' + (pending.updateDate ? Dat.format(new Date(pending.updateDate)): ''));
+  var span = $('<span>').addClass('pick-value small-font last-update').append('Última alteração: ' + (pending.updateDate ? Dat.formatwTime(new Date(pending.updateDate)): ''));
   div.append(span);
+
+  if (isTrueStr(pending.sendEmail) ){
+    div.append(getEmailImage());
+  }
 
   if (pending.status == 0){
     if (typeof wideOpen == "undefined"){
@@ -133,10 +137,6 @@ function getMiddleBottomBarOptions(pending){
 function getLastBottomBarOption(pending){
   var div = $('<div>');
 
-  if (isTrueStr(pending.sendEmail) ){
-    div.append(getEmailImage());
-  }
-
   if ((pending.status < 2 && isWideOpen()) || (pending.status == 2 && !isWideOpen()) ){
     var solve = $('<label>').addClass('button shadow solve-pending').append(getPendingItemButtonLabel(pending)).click(function(){
       onPendingItemButtonClicked($(this), pending);
@@ -144,6 +144,14 @@ function getLastBottomBarOption(pending){
 
     if(isBlocked(pending)){
       solve.addClass('blocked');
+    }
+
+    if (pending.status == 1){
+      var block = $('<img>').addClass('button block-pending').attr('src','/img/block.png').attr('title','Bloquear').click(function(){
+        //callToggleBlockedSale(pending.sale.numeroPedido, true);
+      });
+
+      div.prepend(block);
     }
 
     div.prepend(solve);
@@ -192,7 +200,7 @@ function onPendingItemButtonClicked(button, pending){
 
 function getPendingItemButtonLabel(pending){
   if (pending.status == 2){
-    return "Reiniciar";
+    return "Assumir";
   }else if (isBlocked(pending)){
     return "Bloqueado";
   }else if (pending.status == 1){
@@ -368,14 +376,14 @@ function doallSolvingPendingSale(icon){
 
 function innerSolvingPendingSale(pending, sendEmail, callback){
   pending.sendEmail = sendEmail;
-  executePendingAjax("/picking-pending-solving", pending, function(r){
+  executePendingAjax("/pending-status", pending, function(r){
     callback(r);
   });
 }
 
 function solvedPendingSale(button, pending){
   showLoadingButton(button);
-  executePendingAjax("/picking-pending-solved", pending,  function(resultPending){
+  executePendingAjax("/pending-status", pending,  function(resultPending){
     rebuildSpawItem('solving','solved', resultPending);
   });
 }
