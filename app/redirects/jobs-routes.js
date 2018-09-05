@@ -5,14 +5,14 @@ module.exports = class JobsRoutes extends Routes{
 
   attach(){
     this._post('/run-jobs', (req, res) => {
-      runJobs((r)=>{
+      runJobs(req, (r)=>{
         this._resp().sucess(res, r);
       });
     });
   }
 };
 
-function runJobs(callback){
+function runJobs(req, callback){
   var jobsRunner = require('../jobs/Jobs.js');
 
   if (req.headers.referer.includes('packing')){

@@ -400,9 +400,15 @@ function rebuildSpawItem(actualClass, nextClass , resultPending){
 
   $this.delay(1000).fadeOut(400, function() {
     $this.remove();
+
+    setTimeout(function() {
+       window.location.reload();
+    }, 300);
   });
 
   hidePedingItemModal();
+
+
 }
 
 function executePendingAjax(path, pending, onSucess){
