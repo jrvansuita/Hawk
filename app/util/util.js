@@ -24,6 +24,14 @@ var Util = {
     return arrItem ? arrItem.getBars() : [];
   },
 
+  forProperty(object, callback){
+    for (var key in object) {
+      if (object.hasOwnProperty(key)) {
+        callback(global.inprogressPicking[key], key);
+      }
+    }
+  },
+
   selectContent: function(element) {
     var range = document.createRange();
     range.selectNodeContents(element);

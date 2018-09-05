@@ -9,7 +9,7 @@ module.exports = {
 
   list(){
     return global.staticBlockedSales;
-  },
+  }, 
 
   load(callback){
     BlockedSale.findAll(function(err, all){
@@ -53,7 +53,7 @@ module.exports = {
     }
   },
 
-  getAllBlocks(){
+  getAllSales(){
     return this.list().map(a => a.number);
   }
 
