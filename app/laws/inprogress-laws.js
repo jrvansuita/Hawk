@@ -36,15 +36,16 @@ module.exports = {
     });
   },
 
-  startPicking(sale, userId, addPrintTime){
+  startPicking(sale, userId, doNotCount){
     var begin = new Date();
 
-    if (addPrintTime){
+    if (!doNotCount){
       begin.setSeconds(begin.getSeconds() + 10);
     }
 
     sale.begin = begin;
     sale.end = null;
+    sale.doNotCount = doNotCount;
     sale.pickUser = UsersProvider.get(userId);
     this.object()[userId] = sale;
 
@@ -67,7 +68,7 @@ module.exports = {
     }
   },
 
-  getAllSales(){
+  getSaleNumbers(){
     return Object.values(this.object()).map(a => a.numeroPedido);
   }
 

@@ -1,25 +1,24 @@
 const Pending = require('../bean/pending.js');
-const PendingEmailSender = require('../email/sender/pending-email-sender.js');
-const EccosysCalls = require('../eccosys/eccosys-calls.js');
+
 
 global.staticPendingSales = [];
 
 module.exports = {
 
 
-  list(){
+  getList(){
     return global.staticPendingSales;
   },
 
   //---- Load All Elements ----//
 
-  loadAll(clear, callback){
-    if (clear || (global.staticPendingSales.length == 0)){
+  load(clear, callback){
+    if (clear || (this.getList().length == 0)){
       loadAllPendingSalesFromDB(()=>{
-        callback();
+        callback(this.getList());
       });
     }else{
-      callback();
+      callback(this.getList());
     }
   },
 
@@ -40,16 +39,14 @@ module.exports = {
 
 
   //---- Update Elements ----//
-  
-  incrementStatus(pending, callback){
-    sendEmailIfNeed(pending, ()=>{
-      pending.status = parseInt(pending.status) + 1;
-      pending.updateDate = new Date();
 
-      Pending.upsert(Pending.getKeyQuery(pending.number), pending, function(err, doc){
-        updatePendingSale(pending);
-        callback(pending, err);
-      });
+  incrementStatus(pending, callback){
+    pending.status = parseInt(pending.status) + 1;
+    pending.updateDate = new Date();
+
+    Pending.upsert(Pending.getKeyQuery(pending.number), pending, function(err, doc){
+      updatePendingSale(pending);
+      callback(pending, err);
     });
   },
 
@@ -61,26 +58,15 @@ module.exports = {
     global.staticPendingSales = global.staticPendingSales.filter((i)=>{
       return i.number != saleNumber;
     });
+  },
+
+
+  getSaleNumbers(){
+    return global.staticPendingSales.map(a => a.number);
   }
 
 };
 
-
-function sendEmailIfNeed(pending, callback){
-  if (pending.status == 0 && pending.sendEmail.toString() == "true"){
-    var sale = pending.sale;
-
-    EccosysCalls.getClient(sale.idContato, (data)=>{
-      var client = JSON.parse(data)[0];
-      var pendingEmailSender = new PendingEmailSender();
-      pendingEmailSender.client(client.nome, client.email);
-      pendingEmailSender.sale(sale);
-      pendingEmailSender.send(callback);
-    });
-  }else{
-    callback();
-  }
-}
 
 function loadAllPendingSalesFromDB(callback){
   Pending.findAll(function(err, pendings){

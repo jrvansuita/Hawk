@@ -22,6 +22,10 @@ var Dat = {
     return formated.day + '-' + formated.month + '-' + formated.year;
   },
 
+  query(queryDate, def){
+    return queryDate ? new Date(parseInt(queryDate)) : def;
+  },
+
   daysDif(date1, date2) {
     dt1 = new Date(date1);
     dt2 = new Date(date2);

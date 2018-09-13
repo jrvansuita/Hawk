@@ -1,7 +1,12 @@
 const Routes = require('../redirects/_routes.js');
+const BlockedLaws = require('../laws/blocked-laws.js');
+const TransportLaws = require('../laws/transport-laws.js');
+const InprogressLaws = require('../laws/inprogress-laws.js');
+const PendingLaws = require('../laws/pending-laws.js');
+const DoneLaws = require('../laws/done-laws.js');
+const PickingHandler = require('../handler/picking-handler.js');
 
-
-module.exports = class PerformanceRoutes extends Routes{
+module.exports = class PickingRoutes extends Routes{
 
   attach(){
     this._get('/picking/achievements', (req, res) => {
@@ -16,20 +21,17 @@ module.exports = class PerformanceRoutes extends Routes{
       builder.build();
     });
 
-    var pickingProvider = new require('../provider/PickingProvider.js');
-
     this._get('/picking', (req, res) => {
-      pickingProvider.init(req.query.transp,() => {
+      PickingHandler.init(req.query.transp,() => {
 
         if (!res.headersSent){
           res.render('picking', {
-            upcoming: pickingProvider.upcomingSales(),
-            remaining: pickingProvider.remainingSales(),
-            inprogress: pickingProvider.inprogressPicking(),
-            transportList: pickingProvider.getTransportList(),
-            pendingSales: pickingProvider.pendingSales(),
-            donePickings: pickingProvider.donePickings(),
-            blockedSales: pickingProvider.blockedPickings(),
+            pickingSales: PickingHandler.getPickingSales(),
+            inprogress: InprogressLaws.object(),
+            transportList: TransportLaws.getObject(),
+            pendingSales: PendingLaws.getList(),
+            donePickings: DoneLaws.getList(),
+            blockedSales: BlockedLaws.list(),
             selectedTransp: req.query.transp,
             printPickingUrl: global.pickingPrintUrl
           });
@@ -48,8 +50,8 @@ module.exports = class PerformanceRoutes extends Routes{
 
 
     this._get('/picking/by-date', (req, res) => {
-      var from = req.query.from ? new Date(parseInt(req.query.from)) : Dat.firstDayOfMonth();
-      var to = req.query.to ? new Date(parseInt(req.query.to)).maxTime() : Dat.lastDayOfMonth();
+      var from = Dat.query(req.query.from, Dat.firstDayOfMonth());
+      var to = Dat.query(req.query.to, Dat.lastDayOfMonth());
 
       require('../builder/PickingChartBuilder.js').buildByDate(from, to, res.locals.loggedUser.full, function(charts) {
         res.render('picking-chart', {
@@ -61,15 +63,15 @@ module.exports = class PerformanceRoutes extends Routes{
     });
 
     this._get('/picking-sale', (req, res) => {
-          pickingProvider.handle(req.query.userid,  this._resp().redirect(res));
+      PickingHandler.handle(req.query.userid,  this._resp().redirect(res));
     });
 
     this._post(['/picking/toggle-block-sale'], (req, res) => {
-        pickingProvider.toggleBlockedSale(req.body.saleNumber, req.session.loggedUser, this._resp().redirect(res));
+      BlockedLaws.toggleBlock(req.body.saleNumber, req.session.loggedUser, this._resp().redirect(res));
     });
 
     this._post('/picking-done-restart', (req, res, body, locals, session) => {
-      pickingProvider.restartDoneSale(session.loggedUser, req.body.sale, this._resp().redirect(res));
+      PickingHandler.restart(session.loggedUser, req.body.sale, this._resp().redirect(res));
     });
   }
 };

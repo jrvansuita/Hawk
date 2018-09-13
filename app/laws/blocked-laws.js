@@ -9,7 +9,19 @@ module.exports = {
 
   list(){
     return global.staticBlockedSales;
-  }, 
+  },
+
+  assert(saleList){
+    var blocks = this.getAllSales();
+
+    if (blocks){
+      saleList = saleList.filter(sale =>{
+        return !blocks.includes(sale.numeroPedido);
+      });
+    }
+
+    return saleList;
+  },
 
   load(callback){
     BlockedSale.findAll(function(err, all){

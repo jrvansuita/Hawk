@@ -68,12 +68,12 @@
 
               <div class="pick-header">
                 <span class="label header-title"> Próximos Pedidos</span>
-                <span class="label header-count"> <%=remaining%></span>
+                <span class="label header-count"> <%=pickingSales.length%></span>
               </div>
 
 
               <%
-              upcoming.forEach(function(preview){
+              pickingSales.slice(0, 6).forEach(function(preview){
                 %>
 
                 <div class="shadow label mini-item solved">

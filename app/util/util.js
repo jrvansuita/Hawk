@@ -70,7 +70,23 @@ var Util = {
     });
 
     return !n;
+  },
+
+  throwIfEmpty(list, msg){
+    try{
+      if (list.length == 0) {
+        throw new Error();
+      } else {
+        return false;
+      }
+    }catch(e){
+      console.log(e);
+      throw msg;
+    }
   }
+
+  
+
 
 
 

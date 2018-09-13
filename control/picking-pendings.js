@@ -190,7 +190,7 @@ function onPendingItemButtonClicked(button, pending){
   if (pending.status == 2){
     restartPendingSale(pending);
   }else if (isBlocked(pending)){
-
+ 
   }else if (pending.status == 1){
     solvedPendingSale(button,pending);
   }else{

@@ -6,8 +6,8 @@ module.exports = class PerformanceRoutes extends Routes{
   attach(){
 
     this._get(['/profile/performance'], (req, res) => {
-      var from = req.query.from ? new Date(parseInt(req.query.from)) : Dat.firstDayOfMonth();
-      var to = req.query.to ? new Date(parseInt(req.query.to)).maxTime() : Dat.lastDayOfMonth();
+      var from = Dat.query(req.query.from, Dat.firstDayOfMonth());
+      var to = Dat.query(req.query.to, Dat.lastDayOfMonth());
       var userId = req.query.userid || req.session.loggedUser.id;
 
       require('../provider/ProfilePerformanceProvider.js').onUserPerformance(

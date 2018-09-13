@@ -1,30 +1,28 @@
 const Routes = require('../redirects/_routes.js');
-
+const PendingLaws = require('../laws/pending-laws.js');
+const PendingHandler = require('../handler/pending-handler.js');
 
 module.exports = class PendingRoutes extends Routes{
 
   attach(){
-
-    var pickingProvider = new require('../provider/PickingProvider.js');
-
     this._get('/pending', (req, res) => {
-      pickingProvider.onPending(()=>{
-        res.render('pending',{
+      PendingHandler.load(false, (list)=>{
+        res.render('pending', {
           wideOpen : true,
-          pendingSales: pickingProvider.pendingSales()});
+          pendingSales: list});
       });
     });
-
+ 
     this._post('/start-pending', (req, res, body) => {
-      pickingProvider.storePendingSale(body.pendingSale, body.local, this._resp().redirect(res));
+      PendingHandler.store(body.pendingSale, body.local, this._resp().redirect(res));
     });
 
     this._post('/pending-status', (req, res, body) => {
-      pickingProvider.pendingStatus(body.pendingSale, this._resp().redirect(res)); 
+      PendingHandler.incStatus(body.pendingSale, this._resp().redirect(res));
     });
 
     this._post('/picking-pending-restart', (req, res, body, locals) => {
-      pickingProvider.restartPendingSale(body.pendingSale, locals.loggedUser, this._resp().redirect(res));
+      PendingHandler.restart(body.pendingSale, locals.loggedUser, this._resp().redirect(res));
     });
 
 

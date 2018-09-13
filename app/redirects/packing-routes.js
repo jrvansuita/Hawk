@@ -16,9 +16,9 @@ module.exports = class PackingRoutes extends Routes{
 
 
     this._get('/packing/by-date', (req, res) => {
-      var from = req.query.from ? new Date(parseInt(req.query.from)) : Dat.firstDayOfMonth();
-      var to = req.query.to ? new Date(parseInt(req.query.to)).maxTime() : Dat.lastDayOfMonth();
-
+      var from = Dat.query(req.query.from, Dat.firstDayOfMonth());
+      var to = Dat.query(req.query.to, Dat.lastDayOfMonth());
+      
       require('../builder/InvoiceChartBuilder.js').buildByDate(from, to, res.locals.loggedUser.full, function(charts) {
         res.render('invoice-chart', {
           charts: charts,
