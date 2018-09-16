@@ -5,17 +5,14 @@ const DoneLaws = require('../laws/done-laws.js');
 const PickingLaws = require('../laws/picking-laws.js');
 const UsersProvider = require('../provider/UsersProvider.js');
 const PickingLaps = require('../handler/laps/picking-laps.js');
-const TransportLaws = require('../laws/transport-laws.js');
 const BlockedLaws = require('../laws/blocked-laws.js');
 
 
 module.exports = {
 
-  init(selected, onFinished) {
-    TransportLaws.select(selected);
+  init(onFinished) {
 
-    if (PickingLaws.isEmpty()) {
-
+    if (PickingLaws.isFullEmpty()) {
       PendingLaws.load(true, ()=>{
         BlockedLaws.load(()=>{
           this.load(onFinished);
@@ -30,11 +27,13 @@ module.exports = {
     EccosysCalls.getPickingSales((data) => {
       try{
         PickingLaws.set(JSON.parse(data));
+
         this.setOffSales();
+
         PickingLaws.handleDevMode();
 
-        if (!PickingLaws.isEmpty()){
-          PickingLaps.loadSaleItems(PickingLaws.getList(), 0, callback);
+        if (!PickingLaws.isFullEmpty()){
+          PickingLaps.loadSaleItems(PickingLaws.getFullList(), 0, callback);
         }else{
           callback();
         }
@@ -73,11 +72,16 @@ module.exports = {
 
 
   setOffSales(){
+    //Remove Pendings from Picking List
     PickingLaws.assert(PendingLaws.getSaleNumbers());
 
-    DoneLaws.handle(PickingLaws.getList());
+    //Load Done List from Picking List
+    DoneLaws.handle(PickingLaws.getFullList());
+
+    //Remove Done List from Picking List
     PickingLaws.assert(DoneLaws.getSaleNumbers());
 
+    //Remove In Progress Sales From Done List
     DoneLaws.assert(InprogressLaws.getSaleNumbers());
   },
 

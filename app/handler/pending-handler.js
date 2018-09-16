@@ -3,6 +3,7 @@ const PickingLaws = require('../laws/picking-laws.js');
 const PickingLaps = require('../handler/laps/picking-laps.js');
 const InprogressLaws = require('../laws/inprogress-laws.js');
 const EccosysCalls = require('../eccosys/eccosys-calls.js');
+const PendingEmailSender = require('../email/sender/pending-email-sender.js');
 
 module.exports = {
 
@@ -42,20 +43,27 @@ module.exports = {
 };
 
 
-
-
 function sendEmailIfNeed(pending, callback){
   if (pending.status == 0 && pending.sendEmail.toString() == "true"){
     var sale = pending.sale;
 
-    EccosysCalls.getClient(sale.idContato, (data)=>{
-      var client = JSON.parse(data)[0];
-      var pendingEmailSender = new PendingEmailSender();
-      pendingEmailSender.client(client.nome, client.email);
-      pendingEmailSender.sale(sale);
-      pendingEmailSender.send(callback);
-    });
+    if (sale.client){
+      sendEmail(sale, callback);
+    }else{
+      EccosysCalls.getClient(sale.idContato, (data)=>{
+        var client = JSON.parse(data)[0];
+        sale.client = client;
+        sendEmail(sale, callback);
+      });
+    }
   }else{
     callback();
   }
+}
+
+function sendEmail(sale, callback){
+  var pendingEmailSender = new PendingEmailSender();
+  pendingEmailSender.client(sale.client.nome, sale.client.email);
+  pendingEmailSender.sale(sale);
+  pendingEmailSender.send(callback);
 }

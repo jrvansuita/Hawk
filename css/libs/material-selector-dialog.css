@@ -1,0 +1,101 @@
+.ms-modal{
+  position: fixed;
+  width: 100%;
+  background-color: rgba(0,0,0,.6);
+  height: 100%;
+  left: 0;
+  z-index: 999;
+  top: 0;
+}
+
+.ms-holder{
+  margin: auto;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: -10%;
+  bottom: 0;
+  background-color: white;
+  width: fit-content;
+  height:fit-content;
+  display: block;
+  border-radius: 2px;
+  padding: 0px 15px;
+  padding-top: 20px;
+  padding-bottom: 12px;
+  -webkit-box-shadow: 2px 2px 24px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 2px 2px 24px 0px rgba(0,0,0,0.75);
+  box-shadow: 2px 2px 24px 0px rgba(0,0,0,0.75);
+}
+
+.ms-items{
+  display: block;
+  padding: 0px;
+  margin-top: 15px;
+  margin-bottom: 0px;
+}
+
+.ms-items li{
+  list-style-type: none;
+  display: -webkit-box;
+  width: 100%;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+}
+.ms-items li:hover{
+  border-radius: 2px;
+  background-color: #efecec;
+}
+
+.ms-title{
+  padding-left: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #025f54;
+}
+
+.ms-items  img {
+  cursor: pointer;
+  display: -webkit-box;
+  width: 25px;
+  height: 25px;
+  padding: 0px 6px;
+}
+
+.ms-items  span {
+  cursor: pointer;
+  display: flex;
+  padding: 5px 4px;
+}
+
+.ms-items  label {
+  cursor: pointer;
+  padding: 6px 2px;
+  margin-right: 15px;
+  font-size: 13px;
+  color: #696666;
+  font-weight: 600;
+}
+
+.ms-buttons-holder{
+  margin-top: 5px;
+  padding-top: 8px;
+  border-top: solid 1px #e6e4e4;
+}
+
+.ms-button{
+  color: #025f54;
+  font-size: 14px;
+  font-weight: 700;
+  float: right;
+  cursor: pointer;
+
+  padding: 8px 10px;
+  border-radius: 2px;
+}
+
+.ms-button:hover{
+  background-color: #efecec;
+}

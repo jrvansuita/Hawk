@@ -1,6 +1,7 @@
 const Routes = require('../redirects/_routes.js');
 const BlockedLaws = require('../laws/blocked-laws.js');
 const TransportLaws = require('../laws/transport-laws.js');
+const UfLaws = require('../laws/uf-laws.js');
 const InprogressLaws = require('../laws/inprogress-laws.js');
 const PendingLaws = require('../laws/pending-laws.js');
 const DoneLaws = require('../laws/done-laws.js');
@@ -22,17 +23,25 @@ module.exports = class PickingRoutes extends Routes{
     });
 
     this._get('/picking', (req, res) => {
-      PickingHandler.init(req.query.transp,() => {
+      TransportLaws.select(req.query.transp);
+      UfLaws.select(req.query.uf);
+
+      PickingHandler.init(() => {
 
         if (!res.headersSent){
           res.render('picking', {
             pickingSales: PickingHandler.getPickingSales(),
             inprogress: InprogressLaws.object(),
+            
             transportList: TransportLaws.getObject(),
+            selectedTransp: req.query.transp,
+
+            ufList: UfLaws.getObject(),
+            selectedUf: req.query.uf,
+
             pendingSales: PendingLaws.getList(),
             donePickings: DoneLaws.getList(),
             blockedSales: BlockedLaws.list(),
-            selectedTransp: req.query.transp,
             printPickingUrl: global.pickingPrintUrl
           });
         }
@@ -67,7 +76,7 @@ module.exports = class PickingRoutes extends Routes{
     });
 
     this._post(['/picking/toggle-block-sale'], (req, res) => {
-      BlockedLaws.toggleBlock(req.body.saleNumber, req.session.loggedUser, this._resp().redirect(res));
+      BlockedLaws.toggleBlock(req.body.saleNumber, req.session.loggedUser, req.body.reason, this._resp().redirect(res));
     });
 
     this._post('/picking-done-restart', (req, res, body, locals, session) => {

@@ -26,7 +26,13 @@ $(document).ready(() => {
       var saleNumber = $('#blocked-sale-input').val();
 
       if (saleNumber.length >= 5 && isNum(saleNumber)) {
-        callToggleBlockedSale(saleNumber);
+        if ($('.table-sale-blocked-holder').find("[data-sale='" + saleNumber + "']").length > 0){
+          new BlockedPost(saleNumber).call();
+        }else{
+          new BlockedSelector().onSelect((reason)=>{
+              new BlockedPost(saleNumber, reason).call();
+          }).show();
+        }
       }
     }
   });
@@ -72,12 +78,6 @@ $(document).ready(() => {
     }
   });
 
-
-  $('.inner-label').click(()=>{
-    $('.drop-ttl').click();
-  });
-
-
   $('.inprogress-item').click(function(){
     var saleNumber = $(this).data('sale').split('-')[1];
     var sale = getInProgressSale(saleNumber);
@@ -105,12 +105,12 @@ $(document).ready(() => {
     }
   });
 
-  $('.table-sale-holder').click(function(e){
+  $('.table-sale-blocked-holder').click(function(e){
     var saleNumber = $(this).data('sale');
 
     var drop = new MaterialDropdown($(this), e);
     drop.addItem('/img/delete.png', 'Desbloquear', function(){
-      callToggleBlockedSale(saleNumber);
+      new BlockedPost(saleNumber).call();
     });
 
     drop.show();
@@ -230,21 +230,4 @@ function checkIsLocalFilled(shake){
   }
 
   return isFilled;
-}
-
-
-function callToggleBlockedSale(saleNumber){
-  $.ajax({
-    url: "/picking/toggle-block-sale",
-    type: "post",
-    data: {
-      saleNumber: saleNumber
-    },
-    success: function(response) {
-      window.location.reload();
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      onSimpleMaterialInputError( $('#blocked-sale-input'));
-    }
-  });
 }

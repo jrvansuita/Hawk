@@ -1,5 +1,6 @@
 const UsersProvider = require('../provider/UsersProvider.js');
 const Day = require('../bean/day.js');
+const HistoryStorer = require('../history/history-storer.js');
 
 //Current picking
 global.inprogressPicking = {};
@@ -58,6 +59,8 @@ module.exports = {
 
     var day = Day.picking(userId, Dat.today(), getItemsQuantity(sale), getSecondsDiference(sale));
     console.log('[Fechou] picking ' + sale.pickUser.name  + ' - ' + sale.numeroPedido);
+
+    HistoryStorer.picking(userId, sale, day);
 
     if(sale.doNotCount){
       callback(sale);

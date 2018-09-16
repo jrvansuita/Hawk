@@ -1,5 +1,9 @@
 require('./app/init/init.js');
 
-var PendingHandler = require('./app/handler/pending-handler.js');
+const EccosysCalls = require('./app/eccosys/eccosys-calls.js');
 
-PendingHandler.sendPendingEmail('119154', '241105384');
+
+EccosysCalls.getClient(251875553, (data)=>{
+  var client = JSON.parse(data)[0];
+  console.log(client);
+});

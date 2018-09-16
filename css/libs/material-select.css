@@ -57,15 +57,10 @@
 
 .dropdown ul>li {
   cursor: pointer;
-}
-
-.dropdown ul>li>a {
-  display: block;
   padding: 5px 20px;
   color: inherit;
   outline: 0;
   text-decoration: none;
-  cursor: pointer;
   cursor: pointer;
 }
 

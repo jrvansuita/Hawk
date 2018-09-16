@@ -1,5 +1,6 @@
 const BlockedSale = require('../bean/blocked-sale.js');
 const UsersProvider = require('../provider/UsersProvider.js');
+const PendingLaws = require('../laws/pending-laws.js');
 
 //All Blocked Sales wich can't be picking now
 global.staticBlockedSales = [];
@@ -45,23 +46,24 @@ module.exports = {
     });
   },
 
-  store(saleNumber, user, callback){
-    var blockedSale = new BlockedSale(saleNumber, user, new Date());
+  store(saleNumber, user, reason, callback){
+    var blockedSale = new BlockedSale(saleNumber, user, reason);
     blockedSale.upsert(()=>{
       this.list().push(blockedSale);
+      PendingLaws.remove(saleNumber);
       callback();
     });
   },
 
 
-  toggleBlock(saleNumber, user, callback){
+  toggleBlock(saleNumber, user, reason, callback){
     var blocked = this.get(saleNumber);
 
     if (blocked) {
       this.remove(blocked);
       callback();
     }else{
-      this.store(saleNumber, user, callback);
+      this.store(saleNumber, user, reason, callback);
     }
   },
 

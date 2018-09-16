@@ -1,5 +1,4 @@
 $(document).ready(() => {
-
   $(".checkable-avatar").change(function() {
     var $img = $(this).parent().find('img');
     if(this.checked) {
@@ -147,8 +146,13 @@ function getLastBottomBarOption(pending){
     }
 
     if (pending.status == 1){
-      var block = $('<img>').addClass('button block-pending').attr('src','/img/block.png').attr('title','Bloquear').click(function(){
-        //callToggleBlockedSale(pending.sale.numeroPedido, true);
+      var block = $('<img>').addClass('button block-pending').attr('src','/img/block.png').attr('title','Bloquear').click((e) =>{
+        hidePedingItemModal();
+        e.stopPropagation();
+
+        new BlockedSelector().onSelect((reason)=>{
+            new BlockedPost(pending.number, reason).call();
+        }).show();
       });
 
       div.prepend(block);
@@ -190,7 +194,7 @@ function onPendingItemButtonClicked(button, pending){
   if (pending.status == 2){
     restartPendingSale(pending);
   }else if (isBlocked(pending)){
- 
+
   }else if (pending.status == 1){
     solvedPendingSale(button,pending);
   }else{
@@ -369,7 +373,7 @@ function doallSolvingPendingSale(icon){
         });
 
       });
-    }
+    }  
   });
 }
 

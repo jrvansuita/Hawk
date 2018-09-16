@@ -1,5 +1,7 @@
 const TransportLaws = require('../laws/transport-laws.js');
+const UfLaws = require('../laws/uf-laws.js');
 const BlockedLaws = require('../laws/blocked-laws.js');
+
 
 //Nexts sales to pick
 global.staticPickingList = [];
@@ -15,10 +17,6 @@ module.exports = {
     checkIsInDevMode();
   },
 
-/*  swap(index, item){
-    global.staticPickingList[index] = item;
-  },
-*/
   assert(saleNumbers){
     global.staticPickingList = global.staticPickingList.filter((item, index)=>{
       return !saleNumbers.includes(item.numeroPedido);
@@ -46,6 +44,14 @@ module.exports = {
     return this.getList().length == 0;
   },
 
+  isFullEmpty(){
+    return global.staticPickingList.length == 0;
+  },
+
+  getFullList(){
+    return global.staticPickingList;
+  },
+
   getList(){
     return getAssertedList();
   }
@@ -54,6 +60,7 @@ module.exports = {
 function getAssertedList(){
   var list = global.staticPickingList;
   list = TransportLaws.assert(list);
+  list = UfLaws.assert(list);
   list = BlockedLaws.assert(list);
 
   return list;

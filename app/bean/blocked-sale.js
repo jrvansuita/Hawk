@@ -1,11 +1,12 @@
 module.exports = class BlockedSale extends DataAccess {
 
 
-  constructor(number, user, blockDate) {
+  constructor(number, user, reason) {
     super();
     this.number = Str.def(number);
-    this.blockDate = Dat.def(blockDate);
-    this.user = user? user : {};
+    this.blockDate = new Date();
+    this.user = user ? user : {};
+    this.reason = reason ? reason : {};
   }
 
   static getKey() {

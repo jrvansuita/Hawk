@@ -8,7 +8,7 @@ module.exports = class Day extends DataAccess {
     this.total = Floa.def(total);
     this.count = Floa.def(count);
 
-    this.points = Day.calcPoints(this);
+    this.points = Day.calcPoints(this).toFixed(2);
 
   }
 
@@ -18,7 +18,6 @@ module.exports = class Day extends DataAccess {
     }else if (day.type == 'picking'){
       return ((day.total) / (day.count/day.total)) * 2;
     }
-
 
 
     return 0;
