@@ -69,6 +69,7 @@ routes.push('packing-routes.js');
 routes.push('picking-routes.js');
 routes.push('pending-routes.js');
 routes.push('performance-routes.js');
+routes.push('history-routes.js');
 
 // -- Run Routes -- //
 routes.forEach((r)=>{

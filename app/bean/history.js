@@ -5,14 +5,14 @@ module.exports = class History extends DataAccess {
     //1-Info, 2-Error, 3-Notificação
     this.type = Num.def(type);
     this.tag = Str.def(tag);
-    this.urserId = Num.def(userId);
+    this.userId = Num.def(userId);
     this.title = Str.def(title);
     this.message = Str.def(message);
     this.date = new Date();
   }
 
   static getKey() {
-    return ['date', 'urserId', 'tag'];
+    return ['date', 'userId', 'tag'];
   }
 
 

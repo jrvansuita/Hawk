@@ -1,0 +1,69 @@
+<html>
+<% include menu %>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="/css/history.css">
+
+  <!--
+  <link rel="stylesheet" type="text/css" href="/css/charts.css">
+  <link rel="stylesheet" type="text/css" href="/css/performance.css">
+  <script type="text/javascript" src="/visual/file-loader.js"></script>
+  <script type="text/javascript" src="/visual/date-picker.js"></script>
+  <script type="text/javascript" src="/visual/gradient-back.js"></script>
+  <script type="text/javascript" src="/control/chart-page.js"></script>
+-->
+</head>
+
+<body>
+  <div class="main-content">
+    <div class="panels">
+      <div class="left-panel shadow">
+
+        <div>
+          <input type="text" id="title-search" class="simple-material-input search-input" placeholder="Título" />
+          <input type="text" id="message-search" class="simple-material-input search-input" placeholder="Mensagem" />
+        </div>
+      </div>
+
+      <div class="main-panel shadow" >
+
+        <div class="histories-list">
+          <%if (histories.length === 0){%>
+            <span class="hint">Nenhum histórico encontrado</span>
+            <%}%>
+
+            <%histories.forEach(function(history){%>
+              <div class="history-item">
+                <div class="avatar-holder">
+                  <img class="circle shadow avatar-img" src="<%=history.user.avatar%>" data-id="<%=history.user.id%>" data-src="<%=history.user.avatar%>" onerror="this.src='/img/avatar.png'" />
+                  <span class="label shadow avatar-name"><%=history.user.name%></span>
+                </div>
+
+                <div class="history-main-item">
+                  <div class="history-info">
+                    <label class="history-date" ><%= Dat.formatwTime(new Date(history.date))%></label>
+                    <label class="history-title"><%=history.title%></label>
+                  </div>
+
+                  
+                  <div class="history-message-holder">
+                    <label class="history-message"><%=history.message%></label>
+                  </div>
+                </div>
+
+                <!--
+
+                <span><%=history.tag%></span>
+                <span><%=history.type%></span>
+              -->
+
+              </div>
+              <%});%>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </body>
+    </html>

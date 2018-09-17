@@ -1,0 +1,108 @@
+.panels{
+  height: 100%;
+  display: flex;
+}
+
+.main-content{
+  margin-top: 65px !important;
+  padding-bottom: 5px;
+}
+
+.main-content{
+  overflow: hidden;
+}
+
+.left-panel{
+  margin-left: 15px;
+  margin-right: 15px;
+  height: 100%;
+  flex: 0 1 30%;
+}
+
+.main-panel{
+  margin-right: 15px;
+  flex: 0 1 100%;
+  padding: 10px 0px;
+  display: flex;
+  height: 100%;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.search-input{
+  font-size: 14px;
+  padding: 10px 5px;
+  width: -webkit-fill-available;
+  margin: 20px 15px;
+  display: block;
+}
+
+
+.hint{
+  color: grey;
+  margin-top: 10px;
+  padding-left: 2px;
+  display: inline-block;
+  font-size: 11px;
+}
+
+
+.histories-list{
+  display: block;
+  width: -webkit-fill-available;
+}
+
+.history-main-item{
+  width: -webkit-fill-available;
+  border-bottom: solid 1px rgb(223, 224, 230);
+  display: -webkit-box;
+  padding: 8px 5px;
+  margin-right: 15px;
+  height: fit-content;
+}
+
+.history-item{
+  width: -webkit-fill-available;
+  display: flex;
+}
+
+.history-info{
+  width: fit-content;
+  height: fit-content;
+}
+
+.history-message-holder{
+  display: flex;
+  position: absolute;
+  right: 40px;
+  float: right;
+}
+
+.avatar-holder{
+  padding: 10px 15px;
+}
+
+.history-date{
+  padding-top: 8px;
+  display: block;
+  font-size: 13px;
+  color: #989898;
+  display: block;
+}
+
+.history-title{
+  display: block;
+  padding-bottom: 3px;
+  padding-top: 6px;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.history-message{
+  text-align: right;
+  font-size: 11px;
+  line-break: auto;
+  color: rgb(134, 134, 134);
+  word-wrap: break-word;
+  white-space: pre-line
+}
