@@ -4,7 +4,7 @@
 }
 
 .main-content{
-  margin-top: 65px !important;
+  margin-top: 75px !important;
   padding-bottom: 5px;
 }
 
@@ -39,6 +39,8 @@
 
 
 .hint{
+  margin-left: 25px;
+  font-size: 14px !important;
   color: grey;
   margin-top: 10px;
   padding-left: 2px;
@@ -50,6 +52,8 @@
 .histories-list{
   display: block;
   width: -webkit-fill-available;
+  overflow-y: auto;
+  height: 100%;
 }
 
 .history-main-item{
@@ -92,10 +96,11 @@
 
 .history-title{
   display: block;
+  color: #19695d;
   padding-bottom: 3px;
   padding-top: 6px;
   font-size: 15px;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .history-message{

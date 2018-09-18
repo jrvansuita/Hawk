@@ -24,7 +24,8 @@ module.exports = {
   },
 
   put(transportName){
-    var transp = Str.defStr(transportName, unknow).split(' ')[0];
+    var transp = Util.twoNames(transportName, unknow);
+
     global.transportList[transp] = transp;
     return transp;
   },

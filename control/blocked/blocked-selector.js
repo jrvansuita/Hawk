@@ -17,7 +17,9 @@ class BlockedSelector{
   _createOptions(){
     this.options = [];
     this.options.push(new BlockedReason('Cliente Solicitou Estorno', '/img/money-back.png'));
+    this.options.push(new BlockedReason('Agaurdando Alteração no Pedido', '/img/update-sale.png'));
     this.options.push(new BlockedReason('Aguardando Atualização de Cadastro', '/img/user-update.png'));
+    this.options.push(new BlockedReason('Pedido Duplicado', '/img/question-mark.png'));
     this.options.push(new BlockedReason('Outro Motivo', '/img/three-dots.png'));
   }
 

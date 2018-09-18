@@ -46,10 +46,10 @@
             <span class="highlight"></span>
             <span class="bar"></span>
             <label>Código de Acesso</label>
-
-            <p class="error">Erro</p>
-            <p class="sucess">Sucesso</p>
           </div>
+
+          <p class="error msg-input">Erro</p>
+          <p class="sucess msg-input">Sucesso</p>
 
           <div class="picking-selectors-holder">
             <div class="dropdown">
@@ -284,7 +284,7 @@
                                   %>
                                   <tr class="clickable-mini-item done-sale-item"  data-saleid="done-<%=sale.id%>" data-sale="done-<%=sale.numeroPedido%>">
                                     <td><span class="pick-value green-title"><%=sale.numeroPedido %></span></td>
-                                    <td><span class="pick-value"><%=sale.transportador ? sale.transportador.split(' ')[0] : 'Retirada' %> </span></td>
+                                    <td><span class="pick-value"><%=Util.twoNames(sale.transportador, 'Retirada')%> </span></td>
                                     <td><span class="pick-value" ><%= Dat.format(new Date(sale.data))%></span></td>
                                     <td><span class="pick-value" style="float:right"><%=Dat.daysDif(new Date(sale.data), new Date()) + ' Dias'%></span></td>
                                   </tr>

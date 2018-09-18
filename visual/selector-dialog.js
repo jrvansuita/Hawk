@@ -13,7 +13,9 @@ class SelectorDialog {
   onButton(label, callback){
     var button = $('<label>').addClass('ms-button material-ripple').text(label).click(()=>{
       this.modal.remove();
-      callback();
+      if (callback){
+        callback();
+      }
     });
 
     var div = $('<div>').addClass('ms-buttons-holder').append(button);

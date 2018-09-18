@@ -28,17 +28,21 @@ module.exports = class UsersProvider {
   }
 
   static get(code) {
-    if(global.localUsers[code]){
-      return global.localUsers[code];
-    }else{
-      for (var key in global.localUsers) {
-        if (global.localUsers.hasOwnProperty(key)) {
-          if (global.localUsers[key].access === code){
-            return global.localUsers[key];
+    if (code !== undefined){
+      if(global.localUsers[code]){
+        return global.localUsers[code];
+      }else{
+        for (var key in global.localUsers) {
+          if (global.localUsers.hasOwnProperty(key)) {
+            if (global.localUsers[key].access === code){
+              return global.localUsers[key];
+            }
           }
         }
       }
     }
+
+    return new User();
   }
 
 
@@ -50,7 +54,9 @@ module.exports = class UsersProvider {
 
 
   static checkUserExists(userId) {
-    if (UsersProvider.get(userId) == undefined) {
+    var user = UsersProvider.get(userId);
+
+    if (user == undefined || user.id == 404 || user.id === 0) {
       throw "Usuário não existe.";
     }
 

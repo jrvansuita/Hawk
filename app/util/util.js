@@ -83,9 +83,28 @@ var Util = {
       console.log(e);
       throw msg;
     }
+  },
+
+  twoNames(name, def, pMax){
+    if (!name){
+      return def ? def : '';
+    }
+
+    var max = pMax ? pMax : 10;
+
+    var two = name.split(' ').slice(0,2).join(' ').length <= max;
+
+    if (two){
+      name = name.split(' ').filter((e, i)=>{
+        return i <=1;
+      }).join(' ');
+    }else{
+      name = name.split(' ')[0];
+    }
+
+    return name;
   }
 
-  
 
 
 

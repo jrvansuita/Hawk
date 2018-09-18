@@ -23,10 +23,8 @@ module.exports = {
     return this.object()[userId] != undefined;
   },
 
-  removeAndReturn(userId){
-    var sale = this.object()[userId];
-    delete this.object()[userId];
-    return sale;
+  getInProgressSale(userId){
+    return this.object()[userId];
   },
 
   remove(saleNumber){
@@ -54,11 +52,14 @@ module.exports = {
   },
 
   endPicking(userId, callback){
-    var sale = this.removeAndReturn(userId);
+    var sale = this.getInProgressSale(userId);
     sale.end = new Date();
+
+    checkEndTime(sale);
 
     var day = Day.picking(userId, Dat.today(), getItemsQuantity(sale), getSecondsDiference(sale));
     console.log('[Fechou] picking ' + sale.pickUser.name  + ' - ' + sale.numeroPedido);
+    this.remove(sale.numeroPedido);
 
     HistoryStorer.picking(userId, sale, day);
 
@@ -78,6 +79,15 @@ module.exports = {
 
 };
 
+
+function checkEndTime(sale){
+  var secs = getSecondsDiference(sale);
+  //Calcula 3 segundos por item do pedido no mínimo
+  var minSecs = sale.itemsQuantity * 3;
+  if (secs < minSecs){
+    throw 'Tempo insuficiente para realizar o picking do pedido ' + sale.numeroPedido + '. Tempo mínimo é: ' + minSecs + ' segundos.';
+  }
+}
 
 function getSecondsDiference(sale){
   return (sale.end.getTime() - sale.begin.getTime()) / 1000;

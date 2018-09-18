@@ -25,67 +25,67 @@ module.exports = class Day extends DataAccess {
     return points;
   }
 
-/*static invoicePoints(count, total){
+  /*static invoicePoints(count, total){
   return (count * (total/6)) / 10000;
 }
 
 //itens / secs
 static pickingPoints(count, total){
-  return ((total) / (count/total)) * 4;
+return ((total) / (count/total)) * 4;
 }*/
 
-  static invoice(sale) {
-    return new Day(sale.userId, sale.billingDate, 'invoice', sale.value, 1);
-  }
+static invoice(sale) {
+  return new Day(sale.userId, sale.billingDate, 'invoice', sale.value, 1);
+}
 
-  static picking(userId, date, items, secs) {
-    return new Day(userId, date, 'picking', items, secs);
-  }
-
-
-  static getKey() {
-    return ['userId', 'date', 'type'];
-  }
+static picking(userId, date, items, secs) {
+  return new Day(userId, date, 'picking', items, secs);
+}
 
 
-  static sync(day, callback){
-    Day.upsert(day.getPKQuery(), {
-      $inc: {
-        count: day.count,
-        total: day.total,
-        points: day.points
+static getKey() {
+  return ['userId', 'date', 'type'];
+}
+
+
+static sync(day, callback){
+  Day.upsert(day.getPKQuery(), {
+    $inc: {
+      count: day.count,
+      total: day.total,
+      points: day.points
+    }
+  }, (err, doc) => {
+    callback(err, doc);
+  });
+}
+
+static search(userId, type, callback){
+  Day.aggregate([{
+    $match: {
+      type: type,
+      userId: parseInt(userId),
+    }
+  },{
+    $group: {
+      _id: {
+        type: "$type",
+        userId: "$userId"
+      },
+      sum_count: {
+        $sum: "$count"
+      },
+      sum_total: {
+        $sum: "$total"
+      },
+      sum_points: {
+        $sum: "$points"
       }
-    }, (err, doc) => {
-      callback(err, doc);
-    });
-  }
-
-  static search(userId, type, callback){
-    Day.aggregate([{
-      $match: {
-        type: type,
-        userId: parseInt(userId),
-      }
-    },{
-      $group: {
-        _id: {
-          type: "$type",
-          userId: "$userId"
-        },
-        sum_count: {
-          $sum: "$count"
-        },
-        sum_total: {
-          $sum: "$total"
-        },
-        sum_points: {
-          $sum: "$points"
-        }
-      }
-    }],
-    function(err, res) {
-      if (callback)
-      callback(err, res);
-    });
-  }
+    }
+  }],
+  function(err, res) {
+    if (callback)
+    callback(err, res);
+  });
+}
 };

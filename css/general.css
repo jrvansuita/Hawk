@@ -83,18 +83,22 @@ input, span, label {
   margin-left: 8px;
   margin-right: 8px;
 }
+
+.msg-input{
+  font-size: 12px;
+  padding: 5px 4px;
+  display: none;
+  text-align: center;
+  max-width: 1005;
+  padding-bottom: 15px;
+}
+
 .error {
   color: #e53935;
-  font-size: 12px;
-  padding: 2px;
-  display: none;
 }
 
 .sucess {
   color: #2da961;
-  font-size: 12px;
-  padding: 2px;
-  display: none;
 }
 
 .avatar-name {

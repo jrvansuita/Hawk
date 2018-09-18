@@ -32,7 +32,12 @@
             <span class="hint">Nenhum histórico encontrado</span>
             <%}%>
 
-            <%histories.forEach(function(history){%>
+            <%histories.forEach(function(history){
+                if (!history.user){
+                  console.log(history._id);
+                }
+
+              %>
               <div class="history-item">
                 <div class="avatar-holder">
                   <img class="circle shadow avatar-img" src="<%=history.user.avatar%>" data-id="<%=history.user.id%>" data-src="<%=history.user.avatar%>" onerror="this.src='/img/avatar.png'" />
@@ -45,7 +50,7 @@
                     <label class="history-title"><%=history.title%></label>
                   </div>
 
-                  
+
                   <div class="history-message-holder">
                     <label class="history-message"><%=history.message%></label>
                   </div>
