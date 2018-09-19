@@ -17,7 +17,7 @@ module.exports = {
 
     if (blocks){
       saleList = saleList.filter(sale =>{
-        return !blocks.includes(sale.numeroPedido);
+        return !(blocks.includes(sale.numeroPedido) || blocks.includes(sale.numeroDaOrdemDeCompra));
       });
     }
 
@@ -28,7 +28,7 @@ module.exports = {
     BlockedSale.findAll(function(err, all){
       global.staticBlockedSales = all;
       callback();
-    });
+    }); 
   },
 
   remove(blockSale){

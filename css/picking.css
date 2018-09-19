@@ -495,11 +495,14 @@ tr.row-padding td{
 
 .table-sale-blocked-holder{
   display: block;
-  margin-left: 8px;
   margin-bottom: 5px;
   width: fit-content;
   margin-top: 8px;
   cursor: pointer;
+}
+
+.table-sale-blocked-holder:nth-child(even) {
+    margin-left: 8px;
 }
 
 .super-mini-avatar{

@@ -4,6 +4,8 @@
 var curYear;
 %>
 
+
+
 <%data.forEach((achiev)=>{%>
   <% if(curYear != achiev.year){
     curYear = achiev.year;
@@ -30,7 +32,7 @@ var curYear;
           <label class="label month-desc"><%=item.monthDesc%></label>
 
           <div class="inner-achiev">
-            <div class="avatar-holder">
+            <div class="avatar-holder">  
               <img class="crown <%= isRecord ? 'record-crown' : ''%>  <%= (!item.user || !item.user.avatar) ? 'hidden' : ''%>" src="<%=isRecord ? '/img/record_crown.png' : '/img/crown.png'%>" />
 
               <a href="/profile/performance?userid=<%=item.user.id%>">
