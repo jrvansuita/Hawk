@@ -71,5 +71,5 @@ function head(text){
 
 
 function getUrl(maxPrice){
-  return "https://www.boutiqueinfantil.com.br/products/price/0-" + parseFloat(maxPrice + 4).toFixed(2) + "?dir=desc&order=price&utm_source=email&utm_medium=troca-pendencia";
+  return "https://www.boutiqueinfantil.com.br/products?price=0-" + parseFloat(maxPrice + 4).toFixed(2) + "?dir=desc&order=price&utm_source=email&utm_medium=troca-pendencia";
 }
