@@ -8,6 +8,7 @@
   <script type="text/javascript" src="/visual/shake.js"></script>
   <script type="text/javascript" src="/visual/dropdown.js"></script>
   <script type="text/javascript" src="/visual/selector.js"></script>
+  <script type="text/javascript" src="/libs/request-helper.js"></script>
 
   <!-- To block a sale -->
   <script type="text/javascript" src="/visual/selector-dialog.js"></script>
@@ -158,7 +159,7 @@
                       <table width="100%">
                         <tr>
                           <td rowspan="2">
-                            <img class="circle shadow avatar-img mini-avatar" data-id="<%=sale.pickUser.id%>" src="<%=sale.pickUser.avatar%>" onerror="this.src='/img/avatar.png'" />
+                            <img class="circle shadow avatar-img mini-avatar" data-id="<%=sale.pickUser.id%>" src="<%=sale.pickUser.avatar%>" />
                           </td>
                           <td><span class="pick-value green-title"><%=sale.numeroPedido %></span></td>
                           <td><span class="pick-value"><%=sale.itemsQuantity %> Itens</span></td>
@@ -191,7 +192,7 @@
                         <tr>
                           <td>
                             <%var userName = (blocked.user.name ? blocked.user.name.split(" ")[0] : 'Desconhecido') %>
-                            <img class="circle shadow avatar-img super-mini-avatar" data-id="<%=blocked.user.id%>" src="<%=blocked.user.avatar%>" title="<%=userName%>" onerror="this.src='/img/avatar.png'" />
+                            <img class="circle shadow avatar-img super-mini-avatar" data-id="<%=blocked.user.id%>" src="<%=blocked.user.avatar%>" title="<%=userName%>" />
                             <%if (blocked.reason){%>
                               <img class="circle shadow blocked-reason" src="<%=blocked.reason.icon%>" title="<%=blocked.reason.label%>" />
                               <%}%>

@@ -151,8 +151,10 @@ function fmt(date) {
     min: date.getMinutes()
   };
 
-  formated.day = (formated.day <= 9 ? '0' + formated.day : formated.day);
-  formated.month = (formated.month <= 9 ? '0' + formated.month : formated.month);
+  formated.day = ifLessThenZeroFix(formated.day);
+  formated.month = ifLessThenZeroFix(formated.month);
+  formated.hour = ifLessThenZeroFix(formated.hour);
+  formated.min = ifLessThenZeroFix(formated.min);
 
   return formated;
 }
@@ -179,6 +181,10 @@ function getCurrentMinutes() {
 
 function getCurrentSecondes() {
   return new Date().getSeconds();
+}
+
+function ifLessThenZeroFix(v){
+  return  (v <= 9 ? '0' + v : v);
 }
 
 if (typeof module != 'undefined')

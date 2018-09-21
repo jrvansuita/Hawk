@@ -3,6 +3,8 @@
 
 <head>
   <link rel="stylesheet" type="text/css" href="/css/history.css">
+  <script type="text/javascript" src="/control/history.js"></script>
+  <script type="text/javascript" src="/libs/request-helper.js"></script>
 
   <!--
   <link rel="stylesheet" type="text/css" href="/css/charts.css">
@@ -19,56 +21,27 @@
     <div class="panels">
       <div class="left-panel shadow">
 
-        <div>
+        <div class="search-box">
           <input type="text" id="title-search" class="simple-material-input search-input" placeholder="Título" />
           <input type="text" id="message-search" class="simple-material-input search-input" placeholder="Mensagem" />
+          <input type="text" id="tag-search" class="simple-material-input search-input" placeholder="Tag" />
+
+          <label class="button search-button shadow">Pesquisar</label>
         </div>
+
+
       </div>
 
       <div class="main-panel shadow" >
 
         <div class="histories-list">
-          <%if (histories.length === 0){%>
-            <span class="hint">Nenhum histórico encontrado</span>
-            <%}%>
-
-            <%histories.forEach(function(history){
-                if (!history.user){
-                  console.log(history._id);
-                }
-
-              %>
-              <div class="history-item">
-                <div class="avatar-holder">
-                  <img class="circle shadow avatar-img" src="<%=history.user.avatar%>" data-id="<%=history.user.id%>" data-src="<%=history.user.avatar%>" onerror="this.src='/img/avatar.png'" />
-                  <span class="label shadow avatar-name"><%=history.user.name%></span>
-                </div>
-
-                <div class="history-main-item">
-                  <div class="history-info">
-                    <label class="history-date" ><%= Dat.formatwTime(new Date(history.date))%></label>
-                    <label class="history-title"><%=history.title%></label>
-                  </div>
 
 
-                  <div class="history-message-holder">
-                    <label class="history-message"><%=history.message%></label>
-                  </div>
-                </div>
-
-                <!--
-
-                <span><%=history.tag%></span>
-                <span><%=history.type%></span>
-              -->
-
-              </div>
-              <%});%>
-            </div>
-          </div>
         </div>
-
       </div>
+    </div>
 
-    </body>
-    </html>
+  </div>
+
+</body>
+</html>

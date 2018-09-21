@@ -1,5 +1,5 @@
 const Pending = require('../bean/pending.js');
-
+const HistoryStorer = require('../history/history-storer.js');
 
 global.staticPendingSales = [];
 
@@ -25,10 +25,12 @@ module.exports = {
 
   //---- Store Elements ----//
 
-  store(sale, local, callback){
+  store(sale, local, user, callback){
     sale = removeUnpendingItems(sale);
 
     var pending = new Pending(sale.numeroPedido, sale, local);
+
+    HistoryStorer.pending(user.id, pending);
 
     pending.upsert(()=>{
       //Add new pending sale
@@ -40,9 +42,11 @@ module.exports = {
 
   //---- Update Elements ----//
 
-  incrementStatus(pending, callback){
+  incrementStatus(pending, user, callback){
     pending.status = parseInt(pending.status) + 1;
     pending.updateDate = new Date();
+
+    HistoryStorer.pending(user.id, pending);
 
     Pending.upsert(Pending.getKeyQuery(pending.number), pending, function(err, doc){
       updatePendingSale(pending);

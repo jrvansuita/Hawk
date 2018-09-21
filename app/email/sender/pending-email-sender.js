@@ -1,6 +1,7 @@
 const Email = require('../email.js');
 const PendingEmailTemplate = require('../templates/pending-email-template.js');
 
+
 module.exports= class PendingEmailSender{
 
   constructor(){

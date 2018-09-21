@@ -32,11 +32,11 @@ var curYear;
           <label class="label month-desc"><%=item.monthDesc%></label>
 
           <div class="inner-achiev">
-            <div class="avatar-holder">  
+            <div class="avatar-holder">
               <img class="crown <%= isRecord ? 'record-crown' : ''%>  <%= (!item.user || !item.user.avatar) ? 'hidden' : ''%>" src="<%=isRecord ? '/img/record_crown.png' : '/img/crown.png'%>" />
 
               <a href="/profile/performance?userid=<%=item.user.id%>">
-                <img class="avatar-img circle shadow" src="<%=item.user ? item.user.avatar : ''%>" onerror="this.src='/img/avatar.png'" data-userid="<%=item.user.id%>"/>
+                <img class="avatar-img circle shadow" src="<%=item.user ? item.user.avatar : ''%>"  data-userid="<%=item.user.id%>"/>
               </a>
 
               <span class="label shadow avatar-name"><%=item.user ? item.user.name || 'Indefinido' : 'Indefinido' %></span>

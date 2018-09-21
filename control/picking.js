@@ -30,7 +30,7 @@ $(document).ready(() => {
           new BlockedPost(saleNumber).call();
         }else{
           new BlockedSelector().onSelect((reason)=>{
-              new BlockedPost(saleNumber, reason).call();
+            new BlockedPost(saleNumber, reason).call();
           }).show();
         }
       }
@@ -44,36 +44,35 @@ $(document).ready(() => {
       var code = $('#user-id').val();
 
       if (code.length >= 9 && isNum(code)) {
-        $.ajax({
-          url: "/picking-sale",
-          type: "get",
-          data: {
-            userid: code
-          },
-          success: function(response) {
-            if (response.includes("end-picking")) {
-              $('.sucess').text("Picking encerrado com sucesso.").fadeIn().delay(1000).fadeOut();
-              var sale = response.split("-");
-              sale = sale[sale.length - 1];
-              $('div[data-sale="progress-' + sale + '"]').css('background-color', '#13bb7070').delay(1000).fadeOut();
-              $(".inprogress-count").text(parseInt($(".inprogress-count").text()) - 1);
-              //Inicia um novo picking
-              //$('#user-id').trigger(jQuery.Event( 'keyup', { which: 13 } ));
-              $('#user-id').val('');
 
-            } else {
-              $('.sucess').text("Aguardando impressão do pedido").fadeIn();
-              setTimeout(function() {
-                window.open(response, "picking");
-                window.location.reload();
-              }, 1000);
-
-            }
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-            $('.error').text(jqXHR.responseText).fadeIn().delay(1000).fadeOut();
+        var onSucess = function(response){
+          if (response.includes("end-picking")) {
+            $('.sucess').text("Picking encerrado com sucesso.").fadeIn().delay(1000).fadeOut();
+            var sale = response.split("-");
+            sale = sale[sale.length - 1];
+            $('div[data-sale="progress-' + sale + '"]').css('background-color', '#13bb7070').delay(1000).fadeOut();
+            $(".inprogress-count").text(parseInt($(".inprogress-count").text()) - 1);
+            //Inicia um novo picking
+            //$('#user-id').trigger(jQuery.Event( 'keyup', { which: 13 } ));
+            $('#user-id').val('');
+          } else {
+            $('.sucess').text("Aguardando impressão do pedido").fadeIn();
+            setTimeout(function() {
+              window.open(response, "picking");
+              window.location.reload();
+            }, 1000);
           }
-        });
+        };
+
+        var onError = function(error){
+          $('.error').text(error.responseText).fadeIn().delay(1000).fadeOut();
+        };
+
+        _get("/picking-sale",{
+          userid: code
+        },
+        onSucess,
+        onError);
       }
     }
   });
@@ -87,21 +86,16 @@ $(document).ready(() => {
 
   $('.pending-button').click(function(){
     if (checkIsLocalFilled(true)){
-      $.ajax({
-        url: "/start-pending",
-        type: "post",
-        data: {
-          pendingSale: selectedPendingSale,
-          local: $('#pending-local').val()
-        },
-        success: function(response) {
-          window.location.reload();
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-          console.log(jqXHR);
-          $('.error').text(jqXHR.responseText).fadeIn().delay(1000).fadeOut();
-        }
+
+      _post("/start-pending", {
+        pendingSale: selectedPendingSale,
+        local: $('#pending-local').val()
+      },
+      null,
+      (error)=>{
+        $('.error').text(error.responseText).fadeIn().delay(1000).fadeOut();
       });
+
     }
   });
 
@@ -145,21 +139,11 @@ function getInProgressSale(number){
 }
 
 function doneSaleRestart(saleNumber){
-
-  $.ajax({
-    url: "/picking-done-restart",
-    type: "post",
-    data: {
-      sale: saleNumber
-    },
-    success: function(response) {
-      window.location.reload();
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      $('.error').text(jqXHR.responseText).fadeIn().delay(1000).fadeOut();
-    }
+  _post("/picking-done-restart", {
+    sale: saleNumber
+  },null, (error)=>{
+    $('.error').text(error.responseText).fadeIn().delay(1000).fadeOut();
   });
-
 }
 
 

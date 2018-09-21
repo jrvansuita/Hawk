@@ -151,7 +151,7 @@ function getLastBottomBarOption(pending){
         e.stopPropagation();
 
         new BlockedSelector().onSelect((reason)=>{
-            new BlockedPost(pending.number, reason).call();
+          new BlockedPost(pending.number, reason).call();
         }).show();
       });
 
@@ -330,24 +330,6 @@ function loadPendingSaleItems(el, pending){
   }
 }
 
-
-function solvePendingSale(sale){
-  $.ajax({
-    url: "/picking-pending-solve",
-    type: "post",
-    data: {
-      pendingSale: sale
-    },
-    success: function(response) {
-      window.location.reload();
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      console.log(jqXHR);
-      $('.error').text(jqXHR.responseText).fadeIn().delay(1000).fadeOut();
-    }
-  });
-}
-
 function solvingPendingSale(button, pending){
   showLoadingButton(button);
   innerSolvingPendingSale(pending, $('#send-email-switch').prop('checked'), (resultPending)=>{
@@ -373,27 +355,27 @@ function doallSolvingPendingSale(icon){
         });
 
       });
-    }  
+    }
   });
 }
 
 
 function innerSolvingPendingSale(pending, sendEmail, callback){
   pending.sendEmail = sendEmail;
-  executePendingAjax("/pending-status", pending, function(r){
+  execute("/pending-status", pending, function(r){
     callback(r);
   });
 }
 
 function solvedPendingSale(button, pending){
   showLoadingButton(button);
-  executePendingAjax("/pending-status", pending,  function(resultPending){
+  execute("/pending-status", pending,  function(resultPending){
     rebuildSpawItem('solving','solved', resultPending);
   });
 }
 
 function restartPendingSale(pending){
-  executePendingAjax("/picking-pending-restart", pending);
+  execute("/picking-pending-restart", pending);
 }
 
 function rebuildSpawItem(actualClass, nextClass , resultPending){
@@ -406,7 +388,7 @@ function rebuildSpawItem(actualClass, nextClass , resultPending){
     $this.remove();
 
     setTimeout(function() {
-       window.location.reload();
+      window.location.reload();
     }, 300);
   });
 
@@ -415,24 +397,11 @@ function rebuildSpawItem(actualClass, nextClass , resultPending){
 
 }
 
-function executePendingAjax(path, pending, onSucess){
-  $.ajax({
-    url: path,
-    type: "post",
-    data: {
-      pendingSale: pending
-    },
-    success: function(response) {
-      if (onSucess){
-        onSucess(response);
-      }else{
-        window.location.reload();
-      }
-    },
-    error: function (request, status, error) {
-      console.log(request.responseText);
-      $('.error').text(request.responseText).fadeIn().delay(1000).fadeOut();
-    }
+function execute(path, pending, onSucess){
+  _post(path,  {
+    pendingSale: pending
+  }, onSucess, (error)=>{
+    $('.error').text(error.responseText).fadeIn().delay(1000).fadeOut();
   });
 }
 

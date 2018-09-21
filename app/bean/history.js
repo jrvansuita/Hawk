@@ -20,14 +20,11 @@ module.exports = class History extends DataAccess {
     new History(1, userId, title, message, tag).upsert();
   }
 
-  static error(userId,title, message, tag){
-    new History(2, userId, title, message, tag).upsert();
+  static error(e, title, addtoMessage){
+    new History(2, 0, title ? title : 'Erro de Sistema', addtoMessage ? addtoMessage + '\n' : '' + Util.errorToStr(e), 'Falha').upsert();
   }
 
   static notify(userId, title, message, tag){
-    new History(3, userId, title, message, tag).upsert((err, doc)=>{
-      console.log(err);
-      console.log(doc);
-    });
+    new History(3, userId, title, message, tag).upsert();
   }
 };

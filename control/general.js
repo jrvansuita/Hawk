@@ -4,6 +4,12 @@ $(document).ready(() => {
     Util.copySeleted();
     e.stopPropagation();
   });
+
+
+    $('img.avatar-img').error(function(){
+       $(this).unbind("error").attr("src", "/img/avatar.png");
+    });
+
 });
 
 

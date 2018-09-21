@@ -12,21 +12,14 @@ $(document).ready(() => {
   });
 
   $('.user-logged-holder').click(() => {
-    $.ajax({
-      url: "/login",
-      type: "post",
-      data: {
-
-      },
-      success: function(response) {
+    $.post("/login",
+      function(response) {
         console.log(response);
         location.href = "/login";
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
+      }, function(jqXHR, textStatus, errorThrown) {
         console.log('error');
         location.href = '/login';
-      }
-    });
+      });
   });
 
 

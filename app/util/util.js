@@ -24,6 +24,20 @@ var Util = {
     return arrItem ? arrItem.getBars() : [];
   },
 
+  errorToStr(e){
+    if (e != undefined){
+      var message = e.toString();
+
+      if (e instanceof Error){
+        message = e.toString();
+        message += "\n" + e.stack.split("\n")[1];
+      }
+
+      return message;
+    } 
+    return '';
+  },
+
   forProperty(object, callback){
     for (var key in object) {
       if (object.hasOwnProperty(key)) {
@@ -60,6 +74,39 @@ var Util = {
 
   isTrueStr: function(val){
     return val == true || val == "true";
+  },
+
+  hashCode: function(str) {
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return hash;
+  },
+
+  strToColor: function(str) {
+    var shortened = this.hashCode(str) % 160;
+    return 'hsl(' + shortened + ', 45%, 60%)';
+  },
+
+  historyTagColor(tag){
+    if (tag == 'Falha'){
+      return '#ec7565';
+    }else{
+      return this.strToColor(tag);
+    }
+  },
+
+  historyIcon(status){
+    if (status == 1){
+      return "alert";
+    }else if (status == 2){
+      return "error";
+    }else if(status == 3){
+      return "notification";
+    }
+
+
   },
 
   notIn(array, str){

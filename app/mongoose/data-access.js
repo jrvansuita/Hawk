@@ -66,6 +66,20 @@ module.exports = class DataAccess {
     this.staticAccess().findOne(this.getKeyQuery(keyValue), callback);
   }
 
+  //Find any elements that match the query provided
+  static paginate(query, page, sort, callback) {
+    page--;//Convert to index;
+
+    var rowsPerPage = 30;
+
+    this.staticAccess()
+    .find(query)
+    .sort(sort)
+    .skip(page * rowsPerPage)
+    .limit(rowsPerPage)
+    .exec(callback);
+  }
+
   //Retrive the last stored element
   static getLast(callback) {
     this.staticAccess().findOne().sort({

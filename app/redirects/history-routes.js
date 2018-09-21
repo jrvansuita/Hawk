@@ -5,10 +5,15 @@ module.exports = class HistoryRoutes extends Routes{
 
   attach(){
     this._get('/history', (req, res) => {
-      HistoryProvider.getAll((all)=>{
-        res.render('history', {
-          histories: all
-        });
+      res.render('history');
+    });
+
+    this._get('/history-page',  (req, res) => {
+      var page = parseInt(req.query.page);
+      var query = req.query.query;
+
+      HistoryProvider.getPage(page, query, (all)=>{
+        this._resp().sucess(res, all);
       });
 
     });
