@@ -24,19 +24,7 @@ var Util = {
     return arrItem ? arrItem.getBars() : [];
   },
 
-  errorToStr(e){
-    if (e != undefined){
-      var message = e.toString();
-
-      if (e instanceof Error){
-        message = e.toString();
-        message += "\n" + e.stack.split("\n")[1];
-      }
-
-      return message;
-    } 
-    return '';
-  },
+  
 
   forProperty(object, callback){
     for (var key in object) {

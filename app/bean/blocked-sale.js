@@ -7,6 +7,7 @@ module.exports = class BlockedSale extends DataAccess {
     this.blockDate = new Date();
     this.user = user ? user : {};
     this.reason = reason ? reason : {};
+    this.blocking = true;
   }
 
   static getKey() {

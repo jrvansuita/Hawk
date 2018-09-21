@@ -529,3 +529,8 @@ tr.row-padding td{
   font-size: 12px;
   width: fit-content;
 }
+
+.not-blocking{
+  background-color: #f16d6f !important;
+  border-color: #f16d6f !important;
+}

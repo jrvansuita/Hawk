@@ -1,3 +1,5 @@
+const Err = require('../error/error.js');
+
 module.exports = class History extends DataAccess {
 
   constructor(type, userId, title, message, tag){
@@ -15,13 +17,20 @@ module.exports = class History extends DataAccess {
     return ['date', 'userId', 'tag'];
   }
 
+  static handle(e, userId){
+    if (e.type == "Err"){
+      History.info(userId, 'Aviso de Sistema', Err.xprss(e) , 'Informação');
+    }else{
+      History.error(e, null, null, userId);
+    }
+  }
 
   static info(userId, title,  message, tag){
     new History(1, userId, title, message, tag).upsert();
   }
 
-  static error(e, title, addtoMessage){
-    new History(2, 0, title ? title : 'Erro de Sistema', addtoMessage ? addtoMessage + '\n' : '' + Util.errorToStr(e), 'Falha').upsert();
+  static error(e, title, addtoMessage, userId){
+    new History(2, userId ? userId : 0, title ? title : 'Erro de Sistema', addtoMessage ? addtoMessage + '\n' : '' + Err.xprss(e), 'Falha').upsert();
   }
 
   static notify(userId, title, message, tag){

@@ -1,4 +1,5 @@
 const History = require('../bean/history.js');
+const Err = require('../error/error.js');
 
 module.exports = {
 
@@ -31,7 +32,11 @@ module.exports = {
   error(res, e){
     console.log('Printing error:');
     console.log(e);
-    History.error(e);
-    res.status(500).send(e);
+
+    var userId = res.locals.loggedUser ? res.locals.loggedUser.id : 0;
+    History.handle(e, userId);
+
+    res.status(500).send(e.toString());
+
   }
 };

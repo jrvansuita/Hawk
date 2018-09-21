@@ -1,6 +1,7 @@
 const BlockedSale = require('../bean/blocked-sale.js');
 const UsersProvider = require('../provider/UsersProvider.js');
 const PendingLaws = require('../laws/pending-laws.js');
+const HistoryStorer = require('../history/history-storer.js');
 
 //All Blocked Sales wich can't be picking now
 global.staticBlockedSales = [];
@@ -16,8 +17,15 @@ module.exports = {
     var blocks = this.getAllSales();
 
     if (blocks){
-      saleList = saleList.filter(sale =>{
-        return !(blocks.includes(sale.numeroPedido) || blocks.includes(sale.numeroDaOrdemDeCompra));
+      saleList = saleList.filter((sale) =>{
+        var block = this.get(sale.numeroPedido, sale.numeroDaOrdemDeCompra);
+
+        if (block){
+          //If the block is blocking any sale
+          block.blocking = true;
+        }
+
+        return !block;
       });
     }
 
@@ -28,7 +36,7 @@ module.exports = {
     BlockedSale.findAll(function(err, all){
       global.staticBlockedSales = all;
       callback();
-    }); 
+    });
   },
 
   remove(blockSale){
@@ -40,9 +48,9 @@ module.exports = {
     }
   },
 
-  get(saleNumber){
+  get(blockNumber, alternative){
     return this.list().find((i)=>{
-      return i.number == saleNumber;
+      return i.number == blockNumber || i.number == alternative;
     });
   },
 
@@ -50,6 +58,7 @@ module.exports = {
     var blockedSale = new BlockedSale(saleNumber, user, reason);
     blockedSale.upsert(()=>{
       this.list().push(blockedSale);
+      HistoryStorer.blocked(user.id, saleNumber, true);
       PendingLaws.remove(saleNumber);
       callback();
     });
@@ -60,6 +69,7 @@ module.exports = {
     var blocked = this.get(saleNumber);
 
     if (blocked) {
+      HistoryStorer.blocked(user.id, saleNumber, false);
       this.remove(blocked);
       callback();
     }else{

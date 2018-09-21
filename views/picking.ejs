@@ -192,8 +192,9 @@
                         <tr>
                           <td>
                             <%var userName = (blocked.user.name ? blocked.user.name.split(" ")[0] : 'Desconhecido') %>
-                            <img class="circle shadow avatar-img super-mini-avatar" data-id="<%=blocked.user.id%>" src="<%=blocked.user.avatar%>" title="<%=userName%>" />
-                            <%if (blocked.reason){%>
+                            <%var blockingClass = (blocked.blocking ? 'blocking' : 'not-blocking') %>
+                            <img class="circle shadow avatar-img super-mini-avatar <%=blockingClass%>" data-id="<%=blocked.user.id%>" src="<%=blocked.user.avatar%>" title="<%=userName%>" />
+                            <%if (blocked.reason){%> 
                               <img class="circle shadow blocked-reason" src="<%=blocked.reason.icon%>" title="<%=blocked.reason.label%>" />
                               <%}%>
                             </td>

@@ -1,6 +1,7 @@
 const UsersProvider = require('../provider/UsersProvider.js');
 const Day = require('../bean/day.js');
 const HistoryStorer = require('../history/history-storer.js');
+const Err = require('../error/error.js');
 
 //Current picking
 global.inprogressPicking = {};
@@ -13,7 +14,7 @@ module.exports = {
 
   checkAndThrowUserInProgress(userId){
     if (this.checkUserInProgress(userId)){
-      throw 'O usuário ' + user.name + ' já tem um pedido em processo de picking.';
+      Err.thrw('O usuário ' + user.name + ' já tem um pedido em processo de picking.');
     }
 
     return false;
@@ -48,7 +49,9 @@ module.exports = {
     sale.pickUser = UsersProvider.get(userId);
     this.object()[userId] = sale;
 
-    console.log('[Abriu] picking ' + sale.pickUser.name  + ' - ' + sale.numeroPedido);
+    HistoryStorer.picking(userId, sale, null);
+
+    //console.log('[Abriu] picking ' + sale.pickUser.name  + ' - ' + sale.numeroPedido);
   },
 
   endPicking(userId, callback){
@@ -58,7 +61,7 @@ module.exports = {
     checkEndTime(sale);
 
     var day = Day.picking(userId, Dat.today(), getItemsQuantity(sale), getSecondsDiference(sale));
-    console.log('[Fechou] picking ' + sale.pickUser.name  + ' - ' + sale.numeroPedido);
+    //console.log('[Fechou] picking ' + sale.pickUser.name  + ' - ' + sale.numeroPedido);
     this.remove(sale.numeroPedido);
 
     HistoryStorer.picking(userId, sale, day);
@@ -85,7 +88,7 @@ function checkEndTime(sale){
   //Calcula 3 segundos por item do pedido no mínimo
   var minSecs = sale.itemsQuantity * 3;
   if (secs < minSecs){
-    throw 'Tempo insuficiente para realizar o picking do pedido ' + sale.numeroPedido + '. Tempo mínimo é: ' + minSecs + ' segundos.';
+    Err.thrw('Tempo insuficiente para realizar o picking do pedido ' + sale.numeroPedido + '. Tempo mínimo é: ' + minSecs + ' segundos.');
   }
 }
 

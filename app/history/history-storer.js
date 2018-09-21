@@ -4,25 +4,33 @@ const History = require('../bean/history.js');
 module.exports={
 
 
-  email(user, sale, err){
+  email(userId, sale, err){
     var message = 'Pedido: ' + sale.numeroPedido + ' Ordem de Compra: ' + sale.numeroDaOrdemDeCompra;
     message+= '\n Remetente: ' + sale.client.nome + ' - ' + sale.client.email;
 
     if (err){
       History.error(err, 'Email não Enviado', message);
     }else{
-      History.info(user, 'Email Enviado', message, 'Email');
+      History.info(userId, 'Email Enviado', message, 'Email');
     }
   },
 
+  blocked(userId, blockNumber, blocked){
+    var message = 'O pedido ' + blockNumber + ' foi ' + (blocked ? 'bloqueado' : 'desbloqueado');
+
+    History.notify(userId, blocked ? 'Pedido Bloqueado' : 'Pedido Desbloqueado', message, 'Bloqueio');
+  },
 
   picking(userId, sale, day){
     onTry(()=>{
       var message = 'Pedido: ' + sale.numeroPedido + ' - ' + sale.client.nome;
-      message += '\nItems: ' + day.total + " Secs: " + day.count + ' Pontos gerados: ' + day.points;
-      //message += '\n((' + day.total + ') / (' + day.count + '/' + day.total + ')) * 2 = ' + day.points;
 
-      History.notify(userId, 'Picking Realizado', message, 'Picking');
+      if (day){
+        message += '\nItems: ' + day.total + " Secs: " + day.count + ' Pontos gerados: ' + day.points;
+        //message += '\n((' + day.total + ') / (' + day.count + '/' + day.total + ')) * 2 = ' + day.points;
+      }
+
+      History.notify(userId, day ? 'Picking Finalizado' : 'Picking Iniciado', message, 'Picking');
     });
   },
 

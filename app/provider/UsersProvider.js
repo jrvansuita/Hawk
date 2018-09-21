@@ -1,4 +1,5 @@
 const User = require('../bean/user.js');
+const Err = require('../error/error.js');
 
 module.exports = class UsersProvider {
 
@@ -57,7 +58,7 @@ module.exports = class UsersProvider {
     var user = UsersProvider.get(userId);
 
     if (user == undefined || user.id == 404 || user.id === 0) {
-      throw "Usuário não existe.";
+      Err.thrw("Usuário não existe.");
     }
 
     return true;

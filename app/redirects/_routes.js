@@ -16,7 +16,7 @@ module.exports = class Routes {
 
   _post(paths, callback){
     this.app.post(paths, (req, res) => {
-      Response.onTry(res, ()=>{
+      Response.onTry(res,()=>{
         callback(req, res, req.body, res.locals, req.session);
       });
     });

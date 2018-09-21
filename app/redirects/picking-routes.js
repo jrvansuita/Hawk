@@ -32,7 +32,7 @@ module.exports = class PickingRoutes extends Routes{
           res.render('picking', {
             pickingSales: PickingHandler.getPickingSales(),
             inprogress: InprogressLaws.object(),
-            
+
             transportList: TransportLaws.getObject(),
             selectedTransp: req.query.transp,
 
@@ -72,7 +72,7 @@ module.exports = class PickingRoutes extends Routes{
     });
 
     this._get('/picking-sale', (req, res) => {
-      PickingHandler.handle(req.query.userid,  this._resp().redirect(res));
+        PickingHandler.handle(req.query.userid,  this._resp().redirect(res));
     });
 
     this._post(['/picking/toggle-block-sale'], (req, res) => {
@@ -82,5 +82,7 @@ module.exports = class PickingRoutes extends Routes{
     this._post('/picking-done-restart', (req, res, body, locals, session) => {
       PickingHandler.restart(session.loggedUser, req.body.sale, this._resp().redirect(res));
     });
+
+
   }
 };
