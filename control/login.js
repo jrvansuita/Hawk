@@ -74,7 +74,6 @@ function login(code) {
       $('.error').text(jqXHR.responseText).fadeIn().delay(2000).fadeOut();
       onError();
     }
-
   });
 }
 
