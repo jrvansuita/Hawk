@@ -1,5 +1,6 @@
 const https = require('https');
 var MD5 = require('../util/md5.js');
+const History = require('../bean/history.js');
 
 var exports = module.exports = {};
 
@@ -18,7 +19,7 @@ exports.get = (path, onEnd) => {
     });
 
     res.on('end', function() {
-      onEnd(body);
+      onEnd(checkEccoStatus(body));
     });
   });
 
@@ -53,6 +54,14 @@ function generateSignature() {
   }
 
   return signature;
+}
 
 
+function checkEccoStatus(data){
+  if (data.includes('503 Service Temporarily Unavailable')){
+     History.error("API Eccosys indisponível no momento.");
+     return '[]';
+  }
+
+  return data;
 }

@@ -1,4 +1,4 @@
-const Routes = require('../redirects/_routes.js');
+const Routes = require('../redirects/controller/routes.js');
 const PendingLaws = require('../laws/pending-laws.js');
 const PendingHandler = require('../handler/pending-handler.js');
 
@@ -16,7 +16,7 @@ module.exports = class PendingRoutes extends Routes{
     this._post('/start-pending', (req, res, body, locals) => {
       PendingHandler.store(body.pendingSale, body.local, locals.loggedUser, this._resp().redirect(res));
     });
- 
+
     this._post('/pending-status', (req, res, body, locals) => {
       PendingHandler.incStatus(body.pendingSale, locals.loggedUser, this._resp().redirect(res));
     });

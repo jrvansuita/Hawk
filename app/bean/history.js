@@ -4,7 +4,7 @@ module.exports = class History extends DataAccess {
 
   constructor(type, userId, title, message, tag){
     super();
-    //1-Info, 2-Error, 3-Notificação
+    //1-Info, 2-Error, 3-Notificação, 4-Job/Automation
     this.type = Num.def(type);
     this.tag = Str.def(tag);
     this.userId = Num.def(userId);
@@ -35,5 +35,9 @@ module.exports = class History extends DataAccess {
 
   static notify(userId, title, message, tag){
     new History(3, userId, title, message, tag).upsert();
+  }
+
+  static job(title, message, tag){
+    new History(4, 0, title, message, tag).upsert();
   }
 };

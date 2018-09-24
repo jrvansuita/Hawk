@@ -1,28 +1,25 @@
+const Controller = require('../jobs/controller/controller.js');
+
 const Sale = require('../bean/sale.js');
 const User = require('../bean/user.js');
 const Day = require('../bean/day.js');
-
+const History = require('../bean/history.js');
 
 var data;
 
-module.exports = {
-  run(onFinished) {
+module.exports = class JobDays extends Controller{
+  run() {
     Sale.findNotSynced((err, salesArr) => {
       if (salesArr.length > 0) {
         data = {};
         handleData(salesArr);
 
         var rows = Object.values(data);
-        console.log('--- Updating ' + rows.length + ' rows ---');
+        History.job('Calculando Pontos', 'Calculando os pontos gerados pelo faturamento dos pedidos', 'Hawk');
 
         execute(rows, 0, () => {
           Sale.syncAll();
-          onFinished();
-
-          console.log('--- Days Sync Job Finished ---');
         });
-      } else {
-        onFinished();
       }
     });
   }
@@ -48,8 +45,6 @@ function handleData(sales) {
 }
 
 function execute(data, index, onFinished) {
-  console.log('Day ' + (index + 1));
-
   store(data[index], () => {
     index++;
 

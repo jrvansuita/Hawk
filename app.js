@@ -70,6 +70,7 @@ routes.push('picking-routes.js');
 routes.push('pending-routes.js');
 routes.push('performance-routes.js');
 routes.push('history-routes.js');
+routes.push('product-routes.js');
 
 // -- Run Routes -- //
 routes.forEach((r)=>{

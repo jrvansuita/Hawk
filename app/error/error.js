@@ -14,7 +14,6 @@ module.exports = class Err{
   static xprss(e){
     if (e != undefined){
       var message = e.toString();
-
       if (e instanceof Error){
         message += "\n" + e.stack.split("\n")[1];
       }

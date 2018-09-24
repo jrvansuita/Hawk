@@ -1,5 +1,4 @@
-const Routes = require('../redirects/_routes.js');
-
+const Routes = require('../redirects/controller/routes.js');
 
 module.exports = class PackingRoutes extends Routes{
 
@@ -18,7 +17,7 @@ module.exports = class PackingRoutes extends Routes{
     this._get('/packing/by-date', (req, res) => {
       var from = Dat.query(req.query.from, Dat.firstDayOfMonth());
       var to = Dat.query(req.query.to, Dat.lastDayOfMonth());
-      
+
       require('../builder/InvoiceChartBuilder.js').buildByDate(from, to, res.locals.loggedUser.full, function(charts) {
         res.render('invoice-chart', {
           charts: charts,

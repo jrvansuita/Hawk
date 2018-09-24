@@ -1,4 +1,4 @@
-const Routes = require('../redirects/_routes.js');
+const Routes = require('../redirects/controller/routes.js');
 const HistoryProvider = require('../provider/HistoryProvider.js');
 
 module.exports = class HistoryRoutes extends Routes{

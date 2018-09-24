@@ -24,7 +24,7 @@ var Util = {
     return arrItem ? arrItem.getBars() : [];
   },
 
-  
+
 
   forProperty(object, callback){
     for (var key in object) {
@@ -92,6 +92,8 @@ var Util = {
       return "error";
     }else if(status == 3){
       return "notification";
+    }else if(status == 4){
+      return "gear";
     }
 
 

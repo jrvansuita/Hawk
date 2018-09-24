@@ -1,5 +1,6 @@
-const Routes = require('../redirects/_routes.js');
-
+const Routes = require('../redirects/controller/routes.js');
+const PickingLaws = require('../laws/picking-laws.js');
+const JobSales = require('../jobs/job-sales.js');
 
 module.exports = class JobsRoutes extends Routes{
 
@@ -13,16 +14,17 @@ module.exports = class JobsRoutes extends Routes{
 };
 
 function runJobs(req, callback){
-  var jobsRunner = require('../jobs/Jobs.js');
-
   if (req.headers.referer.includes('packing')){
-    jobsRunner.runPacking((runned) => {
-      callback(buildResponse(runned));
-    });
-  }else{
-    jobsRunner.runPicking(()=>{
+    try{
+      var runner = new JobSales();
+      runner.run();
       callback(buildResponse(true));
-    });
+    }catch(e){
+      callback(buildResponse(false));
+    }
+  }else{
+    PickingLaws.clear();
+    callback(buildResponse(true));
   }
 }
 

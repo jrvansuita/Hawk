@@ -38,7 +38,6 @@ module.exports = {
           callback();
         }
       }catch(e){
-        Err.thrw(e);
         callback();
       }
     });
@@ -100,7 +99,8 @@ module.exports = {
 
   getPickingSales(){
     return PickingLaws.getList();
-  },
+  }
+
 
 
 

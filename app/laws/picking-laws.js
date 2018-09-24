@@ -1,10 +1,11 @@
 const TransportLaws = require('../laws/transport-laws.js');
 const UfLaws = require('../laws/uf-laws.js');
 const BlockedLaws = require('../laws/blocked-laws.js');
-
+const History = require('../bean/history.js');
 
 //Nexts sales to pick
 global.staticPickingList = [];
+global.lastClear = 0;
 global.pickingPrintUrl =  "https://" + process.env.ECCOSYS_HOST + "/relatorios/picking.impressao.romaneio.php?imprimeAbertos=N&idsVendas=";
 
 module.exports = {
@@ -54,8 +55,22 @@ module.exports = {
 
   getList(){
     return getAssertedList();
+  },
+
+  clear(){
+    var now = new Date().getTime();
+
+    if ((global.staticPickingList.length <= 50) || (global.lastClear + 3600000) < now){
+      global.lastClear = now;
+      global.staticPickingList = [];
+      History.job('Atualização de Picking', 'Iniciando atualização da lista de picking', 'Eccosys');
+    }else{
+      History.job('Atualização de Picking', 'Tentativa de atualização de lista de picking muito frequente.\n Tentar novamente em 1 hora.', 'Eccosys');
+    }
   }
 };
+
+
 
 function getAssertedList(){
   var list = global.staticPickingList;

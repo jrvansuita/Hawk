@@ -1,4 +1,4 @@
-const Routes = require('../redirects/_routes.js');
+const Routes = require('../redirects/controller/routes.js');
 const BlockedLaws = require('../laws/blocked-laws.js');
 const TransportLaws = require('../laws/transport-laws.js');
 const UfLaws = require('../laws/uf-laws.js');

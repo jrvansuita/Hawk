@@ -13,7 +13,7 @@ module.exports = class AchievProvider {
 
   onAddRowListener(func){
     this.onAddRowFunc = func;
-  }
+  } 
 
   onResultListener(func){
     this.onResultFunc = func;

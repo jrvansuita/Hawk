@@ -24,9 +24,16 @@ console.log('Loaded All Users...');
 //Build the prototypes
 require('../init/prototypes.js');
 
-//Trigger the scheduled jobs
-require('../jobs/Jobs.js').schedule(false);
-
-
 //Ajust $points
 //require('../init/assert-points.js');
+
+
+var jobs = [];
+jobs.push(['job-products.js', '6.30']);
+jobs.push(['job-sales.js', ['11','15', '17']]);
+
+// -- Run Jobs schedules -- //
+jobs.forEach((r)=>{
+  var Clazz = require('../jobs/' + r[0]);
+  new Clazz().schedule(r[1]);
+});

@@ -1,4 +1,4 @@
-const Response = require('../util/response.js');
+const Response = require('../../util/response.js');
 
 module.exports = class Routes {
 

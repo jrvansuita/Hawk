@@ -21,6 +21,20 @@ function _get(path, data, onSucess, onError){
 }
 
 
+$.ajax({
+  url: '/product-sku',
+  type: "get",
+  data: {sku: "3817-Rsp-M"},
+  success: function(response) {
+    console.log(response);
+  },
+  error: function(error, message, errorThrown) {
+    console.log(error);
+  }
+});
+
+
+
 function _post(path, data, onSucess, onError){
   $.ajax({
     url: path,
