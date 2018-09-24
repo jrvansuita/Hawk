@@ -118,7 +118,7 @@ function buildUser(pedido) {
 
 
 function storeHistory(from, to, salesCount){
-  var msg = 'Iniciando a importação de pedidos de ' + Dat.format(from) + ' até ' + Dat.format(to);
+  var msg = 'Iniciando a importação de pedidos faturados de ' + Dat.format(from) + ' até ' + Dat.format(to);
   msg+="\nSerão importados " + salesCount + " pedidos" ;
 
   History.job('Importação de Pedidos', msg, 'Eccosys');

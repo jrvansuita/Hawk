@@ -1,15 +1,19 @@
 $(document).ready(() => {
 
-  $('.start-jobs').click(() => {
-    $('#logo').hide();
-    $('#run-jobs-img').fadeIn();
+  var href = window.location.href;
 
-    $.post("/run-jobs", (data) => {
-      if (data.was_running) {
-        location.reload();
-      }
+  if(href.includes('picking') || href.includes('packing')){
+    $('.start-jobs').click(() => {
+      $('#logo').hide();
+      $('#run-jobs-img').fadeIn();
+
+      $.post("/run-jobs", (data) => {
+        if (data.was_running) {
+          location.reload();
+        }
+      });
     });
-  });
+  }
 
   $('.user-logged-holder').click(() => {
     $.ajax({

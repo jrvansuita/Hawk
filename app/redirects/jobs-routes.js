@@ -22,7 +22,7 @@ function runJobs(req, callback){
     }catch(e){
       callback(buildResponse(false));
     }
-  }else{
+  }else if (req.headers.referer.includes('picking')){
     PickingLaws.clear();
     callback(buildResponse(true));
   }
