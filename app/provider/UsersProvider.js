@@ -43,7 +43,7 @@ module.exports = class UsersProvider {
       }
     }
 
-    return new User();
+    return undefined;
   }
 
 
@@ -57,7 +57,7 @@ module.exports = class UsersProvider {
   static checkUserExists(userId) {
     var user = UsersProvider.get(userId);
 
-    if (user == undefined || user.id == 404 || user.id === 0) {
+    if (user === undefined || user.id < 1000) {
       Err.thrw("Usuário não existe.");
     }
 

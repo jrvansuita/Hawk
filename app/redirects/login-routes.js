@@ -12,9 +12,7 @@ module.exports = class LoginRoutes extends Routes{
 
 
       UsersProvider.login(req.body.userId, req.body.userAccess, (user, msg)=>{
-        req.session.loggedUser = user == undefined || user.id == 0 || user.id == 404 ? undefined : user;
-
-        console.log(req.session.loggedUser);
+        req.session.loggedUser = user;
 
         if (req.session.loggedUser) {
           res.status(200).send(req.session.loggedUser);

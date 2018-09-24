@@ -16,7 +16,7 @@ module.exports = {
 function loadUsers(data){
   if (data){
     data.forEach(function (item, index){
-      data[index]._doc.user = UsersProvider.get(item.userId);
+      data[index]._doc.user = UsersProvider.getDefault(item.userId);
     });
   }
 

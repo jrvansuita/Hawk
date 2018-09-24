@@ -2,7 +2,7 @@ module.exports = class User extends DataAccess {
 
   constructor(id, name) {
     super();
-    this.id = Num.def(id, 404);
+    this.id = Num.def(id, 0);
     this.name = Str.def(name, 'Desconhecido');
     this.full = false;
     this.access = '';
