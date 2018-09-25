@@ -14,7 +14,7 @@ module.exports = {
 
   checkAndThrowUserInProgress(userId){
     if (this.checkUserInProgress(userId)){
-      Err.thrw('O usuário ' + user.name + ' já tem um pedido em processo de picking.');
+      Err.thrw('O usuário ' + UsersProvider.get(userId).name + ' já tem um pedido em processo de picking.');
     }
 
     return false;

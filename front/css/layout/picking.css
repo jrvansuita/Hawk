@@ -64,6 +64,7 @@ table{
   display: inline-block;
   padding: 3px 1px;
   font-size: 11px;
+   cursor: default;
 }
 
 .green-title {
@@ -247,12 +248,12 @@ tr.row-padding td{
 
 
 .checked{
-  background-image: url('../img/checked.png');
+  background-image: url('/img/checked.png');
   transition: background 0.25s ease-in-out;
 }
 
 .checked:hover{
-  background-image: url('../img/pending.png');
+  background-image: url('/img/pending.png');
 }
 
 .pending-box{
@@ -262,7 +263,7 @@ tr.row-padding td{
 }
 
 .pending{
-  background-image: url('../img/pending.png');
+  background-image: url('/img/pending.png');
 }
 
 .pick-icon{
@@ -416,7 +417,7 @@ tr.row-padding td{
 }
 
 .quantity-click:hover{
-  background-color:  #f3f3f3;
+  background-color:  #e0dddd;
   border-radius: 4px;
   margin: 1px 10px;
   cursor: pointer;
@@ -533,4 +534,27 @@ tr.row-padding td{
 .not-blocking{
   background-color: #f16d6f !important;
   border-color: #f16d6f !important;
+}
+
+
+.open-sale-holder{
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.open-sale-holder .pick-header{
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+ #opened-sale tr td:first-child{
+   padding-left: 10px;
+ }
+ #opened-sale tr td:last-child{
+   padding-right: 10px;
+ }
+
+.row-padding:hover{
+  border-radius: 4px;
+  background-color: #f3f3f3;
 }

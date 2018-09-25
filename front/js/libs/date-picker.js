@@ -1,7 +1,7 @@
 function bindDateRangePickers(onRangeSelected) {
-  loadCssFile('/css/libs/material-date-picker.min.css');
-  loadCssFile('/css/date-picker.css');
-  loadJsFile('/libs/material-date-picker.min.js', function() {
+  loadCssFile('/front/css/libs/material-date-picker.min.css');
+  loadCssFile('/front/css/libs/date-picker.css');
+  loadJsFile('/front/js/libs/material-date-picker.min.js', function() {
 
     $('.datepicker').each(function() {
       var $inputTo = $('<input>').attr('id', 'select-date-to').addClass('select-date');

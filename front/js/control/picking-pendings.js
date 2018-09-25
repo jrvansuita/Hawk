@@ -2,7 +2,7 @@ $(document).ready(() => {
   $(".checkable-avatar").change(function() {
     var $img = $(this).parent().find('img');
     if(this.checked) {
-      $img.attr('src', '../img/checked.png').hide().fadeIn(300);
+      $img.attr('src', '/img/checked.png').hide().fadeIn(300);
     }else{
       $img.attr('src', $img.data('src')).hide().fadeIn(300);
     }
@@ -233,12 +233,23 @@ function buildProductFirstCol(item, slim){
       desc.splice(5,desc.length -5);
       desc = desc.join(' ');
     }
-  }
+  } 
 
   var first = $('<div>').addClass('vertical-content');
 
   var div = $('<div>').addClass('nobreak');
   var sku = $('<label>').addClass('pick-value sku copiable').text(item.codigo);
+
+  var preview = new ImagePreview(first);
+
+  first.hover(function() {
+    _get('/product-sku', {sku: item.codigo },(product)=>{
+      preview.show(product.image);
+    });
+  },
+  function() {
+    preview.remove();
+  });
 
   sku.click(function(e){
     Util.selectContent(this);

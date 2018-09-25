@@ -218,3 +218,20 @@ tr.line td{
 .dotted-top{
   border-top: 1px dashed #e6e7e6;
 }
+
+
+
+.image-preview {
+  width: 90px;
+  height: 90px;
+  border: 2px solid #dfdddf;
+  border-radius: 10px;
+  z-index: 100000;
+  background: white;
+  position: absolute;
+  width: 400px !important;
+  height: 400px !important;
+  -webkit-box-shadow: 10px 10px 30px 0px rgba(50, 50, 50, 0.63);
+  -moz-box-shadow: 10px 10px 30px 0px rgba(50, 50, 50, 0.63);
+  box-shadow: 10px 10px 30px 0px rgba(50, 50, 50, 0.63);
+}

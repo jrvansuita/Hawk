@@ -23,7 +23,7 @@ module.exports={
 
   picking(userId, sale, day){
     onTry(()=>{
-      var message = 'Pedido: ' + sale.numeroPedido + ' - ' + sale.client.nome;
+      var message = 'Pedido: ' + sale.numeroPedido + (sale.client ? ' - ' + sale.client.nome : '');
 
       if (day){
         message += '\nItems: ' + day.total + " Secs: " + day.count + ' Pontos gerados: ' + day.points;

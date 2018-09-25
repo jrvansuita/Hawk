@@ -336,12 +336,12 @@
  .gj-picker-bootstrap [role=header] {
    background: #eee;
    color: #AAA
- }
+ } 
 
  @font-face {
    font-family: gijgo-material;
-   src: url(../fonts/gijgo-material.eot?235541);
-   src: url(../fonts/gijgo-material.eot?235541#iefix) format('embedded-opentype'), url(../fonts/gijgo-material.ttf?235541) format('truetype'), url(../fonts/gijgo-material.woff?235541) format('woff'), url(../fonts/gijgo-material.svg?235541#gijgo-material) format('svg');
+   src: url(/front/fonts/gijgo-material.eot?235541);
+   src: url(/front/fonts/gijgo-material.eot?235541#iefix) format('embedded-opentype'), url(/front/fonts/gijgo-material.ttf?235541) format('truetype'), url(/front/fonts/gijgo-material.woff?235541) format('woff'), url(/front/fonts/gijgo-material.svg?235541#gijgo-material) format('svg');
    font-weight: 400;
    font-style: normal
  }

@@ -25,12 +25,11 @@ app.use(cookieSession({
 }));
 
 app.set('view engine', 'ejs');
-app.use('/css', express.static('css'));
-app.use('/img', express.static('img'));
-app.use('/visual', express.static('visual'));
-app.use('/control', express.static('control'));
+
+app.use('/img', express.static('front/img'));
+app.use('/front', express.static('front'));
+
 app.use('/util', express.static('app/util'));
-app.use('/libs', express.static('libs'));
 app.use('/chart', express.static('views/chart'));
 
 
