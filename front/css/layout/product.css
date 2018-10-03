@@ -221,6 +221,7 @@ tr.selected td{
 }
 
 .editable-input{
+  text-transform: uppercase;
   outline: none;
   height: 26px;
   background-color: transparent;
@@ -242,4 +243,18 @@ tr.selected td{
   margin-top: -3px;
   max-width: 23px;
   max-height: 23px;
+}
+
+
+.error-holder{
+  height: 100%;
+}
+
+.msg-error{
+  color: red;
+  font-size: 13px;
+  text-align: left;
+  padding: 5px 35px;
+  vertical-align: super;
+  font-weight: 600;
 }

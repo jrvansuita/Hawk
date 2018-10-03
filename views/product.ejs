@@ -104,10 +104,18 @@
       <div class="main-panel shadow" >
 
         <div class="search-holder">
-          <img src="/img/loader/circle.svg" class="right-loading loading-circle"/>
-          <input type="text" id="search" value="<%=product.selected ? product.selected : product.codigo%>" class="simple-material-input" placeholder="Pesquisar" style="width:100%"/>
+          <%if (product.codigo){%>
+            <img src="/img/loader/circle.svg" class="right-loading loading-circle"/>
+          <%}%>
+          <input type="text" id="search" value="<%=product.selected ? product.selected : product.codigo%>" class="<%=product.error? 'simple-material-input-error simple-material-input' : 'simple-material-input'%>" placeholder="Pesquisar" style="width:100%"/>
           <label class="top-label sub search-hint">SKU ou EAN</label>
         </div>
+
+       <%if (product.error){%>
+        <div class="error-holder">
+        <label class="msg-error" ><%=product.error%></label>
+        </div>
+        <%}%>
 
       <%if (product.codigo){ %>
         <div class="table-child-skus">

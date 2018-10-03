@@ -42,7 +42,7 @@ function buildChildSku(product, child){
   var cols = [];
   cols.push(buildSkuCol(child));
   cols.push(buildCol(child.localizacao, true));
-  cols.push(buildCol(estoque.estoqueReal, true));
+  cols.push(buildCol(estoque.estoqueReal, true, true));
   cols.push(buildCol(estoque.estoqueDisponivel));
   cols.push(buildCol(estoque.estoqueReal - estoque.estoqueDisponivel));
 
@@ -63,11 +63,15 @@ function buildChildSku(product, child){
 }
 
 
-function buildCol(val, canEdit){
+function buildCol(val, canEdit, isNumber){
   var $valElement;
 
   if (canEdit){
     $valElement = $('<input>').attr('value',val).addClass('child-value editable-input');
+    //Allow only numbers
+    if (isNumber){
+      $valElement.attr('onkeypress',"return isStockValid(event, this);");
+    }
   }else{
     $valElement = $('<label>').addClass('child-value').text(val);
   }
@@ -96,4 +100,13 @@ function addFooter(){
   $tr.append(buildCol(estoqueDisponivelTotal));
   $tr.append(buildCol(estoqueReservadoTotal));
   $('#child-skus-holder').append($tr);
+}
+
+function isStockValid(event, input){
+  return isNumberKey(event) && parseInt(input.value) < 1000;
+}
+
+function isNumberKey(evt){
+  var charCode = (evt.which) ? evt.which : evt.keyCode;
+  return !(charCode > 31 && (charCode < 48 || charCode > 57));
 }

@@ -8,10 +8,11 @@ module.exports = {
   get(sku, father, callback){
     if (sku){
       EccosysCalls.getProduct(father ? getFatherSku(sku) : sku , (product)=>{
+        product = JSON.parse(product);
+
         if (typeof product == 'string'){
-          callback({});
+          callback({error : product, selected : sku});
         }else{
-          product = JSON.parse(product);
           product.selected = sku;
 
           this.getImage(sku, (img)=>{
