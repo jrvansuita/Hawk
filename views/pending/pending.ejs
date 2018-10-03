@@ -1,5 +1,5 @@
 <html>
-<% include menu %>
+<%  include ../menus/main-menu %>
 
 <head>
   <link rel="stylesheet" type="text/css" href="/front/css/layout/picking.css">
@@ -18,7 +18,7 @@
 </head>
 
 <body>
-  <% include picking-menu %>
+  <%  include ../menus/picking-menu %>
 
   <script>
   window.pendingSales = <%- JSON.stringify(pendingSales || null) %>
@@ -51,21 +51,21 @@
          var label = 'Não Atendido';
          var topClass = 'red-top';
       %>
-      <% include picking-pendings %>
+      <%  include ../pending/picking-pendings %>
 
       <% pendingSales =solving
          var label = 'Em Atendimento';
          var topClass = 'orange-top';
       %>
-      <% include picking-pendings %>
+      <%  include ../pending/picking-pendings %>
 
       <% pendingSales =solved
          var label = 'Resolvido';
          var topClass = 'green-top';
       %>
-      <% include picking-pendings %>
+      <%  include ../pending/picking-pendings %>
     <%}else{%>
-      <% include picking-pendings %>
+      <%  include ../pending/picking-pendings %>
     <%}%>
 
 

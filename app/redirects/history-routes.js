@@ -1,5 +1,5 @@
 const Routes = require('../redirects/controller/routes.js');
-const HistoryProvider = require('../provider/HistoryProvider.js');
+const HistoryLaws = require('../laws/history-laws.js');
 
 module.exports = class HistoryRoutes extends Routes{
 
@@ -12,10 +12,16 @@ module.exports = class HistoryRoutes extends Routes{
       var page = parseInt(req.query.page);
       var query = req.query.query;
 
-      HistoryProvider.getPage(page, query, (all)=>{
+      HistoryLaws.getPage(page, query, (all)=>{
         this._resp().sucess(res, all);
       });
 
+    });
+
+    this._post('/history-delete', (req, res) => {
+      HistoryLaws.delete(req.query.query,()=>{
+        this._resp().sucess(res);
+      });
     });
   }
 };

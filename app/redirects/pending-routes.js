@@ -7,7 +7,7 @@ module.exports = class PendingRoutes extends Routes{
   attach(){
     this._get('/pending', (req, res) => {
       PendingHandler.load(false, (list)=>{
-        res.render('pending', {
+        res.render('pending/pending', {
           wideOpen : true,
           pendingSales: list});
       });

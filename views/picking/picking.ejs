@@ -1,5 +1,5 @@
 <html>
-<% include menu %>
+<%  include ../menus/main-menu %>
 
 <head>
   <link rel="stylesheet" type="text/css" href="/front/css/layout/picking.css">
@@ -34,7 +34,7 @@
   window.printPickingUrl = "<%- printPickingUrl || "undefined" %>"
   </script>
 
-  <% include picking-menu %>
+  <%  include ../menus/picking-menu %>
   <div class="main-content no-scroll">
 
 
@@ -301,7 +301,7 @@
                           </div>
 
 
-                          <%include picking-pendings %>
+                          <% include ../pending/picking-pendings %>
                         </div>
                       </div>
                     </body>

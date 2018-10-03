@@ -1,0 +1,133 @@
+<html>
+<%  include menus/main-menu %>
+
+
+<head>
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-select.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/product.css">
+
+  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+  <script type="text/javascript" src="/front/js/control/product.js"></script>
+</head>
+
+
+
+<body>
+  <script>
+  window.product = <%- JSON.stringify(product || null) %>
+  </script>
+  <%  include menus/stock-menu %>
+
+
+  <div class="main-content">
+    <div class="panels">
+      <div class="left-panel shadow">
+
+        <div class="top-image-holder">
+          <label id="top-sku" class="top-label"><%=product.codigo%></label>
+          <label id="top-brand" class="top-label sub"><%=product.Marca%></label>
+        </div>
+        <div class="image-holder">
+
+          <img id="image" src="<%=product.img ? product.img.image : ''%>" onerror="this.src='/img/product-placeholder.png'"/>
+        </div>
+
+        <div class="bottom-image-holder">
+          <a href="<%=product.img?product.img.url : ''%>" target="_blank">
+            <label id="top-product-name" class="top-label"><%=product.nome%></label>
+          </a>
+        </div>
+
+
+       <%if (product.codigo){ %>
+        <div class="product-attributes">
+
+          <div class="attributes-row">
+            <div class="attribute-holder">
+              <label class="attribute-name">Cor</label>
+              <label class="attribute-value"><%=product.Cor%></label>
+            </div>
+
+            <div class="attribute-holder">
+              <label class="attribute-name">Coleção</label>
+              <label class="attribute-value"><%=product.Coleção%></label>
+            </div>
+
+            <div class="attribute-holder">
+              <label class="attribute-name">Gênero</label>
+              <label class="attribute-value"><%=product.Genero%></label>
+            </div>
+          </div>
+
+
+          <div class="attributes-row">
+            <div class="attribute-holder">
+              <label class="attribute-name">Estação</label>
+              <label class="attribute-value"><%=product.Estacao%></label>
+            </div>
+
+            <div class="attribute-holder">
+              <label class="attribute-name">Faixa de Idade</label>
+              <label class="attribute-value"><%=product['Faixa de Idade']%></label>
+            </div>
+
+            <div class="attribute-holder">
+              <label class="attribute-name">Departamento</label>
+              <label class="attribute-value"><%=product.Departamento%></label>
+            </div>
+          </div>
+
+
+          <div class="attributes-row">
+            <div class="attribute-holder">
+              <label class="attribute-name">Material</label>
+              <label class="attribute-value"><%=product.Material%></label>
+            </div>
+
+            <div class="attribute-holder">
+              <label class="attribute-name">Fabricante</label>
+              <label class="attribute-value"><%=product.Fabricante%></label>
+            </div>
+
+            <div class="attribute-holder">
+              <label class="attribute-name">Idade</label>
+              <label class="attribute-value"><%=product.Idade%></label>
+            </div>
+          </div>
+
+        </div>
+      <%}%>
+
+
+      </div>
+
+      <div class="main-panel shadow" >
+
+        <div class="search-holder">
+          <img src="/img/loader/circle.svg" class="right-loading loading-circle"/>
+          <input type="text" id="search" value="<%=product.selected ? product.selected : product.codigo%>" class="simple-material-input" placeholder="Pesquisar" style="width:100%"/>
+          <label class="top-label sub search-hint">SKU ou EAN</label>
+        </div>
+
+      <%if (product.codigo){ %>
+        <div class="table-child-skus">
+          <table id="child-skus-holder">
+            <tr class="title-holder">
+              <td class="title-col left">Sku</td>
+              <td class="title-col">Localização</td>
+              <td class="title-col">Estoque Físico</td>
+              <td class="title-col">Estoque Disponível</td>
+              <td class="title-col">Estoque Reservado</td>
+            </tr>
+          </table>
+        </div>
+        <%}%>
+      </div>
+    </div>
+
+  </div>
+
+
+</body>
+
+</html>

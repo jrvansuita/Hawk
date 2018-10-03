@@ -1,5 +1,5 @@
 <html>
-<% include menu %>
+<%  include ../menus/main-menu %>
 <%
 
 var isByDate = page.includes('by-date');
@@ -15,10 +15,10 @@ var subtitlesArr = Util.getSubtitles(charts);
 </head>
 
 <body>
-<% include invoice-menu %>
+<%  include ../menus/packing-menu %>
 
   <div class="main-content">
-    <% include group-chart-render %>
+    <%  include ../chart/group-chart-render %>
   </div>
 
 </body>

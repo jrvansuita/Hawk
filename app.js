@@ -25,13 +25,11 @@ app.use(cookieSession({
 }));
 
 app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
 
 app.use('/img', express.static('front/img'));
 app.use('/front', express.static('front'));
-
 app.use('/util', express.static('app/util'));
-app.use('/chart', express.static('views/chart'));
-
 
 
 const ignorePaths = ['/login', '/', '.png', '.jpg'];
@@ -69,7 +67,7 @@ routes.push('picking-routes.js');
 routes.push('pending-routes.js');
 routes.push('performance-routes.js');
 routes.push('history-routes.js');
-routes.push('product-routes.js');
+routes.push('stock-routes.js');
 
 // -- Run Routes -- //
 routes.forEach((r)=>{

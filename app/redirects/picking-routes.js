@@ -14,7 +14,7 @@ module.exports = class PickingRoutes extends Routes{
       var PickingAchievGridBuilder = require('../builder/PickingAchievGridBuilder.js');
       var builder = new PickingAchievGridBuilder();
       builder.init(res.locals.loggedUser.full, (data) => {
-          res.render('picking-achiev', {
+          res.render('picking/picking-achiev', {
             data: data
           });
       });
@@ -29,7 +29,7 @@ module.exports = class PickingRoutes extends Routes{
       PickingHandler.init(() => {
 
         if (!res.headersSent){
-          res.render('picking', {
+          res.render('picking/picking', {
             pickingSales: PickingHandler.getPickingSales(),
             inprogress: InprogressLaws.object(),
 
@@ -50,7 +50,7 @@ module.exports = class PickingRoutes extends Routes{
 
     this._get('/picking/overview', (req, res) => {
       require('../builder/PickingChartBuilder.js').buildOverview(res.locals.loggedUser.full, function(charts) {
-          res.render('picking-chart', {
+          res.render('picking/picking-chart', {
             charts: charts,
             page: req.originalUrl,
         });
@@ -63,7 +63,7 @@ module.exports = class PickingRoutes extends Routes{
       var to = Dat.query(req.query.to, Dat.lastDayOfMonth());
 
       require('../builder/PickingChartBuilder.js').buildByDate(from, to, res.locals.loggedUser.full, function(charts) {
-        res.render('picking-chart', {
+        res.render('picking/picking-chart', {
           charts: charts,
           page: req.originalUrl,
           showCalendarFilter : true

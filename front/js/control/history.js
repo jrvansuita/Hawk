@@ -16,6 +16,11 @@ $(document).ready(()=>{
   $('.search-button').click(()=>{
     search();
   });
+
+
+  $('.delete-button').click(()=>{
+    _post('/history-delete',{ query: getQuery()});
+  });
 });
 
 function initSearch(){
@@ -26,13 +31,17 @@ function initSearch(){
 }
 
 function search(){
+  initSearch();
+  nextPage(getQuery());
+}
+
+function getQuery(){
   var query = {};
   query.title = $('#title-search').val();
   query.message = $('#message-search').val();
   query.tag = $('#tag-search').val();
 
-  initSearch();
-  nextPage(query);
+  return query;
 }
 
 var currentPage;

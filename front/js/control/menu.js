@@ -8,9 +8,10 @@ $(document).ready(() => {
       $('#run-jobs-img').fadeIn();
 
       $.post("/run-jobs", (data) => {
-        if (data.was_running) {
-          location.reload();
-        }
+        //Não dá mais reload na página
+        //if (data.was_running) {
+        //  location.reload();
+        //}
       });
     });
   }

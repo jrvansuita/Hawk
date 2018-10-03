@@ -6,7 +6,7 @@ module.exports = class PackingRoutes extends Routes{
 
     this._get(['/packing', '/packing/overview'], (req, res) => {
       require('../builder/InvoiceChartBuilder.js').buildOverview(res.locals.loggedUser.full, (charts)=> {
-        res.render('invoice-chart', {
+        res.render('packing/packing-chart', {
           charts: charts,
           page: req.originalUrl,
         });
@@ -19,7 +19,7 @@ module.exports = class PackingRoutes extends Routes{
       var to = Dat.query(req.query.to, Dat.lastDayOfMonth());
 
       require('../builder/InvoiceChartBuilder.js').buildByDate(from, to, res.locals.loggedUser.full, function(charts) {
-        res.render('invoice-chart', {
+        res.render('packing/packing-chart', {
           charts: charts,
           page: req.originalUrl,
           showCalendarFilter : true
@@ -34,7 +34,7 @@ module.exports = class PackingRoutes extends Routes{
       var builder = new InvoiceAchievGridBuilder();
       builder.init(res.locals.loggedUser.full,
         (data) => {
-          res.render('invoice-achiev', {
+          res.render('packing/packing-achiev', {
             data: data
           });
         });

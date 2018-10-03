@@ -10,6 +10,10 @@ module.exports = {
     });
   },
 
+  delete(query,callback){
+    History.removeAll(query, callback);
+  }
+
 };
 
 

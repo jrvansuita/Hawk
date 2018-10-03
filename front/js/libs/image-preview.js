@@ -7,11 +7,11 @@ class ImagePreview{
   show(src){
 
     if (src && this.element){
-      this.removeNow();
-
       var _self = this;
       this.runLatter = setTimeout(function(){
+        _self.removeNow();
         runnable(_self.element, src);
+
       }, 100);
 
     }
@@ -46,5 +46,6 @@ function runnable(element, src) {
   .attr('src', src)
   .fadeIn();
 
+  $('.image-preview').remove();
   $('body').append($img);
 }

@@ -233,7 +233,7 @@ function buildProductFirstCol(item, slim){
       desc.splice(5,desc.length -5);
       desc = desc.join(' ');
     }
-  } 
+  }
 
   var first = $('<div>').addClass('vertical-content');
 
@@ -243,7 +243,7 @@ function buildProductFirstCol(item, slim){
   var preview = new ImagePreview(first);
 
   first.hover(function() {
-    _get('/product-sku', {sku: item.codigo },(product)=>{
+    _get('/product-image', {sku: item.codigo },(product)=>{
       preview.show(product.image);
     });
   },

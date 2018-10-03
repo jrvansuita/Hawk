@@ -11,13 +11,13 @@ this.calendarAlreadySpawned = false;
     <%if ((typeof hideEmptyCharts === 'undefined') || (chart.getItems().length > 0)){%>
       <div class="chart-group shadow <%=typeof showCalendarFilter !== 'undefined' ? 'max-chart' : ''%>">
 
-        <%- include chart/title-chart-render %>
-        <%- include chart/sums-chart-render %>
+        <%-  include title-chart-render %>
+        <%-  include sums-chart-render %>
 
 
         <div class="chart-holder">
-          <%- include chart/empty-chart-render %>
-          <%- include chart/items-chart-render %>
+          <%-  include empty-chart-render %>
+          <%-  include items-chart-render %>
         </div>
       </div>
     <% } %>

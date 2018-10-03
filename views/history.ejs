@@ -1,5 +1,5 @@
 <html>
-<% include menu %>
+<%  include menus/main-menu %>
 
 <head>
   <link rel="stylesheet" type="text/css" href="/front/css/layout/history.css">
@@ -19,6 +19,9 @@
           <input type="text" id="tag-search" class="simple-material-input search-input" placeholder="Tag" />
 
           <label class="button search-button shadow">Pesquisar</label>
+          <%if (locals.loggedUser.full){%>
+             <label class="button error delete-button shadow">Excluir Tudo</label>
+          <%}%>
         </div>
 
 

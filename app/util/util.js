@@ -25,7 +25,6 @@ var Util = {
   },
 
 
-
   forProperty(object, callback){
     for (var key in object) {
       if (object.hasOwnProperty(key)) {

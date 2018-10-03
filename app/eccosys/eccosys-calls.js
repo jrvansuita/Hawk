@@ -31,5 +31,9 @@ module.exports = {
 
   getClient(id, callback) {
     Eccosys.get('clientes/' + id, callback);
+  },
+
+  getProduct(sku, callback) {
+    Eccosys.get('produtos/' + sku, callback);
   }
 };

@@ -1,15 +1,15 @@
 <html>
-<% include menu %>
+<%  include ../menus/main-menu %>
 
 <body>
   <%
   var subtitlesArr = Util.getSubtitles(data);
   %>
-  <% include picking-menu %>
+  <%  include ../menus/picking-menu %>
   <div class="main-content">
 
 
-    <% include achievements-render %>
+    <%  include ../achiev/achievements-render %>
   </div>
 
 </body>

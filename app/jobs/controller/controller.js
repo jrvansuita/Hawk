@@ -39,6 +39,7 @@ module.exports = class Controller {
 
   schedule(hours){
     _build(hours).forEach((rule) => {
+      console.log('Job agendado para '+ rule.hour + ":" + rule.minute);
       schedule.scheduleJob(rule, (fireDate) => {
         this.internalRun();
       });
@@ -58,7 +59,10 @@ function _build(hours) {
     hours.forEach((hour) => {
       var rule = new schedule.RecurrenceRule();
       //Monday to Friday
-      rule.dayOfWeek = new schedule.Range(0, 6);
+      rule.dayOfWeek = new schedule.Range(1, 5);
+
+      //All week
+      //rule.dayOfWeek = new schedule.Range(0, 6);
 
       var time = parseFloat(hour.toString().replace(',','.')).toString().split('.');
 
