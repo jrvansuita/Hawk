@@ -8,19 +8,28 @@ const host = process.env.ECCOSYS_HOST;
 const apiKey = process.env.ECCOSYS_API;
 const secret = process.env.ECCOSYS_SECRET;
 
-exports.get = (path, onEnd) => {
+exports.get = (path, onResponse) => {
+  makeRequest(getOptions(path, 'GET'), null,  onResponse);
+};
 
-  var body = '';
+exports.put = (path, body, onResponse) => {
+  makeRequest(getOptions(path, 'PUT'), body, onResponse);
+};
 
+exports.post = (path, body, onResponse) => {
+  makeRequest(getOptions(path, 'POST'), body, onResponse);
+};
 
-  var req = https.request(getOptions(path), function(res) {
+function makeRequest(options, postBody, onResponse){
+  var responseBody = '';
 
+  var req = https.request(options, function(res) {
     res.on('data', function(chunk) {
-      body += chunk;
+      responseBody += chunk;
     });
 
     res.on('end', function() {
-      onEnd(checkEccoStatus(body));
+      onResponse(responseBody);
     });
   });
 
@@ -28,22 +37,27 @@ exports.get = (path, onEnd) => {
     console.log(e);
   });
 
+  if (postBody){
+    req.write(JSON.stringify(postBody));
+  }
+
   req.end();
+}
 
-};
-
-function getOptions(path) {
-  return {
+function getOptions(path, method) {
+  var options = {
     host: host,
     port: 443,
     path: '/api/' + path,
-    method: 'GET',
+    method: method,
     headers: {
       'signature': generateSignature(),
       'apikey': apiKey,
       'Content-Type': 'application/json; charset=utf-8'
     }
   };
+
+  return options;
 }
 
 // Gera uma nova Signature

@@ -16,7 +16,7 @@ module.exports = class Controller {
         this.terminate();
       });
     }
-  }
+  } 
 
   isRunning(){
     return global.jobsRunning;
@@ -24,7 +24,9 @@ module.exports = class Controller {
 
   checkActive(){
     if (this.isRunning()){
-      throw 'Já existe um job ativo no momento.';
+      var msg = 'Já existe um job ativo no momento.';
+      History.error(msg);
+      throw msg;
     }
   }
 

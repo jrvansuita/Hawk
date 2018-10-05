@@ -33,7 +33,27 @@ module.exports = {
     Eccosys.get('clientes/' + id, callback);
   },
 
-  getProduct(sku, callback) {
-    Eccosys.get('produtos/' + sku, callback);
+  getProduct(skuOrEan, callback) {
+    Eccosys.get('produtos/' + (Num.isEan(skuOrEan) ? 'gtin=' + skuOrEan : skuOrEan), (product)=>{
+      callback(JSON.parse(product));
+    });
+  },
+
+  getStockHistory(sku, callback) {
+    Eccosys.get('estoques/' + sku + '/registros', (rows)=>{
+      callback(JSON.parse(rows));
+    });
+  },
+
+  updateProductLocal(body, callback) {
+    Eccosys.put('produtos', body, (res)=>{
+      callback(JSON.parse(res));
+    });
+  },
+
+  updateProductStock(sku, body, callback) {
+    Eccosys.post('estoques/' + sku, body, (res)=>{
+      callback(JSON.parse(res));
+    });
   }
 };

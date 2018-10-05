@@ -26,12 +26,12 @@
 .main-panel{
   margin-right: 15px;
   flex: 0 80%;
-  padding: 10px 0px;
+  padding-bottom: 10px;
   display: flex;
   height: 100%;
-  overflow-y: auto;
   flex-wrap: wrap;
   align-items: flex-start;
+  flex-direction: column;
 }
 
 
@@ -93,7 +93,8 @@
 }
 
 .search-holder{
-  width: 100%;
+  width: 90%;
+  min-width: 90%;
   padding: 20px 35px;
 }
 
@@ -152,17 +153,17 @@
   font-size: 13px;
   text-align: center;
   border-bottom: 1px dashed #e6e7e6;
-  padding: 10px 18px;
+  padding: 5px 18px;
 }
 
 .title-holder{
   height: fit-content;
 }
 
+
+
 .table-child-skus{
   width: 100%;
-  height: 100%;
-  overflow-y: auto;
   vertical-align: super;
 }
 
@@ -194,6 +195,7 @@
   font-size: 15px !important;
   font-weight: 800;
   text-align: left !important;
+  width: max-content;
 }
 
 .child-ean{
@@ -214,25 +216,34 @@
 .footer td{
   line-height: 20px;
   border-top: 1px dashed #e6e7e6;
+  text-align: center;
 }
 
 tr.selected td{
   background-color: #efebeb;
 }
 
+
 .editable-input{
+  border-radius: 5px;
+  margin-top: -5px;
+  text-align: center;
+  display: block;
+  width: -webkit-fill-available;
   text-transform: uppercase;
   outline: none;
   height: 26px;
   background-color: transparent;
-  width: -webkit-fill-available;
-  display: block;
-  margin-top: -5px;
-  text-align: center;
   border-style: none none none none;
+  transform: scale(1);
+}
+
+.editable-input:hover{
+  transform: scale(1.1);
 }
 
 .editable-input:focus{
+  border-radius: 0px;
   border: 2px #1c796b;
   border-style: none none solid none;
 }
@@ -257,4 +268,87 @@ tr.selected td{
   padding: 5px 35px;
   vertical-align: super;
   font-weight: 600;
+}
+
+.obs-title{
+  background: #e8e8e8;
+  padding: 12px 15px !important;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  display: -webkit-box;
+  font-size: 15px;
+  border-bottom: 0px !important;
+  color: #989898 !important;
+}
+
+.obs{
+  padding: 0px 8px;
+  line-height: 20px;
+  color: #4a4949;
+  line-break: auto;
+  font-size: 12px;
+  word-wrap: break-word;
+  white-space: pre-line;
+}
+.product-top{
+  min-width: 100%;
+  height: 100%;
+  padding-bottom: 20px;
+  min-height: 300px;
+  flex: 1;
+}
+
+.product-bottom{
+  flex: 1;
+  vertical-align: super;
+  width: 100%;
+  height: -webkit-fill-available;
+  padding-top: 25px;
+  display: flex;
+}
+
+.bottom-box{
+  height: 100%;
+  vertical-align: super;
+  display: block;
+  width: 50%;
+  margin-bottom: 15px;
+}
+
+.bottom-box:first-of-type{
+  margin-right: 15px;
+}
+
+#stock-history tr:first-of-type{
+  background-color: #f1eeed;
+}
+
+#stock-history tr td{
+  padding: 3px 4px !important;
+}
+
+#stock-history .child-value{
+  font-size: 12px !important;
+}
+
+
+.positive-row{
+  background-color: #ccf3df;
+}
+
+.negative-row{
+  background-color: #f3cccc;
+}
+
+table{
+  min-width: 100%;
+}
+
+.overflow{
+  overflow-y: auto;
+  height: 100%;
+}
+
+.loading-value{
+  background-color: #e8e8e8;
 }

@@ -43,6 +43,15 @@ var Num = {
 
   isInt(n) {
     return n % 1 === 0;
+  },
+
+  isEan(ean){
+    try{
+      var isNum = /^\d+$/.test(ean);
+      return isNum && ean.toString().length == 13;
+    }catch(e){
+      return false;
+    }
   }
 
 };

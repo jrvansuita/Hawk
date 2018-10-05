@@ -39,103 +39,133 @@
         </div>
 
 
-       <%if (product.codigo){ %>
-        <div class="product-attributes">
+        <%if (product.codigo){ %>
+          <div class="product-attributes">
 
-          <div class="attributes-row">
-            <div class="attribute-holder">
-              <label class="attribute-name">Cor</label>
-              <label class="attribute-value"><%=product.Cor%></label>
+            <div class="attributes-row">
+              <div class="attribute-holder">
+                <label class="attribute-name">Cor</label>
+                <label class="attribute-value"><%=product.Cor%></label>
+              </div>
+
+              <div class="attribute-holder">
+                <label class="attribute-name">Coleção</label>
+                <label class="attribute-value"><%=product.Coleção%></label>
+              </div>
+
+              <div class="attribute-holder">
+                <label class="attribute-name">Gênero</label>
+                <label class="attribute-value"><%=product.Genero%></label>
+              </div>
             </div>
 
-            <div class="attribute-holder">
-              <label class="attribute-name">Coleção</label>
-              <label class="attribute-value"><%=product.Coleção%></label>
+
+            <div class="attributes-row">
+              <div class="attribute-holder">
+                <label class="attribute-name">Estação</label>
+                <label class="attribute-value"><%=product.Estacao%></label>
+              </div>
+
+              <div class="attribute-holder">
+                <label class="attribute-name">Faixa de Idade</label>
+                <label class="attribute-value"><%=product['Faixa de Idade']%></label>
+              </div>
+
+              <div class="attribute-holder">
+                <label class="attribute-name">Departamento</label>
+                <label class="attribute-value"><%=product.Departamento%></label>
+              </div>
             </div>
 
-            <div class="attribute-holder">
-              <label class="attribute-name">Gênero</label>
-              <label class="attribute-value"><%=product.Genero%></label>
+
+            <div class="attributes-row">
+              <div class="attribute-holder">
+                <label class="attribute-name">Material</label>
+                <label class="attribute-value"><%=product.Material%></label>
+              </div>
+
+              <div class="attribute-holder">
+                <label class="attribute-name">Fabricante</label>
+                <label class="attribute-value"><%=product.Fabricante%></label>
+              </div>
+
+              <div class="attribute-holder">
+                <label class="attribute-name">Idade</label>
+                <label class="attribute-value"><%=product.Idade%></label>
+              </div>
             </div>
+
           </div>
-
-
-          <div class="attributes-row">
-            <div class="attribute-holder">
-              <label class="attribute-name">Estação</label>
-              <label class="attribute-value"><%=product.Estacao%></label>
-            </div>
-
-            <div class="attribute-holder">
-              <label class="attribute-name">Faixa de Idade</label>
-              <label class="attribute-value"><%=product['Faixa de Idade']%></label>
-            </div>
-
-            <div class="attribute-holder">
-              <label class="attribute-name">Departamento</label>
-              <label class="attribute-value"><%=product.Departamento%></label>
-            </div>
-          </div>
-
-
-          <div class="attributes-row">
-            <div class="attribute-holder">
-              <label class="attribute-name">Material</label>
-              <label class="attribute-value"><%=product.Material%></label>
-            </div>
-
-            <div class="attribute-holder">
-              <label class="attribute-name">Fabricante</label>
-              <label class="attribute-value"><%=product.Fabricante%></label>
-            </div>
-
-            <div class="attribute-holder">
-              <label class="attribute-name">Idade</label>
-              <label class="attribute-value"><%=product.Idade%></label>
-            </div>
-          </div>
-
-        </div>
-      <%}%>
-
-
-      </div>
-
-      <div class="main-panel shadow" >
-
-        <div class="search-holder">
-          <%if (product.codigo){%>
-            <img src="/img/loader/circle.svg" class="right-loading loading-circle"/>
           <%}%>
-          <input type="text" id="search" value="<%=product.selected ? product.selected : product.codigo%>" class="<%=product.error? 'simple-material-input-error simple-material-input' : 'simple-material-input'%>" placeholder="Pesquisar" style="width:100%"/>
-          <label class="top-label sub search-hint">SKU ou EAN</label>
+
+
         </div>
 
-       <%if (product.error){%>
-        <div class="error-holder">
-        <label class="msg-error" ><%=product.error%></label>
+        <div class="main-panel" >
+          <div class="shadow product-top">
+            <div class="overflow">
+              <div class="search-holder">
+                <%if (product.codigo){%>
+                  <img src="/img/loader/circle.svg" class="right-loading loading-circle"/>
+                  <%}%>
+                  <input type="text" id="search" value="<%=product.selected ? product.selected : product.codigo%>" class="<%=product.error? 'simple-material-input-error simple-material-input' : 'simple-material-input'%>" placeholder="Pesquisar" style="width:100%"/>
+                  <label class="top-label sub search-hint">SKU ou EAN</label>
+                </div>
+
+                <%if (product.error){%>
+                  <div class="error-holder">
+                    <label class="msg-error" ><%=product.error%></label>
+                  </div>
+                  <%}%>
+
+
+                  <div class="table-child-skus">
+
+                    <%if (product.codigo){ %>
+                      <table id="child-skus-holder">
+                        <tr class="title-holder">
+                          <td class="title-col left">Sku</td>
+                          <td class="title-col">Localização</td>
+                          <td class="title-col">Estoque Físico</td>
+                          <td class="title-col">Estoque Disponível</td>
+                          <td class="title-col">Estoque Reservado</td>
+                        </tr>
+                      </table>
+
+                      <%}%>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="product-bottom">
+                  <div class="bottom-box shadow">
+                    <div class="overflow">
+                      <label class="title-col obs-title">Histórico do Produto</label>
+                      <p id="product-history" class="obs">
+
+                      </p>
+                    </div>
+                  </div>
+                  <div class="bottom-box shadow">
+                    <div class="overflow">
+                      <label class="title-col obs-title">Histórico do Estoque</label>
+                      <table id="stock-history" class="obs" style="display:none">
+                        <td class="title-col left">Data</td>
+                        <td class="title-col">Quantidade</td>
+                        <td class="title-col">Descrição</td>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+
         </div>
-        <%}%>
-
-      <%if (product.codigo){ %>
-        <div class="table-child-skus">
-          <table id="child-skus-holder">
-            <tr class="title-holder">
-              <td class="title-col left">Sku</td>
-              <td class="title-col">Localização</td>
-              <td class="title-col">Estoque Físico</td>
-              <td class="title-col">Estoque Disponível</td>
-              <td class="title-col">Estoque Reservado</td>
-            </tr>
-          </table>
-        </div>
-        <%}%>
-      </div>
-    </div>
-
-  </div>
 
 
-</body>
+      </body>
 
-</html>
+      </html>

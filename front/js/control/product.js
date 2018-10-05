@@ -2,32 +2,44 @@ $(document).ready(() => {
 
   $('#search').on("keyup", function(e) {
     var key = e.which;
-    var sku = $('#search').val();
-    if (key == 13 && sku){
+    var skuOrEan = $('#search').val();
+    if (key == 13 && skuOrEan){
+
       var url = window.location.origin + window.location.pathname;
-      window.location.href =  url + '?sku=' + sku;
+      var query;
+
+      if (Num.isEan(skuOrEan)){
+        query = '?ean=' + skuOrEan;
+      }else{
+        query = '?sku=' + skuOrEan;
+      }
+
+      window.location.href =  url + query;
     }
   });
 
-  requestProductChils();
+  requestProductChilds();
 });
 
 var skusCount = 0;
 
-function requestProductChils(){
-  if (product._Skus){
-    skusCount = product._Skus.length;
-    product._Skus.forEach((sku)=>{
-      _get('/product-child', {sku: sku.codigo}, (child)=>{
-        buildChildSku(product, child);
-        skusCount--;
-
-        if (skusCount == 0){
-          onFinishedLoading();
-        }
-      });
-    });
+function requestProductChilds(){
+  if (product._Skus.length == 0){
+    product._Skus = [{codigo:product.codigo}];
   }
+
+  skusCount = product._Skus.length;
+  product._Skus.forEach((sku)=>{
+    _get('/product-child', {sku: sku.codigo}, (child)=>{
+      buildChildSku(product, child);
+      skusCount--;
+
+      if (skusCount == 0){
+        onFinishedLoading();
+      }
+    });
+  });
+
 }
 
 function onFinishedLoading(){
@@ -41,10 +53,10 @@ function buildChildSku(product, child){
 
   var cols = [];
   cols.push(buildSkuCol(child));
-  cols.push(buildCol(child.localizacao, true));
-  cols.push(buildCol(estoque.estoqueReal, true, true));
-  cols.push(buildCol(estoque.estoqueDisponivel));
-  cols.push(buildCol(estoque.estoqueReal - estoque.estoqueDisponivel));
+  cols.push(buildLocalCol(child));
+  cols.push(buildStockCol(child));
+  cols.push(buildTextCol(estoque.estoqueDisponivel).addClass('available-stock'));
+  cols.push(buildTextCol(estoque.estoqueReal - estoque.estoqueDisponivel));
 
   estoqueRealTotal+= estoque.estoqueReal;
   estoqueDisponivelTotal+= estoque.estoqueDisponivel;
@@ -55,35 +67,96 @@ function buildChildSku(product, child){
     $tr.append(col);
   });
 
-  if (product.selected == child.codigo){
+  $tr.click(()=>{
+    onChildSelected(child);
+  });
+
+  if (product.selected == child.codigo || product.selected == child.gtin){
     $tr.addClass('selected');
+    $tr.trigger('click');
   }
 
   $('#child-skus-holder').append($tr);
 }
 
 
-function buildCol(val, canEdit, isNumber){
-  var $valElement;
+function buildLocalCol(product){
+  var $valElement = buildInput(product.localizacao);
 
-  if (canEdit){
-    $valElement = $('<input>').attr('value',val).addClass('child-value editable-input');
-    //Allow only numbers
-    if (isNumber){
-      $valElement.attr('onkeypress',"return isStockValid(event, this);");
+  bindEvents($valElement, true);
+
+  $valElement.focusout(function(){
+    if ($(this).val() && $(this).val().trim() !== $(this).data('value').toString().trim()){
+      $(this).addClass('loading-value');
+      _post('/product-local', {sku:product.codigo, local: $(this).val()}, (res)=>{
+        handleInputUpdate($(this), res, $(this).val());
+      });
     }
-  }else{
-    $valElement = $('<label>').addClass('child-value').text(val);
+  });
+
+  return buildCol($valElement);
+}
+
+function buildStockCol(product){
+  var $valElement = buildInput(product._Estoque.estoqueReal, true);
+
+  bindEvents($valElement, true, true);
+
+  $valElement.focusout(function(){
+    if ($(this).val() && $(this).val().trim() !== $(this).data('value').toString().trim()){
+      $(this).addClass('loading-value');
+      var val = parseInt($(this).val());
+
+      _post('/product-stock', {sku:product.codigo, stock: val}, (res)=>{
+        handleInputUpdate($(this), res, $(this).data('value') + val);
+
+        var $disp = $(this).closest('tr').find('.available-stock .child-value');
+
+        $disp.text(parseInt($disp.text()) + val);
+      });
+    }else{
+      $(this).val($(this).data('value'));
+    }
+  });
+  return buildCol($valElement);
+}
+
+function buildInput(val, isNum){
+  var $valElement;
+  $valElement = $('<input>').attr('value',val)
+  .addClass('child-value editable-input')
+  .attr('placeholder', val)
+  .data('value', val);
+
+  if (isNum){
+    $valElement.attr('onkeypress',"return isNumberKey(event);").attr('maxlenght','5');
   }
 
-  return $('<td>').addClass('td-child').append($valElement);
+  return $valElement;
+}
+
+function buildTextCol(val){
+  return buildCol($('<label>').addClass('child-value').text(val));
+}
+
+function buildCol($el){
+  return $('<td>').addClass('td-child').append($el);
 }
 
 function buildSkuCol(product){
-  var $sku = $('<label>').addClass('child-value child-sku').text(product.codigo);
-  var $ean = $('<label>').addClass('child-title child-ean').text(product.gtin);
+  var $sku = $('<label>').addClass('child-value child-sku copiable').text(product.codigo);
+  var $ean = $('<label>').addClass('child-title child-ean copiable').text(product.gtin);
 
-  return $('<td>').addClass('td-child').append($sku, $ean);
+  var f = function(e){
+    Util.selectContent(this);
+    Util.copySeleted();
+    e.stopPropagation();
+  };
+
+  $sku.click(f);
+  $ean.click(f);
+
+  return buildCol([$sku, $ean]);
 }
 
 var estoqueRealTotal = 0;
@@ -102,11 +175,109 @@ function addFooter(){
   $('#child-skus-holder').append($tr);
 }
 
-function isStockValid(event, input){
-  return isNumberKey(event) && parseInt(input.value) < 1000;
+
+var lastSelected;
+
+function onChildSelected(child){
+  if (lastSelected != child.codigo){
+    $('#product-history').text(child.obs).hide().fadeIn();
+    loadStockHistory(child.codigo);
+  }
+
+  lastSelected = child.codigo;
 }
 
-function isNumberKey(evt){
-  var charCode = (evt.which) ? evt.which : evt.keyCode;
-  return !(charCode > 31 && (charCode < 48 || charCode > 57));
+
+function loadStockHistory(childSku){
+  $('#stock-history').find("tr:gt(0)").remove();
+  $('#stock-history').hide();
+
+  _get('/product-stock-history', {sku:childSku},(rows)=>{
+    rows.forEach((i)=>{
+      var obs = '';
+
+      if ((i.es == 'E') && (i.idOrigem + i.obs == '')){
+        obs = 'Estoque Inicial';
+      }else if (i.idOrigem != '' && i.es == 'S' && i.obs == ''){
+        obs = 'Saída por Faturamento';
+      }else{
+        obs = i.obs;
+      }
+
+      var $tr = $('<tr>').append(buildTextCol(Dat.format(new Date(i.data))),
+      buildTextCol(parseInt(i.quantidade)),
+      buildTextCol(obs));
+
+      if (parseInt(i.quantidade) > 0){
+        $tr.addClass('positive-row');
+      }else{
+        $tr.addClass('negative-row');
+      }
+
+      $('#stock-history').append($tr);
+    });
+
+    $('#stock-history').hide().fadeIn();
+  });
+}
+
+function isNumberKey(e){
+  e = e || window.event;
+  var charCode = e.which ? e.which : e.keyCode;
+  return /^-?[0-9]*$/.test(String.fromCharCode(charCode));
+}
+
+function isStored(res){
+  try{
+    return res &&  res.result.success.length >0;
+  }catch(e){
+    return res && res.success.length >0;
+  }
+}
+
+
+function flashOnUpdate($el, res){
+  if (isStored(res)){
+    flashColor($el, 'positive-row');
+  }else{
+    flashColor($el, 'negative-row');
+  }
+}
+
+function flashColor($el, clazz){
+  $el.removeClass('loading-value').addClass(clazz).delay(1000).queue(function(){
+    $el.removeClass(clazz).dequeue();
+  });
+}
+
+
+function handleInputUpdate($el, res, newValue){
+  flashOnUpdate($el, res);
+
+  $el.val(newValue);
+
+  if (isStored(res)){
+    $el.data('value', newValue);
+    $el.attr('placeholder', newValue);
+  }
+}
+
+function bindEvents($el, blurOnEnter, clearOnFocus){
+  $el.click(function(e){
+    e.stopPropagation();
+  });
+
+  if (clearOnFocus){
+    $el.focusin(function(e){
+      $(this).val('');
+    });
+  }
+
+  if (blurOnEnter){
+    $el.keypress(function(e){
+      if(e.which == 13){
+        $el.blur();
+      }
+    });
+  }
 }

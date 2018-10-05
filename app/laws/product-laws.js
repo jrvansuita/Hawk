@@ -1,25 +1,16 @@
 const EccosysCalls = require('../eccosys/eccosys-calls.js');
 const Product = require('../bean/product.js');
-
+const ProductHandler = require('../handler/product-handler.js');
 
 module.exports = {
 
-
-  get(sku, father, callback){
-    if (sku){
-      EccosysCalls.getProduct(father ? getFatherSku(sku) : sku , (product)=>{
-        product = JSON.parse(product);
-
-        if (typeof product == 'string'){
-          callback({error : product, selected : sku});
+  load(eanOrSku, callback){
+    if (eanOrSku){
+      ProductHandler.get(eanOrSku, true, (product)=>{
+        if (product.error){
+          callback(product);
         }else{
-          product.selected = sku;
-
-          this.getImage(sku, (img)=>{
-            product.img = img;
-
-            callback(loadAttributes(product));
-          });
+          handleAttrs(product, callback);
         }
       });
     }else{
@@ -27,26 +18,23 @@ module.exports = {
     }
   },
 
-  getImage(sku, callback){
-    if (sku){
-      Product.findOne(Product.getKeyQuery(getFatherSku(sku)), (err, product)=>{
-        callback(product);
-      });
-    }else{
-      callback();
-    }
-  },
+  updateLocal(sku, newLocal, user, callback){
+    ProductHandler.updateLocal(sku, newLocal,user,callback);
+  }
+
 
 };
 
-function getFatherSku(sku){
-  return sku.split('-')[0];
-}
+function handleAttrs(product, callback){
+  ProductHandler.getImage(product.codigo, (img)=>{
+    //Get the product Image
+    product.img = img;
 
-function loadAttributes(products){
-  products._Atributos.forEach((attr)=>{
-    products[attr.descricao] = attr.valor;
+    //Handle the products attirbutes
+    product._Atributos.forEach((attr)=>{
+      product[attr.descricao] = attr.valor;
+    });
+
+    callback(product);
   });
-
-  return products;
 }
