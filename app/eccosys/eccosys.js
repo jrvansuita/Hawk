@@ -48,7 +48,7 @@ function getOptions(path, method) {
   var options = {
     host: host,
     port: 443,
-    path: '/api/' + path,
+    path: '/api/' + encodeURI(path),
     method: method,
     headers: {
       'signature': generateSignature(),

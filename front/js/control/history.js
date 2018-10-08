@@ -21,6 +21,13 @@ $(document).ready(()=>{
   $('.delete-button').click(()=>{
     _post('/history-delete',{ query: getQuery()});
   });
+
+
+  $('.search-input').keypress(function(e){
+    if(e.which == 13){
+      $('.search-button').trigger('click');
+    }
+  });
 });
 
 function initSearch(){
@@ -32,7 +39,7 @@ function initSearch(){
 
 function search(){
   initSearch();
-  nextPage(getQuery());
+  nextPage();
 }
 
 function getQuery(){
@@ -47,7 +54,8 @@ function getQuery(){
 var currentPage;
 var stop;
 
-function nextPage(query){
+function nextPage(){
+  var query  = getQuery();
   currentPage++;
   stop = true;
 

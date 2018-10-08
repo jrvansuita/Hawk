@@ -29,7 +29,7 @@ require('../init/prototypes.js');
 
 
 var jobs = [];
-jobs.push(['job-products.js', '7.30']);
+jobs.push(['job-products.js', '8.30']);
 jobs.push(['job-sales.js', ['11','15', '17']]);
 
 // -- Run Jobs schedules -- //

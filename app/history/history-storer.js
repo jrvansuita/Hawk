@@ -3,7 +3,6 @@ const History = require('../bean/history.js');
 
 module.exports={
 
-
   email(userId, sale, err){
     var message = 'Pedido: ' + sale.numeroPedido + ' Ordem de Compra: ' + sale.numeroDaOrdemDeCompra;
     message+= '\n Remetente: ' + sale.client.nome + ' - ' + sale.client.email;

@@ -1,5 +1,4 @@
 const https = require('https');
-const History = require('../bean/history.js');
 
 var exports = module.exports = {};
 
