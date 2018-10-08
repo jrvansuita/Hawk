@@ -79,3 +79,12 @@ routes.forEach((r)=>{
 app.listen(app.get('port'), function() {
   console.log('Node is running on port ', app.get('port'));
 });
+
+
+
+const History = require('./app/bean/history.js');
+
+process.on('uncaughtException', function (err) {
+  History.error(err);
+  console.log("Node NOT Exiting. New History row from error.");
+});

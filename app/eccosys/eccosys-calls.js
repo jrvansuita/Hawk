@@ -34,8 +34,14 @@ module.exports = {
   },
 
   getProduct(skuOrEan, callback) {
-    Eccosys.get('produtos/' + (Num.isEan(skuOrEan) ? 'gtin=' + skuOrEan : skuOrEan), (product)=>{
-      callback(JSON.parse(product));
+    Eccosys.get('produtos/' + (Num.isEan(skuOrEan) ? 'gtin=' + skuOrEan : skuOrEan), (data)=>{
+      var parsed = JSON.parse(data);
+
+      if (typeof parsed == 'string'){
+        callback({error : parsed});
+      }else{
+        callback(parsed);
+      }
     });
   },
 

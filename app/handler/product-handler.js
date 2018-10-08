@@ -13,21 +13,19 @@ module.exports ={
 
   getByEan(ean, callback){
     EccosysCalls.getProduct(ean, (eanProduct)=>{
-      this.getBySku(getFatherSku(eanProduct.codigo), true, (product)=>{
-        product.selected = ean;
-        callback(product);
-      });
+      if (eanProduct.error){
+        handleCallback(callback, eanProduct, ean);
+      }else{
+        this.getBySku(getFatherSku(eanProduct.codigo), true, (product)=>{
+          handleCallback(callback, product, ean);
+        });
+      }
     });
   },
 
   getBySku(sku, father, callback){
     EccosysCalls.getProduct(father ? getFatherSku(sku) : sku , (product)=>{
-      if (typeof product == 'string'){
-        callback({error : product, selected : sku});
-      }else{
-        product.selected = sku;
-        callback(product);
-      }
+      handleCallback(callback, product, sku);
     });
   },
 
@@ -85,7 +83,12 @@ module.exports ={
 };
 
 
+function handleCallback(callback, product, selected){
+  product.selected = selected;
+  callback(product);
+}
+
 
 function getFatherSku(sku){
-  return sku.split('-')[0];
+  return sku ? sku.split('-')[0] : sku;
 }
