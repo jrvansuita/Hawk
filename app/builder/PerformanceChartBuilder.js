@@ -44,12 +44,12 @@ function buildChart(type, title, from, to, userId, callback) {
       if (type == 'invoice'){
        item.addBar('Pedidos', dataItem.count, 0.8, '14b5a6', true);
        }
-      //item.addBar('Segundos/Item', dataItem.count/dataItem.total, 0.7, '5f7ce8', false);
-      if (dataItem.points > 0)
+
       item.addBar('Pontos', dataItem.points, 1, '1da8b9', true);
     });
 
     //chart.sort('Pontos');
+
     charts.push(chart);
     callback();
   };

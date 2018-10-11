@@ -25,3 +25,19 @@ function onSimpleMaterialInputError(input){
       next();
   });
 }
+
+
+function loadUsersAutoComplete(el, users, onSelect){
+  var data = [];
+
+  Object.keys(users).forEach((key)=>{
+    if (users[key].avatar)
+    data[users[key].name] = users[key].avatar;
+  });
+
+  el.autocomplete({
+    data: data,
+    limit: 5,
+    onAutocomplete: onSelect
+  });
+}

@@ -1,5 +1,20 @@
 
+var users;
+
 $(document).ready(()=>{
+
+  _get('/profiles', null, (allUsers)=>{
+    users = allUsers;
+    loadUsersAutoComplete($('#user-search'), allUsers);
+
+    onInit();
+  });
+
+});
+
+
+function onInit(){
+
   var panel = $('.main-panel');
   var list = $('.histories-list');
 
@@ -10,6 +25,7 @@ $(document).ready(()=>{
       }
     }
   });
+
 
   search();
 
@@ -22,13 +38,12 @@ $(document).ready(()=>{
     _post('/history-delete',{ query: getQuery()});
   });
 
-
   $('.search-input').keypress(function(e){
     if(e.which == 13){
       $('.search-button').trigger('click');
     }
   });
-});
+}
 
 function initSearch(){
   currentPage = 0;
@@ -47,6 +62,13 @@ function getQuery(){
   query.title = $('#title-search').val();
   query.message = $('#message-search').val();
   query.tag = $('#tag-search').val();
+
+  if ($('#user-search').val()){
+    var user = Util.findUserInListByName($('#user-search').val(), users);
+    if (user){
+      query.userId = user.id;
+    }
+  }
 
   return query;
 }

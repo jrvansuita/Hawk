@@ -86,5 +86,6 @@ const History = require('./app/bean/history.js');
 
 process.on('uncaughtException', function (err) {
   History.error(err);
+  console.log(err);
   console.log("Node NOT Exiting. New History row from error.");
 });

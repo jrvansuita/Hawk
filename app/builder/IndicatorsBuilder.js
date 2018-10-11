@@ -49,7 +49,12 @@ module.exports = class IndicatorsBuilder{
     }
 
     group.addItem('Segundos/Item', parseInt(data.sum_count/data.sum_total), '5f7ce8');
+    if (data.sum_points > 0)
     group.addItem('Pontos', data.sum_points, '1da8b9');
+
+    if (data.sum_neg_points < 0){
+      group.addItem('Pontos Perdidos', data.sum_neg_points , 'ec7269');
+    }
   }
 
 
@@ -61,6 +66,12 @@ module.exports = class IndicatorsBuilder{
     }
     group.addItem('Pedidos Faturados', data.sum_count, '14b5a6');
     group.addItem('Ticker Médio', data.sum_total/data.sum_count, 'b359e2');
+
+    if (data.sum_points > 0)
     group.addItem('Pontos', data.sum_points , '1da8b9');
+
+    if (data.sum_neg_points < 0){
+      group.addItem('Pontos Perdidos', data.sum_neg_points , 'ec7269');
+    }
   }
 };

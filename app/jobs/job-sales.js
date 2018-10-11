@@ -16,6 +16,7 @@ var to;
 module.exports = class JobSales extends Controller{
 
   run() {
+      var controller = this;
     //Find the last sale row date to set as from date sync
     Sale.getLast(function(err, doc) {
       from = doc ? doc.billingDate : Dat.firstDayOfYear();
@@ -23,6 +24,9 @@ module.exports = class JobSales extends Controller{
 
       handleSalePaging(0, () => {
         clear();
+
+        controller.terminate();
+
         new jobDays().run();
       });
     });
@@ -78,6 +82,7 @@ function processSalesPage(list, index, callback) {
     var item = list[index];
 
     Sale.findByKey(item.numeroPedido, function(err, doc) {
+      console.log(item.numeroPedido + ' - ' + (doc ? doc.synced : false));
       //If there isn't a sale stored on local db
       if (!doc) {
         //To to Eccosys and find the sale
@@ -89,7 +94,7 @@ function processSalesPage(list, index, callback) {
         processSalesPage(list, index, callback);
       }
 
-    });
+    }); 
   } else {
     callback();
   }
@@ -103,6 +108,8 @@ function handleSale(pedido) {
   if (user) {
     var sale = buildSale(user.id, pedido);
     UsersProvider.store(user);
+
+    console.log(sale);
     sale.upsert();
   }
 }

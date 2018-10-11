@@ -1,8 +1,15 @@
-Date.prototype.withoutTime = function() {
+Date.prototype.dateBegin = function() {
   var d = new Date(this);
   d.setUTCHours(0, 0, 0, 0);
   return d;
 };
+
+Date.prototype.dateEnd = function() {
+  var d = new Date(this);
+  d.setUTCHours(23, 59, 59, 59);
+  return d;
+};
+
 
 Date.prototype.maxTime = function() {
   var d = new Date(this);

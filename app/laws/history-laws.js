@@ -11,7 +11,7 @@ module.exports = {
   },
 
   delete(query,callback){
-    History.removeAll(query, callback);
+    History.removeAll(buildQuery(query), callback);
   }
 
 };
@@ -38,21 +38,21 @@ function buildQuery(query){
     assertStr(and, "title", query.title);
     assertStr(and, "tag", query.tag);
 
+    if (query.userId)
+    assertStr(and, "userId", parseInt(query.userId));
 
     if (and.length > 0){
       result.$and = and;
     }
-
-
   }
 
   return result;
 }
 
 function assertStr(list, name, val){
-  if (val != undefined && val.length > 0){
+  if (val != undefined && val.toString().length > 0){
     list.push({
-      [name]:{
+      [name]: typeof val == 'number' ? val: {
         $regex: new RegExp(val, 'i')
       }
     });

@@ -1,0 +1,43 @@
+<html>
+<%  include ../menus/main-menu %>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/manage-points.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/autocomplete.css">
+  <script src="front/js/libs/autocomplete.js" charset="utf-8"></script>
+  <script src="front/js/control/manage-points.js" charset="utf-8"></script>
+  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+</head>
+
+
+<body>
+  <%  include ../menus/performance-menu %>
+  <div class="main-content">
+
+    <%if (locals.loggedUser.full){%>
+      <div class="main-box shadow">
+
+
+        <div class="avatar-holder">
+          <img src="/img/avatar.png" class="shadow circle" id="profile-img" />
+          <span class="label shadow avatar-name" id="profile-name">...</span>
+        </div>
+
+
+
+        <input type="text" class="input-val simple-material-input user" id="user" placeholder="Usuário"/>
+        <input type="text" class="input-val simple-material-input" id="val" placeholder="Pontos" onkeypress="return Num.isNumberKey(event);"/>
+        <input type="text" class="input-val simple-material-input" id="type" placeholder="Contabilizar" />
+        <textarea class="input-val simple-material-input" id="obs" placeholder="Observação"  rows="5"></textarea>
+
+        <div class="buttons-holder">
+          <label class="button store-button shadow">Gravar</label>
+        </div>
+
+
+      </div>
+    </div>
+    <%}%>
+  </body>
+
+  </html>

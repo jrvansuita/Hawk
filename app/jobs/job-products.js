@@ -8,6 +8,8 @@ const History = require('../bean/history.js');
 module.exports = class JobProducts extends Controller{
 
   run(){
+    var controller = this;
+
     History.job('Atualização de Produtos', 'Atualizando produtos através do feed xml', 'XML');
 
     FeedXml.get((xml) =>{
@@ -19,11 +21,11 @@ module.exports = class JobProducts extends Controller{
         var url = getVal(item, "link");
         var image = getVal(item, "image_link");
 
-        console.log(sku);
-
         var product = new Product(sku, name, url, image);
         product.upsert();
       });
+
+      controller.terminate();
     });
   }
 };

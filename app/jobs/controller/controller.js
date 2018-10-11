@@ -1,4 +1,5 @@
 const schedule = require('node-schedule');
+const History = require('../../bean/history.js');
 
 module.exports = class Controller {
   constructor(){
@@ -10,13 +11,13 @@ module.exports = class Controller {
   }
 
   internalRun(){
+    console.log('Iniciou Job');
+
     if (!this.isRunning()){
       this.start();
-      this.run(()=>{
-        this.terminate();
-      });
+      this.run();
     }
-  } 
+  }
 
   isRunning(){
     return global.jobsRunning;

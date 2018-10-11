@@ -92,13 +92,12 @@ function buildChart(from, to, title) {
       var item = chart.addItem(Str.first_word(dataItem.label, 10), dataItem.img, dataItem.tag);
 
       item.addBar('Itens', dataItem.total, 0.8, '03c184', true);
-      //item.addBar('Tempo', dataItem.count, 0.7, '14b5a6', true);
 
-      item.addBar('Segundos/Item', dataItem.count/dataItem.total, 0.7, '5f7ce8', false);
+      var secit = dataItem.count/dataItem.total || 0;
 
-      if (dataItem.points > 0){
-        item.addBar('Pontos', dataItem.points, 1, '1da8b9', false);
-      }
+      item.addBar('Segundos/Item', secit, 0.7, '5f7ce8', false);
+
+      item.addBar('Pontos', dataItem.points, 1, '1da8b9', false);
 
     });
 

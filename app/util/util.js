@@ -1,5 +1,3 @@
-
-
 var Util = {
 
   getSubtitles: function(charts) {
@@ -24,6 +22,16 @@ var Util = {
     return arrItem ? arrItem.getBars() : [];
   },
 
+  findUserInListByName(name, list){
+    var arr = Object.keys(list);
+    for(var i = 0; i <arr.length; i++){
+      var item = list[arr[i]];
+
+      if (item.name.trim() == name.trim()){
+        return item;
+      }
+    }
+  },
 
   forProperty(object, callback){
     for (var key in object) {
@@ -116,7 +124,6 @@ var Util = {
         return false;
       }
     }catch(e){
-      console.log(e);
       throw msg;
     }
   },

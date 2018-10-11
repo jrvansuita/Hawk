@@ -19,7 +19,7 @@ module.exports = class HistoryRoutes extends Routes{
     });
 
     this._post('/history-delete', (req, res) => {
-      HistoryLaws.delete(req.query.query,()=>{
+      HistoryLaws.delete(req.body.query,()=>{
         this._resp().sucess(res);
       });
     });

@@ -52,6 +52,13 @@ var Num = {
     }catch(e){
       return false;
     }
+  },
+
+
+   isNumberKey(e){
+    e = e || window.event;
+    var charCode = e.which ? e.which : e.keyCode;
+    return /^-?[0-9]*$/.test(String.fromCharCode(charCode));
   }
 
 };

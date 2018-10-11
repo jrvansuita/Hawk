@@ -62,6 +62,11 @@ module.exports = class DataAccess {
   }
 
   //Find any elements that match the query provided
+  static findAndSort(query, sortField, callback) {
+    this.staticAccess().find(query).sort(sortField).exec(callback);
+  }
+
+  //Find any elements that match the query provided
   static findByKey(keyValue, callback) {
     this.staticAccess().findOne(this.getKeyQuery(keyValue), callback);
   }

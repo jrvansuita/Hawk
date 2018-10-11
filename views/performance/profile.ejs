@@ -1,5 +1,5 @@
 <html>
-<%  include menus/main-menu %>
+<%  include ../menus/main-menu %>
 
 <head>
   <link rel="stylesheet" type="text/css" href="/front/css/layout/charts.css">
@@ -11,13 +11,14 @@
 </head>
 
 <body>
+  <%  include ../menus/performance-menu %>
   <div class="main-content">
     <div class="panels">
       <div class="left-panel shadow">
 
         <div class="avatar-box gradient-effect">
-            <img class="avatar-img circle shadow zoomed-avatar" src="<%=user.avatar%>"  />
-            <span class="label shadow avatar-name zoomed-avatar-name"><%=user.name%></span>
+          <img class="avatar-img circle shadow zoomed-avatar" src="<%=user.avatar%>"  />
+          <span class="label shadow avatar-name zoomed-avatar-name"><%=user.name%></span>
 
 
         </div>
@@ -44,7 +45,7 @@
           </div>
 
           <div class="main-panel" >
-            <% include chart/group-chart-render%>
+            <% include ../chart/group-chart-render%>
 
           </div>
         </div>

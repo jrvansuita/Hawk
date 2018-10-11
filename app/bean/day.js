@@ -1,6 +1,6 @@
 module.exports = class Day extends DataAccess {
 
-  constructor(userId, date, type, total, count) {
+  constructor(userId, date, type, total, count, points) {
     super();
     this.userId = Num.def(userId);
     this.date = Dat.def(date);
@@ -8,7 +8,7 @@ module.exports = class Day extends DataAccess {
     this.total = Floa.def(total);
     this.count = Floa.def(count);
 
-    this.points = Day.calcPoints(this);
+    this.points = points || Day.calcPoints(this);
   }
 
   static calcPoints(day){
@@ -56,7 +56,9 @@ static sync(day, callback){
       points: day.points
     }
   }, (err, doc) => {
-    callback(err, doc);
+    if (callback){
+      callback(err, doc);
+    }
   });
 }
 
@@ -80,6 +82,9 @@ static search(userId, type, callback){
       },
       sum_points: {
         $sum: "$points"
+      },
+      sum_neg_points: {
+        $sum: {$cond:[{ '$lt': ['$points', 0]}, "$points", 0]},
       }
     }
   }],

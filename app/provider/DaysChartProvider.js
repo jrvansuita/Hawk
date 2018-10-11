@@ -23,7 +23,7 @@ module.exports = class DaysChartProvider {
   get(from, to, userId) {
     var _self = this;
 
-    Day.find(this.buildQuery(from, to, userId), (err, items) => {
+    Day.findAndSort(this.buildQuery(from, to, userId), 'date', (err, items) => {
       _self.handle(items, 0);
     });
   }
@@ -35,8 +35,8 @@ module.exports = class DaysChartProvider {
     var query = {
       'type': this.type,
       'date': {
-        $gte: from.withoutTime(),
-        $lte: to.withoutTime()
+        $gte: from.dateBegin(),
+        $lte: to.dateEnd()
       }
     };
 
@@ -74,7 +74,11 @@ module.exports = class DaysChartProvider {
   }
 
   getGroupByValue(item){
-    return item[this.groupBy];
+    if (this.groupBy === 'date'){
+      return Dat.api(item[this.groupBy]);
+    }else{
+      return item[this.groupBy];
+    }
   }
 
   putGroupInfo(item){

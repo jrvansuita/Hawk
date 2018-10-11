@@ -129,7 +129,7 @@ function buildInput(val, isNum){
   .data('value', val);
 
   if (isNum){
-    $valElement.attr('onkeypress',"return isNumberKey(event);").attr('maxlenght','5');
+    $valElement.attr('onkeypress',"return Num.isNumberKey(event);").attr('maxlenght','5');
   }
 
   return $valElement;
@@ -221,11 +221,7 @@ function loadStockHistory(childSku){
   });
 }
 
-function isNumberKey(e){
-  e = e || window.event;
-  var charCode = e.which ? e.which : e.keyCode;
-  return /^-?[0-9]*$/.test(String.fromCharCode(charCode));
-}
+
 
 function isStored(res){
   try{

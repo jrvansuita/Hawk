@@ -1,0 +1,38 @@
+.main-box{
+  max-width: 400px;
+  margin: auto;
+  width: fit-content;
+  height: fit-content;
+  padding: 40px;
+  margin-top: 50px;
+}
+
+
+.input-val{
+  font-size: 14px;
+  margin-top: 30px;
+  padding: 3px;
+  margin-bottom: 15px;
+}
+
+.avatar-holder{
+  margin: auto;
+  text-align: center;
+}
+
+#profile-img{
+  width: 70px;
+  height: 70px;
+}
+
+#obs{
+  height: auto;
+  min-width: 50px;
+}
+
+
+.buttons-holder{
+  margin-top: 20px;
+  height: auto;
+  display: grid;
+}

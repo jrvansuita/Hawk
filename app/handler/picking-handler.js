@@ -6,7 +6,6 @@ const PickingLaws = require('../laws/picking-laws.js');
 const UsersProvider = require('../provider/UsersProvider.js');
 const PickingLaps = require('../handler/laps/picking-laps.js');
 const BlockedLaws = require('../laws/blocked-laws.js');
-const Err = require('../error/error.js');
 
 module.exports = {
 
