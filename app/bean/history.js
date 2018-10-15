@@ -19,7 +19,7 @@ module.exports = class History extends DataAccess {
 
   static handle(e, userId){
     if (e.type == "Err"){
-      History.info(userId, 'Aviso de Sistema', Err.xprss(e) , 'Informação');
+      History.info(e.userId ? e.userId : userId, 'Aviso de Sistema', Err.xprss(e) , 'Informação');
     }else{
       History.error(e, null, null, userId);
     }
@@ -30,7 +30,9 @@ module.exports = class History extends DataAccess {
   }
 
   static error(e, title, addtoMessage, userId){
-    new History(2, userId ? userId : 0, title ? title : 'Erro de Sistema', addtoMessage ? addtoMessage + '\n' : '' + Err.xprss(e), 'Falha').upsert();
+    var _userId = userId ? userId : (e.userId ? e.userId : 0);
+
+    new History(2, _userId , title ? title : 'Erro de Sistema', addtoMessage ? addtoMessage + '\n' : '' + Err.xprss(e), 'Falha').upsert();
   }
 
   static notify(userId, title, message, tag){

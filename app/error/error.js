@@ -1,9 +1,10 @@
 
 
 module.exports = class Err{
-  constructor(e) {
+  constructor(e, user) {
     this.e = e;
     this.type = "Err";
+    this.userId = user.id || user;
   }
 
   toString(){
@@ -23,7 +24,7 @@ module.exports = class Err{
     return '';
   }
 
-  static thrw(e){
-    throw new Err(e);
+  static thrw(e, user){
+    throw new Err(e, user);
   }
 };

@@ -14,7 +14,7 @@ module.exports = {
 
   checkAndThrowUserInProgress(userId){
     if (this.checkUserInProgress(userId)){
-      Err.thrw('O usuário ' + UsersProvider.get(userId).name + ' já tem um pedido em processo de picking.');
+      Err.thrw(Const.user_already_on_picking.format(UsersProvider.get(userId).name), userId);
     }
 
     return false;
@@ -58,7 +58,7 @@ module.exports = {
     var sale = this.getInProgressSale(userId);
     sale.end = new Date();
 
-    checkEndTime(sale);
+    checkEndTime(sale, userId);
 
     var day = Day.picking(userId, Dat.today(), getItemsQuantity(sale), getSecondsDiference(sale));
     //console.log('[Fechou] picking ' + sale.pickUser.name  + ' - ' + sale.numeroPedido);
@@ -83,14 +83,14 @@ module.exports = {
 };
 
 
-function checkEndTime(sale){
+function checkEndTime(sale, userId){
   var secs = getSecondsDiference(sale);
   secs = secs < 0 ? 0 : secs;
 
   //Calcula 3 segundos por item do pedido no mínimo
   var minSecs = sale.itemsQuantity * 3;
   if (secs < minSecs){
-    Err.thrw('Tempo insuficiente para realizar o picking do pedido ' + sale.numeroPedido + '. Tempo mínimo é: ' + minSecs + ' segundos. Você levou ' + parseInt(secs) + ' segundos.');
+    Err.thrw(Const.insufficient_picking_time.format(sale.numeroPedido, minSecs, parseInt(secs)), userId);
   }
 }
 

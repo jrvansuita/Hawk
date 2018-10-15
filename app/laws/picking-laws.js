@@ -29,7 +29,9 @@ module.exports = {
   },
 
   next(userId){
-    Util.throwIfEmpty(this.getList(), Const.none_sale_founded);
+    if (this.getList().length == 0){
+      Err.throw(Const.none_sale_founded, userId);
+    }
 
     //Get the next sale from list
     var sale = getAssertedList()[0];

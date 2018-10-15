@@ -116,18 +116,6 @@ var Util = {
     return !n;
   },
 
-  throwIfEmpty(list, msg){
-    try{
-      if (list.length == 0) {
-        throw new Error();
-      } else {
-        return false;
-      }
-    }catch(e){
-      throw msg;
-    }
-  },
-
   twoNames(name, def, pMax){
     if (!name){
       return def ? def : '';

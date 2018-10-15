@@ -27,6 +27,7 @@ String.prototype.format = String.prototype.f = function() {
   return s;
 };
 
+
 // Object.prototype._getType = function() {
 //   var funcNameRegex = /function (.{1,})\(/;
 //   var results = (funcNameRegex).exec((this).constructor.toString());
