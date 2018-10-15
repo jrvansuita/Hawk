@@ -65,7 +65,10 @@ $(document).ready(() => {
         };
 
         var onError = function(error){
-          $('.error').text(error.responseText).fadeIn().delay(1000).fadeOut();
+          var l = error.responseText.length * 20;
+          var showDelay = 1000 + l;
+
+          $('.error').text(error.responseText).clearQueue().fadeIn().delay(showDelay).fadeOut();
         };
 
         _get("/picking-sale",{

@@ -83,7 +83,7 @@ function getAssertedList(){
 
 
 function checkIsInDevMode(){
-  var maxSalesOnDevMove = 6;
+  var maxSalesOnDevMove = 50;
   //If this Env Var is not defined, it's on development mode
   //Not necessary to load all sales for tests porpouse
   if (!process.env.NODE_ENV){

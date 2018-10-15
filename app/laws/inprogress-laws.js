@@ -85,10 +85,12 @@ module.exports = {
 
 function checkEndTime(sale){
   var secs = getSecondsDiference(sale);
+  secs = secs < 0 ? 0 : secs;
+
   //Calcula 3 segundos por item do pedido no mínimo
   var minSecs = sale.itemsQuantity * 3;
   if (secs < minSecs){
-    Err.thrw('Tempo insuficiente para realizar o picking do pedido ' + sale.numeroPedido + '. Tempo mínimo é: ' + minSecs + ' segundos. Você levou ' + secs + ' segundos.');
+    Err.thrw('Tempo insuficiente para realizar o picking do pedido ' + sale.numeroPedido + '. Tempo mínimo é: ' + minSecs + ' segundos. Você levou ' + parseInt(secs) + ' segundos.');
   }
 }
 
