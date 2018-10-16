@@ -2,6 +2,7 @@ const TransportLaws = require('../laws/transport-laws.js');
 const UfLaws = require('../laws/uf-laws.js');
 const BlockedLaws = require('../laws/blocked-laws.js');
 const History = require('../bean/history.js');
+const Err = require('../error/error.js');
 
 //Nexts sales to pick
 global.staticPickingList = [];
@@ -30,7 +31,7 @@ module.exports = {
 
   next(userId){
     if (this.getList().length == 0){
-      Err.throw(Const.none_sale_founded, userId);
+      Err.thrw(Const.none_sale_founded, userId);
     }
 
     //Get the next sale from list
@@ -85,7 +86,7 @@ function getAssertedList(){
 
 
 function checkIsInDevMode(){
-  var maxSalesOnDevMove = 50;
+  var maxSalesOnDevMove = 10;
   //If this Env Var is not defined, it's on development mode
   //Not necessary to load all sales for tests porpouse
   if (!process.env.NODE_ENV){

@@ -28,10 +28,12 @@
 
   <script>
   window.pickingSales = <%- JSON.stringify(pickingSales || null) %>
-
   window.inprogress = <%- JSON.stringify(inprogress || null) %>
   window.pendingSales = <%- JSON.stringify(pendingSales || null) %>
   window.printPickingUrl = "<%- printPickingUrl || "undefined" %>"
+
+  window.selectedTransp = "<%- selectedTransp || undefined %>";
+  window.selectedUf = "<%- selectedUf || undefined %>";
   </script>
 
   <%  include ../menus/picking-menu %>

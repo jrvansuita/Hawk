@@ -72,7 +72,9 @@ $(document).ready(() => {
         };
 
         _get("/picking-sale",{
-          userid: code
+          userid: code,
+          uf: selectedUf,
+          transp: selectedTransp
         },
         onSucess,
         onError);

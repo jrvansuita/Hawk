@@ -1,5 +1,9 @@
 $(document).ready(() => {
 
+  $('#search').focusin(function(){
+    $('#search').select();
+  });
+
   $('#search').on("keyup", function(e) {
     var key = e.which;
     var skuOrEan = $('#search').val();
@@ -102,7 +106,22 @@ function buildStockCol(product){
 
   bindEvents($valElement, true, true);
 
-  $valElement.focusout(function(){
+  $valElement.change(function(e, v){
+    if ($(this).val()){
+      $(this).addClass('loading-value');
+      var val = parseInt($(this).val());
+
+      _post('/product-stock', {sku:product.codigo, stock: val}, (res)=>{
+        handleInputUpdate($(this), res, $(this).data('value') + val);
+
+        var $disp = $(this).closest('tr').find('.available-stock .child-value');
+
+        $disp.text(parseInt($disp.text()) + val);
+      });
+    }
+  });
+
+  /*$valElement.focusout(function(){
     if ($(this).val() && $(this).val().trim() !== $(this).data('value').toString().trim()){
       $(this).addClass('loading-value');
       var val = parseInt($(this).val());
@@ -117,7 +136,8 @@ function buildStockCol(product){
     }else{
       $(this).val($(this).data('value'));
     }
-  });
+  });*/
+
   return buildCol($valElement);
 }
 

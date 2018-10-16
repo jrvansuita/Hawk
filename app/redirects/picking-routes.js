@@ -22,6 +22,29 @@ module.exports = class PickingRoutes extends Routes{
       builder.build();
     });
 
+    this._get('/picking/overview', (req, res) => {
+      require('../builder/PickingChartBuilder.js').buildOverview(res.locals.loggedUser.full, function(charts) {
+          res.render('picking/picking-chart', {
+            charts: charts,
+            page: req.originalUrl,
+        });
+      });
+    });
+
+
+    this._get('/picking/by-date', (req, res) => {
+      var from = Dat.query(req.query.from, Dat.firstDayOfMonth());
+      var to = Dat.query(req.query.to, Dat.lastDayOfMonth());
+
+      require('../builder/PickingChartBuilder.js').buildByDate(from, to, res.locals.loggedUser.full, function(charts) {
+        res.render('picking/picking-chart', {
+          charts: charts,
+          page: req.originalUrl,
+          showCalendarFilter : true
+        });
+      });
+    });
+
     this._get('/picking', (req, res) => {
       TransportLaws.select(req.query.transp);
       UfLaws.select(req.query.uf);
@@ -48,31 +71,12 @@ module.exports = class PickingRoutes extends Routes{
       });
     });
 
-    this._get('/picking/overview', (req, res) => {
-      require('../builder/PickingChartBuilder.js').buildOverview(res.locals.loggedUser.full, function(charts) {
-          res.render('picking/picking-chart', {
-            charts: charts,
-            page: req.originalUrl,
-        });
-      });
-    });
-
-
-    this._get('/picking/by-date', (req, res) => {
-      var from = Dat.query(req.query.from, Dat.firstDayOfMonth());
-      var to = Dat.query(req.query.to, Dat.lastDayOfMonth());
-
-      require('../builder/PickingChartBuilder.js').buildByDate(from, to, res.locals.loggedUser.full, function(charts) {
-        res.render('picking/picking-chart', {
-          charts: charts,
-          page: req.originalUrl,
-          showCalendarFilter : true
-        });
-      });
-    });
-
     this._get('/picking-sale', (req, res) => {
-        PickingHandler.handle(req.query.userid,  this._resp().redirect(res));
+      console.log(req.query);
+      TransportLaws.select(req.query.transp);
+      UfLaws.select(req.query.uf);
+
+      PickingHandler.handle(req.query.userid,  this._resp().redirect(res));
     });
 
     this._post(['/picking/toggle-block-sale'], (req, res) => {

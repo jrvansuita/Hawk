@@ -26,7 +26,7 @@ module.exports={
       message += '\n'+ sale.transport + ' - ' + (sale.client ? sale.client.uf : 'UF Não encontrado') + ' - ' + Num.money(sale.totalProdutos);
 
       if (day){
-        message += '\nItems: ' + day.total + " Secs: " + day.count + ' Pontos gerados: ' + day.points;
+        message += '\nItems: ' + day.total + " Secs: " + parseInt(day.count) + ' Pontos gerados: ' + day.points;
         //message += '\n((' + day.total + ') / (' + day.count + '/' + day.total + ')) * 2 = ' + day.points;
       }
 
