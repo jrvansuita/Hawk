@@ -72,7 +72,6 @@ module.exports = class PickingRoutes extends Routes{
     });
 
     this._get('/picking-sale', (req, res) => {
-      console.log(req.query);
       TransportLaws.select(req.query.transp);
       UfLaws.select(req.query.uf);
 
@@ -85,6 +84,11 @@ module.exports = class PickingRoutes extends Routes{
 
     this._post('/picking-done-restart', (req, res, body, locals, session) => {
       PickingHandler.restart(session.loggedUser, req.body.sale, this._resp().redirect(res));
+    });
+
+    this._get('/print-picking-sale', (req, res, body, locals, session) => {
+      const Print = require('../pdf/picking-sale-pdf.js');
+      Print.load(req.query.userId, req.query.saleNumber, this._resp().redirect(res));
     });
 
 

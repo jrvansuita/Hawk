@@ -28,6 +28,8 @@ $(document).ready(() => {
 var skusCount = 0;
 
 function requestProductChilds(){
+
+
   if (product._Skus.length == 0){
     product._Skus = [{codigo:product.codigo}];
   }
@@ -60,7 +62,7 @@ function buildChildSku(product, child){
   cols.push(buildLocalCol(child));
   cols.push(buildStockCol(child));
   cols.push(buildTextCol(estoque.estoqueDisponivel).addClass('available-stock'));
-  cols.push(buildTextCol(estoque.estoqueReal - estoque.estoqueDisponivel));
+  cols.push(buildTextCol(estoque.estoqueReal - estoque.estoqueDisponivel).addClass('reserved-stock'));
 
   estoqueRealTotal+= estoque.estoqueReal;
   estoqueDisponivelTotal+= estoque.estoqueDisponivel;
@@ -71,7 +73,12 @@ function buildChildSku(product, child){
     $tr.append(col);
   });
 
+  $('.label-val-title').hide();
+
   $tr.click(()=>{
+    $('.label-val-title').hide();
+    $('.selected').removeClass('selected');
+    $tr.addClass('selected');
     onChildSelected(child);
   });
 
@@ -122,23 +129,23 @@ function buildStockCol(product){
   });
 
   /*$valElement.focusout(function(){
-    if ($(this).val() && $(this).val().trim() !== $(this).data('value').toString().trim()){
-      $(this).addClass('loading-value');
-      var val = parseInt($(this).val());
+  if ($(this).val() && $(this).val().trim() !== $(this).data('value').toString().trim()){
+  $(this).addClass('loading-value');
+  var val = parseInt($(this).val());
 
-      _post('/product-stock', {sku:product.codigo, stock: val}, (res)=>{
-        handleInputUpdate($(this), res, $(this).data('value') + val);
+  _post('/product-stock', {sku:product.codigo, stock: val}, (res)=>{
+  handleInputUpdate($(this), res, $(this).data('value') + val);
 
-        var $disp = $(this).closest('tr').find('.available-stock .child-value');
+  var $disp = $(this).closest('tr').find('.available-stock .child-value');
 
-        $disp.text(parseInt($disp.text()) + val);
-      });
-    }else{
-      $(this).val($(this).data('value'));
-    }
-  });*/
+  $disp.text(parseInt($disp.text()) + val);
+});
+}else{
+$(this).val($(this).data('value'));
+}
+});*/
 
-  return buildCol($valElement);
+return buildCol($valElement);
 }
 
 function buildInput(val, isNum){
@@ -225,7 +232,7 @@ function loadStockHistory(childSku){
       }
 
       var $tr = $('<tr>').append(buildTextCol(Dat.format(new Date(i.data))),
-      buildTextCol(parseInt(i.quantidade)),
+      buildTextCol(parseInt(i.quantidade)).addClass('stock-val'),
       buildTextCol(obs));
 
       if (parseInt(i.quantidade) > 0){
@@ -238,10 +245,27 @@ function loadStockHistory(childSku){
     });
 
     $('#stock-history').hide().fadeIn();
+    loadSumsStocks();
   });
 }
 
 
+function loadSumsStocks(){
+  var totals = ['.negative-row', '.positive-row'];
+
+  totals.forEach((item)=>{
+    var total = $('#stock-history ' + item + ' .stock-val .child-value').map(function() {
+      return parseInt($(this).text());
+    })
+    .get().reduce(function(i, e) {
+      return i + e;
+    },0);
+
+    $('.label-val-title' + item).text(Math.abs(total));
+  });
+
+  $('.label-val-title').show();
+}
 
 function isStored(res){
   try{

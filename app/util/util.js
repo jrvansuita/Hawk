@@ -36,7 +36,17 @@ var Util = {
   forProperty(object, callback){
     for (var key in object) {
       if (object.hasOwnProperty(key)) {
-        callback(global.inprogressPicking[key], key);
+        callback(object[key], key);
+      }
+    }
+  },
+
+  findByProperty(object, onCheck){
+    for (var key in object) {
+      if (object.hasOwnProperty(key)) {
+        if (onCheck(object[key], key)){
+          return object[key];
+        }
       }
     }
   },

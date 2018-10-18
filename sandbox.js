@@ -1,9 +1,7 @@
-require('./app/init/init.js');
+require('./app/init/dotenv.js');
+global.Dat = require('./app/util/date.js');
 
-const EccosysCalls = require('./app/eccosys/eccosys-calls.js');
+const Test = require('./app/eccosys/picking-pdf/picking-sale-pdf.js');
 
 
-EccosysCalls.getClient(251875553, (data)=>{
-  var client = JSON.parse(data)[0];
-  console.log(client);
-});
+Test.test3();

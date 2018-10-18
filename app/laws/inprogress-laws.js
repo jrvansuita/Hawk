@@ -36,6 +36,12 @@ module.exports = {
     });
   },
 
+  get(saleNumber){
+    return Util.findByProperty(this.object(), (i)=>{
+      return i.numeroPedido === saleNumber;
+    });
+  },
+
   startPicking(sale, userId, doNotCount){
     var begin = new Date();
 

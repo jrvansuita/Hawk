@@ -1,6 +1,7 @@
 const https = require('https');
 var MD5 = require('../util/md5.js');
-const History = require('../bean/history.js');
+
+const History = typeof DataAccess == 'undefined' ? null :  require('../bean/history.js');
 
 var exports = module.exports = {};
 
@@ -9,15 +10,15 @@ const apiKey = process.env.ECCOSYS_API;
 const secret = process.env.ECCOSYS_SECRET;
 
 exports.get = (path, onResponse) => {
-  makeRequest(getOptions(path, 'GET'), null,  onResponse);
+  makeRequest(getOptions(path, 'GET', true), null,  onResponse);
 };
 
 exports.put = (path, body, onResponse) => {
-  makeRequest(getOptions(path, 'PUT'), body, onResponse);
+  makeRequest(getOptions(path, 'PUT', true), body, onResponse);
 };
 
 exports.post = (path, body, onResponse) => {
-  makeRequest(getOptions(path, 'POST'), body, onResponse);
+  makeRequest(getOptions(path, 'POST', true), body, onResponse);
 };
 
 function makeRequest(options, postBody, onResponse){
@@ -44,12 +45,15 @@ function makeRequest(options, postBody, onResponse){
   req.end();
 }
 
-function getOptions(path, method) {
+function getOptions(path, method, isApiCall) {
+  var _path = (isApiCall ? '/api/' : '') + encodeURI(path);
+
   var options = {
     host: host,
     port: 443,
-    path: '/api/' + encodeURI(path),
+    path: _path,
     method: method,
+    url: 'https://' + host + _path,
     headers: {
       'signature': generateSignature(),
       'apikey': apiKey,
@@ -74,8 +78,10 @@ function generateSignature() {
 
 function checkEccoStatus(data){
   if (data.includes('503 Service Temporarily Unavailable')){
-     History.error("API Eccosys indisponível no momento.");
-     return '[]';
+    if (History){
+      History.error("API Eccosys indisponível no momento.");
+    }
+    return '[]';
   }
 
   return data;

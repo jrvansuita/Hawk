@@ -25,6 +25,10 @@ module.exports = {
     });
   },
 
+  get(saleNumber){
+    return global.staticPickingList.find(sale => sale.numeroPedido == saleNumber);
+  },
+
   remove(inputSale){
     global.staticPickingList = global.staticPickingList.filter(sale => sale.id != inputSale.id);
   },
