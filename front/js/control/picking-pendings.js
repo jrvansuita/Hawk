@@ -238,7 +238,12 @@ function buildProductFirstCol(item, slim){
   var first = $('<div>').addClass('vertical-content');
 
   var div = $('<div>').addClass('nobreak');
-  var sku = $('<label>').addClass('pick-value sku copiable').text(item.codigo);
+  var sku = $('<label>')
+  .addClass('pick-value sku copiable')
+  .text(item.codigo)
+  .dblclick(()=>{
+    window.location.href = '/stock?sku=' + item.codigo;
+  });
 
   var preview = new ImagePreview(first);
 

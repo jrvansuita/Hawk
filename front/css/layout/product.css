@@ -113,7 +113,7 @@
 
 .attribute-name{
   display: block;
-  color: gray;
+  color: #302d2d;
   width: fit-content;
   padding: 3px 1px;
   font-size: 13px;
@@ -220,6 +220,8 @@
 
 
 .footer td{
+  font-size: 15px;
+  font-weight: 800;
   line-height: 20px;
   border-top: 1px dashed #e6e7e6;
   text-align: center;
@@ -289,7 +291,7 @@ tr.selected td{
 
 .title-label{
   font-size: 15px;
-  color: #989898;
+  color: #302d2d;
   text-align: center;
   padding: 5px 0px;
 }

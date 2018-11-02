@@ -4,7 +4,7 @@ module.exports = class Err{
   constructor(e, user) {
     this.e = e;
     this.type = "Err";
-    this.userId = user.id || user;
+    this.userId = user ? (user.id || user) : undefined;
   }
 
   toString(){
