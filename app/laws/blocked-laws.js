@@ -13,8 +13,31 @@ module.exports = {
     return global.staticBlockedSales;
   },
 
+
   assert(saleList){
-    var blocks = this.getAllSales();
+    for(var i=0; i < this.list().length; i++){
+      var block = this.list()[i];
+
+      if (block.reason.tag == 994){
+        saleList = saleList.filter((sale)=>{
+          return !sale.items.some((item)=>{
+            return item.codigo.toLowerCase().indexOf(block.number.toLowerCase()) > -1;
+          });
+        });
+      }else{
+        saleList = saleList.filter( (sale)=>{
+          return !(sale.numeroPedido == block.number || sale.numeroDaOrdemDeCompra == block.number);
+        });
+      }
+    }
+
+
+    return saleList;
+
+  },
+
+  oldassert(saleList){
+    var blocks = this.getAllBlocks();
 
     if (blocks){
       saleList = saleList.filter((sale) =>{
@@ -24,6 +47,8 @@ module.exports = {
           //If the block is blocking any sale
           block.blocking = true;
         }
+
+        console.log(block);
 
         return !block;
       });
@@ -77,7 +102,7 @@ module.exports = {
     }
   },
 
-  getAllSales(){
+  getAllBlocks(){
     return this.list().map(a => a.number);
   }
 

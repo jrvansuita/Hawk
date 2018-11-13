@@ -4,28 +4,39 @@ module.exports= class SaleLoader {
 
   constructor(data){
     this.sale = data;
-    this.runs = [];
+
   }
 
-  loadSale(){
-    this.runs.push(loadSale);
+
+  loadClient(callback){
+    if (this.sale.idContato && !this.sale.client){
+      EccosysCalls.getClient(this.sale.idContato, (data)=>{
+        var client = JSON.parse(data)[0];
+        this.sale.client = client;
+        callback(this.sale);
+      });
+    }else{
+      callback(this.sale);
+    }
+
     return this;
   }
 
-  loadClient(){
-    this.runs.push(loadClient);
+  loadItems(callback){
+    EccosysCalls.getSaleItems(this.sale.numeroPedido, (data) => {
+      var items = JSON.parse(data);
+
+      this.sale.transport = Util.twoNames(this.sale.transportador, Const.no_transport);
+      this.sale.items = items;
+      this.sale.itemsQuantity = items.reduce(function(a, b) {
+        return a + parseFloat(b.quantidade);
+      }, 0);
+
+      callback(this.sale);
+    });
+
     return this;
   }
-
-  loadItems(){
-    this.runs.push(loadItems);
-    return this;
-  }
-
-  _runner(){
-
-  }
-
 
   run(callback){
 
@@ -35,28 +46,10 @@ module.exports= class SaleLoader {
         _runner();
       });
     }else{
-        _runner();
+      _runner();
     }
   }
+
+
+
 };
-
-
-
-
-function loadSale(sale, callback){
-  EccosysCalls.getSale(sale, (s)=>{
-    callback(s);
-  });
-}
-
-function loadClient(sale){
-  if (sale.idContato && !sale.client){
-    EccosysCalls.getClient(sale.idContato, (data)=>{
-      var client = JSON.parse(data)[0];
-      sale.client = client;
-      callback(sale);
-    });
-  }else{
-    callback(sale);
-  }
-}

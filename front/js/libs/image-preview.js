@@ -1,33 +1,43 @@
 class ImagePreview{
-  constructor(element){
-    this.element = element;
+  constructor(){
   }
 
+  onElement(element){
+    this.element = element;
+    return this;
+  }
 
   show(src){
+    cancel = false;
 
     if (src && this.element){
       var _self = this;
-      this.runLatter = setTimeout(function(){
-        _self.removeNow();
-        runnable(_self.element, src);
 
+      setTimeout(()=>{
+        if (!cancel){
+          console.log(cancel);
+          runnable(_self.element, src);
+        }
       }, 100);
-
     }
   }
 
   remove(){
-    clearTimeout(this.runLatter);
-    $('.image-preview').fadeOut(200, function() {
-      $(this).remove();
-    });
-  }
+    cancel = true;
 
-  removeNow(){
-    $('.image-preview').remove();
+    if ($(this).is(":visible")){
+      $('.image-preview').fadeOut(200, function() {
+        $(this).remove();
+      });
+    }else{
+      $('.image-preview').remove();
+    }
+
   }
 }
+
+
+var cancel = false;
 
 
 function runnable(element, src) {

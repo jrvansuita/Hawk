@@ -16,6 +16,7 @@ module.exports = {
   picking_current_month: 'Picking do mês atual',
   picking_by_date: 'Picking por período',
   none_sale_founded: "Nenhum pedido encontrado",
+  no_transport: 'Retirada',
 
 
   from_to: 'De {0} Até {1}',

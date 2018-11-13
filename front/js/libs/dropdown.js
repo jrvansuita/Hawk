@@ -4,7 +4,7 @@ class MaterialDropdown {
 
     var $div = $('<div>').addClass('md-dropdown');
     $(parent).append($div);
-    this.items = $('<ul>').css('left', event.pageX).css('top', event.pageY - 100);
+    this.items = $('<ul>').css('left', event.pageX -10).css('top', event.pageY - 110);
     $div.append(this.items);
 
     this.items.hide();

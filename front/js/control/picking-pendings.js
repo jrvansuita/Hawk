@@ -214,6 +214,15 @@ function getPendingItemButtonLabel(pending){
   }
 }
 
+var previewProduct;
+
+function getPreviewProduct(){
+  if (previewProduct == null){
+    previewProduct = new ImagePreview();
+  }
+
+  return previewProduct;
+}
 
 function buildProductFirstCol(item, slim){
   var desc = item.descricao.split('-')[0];
@@ -242,18 +251,19 @@ function buildProductFirstCol(item, slim){
   .addClass('pick-value sku copiable')
   .text(item.codigo)
   .dblclick(()=>{
-    window.location.href = '/stock?sku=' + item.codigo;
+    window.open(
+      '/stock?sku=' + item.codigo,
+      '_blank' // <- This is what makes it open in a new window.
+    );
   });
-
-  var preview = new ImagePreview(first);
 
   first.hover(function() {
     _get('/product-image', {sku: item.codigo },(product)=>{
-      preview.show(product.image);
+      getPreviewProduct().onElement(first).show(product.image);
     });
   },
   function() {
-    preview.remove();
+    getPreviewProduct().onElement(first).remove();
   });
 
   sku.click(function(e){

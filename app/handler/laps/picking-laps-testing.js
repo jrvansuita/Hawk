@@ -1,13 +1,20 @@
 const EccosysCalls = require('../../eccosys/eccosys-calls.js');
 const TransportLaws = require('../../laws/transport-laws.js');
 const UfLaws = require('../../laws/uf-laws.js');
+const SaleLoader = require('../../loader/sale-loader.js');
 
 module.exports={
 
   loadSaleItems(saleList, index, callback) {
-
-
     var sale = saleList[index];
+
+    var saleLoader = new SaleLoader(sale);
+
+    saleLoader.loadClient((sale)=>{
+      UfLaws.put(sale.client.uf);
+    }).loadItems((sale)=>{
+       TransportLaws.put(sale.transportador);
+    });
 
     this.callLoadClient(sale, (sale)=>{
 
@@ -37,34 +44,6 @@ module.exports={
         }
       });
     });
-  },
-
-  callLoadClient(sale, callback){
-    EccosysCalls.getClient(sale.idContato, (data)=>{
-      var client = JSON.parse(data)[0];
-      sale.client = client;
-      UfLaws.put(sale.client.uf);
-
-      callback(sale);
-    });
-  },
-
-
-  callLoadSaleItems(sale, callback){
-    EccosysCalls.getSaleItems(sale.numeroPedido, (data) => {
-      var items = JSON.parse(data);
-      var saleResult = this.loadSingleAttrs(sale, items);
-      callback(saleResult, items);
-    });
-  },
-
-  loadSingleAttrs(sale, items){
-    sale.transport = TransportLaws.excluir_put(sale.transportador);
-    sale.items = items;
-    sale.itemsQuantity = items.reduce(function(a, b) {
-      return a + parseFloat(b.quantidade);
-    }, 0);
-
-    return sale;
   }
+
 };

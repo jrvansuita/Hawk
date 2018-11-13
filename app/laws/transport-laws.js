@@ -2,9 +2,6 @@ global.transportList = {};
 
 global.selectedTransp = undefined;
 
-const unknow = 'Retirada';
-
-
 module.exports = {
 
   select(selected){
@@ -15,7 +12,7 @@ module.exports = {
     if (global.selectedTransp){
       if (saleList.length > 0) {
         saleList = saleList.filter(sale =>{
-          return Str.defStr(sale.transportador, unknow).includes(global.selectedTransp);
+          return Str.defStr(sale.transportador, Const.no_transport).includes(global.selectedTransp);
         });
       }
     }
@@ -24,7 +21,11 @@ module.exports = {
   },
 
   put(transportName){
-    var transp = Util.twoNames(transportName, unknow);
+    global.transportList[transportName] = transportName;
+  },
+
+  excluir_put(transportName){
+    var transp = Util.twoNames(transportName, Const.no_transport);
 
     global.transportList[transp] = transp;
     return transp;

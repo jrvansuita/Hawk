@@ -64,7 +64,7 @@ table{
   display: inline-block;
   padding: 3px 1px;
   font-size: 11px;
-   cursor: default;
+  cursor: default;
 }
 
 .green-title {
@@ -487,11 +487,18 @@ tr.row-padding td{
 }
 
 
+.block-scroll{
+  height: -webkit-fill-available;
+  overflow-y: scroll;
+}
+
+
 .blocked-sales-holder{
   padding-top: 12px;
   display: flex;
   flex-wrap: wrap;
   width: 100%;
+  height: 100%;
 }
 
 .table-sale-blocked-holder{
@@ -500,30 +507,30 @@ tr.row-padding td{
   width: fit-content;
   margin-top: 8px;
   cursor: pointer;
+  height: fit-content;
 }
 
 .table-sale-blocked-holder:nth-child(even) {
-    margin-left: 8px;
+  margin-left: 8px;
 }
 
 .super-mini-avatar{
   width: 35px;
   height: 35px;
-  margin: 4px 4px;
+  margin: 4px 0px 4px 2px;
   cursor: pointer;
 }
 
 .blocked-reason{
-  position: absolute;
-    margin-top: -42px;
-    margin-left: 25px;
-    width: 20px;
-    height: 20px;
-    padding: 0px;
+  margin-top: -42px;
+  margin-left: 21px;
+  width: 18px;
+  height: 18px;
+  padding: 0px;
 }
 
 .blocked-sale-label{
-  padding: 3px 5px;
+  padding: 2px 2px;
   display: block;
   cursor: pointer;
   color: #1C7974;
@@ -547,12 +554,12 @@ tr.row-padding td{
   padding-right: 15px;
 }
 
- #opened-sale tr td:first-child{
-   padding-left: 10px;
- }
- #opened-sale tr td:last-child{
-   padding-right: 10px;
- }
+#opened-sale tr td:first-child{
+  padding-left: 10px;
+}
+#opened-sale tr td:last-child{
+  padding-right: 10px;
+}
 
 .row-padding:hover{
   border-radius: 4px;

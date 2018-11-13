@@ -82,7 +82,9 @@ function buildChildSku(product, child){
     onChildSelected(child);
   });
 
-  if (product.selected == child.codigo || product.selected == child.gtin){
+  var sel = product.selected.toLowerCase();
+
+  if (sel == child.codigo.toLowerCase() || sel == child.gtin){
     $tr.addClass('selected');
     $tr.trigger('click');
   }
@@ -128,22 +130,6 @@ function buildStockCol(product){
     }
   });
 
-  /*$valElement.focusout(function(){
-  if ($(this).val() && $(this).val().trim() !== $(this).data('value').toString().trim()){
-  $(this).addClass('loading-value');
-  var val = parseInt($(this).val());
-
-  _post('/product-stock', {sku:product.codigo, stock: val}, (res)=>{
-  handleInputUpdate($(this), res, $(this).data('value') + val);
-
-  var $disp = $(this).closest('tr').find('.available-stock .child-value');
-
-  $disp.text(parseInt($disp.text()) + val);
-});
-}else{
-$(this).val($(this).data('value'));
-}
-});*/
 
 return buildCol($valElement);
 }

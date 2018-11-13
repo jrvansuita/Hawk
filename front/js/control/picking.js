@@ -24,8 +24,9 @@ $(document).ready(() => {
     var key = e.which;
     if (key == 13){
       var saleNumber = $('#blocked-sale-input').val();
-
-      if (saleNumber.length >= 5 && isNum(saleNumber)) {
+      //var isSaleNumber = saleNumber.length >= 5 && isNum(saleNumber);
+      
+      if (saleNumber.length > 3) {
         if ($('.blocked-sales-holder').find("[data-sale='" + saleNumber + "']").length > 0){
           new BlockedPost(saleNumber).call();
         }else{

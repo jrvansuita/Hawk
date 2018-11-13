@@ -189,6 +189,7 @@
 
                   <input type="text" id="blocked-sale-input" class="simple-material-input" placeholder="Número do pedido" style="width:100%"/>
 
+                  <div class="block-scroll">
                   <div class="blocked-sales-holder">
                     <%  blockedSales.forEach((blocked) => {%>
                       <table class="table-sale-blocked-holder shadow" data-sale="<%=blocked.number%>">
@@ -198,7 +199,7 @@
                             <%var blockingClass = (blocked.blocking ? 'blocking' : 'not-blocking') %>
                             <img class="circle shadow avatar-img super-mini-avatar <%=blockingClass%>" data-id="<%=blocked.user.id%>" src="<%=blocked.user.avatar%>" title="<%=userName%>" />
                             <%if (blocked.reason){%>
-                              <img class="circle shadow blocked-reason" src="<%=blocked.reason.icon%>" title="<%=blocked.reason.label%>" />
+                              <img class="circle shadow blocked-reason" src="<%=blocked.reason.icon ? blocked.reason.icon : 'img/question-mark.png'%>" title="<%=blocked.reason.label ? blocked.reason.label : 'Indefinido'%>" />
                               <%}%>
                             </td>
                             <td>
@@ -217,6 +218,7 @@
                         </div>
                       </div>
                     </div>
+                  </div>
 
 
                     <div class="col opened-sale-box">
