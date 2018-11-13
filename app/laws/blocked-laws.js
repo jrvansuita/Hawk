@@ -20,7 +20,7 @@ module.exports = {
 
       if (block.reason.tag == 994){
         saleList = saleList.filter((sale)=>{
-          return !sale.items.some((item)=>{
+          return sale.items && !sale.items.some((item)=>{
             return item.codigo.toLowerCase().indexOf(block.number.toLowerCase()) > -1;
           });
         });
