@@ -489,6 +489,11 @@ tr.row-padding td{
 
 .block-scroll{
   height: -webkit-fill-available;
+  overflow: hidden;
+}
+
+.block-scroll:hover{
+  height: -webkit-fill-available;
   overflow-y: scroll;
 }
 
@@ -534,7 +539,7 @@ tr.row-padding td{
   display: block;
   cursor: pointer;
   color: #1C7974;
-  font-size: 12px;
+  font-size: 11px;
   width: fit-content;
 }
 
