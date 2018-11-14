@@ -35,12 +35,15 @@ module.exports = {
 
       HistoryStorer.pending(user.id, pending);
 
-      new SaleLoader(pending.sale).loadClient().loadItems().run(function(sale){
+      new SaleLoader(pending.sale.numeroPedido)
+      .loadClient()
+      .loadItems()
+      .run(function(sale){
         InprogressLaws.startPicking(sale, user.id, true);
         callback();
       });
     }
-  }
+  } 
 
 };
 

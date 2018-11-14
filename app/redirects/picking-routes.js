@@ -49,14 +49,15 @@ module.exports = class PickingRoutes extends Routes{
       TransportLaws.select(req.query.transp);
       UfLaws.select(req.query.uf);
 
-      var pickingSales = PickingHandler.getPickingSales();
 
       PickingHandler.init(() => {
 
+        var pickingSales = PickingHandler.getPickingSales();
+
         if (!res.headersSent){
           res.render('picking/picking', {
-            previewPickingSales: pickingSales.slice(6),
-            previewSalesCount:pickingSales.length,
+            previewPickingSales: pickingSales,
+            previewSalesCount: pickingSales.length,
             inprogress: InprogressLaws.object(),
 
             transportList: TransportLaws.getObject(),

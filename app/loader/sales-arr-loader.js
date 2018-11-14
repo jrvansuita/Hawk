@@ -59,7 +59,7 @@ module.exports= class SalesArrLoader {
     }
 
     saleLoader.run((sale)=>{
-      this.saleList[this.index] = sale;
+      this.saleList[this.index] = sale;   
 
       if (this._filter(sale) && this.onEverySaleLoaded){
         this.onEverySaleLoaded(sale, this.index);
@@ -74,8 +74,8 @@ module.exports= class SalesArrLoader {
       if (this.index < currentLength) {
         this._load(onFinished);
 
-        //Pelo menos 10 pedidos já foram carregados os itens
-        if (this.index == 10) {
+        //Pelo menos 10 pedidos já foram tratados e podem estar aparecendo
+        if (this.staticIndex == 10) {
           onFinished();
         }
       }

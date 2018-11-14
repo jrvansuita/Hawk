@@ -23,7 +23,7 @@ $(document).ready(() => {
   $('#blocked-rule-input').on("keyup", function(e) {
     var key = e.which;
     if (key == 13){
-      var saleNumber = $('#blocked-rule-input').val();
+      var saleNumber = $('#blocked-rule-input').val().trim();
       //var isSaleNumber = saleNumber.length >= 5 && isNum(saleNumber);
 
       if (saleNumber.length > 3) {

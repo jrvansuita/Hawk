@@ -46,6 +46,7 @@ module.exports= class SaleLoader {
     var self = this;
 
     var func = ()=>{
+
       if((!this.sale.items && ifNotHas) || !ifNotHas){
         EccosysCalls.getSaleItems(this.sale.numeroPedido, (data) => {
           var items = JSON.parse(data);
@@ -59,7 +60,7 @@ module.exports= class SaleLoader {
         });
       }else{
         this._callbackHit(callback);
-      }
+      } 
     };
 
     this.list.push(func);
@@ -77,7 +78,9 @@ module.exports= class SaleLoader {
     this.list.splice(-1,1);
 
     if (this.list.length == 0){
-      this.onFinished(this.sale);
+      if (typeof this.onFinished == 'function'){
+        this.onFinished(this.sale);
+      }
     }
   }
 
