@@ -15,13 +15,17 @@ module.exports = {
     return global.staticBlockRules;
   },
 
+  hasBlockSales(){
+    return global.staticBlockedSales.length > 0;
+  },
+
   checkAllAndCapture(sale, ignoreBlocking){
     var isBlocked = false;
 
     for(var i=0; i < this.rules().length; i++){
       var block = this.rules()[i];
 
-      if (ignoreBlocking || (!block.blocking || block.reason.tag.toString() == '994')){
+      if (ignoreBlocking || !block.blocking || (block.reason.tag.toString() == '994')){
 
         isBlocked = this.checkAndCapture(block, sale);
 

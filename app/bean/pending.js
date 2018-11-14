@@ -5,6 +5,7 @@ Pending status
 0 - Open
 1 - Solving
 2 - Solved
+3 - Assumed
 */
 
   constructor(number, sale, local) {

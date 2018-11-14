@@ -72,7 +72,7 @@ module.exports = {
 
     HistoryStorer.picking(userId, sale, day);
 
-    if(sale.doNotCount){
+    if(sale.doNotCount || (process.env.NODE_ENV === undefined)){
       callback(sale);
     }else{
       Day.sync(day, (err, doc) => {

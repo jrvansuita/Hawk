@@ -45,13 +45,16 @@ module.exports={
       }else if(pending.status == 1){
         title+= 'em Andamento';
         status= "colocado em atendimento";
-      }else{
+      }else if(pending.status == 2){
         status= "marcado como resolvido";
-        title+= 'Finalizada';
+        title+= 'Resolvida';
+      }else{
+        status= "assumido";
+        title+= 'Assumida';
       }
 
       var message = 'Pedido ' + pending.sale.numeroPedido + ' foi ' + status;
-      message += '\nOrdem de Compra: ' + pending.sale.numeroDaOrdemDeCompra;
+      message += '\nOrdem de Compra: ' + pending.sale.numeroDaOrdemDeCompra + ' Localização: ' + pending.local;
 
       History.notify(userId, title, message, 'Pendência');
     });

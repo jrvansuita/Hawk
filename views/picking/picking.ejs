@@ -25,7 +25,7 @@
 </head>
 
 <body>
-<!--window.pickingSales = <%- JSON.stringify(pickingSales || null) %>-->
+
   <script>
 
   window.inprogress = <%- JSON.stringify(inprogress || null) %>
@@ -98,12 +98,12 @@
 
                   <div class="pick-header">
                     <span class="label header-title"> Próximos Pedidos</span>
-                    <span class="label header-count"> <%=pickingSales.length%></span>
+                    <span class="label header-count"> <%=previewSalesCount%></span>
                   </div>
 
 
                   <%
-                  pickingSales.slice(0, 6).forEach(function(preview){
+                  previewPickingSales.slice(0, 6).forEach(function(preview){
                     %>
 
                     <div class="shadow label mini-item solved">
@@ -120,7 +120,7 @@
                         </tr>
                         <tr>
                           <td><span class="pick-value"><%=preview.transport%></span></td>
-                          <td><span class="pick-value"></span></td>
+                          <td><span class="pick-value"><%=preview.client.uf%></span></td>
                           <td><span class="pick-value" style="float:right"><%=Num.money(preview.totalProdutos) %></span></td>
                         </tr>
                       </table>
@@ -166,7 +166,7 @@
                           </td>
                           <td><span class="pick-value green-title"><%=sale.numeroPedido %></span></td>
                           <td><span class="pick-value"><%=sale.itemsQuantity %> Itens</span></td>
-                          <td><a class="print-progress" href="<%=printPickingUrl + sale.id %>" target="_blank"><div class="print-sale-holder" title="Reimprimir" ><img class="print-sale" src="/img/print.png" /></div></a></td>
+                          <td><a class="print-progress" href="<%=printPickingUrl + sale.id %>" target="_blank"><div class="print-sale-holder" title="Reimprimir" ><img class="print-sale" title="<%=sale.doNotCount ? 'Pedido já foi impresso!' : 'Imprimir' %>" src="<%=sale.doNotCount ? '/img/printed.png' : '/img/print.png' %>" /></div></a></td>
                         </tr>
                         <tr>
                           <td><span class="pick-value"><%=sale.pickUser.name ? sale.pickUser.name.split(" ")[0] : 'Desconhecido'%></span></td>

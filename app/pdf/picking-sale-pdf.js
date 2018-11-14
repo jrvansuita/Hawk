@@ -1,6 +1,6 @@
 const DoneLaws = require('../laws/done-laws.js');
 const InprogressLaws = require('../laws/inprogress-laws.js');
-const PickingLaps = require('../handler/laps/picking-laps.js');
+
 
 module.exports = {
 

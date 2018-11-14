@@ -4,7 +4,6 @@ const InprogressLaws = require('../laws/inprogress-laws.js');
 const DoneLaws = require('../laws/done-laws.js');
 const PickingLaws = require('../laws/picking-laws.js');
 const UsersProvider = require('../provider/UsersProvider.js');
-//const PickingLaps = require('../handler/laps/picking-laps.js');
 const BlockedLaws = require('../laws/blocked-laws.js');
 const SalesArrLoader = require('../loader/sales-arr-loader.js');
 const SaleLoader = require('../loader/sale-loader.js');
@@ -16,7 +15,7 @@ module.exports = {
 
   init(onFinished) {
 
-    if (PickingLaws.isFullEmpty()) {
+    if (PickingLaws.isFullEmpty() && !BlockedLaws.hasBlockSales()) {
       PendingLaws.load(true, ()=>{
         BlockedLaws.load(()=>{
           this.load(onFinished);
@@ -52,7 +51,7 @@ module.exports = {
           })
           .run(onFinished);
 
-          //PickingLaps.loadSaleItems(PickingLaws.getFullList(), 0, onFinished);
+
         }else{
           onFinished();
         }
@@ -109,7 +108,7 @@ module.exports = {
 
     if (!InprogressLaws.checkAndThrowUserInProgress(user.id)) {
 
-      new SaleLoader(sale).loadItems(function(sale){
+      new SaleLoader(sale).loadItems().run(function(sale){
         InprogressLaws.startPicking(sale, user.id, true);
         DoneLaws.remove(doneSale);
         callback();

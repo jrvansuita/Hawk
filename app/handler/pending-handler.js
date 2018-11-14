@@ -1,6 +1,6 @@
 const PendingLaws = require('../laws/pending-laws.js');
 const PickingLaws = require('../laws/picking-laws.js');
-const PickingLaps = require('../handler/laps/picking-laps.js');
+const SaleLoader = require('../loader/sale-loader.js');
 const InprogressLaws = require('../laws/inprogress-laws.js');
 const EccosysCalls = require('../eccosys/eccosys-calls.js');
 const PendingEmailSender = require('../email/sender/pending-email-sender.js');
@@ -31,8 +31,11 @@ module.exports = {
   restart(pending, user, callback){
     if (!InprogressLaws.checkAndThrowUserInProgress(user.id)) {
       PendingLaws.remove(pending.number);
+      pending.status = 3;
 
-      PickingLaps.callLoadSaleItems(pending.sale, function(sale, items){
+      HistoryStorer.pending(user.id, pending);
+
+      new SaleLoader(pending.sale).loadClient().loadItems().run(function(sale){
         InprogressLaws.startPicking(sale, user.id, true);
         callback();
       });
