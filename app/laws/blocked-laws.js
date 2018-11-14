@@ -21,7 +21,7 @@ module.exports = {
     for(var i=0; i < this.rules().length; i++){
       var block = this.rules()[i];
 
-      if (ignoreBlocking || (!block.blocking || block.reason.tag == 994)){
+      if (ignoreBlocking || (!block.blocking || block.reason.tag.toString() == '994')){
 
         isBlocked = this.checkAndCapture(block, sale);
 
@@ -93,7 +93,7 @@ module.exports = {
 
       global.staticBlockedSales = global.staticBlockedSales.filter((sale)=>{
         var restore = !this.checkAllAndCapture(sale, true);
-        
+
         if (restore){
           PickingLaws.add(sale);
         }
