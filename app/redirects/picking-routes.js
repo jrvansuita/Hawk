@@ -56,7 +56,7 @@ module.exports = class PickingRoutes extends Routes{
 
         if (!res.headersSent){
           res.render('picking/picking', {
-            previewPickingSales: pickingSales,
+            previewPickingSales: pickingSales.slice(0,6),
             previewSalesCount: pickingSales.length,
             inprogress: InprogressLaws.object(),
 
