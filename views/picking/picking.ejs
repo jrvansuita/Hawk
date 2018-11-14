@@ -27,7 +27,7 @@
 <body>
 
   <script>
-  //window.pickingSales = <%- JSON.stringify(pickingSales || null) %>
+  window.pickingSales = <%- JSON.stringify(pickingSales || null) %>
   window.inprogress = <%- JSON.stringify(inprogress || null) %>
   window.pendingSales = <%- JSON.stringify(pendingSales || null) %>
   window.printPickingUrl = "<%- printPickingUrl || "undefined" %>"
@@ -182,16 +182,17 @@
                 </div>
 
                 <div class="pick-box shadow red-top blocked-box">
-                  <div class="pick-header">
-                    <span class="label header-title">Bloqueados</span>
-                    <span class="label header-count inprogress-count"> <%=blockedSales.length%></span>
+                  <div class="blocked-header">
+                    <div class="pick-header">
+                      <span class="label header-title">Bloqueados</span>
+                      <span class="label header-count inprogress-count"> <%=blockedRules.length%></span>
+                    </div>
+
+                    <input type="text" id="blocked-rule-input" class="simple-material-input" placeholder="Número do pedido" style="width:100%"/>
                   </div>
-
-                  <input type="text" id="blocked-sale-input" class="simple-material-input" placeholder="Número do pedido" style="width:100%"/>
-
                   <div class="block-scroll">
-                  <div class="blocked-sales-holder">
-                    <%  blockedSales.forEach((blocked) => {%>
+                  <div class="blocked-rules-holder">
+                    <%  blockedRules.forEach((blocked) => {%>
                       <table class="table-sale-blocked-holder shadow" data-sale="<%=blocked.number%>">
                         <tr>
                           <td>

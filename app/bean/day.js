@@ -25,14 +25,6 @@ module.exports = class Day extends DataAccess {
     return points;
   }
 
-  /*static invoicePoints(count, total){
-  return (count * (total/6)) / 10000;
-}
-
-//itens / secs
-static pickingPoints(count, total){
-return ((total) / (count/total)) * 4;
-}*/
 
 static invoice(sale) {
   return new Day(sale.userId, sale.billingDate, 'invoice', sale.value, 1);

@@ -1,109 +1,124 @@
-const BlockedSale = require('../bean/blocked-sale.js');
+const BlockRule = require('../bean/block-rule.js');
 const UsersProvider = require('../provider/UsersProvider.js');
 const PendingLaws = require('../laws/pending-laws.js');
 const HistoryStorer = require('../history/history-storer.js');
+const PickingLaws = require('../laws/picking-laws.js');
 
-//All Blocked Sales wich can't be picking now
+//All Blocked Rules wich can't be picking now
+global.staticBlockRules = [];
 global.staticBlockedSales = [];
 
 
 module.exports = {
 
-  list(){
-    return global.staticBlockedSales;
+  rules(){
+    return global.staticBlockRules;
   },
 
+  checkAllAndCapture(sale, ignoreBlocking){
+    var isBlocked = false;
 
-  assert(saleList){
-    for(var i=0; i < this.list().length; i++){
-      var block = this.list()[i];
+    for(var i=0; i < this.rules().length; i++){
+      var block = this.rules()[i];
 
-      if (block.reason.tag == 994){
-        saleList = saleList.filter((sale)=>{
-          return sale.items && !sale.items.some((item)=>{
-            return item.codigo.toLowerCase().indexOf(block.number.toLowerCase()) > -1;
-          });
-        });
-      }else{
-        saleList = saleList.filter( (sale)=>{
-          return !(sale.numeroPedido == block.number || sale.numeroDaOrdemDeCompra == block.number);
-        });
+      if (ignoreBlocking || (!block.blocking || block.reason.tag == 994)){
+
+        isBlocked = this.checkAndCapture(block, sale);
+
+        if (isBlocked){
+          break;
+        }
       }
     }
 
-
-    return saleList;
-
+    return isBlocked;
   },
 
-  oldassert(saleList){
-    var blocks = this.getAllBlocks();
+  checkAndCapture(block, sale){
+    var isBlocked = this.match(block, sale);
 
-    if (blocks){
-      saleList = saleList.filter((sale) =>{
-        var block = this.get(sale.numeroPedido, sale.numeroDaOrdemDeCompra);
-
-        if (block){
-          //If the block is blocking any sale
-          block.blocking = true;
-        }
-
-        console.log(block);
-
-        return !block;
-      });
+    if (isBlocked){
+      if (global.staticBlockedSales.indexOf(sale) === -1)  global.staticBlockedSales.push(sale);
+      block.blocking = true;
     }
 
-    return saleList;
+    return isBlocked;
+  },
+
+  match(block, sale){
+    if (block.reason.tag == 994){
+      return !sale.items || sale.items.some((item)=>{
+        return item.codigo.toLowerCase().indexOf(block.number.toLowerCase()) > -1;
+      });
+    }else{
+      return (sale.numeroPedido == block.number || sale.numeroDaOrdemDeCompra == block.number);
+    }
   },
 
   load(callback){
-    BlockedSale.findAll(function(err, all){
-      global.staticBlockedSales = all;
+    BlockRule.findAll(function(err, all){
+      global.staticBlockRules = all;
       callback();
     });
   },
 
-  remove(blockSale){
-    var index = this.list().indexOf(blockSale);
-
-    if (index >= 0){
-      blockSale.remove();
-      this.list().splice(index, 1);
-    }
-  },
-
-  get(blockNumber, alternative){
-    return this.list().find((i)=>{
-      return i.number == blockNumber || i.number == alternative;
+  get(blockNumber){
+    return this.rules().find((i)=>{
+      return i.number == blockNumber;
     });
   },
 
   store(saleNumber, user, reason, callback){
-    var blockedSale = new BlockedSale(saleNumber, user, reason);
-    blockedSale.upsert(()=>{
-      this.list().push(blockedSale);
+    var blockRule = new BlockRule(saleNumber, user, reason);
+    blockRule.upsert(()=>{
+      this.rules().push(blockRule);
       HistoryStorer.blocked(user.id, saleNumber, true);
       PendingLaws.remove(saleNumber);
+
+      //Remove all sales that matchs the new block
+      PickingLaws.filter((sale)=>{
+        return !this.checkAndCapture(blockRule, sale);
+      });
+
       callback();
     });
   },
 
+  remove(blockRule){
+    var index = this.rules().indexOf(blockRule);
 
-  toggleBlock(saleNumber, user, reason, callback){
-    var blocked = this.get(saleNumber);
+    if (index >= 0){
+      blockRule.remove();
+      this.rules().splice(index, 1);
+
+      global.staticBlockedSales = global.staticBlockedSales.filter((sale)=>{
+        var restore = !this.checkAllAndCapture(sale, true);
+        
+        if (restore){
+          PickingLaws.add(sale);
+        }
+
+        return !restore;
+      });
+
+    }
+  },
+
+
+  toggleBlock(blockNumber, user, reason, callback){
+    var blocked = this.get(blockNumber);
 
     if (blocked) {
-      HistoryStorer.blocked(user.id, saleNumber, false);
+      HistoryStorer.blocked(user.id, blockNumber, false);
       this.remove(blocked);
       callback();
     }else{
-      this.store(saleNumber, user, reason, callback);
+      this.store(blockNumber, user, reason, callback);
     }
   },
 
   getAllBlocks(){
-    return this.list().map(a => a.number);
+    return this.rules().map(a => a.number);
   }
 
 };

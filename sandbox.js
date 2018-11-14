@@ -1,7 +1,12 @@
-require('./app/init/dotenv.js');
-global.Dat = require('./app/util/date.js');
-
-const Test = require('./app/eccosys/picking-pdf/picking-sale-pdf.js');
+require('./app/init/init.js');
 
 
-Test.test3();
+const SalesLoader = require('./app/loader/sale-loader.js');
+
+
+new SalesLoader('199500')
+  .loadItems()
+  .loadClient()
+  .run((sale)=>{
+    console.log(sale);
+  });

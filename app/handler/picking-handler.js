@@ -4,8 +4,13 @@ const InprogressLaws = require('../laws/inprogress-laws.js');
 const DoneLaws = require('../laws/done-laws.js');
 const PickingLaws = require('../laws/picking-laws.js');
 const UsersProvider = require('../provider/UsersProvider.js');
-const PickingLaps = require('../handler/laps/picking-laps.js');
+//const PickingLaps = require('../handler/laps/picking-laps.js');
 const BlockedLaws = require('../laws/blocked-laws.js');
+const SalesArrLoader = require('../loader/sales-arr-loader.js');
+const SaleLoader = require('../loader/sale-loader.js');
+const History = require('../bean/history.js');
+const TransportLaws = require('../laws/transport-laws.js');
+const UfLaws = require('../laws/uf-laws.js');
 
 module.exports = {
 
@@ -22,7 +27,7 @@ module.exports = {
     }
   },
 
-  load(callback){
+  load(onFinished){
     EccosysCalls.getPickingSales((data) => {
       try{
         PickingLaws.set(JSON.parse(data));
@@ -32,12 +37,28 @@ module.exports = {
         PickingLaws.handleDevMode();
 
         if (!PickingLaws.isFullEmpty()){
-          PickingLaps.loadSaleItems(PickingLaws.getFullList(), 0, callback);
+
+
+          new SalesArrLoader(PickingLaws.getFullList())
+          .loadItems(true)
+          .loadClient((sale)=>{
+            UfLaws.put(sale.client.uf);
+          })
+          .onFilter((sale)=>{
+            return !BlockedLaws.checkAllAndCapture(sale);
+          })
+          .onEverySaleLoaded((sale)=>{
+            TransportLaws.put(sale.transport);
+          })
+          .run(onFinished);
+
+          //PickingLaps.loadSaleItems(PickingLaws.getFullList(), 0, onFinished);
         }else{
-          callback();
+          onFinished();
         }
       }catch(e){
-        callback();
+        History.error(e);
+        onFinished();
       }
     });
   },
@@ -88,7 +109,7 @@ module.exports = {
 
     if (!InprogressLaws.checkAndThrowUserInProgress(user.id)) {
 
-      PickingLaps.callLoadSaleItems(sale, function(){
+      new SaleLoader(sale).loadItems(function(sale){
         InprogressLaws.startPicking(sale, user.id, true);
         DoneLaws.remove(doneSale);
         callback();

@@ -4,7 +4,7 @@ const UfLaws = require('../../laws/uf-laws.js');
 
 module.exports={
 
-  loadSaleItems(saleList, index, callback) {
+  loadSaleItems(saleList, index, onFinished) {
 
 
     var sale = saleList[index];
@@ -12,28 +12,25 @@ module.exports={
     this.callLoadClient(sale, (sale)=>{
 
       this.callLoadSaleItems(sale, (sale, items) =>{
-
-        var currentLength = saleList.length;
+        
         saleList[index] = sale;
 
-        //var c = global.staticPickingList[index].client;
-
-        //console.log(sale.numeroPedido + " -> " + sale.idContato + " -> " + (c ? c.nome : "--") + " -> " + (c ? c.uf: "--"));
-
         index++;
+
+        var currentLength = saleList.length;
         console.log(index + '/' + (currentLength));
 
         if (index < currentLength) {
-          this.loadSaleItems(saleList, index, callback);
+          this.loadSaleItems(saleList, index, onFinished);
 
           //Pelo menos 10 pedidos já foram carregados os itens
           if (index == 10) {
-            callback();
+            onFinished();
           }
         }
         //No Sales to pick
         else if (currentLength == index){
-          callback();
+          onFinished();
         }
       });
     });

@@ -1,6 +1,6 @@
 const TransportLaws = require('../laws/transport-laws.js');
 const UfLaws = require('../laws/uf-laws.js');
-const BlockedLaws = require('../laws/blocked-laws.js');
+//const BlockedLaws = require('../laws/blocked-laws.js');
 const History = require('../bean/history.js');
 const Err = require('../error/error.js');
 
@@ -15,14 +15,22 @@ module.exports = {
     global.staticPickingList = list;
   },
 
+  add(sale){
+    global.staticPickingList.unshift(sale);
+  },
+
   handleDevMode(){
     checkIsInDevMode();
   },
 
   assert(saleNumbers){
-    global.staticPickingList = global.staticPickingList.filter((item, index)=>{
+    this.filter((item, index)=>{
       return !saleNumbers.includes(item.numeroPedido);
     });
+  },
+
+  filter(callback){
+    global.staticPickingList = global.staticPickingList.filter(callback);
   },
 
   get(saleNumber){
@@ -83,14 +91,14 @@ function getAssertedList(){
   var list = global.staticPickingList;
   list = TransportLaws.assert(list);
   list = UfLaws.assert(list);
-  list = BlockedLaws.assert(list);
+  //list = BlockedLaws.assert(list);
 
   return list;
 }
 
 
 function checkIsInDevMode(){
-  var maxSalesOnDevMove = 10;
+  var maxSalesOnDevMove = 50;
   //If this Env Var is not defined, it's on development mode
   //Not necessary to load all sales for tests porpouse
   if (!process.env.NODE_ENV){

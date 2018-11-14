@@ -31,7 +31,7 @@ module.exports = class History extends DataAccess {
 
   static error(e, title, addtoMessage, userId){
     var _userId = userId ? userId : (e.userId ? e.userId : 0);
-
+    console.error(e);
     new History(2, _userId , title ? title : 'Erro de Sistema', addtoMessage ? addtoMessage + '\n' : '' + Err.xprss(e), 'Falha').upsert();
   }
 

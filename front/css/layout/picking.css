@@ -484,6 +484,13 @@ tr.row-padding td{
   max-height: 300px;
   width: min-content;
   min-height: fit-content;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.blocked-header{
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 
@@ -498,11 +505,13 @@ tr.row-padding td{
 }
 
 
-.blocked-sales-holder{
+.blocked-rules-holder{
   padding-top: 12px;
   display: flex;
   flex-wrap: wrap;
-  width: 100%;
+  width: fit-content;
+  padding-left: 10px;
+  padding-right: 10px;
   height: 100%;
 }
 

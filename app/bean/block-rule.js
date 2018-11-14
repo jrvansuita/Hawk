@@ -1,4 +1,4 @@
-module.exports = class BlockedSale extends DataAccess {
+module.exports = class BlockRule extends DataAccess {
 
 
   constructor(number, user, reason) {
@@ -7,9 +7,9 @@ module.exports = class BlockedSale extends DataAccess {
     this.blockDate = new Date();
     this.user = user ? user : {};
     this.reason = reason ? reason : {};
-    this.blocking = true;
+    this.blocking = false;
   }
-
+ 
   static getKey() {
     return ['number'];
   }

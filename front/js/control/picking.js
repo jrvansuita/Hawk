@@ -20,14 +20,14 @@ $(document).ready(() => {
     });
   }, 1000);
 
-  $('#blocked-sale-input').on("keyup", function(e) {
+  $('#blocked-rule-input').on("keyup", function(e) {
     var key = e.which;
     if (key == 13){
-      var saleNumber = $('#blocked-sale-input').val();
+      var saleNumber = $('#blocked-rule-input').val();
       //var isSaleNumber = saleNumber.length >= 5 && isNum(saleNumber);
-      
+
       if (saleNumber.length > 3) {
-        if ($('.blocked-sales-holder').find("[data-sale='" + saleNumber + "']").length > 0){
+        if ($('.blocked-rules-holder').find("[data-sale='" + saleNumber + "']").length > 0){
           new BlockedPost(saleNumber).call();
         }else{
           new BlockedSelector().onSelect((reason)=>{

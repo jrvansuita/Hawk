@@ -22,9 +22,9 @@ class BlockedPost{
         window.location.reload();
       },
       error: function(jqXHR, textStatus, errorThrown) {
-        console.console.log(textStatus);
+        console.log(textStatus);
         this.errorListener();
-        //onSimpleMaterialInputError( $('#blocked-sale-input'));
+        //onSimpleMaterialInputError( $('#blocked-rule-input'));
       }
     });
   }
