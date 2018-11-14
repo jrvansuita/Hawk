@@ -36,8 +36,7 @@ module.exports = {
         PickingLaws.handleDevMode();
 
         if (!PickingLaws.isFullEmpty()){
-
-
+          
           new SalesArrLoader(PickingLaws.getFullList())
           .loadItems(true)
           .loadClient((sale)=>{

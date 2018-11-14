@@ -24,6 +24,14 @@ class BlockedSelector{
     this.options.push(new BlockedReason('Outro Motivo', 101, '/img/three-dots.png'));
   }
 
+  get(reasonTag){
+    for(var i =0; i < this.options.length; i++){
+      if (reasonTag.toString() == this.options[i].tag.toString()){
+        return this.options[i];
+      }
+    }
+  }
+
   getReason(index){
     return this.options[index];
   }

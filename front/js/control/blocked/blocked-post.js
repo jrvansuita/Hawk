@@ -1,8 +1,8 @@
 
 class BlockedPost{
 
-  constructor(saleNumber, reason){
-    this.saleNumber = saleNumber;
+  constructor(blockNumber, reason){
+    this.blockNumber = blockNumber;
     this.reason = reason;
   }
 
@@ -12,11 +12,11 @@ class BlockedPost{
 
   call(){
     $.ajax({
-      url: "/picking/toggle-block-sale",
+      url: "/picking/toggle-block",
       type: "post",
       data: {
-        saleNumber: this.saleNumber,
-        reason : this.reason
+        blockNumber: this.blockNumber,
+        reasonTag : this.reason ? this.reason.tag : null
       },
       success: function(response) {
         window.location.reload();

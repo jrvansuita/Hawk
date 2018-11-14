@@ -15,9 +15,9 @@ module.exports={
   },
 
   blocked(userId, blockNumber, blocked){
-    var message = 'O pedido ' + blockNumber + ' foi ' + (blocked ? 'bloqueado' : 'desbloqueado');
+    var message = 'O código ' + blockNumber + ' foi ' + (blocked ? 'bloqueado' : 'desbloqueado');
 
-    History.notify(userId, blocked ? 'Pedido Bloqueado' : 'Pedido Desbloqueado', message, 'Bloqueio');
+    History.notify(userId, blocked ? 'Picking Bloqueado' : 'Picking Desbloqueado', message, 'Bloqueio');
   },
 
   picking(userId, sale, day){

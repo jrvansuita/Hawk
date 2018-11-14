@@ -82,8 +82,8 @@ module.exports = class PickingRoutes extends Routes{
       PickingHandler.handle(req.query.userid,  this._resp().redirect(res));
     });
 
-    this._post(['/picking/toggle-block-sale'], (req, res) => {
-      BlockedLaws.toggleBlock(req.body.saleNumber, req.session.loggedUser, req.body.reason, this._resp().redirect(res));
+    this._post(['/picking/toggle-block'], (req, res) => {
+      BlockedLaws.toggleBlock(req.body.blockNumber, req.session.loggedUser, req.body.reasonTag, this._resp().redirect(res));
     });
 
     this._post('/picking-done-restart', (req, res, body, locals, session) => {

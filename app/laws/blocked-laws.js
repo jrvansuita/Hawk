@@ -25,7 +25,7 @@ module.exports = {
     for(var i=0; i < this.rules().length; i++){
       var block = this.rules()[i];
 
-      if (ignoreBlocking || !block.blocking || (block.reason.tag.toString() == '994')){
+      if (ignoreBlocking || !block.blocking || (block.reasonTag.toString() == '994')){
 
         isBlocked = this.checkAndCapture(block, sale);
 
@@ -50,7 +50,7 @@ module.exports = {
   },
 
   match(block, sale){
-    if (block.reason.tag == 994){
+    if (block.reasonTag.toString() == '994'){
       return !sale.items || sale.items.some((item)=>{
         return item.codigo.toLowerCase().indexOf(block.number.toLowerCase()) > -1;
       });
@@ -72,8 +72,8 @@ module.exports = {
     });
   },
 
-  store(saleNumber, user, reason, callback){
-    var blockRule = new BlockRule(saleNumber, user, reason);
+  store(saleNumber, user, reasonTag, callback){
+    var blockRule = new BlockRule(saleNumber, user, reasonTag);
     blockRule.upsert(()=>{
       this.rules().push(blockRule);
       HistoryStorer.blocked(user.id, saleNumber, true);
@@ -109,7 +109,7 @@ module.exports = {
   },
 
 
-  toggleBlock(blockNumber, user, reason, callback){
+  toggleBlock(blockNumber, user, reasonTag, callback){
     var blocked = this.get(blockNumber);
 
     if (blocked) {
@@ -117,12 +117,9 @@ module.exports = {
       this.remove(blocked);
       callback();
     }else{
-      this.store(blockNumber, user, reason, callback);
+      this.store(blockNumber, user, reasonTag, callback);
     }
   },
 
-  getAllBlocks(){
-    return this.rules().map(a => a.number);
-  }
 
 };

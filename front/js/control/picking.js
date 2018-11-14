@@ -23,21 +23,27 @@ $(document).ready(() => {
   $('#blocked-rule-input').on("keyup", function(e) {
     var key = e.which;
     if (key == 13){
-      var saleNumber = $('#blocked-rule-input').val().trim();
-      //var isSaleNumber = saleNumber.length >= 5 && isNum(saleNumber);
+      var blockNumber = $('#blocked-rule-input').val().trim();
 
-      if (saleNumber.length > 3) {
-        if ($('.blocked-rules-holder').find("[data-sale='" + saleNumber + "']").length > 0){
-          new BlockedPost(saleNumber).call();
+      if (blockNumber.length > 3) {
+        if ($('.blocked-rules-holder').find("[data-sale='" + blockNumber + "']").length > 0){
+          new BlockedPost(blockNumber).call();
         }else{
           new BlockedSelector().onSelect((reason)=>{
-            new BlockedPost(saleNumber, reason).call();
+            new BlockedPost(blockNumber, reason).call();
           }).show();
         }
       }
     }
   });
 
+
+  $('.blocked-reason').each(function(index, item) {
+    var reason = $(this).data('reason');
+    reason = new BlockedSelector().get(reason);
+    $(this).attr('src',reason.icon ? reason.icon : 'img/question-mark.png')
+    .attr('title',reason.label ? reason.label: 'Indefinido');
+  });
 
   $('#user-id').on("keyup", function(e) {
     var key = e.which;
@@ -106,11 +112,11 @@ $(document).ready(() => {
   });
 
   $('.table-sale-blocked-holder').click(function(e){
-    var saleNumber = $(this).data('sale');
+    var blockNumber = $(this).data('blocknumber');
 
     var drop = new MaterialDropdown($(this), e);
     drop.addItem('/img/delete.png', 'Desbloquear', function(){
-      new BlockedPost(saleNumber).call();
+      new BlockedPost(blockNumber).call();
     });
 
     drop.show();

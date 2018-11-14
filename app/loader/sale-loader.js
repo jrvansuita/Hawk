@@ -7,31 +7,35 @@ module.exports= class SaleLoader {
     this.list = [];
   }
 
-  _callbackHit(callback){
-    if (typeof callback === "function"){
-      callback(this.sale);
+  _callbackHit(onCallNext, onCallOuter){
+    if (typeof onCallNext === "function"){
+      onCallNext();
+    }
+
+    if (typeof onCallOuter === "function"){
+      onCallOuter(this.sale);
     }
     this.checkTerminate();
   }
 
-  loadSale(saleNumber, callback){
+  loadSale(saleNumber, onCallOuter){
     EccosysCalls.getSale(saleNumber, (sale)=>{
       this.sale = JSON.parse(sale)[0];
-      callback(sale);
+      onCallOuter(sale);
     });
   }
 
-  loadClient(callback){
+  loadClient(onCallOuter){
 
-    var func = ()=>{
+    var func = (onCallNext)=>{
       if (this.sale.idContato && !this.sale.client){
         EccosysCalls.getClient(this.sale.idContato, (data)=>{
           var client = JSON.parse(data)[0];
           this.sale.client = client;
-          this._callbackHit(callback);
+          this._callbackHit(onCallNext, onCallOuter);
         });
       }else{
-        this._callbackHit(callback);
+        this._callbackHit(onCallNext, onCallOuter);
       }
     };
 
@@ -41,11 +45,11 @@ module.exports= class SaleLoader {
     return this;
   }
 
-  loadItems(callback, ifNotHas){
+  loadItems(onCallOuter, ifNotHas){
 
     var self = this;
 
-    var func = ()=>{
+    var func = (onCallNext)=>{
 
       if((!this.sale.items && ifNotHas) || !ifNotHas){
         EccosysCalls.getSaleItems(this.sale.numeroPedido, (data) => {
@@ -56,11 +60,11 @@ module.exports= class SaleLoader {
             return a + parseFloat(b.quantidade);
           }, 0);
 
-          this._callbackHit(callback);
+          this._callbackHit(onCallNext, onCallOuter);
         });
       }else{
-        this._callbackHit(callback);
-      } 
+        this._callbackHit(onCallNext, onCallOuter);
+      }
     };
 
     this.list.push(func);
@@ -68,10 +72,35 @@ module.exports= class SaleLoader {
     return this;
   }
 
-  callFuncs(){
-    this.list.forEach((func)=>{
-      func();
-    });
+
+  loadProducts(onCallOuter){
+    var func = (onCallNext)=>{
+
+      var index = this.sale.items.length;
+      var products = [];
+
+      this.sale.items.forEach((item)=>{
+        EccosysCalls.getProduct(item.codigo, (product)=>{
+          index--;
+          products.push(product);
+
+          if(index == 0){
+            this._callbackHit(onCallNext, ()=>{
+               onCallOuter(products);
+            });
+          }
+        });
+      });
+    };
+  }
+
+  callFuncs(index){
+    if (index < this.list.length){
+      this.list[index](()=>{
+        index++;
+        this.callFuncs(index);
+      });
+    }
   }
 
   checkTerminate(){
@@ -89,10 +118,10 @@ module.exports= class SaleLoader {
 
     if (typeof this.sale !== 'object'){
       this.loadSale(this.sale, (sale)=>{
-        this.callFuncs();
+        this.callFuncs(0);
       });
     }else{
-      this.callFuncs();
+      this.callFuncs(0);
     }
   }
 
