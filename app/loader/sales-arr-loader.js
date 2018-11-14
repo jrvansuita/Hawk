@@ -5,6 +5,10 @@ module.exports= class SalesArrLoader {
   constructor(saleList){
     this.saleList = saleList;
     this.index = 0;
+
+
+    this.initialLength = saleList.length;
+    this.staticIndex = 0;
   }
 
   loadClient(callback){
@@ -62,9 +66,10 @@ module.exports= class SalesArrLoader {
       }
 
       var currentLength = this.saleList.length;
- 
+
       this.index++;
-      console.log(this.index + '/' + (currentLength));
+      this.staticIndex++;
+      console.log(this.staticIndex + '/' + (this.initialLength));
 
       if (this.index < currentLength) {
         this._load(onFinished);

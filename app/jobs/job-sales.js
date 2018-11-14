@@ -94,7 +94,7 @@ function processSalesPage(list, index, callback) {
         processSalesPage(list, index, callback);
       }
 
-    }); 
+    });
   } else {
     callback();
   }
@@ -109,7 +109,6 @@ function handleSale(pedido) {
     var sale = buildSale(user.id, pedido);
     UsersProvider.store(user);
 
-    console.log(sale);
     sale.upsert();
   }
 }
