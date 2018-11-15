@@ -39,7 +39,7 @@ module.exports = class History extends DataAccess {
     new History(3, userId, title, message, tag).upsert();
   }
 
-  static job(title, message, tag){
-    new History(4, 0, title, message, tag).upsert();
+  static job(title, message, tag, userId){
+    new History(4, userId ? userId : 0, title, message, tag).upsert();
   }
 };

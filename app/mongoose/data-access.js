@@ -1,8 +1,8 @@
 module.exports = class DataAccess {
 
-  raw() {
+  /*raw() {
     console.log(Schema.Raw(this));
-  }
+  }*/
 
   // -- Abstract -- //
 
@@ -125,7 +125,7 @@ module.exports = class DataAccess {
 
 
   static removeAll(query, callback) {
-    this.staticAccess().remove(query, (err) => {
+    this.staticAccess().deleteMany(query, (err) => {
       if (callback)
         callback(err);
     });

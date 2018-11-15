@@ -31,7 +31,6 @@ module.exports = class JobDays extends Controller{
 
 function handleData(sales) {
   sales.forEach((sale) => {
-    console.log(sale);
     var code = Sale.invoiceCode(sale);
     var dayRow = data[code];
 
@@ -62,7 +61,6 @@ function execute(data, index, onFinished) {
 }
 
 function store(dayRow, callback) {
-  console.log(dayRow);
   Day.sync(dayRow, (err, doc) => {
     callback();
   });

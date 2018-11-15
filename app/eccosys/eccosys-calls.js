@@ -26,11 +26,15 @@ module.exports = {
 
   getPickingSales(callback) {
     //Pronto para picking
-    Eccosys.get('pedidos/situacao/3', callback);
+    Eccosys.get('pedidos/situacao/3', (data)=>{
+      callback(checkEccoStatus(data, []));
+    });
   },
 
   getClient(id, callback) {
-    Eccosys.get('clientes/' + id, callback);
+    Eccosys.get('clientes/' + id, (data)=>{
+      callback(checkEccoStatus(data, {}));
+    });
   },
 
   getProduct(skuOrEan, callback) {
@@ -63,3 +67,17 @@ module.exports = {
     });
   }
 };
+
+
+
+
+function checkEccoStatus(data, def){
+  if (data.includes('503 Service Temporarily Unavailable')){
+    if (History){
+      History.error("API Eccosys indisponível no momento.");
+    }
+    return def;
+  }
+
+  return data;
+}

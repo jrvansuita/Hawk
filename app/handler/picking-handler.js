@@ -10,19 +10,21 @@ const SaleLoader = require('../loader/sale-loader.js');
 const History = require('../bean/history.js');
 const TransportLaws = require('../laws/transport-laws.js');
 const UfLaws = require('../laws/uf-laws.js');
+const AutoBlockPicking = require('../auto/auto-block-picking.js');
 
 module.exports = {
 
   init(onFinished) {
+    onFinished = onFinished == undefined ? ()=>{} : onFinished;
 
     if (PickingLaws.isFullEmpty() && !BlockedLaws.hasBlockSales()) {
       PendingLaws.load(true, ()=>{
         BlockedLaws.load(()=>{
-          this.load(onFinished);
+          this.load((onFinished));
         });
       });
     } else {
-      onFinished();
+        onFinished();
     }
   },
 
@@ -36,20 +38,20 @@ module.exports = {
         PickingLaws.handleDevMode();
 
         if (!PickingLaws.isFullEmpty()){
-          
+
           new SalesArrLoader(PickingLaws.getFullList())
-          .loadItems(true)
           .loadClient((sale)=>{
             UfLaws.put(sale.client.uf);
           })
+          .loadItems(true)
           .onFilter((sale)=>{
             return !BlockedLaws.checkAllAndCapture(sale);
           })
           .onEverySaleLoaded((sale)=>{
             TransportLaws.put(sale.transport);
+            //new AutoBlockPicking([sale]).run();
           })
           .run(onFinished);
-
 
         }else{
           onFinished();

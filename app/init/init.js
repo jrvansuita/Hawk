@@ -29,11 +29,12 @@ require('../init/prototypes.js');
 
 
 var jobs = [];
-jobs.push(['job-products.js', '8.30']);
-jobs.push(['job-sales.js', ['11','15', '17']]);
+jobs.push(['job-products.js', '8:30']);
+jobs.push(['job-sales.js', ['11','15','17']]);
+jobs.push(['job-picking.js', '4']);
 
 // -- Run Jobs schedules -- //
 jobs.forEach((r)=>{
   var Clazz = require('../jobs/' + r[0]);
-  new Clazz().schedule(r[1]);
+  new Clazz().schedule(r[0],r[1]);
 });

@@ -10,5 +10,5 @@ if (!process.env.NODE_ENV) {
     throw result.error;
   }
 
-  //console.log(result.parsed);
+
 }

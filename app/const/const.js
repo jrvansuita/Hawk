@@ -16,7 +16,12 @@ module.exports = {
   picking_current_month: 'Picking do mês atual',
   picking_by_date: 'Picking por período',
   none_sale_founded: "Nenhum pedido encontrado",
+  none_sale_founded_asserted: "Nenhum pedido encontrado com essa pesquisa",
   no_transport: 'Retirada',
+
+  picking_update: 'Atualização de Picking',
+  starting_picking_update: 'Iniciando atualização da lista de picking',
+  cant_starting_picking_update: 'Impossível atualizar a lista de picking agora.\n Tentar novamente em {0} horas.',
 
 
   from_to: 'De {0} Até {1}',

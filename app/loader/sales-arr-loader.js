@@ -11,6 +11,11 @@ module.exports= class SalesArrLoader {
     this.staticIndex = 0;
   }
 
+  onLastSaleLoaded(callback){
+    this.onLastSaleLoaded = callback;
+    return this;
+  }
+
   loadClient(callback){
     this.loadClient = callback;
     return this;
@@ -59,7 +64,7 @@ module.exports= class SalesArrLoader {
     }
 
     saleLoader.run((sale)=>{
-      this.saleList[this.index] = sale;   
+      this.saleList[this.index] = sale;
 
       if (this._filter(sale) && this.onEverySaleLoaded){
         this.onEverySaleLoaded(sale, this.index);
@@ -69,7 +74,7 @@ module.exports= class SalesArrLoader {
 
       this.index++;
       this.staticIndex++;
-      console.log(this.staticIndex + '/' + (this.initialLength));
+      console.log(sale.numeroPedido + ' | ' + this.staticIndex + '/' + (this.initialLength));
 
       if (this.index < currentLength) {
         this._load(onFinished);
@@ -79,9 +84,15 @@ module.exports= class SalesArrLoader {
           onFinished();
         }
       }
-      //No Sales to pick
+      //No Sales to pick | Or finished loading sales
       else if (currentLength == this.index){
         onFinished();
+
+        if (this.staticIndex > 0){
+          if (this.onLastSaleLoaded){
+            this.onLastSaleLoaded();
+          }
+        }
       }
     });
   }

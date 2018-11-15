@@ -1,12 +1,8 @@
 require('./app/init/init.js');
 
 
-const SalesLoader = require('./app/loader/sale-loader.js');
+const AutoBlockPicking = require('./app/auto/auto-block-picking.js');
 
-
-new SalesLoader('199500')
-  .loadItems()
-  .loadClient()
-  .run((sale)=>{
-    console.log(sale);
-  });
+var auto = new AutoBlockPicking();
+auto.run();
+ 

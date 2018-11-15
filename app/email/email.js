@@ -46,9 +46,10 @@ module.exports = class Email{
     // send mail with defined transport object
     this.transporter.sendMail(this.mailOptions, (error, info) => {
       try{
-        
+
         if (error) {
           callback(error, null);
+          console.log('Erro ao enviar email');
           return console.log(error);
         }
 
@@ -60,6 +61,7 @@ module.exports = class Email{
         // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
         // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
       }catch(e){
+        console.log('Erro ao confirmar email');
         console.log(e);
         History.error(e);
       }

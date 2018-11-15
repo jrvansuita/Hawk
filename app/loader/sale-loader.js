@@ -1,4 +1,5 @@
 const EccosysCalls = require('../eccosys/eccosys-calls.js');
+const History = require('../bean/history.js');
 
 module.exports= class SaleLoader {
 
@@ -30,7 +31,14 @@ module.exports= class SaleLoader {
     var func = (onCallNext)=>{
       if (this.sale.idContato && !this.sale.client){
         EccosysCalls.getClient(this.sale.idContato, (data)=>{
-          var client = JSON.parse(data)[0];
+          var client;
+
+          try{
+            client = JSON.parse(data)[0];
+          }catch(e){
+            History.error(e, null, 'Erro ao carregar cliente ' + this.sale.idContato + ' do pedido ' + this.sale.numeroPedido);
+          }
+
           this.sale.client = client;
           this._callbackHit(onCallNext, onCallOuter);
         });
@@ -86,12 +94,16 @@ module.exports= class SaleLoader {
 
           if(index == 0){
             this._callbackHit(onCallNext, ()=>{
-               onCallOuter(products);
+              onCallOuter(products);
             });
           }
         });
       });
     };
+
+    this.list.push(func);
+
+    return this;
   }
 
   callFuncs(index){

@@ -69,6 +69,7 @@ module.exports = class PickingRoutes extends Routes{
             pendingSales: PendingLaws.getList(),
             donePickings: DoneLaws.getList(),
             blockedRules: BlockedLaws.rules(),
+            blockedSalesCount: BlockedLaws.list().length,
             printPickingUrl: global.pickingPrintUrl
           });
         }

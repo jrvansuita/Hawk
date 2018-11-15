@@ -35,6 +35,7 @@ function makeRequest(options, postBody, onResponse){
   });
 
   req.on('error', function(e) {
+    console.log('Erro na call eccosys');
     console.log(e);
   });
 
@@ -73,16 +74,4 @@ function generateSignature() {
   }
 
   return signature;
-}
-
-
-function checkEccoStatus(data){
-  if (data.includes('503 Service Temporarily Unavailable')){
-    if (History){
-      History.error("API Eccosys indisponível no momento.");
-    }
-    return '[]';
-  }
-
-  return data;
 }

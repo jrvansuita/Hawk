@@ -501,7 +501,7 @@ tr.row-padding td{
 
 .block-scroll:hover{
   height: -webkit-fill-available;
-  overflow-y: scroll;
+  overflow-y: overlay;
 }
 
 
@@ -553,7 +553,6 @@ tr.row-padding td{
 }
 
 .not-blocking{
-  background-color: #f16d6f !important;
   border-color: #f16d6f !important;
 }
 

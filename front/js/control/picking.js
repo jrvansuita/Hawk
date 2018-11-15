@@ -26,8 +26,15 @@ $(document).ready(() => {
       var blockNumber = $('#blocked-rule-input').val().trim();
 
       if (blockNumber.length > 3) {
-        if ($('.blocked-rules-holder').find("[data-sale='" + blockNumber + "']").length > 0){
-          new BlockedPost(blockNumber).call();
+        if ($('.blocked-rules-holder').find("[data-blocknumber='" + blockNumber + "']").length > 0){
+          $('#blocked-rule-input').val('');
+          var placeHolder = $('#blocked-rule-input').attr('placeholder');
+
+          $('#blocked-rule-input').attr('placeholder','O Código ' + blockNumber + ' já está bloqueado').delay(3000).queue(function(n) {
+            $('#blocked-rule-input').attr('placeholder',placeHolder);
+          });
+
+
         }else{
           new BlockedSelector().onSelect((reason)=>{
             new BlockedPost(blockNumber, reason).call();

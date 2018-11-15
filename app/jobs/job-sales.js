@@ -12,18 +12,31 @@ const jobDays = require('../jobs/job-days.js');
 
 var from;
 var to;
+var count;
 
 module.exports = class JobSales extends Controller{
 
+  setUserId(userId){
+    this.userId = userId;
+    return this;
+  }
+
   run() {
-      var controller = this;
+    count = 0;
+
+    var controller = this;
+
     //Find the last sale row date to set as from date sync
     Sale.getLast(function(err, doc) {
       from = doc ? doc.billingDate : Dat.firstDayOfYear();
       to = new Date();
 
+      storeHistoryBegin(from, to, controller.userId);
+
       handleSalePaging(0, () => {
         clear();
+
+        storeHistoryEnd(from, to, count, controller.userId);
 
         controller.terminate();
 
@@ -31,7 +44,6 @@ module.exports = class JobSales extends Controller{
       });
     });
   }
-
 };
 
 function clear(){
@@ -55,10 +67,7 @@ function handleSalePaging(page, callback) {
       var list = JSON.parse(data);
 
       if (list instanceof Array && list.length > 0) {
-
-        if (page == 0){
-          storeHistory(from, to, list.length);
-        }
+        count += list.length;
 
         processSalesPage(list, -1, () => {
           page++;
@@ -82,7 +91,7 @@ function processSalesPage(list, index, callback) {
     var item = list[index];
 
     Sale.findByKey(item.numeroPedido, function(err, doc) {
-      console.log(item.numeroPedido + ' - ' + (doc ? doc.synced : false));
+      //console.log(item.numeroPedido + ' - ' + (doc ? doc.synced : false));
       //If there isn't a sale stored on local db
       if (!doc) {
         //To to Eccosys and find the sale
@@ -123,10 +132,17 @@ function buildUser(pedido) {
 }
 
 
-function storeHistory(from, to, salesCount){
+function storeHistoryBegin(from, to, userId){
   var msg = 'Iniciando a importação de pedidos faturados de ' + Dat.format(from) + ' até ' + Dat.format(to);
-  msg+="\nSerão importados " + salesCount + " pedidos" ;
 
-  History.job('Importação de Pedidos', msg, 'Eccosys');
+  History.job('Importação de Pedidos Packing', msg, 'Eccosys', userId);
+
+}
+
+function storeHistoryEnd(from, to, salesCount, userId){
+  var msg = 'Finalizado a importação de pedidos faturados de ' + Dat.format(from) + ' até ' + Dat.format(to);
+  msg+= '\nForam importados ' + salesCount + ' pedidos';
+
+  History.job('Importação de Pedidos Packing', msg, 'Eccosys', userId);
 
 }

@@ -1,26 +1,32 @@
-const PickingLaws = require('../laws/picking-laws.js');
 const SaleLoader = require('../loader/sale-loader.js');
 const BlockedLaws = require('../laws/blocked-laws.js');
 const User = require('../bean/user.js');
 
 module.exports= class AutoBlockPicking {
 
-  constructor(){
-    this.sales = PickingLaws.getFullList();
+  constructor(sales){
+    this.sales = sales;
   }
 
-  onProduct(products, index, onTerminate){
+  onCheckStock(products, index, onTerminate){
     if (index < products.length){
       var product = products[index];
 
-console.log('Testou ' + product.codig);
+       index++;
 
-      if (product._Estoque.estoqueDisponivel < 1){
-        ///nao pode bloquead o que já está bloqueado
-        BlockedLaws.toggleBlock(product.codigo, new User(404), '994', ()=>{
-          index++;
-          onProduct(products, index);
-        });
+      if (product._Estoque.estoqueDisponivel < 0){
+        var isBlocked = BlockedLaws.get(product.codigo);
+
+        if (!isBlocked){
+          BlockedLaws.toggleBlock(product.codigo, new User(404, 'Sistema'), '994', ()=>{
+            console.log('Bloqueio ' + product.codigo + ' estoque ' + product._Estoque.estoqueDisponivel);
+            this.onCheckStock(products, index, onTerminate);
+          });
+        }else{
+          this.onCheckStock(products, index, onTerminate);
+        }
+      }else{
+        this.onCheckStock(products, index, onTerminate);
       }
     }else{
       onTerminate();
@@ -28,18 +34,18 @@ console.log('Testou ' + product.codig);
   }
 
   onSale(sales, index){
-    new SaleLoader(this.sales[index]).loadProducts((products)=>{
-      console.log('Carregou os produtos ' + this.sales[index].numeroPedido);
-      onProduct(products, 0, ()=>{
-        index++;
-        onSale(sales, index);
-      });
-    }).run();
-
+    if (index < sales.length){
+      new SaleLoader(this.sales[index]).loadProducts((products)=>{
+        this.onCheckStock(products, 0, ()=>{
+          index++;
+          this.onSale(sales, index);
+        });
+      }).run();
+    }
   }
 
   run(){
-    onSale(this.sales, 0);
+    this.onSale(this.sales, 0);
   }
 
 };

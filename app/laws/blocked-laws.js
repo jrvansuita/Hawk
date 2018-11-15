@@ -11,12 +11,20 @@ global.staticBlockedSales = [];
 
 module.exports = {
 
+  clear(){
+    global.staticBlockedSales = [];
+  },
+
   rules(){
     return global.staticBlockRules;
   },
 
+  list(){
+    return global.staticBlockedSales;
+  },
+
   hasBlockSales(){
-    return global.staticBlockedSales.length > 0;
+    return this.list().length > 0;
   },
 
   checkAllAndCapture(sale, ignoreBlocking){
@@ -42,7 +50,7 @@ module.exports = {
     var isBlocked = this.match(block, sale);
 
     if (isBlocked){
-      if (global.staticBlockedSales.indexOf(sale) === -1)  global.staticBlockedSales.push(sale);
+      if (this.list().indexOf(sale) === -1)  this.list().push(sale);
       block.blocking = true;
     }
 
@@ -68,18 +76,22 @@ module.exports = {
 
   get(blockNumber){
     return this.rules().find((i)=>{
-      return i.number == blockNumber;
+      return i.number.toLowerCase() == blockNumber.toLowerCase();
     });
   },
 
-  store(saleNumber, user, reasonTag, callback){
-    var blockRule = new BlockRule(saleNumber, user, reasonTag);
+  store(blockNumber, user, reasonTag, callback){
+    var blockRule = new BlockRule(blockNumber, user, reasonTag);
     blockRule.upsert(()=>{
       this.rules().push(blockRule);
-      HistoryStorer.blocked(user.id, saleNumber, true);
-      PendingLaws.remove(saleNumber);
+      HistoryStorer.blocked(user.id, blockNumber, true);
+
+      if (blockRule.reasonTag !== '994'){
+        PendingLaws.remove(blockNumber);
+      }
 
       //Remove all sales that matchs the new block
+      //console.log('Vai checar todas as sales que tem ' + blockRule.number);
       PickingLaws.filter((sale)=>{
         return !this.checkAndCapture(blockRule, sale);
       });

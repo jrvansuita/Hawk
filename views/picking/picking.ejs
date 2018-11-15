@@ -185,7 +185,7 @@
                   <div class="blocked-header">
                     <div class="pick-header">
                       <span class="label header-title">Bloqueados</span>
-                      <span class="label header-count inprogress-count"> <%=blockedRules.length%></span>
+                      <span class="label header-count"> <%=blockedSalesCount%></span>
                     </div>
 
                     <input type="text" id="blocked-rule-input" class="simple-material-input" placeholder="Número do pedido" style="width:100%"/>
@@ -198,7 +198,7 @@
                           <td>
                             <%var userName = (blocked.user.name ? blocked.user.name.split(" ")[0] : 'Desconhecido') %>
                             <%var blockingClass = (blocked.blocking ? 'blocking' : 'not-blocking') %>
-                            <img class="circle shadow avatar-img super-mini-avatar <%=blockingClass%>" data-id="<%=blocked.user.id%>" src="<%=blocked.user.avatar%>" title="<%=userName%>" />
+                            <img class="circle shadow avatar-img super-mini-avatar <%=blockingClass%>" data-id="<%=blocked.user.id%>" src="<%=blocked.user.id == 404 ? 'img/system.png' : blocked.user.avatar %>" title="<%=userName%>" />
                             <%if (blocked.reasonTag){%>
                               <img class="circle shadow blocked-reason" data-reason="<%=blocked.reasonTag%>" />
                               <%}%>

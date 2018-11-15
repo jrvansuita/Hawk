@@ -1,6 +1,5 @@
 const TransportLaws = require('../laws/transport-laws.js');
 const UfLaws = require('../laws/uf-laws.js');
-//const BlockedLaws = require('../laws/blocked-laws.js');
 const History = require('../bean/history.js');
 const Err = require('../error/error.js');
 
@@ -13,6 +12,7 @@ module.exports = {
 
   set(list){
     global.staticPickingList = list;
+    global.lastClear = new Date().getTime();
   },
 
   add(sale){
@@ -41,13 +41,24 @@ module.exports = {
     global.staticPickingList = global.staticPickingList.filter(sale => sale.id != inputSale.id);
   },
 
-  next(userId){
+  next(userId, howMuch, onNextSales){
     if (this.getList().length == 0){
       Err.thrw(Const.none_sale_founded, userId);
     }
 
+    var pickingList = getAssertedList();
+
+    if (pickingList.length == 0){
+      Err.thrw(Const.none_sale_founded_asserted, userId);
+    }
+
     //Get the next sale from list
-    var sale = getAssertedList()[0];
+    var sale = pickingList[0];
+
+    /*if (onNextSales && howMuch){
+      onNextSales(pickingList.slice(1, howMuch));
+    }*/
+
     this.remove(sale);
     return sale;
   },
@@ -72,15 +83,21 @@ module.exports = {
     return getAssertedList();
   },
 
-  clear(){
+  clear(userId){
     var now = new Date().getTime();
+    var salesCount = 1000;//this.getFullList().length;
 
-    if ((global.staticPickingList.length <= 50) || (global.lastClear + 3600000) < now){
-      global.lastClear = now;
-      global.staticPickingList = [];
-      History.job('Atualização de Picking', 'Iniciando atualização da lista de picking', 'Eccosys');
+    var minTime =  salesCount * 60000;
+    var nextClear = global.lastClear + minTime;
+
+    if ((salesCount <= 50) || (nextClear < now)){
+      //Limpa a lista de picking
+      this.set([]);
+      //Limpa a lista de pedidos bloqueados
+      global.staticBlockedSales = [];
+      History.job(Const.picking_update, Const.starting_picking_update, 'Eccosys', userId);
     }else{
-      History.job('Atualização de Picking', 'Tentativa de atualização de lista de picking muito frequente.\n Tentar novamente em 1 hora.', 'Eccosys');
+      History.job(Const.picking_update, Const.cant_starting_picking_update.format(Math.trunc((nextClear - now) / (1000 * 60 * 60))), 'Eccosys', userId);
     }
   }
 };
@@ -98,7 +115,7 @@ function getAssertedList(){
 
 
 function checkIsInDevMode(){
-  var maxSalesOnDevMove = 50;
+  var maxSalesOnDevMove = 12;
   //If this Env Var is not defined, it's on development mode
   //Not necessary to load all sales for tests porpouse
   if (!process.env.NODE_ENV){

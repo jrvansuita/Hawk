@@ -40,9 +40,9 @@ module.exports = class Controller {
     global.jobsRunning = false;
   }
 
-  schedule(hours){
+  schedule(jobName, hours){
     _build(hours).forEach((rule) => {
-      console.log('Job agendado para '+ rule.hour + ":" + rule.minute);
+      console.log('Job ' + jobName +' agendado para as '+ rule.hour + (rule.minute > 0 ? ":" + rule.minute : ""));
       schedule.scheduleJob(rule, (fireDate) => {
         this.internalRun();
       });
@@ -55,7 +55,7 @@ function _build(hours) {
   var rules = [];
 
   if (hours != undefined){
-    if (typeof hours != Array){
+    if (!(hours instanceof Array)){
       hours = [hours];
     }
 
@@ -66,11 +66,9 @@ function _build(hours) {
 
       //All week
       //rule.dayOfWeek = new schedule.Range(0, 6);
-
-      var time = parseFloat(hour.toString().replace(',','.')).toString().split('.');
-
+      var time = hour.split(':');
       rule.hour = Num.def(time[0]);
-      rule.minute = Num.def(time[1].length < 2 ? time[1] + '0' : time[1]);
+      rule.minute = Num.def(time[1]);
       rules.push(rule);
     });
   }

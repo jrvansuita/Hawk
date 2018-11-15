@@ -24,6 +24,7 @@ exports.get = (onEnd) => {
   });
 
   req.on('error', function(e) {
+    console.log('Erro ao ler feed xml');
     console.log(e);
   });
 
