@@ -29,9 +29,9 @@ module.exports = {
   },
 
   load(onFinished){
-    EccosysCalls.getPickingSales((data) => {
+    EccosysCalls.getPickingSales((sales) => {
       try{
-        PickingLaws.set(JSON.parse(data));
+        PickingLaws.set(sales);
 
         this.setOffSales();
 
@@ -49,7 +49,7 @@ module.exports = {
           })
           .onEverySaleLoaded((sale)=>{
             TransportLaws.put(sale.transport);
-            //new AutoBlockPicking([sale]).run();
+            new AutoBlockPicking([sale]).run();
           })
           .run(onFinished);
 

@@ -73,6 +73,8 @@ function buildChildSku(product, child){
     $tr.append(col);
   });
 
+  paintLineStock($tr, estoque);
+
   $('.label-val-title').hide();
 
   $tr.click(()=>{
@@ -206,33 +208,51 @@ function loadStockHistory(childSku){
   $('#stock-history').hide();
 
   _get('/product-stock-history', {sku:childSku},(rows)=>{
+
+    var groupArr={};
+
     rows.forEach((i)=>{
-      var obs = '';
+        var id = Dat.format(new Date(i.data)) + (i.es == 'S' ? i.es : '');
 
-      if ((i.es == 'E') && (i.idOrigem + i.obs == '')){
-        obs = 'Estoque Inicial';
-      }else if (i.idOrigem != '' && i.es == 'S' && i.obs == ''){
-        obs = 'Saída por Faturamento';
-      }else{
-        obs = i.obs;
-      }
-
-      var $tr = $('<tr>').append(buildTextCol(Dat.format(new Date(i.data))),
-      buildTextCol(parseInt(i.quantidade)).addClass('stock-val'),
-      buildTextCol(obs));
-
-      if (parseInt(i.quantidade) > 0){
-        $tr.addClass('positive-row');
-      }else{
-        $tr.addClass('negative-row');
-      }
-
-      $('#stock-history').append($tr);
+        if (groupArr[id]){
+          groupArr[id].quantidade += parseInt(i.quantidade);
+        }else{
+          i.quantidade = parseInt(i.quantidade);
+          groupArr[id] = i;
+        }
     });
+
+    loadLayoutLoadHistory(Object.values(groupArr));
 
     $('#stock-history').hide().fadeIn();
     loadSumsStocks();
   });
+}
+
+function loadLayoutLoadHistory(rows){
+  rows.forEach((i)=>{
+    var obs = '';
+
+   if (i.idOrigem != '' && i.es == 'S' && i.obs == ''){
+      obs = 'Saída por Faturamento';
+    }else{
+      obs = i.obs;
+    }
+
+    var $tr = $('<tr>').append(buildTextCol(Dat.format(new Date(i.data))),
+    buildTextCol(parseInt(i.quantidade)).addClass('stock-val'),
+    buildTextCol(obs));
+
+    if (parseInt(i.quantidade) > 0){
+      $tr.addClass('positive-row');
+    }else{
+      $tr.addClass('negative-row');
+    }
+
+    $('#stock-history').append($tr);
+  });
+
+
 }
 
 
@@ -305,5 +325,14 @@ function bindEvents($el, blurOnEnter, clearOnFocus){
         $el.blur();
       }
     });
+  }
+}
+
+
+function paintLineStock(el, stock){
+  if (stock.estoqueReal < 1){
+    $(el).css('background-color', '#ff00003d');
+  }else if (stock.estoqueDisponivel < 1){
+    $(el).css('background-color', '#ffbf004f');
   }
 }

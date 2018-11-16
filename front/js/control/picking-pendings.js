@@ -77,7 +77,7 @@ function buildPendingItemsViews(el, pending){
     if (item.pending){
       var row = $('<tr>').addClass('row-padding closable hover-pending-item');
 
-      row.append($('<td>').attr('colspan','2').append(buildProductFirstCol(item, false)));
+      row.append($('<td>').attr('colspan','2').append(buildProductFirstCol(item, false, pending)));
       row.append($('<td>').append(buildProductSecondCol(item, false)));
       row.append($('<td>').addClass('right-align').append(buildProductThirdCol(item)));
 
@@ -224,32 +224,27 @@ function getPreviewProduct(){
   return previewProduct;
 }
 
-function buildProductFirstCol(item, slim){
-  var desc = item.descricao.split('-')[0];
-  var b = item.descricao.split('-');
-  var brand = b.length >=2 ? b[1].trim() : "";
+function buildProductFirstCol(item, slim, pending){
 
-  if (brand.length > 10){
-    brand = brand.split(' ')[0];
-  }
-
-  desc = desc.trim().split(' ');
-
-  if (desc.length >= 3){
-    if (slim){
-      desc = desc[0] +  ' ' + desc[desc.length-1];
-    }else{
-      desc.splice(5,desc.length -5);
-      desc = desc.join(' ');
-    }
-  }
 
   var first = $('<div>').addClass('vertical-content');
 
   var div = $('<div>').addClass('nobreak');
-  var sku = $('<label>')
-  .addClass('pick-value sku copiable')
+
+  var sku;
+  var isSwapableSku = !slim && pending.status == 1;
+
+  if (isSwapableSku){
+    sku = $('<input>');
+  }else{
+    sku = $('<label>');
+  }
+
+  sku.addClass('pick-value sku ' + (isSwapableSku ? 'sku-input' : 'copiable' ))
+  .val(item.codigo)
   .text(item.codigo)
+  .attr('data-sku', item.codigo)
+  .attr('placeholder', item.codigo)
   .dblclick(()=>{
     window.open(
       '/stock?sku=' + item.codigo,
@@ -257,32 +252,63 @@ function buildProductFirstCol(item, slim){
     );
   });
 
-  first.hover(function() {
-    _get('/product-image', {sku: item.codigo },(product)=>{
-      getPreviewProduct().onElement(first).show(product.image);
-    });
-  },
-  function() {
-    getPreviewProduct().onElement(first).remove();
-  });
+
 
   sku.click(function(e){
     Util.selectContent(this);
     Util.copySeleted();
+    $(this).select();
     e.stopPropagation();
   });
 
+  var gtin = $('<span>').addClass('pick-value right').text(slim ? item.gtin.slice(9, item.gtin.length) : item.gtin);
+
   div.append(sku);
-  div.append($('<span>').addClass('pick-value right').text(slim ? item.gtin.slice(9, item.gtin.length) : item.gtin));
+  div.append(gtin);
   first.append(div);
 
 
   div = $('<div>').addClass('nobreak');
-  var descHolder = $('<label>').addClass('pick-value desc no-wrap').text(desc);
+  var descHolder = $('<label>').addClass('pick-value desc no-wrap').text(getProductName(item.descricao, slim));
   div.append(descHolder);
-  div.append($('<span>').addClass('pick-value right').text(brand));
+  div.append($('<span>').addClass('pick-value right').text(getProductBrand(item.descricao)));
 
   first.append(div);
+
+
+  if (isSwapableSku){
+    sku.on("keyup", function(e) {
+      var key = e.which;
+      if (key == 13){
+        var productDesc = descHolder.text();
+        descHolder.text('Carregando...');
+        gtin.text('');
+        handlSwapProductSale(pending.number, $(this).data('sku'), $(this).val(), (swapProduct)=>{
+          if (swapProduct.error){
+            descHolder.text(swapProduct.error.slice(0,40) + '...').addClass("error").delay(3000).queue(function(next){
+              $(this).removeClass("error");
+              descHolder.text(productDesc);
+              next();
+            });
+          }else{
+            descHolder.text(getProductName(swapProduct.nome, slim));
+            gtin.text(swapProduct.gtin);
+          }
+        });
+      }
+    });
+  }else{
+    sku.hover(function() {
+      _get('/product-image', {sku: item.codigo },(product)=>{
+        getPreviewProduct().onElement(first).show(product.image);
+      });
+    },
+    function() {
+      getPreviewProduct().onElement(first).remove();
+    });
+  }
+
+
 
   return first;
 }
@@ -466,4 +492,48 @@ function getPendingLocal(pending){
   }else{
     return "";
   }
+}
+
+
+function getProductBrand(name){
+  var brand = name.split('-');
+  brand = brand.length >=2 ? brand[1].trim() : "";
+
+  if (brand.length > 10){
+    brand = brand.split(' ')[0];
+  }
+
+  return brand;
+}
+
+function getProductName(name, slim){
+  var desc = name.split('-')[0];
+
+  if (slim){
+    desc = desc.trim().split(' ');
+    if (desc.length >= 3){
+      desc = desc[0] +  ' ' + desc[desc.length-1];
+    }
+  }
+  return desc;
+}
+
+
+
+function handlSwapProductSale(saleNumber, targerSku, swapSku, callback){
+  _get('/product-child', {sku: swapSku },(product)=>{
+    if (product.error){
+      callback(product);
+    }else{
+      _post('/pending-swap-items',
+      { saleNumber: saleNumber,
+        targetSku: targerSku,
+        swapSku: swapSku,
+      },(error)=>{
+        product.error = error;
+        callback(product);
+      });
+    }
+  });
+
 }

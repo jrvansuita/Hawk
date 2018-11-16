@@ -21,6 +21,10 @@ exports.post = (path, body, onResponse) => {
   makeRequest(getOptions(path, 'POST', true), body, onResponse);
 };
 
+exports.delete = (path, onResponse) => {
+  makeRequest(getOptions(path, 'DELETE', true), null, onResponse);
+};
+
 function makeRequest(options, postBody, onResponse){
   var responseBody = '';
 

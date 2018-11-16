@@ -42,7 +42,7 @@ module.exports = class Controller {
 
   schedule(jobName, hours){
     _build(hours).forEach((rule) => {
-      console.log('Job ' + jobName +' agendado para as '+ rule.hour + (rule.minute > 0 ? ":" + rule.minute : ""));
+      //console.log('Job ' + jobName +' agendado para as '+ rule.hour + (rule.minute > 0 ? ":" + rule.minute : ""));
       schedule.scheduleJob(rule, (fireDate) => {
         this.internalRun();
       });

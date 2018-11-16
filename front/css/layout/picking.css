@@ -578,3 +578,25 @@ tr.row-padding td{
   border-radius: 4px;
   background-color: #f3f3f3;
 }
+
+.sku-input{
+  cursor: default;
+  border-radius: 5px;
+  outline: none;
+  height: 26px;
+  background-color: transparent;
+  border-style: none none none none;
+}
+
+.sku-input:hover {
+  border-radius: 0px;
+  border: 2px #77717161;
+  border-style: none none solid none;
+}
+
+
+.sku-input:focus {
+  border-radius: 0px;
+  border: 2px #1c796b;
+  border-style: none none solid none;
+}

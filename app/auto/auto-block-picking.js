@@ -12,7 +12,7 @@ module.exports= class AutoBlockPicking {
     if (index < products.length){
       var product = products[index];
 
-       index++;
+      index++;
 
       if (product._Estoque.estoqueDisponivel < 0){
         var isBlocked = BlockedLaws.get(product.codigo);
@@ -45,7 +45,9 @@ module.exports= class AutoBlockPicking {
   }
 
   run(){
-    this.onSale(this.sales, 0);
+    if (process.env.NODE_ENV){
+      this.onSale(this.sales, 0);
+    }
   }
 
 };

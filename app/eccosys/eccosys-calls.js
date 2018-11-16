@@ -16,30 +16,34 @@ module.exports = {
   },
 
   getSale(number, callback) {
-    Eccosys.get('pedidos/' + number, callback);
+    Eccosys.get('pedidos/' + number, (data)=>{
+      callback(JSON.parse(checkNoSale(data, '{}'))[0]);
+    });
   },
 
   getSaleItems(number, callback) {
-    Eccosys.get('pedidos/' + number + '/items', callback);
+    Eccosys.get('pedidos/' + number + '/items', (data)=>{
+      callback(JSON.parse(checkNoSale(data, '[]')));
+    });
   },
 
 
   getPickingSales(callback) {
     //Pronto para picking
     Eccosys.get('pedidos/situacao/3', (data)=>{
-      callback(checkEccoStatus(data, []));
+      callback(JSON.parse(checkEccoStatus(data, '[]')));
     });
   },
 
   getClient(id, callback) {
     Eccosys.get('clientes/' + id, (data)=>{
-      callback(checkEccoStatus(data, {}));
+      callback(JSON.parse(checkNoSale(data, '{}'))[0]);
     });
   },
 
   getProduct(skuOrEan, callback) {
     Eccosys.get('produtos/' + (Num.isEan(skuOrEan) ? 'gtin=' + skuOrEan : skuOrEan), (data)=>{
-      var parsed = JSON.parse(data);
+      var parsed = JSON.parse(checkEccoStatus(data, '{}'));
 
       if (typeof parsed == 'string'){
         callback({error : parsed});
@@ -65,6 +69,23 @@ module.exports = {
     Eccosys.post('estoques/' + sku, body, (res)=>{
       callback(JSON.parse(res));
     });
+  },
+
+  removeSaleItems(saleNumber, callback){
+    Eccosys.delete('pedidos/' + saleNumber + '/items', (res)=>{
+      if (callback){
+        callback(res);
+      }
+    });
+  },
+
+
+  insertSaleItems(saleNumber, items, callback){
+    Eccosys.post('pedidos/' + saleNumber + '/items', items, (res)=>{
+      if (callback){
+        callback(res);
+      }
+    });
   }
 };
 
@@ -80,4 +101,14 @@ function checkEccoStatus(data, def){
   }
 
   return data;
+}
+
+
+
+function checkNoSale(data, def){
+  if (data.includes('Nenhum pedido ou item encontrado')){
+    return def;
+  }
+
+  return checkEccoStatus(data, def);
 }

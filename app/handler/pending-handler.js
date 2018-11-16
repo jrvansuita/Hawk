@@ -43,7 +43,7 @@ module.exports = {
         callback();
       });
     }
-  } 
+  }
 
 };
 
@@ -57,8 +57,7 @@ function sendEmailIfNeed(pending, user,  callback){
       sendEmail(sale, user, callback);
 
     }else{
-      EccosysCalls.getClient(sale.idContato, (data)=>{
-        var client = JSON.parse(data)[0];
+      EccosysCalls.getClient(sale.idContato, (client)=>{
         sale.client = client;
         sendEmail(sale, user, callback);
       });

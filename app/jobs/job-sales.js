@@ -5,6 +5,7 @@ var UsersProvider = require('../provider/UsersProvider.js');
 var Sale = require('../bean/sale.js');
 var User = require('../bean/user.js');
 const History = require('../bean/history.js');
+const SaleLoader = require('../loader/sale-loader.js');
 
 //Este job é usado para contabilizar os pedidos faturados.
 //Deve ser extinto assim que implementado o faturamento por dentro do hawk.
@@ -62,10 +63,8 @@ function clear(){
 }
 
 function handleSalePaging(page, callback) {
-  EccosysCalls.getSales(from, to, page, function(data) {
+  EccosysCalls.getSales(from, to, page, function(list) {
     try{
-      var list = JSON.parse(data);
-
       if (list instanceof Array && list.length > 0) {
         count += list.length;
 
@@ -94,8 +93,8 @@ function processSalesPage(list, index, callback) {
       //console.log(item.numeroPedido + ' - ' + (doc ? doc.synced : false));
       //If there isn't a sale stored on local db
       if (!doc) {
-        //To to Eccosys and find the sale
-        EccosysCalls.getSale(item.numeroPedido, function(pedido) {
+        //Go to Eccosys and find the sale
+        new SaleLoader(item.numeroPedido).run(function(pedido) {
           handleSale(pedido);
           processSalesPage(list, index, callback);
         });
@@ -110,8 +109,6 @@ function processSalesPage(list, index, callback) {
 }
 
 function handleSale(pedido) {
-  pedido = JSON.parse(pedido)[0];
-
   var user = buildUser(pedido);
 
   if (user) {

@@ -4,6 +4,7 @@ $(document).ready(() => {
   $(".print-progress").click(function(e) {
     //do something
     e.stopPropagation();
+    $( "#user-id" ).focus();
   });
 
 
@@ -100,6 +101,7 @@ $(document).ready(() => {
     var saleNumber = $(this).data('sale').split('-')[1];
     var sale = getInProgressSale(saleNumber);
     loadSale(sale);
+    $( "#user-id" ).focus();
   });
 
 
@@ -108,7 +110,7 @@ $(document).ready(() => {
 
       _post("/start-pending", {
         pendingSale: selectedPendingSale,
-        local: $('#pending-local').val()
+        local: $('#pending-local').val()  
       },
       null,
       (error)=>{

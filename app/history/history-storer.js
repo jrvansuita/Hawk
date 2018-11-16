@@ -58,6 +58,13 @@ module.exports={
 
       History.notify(userId, title, message, 'Pendência');
     });
+  },
+
+  swapItems(saleNumber, targetSku, swapSku, userId){
+    onTry(()=>{
+      var message = 'Foi realizada a troca do produto ' + targetSku + ' pelo produto ' + swapSku + ' no pedido ' + saleNumber;
+      History.notify(userId, 'Troca de Produto' , message, 'Pendência');
+    });
   }
 
 };

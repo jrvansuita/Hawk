@@ -168,7 +168,7 @@
 }
 
 #child-skus-holder{
-  width: 100%;
+  width: 101%;
   height: auto;
 }
 
@@ -342,7 +342,9 @@ tr.selected td{
 .bottom-box:first-of-type{
   margin-right: 15px;
 }
-
+#stock-history{
+  width: 101%;
+}
 
 #stock-history tr td{
   border-bottom: 0;

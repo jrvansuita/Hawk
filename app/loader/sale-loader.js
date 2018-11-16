@@ -21,7 +21,7 @@ module.exports= class SaleLoader {
 
   loadSale(saleNumber, onCallOuter){
     EccosysCalls.getSale(saleNumber, (sale)=>{
-      this.sale = JSON.parse(sale)[0];
+      this.sale = sale;
       onCallOuter(sale);
     });
   }
@@ -30,12 +30,9 @@ module.exports= class SaleLoader {
 
     var func = (onCallNext)=>{
       if (this.sale.idContato && !this.sale.client){
-        EccosysCalls.getClient(this.sale.idContato, (data)=>{
-          var client;
+        EccosysCalls.getClient(this.sale.idContato, (client)=>{
 
-          try{
-            client = JSON.parse(data)[0];
-          }catch(e){
+          if (Object.keys(client).length === 0){
             History.error(e, null, 'Erro ao carregar cliente ' + this.sale.idContato + ' do pedido ' + this.sale.numeroPedido);
           }
 
@@ -60,13 +57,15 @@ module.exports= class SaleLoader {
     var func = (onCallNext)=>{
 
       if((!this.sale.items && ifNotHas) || !ifNotHas){
-        EccosysCalls.getSaleItems(this.sale.numeroPedido, (data) => {
-          var items = JSON.parse(data);
+        EccosysCalls.getSaleItems(this.sale.numeroPedido, (items) => {
           this.sale.transport = Util.twoNames(this.sale.transportador, Const.no_transport);
           this.sale.items = items;
-          this.sale.itemsQuantity = items.reduce(function(a, b) {
-            return a + parseFloat(b.quantidade);
-          }, 0);
+
+          if (items.length > 0){
+            this.sale.itemsQuantity = items.reduce(function(a, b) {
+              return a + parseFloat(b.quantidade);
+            }, 0);
+          }
 
           this._callbackHit(onCallNext, onCallOuter);
         });
@@ -130,7 +129,13 @@ module.exports= class SaleLoader {
 
     if (typeof this.sale !== 'object'){
       this.loadSale(this.sale, (sale)=>{
-        this.callFuncs(0);
+        if (this.list.length != 0){
+          this.callFuncs(0);
+        }else{
+          if (onFinished){
+            onFinished();
+          }
+        }
       });
     }else{
       this.callFuncs(0);

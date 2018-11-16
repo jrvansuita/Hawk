@@ -46,7 +46,7 @@ module.exports = {
     var begin = new Date();
 
     if (!doNotCount){
-      begin.setSeconds(begin.getSeconds() + 10);
+      begin.setSeconds(begin.getSeconds() + 3);
     }
 
     sale.begin = begin;

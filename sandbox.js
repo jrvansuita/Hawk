@@ -1,8 +1,6 @@
 require('./app/init/init.js');
 
 
-const AutoBlockPicking = require('./app/auto/auto-block-picking.js');
+const SaleItemSwapper = require('./app/swap/sale-item-swapper.js');
 
-var auto = new AutoBlockPicking();
-auto.run();
- 
+new SaleItemSwapper('100197', 404).on('PS88az-2').to('cb008am-rn').go();
