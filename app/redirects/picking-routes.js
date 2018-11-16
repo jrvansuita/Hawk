@@ -53,6 +53,8 @@ module.exports = class PickingRoutes extends Routes{
       PickingHandler.init(() => {
 
         var pickingSales = PickingHandler.getPickingSales();
+        console.log('aqui');
+        console.log(pickingSales.length);
 
         if (!res.headersSent){
           res.render('picking/picking', {
