@@ -59,7 +59,7 @@ module.exports = {
 
   match(block, sale){
     if (block.reasonTag.toString() == '994'){
-      return !sale.items || sale.items.some((item)=>{
+      return sale.items && sale.items.some((item)=>{
         return item.codigo.toLowerCase().indexOf(block.number.toLowerCase()) > -1;
       });
     }else{

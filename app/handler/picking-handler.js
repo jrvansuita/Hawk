@@ -15,12 +15,10 @@ const AutoBlockPicking = require('../auto/auto-block-picking.js');
 module.exports = {
 
   init(onFinished) {
-    onFinished = onFinished == undefined ? ()=>{} : onFinished;
-
     if (PickingLaws.isFullEmpty() && !BlockedLaws.hasBlockSales()) {
       PendingLaws.load(true, ()=>{
         BlockedLaws.load(()=>{
-          this.load((onFinished));
+          this.load(onFinished);
         });
       });
     } else {
@@ -49,7 +47,7 @@ module.exports = {
           })
           .onEverySaleLoaded((sale)=>{
             TransportLaws.put(sale.transport);
-          //  new AutoBlockPicking([sale]).run();
+            new AutoBlockPicking([sale]).run();
           })
           .run(onFinished);
 
