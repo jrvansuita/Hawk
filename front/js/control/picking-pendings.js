@@ -482,7 +482,7 @@ function updatePendingSales(pending){
 }
 
 function isBlocked(pending){
-  return pending.status == 0 && Dat.hoursDif(pending.updateDate, new Date()) <= 1;
+  return false; //pending.status == 0 && Dat.hoursDif(pending.updateDate, new Date()) <= 1;
 }
 
 
