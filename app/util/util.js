@@ -22,6 +22,10 @@ var Util = {
     return arrItem ? arrItem.getBars() : [];
   },
 
+  clone(object){
+    return JSON.parse(JSON.stringify(object));
+  },
+
   findUserInListByName(name, list){
     var arr = Object.keys(list);
     for(var i = 0; i <arr.length; i++){

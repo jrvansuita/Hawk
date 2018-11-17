@@ -133,7 +133,7 @@ module.exports= class SaleLoader {
           this.callFuncs(0);
         }else{
           if (onFinished){
-            onFinished();
+            onFinished(sale);
           }
         }
       });

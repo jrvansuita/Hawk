@@ -60,10 +60,9 @@ module.exports={
     });
   },
 
-  swapItems(saleNumber, targetSku, swapSku, userId){
+  swapItems(saleNumber, targetSku, swapSku, quantity,  userId){
     onTry(()=>{
-      var message = 'Foi realizada a troca do produto ' + targetSku + ' pelo produto ' + swapSku + ' no pedido ' + saleNumber;
-      History.notify(userId, 'Troca de Produto' , message, 'Pendência');
+      History.notify(userId, 'Troca de Produto' , Const.swaped_items.format(quantity, targetSku, swapSku, saleNumber), 'Pendência');
     });
   }
 

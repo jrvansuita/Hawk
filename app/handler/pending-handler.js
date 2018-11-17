@@ -13,6 +13,19 @@ module.exports = {
     PendingLaws.load(clear, callback);
   },
 
+  updateItem(saleNumber, targetSku, swapItem, callback){
+    var pending  = PendingLaws.find(saleNumber);
+
+    pending.sale.items.forEach((item, index, arr)=>{
+      if (item.codigo.toLowerCase() == targetSku.toLowerCase()){
+        arr[index] = swapItem;
+        arr[index].changed = true;
+      }
+    });
+
+    PendingLaws.update(pending, callback);
+  },  
+
   store(sale, local,user, callback){
     PendingLaws.store(sale, local, user, ()=>{
       PickingLaws.remove(sale);

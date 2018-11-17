@@ -522,10 +522,7 @@ tr.row-padding td{
   margin-top: 8px;
   cursor: pointer;
   height: fit-content;
-}
-
-.table-sale-blocked-holder:nth-child(even) {
-  margin-left: 8px;
+  margin-right: 8px;
 }
 
 .super-mini-avatar{
@@ -574,7 +571,7 @@ tr.row-padding td{
   padding-right: 10px;
 }
 
-.row-padding:hover{
+.row-padding:hover {
   border-radius: 4px;
   background-color: #f3f3f3;
 }
@@ -599,4 +596,16 @@ tr.row-padding td{
   border-radius: 0px;
   border: 2px #1c796b;
   border-style: none none solid none;
+}
+
+
+.changed-label{
+  border-radius: 2px;
+  background-color: #20c361d1;
+  color: white;
+  padding: 3px 3px;
+  display: -webkit-inline-box;
+  font-size: 8px;
+  margin-left: 5px;
+  margin-right: 5px;
 }

@@ -15,7 +15,6 @@ class ImagePreview{
 
       setTimeout(()=>{
         if (!cancel){
-          console.log(cancel);
           runnable(_self.element, src);
         }
       }, 100);
@@ -58,4 +57,9 @@ function runnable(element, src) {
 
   $('.image-preview').remove();
   $('body').append($img);
+
+  setTimeout(()=>{
+      $('.image-preview').remove();
+  },
+  2000);
 }

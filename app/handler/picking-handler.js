@@ -47,7 +47,7 @@ module.exports = {
           })
           .onEverySaleLoaded((sale)=>{
             TransportLaws.put(sale.transport);
-            new AutoBlockPicking([sale]).run();
+            //new AutoBlockPicking([sale]).run();
           })
           .run(onFinished);
 

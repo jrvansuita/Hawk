@@ -12,7 +12,9 @@ module.exports = {
     query.addDate('toDate', to);
     query.add('count', page_count);
     query.add('offset', page_count * page);
-    Eccosys.get('pedidos' + query.build(), callback);
+    Eccosys.get('pedidos' + query.build(), (data)=>{
+      callback(JSON.parse(checkNoSale(data, '[]')));
+    });
   },
 
   getSale(number, callback) {
@@ -68,6 +70,12 @@ module.exports = {
   updateProductStock(sku, body, callback) {
     Eccosys.post('estoques/' + sku, body, (res)=>{
       callback(JSON.parse(res));
+    });
+  },
+
+  updateSale(body, callback) {
+    Eccosys.put('pedidos', body, (res)=>{
+      callback(res);
     });
   },
 

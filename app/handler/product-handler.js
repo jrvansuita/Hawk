@@ -55,7 +55,7 @@ module.exports ={
       var body = {
         codigo: product.codigo,
         localizacao: newLocal,
-        obs : product.obs +  "\n" + user.name + ": Localização -> " + newLocal + " em " + Dat.format(new Date())
+        obs : product.obs +  "\n[" + user.name + "] Nova Localização:  " + newLocal + " em " + Dat.format(new Date())
       };
 
 

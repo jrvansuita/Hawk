@@ -13,7 +13,7 @@ $(document).ready(() => {
       var diftime = parseInt($(item).attr("diftime"));
       diftime+= 1000;
 
-      if (diftime > 0){
+      if (diftime > 0){ 
         $(item).text((diftime/1000).toString().toMMSS());
       }
 
@@ -110,7 +110,7 @@ $(document).ready(() => {
 
       _post("/start-pending", {
         pendingSale: selectedPendingSale,
-        local: $('#pending-local').val()  
+        local: $('#pending-local').val()
       },
       null,
       (error)=>{

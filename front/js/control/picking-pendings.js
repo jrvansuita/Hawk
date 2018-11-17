@@ -12,23 +12,34 @@ $(document).ready(() => {
     $(this).closest('.pending-box').find('.pending-count').text(selecteds == 0 ?  count : selecteds + '/' + count);
   });
 
+  //Era para abrir o pedido clicando duas vezes no numero dele na pendencia,
+  //mais o printPickingUrl não existe na tela de pendencias e fica muito ruim a impressão
+  //Para o pessoal do atendimento
+  /*  $('.pending-sale-number').dblclick(function(){
+  var saleId = $(this).data('saleid');
+  window.open(
+  printPickingUrl + saleId,
+  '_blank' // <- This is what makes it open in a new window.
+);
+});
+*/
 
-  $('.label-for-avatar').click(function(e){
-    e.stopPropagation();
+$('.label-for-avatar').click(function(e){
+  e.stopPropagation();
+});
+
+$('.pending-item').click(function(e){
+  var saleNumber = $(this).data('sale').split('-')[1];
+  loadPendingSaleItems($(this), getPendingSale(saleNumber));
+  e.stopPropagation();
+});
+
+if (isWideOpen() && ($('.pending-item.not-solved').length > 0)){
+  var $icon = $('<img>').addClass('small-icon-button').attr('title','Enviar todos os emails!').css('position','absolute').css('margin-top','-5px').attr('src', '/img/send-mass-email.png').click(()=>{
+    doallSolvingPendingSale($icon);
   });
-
-  $('.pending-item').click(function(e){
-    var saleNumber = $(this).data('sale').split('-')[1];
-    loadPendingSaleItems($(this), getPendingSale(saleNumber));
-    e.stopPropagation();
-  });
-
-  if (isWideOpen() && ($('.pending-item.not-solved').length > 0)){
-    var $icon = $('<img>').addClass('small-icon-button').attr('title','Enviar todos os emails!').css('position','absolute').css('margin-top','-5px').attr('src', '/img/send-mass-email.png').click(()=>{
-      doallSolvingPendingSale($icon);
-    });
-    $('.pending-box.red-top>.pick-header>.header-title').after($icon);
-  }
+  $('.pending-box.red-top>.pick-header>.header-title').after($icon);
+}
 });
 
 
@@ -66,15 +77,15 @@ function hidePedingItemModal(){
 
 function buildPendingItemsViews(el, pending){
   var table = el.find('table');
-  var row = $('<tr>').addClass('row-padding dotted-line closable');
+  var row = $('<tr>').addClass('dotted-line closable');
 
-  row.append($('<td>').attr('colspan','2').append($('<span>').addClass('pick-value').append('Produto')));
+  row.append($('<td>').attr('colspan','2').append($('<span>').addClass('pick-value').append('Produto').css('padding-top','20px')));
   row.append($('<td>').append($('<span>').addClass('pick-value center').append('Quant.')));
   row.append($('<td>').append($('<span>').addClass('pick-value').css('float', 'right').append('Preço')));
   table.append(row);
 
   pending.sale.items.forEach(function(item){
-    if (item.pending){
+    if (item.pending || item.changed){
       var row = $('<tr>').addClass('row-padding closable hover-pending-item');
 
       row.append($('<td>').attr('colspan','2').append(buildProductFirstCol(item, false, pending)));
@@ -86,6 +97,7 @@ function buildPendingItemsViews(el, pending){
   });
 
   table.find('tr').last().addClass('dotted-line');
+
 
   var last = $('<tr>').addClass('closable');
 
@@ -261,9 +273,18 @@ function buildProductFirstCol(item, slim, pending){
     e.stopPropagation();
   });
 
-  var gtin = $('<span>').addClass('pick-value right').text(slim ? item.gtin.slice(9, item.gtin.length) : item.gtin);
 
-  div.append(sku);
+  var gtinStr = slim ? item.gtin.slice(9, item.gtin.length) : item.gtin;
+
+  var gtin = $('<span>').addClass('pick-value right').text(gtinStr);
+
+
+  if (item.changed){
+    gtin.prepend($('<label>').addClass('changed-label').text('Trocado'));
+  }
+
+
+  div.append(sku); 
   div.append(gtin);
   first.append(div);
 
@@ -283,17 +304,16 @@ function buildProductFirstCol(item, slim, pending){
         var productDesc = descHolder.text();
         descHolder.text('Carregando...');
         gtin.text('');
-        handlSwapProductSale(pending.number, $(this).data('sku'), $(this).val(), (swapProduct)=>{
-          if (swapProduct.error){
-            descHolder.text(swapProduct.error.slice(0,40) + '...').addClass("error").delay(3000).queue(function(next){
-              $(this).removeClass("error");
-              descHolder.text(productDesc);
-              next();
-            });
-          }else{
-            descHolder.text(getProductName(swapProduct.nome, slim));
-            gtin.text(swapProduct.gtin);
-          }
+        handlSwapProductSale(pending.number, item.codigo, $(this).val(), parseInt(item.quantidade), (swapProduct)=>{
+          descHolder.text(getProductName(swapProduct.nome, slim));
+          gtin.text(swapProduct.gtin);
+          sku.val(swapProduct.codigo);
+        },(error)=>{
+          descHolder.text(error.slice(0,40) + '...').addClass("error").delay(3000).queue(function(next){
+            $(this).removeClass("error");
+            descHolder.text(productDesc);
+            next();
+          });
         });
       }
     });
@@ -482,7 +502,7 @@ function updatePendingSales(pending){
 }
 
 function isBlocked(pending){
-  return false; //pending.status == 0 && Dat.hoursDif(pending.updateDate, new Date()) <= 1;
+  return pending.status == 0 && Dat.hoursDif(pending.updateDate, new Date()) <= 1;
 }
 
 
@@ -520,18 +540,24 @@ function getProductName(name, slim){
 
 
 
-function handlSwapProductSale(saleNumber, targerSku, swapSku, callback){
+function handlSwapProductSale(saleNumber, targerSku, swapSku, quantity, onSucess, onError ){
   _get('/product-child', {sku: swapSku },(product)=>{
     if (product.error){
-      callback(product);
+      onError(product.error);
     }else{
       _post('/pending-swap-items',
       { saleNumber: saleNumber,
         targetSku: targerSku,
         swapSku: swapSku,
-      },(error)=>{
-        product.error = error;
-        callback(product);
+        quantity: parseInt(quantity),
+      },(sucess)=>{
+        if (sucess && onSucess){
+          onSucess(product);
+        }
+      },(e)=>{
+        if (onError){
+          onError(e.responseText);
+        }
       });
     }
   });
