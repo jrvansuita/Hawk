@@ -27,15 +27,15 @@ module.exports = class PendingRoutes extends Routes{
       });
 
       this._post('/pending-swap-items', (req, res, body, locals) => {
-        if (locals.loggedUser.full){
+        //if (locals.loggedUser.full){
           new SaleItemSwapper(body.saleNumber, locals.loggedUser.id)
           .on(body.targetSku)
           .to(body.swapSku)
           .with(body.quantity)
           .go(this._resp().redirect(res));
-        }else{
-          this._resp().error(res, 'Você não tem permissão para função');
-        }
+        //}else{
+//          this._resp().error(res, 'Você não tem permissão para função');
+  //      }
       });
 
     }

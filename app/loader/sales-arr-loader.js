@@ -74,7 +74,7 @@ module.exports= class SalesArrLoader {
 
       this.index++;
       this.staticIndex++;
-      console.log(sale.numeroPedido + ' | ' + this.staticIndex + '/' + (this.initialLength));
+      console.log(sale.numeroPedido + ' - ' + sale.data + ' | ' + this.staticIndex + '/' + (this.initialLength));
 
       if (this.index < currentLength) {
         this._load(onFinished);
