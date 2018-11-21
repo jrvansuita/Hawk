@@ -1,65 +1,81 @@
 class ImagePreview{
-  constructor(){
-  }
-
-  onElement(element){
+  constructor(element){
     this.element = element;
-    return this;
   }
 
-  show(src){
-    cancel = false;
+  hover(over, leave){
 
-    if (src && this.element){
-      var _self = this;
+    this.element.mouseenter(()=> {
+      cancel = false;
+      if (over){
+        over(this);
+      }
+    }).mouseleave(
+      ()=>{
+        cancel = true;
 
-      setTimeout(()=>{
-        if (!cancel){
-          runnable(_self.element, src);
+        if (leave){ 
+          leave(this);
+        }else{
+          this.remove();
         }
-      }, 100);
-    }
-  }
-
-  remove(){
-    cancel = true;
-
-    if ($(this).is(":visible")){
-      $('.image-preview').fadeOut(200, function() {
-        $(this).remove();
       });
-    }else{
-      $('.image-preview').remove();
+
+
+      return this;
     }
 
+    show(src){
+      if (src && this.element){
+        var _self = this;
+
+        setTimeout(()=>{
+          if (!cancel){
+            runnable(_self.element, src);
+          }
+        }, 500);
+      }
+    }
+
+    remove(){
+      if ($(this).is(":visible")){
+        $('.image-preview').fadeOut(200, function() {
+          $(this).remove();
+        });
+      }else{
+        $('.image-preview').remove();
+      }
+
+    }
   }
-}
 
 
-var cancel = false;
+  var cancel = false;
 
 
-function runnable(element, src) {
-  var offset = $(element).offset();
+  function runnable(element, src) {
+    var offset = $(element).offset();
 
-  offset.left += 150;
-  var minTop = 60;
-  var maxTop = 340;
-  offset.top = (offset.top - minTop) < minTop ? minTop : offset.top - minTop;
-  offset.top = offset.top > maxTop ? maxTop : offset.top;
+    offset.left += 150;
+    var minTop = 60;
+    var maxTop = 340;
+    offset.top = (offset.top - minTop) < minTop ? minTop : offset.top - minTop;
+    offset.top = offset.top > maxTop ? maxTop : offset.top;
 
-  var $img = $('<img>')
-  .addClass('image-preview')
-  .offset(offset)
-  .hide()
-  .attr('src', src)
-  .fadeIn();
+    var $img = $('<img>')
+    .addClass('image-preview')
+    .offset(offset)
+    .hide()
+    .attr('src', src)
+    .fadeIn();
 
-  $('.image-preview').remove();
-  $('body').append($img);
+    $('.image-preview').remove();
+    $('body').append($img);
 
-  setTimeout(()=>{
-      $('.image-preview').remove();
-  },
-  2000);
-}
+    /*if ($('.image-preview').is(":visible")){
+      setTimeout(()=>{
+        $('.image-preview').remove();
+      },
+      2000);
+    }*/
+  }

@@ -8,8 +8,30 @@ require('./app/init/init.js');
 
 //-----
 
-const SaleLoader = require('./app/loader/sale-loader.js');
+//const SaleLoader = require('./app/loader/sale-loader.js');
 
-new SaleLoader('192663').run((sale)=>{
-  console.log(sale);
+//new SaleLoader('192663').run((sale)=>{
+//  console.log(sale);
+//});
+
+
+const PendingLaws = require('./app/laws/pending-laws.js');
+
+
+PendingLaws.load(true,()=>{
+
+  var pending = PendingLaws.getList()[0];
+
+  pending.sale.items.forEach((item, index, arr)=>{
+    arr[index].teste = true;
+  });
+
+  console.log(pending.number);
+
+  PendingLaws.resetSale(pending,(e, s)=>{
+    console.log(e);
+    console.log(s);
+  });
+
+
 });

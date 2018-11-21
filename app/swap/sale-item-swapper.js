@@ -36,6 +36,18 @@ module.exports = class SaleItemSwapper{
     }
   }
 
+  _checkAllreadyHasSwapSku(){
+    var has = this.sale.items.some((item)=>{
+      return item.codigo.toLowerCase() == this.swapSku.trim().toLowerCase();
+    });
+
+    if (has){
+        this._onError(new Err(Const.product_in_sale.format(this.swapSku.trim()), this.userId));
+    }
+
+    return !has;
+  }
+
   _swapTargetSku(){
     var hasTargetSku = false;
 
@@ -110,7 +122,7 @@ module.exports = class SaleItemSwapper{
       .run((sale)=>{
         this.sale = sale;
 
-        if (this._checkSaleStatus()){
+        if (this._checkSaleStatus() && this._checkAllreadyHasSwapSku()){
           if (this._swapTargetSku()){
             EccosysCalls.removeSaleItems(this.sale.numeroPedido, (res)=>{
               EccosysCalls.insertSaleItems(this.sale.numeroPedido, this.sale.items, (res)=>{
@@ -122,9 +134,7 @@ module.exports = class SaleItemSwapper{
                 HistoryStorer.swapItems(this.sale.numeroPedido, this.targetSku, this.swapSku, this.quantity, this.userId);
                 this._updateSaleObs();
 
-                PendingHandler.updateItem(this.sale.numeroPedido, this.targetSku, this.changedItem,()=>{
-                  //console.log('atualizou a pendencia');
-                }); 
+                PendingHandler.updateItem(this.sale.numeroPedido, this.targetSku, this.changedItem, ()=>{});
               });
             });
           }

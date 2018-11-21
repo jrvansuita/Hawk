@@ -15,16 +15,24 @@ module.exports = {
 
   updateItem(saleNumber, targetSku, swapItem, callback){
     var pending  = PendingLaws.find(saleNumber);
+    var items = pending.sale.items;
+    var changed = false;
 
-    pending.sale.items.forEach((item, index, arr)=>{
+    for(var i=0; i < items.length; i++) {
+      var item = items[i];
+
       if (item.codigo.toLowerCase() == targetSku.toLowerCase()){
-        arr[index] = swapItem;
-        arr[index].changed = true;
+        items[i] = swapItem;
+        items[i].changed = true;
+        changed = true;
+        break;
       }
-    });
-
-    PendingLaws.update(pending, callback);
-  },  
+    }
+    
+    if (changed){
+      PendingLaws.update(pending, callback);
+    }
+  },
 
   store(sale, local,user, callback){
     PendingLaws.store(sale, local, user, ()=>{
@@ -35,7 +43,9 @@ module.exports = {
     });
   },
 
-  incStatus(pending, user, callback){
+  incStatus(pendingNumber, user, callback){
+    var pending  = PendingLaws.find(pendingNumber);
+
     sendEmailIfNeed(pending, user, ()=>{
       PendingLaws.incrementStatus(pending,user, callback);
     });

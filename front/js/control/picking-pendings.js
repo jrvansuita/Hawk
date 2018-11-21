@@ -226,14 +226,8 @@ function getPendingItemButtonLabel(pending){
   }
 }
 
-var previewProduct;
-
-function getPreviewProduct(){
-  if (previewProduct == null){
-    previewProduct = new ImagePreview();
-  }
-
-  return previewProduct;
+function addChangedLabel(el){
+  el.prepend($('<label>').addClass('changed-label').text('Trocado'));
 }
 
 function buildProductFirstCol(item, slim, pending){
@@ -280,7 +274,7 @@ function buildProductFirstCol(item, slim, pending){
 
 
   if (item.changed){
-    gtin.prepend($('<label>').addClass('changed-label').text('Trocado'));
+    addChangedLabel(gtin);
   }
 
 
@@ -308,6 +302,7 @@ function buildProductFirstCol(item, slim, pending){
           descHolder.text(getProductName(swapProduct.nome, slim));
           gtin.text(swapProduct.gtin);
           sku.val(swapProduct.codigo);
+          addChangedLabel(gtin);
         },(error)=>{
           descHolder.text(error.slice(0,40) + '...').addClass("error").delay(3000).queue(function(next){
             $(this).removeClass("error");
@@ -318,14 +313,13 @@ function buildProductFirstCol(item, slim, pending){
       }
     });
   }else{
-    sku.hover(function() {
+    new ImagePreview(first).hover((self)=>{
       _get('/product-image', {sku: item.codigo },(product)=>{
-        getPreviewProduct().onElement(first).show(product.image);
+        self.show(product.image);
       });
-    },
-    function() {
-      getPreviewProduct().onElement(first).remove();
     });
+
+
   }
 
 

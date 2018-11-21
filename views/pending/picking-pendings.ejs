@@ -41,9 +41,7 @@
                   <td><span class="pick-value"><%=(sale.pickUser.name ? sale.pickUser.name.split(" ")[0] : 'Desconhecido') %></span></td>
                   <td><span class="pick-value" ><%= Dat.format(new Date(sale.data))%></span></td>
                   <td>
-                    <span class="pick-value circle-pending " style="float:right"><%=sale.items.filter((i)=>{
-                      return i.pending;
-                    }).length %></span>
+                    <span class="pick-value circle-pending " style="float:right"><%=sale.items.length %></span>
 
                     <%var difDays = Dat.daysDif(new Date(sale.data), new Date()) %>
                     <span class="pick-value <%=difDays >=5 ? 'pulse' : '' %>" style="float:right"><%=difDays + ' Dias'%></span>

@@ -19,9 +19,11 @@ module.exports = {
   update(pending, callback){
     Pending.upsert(Pending.getKeyQuery(pending.number), pending, function(err, doc){
       updatePendingSale(pending);
-      callback(pending, err);
+      if (callback){
+        callback(pending, err);
+      }
     });
-  },
+  }, 
 
   //---- Load All Elements ----//
 
@@ -50,7 +52,8 @@ module.exports = {
       this.getList().push(pending);
       callback();
     });
-  }, 
+  },
+
 
 
   //---- Update Elements ----//
@@ -61,14 +64,14 @@ module.exports = {
 
     HistoryStorer.pending(user.id, pending);
 
-   this.update(pending, callback);
+    this.update(pending, callback);
   },
 
 
   //---- Remove Elements ----//
 
-  remove(saleNumber){
-    Pending.removeAll(Pending.getKeyQuery(saleNumber));
+  remove(saleNumber, callback){
+    Pending.removeAll(Pending.getKeyQuery(saleNumber), callback);
     global.staticPendingSales = global.staticPendingSales.filter((i)=>{
       return i.number != saleNumber;
     });

@@ -25,6 +25,7 @@ module.exports = {
   swaped_items : 'Foi realizada a troca de {0} unidade do produto {1} pelo produto {2} no pedido {3}',
   sale_not_picking: 'O Pedido {0} não está pronto para picking.',
   product_not_in_sale: 'Produto {0} não não encontrato no pedido {1}',
+  product_in_sale: 'Produto {0} já está no pedido.',
 
 
   from_to: 'De {0} Até {1}',
