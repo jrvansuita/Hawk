@@ -84,13 +84,14 @@ module.exports = {
   },
 
   clear(userId){
+    var isDevMode = process.env.NODE_ENV == undefined;
     var now = new Date().getTime();
     var salesCount = 1000;//this.getFullList().length;
 
     var minTime =  salesCount * 60000;
     var nextClear = global.lastClear + minTime;
 
-    if ((salesCount <= 50) || (nextClear < now)){
+    if (isDevMode || (salesCount <= 50) || (nextClear < now)){
       //Limpa a lista de picking
       this.set([]);
       //Limpa a lista de pedidos bloqueados
@@ -108,14 +109,13 @@ function getAssertedList(){
   var list = global.staticPickingList;
   list = TransportLaws.assert(list);
   list = UfLaws.assert(list);
-  //list = BlockedLaws.assert(list);
 
   return list;
 }
 
 
 function checkIsInDevMode(){
-  var maxSalesOnDevMove = 12;
+  var maxSalesOnDevMove = process.env.MAX_SALES_ON_DEV || 12;
   //If this Env Var is not defined, it's on development mode
   //Not necessary to load all sales for tests porpouse
   if (!process.env.NODE_ENV){

@@ -8,7 +8,17 @@ const unknow = 'Não encontrado';
 module.exports = {
 
   select(selected){
-    global.selectedUf = selected;
+    if (selected){
+      if (selected == 'all'){
+        global.selectedUf = undefined;
+      }else{
+        global.selectedUf = selected;
+      }
+    }
+  },
+
+  getSelected(){
+    return global.selectedUf;
   },
 
   assert(saleList){
@@ -20,7 +30,7 @@ module.exports = {
         });
       }
     }
- 
+
     return saleList;
   },
 

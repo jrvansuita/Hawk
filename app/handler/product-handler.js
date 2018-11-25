@@ -52,10 +52,12 @@ module.exports ={
   updateLocal(sku, newLocal, user,  callback) {
     this.getBySku(sku, false, (product)=>{
 
+      newLocal = newLocal.toUpperCase();
+
       var body = {
         codigo: product.codigo,
         localizacao: newLocal,
-        obs : product.obs +  "\n[" + user.name + "] Nova Localização:  " + newLocal + " em " + Dat.format(new Date())
+        obs : product.obs +  "\n" + user.name + "| Desktop | " + newLocal + " | " + Dat.format(new Date())
       };
 
 

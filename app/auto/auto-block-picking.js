@@ -1,5 +1,5 @@
 const SaleLoader = require('../loader/sale-loader.js');
-const BlockedLaws = require('../laws/blocked-laws.js');
+const BlockHandler = require('../handler/block-handler.js');
 const User = require('../bean/user.js');
 
 module.exports= class AutoBlockPicking {
@@ -8,25 +8,44 @@ module.exports= class AutoBlockPicking {
     this.sales = sales;
   }
 
-  onCheckStock(products, index, onTerminate){
+  _hasToBlock(product){
+    var stock = product._Estoque;
+    var local = product.localizacao.trim();
+
+    var reasonStock = stock.estoqueReal <=3 && stock.estoqueDisponivel < 0;
+    var reasonLocal = local.length == 0;
+
+    var hasToBlock =  reasonStock || reasonLocal;
+
+    return hasToBlock;
+  }
+
+  onCheckStock(sale, products, index, onTerminate){
     if (index < products.length){
       var product = products[index];
 
       index++;
 
-      if (product._Estoque.estoqueDisponivel < 0){
-        var isBlocked = BlockedLaws.get(product.codigo);
+      var next = ()=>{
+        this.onCheckStock(sale, products, index, onTerminate);
+      };
+
+      if (this._hasToBlock(product)){
+
+        var isBlocked = BlockHandler.get(product.codigo);
 
         if (!isBlocked){
-          BlockedLaws.toggleBlock(product.codigo, new User(404, 'Sistema'), '994', ()=>{
-            console.log('Bloqueio ' + product.codigo + ' estoque ' + product._Estoque.estoqueDisponivel);
-            this.onCheckStock(products, index, onTerminate);
-          });
+          console.log('----[AutoBlock]---- ' + sale.numeroPedido + ' - ' + product.codigo);
+          BlockHandler.store(product.codigo, new User(404, 'Sistema'), '994', ()=>{
+            next();
+          });  
         }else{
-          this.onCheckStock(products, index, onTerminate);
+          console.log('[Já b] ' + sale.numeroPedido + ' - ' + product.codigo);
+
+          next();
         }
       }else{
-        this.onCheckStock(products, index, onTerminate);
+        next();
       }
     }else{
       onTerminate();
@@ -35,8 +54,10 @@ module.exports= class AutoBlockPicking {
 
   onSale(sales, index){
     if (index < sales.length){
-      new SaleLoader(this.sales[index]).loadProducts((products)=>{
-        this.onCheckStock(products, 0, ()=>{
+      var sale = this.sales[index];
+
+      new SaleLoader(sale).loadProducts((products)=>{
+        this.onCheckStock(sale, products, 0, ()=>{
           index++;
           this.onSale(sales, index);
         });
@@ -45,9 +66,9 @@ module.exports= class AutoBlockPicking {
   }
 
   run(){
-    if (process.env.NODE_ENV){
+    //if (process.env.NODE_ENV){
       this.onSale(this.sales, 0);
-    }
+    //}
   }
 
 };

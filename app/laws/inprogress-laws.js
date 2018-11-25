@@ -64,7 +64,10 @@ module.exports = {
     var sale = this.getInProgressSale(userId);
     sale.end = new Date();
 
-    checkEndTime(sale, userId);
+
+    if (!sale.doNotCount){
+      checkEndTime(sale, userId);
+    }
 
     var day = Day.picking(userId, Dat.today(), getItemsQuantity(sale), getSecondsDiference(sale));
     //console.log('[Fechou] picking ' + sale.pickUser.name  + ' - ' + sale.numeroPedido);

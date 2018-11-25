@@ -5,7 +5,18 @@ global.selectedTransp = undefined;
 module.exports = {
 
   select(selected){
-    global.selectedTransp = selected;
+
+    if (selected){
+      if (selected == 'all'){
+        global.selectedTransp = undefined;
+      }else{
+        global.selectedTransp = selected;
+      }
+    }
+  },
+
+  getSelected(){
+    return global.selectedTransp;
   },
 
   assert(saleList){

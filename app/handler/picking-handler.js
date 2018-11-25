@@ -4,7 +4,7 @@ const InprogressLaws = require('../laws/inprogress-laws.js');
 const DoneLaws = require('../laws/done-laws.js');
 const PickingLaws = require('../laws/picking-laws.js');
 const UsersProvider = require('../provider/UsersProvider.js');
-const BlockedLaws = require('../laws/blocked-laws.js');
+const BlockHandler = require('../handler/block-handler.js');
 const SalesArrLoader = require('../loader/sales-arr-loader.js');
 const SaleLoader = require('../loader/sale-loader.js');
 const History = require('../bean/history.js');
@@ -15,9 +15,9 @@ const AutoBlockPicking = require('../auto/auto-block-picking.js');
 module.exports = {
 
   init(onFinished) {
-    if (PickingLaws.isFullEmpty() && !BlockedLaws.hasBlockSales()) {
+    if (PickingLaws.isFullEmpty() && !BlockHandler.hasBlockSales()) {
       PendingLaws.load(true, ()=>{
-        BlockedLaws.load(()=>{
+        BlockHandler.load(()=>{
           this.load(onFinished);
         });
       });
@@ -43,11 +43,11 @@ module.exports = {
           })
           .loadItems(true)
           .onFilter((sale)=>{
-            return !BlockedLaws.checkAllAndCapture(sale);
+            return !BlockHandler.checkAllBlocksAndCapture(sale);
           })
           .onEverySaleLoaded((sale)=>{
             TransportLaws.put(sale.transport);
-            //new AutoBlockPicking([sale]).run();
+            new AutoBlockPicking([sale]).run();
           })
           .run(onFinished);
 

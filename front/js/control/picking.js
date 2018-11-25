@@ -8,12 +8,19 @@ $(document).ready(() => {
   });
 
 
+  $(".blocked-sale-label[data-reason='994']").dblclick(function(){
+    window.open(
+      '/stock?sku=' + $(this).text(),
+      '_blank' // <- This is what makes it open in a new window.
+    );
+  });
+
   window.setInterval(function() {
     $(".inprogress-begin").each(function(index, item) {
       var diftime = parseInt($(item).attr("diftime"));
       diftime+= 1000;
 
-      if (diftime > 0){ 
+      if (diftime > 0){
         $(item).text((diftime/1000).toString().toMMSS());
       }
 

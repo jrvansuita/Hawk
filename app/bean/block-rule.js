@@ -7,7 +7,7 @@ module.exports = class BlockRule extends DataAccess {
     this.blockDate = new Date();
     this.user = user ? user : {};
     this.reasonTag = Num.def(reasonTag);
-    this.blocking = false;
+    this.blockings = Num.def(0);
   }
 
   static getKey() {

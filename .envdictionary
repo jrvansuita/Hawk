@@ -9,4 +9,4 @@ REPLY_EMAIL=example@company.com.br
 EMAIL=example@company.com.br
 EMAIL_PASS=?
 TZ=Timezone
-NODE_ENV=PROD
+MAX_SALES_ON_DEV=12

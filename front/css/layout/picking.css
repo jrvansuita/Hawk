@@ -387,8 +387,8 @@ tr.row-padding td{
   overflow-y: overlay;
 }
 
-.circle-pending{
-  margin-left: 8px;
+.mini-circle{
+  margin-left:5px;
   background-color: #bd48008a;
   border-radius: 50%;
   width: 10px;
@@ -400,6 +400,7 @@ tr.row-padding td{
   z-index: 10;
   position: relative;
   margin-bottom: -10px;
+  margin-right: 5px;
 }
 
 .modal{
@@ -546,7 +547,7 @@ tr.row-padding td{
   cursor: pointer;
   color: #1C7974;
   font-size: 11px;
-  width: fit-content;
+  width: 100%;
 }
 
 .not-blocking{
