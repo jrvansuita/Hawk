@@ -10,7 +10,7 @@ const PickingHandler = require('../handler/picking-handler.js');
 module.exports = class PickingRoutes extends Routes{
 
   attach(){
-    this._get('/picking/achievements', (req, res) => {
+    this._page('/picking/achievements', (req, res) => {
       var PickingAchievGridBuilder = require('../builder/PickingAchievGridBuilder.js');
       var builder = new PickingAchievGridBuilder();
       builder.init(res.locals.loggedUser.full, (data) => {
@@ -22,7 +22,7 @@ module.exports = class PickingRoutes extends Routes{
       builder.build();
     });
 
-    this._get('/picking/overview', (req, res) => {
+    this._page('/picking/overview', (req, res) => {
       require('../builder/PickingChartBuilder.js').buildOverview(res.locals.loggedUser.full, function(charts) {
           res.render('picking/picking-chart', {
             charts: charts,
@@ -32,7 +32,7 @@ module.exports = class PickingRoutes extends Routes{
     });
 
 
-    this._get('/picking/by-date', (req, res) => {
+    this._page('/picking/by-date', (req, res) => {
       var from = Dat.query(req.query.from, Dat.firstDayOfMonth());
       var to = Dat.query(req.query.to, Dat.lastDayOfMonth());
 
@@ -45,7 +45,7 @@ module.exports = class PickingRoutes extends Routes{
       });
     });
 
-    this._get('/picking', (req, res) => {
+    this._page('/picking', (req, res) => {
       TransportLaws.select(req.query.transp);
       UfLaws.select(req.query.uf);
 

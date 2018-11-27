@@ -38,6 +38,7 @@ module.exports={
     onTry(()=>{
       var title = 'Pendência ';
       var status = '';
+      var emailStr = '';
 
       if (pending.status == 0){
         title+= 'Adicionada';
@@ -45,6 +46,12 @@ module.exports={
       }else if(pending.status == 1){
         title+= 'em Andamento';
         status= "colocado em atendimento";
+
+        if (pending.sendEmail){
+          emailStr = '\nEnviado email para o cliente';
+        }else{
+          emailStr = '\nNão foi enviado email para o cliente';
+        }
       }else if(pending.status == 2){
         status= "marcado como resolvido";
         title+= 'Resolvida';
@@ -55,6 +62,8 @@ module.exports={
 
       var message = 'Pedido ' + pending.sale.numeroPedido + ' foi ' + status;
       message += '\nOrdem de Compra: ' + pending.sale.numeroDaOrdemDeCompra + ' Localização: ' + pending.local;
+      message+=emailStr;
+
 
       History.notify(userId, title, message, 'Pendência');
     });

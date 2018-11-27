@@ -6,6 +6,14 @@ module.exports = class Routes {
     this.app = app;
   }
 
+  _page(paths, callback){
+    this._get(paths, (req, res, body, locals, session)=>{
+      req.session.lastpath = [paths][0];
+      callback(req, res, body, locals, session);
+    });
+  }
+
+
   _get(paths, callback){
     this.app.get(paths, (req, res) => {
       Response.onTry(res, ()=>{

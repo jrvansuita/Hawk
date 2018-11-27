@@ -121,13 +121,9 @@ var Util = {
   },
 
   notIn(array, str){
-    var n = false;
-
-    array.forEach((s)=>{
-      n = n || str.includes(s);
+    return !array.some((s)=>{
+      return str.includes(s);
     });
-
-    return !n;
   },
 
   twoNames(name, def, pMax){

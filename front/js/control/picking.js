@@ -182,13 +182,13 @@ function loadSale(sale){
     $('.opened-sale-box').css('display','inline-block').fadeIn(200);
 
     selectedPendingSale = sale;
-    $('.sale-number').text(sale.numeroPedido);
+    $('.sale-number').text(' ' + sale.numeroPedido+ ' ');
     $('#sale-transport').text(sale.transport);
     $('#sale-date').text(Dat.format(new Date(sale.data)));
     $('#sale-itens').text(sale.itemsQuantity + ' Itens');
     $('#sale-value').text(Num.money(sale.totalProdutos));
 
-    $('#opened-sale').find('.row-padding').remove();
+    $('#opened-sale').find('.row-padding').remove(); 
     sale.items.forEach(item => {
       var row = $('<tr>').addClass('row-padding');
 
@@ -202,6 +202,8 @@ function loadSale(sale){
       $('#opened-sale').append(row);
       row.hide().fadeIn();
     });
+
+    $('#opened-sale').parent().append($('<span>').addClass('obs-sale').append(sale.observacaoInterna));
   }else{
     $('.opened-sale-box').fadeOut(200);
   }

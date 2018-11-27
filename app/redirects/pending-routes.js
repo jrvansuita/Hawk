@@ -6,7 +6,7 @@ const SaleItemSwapper = require('../swap/sale-item-swapper.js');
 module.exports = class PendingRoutes extends Routes{
 
   attach(){
-    this._get('/pending', (req, res) => {
+    this._page('/pending', (req, res) => {
       PendingHandler.load(false, (list)=>{
         res.render('pending/pending', {
           wideOpen : true,

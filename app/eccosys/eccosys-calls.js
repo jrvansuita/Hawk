@@ -1,5 +1,7 @@
 var Query = require('../util/query.js');
 var Eccosys = require('../eccosys/eccosys.js');
+const History = require('../bean/history.js');
+
 
 var page_count = 100;
 
@@ -102,9 +104,11 @@ module.exports = {
 
 function checkEccoStatus(data, def){
   if (data.includes('503 Service Temporarily Unavailable')){
-    if (History){
-      History.error("API Eccosys indisponível no momento.");
-    }
+    History.error("API Eccosys indisponível no momento.");
+
+    return def;
+  }else if (data[0] == ('<')){
+    console.log(data);
     return def;
   }
 

@@ -28,7 +28,7 @@ module.exports = {
         break;
       }
     }
-    
+
     if (changed){
       PendingLaws.update(pending, callback);
     }
@@ -53,12 +53,13 @@ module.exports = {
 
   restart(pending, user, callback){
     if (!InprogressLaws.checkAndThrowUserInProgress(user.id)) {
-      PendingLaws.remove(pending.number);
+      var number = pending.number;
       pending.status = 3;
-
       HistoryStorer.pending(user.id, pending);
 
-      new SaleLoader(pending.sale.numeroPedido)
+      PendingLaws.remove(number); 
+
+      new SaleLoader(number)
       .loadClient()
       .loadItems()
       .run(function(sale){

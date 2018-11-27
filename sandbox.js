@@ -15,23 +15,39 @@ require('./app/init/init.js');
 //});
 
 
-const PendingLaws = require('./app/laws/pending-laws.js');
+const Product = require('./app/bean/product.js');
+const EccosysCalls = require('./app/eccosys/eccosys-calls.js');
+const ProductHandler = require('./app/handler/product-handler.js');
 
 
-PendingLaws.load(true,()=>{
+var index = 0;
 
-  var pending = PendingLaws.getList()[0];
+Product.findAll((err, products)=>{
+  products.slice(0,300).forEach((product)=>{
+    EccosysCalls.getProduct(product.sku, (product)=>{
+      if (product._Skus){
+        product._Skus.forEach((sku)=>{
+          EccosysCalls.getProduct(sku.codigo, (child)=>{
 
-  pending.sale.items.forEach((item, index, arr)=>{
-    arr[index].teste = true;
+            index++;
+            console.log(index);
+
+            if (child.localizacao && (/[a-z]/.test(child.localizacao))){
+              var newLocal = child.localizacao.toUpperCase();
+
+
+
+              console.log(child.codigo + ' : ' + child.localizacao + ' -> ' + newLocal);
+
+              //ProductHandler.updateLocal(child.codigo, newLocal, new User(404, 'Sistema'), ()=>{
+              //    console.log(child.codigo + ' : ' + child.localizacao + ' -> ' + newLocal);
+              //});
+
+
+            }
+          });
+        });
+      }
+    });
   });
-
-  console.log(pending.number);
-
-  PendingLaws.resetSale(pending,(e, s)=>{
-    console.log(e);
-    console.log(s);
-  });
-
-
 });

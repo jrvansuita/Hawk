@@ -11,11 +11,11 @@ module.exports = class PerformanceRoutes extends Routes{
       );
     });
 
-    this._get('/manage-points', (req, res) => {
+    this._page('/manage-points', (req, res) => {
       res.render('performance/manage-points');
     });
 
-    this._get(['/profile'], (req, res) => {
+    this._page(['/profile'], (req, res) => {
       var from = Dat.query(req.query.from, Dat.firstDayOfMonth());
       var to = Dat.query(req.query.to, Dat.lastDayOfMonth());
       var userId = req.query.userid || req.session.loggedUser.id;

@@ -291,7 +291,7 @@
                                 </tr>
 
                                 <%
-                                donePickings.forEach(function(sale, index){
+                                donePickings.reverse().forEach(function(sale, index){
                                   %>
                                   <tr class="clickable-mini-item done-sale-item"  data-saleid="done-<%=sale.id%>" data-sale="done-<%=sale.numeroPedido%>">
                                     <td><span class="pick-value green-title"><%=sale.numeroPedido %></span></td>

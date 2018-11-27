@@ -4,7 +4,7 @@ module.exports = class PackingRoutes extends Routes{
 
   attach(){
 
-    this._get(['/packing', '/packing/overview'], (req, res) => {
+    this._page(['/packing', '/packing/overview'], (req, res) => {
       require('../builder/InvoiceChartBuilder.js').buildOverview(res.locals.loggedUser.full, (charts)=> {
         res.render('packing/packing-chart', {
           charts: charts,
@@ -14,7 +14,7 @@ module.exports = class PackingRoutes extends Routes{
     });
 
 
-    this._get('/packing/by-date', (req, res) => {
+    this._page('/packing/by-date', (req, res) => {
       var from = Dat.query(req.query.from, Dat.firstDayOfMonth());
       var to = Dat.query(req.query.to, Dat.lastDayOfMonth());
 
@@ -29,7 +29,7 @@ module.exports = class PackingRoutes extends Routes{
 
 
 
-    this._get('/packing/achievements', (req, res) => {
+    this._page('/packing/achievements', (req, res) => {
       var InvoiceAchievGridBuilder = require('../builder/InvoiceAchievGridBuilder.js');
       var builder = new InvoiceAchievGridBuilder();
       builder.init(res.locals.loggedUser.full,

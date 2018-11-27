@@ -81,7 +81,7 @@ module.exports = class SaleItemSwapper{
     item.descricao = this.swapProduct.nome;
     item.gtin = this.swapProduct.gtin;
     item.quantidade = this.quantity;
-
+    item.observacao = 'changed';
 
     this.changedItem = item;
 

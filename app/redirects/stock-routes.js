@@ -18,7 +18,7 @@ module.exports = class ProductRoutes extends Routes{
       ProductHandler.getStockHistory(req.query.sku, this._resp().redirect(res));
     });
 
-    this._get('/stock', (req, res) => {
+    this._page('/stock', (req, res) => {
       var skuOrEan = req.query.sku || req.query.ean;
 
       ProductLaws.load(skuOrEan, (result)=>{
@@ -37,7 +37,7 @@ module.exports = class ProductRoutes extends Routes{
     });
 
 
-  
+
 
 
 

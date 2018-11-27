@@ -4,7 +4,7 @@ const HistoryLaws = require('../laws/history-laws.js');
 module.exports = class HistoryRoutes extends Routes{
 
   attach(){
-    this._get('/history', (req, res) => {
+    this._page('/history', (req, res) => {
       res.render('history');
     });
 

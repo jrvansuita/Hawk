@@ -32,17 +32,13 @@ app.use('/front', express.static('front'));
 app.use('/util', express.static('app/util'));
 
 
-const ignorePaths = ['/login', '/', '.png', '.jpg'];
+const keepPaths = ['/picking', '/packing'];
 
 //Keep a user variable for session in all ejs
 //Redirect if no user is logged-in
 app.use(function(req, res, next) {
   if (req.session.loggedUser || req.path === '/login') {
     res.locals.loggedUser = req.session.loggedUser;
-
-    if (Util.notIn(ignorePaths, req._parsedUrl.path)){
-      req.session.lastpath = req._parsedUrl.path;
-    }
 
     next();
   } else {
@@ -52,7 +48,7 @@ app.use(function(req, res, next) {
 
 
 app.get(['/'], (req, res)=>{
-  if (req.session.lastpath){
+  if (req.session.lastpath && req.session.lastpath != '/'){
     res.redirect(req.session.lastpath);
   }else{
     res.redirect('/packing');

@@ -273,7 +273,7 @@ function buildProductFirstCol(item, slim, pending){
   var gtin = $('<span>').addClass('pick-value right').text(gtinStr);
 
 
-  if (item.changed){
+  if (item.changed || item.observacao.includes('changed')){
     addChangedLabel(gtin);
   }
 

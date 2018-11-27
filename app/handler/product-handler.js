@@ -54,10 +54,17 @@ module.exports ={
 
       newLocal = newLocal.toUpperCase();
 
+      //Reduzir a obs
+      var lines = product.obs.split('\n');
+      lines = lines.slice(lines.length - 5, lines.length);
+
+      lines = lines.join('\n');
+
+
       var body = {
         codigo: product.codigo,
         localizacao: newLocal,
-        obs : product.obs +  "\n" + user.name + "| Desktop | " + newLocal + " | " + Dat.format(new Date())
+        obs : lines +  "\n" + user.name + " | Desktop | " + newLocal + " | " + Dat.format(new Date())
       };
 
 

@@ -29,22 +29,25 @@ var skusCount = 0;
 
 function requestProductChilds(){
 
+  if (product._Skus){
+    if (product._Skus.length == 0){
+      product._Skus = [{codigo:product.codigo}];
+    }
 
-  if (product._Skus.length == 0){
-    product._Skus = [{codigo:product.codigo}];
-  }
+    skusCount = product._Skus.length;
+    product._Skus.forEach((sku)=>{ 
+      console.log(sku);
+      _get('/product-child', {sku: sku.codigo}, (child)=>{
+        buildChildSku(product, child);
+        skusCount--;
 
-  skusCount = product._Skus.length;
-  product._Skus.forEach((sku)=>{
-    _get('/product-child', {sku: sku.codigo}, (child)=>{
-      buildChildSku(product, child);
-      skusCount--;
-
-      if (skusCount == 0){
-        onFinishedLoading();
-      }
+        if (skusCount == 0){
+          onFinishedLoading();
+        }
+      });
     });
-  });
+
+  }
 
 }
 
@@ -133,7 +136,7 @@ function buildStockCol(product){
   });
 
 
-return buildCol($valElement);
+  return buildCol($valElement);
 }
 
 function buildInput(val, isNum){
@@ -212,14 +215,14 @@ function loadStockHistory(childSku){
     var groupArr={};
 
     rows.forEach((i)=>{
-        var id = Dat.format(new Date(i.data)) + (i.es == 'S' ? i.es : '');
+      var id = Dat.format(new Date(i.data)) + (i.es == 'S' ? i.es : '');
 
-        if (groupArr[id]){
-          groupArr[id].quantidade += parseInt(i.quantidade);
-        }else{
-          i.quantidade = parseInt(i.quantidade);
-          groupArr[id] = i;
-        }
+      if (groupArr[id]){
+        groupArr[id].quantidade += parseInt(i.quantidade);
+      }else{
+        i.quantidade = parseInt(i.quantidade);
+        groupArr[id] = i;
+      }
     });
 
     loadLayoutLoadHistory(Object.values(groupArr));
@@ -233,7 +236,7 @@ function loadLayoutLoadHistory(rows){
   rows.forEach((i)=>{
     var obs = '';
 
-   if (i.idOrigem != '' && i.es == 'S' && i.obs == ''){
+    if (i.idOrigem != '' && i.es == 'S' && i.obs == ''){
       obs = 'Saída por Faturamento';
     }else{
       obs = i.obs;
@@ -333,6 +336,6 @@ function paintLineStock(el, stock){
   if (stock.estoqueReal < 1){
     $(el).css('background-color', '#ff00003d');
   }else if (stock.estoqueDisponivel < 1){
-    $(el).css('background-color', '#ffbf004f');
+    $(el).css('background-color', '#ff000024');
   }
 }
