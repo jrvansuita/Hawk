@@ -41,7 +41,7 @@ module.exports = {
     global.staticPickingList = global.staticPickingList.filter(sale => sale.id != inputSale.id);
   },
 
-  next(userId, howMuch, onNextSales){
+  next(userId){
     if (this.getList().length == 0){
       Err.thrw(Const.none_sale_founded, userId);
     }
@@ -54,10 +54,6 @@ module.exports = {
 
     //Get the next sale from list
     var sale = pickingList[0];
-
-    /*if (onNextSales && howMuch){
-      onNextSales(pickingList.slice(1, howMuch));
-    }*/
 
     this.remove(sale);
     return sale;

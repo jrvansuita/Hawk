@@ -39,15 +39,16 @@ module.exports = {
       PickingLaws.remove(sale);
       InprogressLaws.remove(sale.numeroPedido);
 
-      callback();
+      callback(); 
     });
   },
 
-  incStatus(pendingNumber, user, callback){
-    var pending  = PendingLaws.find(pendingNumber);
+  incStatus(pending, user, callback){
+    var findedPending  = PendingLaws.find(pending.number);
+    findedPending.sendEmail =  pending.sendEmail;
 
-    sendEmailIfNeed(pending, user, ()=>{
-      PendingLaws.incrementStatus(pending,user, callback);
+    sendEmailIfNeed(findedPending, user, ()=>{
+      PendingLaws.incrementStatus(findedPending, user, callback);
     });
   },
 
@@ -57,7 +58,7 @@ module.exports = {
       pending.status = 3;
       HistoryStorer.pending(user.id, pending);
 
-      PendingLaws.remove(number); 
+      PendingLaws.remove(number);
 
       new SaleLoader(number)
       .loadClient()
