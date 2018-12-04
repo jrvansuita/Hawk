@@ -4,13 +4,18 @@ body, span, div, td{
   line-height: 20px;
   color: #333;
 }
+body{
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
 
 p{
   margin: 0;
 }
 
 span{
-  font-size: 15pt;
+  font-size: 16pt;
   font-weight: bold;
 }
 
@@ -20,8 +25,12 @@ span{
 }
 
 .obs{
-  font-size: 15pt;
-  padding: 15px;
+  font-size: 16pt;
+  padding-top: 5px;
+}
+
+.obs>p{
+  padding-bottom: 5px;
 }
 
 .user-name{
@@ -39,11 +48,11 @@ table{
 }
 
 tr{
-   border-bottom: 1px solid gray;
+  border-bottom: 1px solid gray;
 }
 
 tr:nth-last-child(2){
-   border-bottom: 1px dashed gray;
+  border-bottom: 1px dashed gray;
 }
 
 tr:nth-child(even) {
@@ -68,7 +77,8 @@ td{
 }
 
 .sale-client-name{
-  font-size: 20pt;
+  font-size: 14pt;
+  white-space: nowrap;
   font-weight: bold;
 }
 
@@ -79,30 +89,27 @@ td{
 }
 
 .sku{
-  margin: 8px;
-  font-size: 15pt;
+  margin: 10px 0px;
+  width:1%;
+  white-space:nowrap;
+  font-size: 17pt;
   display: -webkit-inline-box;
-  padding-right:  15px;
   font-weight: 800;
 }
 
 .ean{
-  font-size: 13pt;
+  font-size: 15pt;
   font-weight: 600;
 }
 
 .local{
-  font-size: 15pt;
-  font-weight: 600;
-}
-
-.qtd-col{
-  text-align: center;
+  font-size: 16pt;
+  font-weight: 800;
 }
 
 .qtd{
   padding: 5px 10px;
-  font-size: 15pt;
+  font-size: 17pt;
   vertical-align: middle;
   font-weight: 600;
   text-align: center;
@@ -110,7 +117,7 @@ td{
 }
 
 .qtd-border{
-  border: 1px solid black;
+  border: 2px solid black;
 }
 
 .total-line{
@@ -121,4 +128,25 @@ td{
 
 .total{
   padding-top: 20px;
+}
+
+
+.col-sku{
+  width: 1%;
+  white-space: nowrap;
+}
+
+.col-ean{
+  width: 1%;
+  white-space: nowrap;
+}
+
+.col-local{
+  padding-left:  10%;
+  width: auto;
+}
+
+.col-qtd{
+  width: 10%;
+  text-align: center;
 }

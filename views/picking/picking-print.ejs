@@ -46,19 +46,19 @@
       <% sale.items.forEach((item)=>{
         %>
         <tr>
-          <td style="width: 25%;">
+          <td class="col-sku">
             <span class="sku"><%=item.sku%></span>
           </td>
-          <td style="width: 25%;">
+          <td class="col-ean">
             <span class="ean"><%= item.ean%></span>
           </td>
 
-          <td style="width: 35%;">
+          <td class="col-local">
             <span class="local">
               <%=item.local%>
             </span>
           </td>
-          <td style="width: 15%;" class="qtd-col">
+          <td class="col-qtd">
             <%var qtdBorderClass = (item.qtd > 1 ? 'qtd-border' : '')%>
             <span class="qtd <%=qtdBorderClass%>">
               <%=item.qtd%>
