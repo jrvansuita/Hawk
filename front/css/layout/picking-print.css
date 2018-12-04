@@ -1,0 +1,124 @@
+body, span, div, td{
+  font-family: Helvetica,Arial,sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: #333;
+}
+
+p{
+  margin: 0;
+}
+
+span{
+  font-size: 15pt;
+  font-weight: bold;
+}
+
+.main{
+  page-break-inside:avoid;
+  page-break-after:always;
+}
+
+.obs{
+  font-size: 15pt;
+  padding: 15px;
+}
+
+.user-name{
+  text-align: right;
+  font-weight: 600;
+  font-size: 17pt;
+}
+
+table{
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+tr{
+   border-bottom: 1px solid gray;
+}
+
+tr:nth-last-child(2){
+   border-bottom: 1px dashed gray;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+td{
+  padding: 6px;
+}
+
+
+.sale-number{
+  font-size: 25pt;
+  font-weight: bold;
+  margin: 0;
+  vertical-align: middle;
+}
+
+.sale-date{
+  padding-top: 5px;
+  font-size: 15pt;
+  font-weight: bold;
+}
+
+.sale-client-name{
+  font-size: 20pt;
+  font-weight: bold;
+}
+
+.sale-order{
+  padding-top: 5px;
+  font-size: 15pt;
+  font-weight: bold;
+}
+
+.sku{
+  margin: 8px;
+  font-size: 15pt;
+  display: -webkit-inline-box;
+  padding-right:  15px;
+  font-weight: 800;
+}
+
+.ean{
+  font-size: 13pt;
+  font-weight: 600;
+}
+
+.local{
+  font-size: 15pt;
+  font-weight: 600;
+}
+
+.qtd-col{
+  text-align: center;
+}
+
+.qtd{
+  padding: 5px 10px;
+  font-size: 15pt;
+  vertical-align: middle;
+  font-weight: 600;
+  text-align: center;
+  border: 1px solid transparent;
+}
+
+.qtd-border{
+  border: 1px solid black;
+}
+
+.total-line{
+  background-color: transparent !important;
+  border-bottom: 0;
+  margin-top: 10px;
+}
+
+.total{
+  padding-top: 20px;
+}

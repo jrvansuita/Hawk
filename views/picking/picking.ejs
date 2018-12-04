@@ -166,7 +166,7 @@
                           </td>
                           <td><span class="pick-value green-title"><%=sale.numeroPedido %></span></td>
                           <td><span class="pick-value"><%=sale.itemsQuantity %> Itens</span></td>
-                          <td><a class="print-progress" tabIndex="-1" href="<%=printPickingUrl + sale.id %>" target="_blank"><div class="print-sale-holder" title="Reimprimir" ><img class="print-sale" title="<%=sale.doNotCount ? 'Pedido já foi impresso!' : 'Imprimir' %>" src="<%=sale.doNotCount ? '/img/printed.png' : '/img/print.png' %>" /></div></a></td>
+                          <td><a class="print-progress" tabIndex="-1" href="<%= '/print-picking-sale?userId=' + sale.pickUser.id + '&saleNumber=' + sale.numeroPedido %>" target="_blank"><div class="print-sale-holder" title="Reimprimir" ><img class="print-sale" title="<%=sale.doNotCount ? 'Pedido já foi impresso!' : 'Imprimir' %>" src="<%=sale.doNotCount ? '/img/printed.png' : '/img/print.png' %>" /></div></a></td>
                         </tr>
                         <tr>
                           <td><span class="pick-value"><%=sale.pickUser.name ? sale.pickUser.name.split(" ")[0] : 'Desconhecido'%></span></td>

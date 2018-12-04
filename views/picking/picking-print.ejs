@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>Pedido <%= sale.number%></title>
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/picking-print.css">
+
+  <script type="text/javascript" src="/front/js/libs/JsBarcode.all.min.js"></script>
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="/front/js/control/picking-print.js"></script>
+</head>
+<body>
+
+  <script>
+  window.sale = <%- JSON.stringify(sale || null) %>
+  </script>
+
+  <div class="main" >
+    <table>
+      <tr>
+        <td class="obs" colspan="2">
+          <p><%= sale.transport %></p>
+          <p><%= sale.obs %></p>
+        </td>
+        <td class="user-name">
+          <span><%= sale.userName %></span>
+        </td>
+      </tr>
+
+      <tr>
+        <td style="text-align: left; width: 35%;">
+          <svg id="barcode"></svg>
+        </td>
+        <td style="width: 30%;">
+          <p class="sale-number"><%= sale.number%></p>
+          <p class="sale-date"><%= Dat.format(new Date(sale.date))%></p>
+        </td>
+        <td style="width: 35%; text-align: right;">
+          <p class="sale-client-name"><%= sale.clientName%></p>
+          <p class="sale-order"><%= sale.oc%></p>
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <% sale.items.forEach((item)=>{
+        %>
+        <tr>
+          <td style="width: 25%;">
+            <span class="sku"><%=item.sku%></span>
+          </td>
+          <td style="width: 25%;">
+            <span class="ean"><%= item.ean%></span>
+          </td>
+
+          <td style="width: 35%;">
+            <span class="local">
+              <%=item.local%>
+            </span>
+          </td>
+          <td style="width: 15%;" class="qtd-col">
+            <%var qtdBorderClass = (item.qtd > 1 ? 'qtd-border' : '')%>
+            <span class="qtd <%=qtdBorderClass%>">
+              <%=item.qtd%>
+            </span>
+          </td>
+        </tr>
+        <%}) %>
+
+        <% if (sale.items.length > 0){%>
+          <tr class="total-line">
+            <td class="total" colspan="3"><span>Total</span></td>
+            <td class="total qtd-col"><span><%=sale.itemsQuantity%></span></td>
+          </tr>
+          <%}%>
+        </table>
+      </div>
+
+      <script> window.print();</script>
+
+
+
+    </body>
+    </html>

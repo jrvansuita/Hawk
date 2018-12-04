@@ -10,10 +10,10 @@ module.exports= class AutoBlockPicking {
 
   _hasToBlock(product){
     var stock = product._Estoque;
-    var local = product.localizacao.trim();
+    var local = product.localizacao;
 
     var reasonStock = stock.estoqueReal <=3 && stock.estoqueDisponivel < 0;
-    var reasonLocal = local.length == 0;
+    var reasonLocal = !local || local.length == 0;
 
     var hasToBlock =  reasonStock || reasonLocal;
 
@@ -38,7 +38,7 @@ module.exports= class AutoBlockPicking {
           console.log('----[AutoBlock]---- ' + sale.numeroPedido + ' - ' + product.codigo);
           BlockHandler.store(product.codigo, new User(404, 'Sistema'), '994', ()=>{
             next();
-          });  
+          });
         }else{
           console.log('[Já b] ' + sale.numeroPedido + ' - ' + product.codigo);
 
@@ -66,9 +66,9 @@ module.exports= class AutoBlockPicking {
   }
 
   run(){
-    //if (process.env.NODE_ENV){
+    if (process.env.NODE_ENV){
       this.onSale(this.sales, 0);
-    //}
+    }
   }
 
 };

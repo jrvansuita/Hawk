@@ -17,6 +17,16 @@ module.exports = {
   first_word: function(val) {
     var names = val ? val.split(' ') : "";
     return names.length > 0 ? names[0] : 'Desconhecido';
+  },
+
+  extract(str){
+    var result = str.match(/[a-zA-Z]/g);
+
+    if (!result){
+      return str;
+    }
+
+    return result.toString();
   }
 
 };

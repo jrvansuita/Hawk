@@ -16,7 +16,7 @@ module.exports= class SaleLoader {
     if (typeof onCallOuter === "function"){
       onCallOuter(this.sale);
     }
-    this.checkTerminate();
+    //this.checkTerminate();
   }
 
   loadSale(saleNumber, onCallOuter){
@@ -28,7 +28,7 @@ module.exports= class SaleLoader {
 
   loadClient(onCallOuter){
 
-    var func = (onCallNext)=>{
+    var funcClient = (onCallNext)=>{
       if (this.sale.idContato && !this.sale.client){
         EccosysCalls.getClient(this.sale.idContato, (client)=>{
 
@@ -44,7 +44,7 @@ module.exports= class SaleLoader {
       }
     };
 
-    this.list.push(func);
+    this.list.push(funcClient);
 
 
     return this;
@@ -54,7 +54,7 @@ module.exports= class SaleLoader {
 
     var self = this;
 
-    var func = (onCallNext)=>{
+    var funcItems = (onCallNext)=>{
 
       if((!this.sale.items && ifNotHas) || !ifNotHas){
         EccosysCalls.getSaleItems(this.sale.numeroPedido, (items) => {
@@ -74,14 +74,14 @@ module.exports= class SaleLoader {
       }
     };
 
-    this.list.push(func);
+    this.list.push(funcItems);
 
     return this;
   }
 
 
   loadProducts(onCallOuter){
-    var func = (onCallNext)=>{
+    var funcProducts = (onCallNext)=>{
 
       var index = this.sale.items.length;
       var products = [];
@@ -93,14 +93,14 @@ module.exports= class SaleLoader {
 
           if(index == 0){
             this._callbackHit(onCallNext, ()=>{
-              onCallOuter(products);
+              onCallOuter(products, this.sale);
             });
           }
         });
       });
     };
 
-    this.list.push(func);
+    this.list.push(funcProducts);
 
     return this;
   }
@@ -111,10 +111,14 @@ module.exports= class SaleLoader {
         index++;
         this.callFuncs(index);
       });
+    }else{
+      if (typeof this.onFinished == 'function'){
+        this.onFinished(this.sale);
     }
   }
+}
 
-  checkTerminate(){
+  /*checkTerminate(){
     this.list.splice(-1,1);
 
     if (this.list.length == 0){
@@ -122,7 +126,7 @@ module.exports= class SaleLoader {
         this.onFinished(this.sale);
       }
     }
-  }
+  }*/
 
   run(onFinished){
     this.onFinished = onFinished;

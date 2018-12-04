@@ -65,7 +65,6 @@ function clear(){
 function handleSalePaging(page, callback) {
   EccosysCalls.getSales(from, to, page, function(list) {
     try{
-       console.log(Array.isArray(list));
       if (Array.isArray(list) && list.length > 0) {
         count += list.length;
 

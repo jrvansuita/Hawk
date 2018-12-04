@@ -66,8 +66,11 @@ function getOptions(path, method, isApiCall) {
     }
   };
 
+
   return options;
 }
+
+
 
 // Gera uma nova Signature
 var signature;

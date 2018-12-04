@@ -59,6 +59,10 @@ var Num = {
     e = e || window.event;
     var charCode = e.which ? e.which : e.keyCode;
     return /^-?[0-9]*$/.test(String.fromCharCode(charCode));
+  },
+
+  extract(str){
+    return parseInt(str.match(/[0-9]+/g));
   }
 
 };

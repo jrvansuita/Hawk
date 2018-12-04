@@ -92,8 +92,12 @@ module.exports = class PickingRoutes extends Routes{
     });
 
     this._get('/print-picking-sale', (req, res, body, locals, session) => {
-      const Print = require('../pdf/picking-sale-pdf.js');
-      Print.load(req.query.userId, req.query.saleNumber, this._resp().redirect(res));
+      const Print = require('../print/picking-sale-print.js');
+      Print.load(req.query.userId, req.query.saleNumber, (sale)=>{
+
+
+        res.render('picking/picking-print', {sale : sale});
+      });
     });
 
 
