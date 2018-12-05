@@ -2,7 +2,7 @@
 <html lang="pt" dir="ltr">
 <head>
   <meta charset="utf-8">
-  <title><%=sale.userName%> | <%= sale.number%></title>
+  <title><%=sale.userName.split(' ')[0]%> | <%= sale.number%></title>
   <link rel="stylesheet" type="text/css" href="/front/css/layout/picking-print.css">
 
   <script type="text/javascript" src="/front/js/libs/JsBarcode.all.min.js"></script>
@@ -23,7 +23,8 @@
           <p><%= sale.obs %></p>
         </td>
         <td class="user-name">
-          <span><%= sale.userName %></span>
+          <p><%= Dat.formatwTime(new Date()) %></p>
+          <p><%= sale.userName %></p>
         </td>
       </tr>
     </table>

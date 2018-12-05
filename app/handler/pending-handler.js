@@ -39,7 +39,7 @@ module.exports = {
       PickingLaws.remove(sale);
       InprogressLaws.remove(sale.numeroPedido);
 
-      callback(); 
+      callback();
     });
   },
 
@@ -62,7 +62,7 @@ module.exports = {
 
       new SaleLoader(number)
       .loadClient()
-      .loadItems()
+      .reloadItems()
       .run(function(sale){
         InprogressLaws.startPicking(sale, user.id, true);
         callback();

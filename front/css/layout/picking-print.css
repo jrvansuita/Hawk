@@ -109,6 +109,7 @@ td{
 .local{
   font-size: 16pt;
   font-weight: 800;
+  white-space: normal;
 }
 
 .qtd{

@@ -22,7 +22,7 @@ module.exports = class SaleShell{
       var item = sale.items[i];
 
       var product  = products.find((j)=>{
-        return j.codigo.includes(item.codigo);
+        return j.codigo == item.codigo;
       });
 
       this.addItem(item, product ? product.localizacao : 'Não encontrado');
@@ -61,7 +61,7 @@ function sortByLocal(itemA, itemB) {
 
   //Se o corredor é o mesmo, compara a coluna para desempatar...
   if (compareHall == 0){
-    var colA = Num.extract(localA[0]); 
+    var colA = Num.extract(localA[0]);
     var colB = Num.extract(localB[0]);
 
     return colA - colB;

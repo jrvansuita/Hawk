@@ -107,7 +107,7 @@ module.exports = {
 
     if (!InprogressLaws.checkAndThrowUserInProgress(user.id)) {
 
-      new SaleLoader(sale).loadItems().run(function(sale){
+      new SaleLoader(sale).reloadItems().run(function(sale){
         InprogressLaws.startPicking(sale, user.id, true);
         DoneLaws.remove(doneSale);
         callback();

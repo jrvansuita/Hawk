@@ -50,13 +50,17 @@ module.exports= class SaleLoader {
     return this;
   }
 
-  loadItems(onCallOuter, ifNotHas){
+  reloadItems(onCallOuter){
+    return this.loadItems(onCallOuter, true);
+  }
+
+  loadItems(onCallOuter, force){
 
     var self = this;
 
     var funcItems = (onCallNext)=>{
 
-      if((!this.sale.items && ifNotHas) || !ifNotHas){
+      if((!this.sale.items) || (force)){
         EccosysCalls.getSaleItems(this.sale.numeroPedido, (items) => {
           this.sale.transport = Util.twoNames(this.sale.transportador, Const.no_transport);
           this.sale.items = items;
