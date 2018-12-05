@@ -63,12 +63,12 @@ $(document).ready(() => {
   $('#user-id').on("keyup", function(e) {
     var key = e.which;
     if (key == 13){
-      var code = $('#user-id').val();
+      var code = $('#user-id').val().trim();
 
       if (code.length >= 9 && isNum(code)) {
 
         var onSucess = function(response){
-          if (response.includes("end-picking")) {
+          if (typeof response == "string" && response.includes("end-picking")) {
             $('.sucess').text("Picking encerrado com sucesso.").fadeIn().delay(1000).fadeOut();
             var sale = response.split("-");
             sale = sale[sale.length - 1];
@@ -80,7 +80,7 @@ $(document).ready(() => {
           } else {
             $('.sucess').text("Aguardando impressão do pedido").fadeIn();
             setTimeout(function() {
-              window.open(response, "picking");
+              openPrintPickingSale(response);
               window.location.reload();
             }, 1000);
           }
@@ -143,7 +143,10 @@ $(document).ready(() => {
     var sale = $(this).data('sale').split('-')[1];
 
     var drop = new MaterialDropdown($(this), e);
-    drop.addItem('/img/print.png', 'Imprimir', null, printPickingUrl + saleId, '_blank');
+    drop.addItem('/img/print.png', 'Imprimir', ()=>{
+      openPrintPickingSale(sale, $('#user-logged-id').text());
+    });
+
     drop.addItem('/img/back.png', 'Reseparar', function(){
       doneSaleRestart(sale);
     });
@@ -188,7 +191,7 @@ function loadSale(sale){
     $('#sale-itens').text(sale.itemsQuantity + ' Itens');
     $('#sale-value').text(Num.money(sale.totalProdutos));
 
-    $('#opened-sale').find('.row-padding').remove(); 
+    $('#opened-sale').find('.row-padding').remove();
     sale.items.forEach(item => {
       var row = $('<tr>').addClass('row-padding');
 
@@ -245,3 +248,18 @@ function checkIsLocalFilled(shake){
 
   return isFilled;
 }
+
+
+function openPrintPickingSale(sale, userId){
+  var url = '/print-picking-sale?userId=[U]&saleNumber=[S]';
+
+  if (userId){
+    url = url.replace('[U]', userId.trim()).replace('[S]', sale);
+  }else{
+    url = url.replace('[U]', sale.pickUser.id).replace('[S]', sale.numeroPedido);
+  }
+
+
+  window.open(url, "_blank");
+}
+ 

@@ -6,7 +6,6 @@ const Err = require('../error/error.js');
 //Nexts sales to pick
 global.staticPickingList = [];
 global.lastClear = 0;
-global.pickingPrintUrl =  "https://" + process.env.ECCOSYS_HOST + "/relatorios/picking.impressao.romaneio.php?imprimeAbertos=N&idsVendas=";
 
 module.exports = {
 
@@ -57,10 +56,6 @@ module.exports = {
 
     this.remove(sale);
     return sale;
-  },
-
-  printUrl(sale){
-    return global.pickingPrintUrl + sale.id;
   },
 
   isEmpty(){

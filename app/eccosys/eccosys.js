@@ -34,6 +34,8 @@ function makeRequest(options, postBody, onResponse){
     });
 
     res.on('end', function() {
+
+      checkResponse(options, responseBody);
       onResponse(responseBody);
     });
   });
@@ -48,6 +50,13 @@ function makeRequest(options, postBody, onResponse){
   }
 
   req.end();
+}
+
+function checkResponse(options, responseBody){
+  if (responseBody == undefined || responseBody.length == 0){
+    console.log('Resposta vazia do Eccosys para:\n' + options.url);
+    //throw new Err('Resposta vazia do Eccosys para:\n' + options.url);
+  }
 }
 
 function getOptions(path, method, isApiCall) {
@@ -65,6 +74,8 @@ function getOptions(path, method, isApiCall) {
       'Content-Type': 'application/json; charset=utf-8'
     }
   };
+
+  //console.log(options);
 
 
   return options;

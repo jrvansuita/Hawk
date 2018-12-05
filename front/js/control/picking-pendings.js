@@ -12,17 +12,6 @@ $(document).ready(() => {
     $(this).closest('.pending-box').find('.pending-count').text(selecteds == 0 ?  count : selecteds + '/' + count);
   });
 
-  //Era para abrir o pedido clicando duas vezes no numero dele na pendencia,
-  //mais o printPickingUrl não existe na tela de pendencias e fica muito ruim a impressão
-  //Para o pessoal do atendimento
-  /*  $('.pending-sale-number').dblclick(function(){
-  var saleId = $(this).data('saleid');
-  window.open(
-  printPickingUrl + saleId,
-  '_blank' // <- This is what makes it open in a new window.
-);
-});
-*/
 
 $('.label-for-avatar').click(function(e){
   e.stopPropagation();

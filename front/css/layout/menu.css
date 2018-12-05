@@ -104,6 +104,10 @@
   position: static;
 }
 
+#user-logged-id {
+  display: none;
+}
+
 .subtitles {
   position: absolute;
   display: table;

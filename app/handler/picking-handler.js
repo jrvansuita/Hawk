@@ -77,7 +77,7 @@ module.exports = {
   next(userId, callback) {
     var sale = PickingLaws.next(userId);
     InprogressLaws.startPicking(sale, userId);
-    callback(PickingLaws.printUrl(sale));
+    callback(sale);
   },
 
   end(userId, callback) {

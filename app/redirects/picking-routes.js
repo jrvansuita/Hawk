@@ -49,14 +49,14 @@ module.exports = class PickingRoutes extends Routes{
       TransportLaws.select(req.query.transp);
       UfLaws.select(req.query.uf);
 
-
+ 
       PickingHandler.init(() => {
 
         var pickingSales = PickingHandler.getPickingSales();
 
         if (!res.headersSent){
           res.render('picking/picking', {
-            previewPickingSales: pickingSales.slice(0,6),
+            previewPickingSales: pickingSales.slice(0,3),
             previewSalesCount: pickingSales.length,
             inprogress: InprogressLaws.object(),
 
@@ -69,8 +69,7 @@ module.exports = class PickingRoutes extends Routes{
             pendingSales: PendingLaws.getList(),
             donePickings: DoneLaws.getList(),
             blockedRules: BlockHandler.rules(),
-            blockedSalesCount: BlockHandler.getBlockedSalesCount(),
-            printPickingUrl: global.pickingPrintUrl
+            blockedSalesCount: BlockHandler.getBlockedSalesCount()
           });
         }
       });

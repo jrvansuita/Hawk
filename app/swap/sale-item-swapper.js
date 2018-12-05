@@ -37,12 +37,22 @@ module.exports = class SaleItemSwapper{
   }
 
   _checkAllreadyHasSwapSku(){
-    var has = this.sale.items.some((item)=>{
-      return item.codigo.toLowerCase() == this.swapSku.trim().toLowerCase();
-    });
+    var swapSku = this.swapSku.trim().toLowerCase();
+    var targetSku = this.targetSku.trim().toLowerCase();
+
+    var has = swapSku == targetSku;
+
+    if (!has){
+      swapSku = swapSku.split('-')[0];
+
+      has = this.sale.items.some((item)=>{
+        var itemSku = item.codigo.toLowerCase();
+        return  itemSku != targetSku && itemSku.includes(swapSku);
+      });
+    }
 
     if (has){
-        this._onError(new Err(Const.product_in_sale.format(this.swapSku.trim()), this.userId));
+      this._onError(new Err(Const.product_in_sale.format(swapSku), this.userId));
     }
 
     return !has;

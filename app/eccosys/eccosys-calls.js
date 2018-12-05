@@ -3,6 +3,15 @@ var Eccosys = require('../eccosys/eccosys.js');
 const History = require('../bean/history.js');
 
 
+//Situações dos pedidos
+//-1 - Aguardando pagamento
+//0  - Em aberto
+//1  - Atendido
+//2  - Cancelado
+//3  - Pronto para picking
+//4  - Pagamento em análise
+
+
 var page_count = 100;
 
 module.exports = {
@@ -110,6 +119,8 @@ function checkEccoStatus(data, def){
     return def;
   }else if (data[0] == ('<')){
     console.log(data);
+    return def;
+  }else if (data.length == 0){
     return def;
   }
 

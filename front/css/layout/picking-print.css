@@ -17,6 +17,8 @@ p{
 span{
   font-size: 16pt;
   font-weight: bold;
+  width: 1%;
+  white-space: nowrap;
 }
 
 .main{
@@ -25,7 +27,8 @@ span{
 }
 
 .obs{
-  font-size: 16pt;
+  font-size: 17pt;
+  font-weight: 500;
   padding-top: 5px;
 }
 
@@ -37,6 +40,8 @@ span{
   text-align: right;
   font-weight: 600;
   font-size: 17pt;
+  padding: 10px;
+  white-space: nowrap;
 }
 
 table{
@@ -90,15 +95,14 @@ td{
 
 .sku{
   margin: 10px 0px;
-  width:1%;
-  white-space:nowrap;
   font-size: 17pt;
   display: -webkit-inline-box;
   font-weight: 800;
+  padding-right: 5px;
 }
 
 .ean{
-  font-size: 15pt;
+  font-size: 17pt;
   font-weight: 600;
 }
 
@@ -132,8 +136,7 @@ td{
 
 
 .col-sku{
-  width: 1%;
-  white-space: nowrap;
+  width: auto;
 }
 
 .col-ean{
