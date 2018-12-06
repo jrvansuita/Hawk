@@ -91,6 +91,7 @@ $(document).ready(() => {
           var showDelay = 1000 + l;
 
           $('.error').text(error.responseText).clearQueue().fadeIn().delay(showDelay).fadeOut();
+          $('#user-id').select();
         };
 
         _get("/picking-sale",{
@@ -262,4 +263,3 @@ function openPrintPickingSale(sale, userId){
 
   window.open(url, "_blank");
 }
- 

@@ -18,6 +18,10 @@ module.exports = class ProductRoutes extends Routes{
       ProductHandler.getStockHistory(req.query.sku, this._resp().redirect(res));
     });
 
+    this._get('/product-search-autocomplete', (req, res) => {
+      ProductHandler.searchAutoComplete(req.query.typing, this._resp().redirect(res));
+    });
+
     this._page('/stock', (req, res) => {
       var skuOrEan = req.query.sku || req.query.ean;
 
@@ -29,11 +33,11 @@ module.exports = class ProductRoutes extends Routes{
     });
 
     this._post('/product-local', (req, res) => {
-      ProductHandler.updateLocal(req.body.sku, req.body.local, res.locals.loggedUser, this._resp().redirect(res));
+      ProductHandler.updateLocal(req.body.sku, req.body.local, req.body.user, this._resp().redirect(res));
     });
 
     this._post('/product-stock', (req, res) => {
-      ProductHandler.updateStock(req.body.sku, req.body.stock, res.locals.loggedUser, this._resp().redirect(res));
+      ProductHandler.updateStock(req.body.sku, req.body.stock, req.body.user, this._resp().redirect(res));
     });
 
 

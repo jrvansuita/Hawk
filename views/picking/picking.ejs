@@ -17,7 +17,6 @@
   <script type="text/javascript" src="/front/js/control/blocked/blocked-post.js"></script>
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-selector-dialog.css">
 
-  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-select.css">
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-dropdown.css">
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-switch.css">
@@ -44,12 +43,7 @@
         <div class="find-next-holder shadow">
           <span class="picking-title label header-title"> Impressão de Picking </span>
 
-          <div class="material-input-holder group input-group">
-            <input type="text" id="user-id" required>
-            <span class="highlight"></span>
-            <span class="bar"></span>
-            <label>Código de Acesso</label>
-          </div>
+          <input type="text" id="user-id" class="simple-material-input" placeholder="Código de Acesso" />
 
           <p class="error msg-input">Erro</p>
           <p class="sucess msg-input">Sucesso</p>
@@ -109,18 +103,18 @@
 
                       <table width="100%">
                         <tr>
-                          <td rowspan="2" style="max-width: 38px;">
+                          <td rowspan="2" style="max-width: 38px; padding-right:4px;">
                             <img class="circle shadow box-img" data-transp="<%=preview.transport%>" src="/img/transport/<%=preview.transport ? preview.transport.toLowerCase(): ''%>.png" onerror="this.src='/img/wait.png'" />
                           </td>
 
                           <td><span class="pick-value green-title"><%=preview.numeroPedido %></span></td>
-                          <td><span class="pick-value"><%=preview.itemsQuantity ? preview.itemsQuantity : 0%> Itens</span></td>
+                          <td><span class="pick-value"><%=preview.client ? preview.client.uf : ''%></span></td>
                           <td><span class="pick-value" style="float:right"><%= Dat.format(new Date(preview.data))%></span></td>
                         </tr>
                         <tr>
                           <td><span class="pick-value"><%=preview.transport?preview.transport:'Carregando...'%></span></td>
-                          <td><span class="pick-value"><%=preview.client ? preview.client.uf : ''%></span></td>
-                          <td><span class="pick-value" style="float:right"><%=Num.money(preview.totalProdutos) %></span></td>
+                          <td><span class="pick-value"><%=Util.twoNames(preview.client ? preview.client.cidade : '', '', 30)%></span></td>
+                          <td><span class="pick-value" style="float:right"><%=Util.twoNames(preview.client ? preview.client.nome: '') %></span></td>
                         </tr>
                       </table>
                     </div>
@@ -141,7 +135,7 @@
 
                     <input type="text" id="blocked-rule-input" class="simple-material-input" placeholder="Número" style="width:100%"/>
                   </div>
-                  <div class="block-scroll"> 
+                  <div class="block-scroll">
                     <div class="blocked-rules-holder">
                       <%  blockedRules.forEach((blocked) => {%>
                         <table class="table-sale-blocked-holder shadow"  data-blocknumber="<%=blocked.number%>">

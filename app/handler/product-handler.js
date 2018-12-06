@@ -81,11 +81,17 @@ module.exports ={
         codigo: product.codigo,
         quantidade: Math.abs(stock),
         es: stock < 0 ? 'S' : 'E',
-        obs : " - " +  user.name
+        obs : " Desktop - " +  user.name
       };
 
 
       EccosysCalls.updateProductStock(product.codigo, body, callback);
+    });
+  },
+
+  searchAutoComplete(typing, callback){
+    Product.like(typing, 5, (err, products)=>{
+      callback(products);
     });
   }
 

@@ -4,26 +4,42 @@ $(document).ready(() => {
     $('#search').select();
   });
 
-  $('#search').on("keyup", function(e) {
-    var key = e.which;
-    var skuOrEan = $('#search').val();
-    if (key == 13 && skuOrEan){
+  $('#lock-icon').click(()=>{
+    onLockClick();
+  });
 
-      var url = window.location.origin + window.location.pathname;
-      var query;
-
-      if (Num.isEan(skuOrEan)){
-        query = '?ean=' + skuOrEan;
-      }else{
-        query = '?sku=' + skuOrEan;
-      }
-
-      window.location.href =  url + query;
+  $('#lock-user-id').on("keyup", function(e) {
+    if (e.which == 13){
+      loadUserLockAuth();
     }
   });
 
   requestProductChilds();
+  prepareAutoComplete();
+
+  $('#search').on("keyup", function(e) {
+    if (e.which == 13){
+      findCurrentProduct();
+    }
+  });
 });
+
+function findCurrentProduct(){
+  var skuOrEan = $('#search').val();
+  if (skuOrEan){
+
+    var url = window.location.origin + window.location.pathname;
+    var query;
+
+    if (Num.isEan(skuOrEan)){
+      query = '?ean=' + skuOrEan;
+    }else{
+      query = '?sku=' + skuOrEan;
+    }
+
+    window.location.href =  url + query;
+  }
+}
 
 var skusCount = 0;
 
@@ -35,8 +51,7 @@ function requestProductChilds(){
     }
 
     skusCount = product._Skus.length;
-    product._Skus.forEach((sku)=>{ 
-      console.log(sku);
+    product._Skus.forEach((sku)=>{
       _get('/product-child', {sku: sku.codigo}, (child)=>{
         buildChildSku(product, child);
         skusCount--;
@@ -53,7 +68,32 @@ function requestProductChilds(){
 
 function onFinishedLoading(){
   addFooter();
-  $('.right-loading').hide().fadeIn().attr('src', '/img/checked.png').delay(2000).fadeOut();
+  showOkStatus();
+}
+
+
+function showOkStatus(){
+  showStatus('/img/checked.png', 3000);
+}
+
+function showErrorStatus(){
+  showStatus('/img/alert.png', 5000);
+}
+
+function showLoadingStatus(){
+  showStatus('/img/loader/circle.svg', false);
+}
+
+function showStatus(path, delay){
+  var $el = $('.status-icon');
+
+  $el.clearQueue().hide().fadeIn().attr('src', path);
+
+  if (delay > 0){
+    $el.delay(delay).fadeOut();
+  }else if (delay == undefined){
+    $el.delay(3000).fadeOut();
+  }
 }
 
 
@@ -76,7 +116,7 @@ function buildChildSku(product, child){
     $tr.append(col);
   });
 
-  paintLineStock($tr, estoque);
+  paintLineStock($tr, child);
 
   $('.label-val-title').hide();
 
@@ -104,13 +144,26 @@ function buildLocalCol(product){
   bindEvents($valElement, true);
 
   $valElement.focusout(function(){
-    if ($(this).val() && $(this).val().trim() !== $(this).data('value').toString().trim()){
-      $(this).addClass('loading-value');
-      _post('/product-local', {sku:product.codigo, local: $(this).val()}, (res)=>{
-        handleInputUpdate($(this), res, $(this).val());
-      });
+    if (currentUser){
+      if ($(this).val() && $(this).val().trim() !== $(this).data('value').toString().trim()){
+
+        showLoadingStatus();
+
+        var requestBody = {
+          sku:product.codigo,
+          local: $(this).val(),
+          user: currentUser
+        };
+
+
+        _post('/product-local', requestBody, (res)=>{
+          handleInputUpdate($(this), res, $(this).val());
+        });
+      }
     }
-  });
+  })
+  //Ao abrir a tela os campos de edição são desabilitados
+  .attr('disabled', true);
 
   return buildCol($valElement);
 }
@@ -121,19 +174,30 @@ function buildStockCol(product){
   bindEvents($valElement, true, true);
 
   $valElement.change(function(e, v){
-    if ($(this).val()){
-      $(this).addClass('loading-value');
-      var val = parseInt($(this).val());
+    if (currentUser){
+      if ($(this).val()){
+        showLoadingStatus();
+        var val = parseInt($(this).val());
 
-      _post('/product-stock', {sku:product.codigo, stock: val}, (res)=>{
-        handleInputUpdate($(this), res, $(this).data('value') + val);
+        var requestBody = {
+          sku:product.codigo,
+          stock: val,
+          user: currentUser
+        };
 
-        var $disp = $(this).closest('tr').find('.available-stock .child-value');
 
-        $disp.text(parseInt($disp.text()) + val);
-      });
+        _post('/product-stock',requestBody , (res)=>{
+          handleInputUpdate($(this), res, $(this).data('value') + val);
+
+          var $disp = $(this).closest('tr').find('.available-stock .child-value');
+
+          $disp.text(parseInt($disp.text()) + val);
+        });
+      }
     }
-  });
+  })
+  //Ao abrir a tela os campos de edição são desabilitados
+  .attr('disabled', true);
 
 
   return buildCol($valElement);
@@ -238,6 +302,8 @@ function loadLayoutLoadHistory(rows){
 
     if (i.idOrigem != '' && i.es == 'S' && i.obs == ''){
       obs = 'Saída por Faturamento';
+    }else if (i.obs == '' && i.quantidade > 0 && i.tipoEntrada == ''){
+      obs = 'Estoque inicial';
     }else{
       obs = i.obs;
     }
@@ -254,8 +320,6 @@ function loadLayoutLoadHistory(rows){
 
     $('#stock-history').append($tr);
   });
-
-
 }
 
 
@@ -284,24 +348,16 @@ function isStored(res){
   }
 }
 
-
-function flashOnUpdate($el, res){
+function controlStatus($el, res){
   if (isStored(res)){
-    flashColor($el, 'positive-row');
+    showOkStatus();
   }else{
-    flashColor($el, 'negative-row');
+    showErrorStatus();
   }
 }
 
-function flashColor($el, clazz){
-  $el.removeClass('loading-value').addClass(clazz).delay(1000).queue(function(){
-    $el.removeClass(clazz).dequeue();
-  });
-}
-
-
 function handleInputUpdate($el, res, newValue){
-  flashOnUpdate($el, res);
+  controlStatus($el, res);
 
   $el.val(newValue);
 
@@ -317,8 +373,14 @@ function bindEvents($el, blurOnEnter, clearOnFocus){
   });
 
   if (clearOnFocus){
+    var lastVal = $el.val();
+
     $el.focusin(function(e){
       $(this).val('');
+    });
+
+    $el.focusout(function(e){
+      $(this).val(lastVal);
     });
   }
 
@@ -332,10 +394,123 @@ function bindEvents($el, blurOnEnter, clearOnFocus){
 }
 
 
-function paintLineStock(el, stock){
-  if (stock.estoqueReal < 1){
-    $(el).css('background-color', '#ff00003d');
-  }else if (stock.estoqueDisponivel < 1){
+function paintLineStock(el, child){
+  var stock = child._Estoque;
+  var hasLocal = child.localizacao.length > 0;
+
+  if (!hasLocal){
+    //Red
     $(el).css('background-color', '#ff000024');
+    return;
   }
+
+  if (stock.estoqueReal < 1){
+    //Yellow
+    $(el).css('background-color', '#ff00003d');
+    return;
+  }
+
+  if (stock.estoqueDisponivel < 0){
+    //Red
+    $(el).css('background-color', '#ff000024');
+    return;
+  }
+}
+
+var currentUser;
+
+function isUnlocked(){
+  return currentUser != undefined;
+}
+
+function onLockClick(){
+  if (isUnlocked()){
+    initialLockState();
+  }else{
+    waittingToLock();
+  }
+}
+
+function loadUserLockAuth(){
+  var userAcess = $('#lock-user-id').val();
+  if (userAcess){
+    _get('/user?userId='+userAcess,{},(user)=>{
+      unlock(user);
+    },()=>{
+      errorLock();
+    });
+  }
+}
+
+function initialLockState(){
+  $('#lock-icon').hide().attr('src','/img/lock.png').fadeIn();
+  currentUser = undefined;
+  $('#lock-user-id').val('');
+  $('.editable-input').attr('disabled', true);
+}
+
+function waittingToLock(){
+  $('#lock-icon').hide().attr('src','/img/lock-loupe.png').fadeIn();
+  $('#lock-user-id').select().focus();
+
+  $('#lock-user-id').one("focusout",()=>{
+    if (!isUnlocked()){
+      initialLockState();
+    }
+  });
+}
+
+function unlock(user){
+  $('#lock-icon').hide().attr('src','/img/unlocked.png').fadeIn();
+  currentUser = user;
+  $('.editable-input').attr('disabled', false);
+}
+
+function errorLock(user){
+  $('#lock-icon').hide().attr('src','/img/lock-error.png').fadeIn();
+  $('#lock-user-id').select().focus();
+}
+
+
+function prepareAutoComplete(){
+  var options = {
+
+    url: function(phrase) {
+      return "/product-search-autocomplete?typing=" + phrase;
+    },
+
+    getValue: function(element) {
+      return element.sku;
+    },
+
+    template: {
+      type: "description",
+      fields: {
+        description: "name"
+      }
+    },
+
+    ajaxSettings: {
+      dataType: "json",
+      method: "GET",
+      data: {
+        dataType: "json"
+      }
+    },
+    requestDelay: 50,
+    list: {
+      maxNumberOfElements: 5,
+      match: {
+        enabled: true
+      },
+      sort: {
+        enabled: true
+      },
+      onClickEvent: function() {
+        findCurrentProduct();
+      }
+    },
+  };
+
+  $("#search").easyAutocomplete(options);
 }

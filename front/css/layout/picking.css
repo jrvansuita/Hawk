@@ -39,11 +39,12 @@ table{
   display: block;
 }
 
-.group.input-group {
-  max-width: 150px;
+#user-id{
+  font-size: 10pt;
+  padding: 15px 5px;
   margin: auto;
-  margin-bottom: 25px;
-  margin-top: 40px;
+  margin-bottom: 15px;
+  margin-top: 18px;
 }
 
 .header-title {

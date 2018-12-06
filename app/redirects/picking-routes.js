@@ -7,6 +7,7 @@ const PendingLaws = require('../laws/pending-laws.js');
 const DoneLaws = require('../laws/done-laws.js');
 const PickingHandler = require('../handler/picking-handler.js');
 const PickingSalePrint = require('../print/picking-sale-print.js');
+const UsersProvider = require('../provider/UsersProvider.js');
 
 module.exports = class PickingRoutes extends Routes{
 
@@ -93,10 +94,12 @@ module.exports = class PickingRoutes extends Routes{
 
     this._get('/print-picking-sale', (req, res, body, locals, session) => {
 
-      new PickingSalePrint(req.query.userId, req.query.saleNumber).setOnFinish((shell)=>{
+      new PickingSalePrint(req.query.saleNumber).setOnFinish((shell)=>{
+        shell.setUser(UsersProvider.get(req.query.userId));
+
         res.render('picking/picking-print', {sale : shell});
       }).load();
-      
+
     });
 
 

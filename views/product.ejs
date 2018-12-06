@@ -8,6 +8,9 @@
 
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
   <script type="text/javascript" src="/front/js/control/product.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/easy-autocomplete.css">
+  <script type="text/javascript" src="/front/js/libs/easy-autocomplete.min.js"></script>
 </head>
 
 
@@ -106,10 +109,15 @@
             <div class="overflow">
               <div class="search-holder">
                 <%if (product.codigo){%>
-                  <img src="/img/loader/circle.svg" class="right-loading loading-circle"/>
+                  <img src="/img/loader/circle.svg" class="status-icon loading-circle"/>
                   <%}%>
-                  <input type="text" id="search" value="<%=product.selected ? product.selected : product.codigo%>" class="<%=product.error? 'simple-material-input-error simple-material-input' : 'simple-material-input'%>" placeholder="Pesquisar" style="width:100%"/>
+
+
+                  <input type="text" id="search" value="<%=product.selected ? product.selected : product.codigo%>" class="<%=product.error? 'simple-material-input-error simple-material-input' : 'simple-material-input'%>" placeholder="Pesquisar"/>
                   <label class="top-label sub search-hint">SKU ou EAN</label>
+
+                  <img id="lock-icon" src="/img/lock.png" class="lock"/>
+                  <input type="text" id="lock-user-id"/>
                 </div>
 
                 <%if (product.error){%>

@@ -1,7 +1,6 @@
 module.exports = class SaleShell{
 
   constructor(sale, user){
-    this.userName = user.name;
     this.number = sale.numeroPedido;
     this.obs = sale.observacaoInterna;
     this.date = sale.data;
@@ -10,8 +9,17 @@ module.exports = class SaleShell{
     this.transport = sale.transportador;
     this.itemsQuantity = sale.itemsQuantity;
     this.items = [];
+
+    this.setUser(user);
   }
 
+  setUser(user){
+    if (user){
+      this.userName = user.name;
+    }
+
+    return this;
+  }
 
   addItem(item, local){
     this.items.push(new SaleShellItem(item, local));

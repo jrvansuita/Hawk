@@ -2,14 +2,12 @@ const DoneLaws = require('../laws/done-laws.js');
 const InprogressLaws = require('../laws/inprogress-laws.js');
 const SaleLoader = require('../loader/sale-loader.js');
 const SaleShell = require('../print/sale-shell.js');
-const UsersProvider = require('../provider/UsersProvider.js');
 const EccosysCalls = require('../eccosys/eccosys-calls.js');
 const PickingLaws = require('../laws/picking-laws.js');
 
 module.exports = class PickingSalePrint{
 
-  constructor(userId, saleNumber){
-    this.user = UsersProvider.get(userId);
+  constructor(saleNumber){
     this.saleNumber = saleNumber;
   }
 
@@ -21,7 +19,7 @@ module.exports = class PickingSalePrint{
   _loadFromProgressOrDone(){
     var sale = InprogressLaws.get(this.saleNumber) || DoneLaws.get(this.saleNumber);
 
-    loadSaleForPrint(sale || saleNumber, this.user, (shell)=>{
+    loadSaleForPrint(sale || saleNumber, (shell)=>{
       this._fisnish(shell);
     });
   }
@@ -30,11 +28,11 @@ module.exports = class PickingSalePrint{
     var shell = getShellSaleFromPool(this.saleNumber);
     if (shell){
       this._fisnish(shell);
-      createAndHandlePrintPool(this.user);
+      createAndHandlePrintPool();
     }else{
       this._loadFromProgressOrDone();
-      createAndHandlePrintPool(this.user);
-    }
+      createAndHandlePrintPool();
+    }  
   }
 
   _fisnish(shell){
@@ -56,7 +54,7 @@ function getShellSaleFromPool(saleNumber){
 
 global.shellsPrintPool = [];
 
-function createAndHandlePrintPool(user){
+function createAndHandlePrintPool(){
   var poolSize = 3;
 
   var nextSales = PickingLaws.getList().slice(0,poolSize);
@@ -73,13 +71,13 @@ function createAndHandlePrintPool(user){
 
   global.shellsPrintPool = global.shellsPrintPool.slice(-poolSize);
 
-  loadShellsFromSales(user);
+  loadShellsFromSales();
 }
 
-function loadShellsFromSales(user){
+function loadShellsFromSales(){
   global.shellsPrintPool.forEach((item, index)=>{
     if (!(item instanceof SaleShell)){
-      loadSaleForPrint(item, user, (shell)=>{
+      loadSaleForPrint(item, (shell)=>{
         global.shellsPrintPool[index] = shell;
       });
     }
@@ -88,13 +86,13 @@ function loadShellsFromSales(user){
 
 //Carrega toda a Sale e cria uma estrutura chamada de
 //shell para enviar ao layout para montar a impressao
-function loadSaleForPrint(sale, user, callback){
+function loadSaleForPrint(sale, callback){
   new SaleLoader(sale)
   .loadItems()
   .loadClient()
   .loadProducts((products, sale)=>{
     if (callback){
-      var shell = new SaleShell(sale, user);
+      var shell = new SaleShell(sale);
 
       shell.parseItems(sale, products);
       shell.sortByLocal();

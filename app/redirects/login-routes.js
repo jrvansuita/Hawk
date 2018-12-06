@@ -1,4 +1,5 @@
 const Routes = require('../redirects/controller/routes.js');
+const UsersProvider = require('../provider/UsersProvider.js');
 
 module.exports = class LoginRoutes extends Routes{
 
@@ -7,8 +8,18 @@ module.exports = class LoginRoutes extends Routes{
       res.render('login');
     });
 
+    this._get('/user', (req, res) => {
+      var user = UsersProvider.get(req.query.userId);
+      if (user){
+        this._resp().sucess(res, user);
+      }else{
+        this._resp().error(res, 'Usuário não encontrado');
+      }
+
+    });
+
     this._post('/login', (req, res) => {
-      var UsersProvider = require('../provider/UsersProvider.js');
+
 
 
       UsersProvider.login(req.body.userId, req.body.userAccess, (user, msg)=>{
