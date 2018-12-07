@@ -35,7 +35,7 @@
           <svg id="barcode"></svg>
         </td>
         <td style="width: 30%;">
-          <p class="sale-number"><%= sale.number%></p>
+          <p class="sale-number"><%= sale.number + (sale.status == 1 ? ' - Faturado' : '') %></p>
           <p class="sale-date"><%= Dat.format(new Date(sale.date))%></p>
         </td>
         <td style="width: 35%; text-align: right;">

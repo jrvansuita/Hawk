@@ -8,6 +8,7 @@ module.exports = class SaleShell{
     this.clientName = sale.client.nome;
     this.transport = sale.transportador;
     this.itemsQuantity = sale.itemsQuantity;
+    this.status = sale.situacao;
     this.items = [];
 
     this.setUser(user);
