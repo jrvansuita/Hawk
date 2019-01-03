@@ -5,61 +5,97 @@
   <title></title>
 
   <style>
-    .sales{
-      font-family: sans-serif;
-      font-size: 15px;
-      font-weight: 600px;
-      color: rgb(23, 24, 24);
-    }
+  table{
+    display: inline;
+    font-family: sans-serif;
+    font-size: 15px;
+    color: rgb(23, 24, 24);
+  }
 
-    .items{
-      font-family: sans-serif;
-      font-size: 13px;
-      font-weight: 500px;
-      color: rgb(98, 94, 102);
-    }
+  .items{
+    font-family: sans-serif;
+    font-size: 13px;
+    font-weight: 500px;
+    color: rgb(98, 94, 102);
+  }
   </style>
 </head>
 <body>
   <script type="text/javascript">
   window.line = <%- JSON.stringify(line || null) %>
+  window.blocks = <%- JSON.stringify(blocks || null) %>
   </script>
 
-  <table class="sales">
-    <td>Pedido</td>
-    <td>Cliente</td>
-    <td>Data</td>
-    <td>Estado</td>
-    <td>Transportadora</td>
+  <div class="main">
 
-    <%line.forEach((each)=>{
-      %>
+    <table class="sales">
       <tr>
-        <td><%=each.numeroPedido%></td>
-        <td><%=each.client ? each.client.nome : 'NONE'%></td>
-        <td><%=Dat.format(new Date(each.data))%></td>
-        <td><%=each.client ? each.client.uf : 'NONE'%></td>
-        <td><%=each.transport%></td>
+        <td>Pedido</td>
+        <td>Cliente</td>
+        <td>Data</td>
+        <td>Estado</td>
+        <td>Transportadora</td>
       </tr>
 
-      <tr>
-        <td></td>
-        <td colspan="4">
-          <table class="items">
-            <% if (each.items){
-             each.items.forEach((eachItem)=>{%>
-              <tr>
-                <td><%=eachItem.quantidade%></td>
-                <td><%=eachItem.codigo%></td>
-                <td><%=eachItem.descricao%></td>
-              </tr>
-              <%})}%>
-            </table>
-          </td>
+      <%line.forEach((each)=>{
+        %>
+        <tr>
+          <td><%=each.numeroPedido%></td>
+          <td><%=each.client ? each.client.nome : 'NONE'%></td>
+          <td><%=Dat.format(new Date(each.data))%></td>
+          <td><%=each.client ? each.client.uf : 'NONE'%></td>
+          <td><%=each.transport%></td>
         </tr>
-        <%
-      });%>
-    </table>
 
-  </body>
-  </html>
+        <tr>
+          <td></td>
+          <td colspan="4">
+            <table class="items">
+              <% if (each.items){
+                each.items.forEach((eachItem)=>{%>
+                  <tr>
+                    <td><%=eachItem.codigo%></td>
+                    <td><%=eachItem.descricao%></td>
+                  </tr>
+                  <%})}%>
+                </table>
+              </td>
+            </tr>
+            <%
+          });%>
+        </table>
+
+        <table class="blocks">
+          <tr>
+            <td>Pedido</td>
+            <td>Bloqueio</td>
+          </tr>
+
+          <%blocks.forEach((each)=>{
+            %>
+            <tr>
+              <td><%=each.numeroPedido%></td>
+              <td>'Bloqueado'</td>
+            </tr>
+
+            <tr>
+              <td colspan="2">
+                <table class="items">
+                  <% if (each.items){
+                    each.items.forEach((eachItem)=>{%>
+                      <tr>
+                        <td><%=eachItem.codigo%></td>
+                        <td><%=eachItem.descricao%></td>
+                      </tr>
+                      <%})}%>
+                    </table>
+                  </td>
+            </tr>
+         <%})%>
+
+
+          </table>
+        </div>
+
+      </body>
+      </html>

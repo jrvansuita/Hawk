@@ -106,7 +106,9 @@ module.exports = class PickingRoutes extends Routes{
 
     this._get('/picking-line', (req, res, body, locals, session) => {
       const PickingLaws = require('../laws/picking-laws.js');
-      res.render('picking/line', {line : PickingLaws.getFullList()});
+      const BlockLaws = require('../laws/block-laws.js');
+      res.render('picking/line', {line : PickingLaws.getFullList(),
+                                  blocks: BlockLaws.list()});
     });
 
 

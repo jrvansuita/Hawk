@@ -639,3 +639,7 @@ tr.row-padding td{
   margin-top: -10px;
   margin-left: 5px;
 }
+
+.label-transport{
+  min-width: 100px;
+}

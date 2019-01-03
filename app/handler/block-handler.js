@@ -19,7 +19,6 @@ module.exports = {
     return BlockLaws.list().length;
   },
 
-
   hasBlockSales(){
     return BlockLaws.list().length > 0;
   },
