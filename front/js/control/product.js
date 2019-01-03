@@ -69,6 +69,7 @@ function requestProductChilds(){
 function onFinishedLoading(){
   addFooter();
   showOkStatus();
+  checkPermissionUser();
 }
 
 
@@ -513,4 +514,10 @@ function prepareAutoComplete(){
   };
 
   $("#search").easyAutocomplete(options);
+}
+
+function checkPermissionUser(){
+  if (Sett.get(loggedUser,4)){
+    unlock(loggedUser);
+  }
 }

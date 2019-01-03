@@ -12,6 +12,7 @@ global.Util = require('../util/util.js');
 global.Num = require('../util/number.js');
 global.Floa = require('../util/float.js');
 global.Dat = require('../util/date.js');
+global.Sett = require('../util/sett.js');
 
 global.Str = require('../util/string.js');
 global.Const = require('../const/const.js');

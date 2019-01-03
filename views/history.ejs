@@ -6,6 +6,7 @@
   <link rel="stylesheet" type="text/css" href="/front/css/libs/autocomplete.css">
   <script src="front/js/libs/autocomplete.js" charset="utf-8"></script>
   <script type="text/javascript" src="/front/js/control/history.js"></script>
+  <script type="text/javascript" src="/front/js/libs/users-selector.js"></script>
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
 
 </head>
@@ -22,7 +23,9 @@
           <input type="text" id="tag-search" class="simple-material-input search-input" placeholder="Tag" />
 
           <label class="button search-button shadow">Pesquisar</label>
-          <%if (locals.loggedUser.full){%>
+          <%
+
+          if (Sett.get(locals.loggedUser,5)){%>
              <label class="button delete-button shadow">Excluir Tudo</label>
           <%}%>
         </div>

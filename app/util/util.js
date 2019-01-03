@@ -26,16 +26,6 @@ var Util = {
     return JSON.parse(JSON.stringify(object));
   },
 
-  findUserInListByName(name, list){
-    var arr = Object.keys(list);
-    for(var i = 0; i <arr.length; i++){
-      var item = list[arr[i]];
-
-      if (item.name.trim() == name.trim()){
-        return item;
-      }
-    }
-  },
 
   forProperty(object, callback){
     for (var key in object) {
@@ -121,9 +111,22 @@ var Util = {
   },
 
   notIn(array, str){
-    return !array.some((s)=>{
+    return !this.isIn(array, str);
+  },
+
+  isIn(array, str){
+    return array.some((s)=>{
       return str.includes(s);
     });
+  },
+
+  ellipsis(str, max){
+
+    if (str.length > max + 3){
+       return str.substring(0,max) + '...';
+    }
+
+    return str;
   },
 
   twoNames(name, def, pMax){
@@ -145,12 +148,6 @@ var Util = {
 
     return name;
   }
-
-
-
-
-
-
 };
 
 

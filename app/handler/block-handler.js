@@ -2,7 +2,7 @@ const BlockLaws = require('../laws/block-laws.js');
 const PendingLaws = require('../laws/pending-laws.js');
 const HistoryStorer = require('../history/history-storer.js');
 const PickingLaws = require('../laws/picking-laws.js');
-
+const UsersProvider = require('../provider/UsersProvider.js');
 
 module.exports = {
 
@@ -58,7 +58,7 @@ module.exports = {
         PickingLaws.add(sale);
     });
   },
- 
+
   _checkAndBlockSaleFromPicking(blockRule){
     //Remove all sales that matchs the new block
     PickingLaws.filter((sale)=>{
@@ -83,8 +83,9 @@ module.exports = {
     });
   },
 
-  toggle(blockNumber, user, reasonTag, callback){
+  toggle(blockNumber, userId, reasonTag, callback){
     var block = BlockLaws.get(blockNumber);
+    var user = UsersProvider.get(userId);
 
     if (block) {
       this.remove(block, user, callback);

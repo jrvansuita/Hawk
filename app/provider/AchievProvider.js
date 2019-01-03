@@ -13,7 +13,7 @@ module.exports = class AchievProvider {
 
   onAddRowListener(func){
     this.onAddRowFunc = func;
-  } 
+  }
 
   onResultListener(func){
     this.onResultFunc = func;
@@ -66,35 +66,35 @@ function loadEveryMonth(res, onAddRowFunc, onResultFunc){
 
 function runAggregate(_type, callback) {
   Day.aggregate([{
-      $match: {
-        type: _type
+    $match: {
+      type: _type
+    }
+  }, {
+    $group: {
+      _id: {
+        year: {
+          $year: "$date"
+        },
+        month: {
+          $month: "$date"
+        },
+        userId: "$userId"
+      },
+      sum_count: {
+        $sum: "$count"
+      },
+      sum_total: {
+        $sum: "$total"
+      },
+      sum_points: {
+        $sum: "$points"
       }
-    }, {
-      $group: {
-        _id: {
-          year: {
-            $year: "$date"
-          },
-          month: {
-            $month: "$date"
-          },
-          userId: "$userId"
-        },
-        sum_count: {
-          $sum: "$count"
-        },
-        sum_total: {
-          $sum: "$total"
-        },
-        sum_points: {
-          $sum: "$points"
-        }
-      }
-    }],
-    function(err, res) {
-      if (callback)
-        callback(err, res);
-    });
+    }
+  }],
+  function(err, res) {
+    if (callback)
+    callback(err, res);
+  });
 }
 
 function loadUsers(data) {

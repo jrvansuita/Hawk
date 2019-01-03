@@ -65,7 +65,7 @@ module.exports = class IndicatorsBuilder{
       group.addItem('Receita', data.sum_total, '03c184');
     }
     group.addItem('Pedidos Faturados', data.sum_count, '14b5a6');
-    group.addItem('Ticker Médio', data.sum_total/data.sum_count, 'b359e2');
+    group.addItem('Ticket Médio', data.sum_total/data.sum_count, 'b359e2');
 
     if (data.sum_points > 0)
     group.addItem('Pontos', data.sum_points , '1da8b9');

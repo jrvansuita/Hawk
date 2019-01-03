@@ -139,6 +139,13 @@ static aggregate(query, callback) {
     });
   }
 
+  static remove(object, callback) {
+    this.staticAccess().findOneAndRemove(this.staticAccess().getKeyQuery(this.staticAccess().getKeyVal(object)), (err) => {
+      if (callback)
+      callback(err);
+    });
+  }
+
 
   // --- Class -- //
   //A class access to the class model

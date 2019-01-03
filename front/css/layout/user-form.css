@@ -1,0 +1,151 @@
+body {
+  background-color: #009587;
+  bottom: 0;
+  padding: 0px;
+  margin: 0px;
+  height: 100%;
+}
+
+.user-form{
+  width: 80%;
+  display: block;
+  text-align: center;
+  margin: auto;
+  padding: 10px 15px;
+
+}
+
+.main-form{
+  min-height: 400px;
+  text-align: center;
+  margin: auto;
+  padding: 10px 15px;
+}
+
+.fields{
+  text-align: center;
+  width: 50%;
+  float: left;
+  display: -webkit-box;
+}
+
+.left-panel{
+  text-align: center;
+  width: 50%;
+  display: -webkit-box;
+}
+
+.right-panel{
+  text-align: center;
+  width: 50%;
+  display: -webkit-box;
+}
+
+.settings{
+  text-align: center;
+  width: 50%;
+  display: block;
+  float: right;
+}
+
+.oderner{
+  display: grid;
+}
+
+
+.header-name{
+  width: auto;
+  display: grid;
+  text-align: left;
+  margin-top: 10px;
+}
+
+.avatar-holder{
+  width: 100px;
+  height: fit-content;
+  display: inline-block;
+}
+
+.header{
+  display: flex;
+  height: 70px;
+  border-bottom: 1px solid #efe6e6;
+  margin-bottom: 30px;
+}
+
+.label-name{
+  color: black;
+  display: grid;
+  font-size: 16px;
+  height: 4px;
+  margin: 0px;
+}
+
+.label-title{
+  color: #696565;
+  font-size: 14px;
+  margin-top: -13px;
+  height: 10px;
+  display: -webkit-inline-box;
+}
+
+.input-val{
+  display: inline-block;
+  font-size: 15px;
+  margin-bottom: 15px;
+  min-width: 250px;
+}
+
+.footer{
+  border-top: 1px solid #f1e9e9;
+  width: 100%;
+  margin-top: 30px;
+  height: 40px;
+  display: block;
+  padding-top: 10px;
+}
+
+
+.search-input{
+  border: 0;
+  width: 200px;
+  font-size: 15px;
+}
+
+
+.search-input:hover:enabled {
+    border-radius: 0px;
+    border: 2px #77717161;
+    border-style: none none solid none;
+}
+
+.button{
+  margin-left: 15px;
+}
+
+.setts-group{
+  margin: 15px 5px;
+  text-align: left;
+  display: block;
+}
+
+.setts-group-title{
+  font-size: 16px;
+  color: rgba(70, 71, 69, 0.87);
+  text-align: left;
+  padding-bottom: 5px;
+  font-weight: 600;
+  display: -webkit-box;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.setts-row{
+  font-size: 15px;
+  font-weight: 500;
+  color: rgb(18, 17, 18);
+  display: block;
+  text-align: left;
+  vertical-align: middle;
+  padding-top: 5px;
+  padding-right: 5px;
+}

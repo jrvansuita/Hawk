@@ -2,7 +2,7 @@
 .dropdown {
   display: block;
   margin: auto;
-  min-width: 100px;
+  /* min-width: fit-content; */
   width: fit-content;
   position: relative;
   padding: 0;
@@ -27,7 +27,8 @@
   display: inline-block;
   max-width: 100%;
   padding-bottom: 2px;
-  width: 100px;
+  width: fit-content;
+  min-width: 50px;
 }
 
 .drop-ttl {
@@ -57,7 +58,7 @@
 
 .dropdown ul>li {
   cursor: pointer;
-  padding: 5px 20px;
+  padding: 5px 10px;
   color: inherit;
   outline: 0;
   text-decoration: none;

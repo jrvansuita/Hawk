@@ -28,6 +28,14 @@ module.exports = class UsersProvider {
     }
   }
 
+  static addUser(user){
+    global.localUsers[user.id] = user;
+  }
+
+  static remove(userId){
+    delete global.localUsers[userId];
+  }
+
   static get(code) {
     if (code !== undefined){
       if(global.localUsers[code]){
@@ -64,37 +72,6 @@ module.exports = class UsersProvider {
     return true;
   }
 
-  static updateUserAccess(userId, userAccess, callback){
-    User.findOne({access: userAccess}, (err, user)=>{
-      if (user){
-        callback(true, 'Código de acesso já está sendo usando pelo usuário ' + user.name);
-      }else{
-        user = UsersProvider.get(userId);
-        if (user != undefined && user.access){
-          callback(true, 'O usuário ' + user.name + ' já possui um código de acesso.');
-        }else{
-          User.updateAccess(userId, userAccess);
-          global.localUsers[userId].access = userAccess;
-          callback(false);
-        }
-      }
-    });
-  }
-
-
-  static login(userId, userAccess, callback){
-    if (userId){
-      UsersProvider.updateUserAccess(userId, userAccess, (err, msg)=>{
-        if (err){
-          callback(undefined, msg);
-        }else{
-          callback(UsersProvider.get(userId));
-        }
-      });
-    }else{
-      callback(UsersProvider.get(userAccess));
-    }
-  }
 
 
 };

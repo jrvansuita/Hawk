@@ -45,6 +45,9 @@ table{
   margin: auto;
   margin-bottom: 15px;
   margin-top: 18px;
+  opacity: 0;
+  position: absolute;
+  width: 10px;
 }
 
 .header-title {
@@ -54,6 +57,7 @@ table{
 }
 
 .mini-item {
+  /* width: fit-content; */
   padding: 6px 6px 6px 3px;
   display: block;
   margin-bottom: 5px;
@@ -450,9 +454,10 @@ tr.row-padding td{
 }
 
 .box-img{
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   padding: 1px;
+  margin-right: 2px;
 }
 
 
@@ -484,7 +489,7 @@ tr.row-padding td{
 
 .blocked-box{
   margin-top: 20px;
-  max-height: 300px;
+  max-height: 270px;
   width: min-content;
   min-height: fit-content;
   padding-left: 0px;
@@ -625,4 +630,12 @@ tr.row-padding td{
 .upcoming-box{
   min-height:auto;
   max-width: 260px;
+}
+
+.rfid-card{
+  width: 55px;
+  cursor: pointer;
+  float: right;
+  margin-top: -10px;
+  margin-left: 5px;
 }

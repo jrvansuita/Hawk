@@ -265,8 +265,10 @@ tr.selected td{
 
 .status-icon{
   position: absolute;
+  top: 30px;
+  width: 30px;
   margin-left: -26px;
-  margin-top: -3px;
+  margin-top: -10px;
   max-width: 23px;
   max-height: 23px;
 }
@@ -276,12 +278,9 @@ tr.selected td{
   width: 32px;
   height: 32px;
   float: right;
-  /* position: relative; */
-  /* text-align: right; */
   cursor: pointer;
   margin-top: -36px;
-  /* margin-left: 35px; */
-  margin-right: -45px;
+  margin-right: -35px;
 }
 
 #lock-user-id{

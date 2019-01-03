@@ -7,11 +7,13 @@ module.exports = class PendingRoutes extends Routes{
 
   attach(){
     this._page('/pending', (req, res) => {
-      PendingHandler.load(false, (list)=>{
-        res.render('pending/pending', {
-          wideOpen : true,
-          pendingSales: list});
-        });
+      if (this._checkPermissionOrGoBack(req, res, 2)){
+        PendingHandler.load(false, (list)=>{
+          res.render('pending/pending', {
+            wideOpen : true,
+            pendingSales: list});
+          });
+        }
       });
 
       this._post('/start-pending', (req, res, body, locals) => {
@@ -28,14 +30,14 @@ module.exports = class PendingRoutes extends Routes{
 
       this._post('/pending-swap-items', (req, res, body, locals) => {
         //if (locals.loggedUser.full){
-          new SaleItemSwapper(body.saleNumber, locals.loggedUser.id)
-          .on(body.targetSku)
-          .to(body.swapSku)
-          .with(body.quantity)
-          .go(this._resp().redirect(res));
+        new SaleItemSwapper(body.saleNumber, locals.loggedUser.id)
+        .on(body.targetSku)
+        .to(body.swapSku)
+        .with(body.quantity)
+        .go(this._resp().redirect(res));
         //}else{
-//          this._resp().error(res, 'Você não tem permissão para função');
-  //      }
+        //          this._resp().error(res, 'Você não tem permissão para função');
+        //      }
       });
 
     }

@@ -60,6 +60,7 @@ module.exports = class PickingRoutes extends Routes{
           res.render('picking/picking', {
             previewPickingSales: pickingSales.slice(0,3),
             previewSalesCount: pickingSales.length,
+            totalSalesCount: PickingHandler.getPickingSalesTotalCount(),
             inprogress: InprogressLaws.object(),
 
             transportList: TransportLaws.getObject(),
@@ -85,7 +86,7 @@ module.exports = class PickingRoutes extends Routes{
     });
 
     this._post(['/picking/toggle-block'], (req, res) => {
-      BlockHandler.toggle(req.body.blockNumber, req.session.loggedUser, req.body.reasonTag, this._resp().redirect(res));
+      BlockHandler.toggle(req.body.blockNumber, req.session.loggedUserID, req.body.reasonTag, this._resp().redirect(res));
     });
 
     this._post('/picking-done-restart', (req, res, body, locals, session) => {
@@ -100,6 +101,12 @@ module.exports = class PickingRoutes extends Routes{
         res.render('picking/picking-print', {sale : shell});
       }).load();
 
+    });
+
+
+    this._get('/picking-line', (req, res, body, locals, session) => {
+      const PickingLaws = require('../laws/picking-laws.js');
+      res.render('picking/line', {line : PickingLaws.getFullList()});
     });
 
 

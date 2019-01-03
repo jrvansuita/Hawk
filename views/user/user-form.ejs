@@ -1,0 +1,105 @@
+<html>
+<%  include ../menus/main-menu %>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/general.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/user-form.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-checkbox.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/autocomplete.css">
+
+
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="/front/js/control/user-form.js"></script>
+  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+  <script type="text/javascript" src="/front/js/libs/users-selector.js"></script>
+  <script src="front/js/libs/autocomplete.js" charset="utf-8"></script>
+  <script type="text/javascript" src="/front/js/control/general.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/easy-autocomplete.css">
+  <script type="text/javascript" src="/front/js/libs/easy-autocomplete.min.js"></script>
+
+  <title>Hawk</title>
+  <link rel="icon" href="/img/icon/favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="/img/icon/favicon.ico" type="image/x-icon" />
+</head>
+
+<body>
+
+  <script>
+
+  window.userSetts = <%- JSON.stringify(user ? user.setts ? user.setts : {} : {}) %>
+  </script>
+
+
+  <div class="main-content">
+
+    <form class="user-form shadow" name="user-form" action="user-form" method="post" id="user-form">
+
+      <div class="header">
+
+
+        <div class="avatar-holder">
+          <img class="circle shadow avatar-img" id="avatar-user-form" src="<%=user ? user.avatar : 'img/avatar.png'%>" title="System" />
+          <input type="text" id="editing" value="<%=user ? user.id : -1%>" style="display:none">
+        </div>
+        <div class="header-name">
+          <input type="text" class="simple-material-input search-input" value="<%=user ? user.name : ''%>" id="user-search" placeholder="Usuário" autocomplete="off"/>
+          <span class="label-title" id="title-label"><%=user ? user.title : 'Indefinido'%></span>
+        </div>
+
+
+      </div>
+
+      <div class="main-form">
+
+        <div class="fields ">
+          <div class="left-panel">
+            <div class="oderner">
+              <input type="text" id="name" class="input-val simple-material-input" placeholder="Nome" name="name" value="<%=user ? user.name : ''%>" autocomplete="off" maxlength="30"/>
+              <input type="text" id="title"  class="input-val simple-material-input"placeholder="Setor" name="sector" value="<%=user ? user.title : ''%>" autocomplete="off"/>
+              <input type="text" id="avatar" class="input-val simple-material-input" placeholder="Avatar" name="avatar" value="<%=user ? user.avatar : ''%>" autocomplete="off"/>
+
+              <label class="pure-material-checkbox">
+                <input type="checkbox" id="full" name="full" <%=user ? user.full ? 'checked' : '' : ''%>>
+                <span>Admin</span>
+              </label>
+            </div>
+          </div>
+
+
+          <div class="right-panel">
+            <div class="oderner">
+              <input type="text" id="last-name" class="input-val simple-material-input" placeholder="Sobrenome" name="lastName" value="<%=user ? user.lastName : ''%>" autocomplete="off" maxlength="30"/>
+              <input type="text" id="access" class="input-val simple-material-input" placeholder="Código de Acesso" name="access" value="<%=user ? user.access : ''%>" onkeyup="this.value=this.value.replace(/[^\d]/,'')"  autocomplete="off"/>
+              <input type="text" id="id" class="input-val simple-material-input" placeholder="Identificação" name="id" value="<%=user ? user.id : ''%>"  onkeyup="this.value=this.value.replace(/[^\d]/,'')"  autocomplete="off" title="Código do Eccosys"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings">
+
+
+
+
+        </div>
+
+      </div>
+
+
+      <div class="footer">
+        <label class="button shadow" id="save" >Salvar</label>
+        <%if (loggedUser && loggedUser.full){%>
+          <label class="button shadow" id="new-user">Novo</label>
+          <label class="button shadow" id="delete-user">Excluir</label>
+          <%}%>
+        </div>
+
+      </form>
+
+    </div>
+
+
+
+  </body>
+
+  </html>

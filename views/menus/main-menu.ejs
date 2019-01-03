@@ -13,6 +13,7 @@
     <script type="text/javascript" src="/util/number.js"></script>
     <script type="text/javascript" src="/util/util.js"></script>
     <script type="text/javascript" src="/util/float.js"></script>
+    <script type="text/javascript" src="/util/sett.js"></script>
     <script type="text/javascript" src="/front/js/control/general.js"></script>
     <link href="//fonts.googleapis.com/css?family=Roboto" rel='stylesheet' type='text/css'>
 
@@ -33,12 +34,15 @@
   </head>
 
   <body>
+<script type="text/javascript">
+  window.loggedUser = <%- JSON.stringify(loggedUser || null) %>
+</script>
+
 
     <nav id="main-menu">
 
       <div class="material-ripple start-jobs">
-        <img src="<%=process.env.NODE_ENV ? '/img/icon/hawk.png' : '/img/maintenance.png'%>" id="logo" class="<%= global.jobsRunning ? 'gone' : '' %>" />
-        <img id="run-jobs-img" src="/img/loader/loading.svg" class="<%= !global.jobsRunning ? 'gone' : '' %>" />
+        <img src="<%=process.env.NODE_ENV ? '/img/icon/hawk.png' : '/img/maintenance.png'%>" id="logo" />
       </div>
 
       <ul id="nav">
@@ -67,6 +71,12 @@
         <li class="menu-item material-ripple" href="/history">
           <div class="menu-button title">
             Histórico
+          </div>
+        </li>
+
+        <li class="menu-item material-ripple" href="/settings">
+          <div class="menu-button title">
+            Configurações
           </div>
         </li>
       </ul>

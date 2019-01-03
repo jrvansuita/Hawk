@@ -1,0 +1,51 @@
+
+
+.main-content{
+  padding: 30px;
+
+}
+
+.content{
+  min-height: 400px;
+}
+
+.header{
+  border-bottom: 1px solid rgb(217, 220, 221);
+  padding: 15px 30px;
+}
+
+.header-title{
+  font-size: 19px;
+}
+
+
+.user-form-link{
+  color: rgb(72, 66, 147);
+  padding: 10px 15px;
+}
+
+.link{
+  padding: 10px 15px;
+  outline: none;
+  font-weight: 500;
+  font-style: normal;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+}
+
+.group-title{
+  font-size: 18px;
+  padding: 20px 15px;
+  color: rgb(40, 40, 41);
+  font-weight: 600;
+  display:block;
+}
+
+.job-status{
+  width: 32px;
+  height: 32px;
+  display: inline;
+  text-align: center;
+  vertical-align: middle;
+}

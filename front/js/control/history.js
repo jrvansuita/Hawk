@@ -1,15 +1,12 @@
 
-var users;
+var userSelector;
 
 $(document).ready(()=>{
 
-  _get('/profiles', null, (allUsers)=>{
-    users = allUsers;
-    loadUsersAutoComplete($('#user-search'), allUsers);
-
+  userSelector = new UserSelector($('#user-search'));
+  userSelector.load(()=>{
     onInit();
   });
-
 });
 
 
@@ -63,11 +60,9 @@ function getQuery(){
   query.message = $('#message-search').val();
   query.tag = $('#tag-search').val();
 
-  if ($('#user-search').val()){
-    var user = Util.findUserInListByName($('#user-search').val(), users);
-    if (user){
-      query.userId = user.id;
-    }
+  if (userSelector.hasSelectedUser()){
+    var user = userSelector.getSelectedUser();
+    query.userId = user.id;
   }
 
   return query;

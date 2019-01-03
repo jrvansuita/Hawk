@@ -227,12 +227,12 @@ function buildProductFirstCol(item, slim, pending){
   var div = $('<div>').addClass('nobreak');
 
   var sku;
-  var isSwapableSku = !slim && pending.status == 1;
+  var isSwapableSku = !slim && pending.status == 1 && Sett.get(loggedUser, 1);
 
   if (isSwapableSku){
     sku = $('<input>');
   }else{
-    sku = $('<label>');
+    sku = $('<label>');  
   }
 
   sku.addClass('pick-value sku ' + (isSwapableSku ? 'sku-input' : 'copiable' ))

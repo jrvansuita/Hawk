@@ -8,7 +8,6 @@ const HistoryStorer = require('../history/history-storer.js');
 
 module.exports = {
 
-
   load(clear, callback){
     PendingLaws.load(clear, callback);
   },

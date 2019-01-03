@@ -15,6 +15,16 @@ $(document).ready(() => {
     );
   });
 
+  $('.rfid-card').click(()=>{
+    startListeningRFID();
+  });
+
+  $( "#user-id" ).focusin(()=>{
+    startListeningRFID();
+  }).focusout(()=>{
+    stopListeningRFID();
+  });
+
   window.setInterval(function() {
     $(".inprogress-begin").each(function(index, item) {
       var diftime = parseInt($(item).attr("diftime"));
@@ -207,6 +217,7 @@ function loadSale(sale){
       row.hide().fadeIn();
     });
 
+    $('.obs-sale').remove();
     $('#opened-sale').parent().append($('<span>').addClass('obs-sale').append(sale.observacaoInterna));
   }else{
     $('.opened-sale-box').fadeOut(200);
@@ -262,4 +273,15 @@ function openPrintPickingSale(sale, userId){
 
 
   window.open(url, "_blank");
+}
+
+
+function startListeningRFID(){
+  $('.rfid-card').attr('src','img/rfid-listening.gif');
+  $('#user-id').select().focus();
+}
+
+
+function stopListeningRFID(){
+  $('.rfid-card').attr('src','img/rfid-wait.png');
 }

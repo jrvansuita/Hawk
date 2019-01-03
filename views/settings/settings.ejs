@@ -1,0 +1,47 @@
+<html>
+<%  include ../menus/main-menu %>
+
+<head>
+
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/settings.css">
+  <script type="text/javascript" src="/front/js/control/settings.js"></script>
+  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+
+</head>
+
+<body>
+  <div class="main-content">
+
+
+    <div class="content shadow">
+
+      <div class="header">
+        <label class="header-title">Configurações</label>
+      </div>
+
+
+      <div class="user-form-link">
+        <label class="group-title">Cadastros</label>
+
+        <a class="link" href="/user-form?userId=<%=loggedUser ? loggedUser.id: ''%>">Cadastro de Usuário</a>
+      </div>
+
+
+      <div class="user-form-link">
+        <label class="group-title">Tarefas</label>
+
+        <span class="link job" data-ref="picking">
+          <img src="img/play.png" class="job-status">
+          Atualizar Pedidos no Picking
+        </span>
+        
+        <span class="link job" data-ref="packing">
+          <img src="img/play.png" class="job-status">
+          Atualizar gráficos do Packing
+        </span>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

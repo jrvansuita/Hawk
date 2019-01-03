@@ -41,7 +41,11 @@
     <div class="main-pick">
       <div class="col dotted" style="display:block">
         <div class="find-next-holder shadow">
-          <span class="picking-title label header-title"> Impressão de Picking </span>
+
+
+          <img  class="rfid-card" src="img/rfid-listening.gif" title="Passe o cartão">
+
+
 
           <input type="text" id="user-id" class="simple-material-input" placeholder="Código de Acesso" />
 
@@ -91,7 +95,7 @@
 
                   <div class="pick-header">
                     <span class="label header-title"> Próximos Pedidos</span>
-                    <span class="label header-count"> <%=previewSalesCount%></span>
+                    <span class="label header-count"> <%=previewSalesCount == totalSalesCount ? previewSalesCount : previewSalesCount + '/' + totalSalesCount%></span>
                   </div>
 
 
@@ -99,21 +103,22 @@
                   previewPickingSales.slice(0, 6).forEach(function(preview){
                     %>
 
-                    <div class="shadow label mini-item solved">
+                    <div class="shadow label mini-item">
 
                       <table width="100%">
                         <tr>
-                          <td rowspan="2" style="max-width: 38px; padding-right:4px;">
+                          <td rowspan="2" >
                             <img class="circle shadow box-img" data-transp="<%=preview.transport%>" src="/img/transport/<%=preview.transport ? preview.transport.toLowerCase(): ''%>.png" onerror="this.src='/img/wait.png'" />
                           </td>
 
                           <td><span class="pick-value green-title"><%=preview.numeroPedido %></span></td>
-                          <td><span class="pick-value" title="<%=preview.client ? preview.client.cidade : ''%>" ><%=preview.client ? preview.client.cidade.split(' ')[0] : ''%></span></td>
+                          <td><span class="pick-value"><%=preview.client ? preview.client.uf : ''%></span></td>
                           <td><span class="pick-value" style="float:right"><%= Dat.format(new Date(preview.data))%></span></td>
                         </tr>
                         <tr>
                           <td><span class="pick-value"><%=preview.transport?preview.transport:'Carregando...'%></span></td>
-                          <td><span class="pick-value"><%=preview.client ? preview.client.uf : ''%></span></td>
+
+                          <td><span class="pick-value" title="<%=preview.client ? preview.client.cidade : ''%>" ><%=Util.ellipsis(preview.client ? preview.client.cidade : '', 10)%></span></td>
                           <td><span class="pick-value" style="float:right"><%=Util.twoNames(preview.client ? preview.client.nome: '') %></span></td>
                         </tr>
                       </table>

@@ -6,31 +6,26 @@ module.exports = class JobsRoutes extends Routes{
 
   attach(){
     this._post('/run-jobs', (req, res) => {
-      runJobs(req, (r)=>{
-        this._resp().sucess(res, r);
+      runJobs(req, (result)=>{
+        this._resp().sucess(res, result);
       });
     });
   }
 };
 
 function runJobs(req, callback){
-  if (req.headers.referer.includes('packing')){
+  if (req.body.ref.includes('packing')){
     try{
+      console.log('passou');
       var runner = new JobSales();
-      runner.setUserId(req.session.loggedUser.id);
+      runner.setUserId(req.session.loggedUserID);
       runner.run();
-      callback(buildResponse(true));
+      callback();
     }catch(e){
-      callback(buildResponse(false));
+      callback();
     }
-  }else if (req.headers.referer.includes('picking')){
-    PickingLaws.clear(req.session.loggedUser.id);
-    callback(buildResponse(true));
+  }else if (req.body.ref.includes('picking')){
+    PickingLaws.clear(req.session.loggedUserID);
+    callback();
   }
-}
-
-function buildResponse(wasRunning){
-  var r = {};
-  r.was_running = wasRunning;
-  return r;
 }

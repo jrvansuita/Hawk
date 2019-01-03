@@ -117,8 +117,11 @@ module.exports = {
 
   getPickingSales(){
     return PickingLaws.getList();
-  }
+  },
 
+  getPickingSalesTotalCount(){
+    return PickingLaws.getFullList().length;
+  }
 
 
 

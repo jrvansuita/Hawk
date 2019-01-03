@@ -34,11 +34,17 @@ app.use('/util', express.static('app/util'));
 
 const keepPaths = ['/picking', '/packing'];
 
+const Routes = require('./app/redirects/controller/routes.js');
+
 //Keep a user variable for session in all ejs
 //Redirect if no user is logged-in
+const UsersProvider = require('./app/provider/UsersProvider.js');
+
 app.use(function(req, res, next) {
-  if (req.session.loggedUser || req.path === '/login') {
-    res.locals.loggedUser = req.session.loggedUser;
+  if (req.session.loggedUserID || Routes.checkIsPathNotLogged(req.path)) {
+    if (req.session.loggedUserID != undefined){
+      res.locals.loggedUser = UsersProvider.get(req.session.loggedUserID);
+    }
 
     next();
   } else {

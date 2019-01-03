@@ -6,7 +6,7 @@
           Perfil
         </div>
       </li>
-        <%if (locals.loggedUser.full){%>
+        <%if (Sett.get(locals.loggedUser,6)){%>
       <li class="menu-item material-ripple" href="/manage-points">
         <div class="menu-button title">
           Gerenciar Pontos
