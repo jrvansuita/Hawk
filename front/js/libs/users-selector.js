@@ -44,7 +44,7 @@ class UserSelector{
     for(var i = 0; i < arr.length; i++){
       var user = this.users[arr[i]];
 
-      if (user.access.trim() == access.trim()){
+      if (Str.def(user.access).trim() == access.trim()){
         return user;
       }
     }
