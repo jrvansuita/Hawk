@@ -20,7 +20,6 @@ global.Const = require('../const/const.js');
 
 //Load Local Users
 require('../provider/UsersProvider.js').loadAllUsers();
-console.log('Loaded All Users...');
 
 //Build the prototypes
 require('../init/prototypes.js');

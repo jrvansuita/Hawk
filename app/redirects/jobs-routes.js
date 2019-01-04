@@ -16,7 +16,6 @@ module.exports = class JobsRoutes extends Routes{
 function runJobs(req, callback){
   if (req.body.ref.includes('packing')){
     try{
-      console.log('passou');
       var runner = new JobSales();
       runner.setUserId(req.session.loggedUserID);
       runner.run();

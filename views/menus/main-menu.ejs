@@ -42,7 +42,19 @@
     <nav id="main-menu">
 
       <div class="material-ripple start-jobs">
-        <img src="<%=process.env.NODE_ENV ? '/img/icon/hawk.png' : '/img/maintenance.png'%>" id="logo" />
+
+        <%
+          var img = '/img/icon/hawk.png';
+
+          if (!process.env.NODE_ENV){
+            img = '/img/maintenance.png';
+          }
+
+          if (global.eccoConnError){
+            img = '/img/api-error.png';
+          }
+        %>
+        <img src="<%=img%>" id="logo" title="<%=global.eccoConnError? 'Erro ao conectar e receber dados via API' : 'Hawk' %>"/>
       </div>
 
       <ul id="nav">

@@ -113,8 +113,11 @@ module.exports = {
 
 
 function checkEccoStatus(data, def){
+  global.eccoConnError = undefined;
+
   if (data.includes('503 Service Temporarily Unavailable')){
     History.error("API Eccosys indisponível no momento.");
+    global.eccoConnError = true;
 
     return def;
   }else if (data[0] == ('<')){

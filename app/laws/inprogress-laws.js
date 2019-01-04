@@ -79,7 +79,6 @@ module.exports = {
       callback(sale);
     }else{
       Day.sync(day, (err, doc) => {
-        console.log(err);
         callback(sale);
       });
     }

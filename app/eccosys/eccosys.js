@@ -41,8 +41,7 @@ function makeRequest(options, postBody, onResponse){
   });
 
   req.on('error', function(e) {
-    console.log('Erro na call eccosys');
-    console.log(e);
+    console.log('Erro na call eccosys:' + e.toString());
   });
 
   if (postBody){
@@ -75,7 +74,7 @@ function getOptions(path, method, isApiCall) {
     }
   };
 
-  //console.log(options);
+
 
 
   return options;

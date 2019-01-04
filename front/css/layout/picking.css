@@ -633,7 +633,7 @@ tr.row-padding td{
 }
 
 .rfid-card{
-  width: 55px;
+  width: 50px;
   cursor: pointer;
   float: right;
   margin-top: -10px;

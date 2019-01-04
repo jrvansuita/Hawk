@@ -122,16 +122,6 @@ module.exports= class SaleLoader {
   }
 }
 
-  /*checkTerminate(){
-    this.list.splice(-1,1);
-
-    if (this.list.length == 0){
-      if (typeof this.onFinished == 'function'){
-        this.onFinished(this.sale);
-      }
-    }
-  }*/
-
   run(onFinished){
     this.onFinished = onFinished;
 

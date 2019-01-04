@@ -80,7 +80,6 @@ function nextPage(){
     page: currentPage,
     query: query
   }, (response)=>{
-    console.log(query);
     stop = response.length == 0;
 
     if (currentPage == 1 && stop){

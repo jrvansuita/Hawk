@@ -49,8 +49,8 @@ module.exports = class Email{
 
         if (error) {
           callback(error, null);
-          console.log('Erro ao enviar email');
-          return console.log(error);
+          console.log('Erro ao enviar email ' + error.toString());
+          return error;
         }
 
         callback(null, info.messageId);
@@ -61,8 +61,6 @@ module.exports = class Email{
         // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
         // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
       }catch(e){
-        console.log('Erro ao confirmar email');
-        console.log(e);
         History.error(e);
       }
     });

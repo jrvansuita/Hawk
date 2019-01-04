@@ -81,8 +81,7 @@ function onTry(run){
   try{
     run();
   }catch(e){
-    console.log('Erro ao gravar histórico');
-    console.log(e);
+    console.log('Erro ao gravar histórico: ' + e.toString());
     History.error(e);
   }
 }
