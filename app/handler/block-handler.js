@@ -47,7 +47,7 @@ module.exports = {
 
 
   _removeFromPendingSalesIfNeeded(blockRule){
-    if (blockRule.reasonTag !== '994'){
+    if (blockRule.reasonTag.toString() !== '994'){
       PendingLaws.remove(blockRule.number);
     }
   },
@@ -60,8 +60,11 @@ module.exports = {
 
   _checkAndBlockSaleFromPicking(blockRule){
     //Remove all sales that matchs the new block
-    PickingLaws.filter((sale)=>{
-      return !BlockLaws.checkAndCapture(blockRule, sale);
+    //Not using PickingLaws.filter because I need to keep no mutated the object global.staticPickingList
+    PickingLaws.getFullList().forEach((eachSale)=>{
+      if (BlockLaws.checkAndCapture(blockRule, eachSale)){
+        PickingLaws.remove(eachSale);
+      }
     });
   },
 

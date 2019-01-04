@@ -5,6 +5,7 @@ if (!process.env.MLAB_MONGO_CONN) {
 }
 
 mongoose.connect(process.env.MLAB_MONGO_CONN, { useNewUrlParser: true });
+mongoose.set('useFindAndModify', false);
 
 global.Mongoose = mongoose;
 global.Schema = require('../mongoose/schema.js');

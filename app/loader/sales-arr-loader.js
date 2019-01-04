@@ -4,12 +4,22 @@ module.exports= class SalesArrLoader {
 
   constructor(saleList){
     this.saleList = saleList;
-    this.index = 0;
-
 
     this.initialLength = saleList.length;
     this.staticIndex = 0;
+
+    this.createPool();
   }
+
+  createPool(){
+    this.pool = [];
+    this.poolIndex = 0;
+
+    this.saleList.forEach((each)=>{
+      this.pool.push(each.numeroPedido);
+    });
+  }
+
 
   onLastSaleLoaded(callback){
     this.onLastSaleLoaded = callback;
@@ -31,6 +41,18 @@ module.exports= class SalesArrLoader {
     return this;
   }
 
+  getSaleIndex(sale){
+    return this.saleList.findIndex(s => s.numeroPedido == (sale.numeroPedido || sale));
+  }
+
+  removeSale(sale){
+    this.saleList.splice(this.getSaleIndex(sale), 1);
+  }
+
+  getSale(saleNumber){
+    return this.saleList[this.getSaleIndex(saleNumber)];
+  }
+
   onFilter(callback){
     this.onFilter = callback;
     return this;
@@ -41,19 +63,23 @@ module.exports= class SalesArrLoader {
     var removed = false;
 
     if (this.onFilter){
-      removed = !this.onFilter(sale, this.index);
+      removed = !this.onFilter(sale);
       if (removed){
-        this.saleList.splice(this.index, 1);
-        this.index--;
+        this.removeSale(sale);
       }
     }
 
     return !removed;
   }
 
+  getCurrentPoolSale(){
+    return this.pool[this.poolIndex];
+  }
+
   _load(onFinished){
-    //console.log(this.saleList[this.index].numeroPedido);
-    var saleLoader = new SaleLoader(this.saleList[this.index]);
+    var sale = this.getSale(this.getCurrentPoolSale());
+
+    var saleLoader = new SaleLoader(sale);
 
     if (this.loadClient){
       saleLoader.loadClient(this.loadClient);
@@ -64,19 +90,20 @@ module.exports= class SalesArrLoader {
     }
 
     saleLoader.run((sale)=>{
-      this.saleList[this.index] = sale;
+
+      this.saleList[this.getSaleIndex(sale)] = sale;
 
       if (this._filter(sale) && this.onEverySaleLoaded){
-        this.onEverySaleLoaded(sale, this.index);
+        this.onEverySaleLoaded(sale);
       }
 
-      var currentLength = this.saleList.length;
+      var poolLength = this.pool.length;
 
-      this.index++;
+      this.poolIndex++;
       this.staticIndex++;
       console.log(sale.numeroPedido + ' - ' + sale.data + ' | ' + this.staticIndex + '/' + (this.initialLength));
 
-      if (this.index < currentLength) {
+      if (this.poolIndex < poolLength) {
         this._load(onFinished);
 
         //Pelo menos 10 pedidos já foram tratados e podem estar aparecendo
@@ -85,7 +112,7 @@ module.exports= class SalesArrLoader {
         }
       }
       //No Sales to pick | Or finished loading sales
-      else if (currentLength == this.index){
+      else if (poolLength == this.poolIndex){
         onFinished();
 
         if (this.staticIndex > 0){

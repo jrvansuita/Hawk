@@ -5,13 +5,11 @@ const Err = require('../error/error.js');
 
 //Nexts sales to pick
 global.staticPickingList = [];
-global.lastClear = 0;
 
 module.exports = {
 
   set(list){
     global.staticPickingList = list;
-    global.lastClear = new Date().getTime();
   },
 
   add(sale){
@@ -36,9 +34,14 @@ module.exports = {
     return global.staticPickingList.find(sale => sale.numeroPedido == saleNumber);
   },
 
-  remove(inputSale){
-    global.staticPickingList = global.staticPickingList.filter(sale => sale.id != inputSale.id);
+  getSaleIndex(saleNumber){
+    return global.staticPickingList.findIndex(sale => sale.numeroPedido == saleNumber);
   },
+
+  remove(inputSale){
+    global.staticPickingList.splice(this.getSaleIndex(inputSale.numeroPedido),1);
+  },
+
 
   next(userId){
     if (this.getList().length == 0){
@@ -75,22 +78,11 @@ module.exports = {
   },
 
   clear(userId){
-    var isDevMode = process.env.NODE_ENV == undefined;
-    var now = new Date().getTime();
-    var salesCount = 1000;//this.getFullList().length;
-
-    var minTime =  salesCount * 60000;
-    var nextClear = global.lastClear + minTime;
-
-    if (isDevMode || (salesCount <= 50) || (nextClear < now)){
-      //Limpa a lista de picking
-      this.set([]);
-      //Limpa a lista de pedidos bloqueados
-      global.staticBlockedSales = [];
-      History.job(Const.picking_update, Const.starting_picking_update, 'Eccosys', userId);
-    }else{
-      History.job(Const.picking_update, Const.cant_starting_picking_update.format(Math.trunc((nextClear - now) / (1000 * 60 * 60))), 'Eccosys', userId);
-    }
+    //Limpa a lista de picking
+    this.set([]);
+    //Limpa a lista de pedidos bloqueados
+    global.staticBlockedSales = [];
+    History.job(Const.picking_update, Const.starting_picking_update, 'Eccosys', userId);
   }
 };
 

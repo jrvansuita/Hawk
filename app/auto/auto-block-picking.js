@@ -35,13 +35,11 @@ module.exports= class AutoBlockPicking {
         var isBlocked = BlockHandler.get(product.codigo);
 
         if (!isBlocked){
-          console.log('----[AutoBlock]---- ' + sale.numeroPedido + ' - ' + product.codigo);
+          console.log('----[AutoBlock]---- ');
           BlockHandler.store(product.codigo, new User(404, 'Sistema'), '994', ()=>{
             next();
           });
         }else{
-          console.log('[Já b] ' + sale.numeroPedido + ' - ' + product.codigo);
-
           next();
         }
       }else{
@@ -66,9 +64,9 @@ module.exports= class AutoBlockPicking {
   }
 
   run(){
-    if (process.env.NODE_ENV){
+    //if (process.env.NODE_ENV){
       this.onSale(this.sales, 0);
-    }
+    //}
   }
 
 };

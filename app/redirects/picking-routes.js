@@ -90,7 +90,7 @@ module.exports = class PickingRoutes extends Routes{
     });
 
     this._post('/picking-done-restart', (req, res, body, locals, session) => {
-      PickingHandler.restart(session.loggedUser, req.body.sale, this._resp().redirect(res));
+      PickingHandler.restart(req.session.loggedUserID, req.body.sale, this._resp().redirect(res));
     });
 
     this._get('/print-picking-sale', (req, res, body, locals, session) => {
