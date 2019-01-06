@@ -31,9 +31,6 @@ app.use('/img', express.static('front/img'));
 app.use('/front', express.static('front'));
 app.use('/util', express.static('app/util'));
 
-
-const keepPaths = ['/picking', '/packing'];
-
 const Routes = require('./app/redirects/controller/routes.js');
 
 //Keep a user variable for session in all ejs
@@ -57,7 +54,7 @@ app.get(['/'], (req, res)=>{
   if (req.session.lastpath && req.session.lastpath != '/'){
     res.redirect(req.session.lastpath);
   }else{
-    res.redirect('/packing');
+    res.redirect('/picking');
   }
 });
 

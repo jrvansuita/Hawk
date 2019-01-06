@@ -19,8 +19,7 @@ module.exports= class SalesArrLoader {
       this.pool.push(each.numeroPedido);
     });
   }
-
-
+  
   onLastSaleLoaded(callback){
     this.onLastSaleLoaded = callback;
     return this;

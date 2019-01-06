@@ -1,10 +1,21 @@
 const Routes = require('../redirects/controller/routes.js');
+const PackingHandler = require('../handler/packing-handler.js');
+const PackingProvider = require('../provider/packing-provider.js');
+
 
 module.exports = class PackingRoutes extends Routes{
 
   attach(){
 
-    this._page(['/packing', '/packing/overview'], (req, res) => {
+    this._page('/packing', (req, res) => {
+      PackingHandler.findSale(req.query.sale, req.session.loggedUserID, (sale)=>{
+        res.render('packing/packing.ejs', {sale : sale,
+          groups: !sale.id ? PackingProvider.get() : {}
+        });
+      });
+    });
+
+    this._page('/packing/overview', (req, res) => {
       require('../builder/InvoiceChartBuilder.js').buildOverview(res.locals.loggedUser.full, (charts)=> {
         res.render('packing/packing-chart', {
           charts: charts,
@@ -42,4 +53,4 @@ module.exports = class PackingRoutes extends Routes{
         builder.build();
       });
 
-}};
+    }};

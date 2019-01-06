@@ -32,7 +32,9 @@ module.exports = {
 
   _matchAnyRule(sale){
     return this.rules().some((rule)=>{
-      return this.match(rule, sale);
+      if (this.match(rule, sale)){
+        return rule;
+      }
     });
   },
 
@@ -100,6 +102,17 @@ module.exports = {
       callback();
     }
   },
+
+  removeSale(sale){
+    var rule = this._matchAnyRule(sale);
+    rule.blockings--;
+
+    var index = this.list().findIndex((i)=>{
+      return i.numeroPedido == sale.numeroPedido;
+    });
+
+    this.list().splice(index, 1);
+  }
 
 
 

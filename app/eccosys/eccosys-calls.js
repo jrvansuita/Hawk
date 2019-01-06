@@ -29,9 +29,13 @@ module.exports = {
   },
 
   getSale(number, callback) {
-    Eccosys.get('pedidos/' + number, (data)=>{
-      callback(JSON.parse(checkNoSale(data, '{}'))[0]);
-    });
+    if (number == undefined){
+      callback({});
+    }else{
+      Eccosys.get('pedidos/' + number, (data)=>{
+        callback(JSON.parse(checkNoSale(data, '{}'))[0]);
+      });
+    }
   },
 
   getSaleItems(number, callback) {
@@ -133,7 +137,10 @@ function checkEccoStatus(data, def){
 
 
 function checkNoSale(data, def){
-  if (data.includes('Nenhum pedido ou item encontrado')){
+  var parsed = JSON.parse(data);
+
+  if (typeof parsed == 'string'){
+    console.log(parsed);
     return def;
   }
 

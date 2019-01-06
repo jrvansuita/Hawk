@@ -1,0 +1,163 @@
+.main-content{
+  padding-top: 70px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-bottom: 35px;
+  width: 80%;
+  margin: auto;
+  text-align: left;
+}
+
+.header-holder{
+  width: 100%;
+  display: flex;
+  text-align: center;
+}
+
+.info-holder{
+  text-align: left;
+  padding: 20px 25px;
+  display: inline-block;
+  width: 75%;
+}
+
+.search-holder{
+  margin-left: 15px;
+  padding: 20px 25px;
+  text-align: center;
+  max-width: 250px;
+  display: -webkit-inline-box;
+}
+
+input{
+  font-size: 15px;
+}
+
+.product-line{
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 20px 10px;
+}
+
+
+.info{
+  font-size: 15px;
+  min-width: 140px;
+  padding-right: 35px;
+  display: -webkit-box;
+}
+
+.highlighted{
+  font-size: 20px;
+  font-weight: 600;
+}
+
+
+.info-line{
+  padding-bottom: 5px;
+}
+
+.field-title{
+  font-size: 13px;
+  padding-bottom: 3px;
+  color: rgb(116, 114, 116);
+  display: -webkit-box;
+  width: fit-content;
+}
+
+.field{
+  margin-right: 35px;
+  margin-bottom: 8px;
+  display: inline-block;
+  width: fit-content;
+}
+
+
+.icon{
+  width: 35px;
+  height: 35px;
+  vertical-align: middle;
+}
+
+.mini-icon{
+  width: 25px;
+  height: 25px;
+    vertical-align: middle;
+}
+
+.product-icon{
+  width: 28px;
+  height: 28px;
+}
+
+.material-input-holder{
+  margin-top: 25px;
+}
+
+.material-input-holder>label{
+  font-weight: 600 !important;
+  font-size: 15px !important;
+  min-width: 340px;
+  margin-top: 18px;
+}
+
+.material-input-holder>input{
+  font-size: 18px !important;
+  font-weight: 600 !important;
+}
+
+#product-ean{
+  max-width: 200px;
+  display: inline-block;
+}
+
+.products-in-holder{
+  height: 100%;
+  padding-top: 2px;
+}
+
+#products-in{
+  width: 100%;
+}
+
+table tr:first-child td{
+  background-color: white !important;
+}
+table tr:first-child{
+  color: rgb(116, 114, 116);
+  font-size: 12px;
+}
+
+tr:nth-child(even) {
+  background-color: #ddd6d757;
+}
+
+#products-in td{
+  border-bottom: 1px solid #e4e4e4;
+  padding: 8px 15px;
+
+}
+
+.product-ean-holder{
+  display: inline;
+  width: fit-content;
+}
+
+.product-ean-and-icon{
+  display: inline;
+  width: fit-content;
+}
+
+.product-msg{
+  display: block;
+  font-size: 13px;
+  padding-left: 10px;
+  padding-top: 5px;
+}
+
+
+.main-msg{
+  padding-left: 5px;
+  font-size: 13px;
+  color: rgb(152, 145, 143);
+}

@@ -23,7 +23,7 @@ module.exports = {
         callback(pending, err);
       }
     });
-  }, 
+  },
 
   //---- Load All Elements ----//
 
@@ -80,7 +80,12 @@ module.exports = {
 
   getSaleNumbers(){
     return global.staticPendingSales.map(a => a.number);
+  },
+
+  getSaleList(){
+    return Object.values(this.getList()).map(pending => pending.sale);
   }
+
 
 };
 

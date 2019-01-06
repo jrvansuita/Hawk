@@ -123,7 +123,7 @@ var Util = {
   ellipsis(str, max){
 
     if (str.length > max + 3){
-       return str.substring(0,max) + '...';
+      return str.substring(0,max) + '...';
     }
 
     return str;
@@ -147,7 +147,48 @@ var Util = {
     }
 
     return name;
+  },
+
+  getSaleStatusName(status){
+    switch(status) {
+      case -1:
+      return 'Aguardando pagamento';
+      case 0:
+      return 'Em aberto';
+      case 1:
+      return 'Atendido';
+      case 2:
+      return 'Cancelado';
+      case 3:
+      return 'Pronto para picking';
+      case 4:
+      return 'Pagamento em análise';
+      default:
+      return 'Não encontrado';
+    }
+  },
+
+
+  papersIcon(much){
+    if (much < 5){
+      return 'paper';
+    }else if (much < 10){
+      return 'papers';
+    }else if (much < 50){
+      return 'many-papers';
+    }else if (much < 100){
+      return 'all-papers';
+    }
+  },
+
+  orderDatesObject(object){
+    return Object
+    .entries(object)
+    .sort((a, b)=>{
+      return new Date(a[0]) - new Date(b[0]);
+    }).reduce((obj, [k,v]) => ({...obj,[k]: v}), {});
   }
+
 };
 
 

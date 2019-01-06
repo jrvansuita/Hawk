@@ -146,7 +146,7 @@ function fmt(date) {
   var formated = {
     day: date.getUTCDate(),
     month: date.getUTCMonth() + 1,
-    year: date.getFullYear().toString(),
+    year: date.getUTCFullYear().toString(),
     hour: date.getHours(),
     min: date.getMinutes()
   };

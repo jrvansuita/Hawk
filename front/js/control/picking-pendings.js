@@ -232,7 +232,7 @@ function buildProductFirstCol(item, slim, pending){
   if (isSwapableSku){
     sku = $('<input>');
   }else{
-    sku = $('<label>');  
+    sku = $('<label>');
   }
 
   sku.addClass('pick-value sku ' + (isSwapableSku ? 'sku-input' : 'copiable' ))
@@ -293,7 +293,7 @@ function buildProductFirstCol(item, slim, pending){
           sku.val(swapProduct.codigo);
           addChangedLabel(gtin);
         },(error)=>{
-          descHolder.text(error.slice(0,40) + '...').addClass("error").delay(3000).queue(function(next){
+          descHolder.text(error.slice(0,40) + '...').attr('title',error).addClass("error").delay(3000).queue(function(next){
             $(this).removeClass("error");
             descHolder.text(productDesc);
             next();

@@ -1,0 +1,145 @@
+<html lang="en" dir="ltr">
+<head>
+  <%  include ../menus/main-menu %>
+  <meta charset="utf-8">
+
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/packing.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
+
+
+  <script type="text/javascript" src="/front/js/control/packing.js"></script>
+</head>
+<body>
+  <script>
+  window.sale = <%- JSON.stringify(sale || null) %>
+</script>
+
+<div class="main-content">
+
+  <div class="header-holder">
+
+    <div class="info-holder shadow">
+      <%if (!sale || !sale.id){%>
+        <img class="mini-icon" src="/img/checked.png" />
+        <span class="main-msg">
+          Inicie o faturamento de um novo pedido
+        </span>
+
+        <%}else {%>
+          <div class="info-line">
+            <span>
+              <div class="field">
+                <label class="field-title">Número do Pedido</label>
+                <label class="info highlighted"><%=sale? sale.numeroPedido : ''%></label>
+              </div>
+
+              <div class="field">
+                <label class="field-title">Ordem de Compra</label>
+                <label class="info"><%=sale? sale.numeroDaOrdemDeCompra : ''%></label>
+              </div>
+
+              <div class="field">
+                <label class="field-title">Data</label>
+                <label class="info"><%=sale? Dat.format(new Date(sale.data)) : ''%></label>
+              </div>
+
+
+              <img class="circle shadow icon" style="margin-top:-25px;" src="/img/<%=sale ?  'transport/' + sale.transport.toLowerCase() : 'question-mark'%>.png" />
+
+              <div class="field">
+                <label class="field-title">Transportadora</label>
+                <label class="info"><%=sale ? sale.transport : ''%></label>
+              </div>
+            </span>
+          </div>
+
+          <div class="info-line">
+            <span>
+              <div class="field">
+                <label class="field-title">Client</label>
+                <label class="info"><%=sale && sale.client ? sale.client.nome : ''%></label>
+              </div>
+
+              <div class="field">
+                <label class="field-title">Estado</label>
+                <label class="info"><%=sale && sale.client ? sale.client.uf : ''%></label>
+              </div>
+
+              <div class="field">
+                <label class="field-title">Cidade</label>
+                <label class="info"><%=sale && sale.client ? sale.client.cidade : ''%></label>
+              </div>
+
+              <img class="circle shadow icon" style="margin-top:-20px;" src="/img/<%=sale && sale.situacao == '3' ? 'checked' : 'alert'%>.png" />
+
+              <div class="field">
+                <label class="field-title">Situação</label>
+                <label class="info"><%=sale ? Util.getSaleStatusName(parseInt(sale.situacao)) : ''%></label>
+              </div>
+            </span>
+          </div>
+
+          <%}%>
+        </div>
+
+        <div class="search-holder shadow">
+          <div class="material-input-holder group input-group">
+            <input type="text" id="search-sale" value="<%=sale? sale.numeroPedido : ''%>" required>
+            <span class="highlight"></span>
+            <span class="bar"></span>
+            <label>Número do Pedido</label>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <%if (sale && sale.id){%>
+        <div class="product-line shadow">
+
+          <span>
+            <div class="product-ean-holder">
+              <div class="product-ean-and-icon">
+                <img class="circle shadow icon"  id="product-ean-icon" class="product-icon" src="/img/scan-barcode.png" />
+                <input type="text" id="product-ean"  value="7890401010202" class="simple-material-input%>" placeholder="Código de Barras"/>
+              </div>
+
+              <label class="product-msg"></label>
+            </div>
+
+
+          </span>
+
+        </div>
+
+
+        <div class="products-in-holder shadow">
+
+
+          <table id="products-in">
+            <tr>
+              <td></td>
+              <td>Código</td>
+              <td>EAN</td>
+              <td>Descrição</td>
+              <td>Marca</td>
+              <td>Quantidade</td>
+              <td>Pedo Líquido</td>
+              <td>Pedo Bruto</td>
+            </tr>
+
+          </table>
+
+        </div>
+
+
+        <%}%>
+
+
+        <%  include ../sale-groups/sale-grouping %>
+
+      </div>
+
+    </body>
+    </html>

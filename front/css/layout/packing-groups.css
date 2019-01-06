@@ -1,0 +1,64 @@
+.all-groups-holder{
+  display: -webkit-inline-box;
+  position: relative;
+  max-width: 100%;
+  text-align: -webkit-auto;
+}
+
+.group-single-holder{
+  display: inline-table;
+  padding: 20px 15px;
+  margin-top: 20px;
+  max-width: 48%;
+  min-width: 48%;
+  margin-right: 20px;
+}
+
+.group-single-item-holder{
+  display: inline-flex;
+  padding-right: 10px;
+  min-width: 45px;
+  margin-top: 10px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.group-item-labels{
+  display: -webkit-inline-box;
+}
+
+.group-item-label{
+  font-size: 14px;
+  color: rgb(64, 64, 64);
+  font-weight: 500;
+}
+
+.group-item-value{
+  font-size: 12px;
+  color: rgb(130, 128, 125);
+  font-weight: 400;
+  display: -webkit-inline-box;
+  margin-top: 1px;
+}
+
+.group-single-title{
+  font-size: 13px;
+  display: -webkit-box;
+  font-weight: 600;
+  color: #5d5b59;
+  margin-left: 3px;
+  padding-bottom: 10px;
+}
+
+.group-single-item-holder .icon{
+  margin-left: 0px;
+}
+
+div[data-title="Totais"]{
+  max-width: 500px;
+}
+
+div[data-key="Todos os Pedidos"] .group-item-label{
+  font-size: 14px;
+  font-weight: 600;
+}

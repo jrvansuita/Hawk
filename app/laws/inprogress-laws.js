@@ -86,6 +86,10 @@ module.exports = {
 
   getSaleNumbers(){
     return Object.values(this.object()).map(a => a.numeroPedido);
+  },
+
+  getSaleList(){
+    return Object.values(this.object());
   }
 
 };

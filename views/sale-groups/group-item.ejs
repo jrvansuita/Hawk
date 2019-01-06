@@ -1,0 +1,38 @@
+<div class="group-single-holder shadow" data-title="<%=title%>">
+  <label class="group-single-title"><%=title%></label>
+
+  <% Object.keys(group).forEach((each)=>{%>
+    <div class="group-single-item-holder" data-key="<%=each%>">
+
+      <%
+      var iconPath;
+
+      if (group[each].icon){
+        iconPath = group[each].icon;
+      }else if (typeof showPapers !== 'undefined'){
+        iconPath = Util.papersIcon(group[each].value);
+      }
+      %>
+
+      <%if (iconPath){ %>
+        <img class="icon"  src="/img/<%=iconPath%>.png" />
+      <%}%>
+
+
+        <div class="group-item-labels">
+
+          <%
+          var itemLabel = each;
+
+          if (typeof dates != "undefined"){
+            itemLabel = Dat.format(new Date(each));
+          }%>
+
+
+          <label class="group-item-label" data-label="<%=each%>"><%=itemLabel%></label></br>
+          <label class="group-item-value"><%=group[each].value%></label>
+        </div>
+      </div>
+      <%})%>
+
+    </div>
