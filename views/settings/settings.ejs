@@ -27,6 +27,7 @@
       </div>
 
 
+      <%if (Sett.get(locals.loggedUser,9)){%>
       <div class="user-form-link">
         <label class="group-title">Tarefas</label>
 
@@ -34,12 +35,14 @@
           <img src="img/play.png" class="job-status">
           Atualizar Pedidos no Picking
         </span>
-        
+
         <span class="link job" data-ref="packing">
           <img src="img/play.png" class="job-status">
           Atualizar gráficos do Packing
         </span>
       </div>
+
+      <%}%>
 
     </div>
   </div>

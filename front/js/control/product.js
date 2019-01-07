@@ -517,7 +517,7 @@ function prepareAutoComplete(){
 }
 
 function checkPermissionUser(){
-  if (Sett.get(loggedUser,4)){
+  if (Sett.every(loggedUser,[4,7])){
     unlock(loggedUser);
   }
 }

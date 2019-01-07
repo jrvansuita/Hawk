@@ -174,9 +174,9 @@ var Util = {
       return 'paper';
     }else if (much < 10){
       return 'papers';
-    }else if (much < 50){
+    }else if (much < 49){
       return 'many-papers';
-    }else if (much < 100){
+    }else if (much > 50){
       return 'all-papers';
     }
   },
