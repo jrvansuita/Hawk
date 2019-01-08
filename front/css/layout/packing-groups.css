@@ -9,9 +9,10 @@
   display: inline-table;
   padding: 20px 15px;
   margin-top: 20px;
-  max-width: 48%;
-  min-width: 48%;
+  width: fit-content;
+  max-width: 500px;
   margin-right: 20px;
+  min-height: 155px;
 }
 
 .group-single-item-holder{
@@ -52,10 +53,6 @@
 
 .group-single-item-holder .icon{
   margin-left: 0px;
-}
-
-div[data-title="Totais"]{
-  max-width: 500px;
 }
 
 div[data-key="Todos os Pedidos"] .group-item-label{

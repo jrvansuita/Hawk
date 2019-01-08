@@ -1,7 +1,6 @@
 .group {
   position: relative;
   margin-bottom: 20px;
-  text-align: left;
 }
 
 .material-input-holder>input {
@@ -29,7 +28,9 @@
   position: absolute;
   pointer-events: none;
   left: 5px;
+  width: fit-content;
   top: 10px;
+  text-align: left;
   float: unset;
   transition: 0.2s ease all;
   -moz-transition: 0.2s ease all;
@@ -85,6 +86,7 @@
   width: 100px;
   top: 25%;
   left: 0;
+  text-align: center;
   pointer-events: none;
   opacity: 0.5;
 }
