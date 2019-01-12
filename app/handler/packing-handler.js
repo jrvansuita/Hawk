@@ -48,6 +48,7 @@ module.exports = {
     var loader = new SaleLoader(sale)
     .loadClient()
     .loadItems()
+    .loadItemsWeight()
     .run((loadedSale)=>{
       callback(loadedSale);
     });

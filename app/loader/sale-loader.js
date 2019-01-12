@@ -83,6 +83,29 @@ module.exports= class SaleLoader {
     return this;
   }
 
+  loadItemsWeight(onCallOuter){
+    var funcItemsWeight = (onCallNext)=>{
+      var index = this.sale.items.length;
+
+      this.sale.items.forEach((item)=>{
+        EccosysCalls.getProduct(item.codigo, (product)=>{
+          index--;
+          item.liq = product.pesoLiq;
+          item.bru = product.pesoBruto;
+
+          if(index == 0){
+            this._callbackHit(onCallNext, ()=>{
+              onCallOuter(this.sale.items);
+            });
+          }
+        });
+      });
+    };
+
+    this.list.push(funcItemsWeight);
+
+    return this;
+  }
 
   loadProducts(onCallOuter){
     var funcProducts = (onCallNext)=>{

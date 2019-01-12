@@ -133,7 +133,7 @@ tr.line td{
   border-bottom: 1pt solid #80808033;
 }
 
-.copiable {
+.copiable, .copiable > *  {
   cursor: copy !important;
 }
 

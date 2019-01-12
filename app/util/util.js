@@ -149,7 +149,7 @@ var Util = {
     return name;
   },
 
-  getSaleStatusName(status){
+  getSaleSituationName(status){
     switch(status) {
       case -1:
       return 'Aguardando pagamento';
@@ -168,6 +168,15 @@ var Util = {
     }
   },
 
+  getSaleStatusName(status){
+    if (status == 'N'){
+      return 'Aguardando Picking';
+    }else if (status == 'A'){
+      return 'Aguardando Faturamento';
+    }else if (status == 'S'){
+      return 'Faturado';
+    }
+  },
 
   papersIcon(much){
     if (much < 5){
