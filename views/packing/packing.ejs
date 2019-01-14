@@ -5,11 +5,14 @@
 
   <link rel="stylesheet" type="text/css" href="/front/css/layout/packing.css">
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/autocomplete.css">
 
   <script type="text/javascript" src="/front/js/libs/image-preview.js"></script>
   <script type="text/javascript" src="/front/js/control/packing.js"></script>
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
-    <script type="text/javascript" src="/front/js/libs/beep.js"></script>
+  <script type="text/javascript" src="/front/js/libs/beep.js"></script>
+  <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
+  <script src="front/js/libs/autocomplete.js" charset="utf-8"></script>
 </head>
 <body>
   <%  include ../menus/packing-menu %>
@@ -24,10 +27,12 @@
 
     <div class="info-holder shadow">
       <%if (!sale || !sale.id){%>
-        <img class="mini-icon" src="/img/checked.png" />
-        <span class="main-msg">
-          Inicie o faturamento de um novo pedido
-        </span>
+        <div class="main-msg-span">
+          <img class="mini-icon" src="/img/checked.png" />
+          <span class="main-msg">
+            Inicie o faturamento de um novo pedido
+          </span>
+        </div>
 
         <%}else {%>
           <table>
@@ -114,7 +119,7 @@
 
             </tr>
 
-            <tr class="editable-infos-holder">
+            <tr class="editable-infos-holder line-here">
               <td>
                 <div class="field">
                   <label class="field-title">Peso Líquido</label>
@@ -132,7 +137,7 @@
               <td>
                 <div class="field">
                   <label class="field-title">Volumes</label>
-                  <input id="sale-vols" type="text" placeholder="1" value="1" onkeypress="return Num.isNumberKey(event);" maxlength="1" class="editable-info"/>
+                  <input id="sale-vols" type="text" placeholder="1" value="1" onkeypress="return Num.isNumberKey(event);" maxlength="1" class="editable-info" autocomplete="off"/>
                 </div>
               </td>
 
@@ -145,6 +150,39 @@
 
               <td></td>
             </tr>
+
+            <tr class="editable-infos-holder">
+              <td>
+                <div class="field">
+                  <label class="field-title">Altura</label>
+                  <input id="sale-height" type="text" placeholder="0" onkeypress="return Num.isNumberKey(event);" maxlength="6" class="editable-info"/>
+                </div>
+              </td>
+
+              <td>
+                <div class="field">
+                  <label class="field-title">Largura</label>
+                  <input id="sale-width" type="text" placeholder="0" onkeypress="return Num.isNumberKey(event);" maxlength="6" class="editable-info"/>
+                </div>
+              </td>
+
+              <td>
+                <div class="field">
+                  <label class="field-title">Comprimento</label>
+                  <input id="sale-length" type="text" placeholder="0" onkeypress="return Num.isNumberKey(event);"  maxlength="6" class="editable-info" />
+                </div>
+              </td>
+
+              <td>
+                <div class="field">
+                  <label class="field-title">Embalagem</label>
+                  <input id="sale-package-type" type="text" placeholder="Selecionar" maxlength="20" class="editable-info"/>
+                </div>
+              </td>
+
+              <td></td>
+            </tr>
+
           </table>
 
           <%}%>

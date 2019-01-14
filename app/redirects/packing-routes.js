@@ -1,6 +1,7 @@
 const Routes = require('../redirects/controller/routes.js');
 const PackingHandler = require('../handler/packing-handler.js');
 const PackingProvider = require('../provider/packing-provider.js');
+const Pack = require('../bean/pack.js');
 
 
 module.exports = class PackingRoutes extends Routes{
@@ -54,5 +55,13 @@ module.exports = class PackingRoutes extends Routes{
 
         builder.build();
       });
+
+      this._get('/package-types', (req, res)=>{
+        Pack.findAll((err, all)=>{
+          res.status(200).send(all);
+        });
+      });
+
+
 
     }};

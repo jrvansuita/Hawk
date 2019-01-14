@@ -45,7 +45,7 @@ function refreshProgressLine(){
   var progress = (itemsChecked * 100) / sale.itemsQuantity;
   var width = (progress * $('.progress-line').width()) / 100;
 
-   $('.progress-line.inner').width(width);
+  $('.progress-line.inner').width(width);
 }
 
 function refreshSaleWeight(saleItem){
@@ -106,6 +106,7 @@ function handleProductChecking(saleItem){
 function onOneMoreProductChecked(saleItem){
   if (!$('.products-in-holder').is(":visible")){
     $('.products-in-holder').show();
+    loadPackagesTypes();
   }
 
   if ($('#products-in tr').length == 3){
@@ -131,7 +132,7 @@ function onOneMoreProductChecked(saleItem){
 function onLastProductChecked(){
   $('.products-out-holder').hide();
   $('#product-ean-icon').attr('src','img/barcode-ok.png');
-  $('#product-ean').attr('disabled', true).val('Picking Finalizado');
+  $('#product-ean').attr('disabled', true).val('Picking Finalizado').addClass('picking-over');
 }
 
 function createProductsTable(holder, id, data){
@@ -229,14 +230,17 @@ function showProductMsg(msg, icon){
 }
 
 function showMessage(msg, isError, onAutoHide){
+  var delay = 2000 + (msg ? (msg.length * 150) : 0);
+  console.log(delay);
+
   $('.product-msg')
   .text(msg)
   .css('color',isError ? 'red' : 'green')
   .clearQueue()
-  .delay(1000 + (msg ? (msg.length * 20) : 0))
+  .delay(delay)
   .queue(function(next){
     if (onAutoHide) onAutoHide();
-    $(this).text('');
+    $(this).text('').clearQueue();
     next();
   });
 }
@@ -291,4 +295,17 @@ function showLastProduct(saleItem){
   $('.last-product-holder').show();
   $('#last-product-img').attr('src','/sku-image?sku='+saleItem.codigo);
   $('#last-product-sku').text(saleItem.codigo);
+}
+
+
+function loadPackagesTypes(){
+
+
+  new ComboBox($('#sale-package-type'), '/package-types')
+  .setOnSelect((name, item)=>{
+    $('#sale-height').val(item.height);
+    $('#sale-width').val(item.width);
+    $('#sale-length').val(item.length);
+  }).load();
+
 }

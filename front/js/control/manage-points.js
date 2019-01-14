@@ -31,7 +31,7 @@ function onInit(){
 
       if (c){
         var user = userSelector.getSelectedUser();
-        
+
         var data = {
           userId : user.id,
           points : $('#val').val(),

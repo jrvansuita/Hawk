@@ -1,3 +1,5 @@
+
+
 .panels{
   height: 100%;
   display: flex;
@@ -160,4 +162,9 @@
 
 .delete-button{
   background-color: #e45355 !important;
+}
+
+.autocomplete-content{
+  margin-top: -16px !important;
+  margin-left: 15px !important;
 }

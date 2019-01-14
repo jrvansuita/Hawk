@@ -94,9 +94,7 @@ module.exports= class SaleLoader {
           item.bru = product.pesoBruto;
 
           if(index == 0){
-            this._callbackHit(onCallNext, ()=>{
-              onCallOuter(this.sale.items);
-            });
+            this._callbackHit(onCallNext, onCallOuter);
           }
         });
       });
