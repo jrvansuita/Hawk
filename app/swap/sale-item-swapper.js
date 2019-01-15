@@ -127,6 +127,8 @@ module.exports = class SaleItemSwapper{
 
     this._loadProduct(this.swapSku, (swapProduct)=>{
       this.swapProduct = swapProduct;
+      this.swapSku = swapProduct.codigo;
+
       this.saleLoader
       .loadItems()
       .run((sale)=>{
