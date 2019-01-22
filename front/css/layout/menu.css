@@ -10,7 +10,11 @@
 }
 
 
-a{
+.menu-item >a{
+  display: -webkit-box;
+  width: fit-content;
+  height: fit-content;
+  padding: 17px;
   outline: none !important;
   text-decoration: none !important;
 }
@@ -35,18 +39,21 @@ a{
 
 .menu-item {
   cursor: pointer;
-  padding: 17px;
   border-radius: 2px;
   font-size: 14px;
   text-decoration: none;
   outline: none;
 }
 
-.sub-menu-ul>.menu-item {
-  padding: 8px;
+.sub-menu-ul> .menu-item> a {
+  padding: 8px !important;
+}
+
+.sub-menu-ul> .menu-item{
   margin-right: 25px;
   margin-left: 0px;
 }
+
 
 .menu-item:hover{
   background-color: #3534340d;

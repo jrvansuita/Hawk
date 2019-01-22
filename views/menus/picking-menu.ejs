@@ -1,7 +1,7 @@
 <div class="sub-menu">
   <nav class="sub-menu-nav">
     <ul class="sub-menu-ul">
-      <li class="menu-item material-ripple" >
+      <li class="menu-item" >
         <a href="/picking">
           <div class="menu-button title">
             Em Aberto
@@ -9,7 +9,7 @@
         </a>
       </li>
       <%if (Sett.get(locals.loggedUser,2)){%>
-        <li class="menu-item material-ripple" href="/pending">
+        <li class="menu-item " href="/pending">
           <a href="/pending">
             <div class="menu-button title">
               Pendências
@@ -17,21 +17,21 @@
           </a>
         </li>
         <%}%>
-        <li class="menu-item material-ripple" >
+        <li class="menu-item " >
           <a href="/picking/overview">
             <div class="menu-button title">
               Geral
             </div>
           </a>
         </li>
-        <li class="menu-item material-ripple" >
+        <li class="menu-item " >
           <a href="/picking/by-date">
             <div class="menu-button title">
               Por Data
             </div>
           </a>
         </li>
-        <li class="menu-item material-ripple" >
+        <li class="menu-item " >
           <a href="/picking/achievements">
             <div class="menu-button title">
               Conquistas

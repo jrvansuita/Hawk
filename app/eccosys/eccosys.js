@@ -89,8 +89,6 @@ function getOptions(path, method, isApiCall) {
 
   };
 
-
-  console.log(options.url);
   return options;
 }
 

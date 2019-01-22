@@ -419,7 +419,8 @@ function handlePackingDoneResult(result){
       showNfePrintControls(true);
     }
   }else{
-    console.log(result.error[0]);
+    showMessage(result.error[0].responseText, true, false);
+    showMainInputTitle('Rejeição de Nfe', 'paper-alert.png', '#f36c6c');
   }
 }
 
