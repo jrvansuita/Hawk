@@ -10,6 +10,10 @@
 }
 
 
+a{
+  outline: none !important;
+  text-decoration: none !important;
+}
 
 #logo {
   width: 30px;

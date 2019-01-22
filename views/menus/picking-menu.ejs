@@ -1,49 +1,59 @@
 <div class="sub-menu">
   <nav class="sub-menu-nav">
     <ul class="sub-menu-ul">
-      <li class="menu-item material-ripple" href="/picking">
-        <div class="menu-button title">
-          Em Aberto
-        </div>
+      <li class="menu-item material-ripple" >
+        <a href="/picking">
+          <div class="menu-button title">
+            Em Aberto
+          </div>
+        </a>
       </li>
       <%if (Sett.get(locals.loggedUser,2)){%>
-      <li class="menu-item material-ripple" href="/pending">
-        <div class="menu-button title">
-          Pendências
-        </div>
-      </li>
-      <%}%>
-      <li class="menu-item material-ripple" href="/picking/overview">
-        <div class="menu-button title">
-          Geral
-        </div>
-      </li>
-      <li class="menu-item material-ripple" href="/picking/by-date">
-        <div class="menu-button title">
-          Por Data
-        </div>
-      </li>
-      <li class="menu-item material-ripple" href="/picking/achievements">
-        <div class="menu-button title">
-          Conquistas
-        </div>
-      </li>
+        <li class="menu-item material-ripple" href="/pending">
+          <a href="/pending">
+            <div class="menu-button title">
+              Pendências
+            </div>
+          </a>
+        </li>
+        <%}%>
+        <li class="menu-item material-ripple" >
+          <a href="/picking/overview">
+            <div class="menu-button title">
+              Geral
+            </div>
+          </a>
+        </li>
+        <li class="menu-item material-ripple" >
+          <a href="/picking/by-date">
+            <div class="menu-button title">
+              Por Data
+            </div>
+          </a>
+        </li>
+        <li class="menu-item material-ripple" >
+          <a href="/picking/achievements">
+            <div class="menu-button title">
+              Conquistas
+            </div>
+          </a>
+        </li>
 
-    </ul>
-  </nav>
+      </ul>
+    </nav>
 
-  <div class="subtitles">
+    <div class="subtitles">
 
-    <%
-    if (typeof subtitlesArr != "undefined")
+      <%
+      if (typeof subtitlesArr != "undefined")
       subtitlesArr.forEach(function(bar){ %>
 
-      <div class="subtitle-item">
-        <div class="subtitle-color circle shadow" style="background-color: #<%=bar.barColor%>"> </div>
-        <label class="subtitle-label"> <%=bar.name%> </label>
+        <div class="subtitle-item">
+          <div class="subtitle-color circle shadow" style="background-color: #<%=bar.barColor%>"> </div>
+          <label class="subtitle-label"> <%=bar.name%> </label>
+        </div>
+
+        <% }); %>
+
       </div>
-
-      <% }); %>
-
-  </div>
-</div>
+    </div>

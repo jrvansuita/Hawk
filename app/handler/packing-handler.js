@@ -13,16 +13,12 @@ module.exports = {
   findSale(saleNumber, userId,  callback){
     if (this._checkSaleNumber(saleNumber, callback)){
 
-      var sale = this._findSaleFromGood(saleNumber);
+      var throwa = this._checkOtherLists(saleNumber, userId);
 
-      if (!sale){
-        sale = this._checkOtherLists(saleNumber, userId);
-      }
-
-      if (sale && sale.error){
-        callback(sale);
+      if (throwa && throwa.error){
+        callback(throwa);
       }else{
-        this.loadSale(sale || saleNumber, callback);
+        this.loadSale(saleNumber, callback);
       }
     }
   },
@@ -50,9 +46,6 @@ module.exports = {
     }
   },
 
-  _findSaleFromGood(saleNumber){
-    return DoneLaws.get(saleNumber) || PickingLaws.get(saleNumber);
-  },
 
   loadSale(sale, callback){
     var loader = new SaleLoader(sale)
@@ -71,12 +64,6 @@ module.exports = {
   loadTransportTag(res, idNfe){
     EccosysCalls.loadTransportTag(res, idNfe);
   },
-
-  /*done(params, callback){
-    if (params.saleNumber == '252454'){
-      callback({"success":[],"error":[{"id":"251477","erro":"No foi possivel validar a nota fiscal. Detalhes: 1 - Preencha o campo Nome do Contato.; 2 - Preencha o campo Ender do Contato.; 3 - Preencha o campo Namero do endere do Contato.; 4 - Preencha o campo Bairro do Contato.; 5 - Preencha o campo CEP do Contato.; 6 - Preencha o campo Muniio do Contato.; 7 - Preencha o campo UF do Contato.; 8 - Preencha o campo CPFCNPJ no cadastro do contato.; 9 - Problema com o item<b>Conjunto Beba Love Kitty Branco - Meu Pedacinho-G<b>: CFOP e a situa tribut"}]});
-    }
-  },*/
 
   done(params, callback){
     PackagesHandler.decPackStock(params.packageId);

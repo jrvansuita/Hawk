@@ -1,18 +1,22 @@
 <div class="sub-menu">
   <nav class="sub-menu-nav">
     <ul class="sub-menu-ul">
-      <li class="menu-item material-ripple" href="/profile">
-        <div class="menu-button title">
-          Perfil
-        </div>
+      <li class="menu-item material-ripple">
+        <a href="/profile">
+          <div class="menu-button title">
+            Perfil
+          </div>
+        </a>
       </li>
-        <%if (Sett.get(locals.loggedUser,6)){%>
-      <li class="menu-item material-ripple" href="/manage-points">
-        <div class="menu-button title">
-          Gerenciar Pontos
-        </div>
-      </li>
-      <%}%>
-    </ul>
-  </nav>
-</div>
+      <%if (Sett.get(locals.loggedUser,6)){%>
+        <li class="menu-item material-ripple" >
+          <a href="/manage-points">
+            <div class="menu-button title">
+              Gerenciar Pontos
+            </div>
+          </a>
+        </li>
+        <%}%>
+      </ul>
+    </nav>
+  </div>

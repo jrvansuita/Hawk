@@ -33,6 +33,8 @@ function initForPacking(){
 
   sale.pesoLiquido = 0;
   sale.pesoBruto = 0;
+
+  $('#product-ean').focus();
 }
 
 function findItem(gtin){
@@ -124,7 +126,7 @@ function onOneMoreProductChecked(saleItem){
   }
 
   if ($('#products-out tr').length == 1){
-    showMainInputTitle('Confêrencia Finalizada', 'barcode-ok');
+    showMainInputTitle('Confêrencia Finalizada', 'barcode-ok.png');
     $('#packing-done').fadeIn();
     $('#itens-progress').fadeIn();
     $('.products-out-holder').hide();
@@ -423,7 +425,7 @@ function handlePackingDoneResult(result){
 
 function showNfePrintControls(triggerClick){
   if (sale.numeroNotaFiscal){
-    showMainInputTitle('Nf-e Emitida', 'checked');
+    showMainInputTitle('Nf-e Emitida', 'checked.png');
 
     $('#print-transport-tag').fadeIn();
     $('#print-nfe').fadeIn();
@@ -438,7 +440,7 @@ function showNfePrintControls(triggerClick){
 
 function showMainInputTitle(title, icon, lineColor){
   $('.progress-line.inner').width('100%').css('background', lineColor ? lineColor : '#4ad44f');
-  $('#product-ean-icon').attr('src', 'img/' + icon + '.png');
+  $('#product-ean-icon').attr('src', 'img/' + icon);
   $('#product-ean').attr('disabled', true).val(title).addClass('picking-over');
   $('#itens-progress').hide();
 }
