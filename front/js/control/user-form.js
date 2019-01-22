@@ -84,10 +84,10 @@ function clearForm(){
 
 
 function checkform(){
-  var c = checkField($('#title'));
-  c = checkField($('#name')) & c;
-  c = checkField($('#avatar')) & c;
-  c = checkField($('#access')) & c;
+  var c = checkMaterialInput($('#title'));
+  c = checkMaterialInput($('#name')) & c;
+  c = checkMaterialInput($('#avatar')) & c;
+  c = checkMaterialInput($('#access')) & c;
 
   if ($('#access').val()){
     c = testUniqueAccess() & c;
@@ -98,14 +98,6 @@ function checkform(){
   return c;
 }
 
-function checkField(el){
-  if (!el.val()){
-    onSimpleMaterialInputError(el);
-    return false;
-  }
-
-  return true;
-}
 
 function testUniqueAccess(){
 

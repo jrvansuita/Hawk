@@ -12,7 +12,7 @@ module.exports = class ProductRoutes extends Routes{
 
     this._get('/sku-image', (req, res) => {
       ProductHandler.getImage(req.query.sku, (product)=>{
-        res.redirect(product.image);
+        res.redirect(product ? product.image : null);
       });
     });
 

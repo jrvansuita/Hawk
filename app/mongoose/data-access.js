@@ -27,6 +27,13 @@ static getKeyVal(object) {
 
 //Builds the query for primary key quering
 static getKeyQuery(values) {
+
+  if (values instanceof Array){
+    if (values[0] == undefined) return {};
+  }
+
+
+
   var query = {};
   var keys = this.getKey();
 
@@ -131,6 +138,13 @@ static aggregate(query, callback) {
     });
   }
 
+  static create(data, callback){
+    this.staticAccess().create(data, function (err, obj) {
+      if (callback){
+        callback(err, obj);
+      }
+    });
+  }
 
   static removeAll(query, callback) {
     this.staticAccess().deleteMany(query, (err) => {
@@ -163,11 +177,23 @@ static aggregate(query, callback) {
     return this.constructor.getKeyQuery(this.constructor.getKeyVal(this));
   }
 
+
+
+  insert(callback){
+    this.classAccess().save((err, results)=>{
+      if (callback){
+        callback(err, results);
+      }
+    });
+  }
+
   //Inserts the object or update based on the primary key
   upsert(callback) {
     delete this.__v;
+    var query = this.getPKQuery();
+
     this.classAccess().findOneAndUpdate(this.getPKQuery(), this, {
-      upsert: true
+      upsert: true,
     }, (err, doc) => {
       if (callback)
       callback(err, doc);
@@ -178,9 +204,9 @@ static aggregate(query, callback) {
     this.classAccess().update(this.getPKQuery(),
     this, {
       multi: false
-    }, (err) => {
+    }, (err, doc) => {
       if (callback)
-      callback(err);
+      callback(err, doc);
     });
   }
 

@@ -14,12 +14,15 @@ $(document).ready(()=>{
     }
   });
 
+  $('#packing-done').click(packingClick);
+
   if (sale.items){
     initForPacking();
   }
 });
 
 function initForPacking(){
+  showNfePrintControls();
   refreshCountProductItens();
 
   createProductsTable('products-out-holder', 'products-out', {icon : false, title: 'Lista de Produtos do Pedido'});
@@ -27,6 +30,9 @@ function initForPacking(){
   loadProductsOutTable();
 
   addListeners();
+
+  sale.pesoLiquido = 0;
+  sale.pesoBruto = 0;
 }
 
 function findItem(gtin){
@@ -48,12 +54,12 @@ function refreshProgressLine(){
   $('.progress-line.inner').width(width);
 }
 
-function refreshSaleWeight(saleItem){
-  sale.pesoLiquido = parseFloat(sale.pesoLiquido) + parseFloat(saleItem.liq);
-  $('#sale-liq').val(Floa.weight(sale.pesoLiquido));
+function refreshSaleWeight(liqWeight, bruWeigth){
+  sale.pesoLiquido = parseFloat(sale.pesoLiquido) + parseFloat(liqWeight);
+  $('#sale-liq').val(Floa.weight(sale.pesoLiquido)).data('val' , sale.pesoLiquido).hide().fadeIn();
 
-  sale.pesoBruto = parseFloat(sale.pesoBruto) + parseFloat(saleItem.bru);
-  $('#sale-bru').val(Floa.weight(sale.pesoBruto));
+  sale.pesoBruto = parseFloat(sale.pesoBruto) + parseFloat(bruWeigth);
+  $('#sale-bru').val(Floa.weight(sale.pesoBruto)).data('val' , sale.pesoBruto).hide().fadeIn();
 }
 
 function checkProduct(gtin){
@@ -118,21 +124,18 @@ function onOneMoreProductChecked(saleItem){
   }
 
   if ($('#products-out tr').length == 1){
-    onLastProductChecked();
+    showMainInputTitle('Confêrencia Finalizada', 'barcode-ok');
+    $('#packing-done').fadeIn();
+    $('#itens-progress').fadeIn();
+    $('.products-out-holder').hide();
   }else{
     showProductMsg(null, 'checked');
   }
 
   showLastProduct(saleItem);
-  refreshSaleWeight(saleItem);
+  refreshSaleWeight(saleItem.liq, saleItem.bru);
   refreshProgressLine();
   refreshCountProductItens();
-}
-
-function onLastProductChecked(){
-  $('.products-out-holder').hide();
-  $('#product-ean-icon').attr('src','img/barcode-ok.png');
-  $('#product-ean').attr('disabled', true).val('Picking Finalizado').addClass('picking-over');
 }
 
 function createProductsTable(holder, id, data){
@@ -170,7 +173,9 @@ function buildProductLine(saleItem, data){
     cols.push(createProductIcon('checked'));
   }
 
-  cols.push(createProductVal(saleItem.codigo).addClass('copiable'));
+  cols.push(createProductVal(saleItem.codigo).addClass('copiable').dblclick(()=>{
+    window.open('/stock?sku=' + saleItem.codigo,'_blank');
+  }));
   cols.push(createProductVal(saleItem.gtin));
 
   var desc = createProductVal(saleItem.descricao.split('-')[0])
@@ -235,12 +240,13 @@ function showMessage(msg, isError, onAutoHide){
 
   $('.product-msg')
   .text(msg)
-  .css('color',isError ? 'red' : 'green')
+  .css('color', isError ? 'red' : 'green')
   .clearQueue()
+  .fadeIn()
   .delay(delay)
   .queue(function(next){
     if (onAutoHide) onAutoHide();
-    $(this).text('').clearQueue();
+    $(this).hide().clearQueue();
     next();
   });
 }
@@ -254,6 +260,13 @@ function loadProductsOutTable(){
 
 
 function addListeners(){
+  $('#print-nfe').click(()=>{
+    window.open('/packing-danfe?nfe=' + sale.numeroNotaFiscal, '_blank');
+  });
+
+  $('#print-transport-tag').click(()=>{
+    window.open('/packing-transport-tag?idnfe=' + sale.idNotaFiscalRef, '_blank');
+  });
 
   $('.copiable').click(function(e){
     Util.selectContent(this);
@@ -263,18 +276,26 @@ function addListeners(){
   });
 
 
-  $('.icon-open-list').click(function(){
+  $('.icon-open-list').click(function(e){
     var tableId = $(this).data('table');
 
     if (!$(this).hasClass('closed')){
       $(this).addClass('closed').attr('src','img/open-down.png').hide().fadeIn();
       $('#' + tableId + ' > tbody > tr').not(':first').hide();
-      $('#' + tableId).parent().append($('<span>').addClass('title-product-closed ' + tableId).text($(this).data('title')));
+
+      var title = $('<span>').addClass('title-product-closed ' + tableId).text($(this).data('title')).click(()=>{
+        $(this).click();
+      });
+
+      $('#' + tableId).parent().append(title);
     }else{
       $('.title-product-closed.' + tableId).remove();
       $(this).removeClass('closed').attr('src','img/open-up.png').hide().fadeIn();
       $('#' + tableId + ' > tbody  > tr').not(':first').show();
     }
+
+    e.stopPropagation();
+    e.preventDefault();
   });
 }
 
@@ -290,22 +311,134 @@ function addHoverProductImage(holder, sku){
 
 
 function showLastProduct(saleItem){
-  $('.input-group').hide();
+  $('.material-input-holder').hide();
 
   $('.last-product-holder').show();
-  $('#last-product-img').attr('src','/sku-image?sku='+saleItem.codigo);
+
+  new ProductImageLoader($('#last-product-img'))
+  .src('/sku-image?sku='+saleItem.codigo).put();
+
   $('#last-product-sku').text(saleItem.codigo);
 }
 
 
 function loadPackagesTypes(){
+  $('#sale-package-type').focus(()=>{
+    $('#sale-package-type').val('');
+  });
 
+  var lastWeight = 0;
 
   new ComboBox($('#sale-package-type'), '/package-types')
+  .setAutoShowOptions(true)
   .setOnSelect((name, item)=>{
-    $('#sale-height').val(item.height);
-    $('#sale-width').val(item.width);
-    $('#sale-length').val(item.length);
+
+    if (item.stockQtd < item.minStockQtd){
+      $('.pack-alert').hide().fadeIn();
+    }
+
+    refreshSaleWeight(item.weight - lastWeight, item.weight - lastWeight);
+
+    $('#sale-height').val(item.height).hide().fadeIn();
+    $('#sale-width').val(item.width).hide().fadeIn();
+    $('#sale-length').val(item.length).hide().fadeIn();
+    $('#sale-package-type').data('sel',item._id);
+    lastWeight = item.weight;
   }).load();
 
+}
+
+
+function checkAllFields(){
+  var c = checkFloat($('#sale-liq'));
+  c = checkFloat($('#sale-bru')) & c;
+  c = checkInt($('#sale-vols')) & c;
+  c = checkMaterialInput($('#sale-esp')) & c;
+
+  c = checkInt($('#sale-height')) & c;
+  c = checkInt($('#sale-width')) & c;
+  c = checkInt($('#sale-length')) & c;
+
+
+  return c;
+}
+
+function checkFloat(el){
+  if (Floa.def(el.val().replace(',','.')) <= 0){
+    onSimpleMaterialInputError(el);
+    return false;
+  }
+
+  return true;
+}
+
+function checkInt(el){
+  if (Num.def(el.val()) <= 0){
+    onSimpleMaterialInputError(el);
+    return false;
+  }
+
+  return true;
+}
+
+function packingClick(){
+  if (checkAllFields()){
+    postPackingDone();
+  }
+}
+
+function postPackingDone(){
+  $('#packing-done').fadeOut();
+  showMainInputTitle('Enviando Nf-e...','/loader/circle.svg',  '#7eb5f1');
+
+  _post('packing-done', {
+    saleNumber: sale.numeroPedido,
+    liqWeigth : Floa.def($('#sale-liq').val()),
+    bruWeigth : Floa.def($('#sale-bru').val()),
+    vols: Num.def($('#sale-vols').val()),
+    esp: $('#sale-esp').val(),
+    height: Num.def($('#sale-height').val()),
+    width: Num.def($('#sale-width').val()),
+    length: Num.def($('#sale-length').val()),
+    packageId: $('#sale-package-type').data('sel')
+  },
+  (r)=>{
+    handlePackingDoneResult(r);
+  });
+}
+
+function handlePackingDoneResult(result){
+  if (result.success.length > 0){
+    result = result.success[0];
+
+    if (result){
+      sale.numeroNotaFiscal = result.codigo;
+      sale.idNotaFiscalRef = result.id;
+      showNfePrintControls(true);
+    }
+  }else{
+    console.log(result.error[0]);
+  }
+}
+
+function showNfePrintControls(triggerClick){
+  if (sale.numeroNotaFiscal){
+    showMainInputTitle('Nf-e Emitida', 'checked');
+
+    $('#print-transport-tag').fadeIn();
+    $('#print-nfe').fadeIn();
+
+    if (triggerClick){
+      $('#print-nfe').click();
+      $('#print-transport-tag').click();
+    }
+  }
+}
+
+
+function showMainInputTitle(title, icon, lineColor){
+  $('.progress-line.inner').width('100%').css('background', lineColor ? lineColor : '#4ad44f');
+  $('#product-ean-icon').attr('src', 'img/' + icon + '.png');
+  $('#product-ean').attr('disabled', true).val(title).addClass('picking-over');
+  $('#itens-progress').hide();
 }

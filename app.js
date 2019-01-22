@@ -38,9 +38,13 @@ const Routes = require('./app/redirects/controller/routes.js');
 const UsersProvider = require('./app/provider/UsersProvider.js');
 
 app.use(function(req, res, next) {
-  if (req.session.loggedUserID || Routes.checkIsPathNotLogged(req.path)) {
+  if (req.session.loggedUserID || Routes.checkIsPathNotLogged(req.path)) { 
     if (req.session.loggedUserID != undefined){
       res.locals.loggedUser = UsersProvider.get(req.session.loggedUserID);
+
+      if (res.locals.loggedUser && !res.locals.loggedUser.active){
+        req.session.loggedUserID = null;
+      }
     }
 
     next();
@@ -67,6 +71,8 @@ routes.push('pending-routes.js');
 routes.push('performance-routes.js');
 routes.push('history-routes.js');
 routes.push('stock-routes.js');
+routes.push('user-routes.js');
+routes.push('settings-routes.js');
 
 // -- Run Routes -- //
 routes.forEach((r)=>{

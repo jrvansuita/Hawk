@@ -1,5 +1,6 @@
 html, body {
   padding: 0;
+  height: 100%;
   background-color: #fcfcfc;
   margin: 0;
   font-family: Roboto, sans-serif;
@@ -34,6 +35,9 @@ input, span, label {
   cursor: pointer;
 }
 
+.button:hover{
+  background-color: #1B6E61 !important;
+}
 
 .label {
   padding: 2px 3px 2px 3px;
@@ -207,8 +211,8 @@ tr.line td{
 }
 
 .simple-material-input-error{
-  border: 2px #e25952;
-  border-style: none none solid none;
+  border: 2px #e25952 !important;
+  border-style: none none solid none !important;
 }
 
 .dotted {

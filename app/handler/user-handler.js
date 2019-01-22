@@ -11,7 +11,8 @@ module.exports = class UserHandler {
       params.sector,
       params.avatar,
       params.access,
-      params.full);
+      params.full,
+      params.active);
 
       //Gravando as configurações
       Object.keys(params).forEach((key)=>{
@@ -29,7 +30,7 @@ module.exports = class UserHandler {
 
 
       user.upsert((err, doc)=>{
-    
+
       });
 
       callback(user.id);

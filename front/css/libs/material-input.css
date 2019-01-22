@@ -1,4 +1,4 @@
-.group {
+.material-input-holder {
   position: relative;
   margin-bottom: 20px;
 }
@@ -89,44 +89,4 @@
   text-align: center;
   pointer-events: none;
   opacity: 0.5;
-}
-
-/* active state */
-
-.material-input-holder>input:focus~.highlight {
-  -webkit-animation: inputHighlighter 0.3s ease;
-  -moz-animation: inputHighlighter 0.3s ease;
-  animation: inputHighlighter 0.3s ease;
-}
-
-/* ANIMATIONS ================ */
-
-@-webkit-keyframes inputHighlighter {
-  from {
-    background: #259587;
-  }
-  to {
-    width: 0;
-    background: transparent;
-  }
-}
-
-@-moz-keyframes inputHighlighter {
-  from {
-    background: #259587;
-  }
-  to {
-    width: 0;
-    background: transparent;
-  }
-}
-
-@keyframes inputHighlighter {
-  from {
-    background: #259587;
-  }
-  to {
-    width: 0;
-    background: transparent;
-  }
 }

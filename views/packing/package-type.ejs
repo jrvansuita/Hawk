@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt" dir="ltr">
+<%  include ../menus/main-menu %>
+<link rel="stylesheet" type="text/css" href="/front/css/layout/package-type.css">
+<link rel="stylesheet" type="text/css" href="/front/css/libs/autocomplete.css">
+<link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
+
+<script type="text/javascript" src="/front/js/control/package-type.js"></script>
+<script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+<script type="text/javascript" src="/front/js/libs/combobox.js"></script>
+<script type="text/javascript" src="front/js/libs/autocomplete.js"></script>
+
+<head>
+
+</head>
+<body>
+
+  <div class="main">
+
+
+    <form class="pack-form shadow" name="pack-form" action="packages" method="post" id="pack-form">
+      <div class="header">
+
+        <div class="icon-holder">
+          <img class="circle shadow" src="img/box.png%>" />
+          <input type="text" id="editing-id" name="editingId" value="<%=pack ? pack._id : ''%>" style="display:none">
+        </div>
+        <div class="header-name">
+          <input type="text" class="simple-material-input search-input" value="<%=pack ? pack.name : ''%>" id="pack-name" placeholder="Selecione o Pacote" autocomplete="off"/>
+        </div>
+
+      </div>
+
+      <div class="main-form">
+
+        <div class="row">
+          <div class="material-input-holder">
+            <input type="text" id="name" name="name"  maxlength="30"
+            value="<%=pack ? pack.name : ''%>" autocomplete="off"
+             title="Quantidade total em unidades desta embalagem" required/>
+
+            <span class="bar"></span>
+            <label>Nome do Pacote</label>
+          </div>
+
+          <div class="material-input-holder">
+            <input type="text" id="stock-qtd" name="stockQtd"  maxlength="6"
+            value="<%=pack ? pack.stockQtd : ''%>" autocomplete="off"
+            onkeypress="return Num.isNumberKey(event);" title="Quantidade total em unidades desta embalagem" required/>
+
+            <span class="bar"></span>
+            <label>Quantidade em Estoque</label>
+          </div>
+
+
+          <div class="material-input-holder">
+            <input type="text" id="min-stock-qtd" name="minStockQtd"  maxlength="6"
+            value="<%=pack ? pack.minStockQtd : ''%>" autocomplete="off"
+            onkeypress="return Num.isNumberKey(event);" title="Estoque mínimo, avisa o usuário quando está abaixo deste valor definido" required/>
+
+            <span class="bar"></span>
+            <label>Estoque Mínimo</label>
+          </div>
+
+
+
+          <div class="material-input-holder">
+            <input type="text" id="max-weight" name="maxWeight"  maxlength="6"
+            value="<%=pack ? Floa.weight(pack.maxWeight) : ''%>" autocomplete="off"
+            onkeypress="return Floa.isFloatKey(event);"
+
+             title="Peso máximo suportado por esta embalagem" required/>
+
+            <span class="bar"></span>
+            <label>Peso Máximo</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="material-input-holder">
+            <input type="text" id="height" name="height"  maxlength="6"
+            value="<%=pack ? pack.height : ''%>" autocomplete="off"
+            onkeypress="return Num.isNumberKey(event);" required/>
+
+            <span class="bar"></span>
+            <label>Altura</label>
+          </div>
+
+
+          <div class="material-input-holder">
+            <input type="text" id="width" name="width"  maxlength="6"
+            value="<%=pack ? pack.width : ''%>" autocomplete="off"
+            onkeypress="return Num.isNumberKey(event);" required/>
+
+            <span class="bar"></span>
+            <label>Largura</label>
+          </div>
+
+
+
+
+
+          <div class="material-input-holder">
+            <input type="text" id="length" name="length"  maxlength="6"
+            value="<%=pack ? pack.length : ''%>" autocomplete="off"
+            onkeypress="return Num.isNumberKey(event);" required/>
+
+            <span class="bar"></span>
+            <label>Comprimento</label>
+          </div>
+
+          <div class="material-input-holder">
+            <input type="text" id="weight" name="weight"  maxlength="6"
+            value="<%=pack ? Floa.weight(pack.weight) : ''%>" autocomplete="off"
+            onkeypress="return Floa.isFloatKey(event);"
+
+             title="Peso da embalagem" required/>
+
+            <span class="bar"></span>
+            <label>Peso</label>
+          </div>
+
+
+        </div>
+      </div>
+
+
+      <div class="footer">
+        <%if (loggedUser && loggedUser.full){%>
+          <label class="button shadow" id="save" >Salvar</label>
+          <label class="button shadow" id="new">Novo</label>
+          <label class="button shadow" id="delete">Excluir</label>
+          <%}%>
+        </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

@@ -69,6 +69,7 @@ class ComboBox{
 
     if (this.autoShowOptions){
       options.minLength = 0;
+      options.limit = 10;
     }
 
     this.element.autocomplete(options);

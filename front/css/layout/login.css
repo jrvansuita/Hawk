@@ -17,6 +17,8 @@ body {
 }
 .error{
   display: none;
+  font-size: 13px;
+  margin-bottom: 10px;
 }
 
 .login-els {

@@ -9,8 +9,19 @@ const host = process.env.ECCOSYS_HOST;
 const apiKey = process.env.ECCOSYS_API;
 const secret = process.env.ECCOSYS_SECRET;
 
+
+
 exports.get = (path, onResponse) => {
   makeRequest(getOptions(path, 'GET', true), null,  onResponse);
+};
+
+exports.document = (res, path) => {
+  makeRequest(getOptions(path, 'GET', true), null,  (responseBody, chunks)=>{
+    var file = new Buffer.concat(chunks);
+
+    res.type('application/pdf');
+    res.send(file);
+  });
 };
 
 exports.put = (path, body, onResponse) => {
@@ -26,17 +37,19 @@ exports.delete = (path, onResponse) => {
 };
 
 function makeRequest(options, postBody, onResponse){
-  var responseBody = '';
-
   var req = https.request(options, function(res) {
+
+    var responseBody = '';
+    var chucks = [];
+
     res.on('data', function(chunk) {
       responseBody += chunk;
+      chucks.push(chunk);
     });
 
     res.on('end', function() {
-
       checkResponse(options, responseBody);
-      onResponse(responseBody);
+      onResponse(responseBody, chucks);
     });
   });
 
@@ -72,11 +85,12 @@ function getOptions(path, method, isApiCall) {
       'apikey': apiKey,
       'Content-Type': 'application/json; charset=utf-8'
     }
+
+
   };
 
 
-
-
+  console.log(options.url);
   return options;
 }
 

@@ -3,14 +3,37 @@
 var Floa = {
 
   def(val, def) {
-    return ((val !== undefined) && (typeof(parseFloat(val)) === 'number')) ? val : (typeof(def) === 'number' ? def : 0);
+    if (val && (val.toString().length > 0) && (typeof(parseFloat(val)) === 'number')){
+      return this.floa(val);
+    }else{
+      if (typeof(def) === 'number'){
+        return def;
+      }else{
+        return 0;
+      }
+    }
+  },
+
+  floa: function(val) {
+    return parseFloat(val.toString().replace(",", "."));
   },
 
   weight(val){
+    if (!val){
+      return '';
+    }
+
     val = parseFloat(val);
     return new Intl.NumberFormat('pt-BR', { style: 'decimal',
-    minimumFractionDigits: 3,}).format(val);
-  }
+    minimumFractionDigits: 3,}).format(val).replace('.',',');
+  },
+
+  isFloatKey(e){
+   e = e || window.event;
+   var charCode = e.which ? e.which : e.keyCode;
+   return /^-?[0-9,]*$/.test(String.fromCharCode(charCode));
+ }
+
 
 };
 

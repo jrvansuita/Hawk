@@ -95,6 +95,21 @@ module.exports = {
     });
   },
 
+  packingPostNF(saleNumber, callback){
+    Eccosys.post('nfes/' + saleNumber, {}, (res)=>{
+      callback(res);
+    });
+  },
+
+  loadDanfe(res, nfNumber){
+    Eccosys.document(res, 'danfes/' + nfNumber + '/pdf');
+  },
+
+  loadTransportTag(res, idNfe){
+    Eccosys.document(res, 'etiquetas/' + idNfe);
+  },
+
+
   removeSaleItems(saleNumber, callback){
     Eccosys.delete('pedidos/' + saleNumber + '/items', (res)=>{
       if (callback){

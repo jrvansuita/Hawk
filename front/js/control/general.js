@@ -25,3 +25,14 @@ function onSimpleMaterialInputError(input){
     next();
   });
 }
+
+
+
+function checkMaterialInput(el){
+  if (!el.val()){
+    onSimpleMaterialInputError(el);
+    return false;
+  }
+
+  return true;
+}

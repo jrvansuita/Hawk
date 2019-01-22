@@ -19,7 +19,7 @@ body {
   min-height: 400px;
   text-align: center;
   margin: auto;
-  padding: 10px 15px;
+  padding: 0px 15px;
 }
 
 .fields{
@@ -46,6 +46,7 @@ body {
   width: 50%;
   display: block;
   float: right;
+  height: auto;
 }
 
 .oderner{
@@ -70,7 +71,7 @@ body {
   display: flex;
   height: 70px;
   border-bottom: 1px solid #efe6e6;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
 }
 
 .label-name{
@@ -124,7 +125,8 @@ body {
 }
 
 .setts-group{
-  margin: 15px 5px;
+  margin: 0px 5px;
+  padding-bottom: 8px;
   text-align: left;
   display: block;
 }

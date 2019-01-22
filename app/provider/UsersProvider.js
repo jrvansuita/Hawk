@@ -69,6 +69,10 @@ module.exports = class UsersProvider {
       Err.thrw("Usuário não existe.");
     }
 
+    if (!user.active){
+      Err.thrw("Usuário não está ativo.");
+    }
+
     return true;
   }
 
