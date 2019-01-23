@@ -65,10 +65,8 @@ module.exports = {
     EccosysCalls.loadTransportTag(res, idNfe);
   },
 
-  done(params, callback){
-    PackagesHandler.decPackStock(params.packageId);
-
-    var body = {
+  getSalePackingBody(params){
+    return [{
       pickingRealizado : 'S',
       numeroPedido: params.saleNumber,
       pesoLiquido: params.liqWeigth,
@@ -80,24 +78,44 @@ module.exports = {
       dimensaoAltura: params.height,
       dimensaoLargura: params.width,
       dimensaoComprimento: params.length,
-    };
+    }];
+  },
 
-    EccosysCalls.updateSale([body], (updateResult)=>{
-      console.log('--Update--');
-      console.log(updateResult);
-      if (JSON.parse(updateResult).result.success.length > 0){
-        EccosysCalls.packingPostNF(params.saleNumber, (nfResult)=>{
-          console.log('--NF--');
+  updateSale(params, callback){
+    EccosysCalls.updateSale(this.getSalePackingBody(params), (updateResult)=>{
+      if (callback){
+        var result = JSON.parse(updateResult).result;
+        callback(result.success.length > 0, result);
+      }
+    });
+  },
+
+  sendNfe(saleNumber, callback){
+    EccosysCalls.packingPostNF(saleNumber, (nfResult)=>{
+      if (callback){
+        callback(nfResult);
+      }
+    });
+  },
+
+
+
+  done(params, callback){
+    PackagesHandler.decPackStock(params.packageId);
+
+    this.updateSale(params, (sucess, updateResult)=>{
+
+      if (sucess){
+        this.sendNfe(params.saleNumber, (nfResult)=>{
+          console.log('Enviou o resultado via Broadcast');
           console.log(nfResult);
-
-          if (callback){
-            callback(JSON.parse(nfResult));
-          }
+           global.io.sockets.emit(params.saleNumber, nfResult);
         });
-      }else{
-        if (callback){
-          callback(JSON.parse(updateResult));
-        }
+      }
+
+      if (callback){
+        //Envia uma notificação com OK do envio da NF-e ou a critica de update de pedido
+        callback(sucess ? {code:200} : updateResult);
       }
     });
 

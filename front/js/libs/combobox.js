@@ -11,6 +11,10 @@ class ComboBox{
     return this;
   }
 
+  select(el){
+    this.options.onAutocomplete(el.name);
+  }
+
   setAutoShowOptions(yes){
     this.autoShowOptions = yes;
     return this;
@@ -22,6 +26,10 @@ class ComboBox{
         return this.data[i];
       }
     }
+  }
+
+  getOptions(){
+    return this.data;
   }
 
   load(callback){
@@ -62,6 +70,7 @@ class ComboBox{
       data: this.selectorOptions,
       limit: 5,
       onAutocomplete: (name)=>{
+        this.element.val(name);
         this.callback(name, this.findItem(name));
       }
     };
@@ -71,6 +80,8 @@ class ComboBox{
       options.minLength = 0;
       options.limit = 10;
     }
+
+    this.options = options;
 
     this.element.autocomplete(options);
   }

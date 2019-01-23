@@ -19,7 +19,7 @@ module.exports = class PackingRoutes extends Routes{
     });
 
     this._post('/packing-done', (req, res) => {
-       PackingHandler.done(req.body, this._resp().redirect(res));
+      PackingHandler.done(req.body, this._resp().redirect(res));
     });
 
     this._get('/packing-danfe', (req, res) => {

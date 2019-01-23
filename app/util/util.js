@@ -168,6 +168,18 @@ var Util = {
     }
   },
 
+  getSaleSituationIcon(status){
+    switch(status) {
+      case 1:
+      return 'paper-checked';
+      case 3:
+      return 'checked';
+      default:
+      return 'alert';
+    }
+  },
+
+
   getSaleStatusName(status){
     if (status == 'N'){
       return 'Aguardando Picking';
@@ -175,6 +187,16 @@ var Util = {
       return 'Aguardando Faturamento';
     }else if (status == 'S'){
       return 'Faturado';
+    }
+  },
+
+  getSaleStatusIcon(status){
+    if (status == 'N'){
+      return 'alert';
+    }else if (status == 'A'){
+      return 'checked';
+    }else if (status == 'S'){
+      return 'paper-checked';
     }
   },
 

@@ -31,6 +31,9 @@ app.use('/img', express.static('front/img'));
 app.use('/front', express.static('front'));
 app.use('/util', express.static('app/util'));
 
+var timeout = require('connect-timeout');
+app.use(timeout(60000)); // 1 minutos
+
 const Routes = require('./app/redirects/controller/routes.js');
 
 //Keep a user variable for session in all ejs
@@ -38,7 +41,7 @@ const Routes = require('./app/redirects/controller/routes.js');
 const UsersProvider = require('./app/provider/UsersProvider.js');
 
 app.use(function(req, res, next) {
-  if (req.session.loggedUserID || Routes.checkIsPathNotLogged(req.path)) { 
+  if (req.session.loggedUserID || Routes.checkIsPathNotLogged(req.path)) {
     if (req.session.loggedUserID != undefined){
       res.locals.loggedUser = UsersProvider.get(req.session.loggedUserID);
 
@@ -81,15 +84,20 @@ routes.forEach((r)=>{
 });
 
 
-app.listen(app.get('port'), function() {
+var server = app.listen(app.get('port'), function() {
   //('Node is running on port ', app.get('port'));
 });
 
 
+//--- Socket IO for sending messages like Nf-e (Long Request) ---//
+
+global.io = require('socket.io')(server);
+
+
+//--- Keep History of Errors ---//
 
 const History = require('./app/bean/history.js');
 
 process.on('uncaughtException', function (err) {
   History.error(err);
-  //("Node NOT Exiting. New History row from error.");
 });

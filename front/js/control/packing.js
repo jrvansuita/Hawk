@@ -127,6 +127,7 @@ function onOneMoreProductChecked(saleItem){
 
   if ($('#products-out tr').length == 1){
     showMainInputTitle('Confêrencia Finalizada', 'barcode-ok.png');
+    autoSelectPackingType();
     $('#packing-done').fadeIn();
     $('#itens-progress').fadeIn();
     $('.products-out-holder').hide();
@@ -323,6 +324,7 @@ function showLastProduct(saleItem){
   $('#last-product-sku').text(saleItem.codigo);
 }
 
+var packingTypeCombo;
 
 function loadPackagesTypes(){
   $('#sale-package-type').focus(()=>{
@@ -331,7 +333,9 @@ function loadPackagesTypes(){
 
   var lastWeight = 0;
 
-  new ComboBox($('#sale-package-type'), '/package-types')
+  packingTypeCombo = new ComboBox($('#sale-package-type'), '/package-types');
+
+  packingTypeCombo
   .setAutoShowOptions(true)
   .setOnSelect((name, item)=>{
 
@@ -391,7 +395,7 @@ function packingClick(){
 
 function postPackingDone(){
   $('#packing-done').fadeOut();
-  showMainInputTitle('Enviando Nf-e...','/loader/circle.svg',  '#7eb5f1');
+  showMainInputTitle('Atualizando Pedido...','/loader/circle.svg',  '#7eb5f1');
 
   _post('packing-done', {
     saleNumber: sale.numeroPedido,
@@ -404,29 +408,50 @@ function postPackingDone(){
     length: Num.def($('#sale-length').val()),
     packageId: $('#sale-package-type').data('sel')
   },
-  (r)=>{
-    handlePackingDoneResult(r);
+  (result)=>{
+    onSucess(result);
+  },(error, message)=>{
+    onError(error);
   });
 }
 
-function handlePackingDoneResult(result){
+function onSucess(result){
+  if (result.code == 200){
+    showMainInputTitle('Enviando Nf-e...','/loader/circle.svg',  '#7eb5f1');
+    new Broadcast(sale.numeroPedido).onReceive((result)=>{
+      onNfeSucess(result);
+    });
+  }
+}
+
+function onError(error){
+  showMessage(error.responseText, true, false);
+  showMainInputTitle('Erro na Requisição', 'alert.png', '#f36c6c');
+}
+
+
+function onNfeSucess(result){
   if (result.success.length > 0){
     result = result.success[0];
 
     if (result){
       sale.numeroNotaFiscal = result.codigo;
       sale.idNotaFiscalRef = result.id;
+      $('#nfe-label').text(sale.numeroNotaFiscal);
       showNfePrintControls(true);
     }
   }else{
-    showMessage(result.error[0].responseText, true, false);
-    showMainInputTitle('Rejeição de Nfe', 'paper-alert.png', '#f36c6c');
+    showMessage(result.error[0], true, false);
+    showMainInputTitle('Rejeição de Nfe', 'paper-alert.png', '#f1d26a');
   }
 }
 
+
+
 function showNfePrintControls(triggerClick){
-  if (sale.numeroNotaFiscal){
+  if (sale.numeroNotaFiscal && sale.numeroNotaFiscal.length > 0){
     showMainInputTitle('Nf-e Emitida', 'checked.png');
+    $('.editable-infos-holder>input').prop("disabled", true);
 
     $('#print-transport-tag').fadeIn();
     $('#print-nfe').fadeIn();
@@ -444,4 +469,28 @@ function showMainInputTitle(title, icon, lineColor){
   $('#product-ean-icon').attr('src', 'img/' + icon);
   $('#product-ean').attr('disabled', true).val(title).addClass('picking-over');
   $('#itens-progress').hide();
+}
+
+
+function autoSelectPackingType(){
+  var options = packingTypeCombo.getOptions();
+  var packElement = null;
+  var lastDif = 100000000;
+
+  for(var i=0; i < options.length; i++){
+    var pack = options[i];
+
+    if (pack.maxWeight > sale.pesoLiquido){
+      if ((pack.maxWeight - sale.pesoLiquido)  < lastDif){
+        lastDif = pack.maxWeight - sale.pesoLiquido;
+        packElement = pack;
+      }
+    }
+  }
+
+  if (packElement){
+    packingTypeCombo.select(packElement);
+  }
+
+
 }

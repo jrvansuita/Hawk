@@ -77,6 +77,7 @@ function getOptions(path, method, isApiCall) {
   var options = {
     host: host,
     port: 443,
+    timeout: 60000, // 1 minutos
     path: _path,
     method: method,
     url: 'https://' + host + _path,
