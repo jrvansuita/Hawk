@@ -9,13 +9,11 @@ module.exports = class PackingRoutes extends Routes{
   attach(){
 
     this._page('/packing', (req, res) => {
-      if (this._checkPermissionOrGoBack(req, res, 8)){
         PackingHandler.findSale(req.query.sale, req.session.loggedUserID, (sale)=>{
           res.render('packing/packing.ejs', {sale : sale,
             groups: !sale.id ? PackingProvider.get() : {}
           });
         });
-      }
     });
 
     this._post('/packing-done', (req, res) => {

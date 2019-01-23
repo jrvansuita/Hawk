@@ -109,7 +109,7 @@ module.exports = {
         this.sendNfe(params.saleNumber, (nfResult)=>{
           console.log('Enviou o resultado via Broadcast');
           console.log(nfResult);
-           global.io.sockets.emit(params.saleNumber, nfResult);
+          global.io.sockets.emit(params.saleNumber, JSON.parse(nfResult));
         });
       }
 
