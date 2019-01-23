@@ -86,9 +86,7 @@ function checkProduct(gtin){
 }
 
 
-
 var itemsChecked = 0;
-
 
 function handleProductChecking(saleItem){
   saleItem.checkedQtd--;
@@ -125,7 +123,7 @@ function onOneMoreProductChecked(saleItem){
     $('.editable-infos-holder').show();
   }
 
-  if ($('#products-out tr').length == 1){
+  if (itemsChecked == sale.itemsQuantity){
     showMainInputTitle('Confêrencia Finalizada', 'barcode-ok.png');
     autoSelectPackingType();
     $('#packing-done').fadeIn();
@@ -350,7 +348,10 @@ function loadPackagesTypes(){
     $('#sale-length').val(item.length).hide().fadeIn();
     $('#sale-package-type').data('sel',item._id);
     lastWeight = item.weight;
-  }).load();
+  }).load(()=>{
+    //Para casos ontem tem só 1 peça no Pedido
+    autoSelectPackingType();
+  });
 
 }
 
@@ -396,6 +397,7 @@ function packingClick(){
 function postPackingDone(){
   $('#packing-done').fadeOut();
   showMainInputTitle('Atualizando Pedido...','/loader/circle.svg',  '#7eb5f1');
+  $('.editable-infos-holder>input').prop("disabled", true);
 
   _post('packing-done', {
     saleNumber: sale.numeroPedido,
@@ -451,7 +453,6 @@ function onNfeSucess(result){
 function showNfePrintControls(triggerClick){
   if (sale.numeroNotaFiscal && sale.numeroNotaFiscal.length > 0){
     showMainInputTitle('Nf-e Emitida', 'checked.png');
-    $('.editable-infos-holder>input').prop("disabled", true);
 
     $('#print-transport-tag').fadeIn();
     $('#print-nfe').fadeIn();
@@ -473,24 +474,24 @@ function showMainInputTitle(title, icon, lineColor){
 
 
 function autoSelectPackingType(){
-  var options = packingTypeCombo.getOptions();
-  var packElement = null;
-  var lastDif = 100000000;
+    var options = packingTypeCombo.getOptions();
+    if (options && (itemsChecked == sale.itemsQuantity)){
+      var packElement = null;
+      var lastDif = 100000000;
 
-  for(var i=0; i < options.length; i++){
-    var pack = options[i];
+      for(var i=0; i < options.length; i++){
+        var pack = options[i];
 
-    if (pack.maxWeight > sale.pesoLiquido){
-      if ((pack.maxWeight - sale.pesoLiquido)  < lastDif){
-        lastDif = pack.maxWeight - sale.pesoLiquido;
-        packElement = pack;
+        if (pack.maxWeight > sale.pesoLiquido){
+          if ((pack.maxWeight - sale.pesoLiquido)  < lastDif){
+            lastDif = pack.maxWeight - sale.pesoLiquido;
+            packElement = pack;
+          }
+        }
+      }
+
+      if (packElement){
+        packingTypeCombo.select(packElement);
       }
     }
-  }
-
-  if (packElement){
-    packingTypeCombo.select(packElement);
-  }
-
-
 }

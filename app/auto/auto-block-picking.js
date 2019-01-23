@@ -10,13 +10,18 @@ module.exports= class AutoBlockPicking {
 
   _hasToBlock(product){
     var stock = product._Estoque;
-    var local = product.localizacao;
+    var hasToBlock = false;
 
-    var reasonStock = stock.estoqueReal <=3 && stock.estoqueDisponivel < 0;
-    var reasonLocal = !local || local.length == 0;
+    if (stock){
+      var local = product.localizacao;
 
-    var hasToBlock =  reasonStock || reasonLocal;
+      var reasonStock = stock.estoqueReal <=3 && stock.estoqueDisponivel < 0;
+      var reasonLocal = !local || local.length == 0;
 
+      hasToBlock =  reasonStock || reasonLocal;
+
+    }
+    
     return hasToBlock;
   }
 
