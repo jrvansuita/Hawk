@@ -46,7 +46,8 @@ module.exports = {
 
           new SalesArrLoader(PickingLaws.getFullList())
           .loadClient((sale)=>{
-            UfLaws.put(sale.client.uf);
+            if (sale.client)
+              UfLaws.put(sale.client.uf);
           })
           .loadItems(true)
           .onFilter((sale)=>{

@@ -129,6 +129,7 @@ function onOneMoreProductChecked(saleItem){
     $('#packing-done').fadeIn();
     $('#itens-progress').fadeIn();
     $('.products-out-holder').hide();
+    $('#sale-liq').select();
   }else{
     showProductMsg(null, 'checked');
   }
@@ -427,12 +428,14 @@ function onSucess(result){
 }
 
 function onError(error){
+  hideLastProductView();
   showMessage(error.responseText, true, false);
   showMainInputTitle('Erro na Requisição', 'alert.png', '#f36c6c');
 }
 
-
 function onNfeSucess(result){
+  hideLastProductView();
+
   if (result.success.length > 0){
     result = result.success[0];
 
@@ -448,6 +451,10 @@ function onNfeSucess(result){
   }
 }
 
+function hideLastProductView(){
+  $('.material-input-holder').fadeIn();
+  $('.last-product-holder').hide();
+}
 
 
 function showNfePrintControls(triggerClick){

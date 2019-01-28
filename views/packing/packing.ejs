@@ -106,7 +106,7 @@
 
               <td>
                 <div class="status-holder">
-                  <img class="circle shadow icon" src="/img/<%=sale? Util.getSaleSituationIcon(sale.situacao) : 'alert'%>.png" />
+                  <img class="circle shadow icon" src="/img/<%=sale? Util.getSaleSituationIcon(parseInt(sale.situacao)) : 'alert'%>.png" />
 
                   <div class="field skrink">
                     <label class="field-title">Situação</label>

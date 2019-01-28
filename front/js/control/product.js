@@ -598,8 +598,6 @@ function loadLayoutHistory(rows){
     $('#child-skus-holder .tr-child').sort(function(a, b) {
       return getProductLineSize(a) - getProductLineSize(b);
     }).appendTo($('#child-skus-holder tbody'));
-
-    //$('#child-skus-holder .footer').appendTo($('#child-skus-holder tbody'));
   }
 
   function getProductLineSize(el){
