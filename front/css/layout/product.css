@@ -1,26 +1,26 @@
 .panels{
-  height: 100%;
+  /* height: -webkit-fill-available; */
   display: flex;
-  max-width: 80%;
-  max-height: 95%;
+  max-width: 95%;
+  /* max-height: 95%; */
   margin: auto;
 }
 
 .main-content{
-  margin-top: 105px !important;
+  margin-top: 100px !important;
   padding-bottom: 5px;
+  overflow-y: scroll !important;
 }
 
-.main-content{
-  overflow: hidden;
-}
 
 .left-panel{
+  margin-top: 5px;
   margin-left: 15px;
   margin-right: 15px;
-  height: 100%;
+  height: auto;
   flex: 0 1 45%;
   max-width: 45%;
+  margin-bottom: 40px;
 }
 
 .main-panel{
@@ -41,7 +41,7 @@
 }
 
 .top-image-holder{
-  padding: 15px 35px;
+  padding: 2px 15px;
   background-color: #efebeb;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
@@ -61,13 +61,25 @@
   color: #272424;
   font-size: 16px;
   font-weight: 600;
+  cursor: pointer;
 }
 
 #top-brand{
   color: #272424;
-  font-size: 15px;
+  font-size: 14px;
+  padding: 10px 10px;
   float: right;
+  display: -webkit-box;
+  cursor: pointer;
 }
+
+#top-product-name{
+  color: #272424;
+  font-size: 14px;
+  padding: 10px 10px;
+  cursor: pointer;
+}
+
 
 #image{
   width: auto;
@@ -75,26 +87,14 @@
   text-align: center;
   border-radius: 10px;
   background: white;
-  min-height: 240px;
-  max-height: 280px;
+  min-height: 180;
+  max-height: 260;
 }
 
-.bottom-image-holder{
-  text-align: center;
-  border-bottom: 1px dashed #e6e7e6;
-}
 
-#top-product-name{
-  color: #272424;
-  font-weight: 800;
-  font-size: 15px;
-  padding: 10px 10px;
-  cursor: pointer;
-}
 
 .search-holder{
   padding: 20px 35px;
-  /* margin-right: 30px; */
   max-width: 90%;
 }
 
@@ -112,9 +112,11 @@
   font-weight: 600;
 }
 
+
+
 .attribute-name{
   display: block;
-  color: #302d2d;
+  color: gray;
   width: fit-content;
   padding: 3px 1px;
   font-size: 13px;
@@ -123,30 +125,23 @@
 
 .attribute-value{
   display: block;
-  color: gray;
+  color: #302d2d;
   width: fit-content;
   padding: 0px 1px;
   font-size: 15px;
-  font-weight: 600;
 }
 
 .attribute-holder{
-  width: 33%;
+  padding-bottom: 5px;
   margin-left: 10px;
   display: block;
-}
-
-.attributes-row{
-  width: -webkit-fill-available;
-  margin-bottom: 13px;
-  margin-left: 15px;
-  margin-right: 15px;
-  display: -webkit-box;
 }
 
 .product-attributes{
   padding-top: 5px;
   width: 100%;
+  border-top: 1px dashed #e6e7e6;
+  border-bottom: 1px dashed #e6e7e6;
 }
 
 .title-col{
@@ -154,7 +149,7 @@
   font-size: 13px;
   text-align: center;
   border-bottom: 1px dashed #e6e7e6;
-  padding: 5px 18px;
+  padding: 5px 10px;
 }
 
 .title-holder{
@@ -185,7 +180,7 @@
 
 .td-child{
   height: fit-content;
-  padding: 8px 10px;
+  padding: 8px 5px;
 }
 
 
@@ -233,8 +228,6 @@
 
 tr.selected td{
   background-color: #e4e4e4;
-  /*border-bottom: solid 0.5px #80808066;*/
-  /*border-top: solid 0.5px #80808066;*/
 }
 
 
@@ -328,6 +321,11 @@ tr.selected td{
   border: solid 1px #4a494947;
 }
 
+.obs tr:nth-child(even) {
+  background-color: #ddd6d757;
+}
+
+
 .obs{
   padding: 0px 8px;
   line-height: 20px;
@@ -338,10 +336,12 @@ tr.selected td{
   white-space: pre-line;
 }
 .product-top{
+  margin-top: 5px;
   min-width: 100%;
-  height: 100%;
-  padding-bottom: 20px;
+  height: 90%;
+  padding-bottom: 2px;
   min-height: 300px;
+  max-height: 45%;
   flex: 1;
 }
 
@@ -350,11 +350,13 @@ tr.selected td{
   vertical-align: super;
   width: 100%;
   height: -webkit-fill-available;
-  padding-top: 25px;
+  max-height: 50%;
+  padding-top: 15px;
   display: flex;
 }
 
 .bottom-box{
+  padding-bottom: 2px;
   height: 100%;
   vertical-align: super;
   display: block;
@@ -366,25 +368,19 @@ tr.selected td{
   margin-right: 15px;
 }
 #stock-history{
-  width: 101%;
+  /* width: 100%; */
 }
 
-#stock-history tr td{
-  border-bottom: 0;
-  padding: 3px 4px !important;
+#stock-history .child-value {
+  font-size: 13px !important;
 }
 
-#stock-history .child-value{
-  font-size: 12px !important;
+.positive-row td:first-child {
+  border-left: 10px solid #64dc9f;
 }
 
-
-.positive-row{
-  background-color: #ccf3df;
-}
-
-.negative-row{
-  background-color: #f3cccc;
+.negative-row td:first-child {
+  border-left: 6px solid #EDB2B2;
 }
 
 table{
@@ -395,4 +391,17 @@ table{
   overflow-y: auto;
   height: 100%;
   overflow-x: hidden;
+}
+
+.obs td.td-child{
+  padding: 4px 4px !important;
+}
+
+.chart-label{
+  display: none;
+  color: gray;
+  width: fit-content;
+  font-size: 13px;
+  font-weight: 400;
+  padding: 12px;
 }

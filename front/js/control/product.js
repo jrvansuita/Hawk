@@ -53,11 +53,15 @@ function requestProductChilds(){
     skusCount = product._Skus.length;
     product._Skus.forEach((sku)=>{
       _get('/product-child', {sku: sku.codigo}, (child)=>{
-        buildChildSku(product, child);
+        if (!child.error){
+          buildChildSku(product, child);
+        }
+
         skusCount--;
 
         if (skusCount == 0){
           onFinishedLoading();
+
         }
       });
     });
@@ -67,6 +71,7 @@ function requestProductChilds(){
 }
 
 function onFinishedLoading(){
+  sortProducts();
   addFooter();
   showOkStatus();
   checkPermissionUser();
@@ -222,6 +227,11 @@ function buildTextCol(val){
   return buildCol($('<label>').addClass('child-value').text(val));
 }
 
+function buildImgCol(path, title){
+  return buildCol($('<img>').addClass('icon').attr('src',path).attr('title',title)).css('text-align', 'center');
+}
+
+
 function buildCol($el){
   return $('<td>').addClass('td-child').append($el);
 }
@@ -263,7 +273,7 @@ var lastSelected;
 
 function onChildSelected(child){
   if (lastSelected != child.codigo){
-    $('#product-history').text(child.obs).hide().fadeIn();
+    loadObsHistory(child);
     loadStockHistory(child.codigo);
   }
 
@@ -271,253 +281,335 @@ function onChildSelected(child){
 }
 
 
+function loadObsHistory(child){
+  $('#local-history').find("tr:gt(0)").remove();
+  $('#local-history').hide();
+
+
+  child.obs.split('\n').forEach((line)=>{
+    if (line.includes('|')){
+      var lineData = line.split('|');
+
+      var user = lineData[0];
+      var platf = lineData[1];
+      var local = lineData[2];
+      var data = lineData[3];
+
+      var $tr = $('<tr>').append(buildTextCol(data),
+      buildTextCol(user),
+      buildImgCol(platf.includes('Mobile') ? 'img/smartphone.png':'img/pc.png', platf),
+      buildTextCol(local));
+
+      $('#local-history').append($tr);
+    }
+
+  });
+
+  if ($('#local-history tr').length > 1){
+    $('#local-history').hide().fadeIn();
+  }
+}
+
+var stockRowsHistoryMemory = {};
+
+function getStockRowsGrouped(childSku, callback){
+  if (!stockRowsHistoryMemory[childSku]){
+    _get('/product-stock-history', {sku:childSku},(rows)=>{
+      stockRowsHistoryMemory[childSku] = groupStockRows(rows);
+      callback(rows);
+    });
+  }else{
+    callback(stockRowsHistoryMemory[childSku]);
+  }
+}
+
+
 function loadStockHistory(childSku){
   $('#stock-history').find("tr:gt(0)").remove();
   $('#stock-history').hide();
 
-  _get('/product-stock-history', {sku:childSku},(rows)=>{
+  getStockRowsGrouped(childSku ,(groupped)=>{
+    loadLayoutHistory(groupped);
 
-    var groupArr={};
+    if (loggedUser.full){
+      new StockChart('stock-chart', stockRowsHistoryMemory).load();
+      $('.chart-label').css('display','block').fadeIn();
+    }
 
-    rows.forEach((i)=>{
-      var id = Dat.format(new Date(i.data)) + (i.es == 'S' ? i.es : '');
-
-      if (groupArr[id]){
-        groupArr[id].quantidade += parseInt(i.quantidade);
-      }else{
-        i.quantidade = parseInt(i.quantidade);
-        groupArr[id] = i;
-      }
-    });
-
-    loadLayoutLoadHistory(Object.values(groupArr));
 
     $('#stock-history').hide().fadeIn();
     loadSumsStocks();
   });
 }
 
-function loadLayoutLoadHistory(rows){
+function groupStockRows(rows){
+  var groupArr={};
+
+  rows.forEach((i)=>{
+    var user = i.obs.split('-');
+    var id = Dat.id(new Date(i.data)) + (i.es == 'S' ? i.es : '') + (user.length > 1 ? user[1] : '');
+
+    if (groupArr[id]){
+      groupArr[id].quantidade += parseInt(i.quantidade);
+    }else{
+      i.quantidade = parseInt(i.quantidade);
+      groupArr[id] = i;
+    }
+  });
+
+  return Object.values(groupArr);
+}
+
+function loadLayoutHistory(rows){
   rows.forEach((i)=>{
     var obs = '';
+    var user = i.obs.split('-');
+    user = user.length > 1 ? user[1] : '--';
 
     if (i.idOrigem != '' && i.es == 'S' && i.obs == ''){
-      obs = 'Saída por Faturamento';
+      obs = 'Faturamento';
     }else if (i.obs == '' && i.quantidade > 0 && i.tipoEntrada == ''){
-      obs = 'Estoque inicial';
+      obs = 'Estoque Inicial';
+    }else if (i.obs.includes('Lanç') || i.obs.includes('manual')){
+      obs = 'Lançamento';
     }else{
-      obs = i.obs;
+      obs = i.obs.split('-')[0];
     }
 
-    var $tr = $('<tr>').append(buildTextCol(Dat.format(new Date(i.data))),
-    buildTextCol(parseInt(i.quantidade)).addClass('stock-val'),
-    buildTextCol(obs));
+    var isMobile = i.obs.includes('Mobile');
 
-    if (parseInt(i.quantidade) > 0){
-      $tr.addClass('positive-row');
-    }else{
-      $tr.addClass('negative-row');
-    }
+    var $tr = $('<tr>').append(
+      buildTextCol(Dat.format(new Date(i.data))),
+      buildTextCol(user),
+      buildImgCol(isMobile ? 'img/smartphone.png' : 'img/pc.png', isMobile ? 'Mobile' : 'Desktop'),
+      buildTextCol(parseInt(i.quantidade)).addClass('stock-val'),
+      buildTextCol(obs));
 
-    $('#stock-history').append($tr);
-  });
-}
-
-
-function loadSumsStocks(){
-  var totals = ['.negative-row', '.positive-row'];
-
-  totals.forEach((item)=>{
-    var total = $('#stock-history ' + item + ' .stock-val .child-value').map(function() {
-      return parseInt($(this).text());
-    })
-    .get().reduce(function(i, e) {
-      return i + e;
-    },0);
-
-    $('.label-val-title' + item).text(Math.abs(total));
-  });
-
-  $('.label-val-title').show();
-}
-
-function isStored(res){
-  try{
-    return res &&  res.result.success.length >0;
-  }catch(e){
-    return res && res.success.length >0;
-  }
-}
-
-function controlStatus($el, res){
-  if (isStored(res)){
-    showOkStatus();
-  }else{
-    showErrorStatus();
-  }
-}
-
-function handleInputUpdate($el, res, newValue){
-  controlStatus($el, res);
-
-  $el.val(newValue);
-
-  if (isStored(res)){
-    $el.data('value', newValue);
-    $el.attr('placeholder', newValue);
-  }
-}
-
-function bindEvents($el, blurOnEnter, clearOnFocus){
-  $el.click(function(e){
-    e.stopPropagation();
-  });
-
-  if (clearOnFocus){
-    var lastVal = $el.val();
-
-    $el.focusin(function(e){
-      $(this).val('');
-    });
-
-    $el.focusout(function(e){
-      $(this).val(lastVal);
-    });
-  }
-
-  if (blurOnEnter){
-    $el.keypress(function(e){
-      if(e.which == 13){
-        $el.blur();
+      if (parseInt(i.quantidade) > 0){
+        $tr.addClass('positive-row');
+      }else{
+        $tr.addClass('negative-row');
       }
+
+      $('#stock-history tr:first').after($tr);
     });
   }
-}
 
 
-function paintLineStock(el, child){
-  var stock = child._Estoque;
-  var hasLocal = child.localizacao.length > 0;
+  function loadSumsStocks(){
+    var totals = ['.positive-row', '.negative-row'];
 
-  if (!hasLocal){
-    //Red
-    $(el).css('background-color', '#ff000024');
-    return;
-  }
+    totals.forEach((item)=>{
+      var total = $('#stock-history ' + item + ' .stock-val .child-value').map(function() {
+        return parseInt($(this).text());
+      })
+      .get().reduce(function(i, e) {
+        return i + e;
+      },0);
 
-  if (stock.estoqueReal < 1){
-    //Yellow
-    $(el).css('background-color', '#ff00003d');
-    return;
-  }
-
-  if (stock.estoqueDisponivel < 0){
-    //Red
-    $(el).css('background-color', '#ff000024');
-    return;
-  }
-}
-
-var currentUser;
-
-function isUnlocked(){
-  return currentUser != undefined;
-}
-
-function onLockClick(){
-  if (isUnlocked()){
-    initialLockState();
-  }else{
-    waittingToLock();
-  }
-}
-
-function loadUserLockAuth(){
-  var userAcess = $('#lock-user-id').val();
-  if (userAcess){
-    _get('/user?userId='+userAcess,{},(user)=>{
-      unlock(user);
-    },()=>{
-      errorLock();
+      $('.label-val-title' + (item == '.positive-row' ? '.green-wick' : '.red-wick')).text(Math.abs(total));
     });
+
+    $('.label-val-title').show();
   }
-}
 
-function initialLockState(){
-  $('#lock-icon').hide().attr('src','/img/lock.png').fadeIn();
-  currentUser = undefined;
-  $('#lock-user-id').val('');
-  $('.editable-input').attr('disabled', true);
-}
+  function isStored(res){
+    try{
+      return res &&  res.result.success.length >0;
+    }catch(e){
+      return res && res.success.length >0;
+    }
+  }
 
-function waittingToLock(){
-  $('#lock-icon').hide().attr('src','/img/lock-loupe.png').fadeIn();
-  $('#lock-user-id').select().focus();
+  function controlStatus($el, res){
+    if (isStored(res)){
+      showOkStatus();
+    }else{
+      showErrorStatus();
+    }
+  }
 
-  $('#lock-user-id').one("focusout",()=>{
-    if (!isUnlocked()){
+  function handleInputUpdate($el, res, newValue){
+    controlStatus($el, res);
+
+    $el.val(newValue);
+
+    if (isStored(res)){
+      $el.data('value', newValue);
+      $el.attr('placeholder', newValue);
+    }
+  }
+
+  function bindEvents($el, blurOnEnter, clearOnFocus){
+    $el.click(function(e){
+      e.stopPropagation();
+    });
+
+    if (clearOnFocus){
+      var lastVal = $el.val();
+
+      $el.focusin(function(e){
+        $(this).val('');
+      });
+
+      $el.focusout(function(e){
+        $(this).val(lastVal);
+      });
+    }
+
+    if (blurOnEnter){
+      $el.keypress(function(e){
+        if(e.which == 13){
+          $el.blur();
+        }
+      });
+    }
+  }
+
+
+  function paintLineStock(el, child){
+    var stock = child._Estoque;
+    var hasLocal = child.localizacao.length > 0;
+
+    if (!hasLocal){
+      //Red
+      $(el).css('background-color', '#ff000026');
+      return;
+    }
+
+    if (stock.estoqueReal < 1){
+      //Yellow
+      $(el).css('background-color', '#ffe20026');
+      return;
+    }
+
+    if (stock.estoqueDisponivel < 0){
+      //Red
+      $(el).css('background-color', '#ff000026');
+      return;
+    }
+  }
+
+  var currentUser;
+
+  function isUnlocked(){
+    return currentUser != undefined;
+  }
+
+  function onLockClick(){
+    if (isUnlocked()){
       initialLockState();
+    }else{
+      waittingToLock();
     }
-  });
-}
-
-function unlock(user){
-  $('#lock-icon').hide().attr('src','/img/unlocked.png').fadeIn();
-  currentUser = user;
-  $('.editable-input').attr('disabled', false);
-}
-
-function errorLock(user){
-  $('#lock-icon').hide().attr('src','/img/lock-error.png').fadeIn();
-  $('#lock-user-id').select().focus();
-}
-
-
-function prepareAutoComplete(){
-  var options = {
-
-    url: function(phrase) {
-      return "/product-search-autocomplete?typing=" + phrase;
-    },
-
-    getValue: function(element) {
-      return element.sku;
-    },
-
-    template: {
-      type: "description",
-      fields: {
-        description: "name"
-      }
-    },
-
-    ajaxSettings: {
-      dataType: "json",
-      method: "GET",
-      data: {
-        dataType: "json"
-      }
-    },
-    requestDelay: 50,
-    list: {
-      maxNumberOfElements: 5,
-      match: {
-        enabled: true
-      },
-      sort: {
-        enabled: true
-      },
-      onClickEvent: function() {
-        findCurrentProduct();
-      }
-    },
-  };
-
-  $("#search").easyAutocomplete(options);
-}
-
-function checkPermissionUser(){
-  if (Sett.every(loggedUser,[4,7])){
-    unlock(loggedUser);
   }
-}
+
+  function loadUserLockAuth(){
+    var userAcess = $('#lock-user-id').val();
+    if (userAcess){
+      _get('/user?userId='+userAcess,{},(user)=>{
+        unlock(user);
+      },()=>{
+        errorLock();
+      });
+    }
+  }
+
+  function initialLockState(){
+    $('#lock-icon').hide().attr('src','/img/lock.png').fadeIn();
+    currentUser = undefined;
+    $('#lock-user-id').val('');
+    $('.editable-input').attr('disabled', true);
+  }
+
+  function waittingToLock(){
+    $('#lock-icon').hide().attr('src','/img/lock-loupe.png').fadeIn();
+    $('#lock-user-id').select().focus();
+
+    $('#lock-user-id').one("focusout",()=>{
+      if (!isUnlocked()){
+        initialLockState();
+      }
+    });
+  }
+
+  function unlock(user){
+    $('#lock-icon').hide().attr('src','/img/unlocked.png').fadeIn();
+    currentUser = user;
+    $('.editable-input').attr('disabled', false);
+  }
+
+  function errorLock(user){
+    $('#lock-icon').hide().attr('src','/img/lock-error.png').fadeIn();
+    $('#lock-user-id').select().focus();
+  }
+
+
+  function prepareAutoComplete(){
+    var options = {
+
+      url: function(phrase) {
+        return "/product-search-autocomplete?typing=" + phrase;
+      },
+
+      getValue: function(element) {
+        return element.sku;
+      },
+
+      template: {
+        type: "description",
+        fields: {
+          description: "name"
+        }
+      },
+
+      ajaxSettings: {
+        dataType: "json",
+        method: "GET",
+        data: {
+          dataType: "json"
+        }
+      },
+      requestDelay: 50,
+      list: {
+        maxNumberOfElements: 5,
+        match: {
+          enabled: true
+        },
+        sort: {
+          enabled: true
+        },
+        onClickEvent: function() {
+          findCurrentProduct();
+        }
+      },
+    };
+
+    $("#search").easyAutocomplete(options);
+  }
+
+  function checkPermissionUser(){
+    if (Sett.every(loggedUser,[4,7])){
+      unlock(loggedUser);
+    }
+  }
+
+  function sortProducts() {
+    $('#child-skus-holder .tr-child').sort(function(a, b) {
+      return getProductLineSize(a) - getProductLineSize(b);
+    }).appendTo($('#child-skus-holder tbody'));
+
+    //$('#child-skus-holder .footer').appendTo($('#child-skus-holder tbody'));
+  }
+
+  function getProductLineSize(el){
+    var arr = $('td:first .child-sku', el).text().split('-');
+    return decodeLetterSizeProduct(arr[arr.length-1]);
+  }
+
+  function decodeLetterSizeProduct(size){
+    var sizes = ['RN', 'P', 'M', 'G', 'GG' , 'XXG'];
+    var nums = ['-7', '-6', '-5', '-4', '-3' , '-2'];
+    var index = sizes.indexOf(size);
+    return Num.def(index > -1 ? index : size);
+  }

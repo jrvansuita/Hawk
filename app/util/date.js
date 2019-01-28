@@ -17,6 +17,11 @@ var Dat = {
     return formated.year + '-' + formated.month + '-' + formated.day;
   },
 
+  id(date) {
+    var formated = fmt(date);
+    return formated.year + formated.month+ formated.day;
+  },
+
   signatureDate(date) {
     var formated = fmt(date);
     return formated.day + '-' + formated.month + '-' + formated.year;

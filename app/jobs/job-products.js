@@ -20,8 +20,9 @@ module.exports = class JobProducts extends Controller{
         var name = getVal(item, "title");
         var url = getVal(item, "link");
         var image = getVal(item, "image_link");
+        var price = getVal(item, "price");
 
-        var product = new Product(sku, name, url, image);
+        var product = new Product(sku, name, url, image, price);
         product.upsert();
       });
 

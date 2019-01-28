@@ -7,6 +7,11 @@ html, body {
   overflow: hidden;
 }
 
+a{
+  text-decoration: none;
+  cursor: pointer;
+}
+
 input, span, label {
   font-family: Roboto, sans-serif;
 }
@@ -73,12 +78,21 @@ input, span, label {
   border-radius: 50%;
 }
 
+
 .gone {
   display: none;
 }
 
 .red {
   background-color: #f3736a !important;
+}
+
+.red-wick {
+  background-color: #f3cccc !important;
+}
+
+.green-wick{
+  background-color: #ccf3df !important;
 }
 
 .icon{

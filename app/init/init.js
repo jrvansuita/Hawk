@@ -34,7 +34,7 @@ jobs.push(['job-sales.js', ['11','15','17']]);
 jobs.push(['job-picking.js', '4']);
 
 // -- Run Jobs schedules -- //
-jobs.forEach((r)=>{
+jobs.forEach((r, index)=>{
   var Clazz = require('../jobs/' + r[0]);
   new Clazz().schedule(r[0],r[1]);
 });
