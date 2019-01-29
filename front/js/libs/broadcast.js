@@ -1,6 +1,6 @@
 class Broadcast{
   constructor(channel){
-    this.socket = io.connect('http://' + window.location.host);
+    this.socket = io.connect(window.location.origin);
 
 
     this.socket.on(channel, (data)=>{

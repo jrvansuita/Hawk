@@ -129,7 +129,6 @@ function onOneMoreProductChecked(saleItem){
     $('#packing-done').fadeIn();
     $('#itens-progress').fadeIn();
     $('.products-out-holder').hide();
-    $('#sale-liq').select();
   }else{
     showProductMsg(null, 'checked');
   }
@@ -138,6 +137,11 @@ function onOneMoreProductChecked(saleItem){
   refreshSaleWeight(saleItem.liq, saleItem.bru);
   refreshProgressLine();
   refreshCountProductItens();
+
+  //if (itemsChecked == sale.itemsQuantity){
+    //$('#sale-liq').select();
+
+  //}
 }
 
 function createProductsTable(holder, id, data){
@@ -480,7 +484,7 @@ function showMainInputTitle(title, icon, lineColor){
 }
 
 
-function autoSelectPackingType(){
+function autoSelectPackingType(callback){
     var options = packingTypeCombo.getOptions();
     if (options && (itemsChecked == sale.itemsQuantity)){
       var packElement = null;
