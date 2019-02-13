@@ -12,7 +12,7 @@ module.exports = class UserHandler {
       params.avatar,
       params.access,
       params.full,
-      params.active);
+      params.active == false ? false : true);
 
       //Gravando as configurações
       Object.keys(params).forEach((key)=>{

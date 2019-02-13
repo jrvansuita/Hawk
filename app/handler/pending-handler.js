@@ -44,7 +44,7 @@ module.exports = {
 
   incStatus(pending, user, callback){
     var findedPending  = PendingLaws.find(pending.number);
-    findedPending.sendEmail =  pending.sendEmail;
+    findedPending.sendEmail =  pending.sendEmail != undefined && pending.sendEmail.toString() == 'true';
 
     sendEmailIfNeed(findedPending, user, ()=>{
       PendingLaws.incrementStatus(findedPending, user, callback);
@@ -91,7 +91,7 @@ function sendEmailIfNeed(pending, user,  callback){
   }
 }
 
-function sendEmail(sale, user, callback){
+function sendEmail(sale, user, callback){ 
   var pendingEmailSender = new PendingEmailSender();
   pendingEmailSender.client(sale.client.nome, sale.client.email);
   pendingEmailSender.sale(sale);

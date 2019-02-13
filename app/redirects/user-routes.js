@@ -20,7 +20,7 @@ module.exports = class UserRoutes extends Routes{
       var user = UsersProvider.get(req.session.loggedUserID);
 
       if (req.query.userId && (user.full || (user.id == req.query.userId))){
-        user = UsersProvider.get(req.query.userId);
+        user = UsersProvider.get(req.query.userId); 
       }
 
       res.render('user/user-form',{user: user});

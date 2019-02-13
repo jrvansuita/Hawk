@@ -65,50 +65,52 @@
                   <input type="checkbox" id="active" name="active" <%=user ? user.active ? 'checked' : '' : ''%>>
                   <span>Ativo</span>
                 </label>
-             <%}%>
+                <%}%>
 
-              <label class="pure-material-checkbox">
-                <input type="checkbox" id="full" name="full" <%=user ? user.full ? 'checked' : '' : ''%>>
-                <span>Administrador</span>
-              </label>
+                <label class="pure-material-checkbox">
+                  <input type="checkbox" id="full" name="full" <%=user ? user.full ? 'checked' : '' : ''%>>
+                  <span>Administrador</span>
+                </label>
 
+              </div>
+            </div>
+
+
+            <div class="right-panel">
+              <div class="oderner">
+                <input type="text" id="last-name" class="input-val simple-material-input" placeholder="Sobrenome" name="lastName" value="<%=user ? user.lastName : ''%>" autocomplete="off" maxlength="30"/>
+                <input type="text" id="access" class="input-val simple-material-input" placeholder="Código de Acesso" name="access" value="<%=user ? user.access : ''%>" onkeypress="return Num.isNumberKey(event);"  autocomplete="off"/>
+                <input type="text" id="id" class="input-val simple-material-input" placeholder="Identificação" name="id" value="<%=user ? user.id : ''%>"  onkeypress="return Num.isNumberKey(event);"  autocomplete="off" title="Código do Eccosys"/>
+              </div>
             </div>
           </div>
 
 
-          <div class="right-panel">
-            <div class="oderner">
-              <input type="text" id="last-name" class="input-val simple-material-input" placeholder="Sobrenome" name="lastName" value="<%=user ? user.lastName : ''%>" autocomplete="off" maxlength="30"/>
-              <input type="text" id="access" class="input-val simple-material-input" placeholder="Código de Acesso" name="access" value="<%=user ? user.access : ''%>" onkeypress="return Num.isNumberKey(event);"  autocomplete="off"/>
-              <input type="text" id="id" class="input-val simple-material-input" placeholder="Identificação" name="id" value="<%=user ? user.id : ''%>"  onkeypress="return Num.isNumberKey(event);"  autocomplete="off" title="Código do Eccosys"/>
+          <div class="settings-holder">
+            <div class="scroll">
+              <div class="settings">
+
+
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="settings">
 
+        <div class="footer">
+          <label class="button shadow" id="save" >Salvar</label>
+          <%if (loggedUser && loggedUser.full){%>
+            <label class="button shadow" id="new">Novo</label>
+            <label class="button shadow" id="delete">Excluir</label>
+            <%}%>
+          </div>
 
-
-
-        </div>
+        </form>
 
       </div>
 
 
-      <div class="footer">
-        <label class="button shadow" id="save" >Salvar</label>
-        <%if (loggedUser && loggedUser.full){%>
-          <label class="button shadow" id="new">Novo</label>
-          <label class="button shadow" id="delete">Excluir</label>
-          <%}%>
-        </div>
 
-      </form>
+    </body>
 
-    </div>
-
-
-
-  </body>
-
-  </html>
+    </html>

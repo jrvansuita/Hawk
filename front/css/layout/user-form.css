@@ -12,11 +12,11 @@ body {
   text-align: center;
   margin: auto;
   padding: 10px 15px;
-
+  /* height: 70%; */
 }
 
 .main-form{
-  min-height: 400px;
+  height: 400px;
   text-align: center;
   margin: auto;
   padding: 0px 15px;
@@ -41,12 +41,17 @@ body {
   display: -webkit-box;
 }
 
-.settings{
+.settings-holder{
   text-align: center;
   width: 50%;
   display: block;
   float: right;
   height: auto;
+}
+
+.scroll{
+  overflow:scroll;
+  height: 100%;
 }
 
 .oderner{

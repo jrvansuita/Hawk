@@ -13,22 +13,24 @@ $(document).ready(() => {
   });
 
 
-$('.label-for-avatar').click(function(e){
-  e.stopPropagation();
-});
-
-$('.pending-item').click(function(e){
-  var saleNumber = $(this).data('sale').split('-')[1];
-  loadPendingSaleItems($(this), getPendingSale(saleNumber));
-  e.stopPropagation();
-});
-
-if (isWideOpen() && ($('.pending-item.not-solved').length > 0)){
-  var $icon = $('<img>').addClass('small-icon-button').attr('title','Enviar todos os emails!').css('position','absolute').css('margin-top','-5px').attr('src', '/img/send-mass-email.png').click(()=>{
-    doallSolvingPendingSale($icon);
+  $('.label-for-avatar').click(function(e){
+    e.stopPropagation();
   });
-  $('.pending-box.red-top>.pick-header>.header-title').after($icon);
-}
+
+  $('.pending-item').click(function(e){
+    var saleNumber = $(this).data('sale').split('-')[1];
+    loadPendingSaleItems($(this), getPendingSale(saleNumber));
+    e.stopPropagation();
+  });
+
+  if (Sett.get(loggedUser, 10)){
+    if (isWideOpen() && ($('.pending-item.not-solved').length > 0)){
+      var $icon = $('<img>').addClass('small-icon-button').attr('title','Enviar todos os emails!').css('position','absolute').css('margin-top','-5px').attr('src', '/img/send-mass-email.png').click(()=>{
+        doallSolvingPendingSale($icon);
+      });
+      $('.pending-box.red-top>.pick-header>.header-title').after($icon);
+    }
+  }
 });
 
 
@@ -125,8 +127,11 @@ function getMiddleBottomBarOptions(pending){
 
   els.push(getPendingLocal(pending));
 
+
   if (pending.status==0 && isWideOpen()){
-    els.push(getEmailSwitch());
+    if (Sett.get(loggedUser, 10)){
+      els.push(getEmailSwitch());
+    }
 
     return els;
   }else{
@@ -416,7 +421,7 @@ function doallSolvingPendingSale(icon){
 
 
 function innerSolvingPendingSale(pending, sendEmail, callback){
-  pending.sendEmail = sendEmail;
+  pending.sendEmail = sendEmail ? true: false;
   execute("/pending-status", pending, function(r){
     callback(r);
   });
