@@ -47,7 +47,7 @@ class StockChart {
         var date = Dat.format(new Date(row.data));
 
         if (!this.allDates[date]){
-          this.allDates[date] = true;
+          this.allDates[date] = new Date(row.data).getTime();
           handler[date] = {};
         }
 
@@ -61,10 +61,14 @@ class StockChart {
       });
     });
 
+    this.allDates = Object.keys(this.allDates).sort((a,b)=>{
+      return this.allDates[a] - this.allDates[b];
+    });
+
     this.sizes.forEach((size, index)=>{
       var currentDates = [];
 
-      Object.keys(this.allDates).forEach(date =>{
+      this.allDates.forEach(date =>{
         var item = handler[date];
         currentDates.push(item[size] ? item[size] : 0);
       });
@@ -97,7 +101,7 @@ class StockChart {
     stockChartObject = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: Object.keys(this.allDates),
+        labels: this.allDates,
         datasets: this.dataset
       },
       options: {

@@ -23,7 +23,7 @@ $(document).ready(() => {
     '/user-form?userId='+ user.id;
   });
 
-  $('#new-user').click(()=>{
+  $('#new').click(()=>{
     clearForm();
   });
 
@@ -78,7 +78,7 @@ function loadSectors(){
 function clearForm(){
   $('input').val('');
   $('#title-label').text('');
-  $('#full').prop('checked', false);
+  $('input[type="checkbox"]').prop('checked', false);
   $('#avatar-user-form').attr('src', 'img/avatar.png');
 }
 
