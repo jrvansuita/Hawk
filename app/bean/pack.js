@@ -1,6 +1,6 @@
 module.exports = class Pack extends DataAccess {
 
-  constructor(/*id,*/ name, height, width, length, weight, stockQtd, minStockQtd, maxWeight) {
+  constructor(/*id,*/ name, height, width, length, weight, stockQtd, minStockQtd, maxWeight, lockSize) {
     super();
     //this.id = Num.def(id, 0);
     this.name = Str.def(name, 'Pacote Genérico');
@@ -11,6 +11,7 @@ module.exports = class Pack extends DataAccess {
     this.stockQtd = Num.def(stockQtd);
     this.maxWeight = Floa.def(maxWeight);
     this.minStockQtd = Num.def(minStockQtd);
+    this.lockSize = lockSize ? true: false;
   }
 
 

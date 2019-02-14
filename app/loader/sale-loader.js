@@ -29,6 +29,7 @@ module.exports= class SaleLoader {
   loadClient(onCallOuter){
 
     var funcClient = (onCallNext)=>{
+
       if (this.sale.idContato && !this.sale.client){
         EccosysCalls.getClient(this.sale.idContato, (client)=>{
 
@@ -83,7 +84,7 @@ module.exports= class SaleLoader {
     return this;
   }
 
-  loadItemsWeight(onCallOuter){
+  loadItemsDeepAttrs(onCallOuter){
     var funcItemsWeight = (onCallNext)=>{
       var index = this.sale.items.length;
 
@@ -92,6 +93,8 @@ module.exports= class SaleLoader {
           index--;
           item.liq = product.pesoLiq;
           item.bru = product.pesoBruto;
+          item.local = product.localizacao;
+          item.ncm = product.cf;
 
           if(index == 0){
             this._callbackHit(onCallNext, onCallOuter);
@@ -148,7 +151,7 @@ module.exports= class SaleLoader {
 
     if (typeof this.sale !== 'object'){
       this.loadSale(this.sale, (sale)=>{
-        if (this.list.length != 0){
+        if (sale && this.list.length != 0){
           this.callFuncs(0);
         }else{
           if (onFinished){

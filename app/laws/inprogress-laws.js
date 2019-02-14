@@ -55,7 +55,7 @@ module.exports = {
     sale.pickUser = UsersProvider.get(userId);
     this.object()[userId] = sale;
 
-    HistoryStorer.picking(userId, sale, null);
+    //HistoryStorer.picking(userId, sale, null);
 
     //console.log('[Abriu] picking ' + sale.pickUser.name  + ' - ' + sale.numeroPedido);
   },

@@ -15,6 +15,19 @@ class ComboBox{
     this.options.onAutocomplete(el.name);
   }
 
+  pressEnterToSelect(){
+    this.element.focus();
+    this.element.select();
+
+    this.element.one("keyup", (e)=> {
+      if (e.which == 13){
+        this.element.val("");
+        this.element.focus();
+        $('li').attr('tabindex','0');
+      }
+    });
+  }
+
   setAutoShowOptions(yes){
     this.autoShowOptions = yes;
     return this;
@@ -85,4 +98,7 @@ class ComboBox{
 
     this.element.autocomplete(options);
   }
+
+
+
 }

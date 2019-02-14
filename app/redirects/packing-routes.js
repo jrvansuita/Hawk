@@ -10,7 +10,8 @@ module.exports = class PackingRoutes extends Routes{
 
     this._page('/packing', (req, res) => {
         PackingHandler.findSale(req.query.sale, req.session.loggedUserID, (sale)=>{
-          res.render('packing/packing.ejs', {sale : sale,
+          res.render('packing/packing.ejs', {
+            sale : sale,
             groups: !sale.id ? PackingProvider.get() : {}
           });
         });

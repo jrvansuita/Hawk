@@ -451,3 +451,10 @@ table{
 .buttons-holder > .button{
   display: none;
 }
+
+
+.button:focus{
+  background-color: #4CAF50 !important;
+  outline:0;
+  font-weight: 800;
+}

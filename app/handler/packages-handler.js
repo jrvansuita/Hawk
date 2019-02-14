@@ -12,7 +12,8 @@ module.exports = class PackagesHandler {
     params.weight,
     params.stockQtd,
     params.minStockQtd,
-    params.maxWeight);
+    params.maxWeight,
+    params.lockSize == false ? false : true);
 
 
     if (params.editingId.toString().length>0){

@@ -131,7 +131,7 @@
             <%if (sale && sale.situacao == '3'){%>
               <tr class="editable-infos-holder line-here">
                 <td>
-                  <div class="field">
+                  <div class="field packing-select-holder">
                     <div class="pack-holder">
                       <label class="field-title">Embalagem</label>
                       <img class="pack-alert" src="img/alert.png" title="Pouca Embalagem em Estoque">
@@ -159,7 +159,7 @@
                 <td>
                   <div class="field">
                     <label class="field-title">Volumes</label>
-                    <input id="sale-vols" type="text" placeholder="1" value="1" onkeypress="return Num.isNumberKey(event);" maxlength="1" class="editable-info" autocomplete="off"/>
+                    <input id="sale-vols" type="text" placeholder="1" value="1" tabIndex="-1" onkeypress="return Num.isNumberKey(event);" maxlength="1" class="editable-info" autocomplete="off"/>
                   </div>
                 </td>
 
@@ -193,7 +193,7 @@
                 <td>
                   <div class="field">
                     <label class="field-title">Espécie</label>
-                    <input id="sale-esp" type="text" placeholder="FLYER"value="FLYER" maxlength="20" class="editable-info" autocomplete="off"/>
+                    <input id="sale-esp" type="text" placeholder="FLYER" tabIndex="-1" value="FLYER" maxlength="20" class="editable-info" autocomplete="off"/>
                   </div>
                 </td>
 
@@ -255,9 +255,9 @@
 
                   <div class="right-middle-line">
                     <div class="buttons-holder">
-                      <label class="button shadow" id="packing-done">Faturar</label>
-                      <label class="button shadow" id="print-nfe">Imprimir NFe</label>
-                      <label class="button shadow" id="print-transport-tag">Imprimir Etiqueta</label>
+                      <label class="button shadow" id="packing-done" tabindex="0">Faturar</label>
+                      <label class="button shadow" id="print-nfe" tabindex="0">Imprimir NFe</label>
+                      <label class="button shadow" id="print-transport-tag" tabindex="0">Imprimir Etiqueta</label>
                     </div>
                   </div>
 

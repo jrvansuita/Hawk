@@ -36,6 +36,10 @@
   background-color: rgb(233, 233, 233) !important;
 }
 
+.dropdown-content li.active {
+  background-color: rgb(233, 233, 233) !important;
+}
+
 .dropdown-content li {
   padding-left: 8px;
   padding-right: 8px;

@@ -4,6 +4,7 @@
 <link rel="stylesheet" type="text/css" href="/front/css/layout/package-type.css">
 <link rel="stylesheet" type="text/css" href="/front/css/libs/autocomplete.css">
 <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
+<link rel="stylesheet" type="text/css" href="/front/css/libs/material-checkbox.css">
 
 <script type="text/javascript" src="/front/js/control/package-type.js"></script>
 <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
@@ -37,7 +38,7 @@
           <div class="material-input-holder">
             <input type="text" id="name" name="name"  maxlength="30"
             value="<%=pack ? pack.name : ''%>" autocomplete="off"
-             title="Quantidade total em unidades desta embalagem" required/>
+            title="Quantidade total em unidades desta embalagem" required/>
 
             <span class="bar"></span>
             <label>Nome do Pacote</label>
@@ -69,7 +70,7 @@
             value="<%=pack ? Floa.weight(pack.maxWeight) : ''%>" autocomplete="off"
             onkeypress="return Floa.isFloatKey(event);"
 
-             title="Peso máximo suportado por esta embalagem" required/>
+            title="Peso máximo suportado por esta embalagem" required/>
 
             <span class="bar"></span>
             <label>Peso Máximo</label>
@@ -114,7 +115,7 @@
             value="<%=pack ? Floa.weight(pack.weight) : ''%>" autocomplete="off"
             onkeypress="return Floa.isFloatKey(event);"
 
-             title="Peso da embalagem" required/>
+            title="Peso da embalagem" required/>
 
             <span class="bar"></span>
             <label>Peso</label>
@@ -122,6 +123,14 @@
 
 
         </div>
+
+        <div class="row">
+          <label class="pure-material-checkbox">
+            <input type="checkbox" id="lock-size" name="lockSize" <%=pack ? pack.lockSize ? 'checked' : '' : ''%>>
+            <span>Bloquear alteração de dimensão no faturamento</span>
+          </label>
+        </div>
+
       </div>
 
 
@@ -133,8 +142,8 @@
           <%}%>
         </div>
 
+      </div>
     </div>
-  </div>
 
-</body>
-</html>
+  </body>
+  </html>

@@ -28,6 +28,7 @@ module.exports = {
   product_in_sale: 'Produto {0} já está no pedido.',
   sale_in_progress: 'Este pedido está em andamento no picking!',
   sale_in_pending: 'Este pedido está nas pendências!',
+  sale_not_found: 'O pedido {0} não foi encontrado ou não existe.',
 
 
   from_to: 'De {0} Até {1}',

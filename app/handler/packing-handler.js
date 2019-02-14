@@ -51,8 +51,12 @@ module.exports = {
     var loader = new SaleLoader(sale)
     .loadClient()
     .loadItems()
-    .loadItemsWeight()
+    .loadItemsDeepAttrs()
     .run((loadedSale)=>{
+      if (!loadedSale){
+        loadedSale = {error : Const.sale_not_found.format(sale), numeroPedido: sale};
+      }
+
       callback(loadedSale);
     });
   },
