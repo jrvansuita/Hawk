@@ -10,16 +10,16 @@ const apiKey = process.env.ECCOSYS_API;
 const secret = process.env.ECCOSYS_SECRET;
 
 
-
 exports.get = (path, onResponse) => {
   makeRequest(getOptions(path, 'GET', true), null,  onResponse);
 };
 
-exports.document = (res, path) => {
+exports.document = (res, path, docName) => {
   makeRequest(getOptions(path, 'GET', true), null,  (responseBody, chunks)=>{
     var file = new Buffer.concat(chunks);
 
     res.type('application/pdf');
+    res.setHeader('Content-disposition', 'inline; filename="' + docName + '"');
     res.send(file);
   });
 };
@@ -82,13 +82,17 @@ function getOptions(path, method, isApiCall) {
     method: method,
     url: 'https://' + host + _path,
     headers: {
-      'signature': generateSignature(),
-      'apikey': apiKey,
-      'Content-Type': 'application/json; charset=utf-8'
+      //'signature': generateSignature(),
+      //'apikey': apiKey,
+
+      'Content-Type': 'application/json; charset=utf-8',
+      'x-access-token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZEVtcHJlc2EiOjExNDk4MTgzNCwiaWRVc3VhcmlvIjoxNDExMzUzNTIsImRhdGFiYXNlIjoiZWNjb3N5cyIsImFkbWluIjpmYWxzZSwianRpIjoiNWM2NmViZjgzYjJlMSIsImlhdCI6MTU1MDI0ODk1Mn0.TZKyFZnEcU1B6FGomko-N9rsi32qRuBKFtr6577UEuM'
     }
 
 
   };
+
+  console.log(options);
 
   return options;
 }

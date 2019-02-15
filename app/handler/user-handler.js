@@ -5,6 +5,8 @@ const UsersProvider = require('../provider/UsersProvider.js');
 module.exports = class UserHandler {
 
   static storeFromScreen(params, callback) {
+    var actual = UsersProvider.get(params.id);
+
     var user = new User(parseInt(params.id),
       params.name,
       params.lastName,
@@ -12,7 +14,8 @@ module.exports = class UserHandler {
       params.avatar,
       params.access,
       params.full,
-      params.active == false ? false : true);
+      params.active == false ? false : true,
+      params.token ? params.token : actual.token ? actual.token : '');
 
       //Gravando as configurações
       Object.keys(params).forEach((key)=>{

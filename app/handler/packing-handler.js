@@ -94,8 +94,8 @@ module.exports = {
     });
   },
 
-  sendNfe(saleNumber, callback){
-    EccosysCalls.packingPostNF(saleNumber, (nfResult)=>{
+  sendNfe(user, saleNumber, callback){
+    EccosysCalls.packingPostNF(saleNumber, user, (nfResult)=>{
       if (callback){
         callback(nfResult);
       }
@@ -103,17 +103,16 @@ module.exports = {
   },
 
 
-
-  done(params, callback){
+  done(params, user, callback){
     PackagesHandler.decPackStock(params.packageId);
 
     this.updateSale(params, (sucess, updateResult)=>{
 
       if (sucess){
-        this.sendNfe(params.saleNumber, (nfResult)=>{
-          console.log('Enviou o resultado via Broadcast');
-          console.log(nfResult);
+        this.sendNfe(params.saleNumber, user, (nfResult)=>{
+          //'Enviou o resultado via Broadcast'
           global.io.sockets.emit(params.saleNumber, JSON.parse(nfResult));
+          DoneLaws.remove(params.saleNumber);
         });
       }
 
@@ -122,6 +121,5 @@ module.exports = {
         callback(sucess ? {code:200} : updateResult);
       }
     });
-
   }
 };

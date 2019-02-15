@@ -52,25 +52,17 @@
 
       <div class="main-form">
 
-        <div class="fields ">
-          <div class="left-panel">
-            <div class="oderner">
-              <input type="text" id="name" class="input-val simple-material-input" placeholder="Nome" name="name" value="<%=user ? user.name : ''%>" autocomplete="off" maxlength="30"/>
-              <input type="text" id="title"  class="input-val simple-material-input"placeholder="Setor" name="sector" value="<%=user ? user.title : ''%>" autocomplete="off"/>
-              <input type="text" id="avatar" class="input-val simple-material-input" placeholder="Avatar" name="avatar" value="<%=user ? user.avatar : ''%>" autocomplete="off"/>
+        <div class="fields">
+          <div class="main-left">
+
+            <div class="left-panel">
+              <div class="oderner">
+                <input type="text" id="name" class="input-val simple-material-input" placeholder="Nome" name="name" value="<%=user ? user.name : ''%>" autocomplete="off" maxlength="30"/>
+                <input type="text" id="title"  class="input-val simple-material-input"placeholder="Setor" name="sector" value="<%=user ? user.title : ''%>" autocomplete="off"/>
+                <input type="text" id="avatar" class="input-val simple-material-input" placeholder="Avatar" name="avatar" value="<%=user ? user.avatar : ''%>" autocomplete="off"/>
 
 
-              <%if (loggedUser && loggedUser.full && loggedUser.id != user.id){%>
-                <label class="pure-material-checkbox">
-                  <input type="checkbox" id="active" name="active" <%=user ? user.active ? 'checked' : '' : ''%>>
-                  <span>Ativo</span>
-                </label>
-                <%}%>
 
-                <label class="pure-material-checkbox">
-                  <input type="checkbox" id="full" name="full" <%=user ? user.full ? 'checked' : '' : ''%>>
-                  <span>Administrador</span>
-                </label>
 
               </div>
             </div>
@@ -83,34 +75,57 @@
                 <input type="text" id="id" class="input-val simple-material-input" placeholder="Identificação" name="id" value="<%=user ? user.id : ''%>"  onkeypress="return Num.isNumberKey(event);"  autocomplete="off" title="Código do Eccosys"/>
               </div>
             </div>
+
+
           </div>
 
 
-          <div class="settings-holder">
-            <div class="scroll">
-              <div class="settings">
+          <%if (loggedUser && loggedUser.full){%>
+            <textarea class="input-val simple-material-input" id="token" placeholder="Token" name="token"  rows="5" title="Token de acesso a API"><%=user ? user.token : ''%></textarea>
+            <%}%>
 
 
+
+            <%if (loggedUser && loggedUser.full && loggedUser.id != user.id){%>
+              <label class="pure-material-checkbox">
+                <input type="checkbox" id="active" name="active" <%=user ? user.active ? 'checked' : '' : ''%>>
+                <span>Ativo</span>
+              </label>
+              <%}%>
+
+              <label class="pure-material-checkbox">
+                <input type="checkbox" id="full" name="full" <%=user ? user.full ? 'checked' : '' : ''%>>
+                <span>Administrador</span>
+              </label>
+
+
+            </div>
+
+            <div class="settings-holder">
+              <div class="scroll">
+                <div class="settings">
+
+
+                </div>
               </div>
             </div>
           </div>
+
+
+          <div class="footer">
+            <label class="button shadow" id="save" >Salvar</label>
+            <%if (loggedUser && loggedUser.full){%>
+              <label class="button shadow" id="new">Novo</label>
+              <label class="button shadow" id="delete">Excluir</label>
+              <%}%>
+            </div>
+
+          </form>
+
         </div>
 
 
-        <div class="footer">
-          <label class="button shadow" id="save" >Salvar</label>
-          <%if (loggedUser && loggedUser.full){%>
-            <label class="button shadow" id="new">Novo</label>
-            <label class="button shadow" id="delete">Excluir</label>
-            <%}%>
-          </div>
 
-        </form>
+      </body>
 
-      </div>
-
-
-
-    </body>
-
-    </html>
+      </html>

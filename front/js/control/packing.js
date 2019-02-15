@@ -16,6 +16,12 @@ $(document).ready(()=>{
 
   $('#packing-done').click(packingClick);
 
+  $('.button').on("keyup", function(e) {
+    if (e.which == 13){
+      $(this).click();
+    }
+  });
+
   if (sale.items){
     initForPacking();
   }

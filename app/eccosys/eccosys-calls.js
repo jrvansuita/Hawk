@@ -1,5 +1,6 @@
 var Query = require('../util/query.js');
-var Eccosys = require('../eccosys/eccosys.js');
+//var Eccosys = require('../eccosys/eccosys.js');
+var EccosysApi = require('../eccosys/new-eccosys.js');
 const History = require('../bean/history.js');
 
 
@@ -23,7 +24,7 @@ module.exports = {
     query.addDate('toDate', to);
     query.add('count', page_count);
     query.add('offset', page_count * page);
-    Eccosys.get('pedidos' + query.build(), (data)=>{
+    new EccosysApi('pedidos' + query.build()).get((data)=>{
       callback(JSON.parse(checkNoSale(data, '[]')));
     });
   },
@@ -32,14 +33,14 @@ module.exports = {
     if (number == undefined){
       callback({});
     }else{
-      Eccosys.get('pedidos/' + number, (data)=>{
+      new EccosysApi('pedidos/' + number).get((data)=>{
         callback(JSON.parse(checkNoSale(data, '{}'))[0]);
       });
     }
   },
 
   getSaleItems(number, callback) {
-    Eccosys.get('pedidos/' + number + '/items', (data)=>{
+    new EccosysApi('pedidos/' + number + '/items').get((data)=>{
       callback(JSON.parse(checkNoSale(data, '[]')));
     });
   },
@@ -47,21 +48,21 @@ module.exports = {
 
   getPickingSales(callback) {
     //Pronto para picking
-    Eccosys.get('pedidos/situacao/3', (data)=>{
+    new EccosysApi('pedidos/situacao/3').get((data)=>{
       callback(JSON.parse(checkEccoStatus(data, '[]')));
     });
   },
 
   getClient(id, callback) {
-    Eccosys.get('clientes/' + id, (data)=>{
+    new EccosysApi('clientes/' + id).get((data)=>{
       callback(JSON.parse(checkNoSale(data, '{}'))[0]);
     });
   },
 
   getProduct(skuOrEan, callback) {
-    Eccosys.get('produtos/' + (Num.isEan(skuOrEan) ? 'gtin=' + skuOrEan : skuOrEan), (data)=>{
+    new EccosysApi('produtos/' + (Num.isEan(skuOrEan) ? 'gtin=' + skuOrEan : skuOrEan))
+    .get((data)=>{
       var parsed = JSON.parse(checkEccoStatus(data, '{}'));
-
 
       if (typeof parsed == 'string'){
         callback({error : parsed});
@@ -72,55 +73,54 @@ module.exports = {
   },
 
   getStockHistory(sku, callback) {
-    Eccosys.get('estoques/' + sku + '/registros', (rows)=>{
+    new EccosysApi('estoques/' + sku + '/registros').get((rows)=>{
       callback(JSON.parse(rows));
     });
   },
 
   updateProductLocal(body, callback) {
-    Eccosys.put('produtos', body, (res)=>{
+    new EccosysApi('produtos').setBody(body).put((res)=>{
       callback(JSON.parse(res));
     });
   },
 
   updateProductStock(sku, body, callback) {
-    Eccosys.post('estoques/' + sku, body, (res)=>{
+    new EccosysApi('estoques/' + sku).setBody(body).post((res)=>{
       callback(JSON.parse(res));
     });
   },
 
   updateSale(body, callback) {
-    Eccosys.put('pedidos', body, (res)=>{
+    new EccosysApi('pedidos').setBody(body).put((res)=>{
       callback(res);
     });
   },
 
-  packingPostNF(saleNumber, callback){
-    Eccosys.post('nfes/' + saleNumber, {}, (res)=>{
+  packingPostNF(user, saleNumber, callback){
+    new EccosysApi('nfes/' + saleNumber).setBody({}).withUser(user).post((res)=>{
       callback(res);
     });
   },
 
   loadDanfe(res, nfNumber){
-    Eccosys.document(res, 'danfes/' + nfNumber + '/pdf');
+    new EccosysApi('danfes/' + nfNumber + '/pdf').download(res, nfNumber + '.pdf');
   },
 
   loadTransportTag(res, idNfe){
-    Eccosys.document(res, 'etiquetas/' + idNfe);
+    new EccosysApi('etiquetas/' + idNfe).download(res, idNfe + '.pdf');
   },
 
 
   removeSaleItems(saleNumber, callback){
-    Eccosys.delete('pedidos/' + saleNumber + '/items', (res)=>{
+    new EccosysApi('pedidos/' + saleNumber + '/items').delete((res)=>{
       if (callback){
         callback(res);
       }
     });
   },
 
-
   insertSaleItems(saleNumber, items, callback){
-    Eccosys.post('pedidos/' + saleNumber + '/items', items, (res)=>{
+    new EccosysApi('pedidos/' + saleNumber + '/items').setBody(items).post((res)=>{
       if (callback){
         callback(res);
       }
