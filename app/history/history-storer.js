@@ -34,6 +34,19 @@ module.exports={
     });
   },
 
+  packing(userId, sale, day){
+    onTry(()=>{
+      var message = 'Pedido: ' + sale.numeroPedido + (sale.client ? ' - ' + sale.client.nome : '');
+      message += '\n'+ sale.transport + ' - ' + (sale.client ? sale.client.uf : 'UF Não encontrado') + ' - ' + Num.money(sale.totalProdutos);
+
+      if (day){
+        message += '\nItems: ' + sale.itemsQuantity + ' Pontos gerados: ' + day.points;
+      }
+
+      History.notify(userId, 'Packing Finalizado', message, 'Packing');
+    });
+  },
+
   pending(userId, pending){
     onTry(()=>{
       var title = 'Pendência ';
@@ -50,7 +63,7 @@ module.exports={
 
    console.log('Email enviado');
    console.log(pending.sendEmail);
-   
+
         if (pending.sendEmail){
           emailStr = '\nEnviado email para o cliente';
         }else{

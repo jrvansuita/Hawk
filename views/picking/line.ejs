@@ -40,7 +40,7 @@
       <%line.forEach((each)=>{
         %>
         <tr>
-          <td><%=each.id%></td>
+          <td><%=each.numeroPedido%></td>
           <td><%=each.client ? each.client.nome : 'NONE'%></td>
           <td><%=Dat.format(new Date(each.data))%></td>
           <td><%=each.client ? each.client.uf : 'NONE'%></td>

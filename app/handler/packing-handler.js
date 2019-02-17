@@ -7,6 +7,8 @@ const PendingLaws = require('../laws/pending-laws.js');
 const Err = require('../error/error.js');
 const EccosysCalls = require('../eccosys/eccosys-calls.js');
 const PackagesHandler = require('../handler/packages-handler.js');
+const Day = require('../bean/day.js');
+const HistoryStorer = require('../history/history-storer.js');
 
 module.exports = {
 
@@ -46,19 +48,24 @@ module.exports = {
     }
   },
 
+  loadSale(saleNumber, callback){
+    var fromDone = DoneLaws.get(saleNumber);
 
-  loadSale(sale, callback){
-    var loader = new SaleLoader(sale)
-    .loadClient()
-    .loadItems()
-    .loadItemsDeepAttrs()
-    .run((loadedSale)=>{
-      if (!loadedSale){
-        loadedSale = {error : Const.sale_not_found.format(sale), numeroPedido: sale};
-      }
+    if (fromDone && fromDone.packingReady){
+      callback(fromDone);
+    }else{
+      new SaleLoader(saleNumber)
+      .loadClient()
+      .loadItems()
+      .loadItemsDeepAttrs()
+      .run((loadedSale)=>{
+        if (!loadedSale){
+          loadedSale = {error : Const.sale_not_found.format(saleNumber), numeroPedido: saleNumber};
+        }
 
-      callback(loadedSale);
-    });
+        callback(loadedSale);
+      });
+    }
   },
 
   loadDanfe(res, nfNumber){
@@ -112,7 +119,7 @@ module.exports = {
         this.sendNfe(params.saleNumber, user, (nfResult)=>{
           //'Enviou o resultado via Broadcast'
           global.io.sockets.emit(params.saleNumber, JSON.parse(nfResult));
-          DoneLaws.remove(params.saleNumber);
+          onPackingDone(params, user);
         });
       }
 
@@ -123,3 +130,45 @@ module.exports = {
     });
   }
 };
+
+function onPackingDone(params, user, callback){
+  DoneLaws.remove(params.saleNumber);
+
+  new SaleLoader(params.saleNumber)
+  .loadClient()
+  .loadItems()
+  .run((sale)=>{
+    if (sale){
+      var day = Day.packing(user.id, Dat.today, sale);
+
+      HistoryStorer.packing(user.id, sale, day);
+
+      Day.sync(day, (err, doc) => {
+        //nothing
+      });
+    }
+  });
+
+  prepareDoneList();
+}
+
+
+
+function prepareDoneList(){
+  var doneList = DoneLaws.getList();
+
+  for(var i=0; i< doneList.length;i++){
+    var doneSale = doneList[i];
+
+    if (!doneSale.packingReady){
+      var loader = new SaleLoader(doneSale)
+      .loadClient()
+      .reloadItems()
+      .loadItemsDeepAttrs()
+      .run((loadedSale)=>{
+        loadedSale.packingReady = true;
+        DoneLaws.put(loadedSale);
+      });
+    }
+  }
+}

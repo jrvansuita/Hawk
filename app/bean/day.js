@@ -26,8 +26,8 @@ module.exports = class Day extends DataAccess {
   }
 
 
-static invoice(sale) {
-  return new Day(sale.userId, sale.billingDate, 'invoice', sale.value, 1);
+static packing(userId, date, sale) {
+  return new Day(userId, date, 'invoice', sale.totalProdutos, 1);
 }
 
 static picking(userId, date, items, secs) {

@@ -30,12 +30,6 @@ module.exports = {
     EccosysCalls.getPickingSales((sales) => {
       try{
 
-        //Remover isso, foi pra teste
-        //sales = sales.filter((i)=>{
-        //  return Util.isIn(['294569774','294569790','294569807','294569868','294569883'], i.id.toString());
-        //});
-
-
         PickingLaws.set(sales);
 
         this.setOffSales();

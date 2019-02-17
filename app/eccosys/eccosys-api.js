@@ -51,7 +51,7 @@ module.exports = class EccosysApi{
     }
 
 
-    console.log(options);
+    //console.log(options);
 
     return options;
   }

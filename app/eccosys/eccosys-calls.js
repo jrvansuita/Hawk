@@ -1,6 +1,5 @@
 var Query = require('../util/query.js');
-//var Eccosys = require('../eccosys/eccosys.js');
-var EccosysApi = require('../eccosys/new-eccosys.js');
+var EccosysApi = require('../eccosys/eccosys-api.js');
 const History = require('../bean/history.js');
 
 
@@ -91,8 +90,8 @@ module.exports = {
   },
 
   updateSale(body, callback) {
-    new EccosysApi('pedidos').setBody(body).put((res)=>{
-      callback(res);
+    new EccosysApi('pedidos').setBody(body).put((sucess)=>{
+      callback(sucess);
     });
   },
 

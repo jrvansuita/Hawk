@@ -19,7 +19,7 @@ module.exports= class SalesArrLoader {
       this.pool.push(each.numeroPedido);
     });
   }
-  
+
   onLastSaleLoaded(callback){
     this.onLastSaleLoaded = callback;
     return this;
@@ -106,7 +106,7 @@ module.exports= class SalesArrLoader {
         this._load(onFinished);
 
         //Pelo menos 10 pedidos já foram tratados e podem estar aparecendo
-        if (this.staticIndex == 10) {
+        if (this.staticIndex == 3) {
           onFinished();
         }
       }

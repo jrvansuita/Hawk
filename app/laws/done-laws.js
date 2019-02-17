@@ -24,8 +24,12 @@ module.exports = {
   },
 
   put(sale){
-    //Done picking
-    global.staticDonePicking.push(sale);
+    var index = this.getIndex(sale);
+    if (index > -1){
+      global.staticDonePicking[index] = sale;
+    }else{
+      global.staticDonePicking.push(sale);
+    }
   },
 
   get(saleNumber){
@@ -34,6 +38,10 @@ module.exports = {
     });
 
     return l.length > 0 ?  l[0] : undefined;
+  },
+
+  getIndex(sale){
+    return global.staticDonePicking.findIndex(s => s.numeroPedido == sale.numeroPedido);
   },
 
   remove(saleNumber){
