@@ -78,8 +78,9 @@ table{
 }
 
 .header-count {
+  vertical-align: top;
   margin: auto;
-  display: inline-block;
+  display: inline-flex;
   font-size: 14px;
   float: right;
   background-color: transparent;

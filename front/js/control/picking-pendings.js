@@ -25,10 +25,26 @@ $(document).ready(() => {
 
   if (Sett.get(loggedUser, 10)){
     if (isWideOpen() && ($('.pending-item.not-solved').length > 0)){
-      var $icon = $('<img>').addClass('small-icon-button').attr('title','Enviar todos os emails!').css('position','absolute').css('margin-top','-5px').attr('src', '/img/send-mass-email.png').click(()=>{
-        doallSolvingPendingSale($icon);
+
+      var icon = $('<img>').attr('src','img/dots.png').addClass('dots-glyph');
+      var div = $('<div>').css('display','inline-flex').append(icon);
+
+      //var $icon = $('<img>').addClass('small-icon-button').attr('title','Enviar todos os emails!').css('position','absolute').css('margin-top','-5px').attr('src', '/img/send-mass-email.png').click(()=>{
+      //  doallSolvingPendingSale($icon);
+      //});
+
+      div.click(function(e){
+        var drop = new MaterialDropdown($(this), e);
+
+        drop.addItem('/img/send-mass-email.png', 'Enviar Todos E-mails', function(){
+          icon.attr('src','/img/loader/circle.svg');
+          doallSolvingPendingSale();
+        });
+
+        drop.show();
       });
-      $('.pending-box.red-top>.pick-header>.header-title').after($icon);
+
+      $('.pending-box.red-top>.pick-header>.header-count').append(div);
     }
   }
 });
@@ -399,8 +415,6 @@ function solvingPendingSale(button, pending){
 
 
 function doallSolvingPendingSale(icon){
-  icon.attr('src','/img/loader/circle.svg');
-
   $('.pending-item.not-solved').each(function(index, item){
     var pending =  getPendingSale($(item).data('sale').split('-')[1]);
 

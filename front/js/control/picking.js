@@ -19,6 +19,34 @@ $(document).ready(() => {
     startListeningRFID();
   });
 
+  $('.upcoming-dots').click(function(e){
+    var drop = new MaterialDropdown($(this), e);
+    drop.addItem('/img/redownload.png', 'Recarregar Picking', function(){
+      _post("/run-jobs", {ref: 'picking'}, (data) => {
+        window.location.reload();
+      });
+    });
+    drop.show();
+  });
+
+  $('.blocked-dots').click(function(e){
+    var drop = new MaterialDropdown($(this), e);
+
+     drop.addItem('/img/recycle.png', 'Reciclar Todos', function(){
+      $(".table-sale-blocked-holder.not-blocking").each(function(){
+        new BlockedPost($(this).data("blocknumber")).call();
+      });
+    });
+
+    drop.addItem('/img/delete-all.png', 'Remover Todos', function(){
+      $(".table-sale-blocked-holder").each(function(){
+        new BlockedPost($(this).data("blocknumber")).call();
+      });
+    });
+
+    drop.show();
+  });
+
   $( "#user-id" ).focusin(()=>{
     startListeningRFID();
   }).focusout(()=>{
@@ -142,7 +170,7 @@ $(document).ready(() => {
     var blockNumber = $(this).data('blocknumber');
 
     var drop = new MaterialDropdown($(this), e);
-    drop.addItem('/img/delete.png', 'Desbloquear', function(){
+    drop.addItem('/img/delete.png', 'Remover', function(){
       new BlockedPost(blockNumber).call();
     });
 
@@ -278,7 +306,12 @@ function openPrintPickingSale(sale, userId){
 
 function startListeningRFID(){
   $('.rfid-card').attr('src','img/rfid-listening.gif');
-  $('#user-id').select().focus();
+  $('#user-id').select();
+
+  if (!$('#user-id').is(":focus")) {
+    $('#user-id').focus();
+  }
+
 }
 
 

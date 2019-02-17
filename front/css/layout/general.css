@@ -260,3 +260,22 @@ tr.line td{
 table{
   border-collapse: collapse;
 }
+
+
+
+.dots-glyph{
+  width: 15px;
+  margin-right: -5px;
+  margin-left: 5px;
+  height: 15px;
+  padding: 3px;
+  display: inline-flex;
+  margin-top: -3px;
+}
+
+.dots-glyph:hover {
+  background-color: #f3f3f3;
+  transform: scale(1.2);
+  cursor: pointer;
+  border-radius: 50%;
+}
