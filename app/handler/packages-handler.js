@@ -4,6 +4,8 @@ const Err = require('../error/error.js');
 module.exports = class PackagesHandler {
 
   static storeFromScreen(params, callback) {
+    console.log(params.lockSize);
+    
     var pack = new Pack(//parseInt(params.editing),
     params.name,
     params.height,
@@ -13,7 +15,7 @@ module.exports = class PackagesHandler {
     params.stockQtd,
     params.minStockQtd,
     params.maxWeight,
-    params.lockSize == false ? false : true);
+    params.lockSize == 'on' ? true : false);
 
 
     if (params.editingId.toString().length>0){

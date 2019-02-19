@@ -79,8 +79,6 @@ $(document).ready(() => {
           $('#blocked-rule-input').attr('placeholder','O Código ' + blockNumber + ' já está bloqueado').delay(3000).queue(function(n) {
             $('#blocked-rule-input').attr('placeholder',placeHolder);
           });
-
-
         }else{
           new BlockedSelector().onSelect((reason)=>{
             new BlockedPost(blockNumber, reason).call();

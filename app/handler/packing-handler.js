@@ -119,7 +119,9 @@ module.exports = {
         this.sendNfe(params.saleNumber, user, (nfResult)=>{
           //'Enviou o resultado via Broadcast'
           global.io.sockets.emit(params.saleNumber, JSON.parse(nfResult));
-          onPackingDone(params, user);
+          if (nfResult.success.length > 0){
+            onPackingDone(params, user);
+          }
         });
       }
 
@@ -167,6 +169,7 @@ function prepareDoneList(){
       .loadItemsDeepAttrs()
       .run((loadedSale)=>{
         loadedSale.packingReady = true;
+        loadedSale.pickingRealizado = "A";
         DoneLaws.put(loadedSale);
       });
     }

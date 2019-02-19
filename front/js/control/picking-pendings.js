@@ -29,10 +29,6 @@ $(document).ready(() => {
       var icon = $('<img>').attr('src','img/dots.png').addClass('dots-glyph');
       var div = $('<div>').css('display','inline-flex').append(icon);
 
-      //var $icon = $('<img>').addClass('small-icon-button').attr('title','Enviar todos os emails!').css('position','absolute').css('margin-top','-5px').attr('src', '/img/send-mass-email.png').click(()=>{
-      //  doallSolvingPendingSale($icon);
-      //});
-
       div.click(function(e){
         var drop = new MaterialDropdown($(this), e);
 

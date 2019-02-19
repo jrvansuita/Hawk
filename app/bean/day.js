@@ -15,7 +15,7 @@ module.exports = class Day extends DataAccess {
     var points = 0;
 
     if (day.type == 'invoice'){
-      points =  ((day.total)/1000) * 7;
+      points =  ((day.total)/1000) * 2.7;
     }else if (day.type == 'picking'){
       points = ((day.total) / (day.count/day.total)) * 2;
     }
@@ -27,7 +27,7 @@ module.exports = class Day extends DataAccess {
 
 
 static packing(userId, date, sale) {
-  return new Day(userId, date, 'invoice', sale.totalProdutos, 1);
+  return new Day(userId, date, 'invoice', (parseFloat(sale.totalProdutos)/2) * sale.itemsQuantity, 1);
 }
 
 static picking(userId, date, items, secs) {
