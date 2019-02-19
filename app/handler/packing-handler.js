@@ -119,9 +119,9 @@ module.exports = {
         this.sendNfe(params.saleNumber, user, (nfResult)=>{
           //'Enviou o resultado via Broadcast'
           global.io.sockets.emit(params.saleNumber, JSON.parse(nfResult));
-          if (nfResult.success.length > 0){
+          //if (nfResult.success.length > 0){
             onPackingDone(params, user);
-          }
+          //}
         });
       }
 
