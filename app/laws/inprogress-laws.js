@@ -101,7 +101,7 @@ function checkEndTime(sale, userId){
 
   //Calcula 3 segundos por item do pedido no mínimo
   var minSecs = sale.itemsQuantity * 3;
-  if (secs < minSecs && process.env.NODE_ENV){
+  if ((secs < minSecs) && (process.env.NODE_ENV != undefined)){
     Err.thrw(Const.insufficient_picking_time.format(sale.numeroPedido, minSecs, parseInt(secs)), userId);
   }
 }
