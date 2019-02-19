@@ -57,6 +57,7 @@ module.exports = {
       new SaleLoader(saleNumber)
       .loadClient()
       .loadItems()
+      .loadNfe()
       .loadItemsDeepAttrs()
       .run((loadedSale)=>{
         if (!loadedSale){
@@ -117,11 +118,13 @@ module.exports = {
 
       if (sucess){
         this.sendNfe(params.saleNumber, user, (nfResult)=>{
+          nfResult =  JSON.parse(nfResult);
+          console.log(nfResult);
           //'Enviou o resultado via Broadcast'
-          global.io.sockets.emit(params.saleNumber, JSON.parse(nfResult));
-          //if (nfResult.success.length > 0){
+          global.io.sockets.emit(params.saleNumber, nfResult);
+          if (nfResult.success.length > 0){
             onPackingDone(params, user);
-          //}
+          }
         });
       }
 

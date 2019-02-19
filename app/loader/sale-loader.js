@@ -108,6 +108,24 @@ module.exports= class SaleLoader {
     return this;
   }
 
+  loadNfe(onCallOuter){
+    var funcNfe = (onCallNext)=>{
+
+      if (this.sale.numeroNotaFiscal && !this.sale.nfe){
+        EccosysCalls.getNfe(this.sale.numeroNotaFiscal, (nfe)=>{
+          this.sale.nfe = nfe;
+          this._callbackHit(onCallNext, onCallOuter);
+        });
+      }else{
+        this._callbackHit(onCallNext, onCallOuter);
+      }
+    };
+
+    this.list.push(funcNfe);
+
+    return this;
+  }
+
   loadProducts(onCallOuter){
     var funcProducts = (onCallNext)=>{
 

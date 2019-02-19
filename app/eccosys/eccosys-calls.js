@@ -58,6 +58,13 @@ module.exports = {
     });
   },
 
+  getNfe(numeronf, callback) {
+    new EccosysApi('notasfiscais/' + numeronf).get((data)=>{
+      callback(JSON.parse(checkEccoStatus(data, '[]'))[0]);
+    });
+  },
+
+
   getProduct(skuOrEan, callback) {
     new EccosysApi('produtos/' + (Num.isEan(skuOrEan) ? 'gtin=' + skuOrEan : skuOrEan))
     .get((data)=>{
@@ -77,7 +84,7 @@ module.exports = {
     });
   },
 
-  updateProductLocal(body, callback) {
+  updateProduct(body, callback) {
     new EccosysApi('produtos').setBody(body).put((res)=>{
       callback(JSON.parse(res));
     });

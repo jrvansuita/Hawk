@@ -68,7 +68,22 @@ module.exports ={
       };
 
 
-      EccosysCalls.updateProductLocal(body, callback);
+      EccosysCalls.updateProduct(body, callback);
+    });
+  },
+
+  updateNCM(sku, newNCM, user, callback) {
+    this.getBySku(sku, false, (product)=>{
+      newNCM = newNCM.trim();
+      var lines = product.obs.split('\n');
+
+      var body = {
+        codigo: product.codigo,
+        cf: newNCM,
+        obs : lines +  "\n" + user.name + " | Desktop | " + newNCM + " | " + Dat.format(new Date())
+      };
+
+      EccosysCalls.updateProduct(body, callback);
     });
   },
 

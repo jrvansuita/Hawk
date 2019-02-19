@@ -22,24 +22,48 @@ $(document).ready(()=>{
     }
   });
 
+  $('.ncm-input').on("keyup", function(e) {
+    if (e.which == 13){
+      var sku = $(this).data('sku');
+
+      var requestBody = {
+        sku: sku,
+        ncm: $(this).val().trim()
+      };
+      showMainInputTitle('Atualizando NCM...','/loader/circle.svg',  '#a46af1');
+      _post('/product-ncm', requestBody, (res)=>{
+        showMainInputTitle('Deu', 'checked.png');
+      });
+    }
+  });
+
   if (sale.items){
     initForPacking();
   }
 });
 
 function initForPacking(){
-  showNfePrintControls();
+  if (sale.nfe){
+    if (sale.nfe.nfe_msg){
+      showNfeRejected();
+      $('.editable-infos-holder').show();
+      $('#packing-done').fadeIn();
+    }else {
+      showNfePrintControls();
+    }
+  }
+
   loadPackagesTypes();
   refreshCountProductItens();
+
+  sale.pesoLiquido = 0;
+  sale.pesoBruto = 0;
 
   createProductsTable('products-out-holder', 'products-out', {icon : false, title: 'Lista de Produtos do Pedido'});
   createProductsTable('products-in-holder', 'products-in', {icon: true, title: 'Lista de Produtos em Picking'} );
   loadProductsOutTable();
 
   addListeners();
-
-  sale.pesoLiquido = 0;
-  sale.pesoBruto = 0;
 
   $('#product-ean').focus();
 }
@@ -195,7 +219,7 @@ function buildProductLine(saleItem, data){
     window.open('/stock?sku=' + saleItem.codigo,'_blank');
   }));
   cols.push(createProductVal(saleItem.gtin));
-  cols.push(createProductVal(saleItem.ncm).addClass('long-desc'));
+  cols.push(createNcmInput(saleItem.ncm, saleItem.codigo));
 
   var desc = createProductVal(saleItem.descricao.split('-')[0])
   .addClass('long-desc cursor-img');
@@ -247,6 +271,16 @@ function fmtQtd(saleItem, useDif){
 }
 
 
+
+function createNcmInput(ncm, sku){
+  var input = $('<input>').addClass('ncm-input editable-input').attr('placeholder','NCM').data('sku',sku).val(ncm);
+
+  var td = $('<td>').addClass('product-val').append(input);
+
+
+  return td;
+}
+
 function showProductMsg(msg, icon){
   $('#product-ean-icon').attr('src','img/'+ icon +'.png').hide().show();
   $('#product-ean').val('');
@@ -266,8 +300,11 @@ function showMessage(msg, isError, onAutoHide){
   .fadeIn()
   .delay(delay)
   .queue(function(next){
-    if (onAutoHide) onAutoHide();
-    $(this).hide().clearQueue();
+    if (onAutoHide != false) onAutoHide();
+
+    if (onAutoHide != false){
+      $(this).hide().clearQueue();
+    }
     next();
   });
 }
@@ -466,7 +503,18 @@ function onNfeSucess(result){
       showNfePrintControls(true);
     }
   }else{
-    showMessage(result.error[0], true, false);
+    showNfeRejected(result.error[0].erro);
+  }
+}
+
+function showNfeRejected(errorMsg){
+
+  var msg = errorMsg || sale.nfe.nfe_msg;
+
+  if (msg){
+    hideLastProductView();
+
+    showMessage(msg, true, false);
     showMainInputTitle('Rejeição de Nfe', 'paper-alert.png', '#f1d26a');
   }
 }
