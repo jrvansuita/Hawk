@@ -8,70 +8,71 @@ module.exports = class Day extends DataAccess {
     this.total = Floa.def(total);
     this.count = Floa.def(count);
 
-    this.points = parseFloat(points.toFixed(2));
+    this.points = points ? parseFloat(points.toFixed(2)) : 0;
+
   }
 
-static packing(userId, date, sale) {
-  var points = ((parseFloat(sale.totalProdutos)/sale.itemsQuantity)/80)*(sale.itemsQuantity*0.5);
+  static packing(userId, date, sale) {
+    var points = ((parseFloat(sale.totalProdutos)/sale.itemsQuantity)/80)*(sale.itemsQuantity*0.5);
 
-  return new Day(userId, date, 'invoice', sale.totalProdutos, 1, points);
-}
+    return new Day(userId, date, 'invoice', sale.totalProdutos, 1, points);
+  }
 
-static picking(userId, date, items, secs) {
-  var points = ((items) / (secs/items)) * 2;
+  static picking(userId, date, items, secs) {
+    var points = ((items) / (secs/items)) * 2;
 
-  return new Day(userId, date, 'picking', items, secs, points);
-}
-
-
-static getKey() {
-  return ['userId', 'date', 'type'];
-}
+    return new Day(userId, date, 'picking', items, secs, points);
+  }
 
 
-static sync(day, callback){
-  Day.upsert(day.getPKQuery(), {
-    $inc: {
-      count: day.count,
-      total: day.total,
-      points: day.points
-    }
-  }, (err, doc) => {
-    if (callback){
-      callback(err, doc);
-    }
-  });
-}
+  static getKey() {
+    return ['userId', 'date', 'type'];
+  }
 
-static search(userId, type, callback){
-  Day.aggregate([{
-    $match: {
-      type: type,
-      userId: parseInt(userId),
-    }
-  },{
-    $group: {
-      _id: {
-        type: "$type",
-        userId: "$userId"
-      },
-      sum_count: {
-        $sum: "$count"
-      },
-      sum_total: {
-        $sum: "$total"
-      },
-      sum_points: {
-        $sum: "$points"
-      },
-      sum_neg_points: {
-        $sum: {$cond:[{ '$lt': ['$points', 0]}, "$points", 0]},
+
+  static sync(day, callback){
+    Day.upsert(day.getPKQuery(), {
+      $inc: {
+        count: day.count,
+        total: day.total,
+        points: day.points
       }
-    }
-  }],
-  function(err, res) {
-    if (callback)
-    callback(err, res);
-  });
-}
+    }, (err, doc) => {
+      if (callback){
+        callback(err, doc);
+      }
+    });
+  }
+
+  static search(userId, type, callback){
+    Day.aggregate([{
+      $match: {
+        type: type,
+        userId: parseInt(userId),
+      }
+    },{
+      $group: {
+        _id: {
+          type: "$type",
+          userId: "$userId"
+        },
+        sum_count: {
+          $sum: "$count"
+        },
+        sum_total: {
+          $sum: "$total"
+        },
+        sum_points: {
+          $sum: "$points"
+        },
+        sum_neg_points: {
+          $sum: {$cond:[{ '$lt': ['$points', 0]}, "$points", 0]},
+        }
+      }
+    }],
+    function(err, res) {
+      if (callback)
+      callback(err, res);
+    });
+  }
 };
