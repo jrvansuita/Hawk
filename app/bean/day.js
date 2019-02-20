@@ -8,30 +8,19 @@ module.exports = class Day extends DataAccess {
     this.total = Floa.def(total);
     this.count = Floa.def(count);
 
-    this.points = points || Day.calcPoints(this);
+    this.points = parseFloat(points.toFixed(2));
   }
-
-  static calcPoints(day){
-    var points = 0;
-
-    if (day.type == 'invoice'){
-      points =  ((day.total)/1000) * 2.7;
-    }else if (day.type == 'picking'){
-      points = ((day.total) / (day.count/day.total)) * 2;
-    }
-
-    points = parseFloat(points.toFixed(2));
-
-    return points;
-  }
-
 
 static packing(userId, date, sale) {
-  return new Day(userId, date, 'invoice', (parseFloat(sale.totalProdutos)/2) * sale.itemsQuantity, 1);
+  var points = ((parseFloat(sale.totalProdutos)/sale.itemsQuantity)/80)*(sale.itemsQuantity*0.5);
+
+  return new Day(userId, date, 'invoice', sale.totalProdutos, 1, points);
 }
 
 static picking(userId, date, items, secs) {
-  return new Day(userId, date, 'picking', items, secs);
+  var points = ((items) / (secs/items)) * 2;
+
+  return new Day(userId, date, 'picking', items, secs, points);
 }
 
 
