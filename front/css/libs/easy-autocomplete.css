@@ -11,22 +11,26 @@
 .easy-autocomplete-container {
   left: 0;
   position: absolute;
+  max-height: 250px;
+  overflow-y: auto;
+  border-left: solid 1px #e8e8e8;
+  border-right: solid 1px #e8e8e8;
   width: 100%;
   background: transparent;
   z-index: 2;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
 }
 
 .easy-autocomplete-container ul {
   background: none repeat scroll 0 0 #ffffff;
   display: none;
   margin-top: 0;
+  margin-bottom: 0;
   padding-bottom: 0;
   padding-left: 0;
   position: relative;
-
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
 }
 .easy-autocomplete-container ul li, .easy-autocomplete-container ul .eac-category {
   background: inherit;

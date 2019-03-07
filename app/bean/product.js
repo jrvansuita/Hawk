@@ -13,5 +13,33 @@ module.exports = class Product extends DataAccess {
     return ['sku'];
   }
 
+  static likeThis(keyValue, limit, callback){
+    var query  = {
+      $or: [
+        //{ 'sku': new RegExp(keyValue, "i") },
+
+        { 'sku': {
+          "$regex": keyValue,
+          "$options": "i"
+          }
+        },
+
+        { 'name': {
+          "$regex": keyValue,
+          "$options": "i"
+        }
+      }
+    ]
+  };
+
+  console.log(JSON.stringify(query));
+
+  this.staticAccess()
+  .find(query)
+  .limit(limit)
+  .exec(callback);
+
+
+}
 
 };

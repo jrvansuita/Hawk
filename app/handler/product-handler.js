@@ -105,7 +105,7 @@ module.exports ={
   },
 
   searchAutoComplete(typing, callback){
-    Product.like(typing, 5, (err, products)=>{
+    Product.likeThis(typing, 150, (err, products)=>{
       callback(products);
     });
   }

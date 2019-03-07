@@ -570,11 +570,11 @@ function loadLayoutHistory(rows){
           dataType: "json"
         }
       },
-      requestDelay: 50,
+      requestDelay: 400,
       list: {
-        maxNumberOfElements: 5,
+        maxNumberOfElements: 150,
         match: {
-          enabled: true
+          enabled: false
         },
         sort: {
           enabled: true

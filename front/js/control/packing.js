@@ -22,6 +22,14 @@ $(document).ready(()=>{
     }
   });
 
+  $('#sale-liq').blur(()=>{
+    if (Floa.def($('#sale-liq').val()) > 0){
+      $('#sale-bru').val($('#sale-liq').val());
+    }else{
+      $('#sale-bru').select();
+    }
+  });
+
   $('.ncm-input').on("keyup", function(e) {
     if (e.which == 13){
       var sku = $(this).data('sku');
@@ -161,11 +169,6 @@ function onOneMoreProductChecked(saleItem){
   refreshSaleWeight(saleItem.liq, saleItem.bru);
   refreshProgressLine();
   refreshCountProductItens();
-
-  //if (itemsChecked == sale.itemsQuantity){
-  //$('#sale-liq').select();
-
-  //}
 }
 
 function onFinishedChekingProducts(){
