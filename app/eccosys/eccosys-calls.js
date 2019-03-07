@@ -100,6 +100,11 @@ module.exports = {
       if (typeof parsed == 'string'){
         callback({error : parsed});
       }else{
+        //Se o resultado é 1
+        if (!Array.isArray(parsed)){
+          parsed = [parsed];
+        }
+
         callback(parsed);
       }
     });
@@ -178,7 +183,7 @@ function checkEccoStatus(data, def){
   }else if (data.length == 0){
     return def;
   }
-  
+
   return data;
 }
 

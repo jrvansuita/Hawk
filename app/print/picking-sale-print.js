@@ -32,7 +32,7 @@ module.exports = class PickingSalePrint{
     }else{
       this._loadFromProgressOrDone();
       createAndHandlePrintPool();
-    }  
+    }
   }
 
   _fisnish(shell){
@@ -91,6 +91,7 @@ function loadSaleForPrint(sale, callback){
   .loadItems()
   .loadClient()
   .loadProducts((products, sale)=>{
+    
     if (callback){
       var shell = new SaleShell(sale);
 
