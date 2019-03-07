@@ -86,6 +86,25 @@ module.exports= class SaleLoader {
 
   loadItemsDeepAttrs(onCallOuter){
     var funcItemsWeight = (onCallNext)=>{
+
+      EccosysCalls.getSkusFromSale(this.sale, (products)=>{
+        for (let item of this.sale.items) {
+          for (let product of products) {
+            if (item.codigo == product.codigo){
+              item.liq = product.pesoLiq;
+              item.bru = product.pesoBruto;
+              item.local = product.localizacao;
+              item.ncm = product.cf;
+              break;
+            }
+          }
+        }
+
+        this._callbackHit(onCallNext, onCallOuter);
+      });
+
+
+
       var index = this.sale.items.length;
 
       this.sale.items.forEach((item)=>{
@@ -126,23 +145,15 @@ module.exports= class SaleLoader {
     return this;
   }
 
+
   loadProducts(onCallOuter){
     var funcProducts = (onCallNext)=>{
 
-      var index = this.sale.items.length;
-      var products = [];
-
-      this.sale.items.forEach((item)=>{
-        EccosysCalls.getProduct(item.codigo, (product)=>{
-          index--;
-          products.push(product);
-
-          if(index == 0){
-            this._callbackHit(onCallNext, ()=>{
-              onCallOuter(products, this.sale);
-            });
-          }
+      EccosysCalls.getSkusFromSale(this.sale, (products)=>{
+        this._callbackHit(onCallNext, ()=>{
+          onCallOuter(products, this.sale);
         });
+
       });
     };
 
@@ -160,9 +171,9 @@ module.exports= class SaleLoader {
     }else{
       if (typeof this.onFinished == 'function'){
         this.onFinished(this.sale);
+      }
     }
   }
-}
 
   run(onFinished){
     this.onFinished = onFinished;

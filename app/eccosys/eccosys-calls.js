@@ -78,6 +78,33 @@ module.exports = {
     });
   },
 
+  getSkusFromSale(sale, callback) {
+    if(sale.items){
+      var skus = sale.items.map((i)=>{
+        return i.codigo;
+      });
+
+      this.getSkus(skus, callback);
+    }else{
+      if (callback){
+        callback([]);
+      }
+    }
+  },
+
+  getSkus(skus, callback) {
+    new EccosysApi('produtos/' + skus.join(';'))
+    .get((data)=>{
+      var parsed = JSON.parse(checkEccoStatus(data, '[]'));
+
+      if (typeof parsed == 'string'){
+        callback({error : parsed});
+      }else{
+        callback(parsed);
+      }
+    });
+  },
+
   getStockHistory(sku, callback) {
     new EccosysApi('estoques/' + sku + '/registros').get((rows)=>{
       callback(JSON.parse(rows));
@@ -140,7 +167,7 @@ module.exports = {
 function checkEccoStatus(data, def){
   global.eccoConnError = undefined;
 
-  if (data.includes('503 Service Temporarily Unavailable')){
+  if (data.includes('Service Temporarily Unavailable') || data.includes('Bad Gateway')){
     History.error("API Eccosys indisponível no momento.");
     global.eccoConnError = true;
 
@@ -151,18 +178,20 @@ function checkEccoStatus(data, def){
   }else if (data.length == 0){
     return def;
   }
-
+  
   return data;
 }
 
 
 
 function checkNoSale(data, def){
-  var parsed = JSON.parse(data);
+  if (!data.includes('<html>')){
+    var parsed = JSON.parse(data);
 
-  if (typeof parsed == 'string'){
-    console.log(parsed);
-    return def;
+    if (typeof parsed == 'string'){
+      console.log(parsed);
+      return def;
+    }
   }
 
   return checkEccoStatus(data, def);
