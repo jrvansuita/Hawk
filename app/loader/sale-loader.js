@@ -171,6 +171,7 @@ module.exports= class SaleLoader {
     }else{
       if (typeof this.onFinished == 'function'){
         this.onFinished(this.sale);
+        this.onFinished = null;
       }
     }
   }
