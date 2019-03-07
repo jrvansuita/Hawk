@@ -1,5 +1,5 @@
 const Routes = require('../redirects/controller/routes.js');
-const PickingLaws = require('../laws/picking-laws.js');
+const PickingHandler = require('../handler/picking-handler.js');
 const JobSales = require('../jobs/job-sales.js');
 
 module.exports = class JobsRoutes extends Routes{
@@ -24,7 +24,6 @@ function runJobs(req, callback){
       callback();
     }
   }else if (req.body.ref.includes('picking')){
-    PickingLaws.clear(req.session.loggedUserID);
-    callback();
+    PickingHandler.reloadPickingList(req.session.loggedUserID, callback);
   }
 }

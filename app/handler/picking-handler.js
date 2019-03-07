@@ -12,10 +12,14 @@ const TransportLaws = require('../laws/transport-laws.js');
 const UfLaws = require('../laws/uf-laws.js');
 const AutoBlockPicking = require('../auto/auto-block-picking.js');
 
+var loadingList = false;
+
 module.exports = {
 
   init(onFinished) {
-    if (PickingLaws.isFullEmpty() && !BlockHandler.hasBlockSales()) {
+    if (!loadingList && PickingLaws.isFullEmpty() && !BlockHandler.hasBlockSales()) {
+      loadingList = true;
+
       PendingLaws.load(true, ()=>{
         BlockHandler.load(()=>{
           this.load(onFinished);
@@ -23,6 +27,15 @@ module.exports = {
       });
     } else {
         onFinished();
+    }
+  },
+
+  reloadPickingList(userId, callback){
+    if (!loadingList){
+      PickingLaws.clear(userId);
+      this.init(callback);
+    }else{
+      callback();
     }
   },
 
@@ -51,12 +64,17 @@ module.exports = {
             TransportLaws.put(sale.transport);
             new AutoBlockPicking([sale]).run();
           })
+          .onLastSaleLoaded(()=>{
+            loadingList = false;
+          })
           .run(onFinished);
 
         }else{
+          loadingList = false;
           onFinished();
         }
       }catch(e){
+        loadingList = false;
         History.error(e);
         onFinished();
       }
