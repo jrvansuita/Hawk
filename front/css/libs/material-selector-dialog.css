@@ -30,9 +30,9 @@
 
 .ms-items{
   display: block;
-  padding: 0px;
-  margin-top: 15px;
-  margin-bottom: 0px;
+  /* padding: 0px; */
+  /* margin-top: 15px; */
+  /* margin-bottom: 0px; */
 }
 
 .ms-items li{
@@ -73,11 +73,26 @@
 .ms-items  label {
   cursor: pointer;
   padding: 6px 2px;
+
   margin-right: 15px;
   font-size: 13px;
   color: #696666;
   font-weight: 600;
 }
+
+.ms-choices{
+ max-width: 400px;
+}
+
+.ms-choices  label {
+  cursor: pointer;
+  margin: 8px;
+  margin-top: 20px;
+  padding-right: 10px;
+  color: #696666;
+  font-weight: 600;
+}
+
 
 .ms-buttons-holder{
   margin-top: 5px;

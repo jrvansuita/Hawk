@@ -8,6 +8,16 @@ $(document).ready(() => {
   });
 
 
+  $('#select-uf').click(function(){
+    new BasedSelectorDialog('Selecione os Estados', ufList, 'uf', selectedUfs)
+    .show();
+  });
+
+  $('#select-transp').click(function(){
+    new BasedSelectorDialog('Selecione as Transportadoras', transportList, 'transp', selectedTransps)
+    .show();
+  });
+
   $(".blocked-sale-label[data-reason='994']").dblclick(function(){
     window.open(
       '/stock?sku=' + $(this).text(),
@@ -32,7 +42,7 @@ $(document).ready(() => {
   $('.blocked-dots').click(function(e){
     var drop = new MaterialDropdown($(this), e);
 
-     drop.addItem('/img/recycle.png', 'Reciclar Todos', function(){
+    drop.addItem('/img/recycle.png', 'Reciclar Todos', function(){
       $(".table-sale-blocked-holder.not-blocking").each(function(){
         new BlockedPost($(this).data("blocknumber")).call();
       });
@@ -132,7 +142,7 @@ $(document).ready(() => {
 
         _get("/picking-sale",{
           userid: code,
-          uf: selectedUf,
+          uf: selectedUfs,
           transp: selectedTransp
         },
         onSucess,

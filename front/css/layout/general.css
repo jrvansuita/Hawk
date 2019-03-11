@@ -31,7 +31,7 @@ input, span, label {
   text-align: center;
   min-width: 80px;
   display: inline-block;
-  background-color: #1c796b !important;
+  background-color: #1B6E61 !important;
   color: white !important;
   padding: 8px 10px;
   border-radius: 5px;
@@ -41,7 +41,7 @@ input, span, label {
 }
 
 .button:hover{
-  background-color: #1B6E61 !important;
+  background-color: #15564c !important;
 }
 
 .label {

@@ -64,10 +64,10 @@ module.exports = class PickingRoutes extends Routes{
             inprogress: InprogressLaws.object(),
 
             transportList: TransportLaws.getObject(),
-            selectedTransp: TransportLaws.getSelected(),
+            selectedTransps: TransportLaws.getSelecteds(),
 
             ufList: UfLaws.getObject(),
-            selectedUf: UfLaws.getSelected(),
+            selectedUfs: UfLaws.getSelecteds(),
 
             pendingSales: PendingLaws.getList(),
             donePickings: DoneLaws.getList(),

@@ -32,8 +32,6 @@ module.exports = class Product extends DataAccess {
     ]
   };
 
-  console.log(JSON.stringify(query));
-
   this.staticAccess()
   .find(query)
   .limit(limit)

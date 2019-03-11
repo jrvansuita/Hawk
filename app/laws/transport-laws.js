@@ -1,29 +1,37 @@
 global.transportList = {};
 
-global.selectedTransp = undefined;
+global.selectedTransps = undefined;
 
 module.exports = {
 
   select(selected){
 
     if (selected){
-      if (selected == 'all'){
-        global.selectedTransp = undefined;
+      if (selected.includes('all')){
+        global.selectedTransps = undefined;
       }else{
-        global.selectedTransp = selected;
+
+        var transps = [selected];
+
+        if (transps.includes("|")){
+          transps = selected.split('|');
+        }
+
+
+        global.selectedTransps = transps;
       }
     }
   },
 
-  getSelected(){
-    return global.selectedTransp;
-  },
+  getSelecteds(){
+    return global.selectedTransps;
+  }, 
 
   assert(saleList){
-    if (global.selectedTransp){
+    if (global.selectedTransps && (global.selectedTransps.length > 0)){
       if (saleList.length > 0) {
         saleList = saleList.filter(sale =>{
-          return Str.defStr(sale.transportador, Const.no_transport).includes(global.selectedTransp);
+          return global.selectedTransps.join(' ').includes(Str.defStr(sale.transport, Const.no_transport));
         });
       }
     }
@@ -35,12 +43,6 @@ module.exports = {
     global.transportList[transportName] = transportName;
   },
 
-  excluir_put(transportName){
-    var transp = Util.twoNames(transportName, Const.no_transport);
-
-    global.transportList[transp] = transp;
-    return transp;
-  },
 
   getObject() {
     return global.transportList;

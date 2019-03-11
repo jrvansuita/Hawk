@@ -644,3 +644,11 @@ tr.row-padding td{
 .label-transport{
   min-width: 100px;
 }
+
+.sel-option{
+  background-color: #2774ad !important;
+}
+
+.sel-option:hover{
+  background-color: #206292 !important;
+}

@@ -1,32 +1,38 @@
 global.ufList = {};
 
-global.selectedUf = undefined;
-
-const unknow = 'Não encontrado';
-
+global.selectedUfs = undefined;
 
 module.exports = {
 
   select(selected){
+
     if (selected){
-      if (selected == 'all'){
-        global.selectedUf = undefined;
+      if (selected.includes('all')){
+        global.selectedUfs = undefined;
       }else{
-        global.selectedUf = selected;
+
+        var ufs = [selected];
+
+        if (selected.includes("|")){
+          ufs = selected.split('|');
+        }
+
+        global.selectedUfs = ufs;
       }
     }
   },
 
-  getSelected(){
-    return global.selectedUf;
+  getSelecteds(){
+    return global.selectedUfs;
   },
 
   assert(saleList){
 
-    if (global.selectedUf){
+    if (global.selectedUfs && (global.selectedUfs.length > 0)){
       if (saleList.length > 0) {
+
         saleList = saleList.filter(sale =>{
-          return Str.defStr(sale.client ? sale.client.uf : 'none', unknow).includes(global.selectedUf);
+          return global.selectedUfs.join(' ').includes(sale.client ? sale.client.uf : 'none');
         });
       }
     }
