@@ -45,7 +45,7 @@ module.exports = {
 
         PickingLaws.set(sales);
 
-        //this.setOffSales();
+        this.setOffSales();
 
         PickingLaws.handleDevMode();
 

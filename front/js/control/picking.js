@@ -143,7 +143,7 @@ $(document).ready(() => {
         _get("/picking-sale",{
           userid: code,
           uf: selectedUfs,
-          transp: selectedTransp
+          transp: selectedTransps
         },
         onSucess,
         onError);
