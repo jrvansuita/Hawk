@@ -25,9 +25,9 @@ module.exports = {
 
   getSelecteds(){
     return global.selectedTransps;
-  }, 
+  },
 
-  assert(saleList){
+  assert(saleList){ 
     if (global.selectedTransps && (global.selectedTransps.length > 0)){
       if (saleList.length > 0) {
         saleList = saleList.filter(sale =>{
