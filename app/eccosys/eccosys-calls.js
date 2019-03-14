@@ -98,7 +98,7 @@ module.exports = {
       var parsed = JSON.parse(checkEccoStatus(data, '[]'));
 
       if (typeof parsed == 'string'){
-        callback({error : parsed});
+        throw parsed;
       }else{
         //Se o resultado é 1
         if (!Array.isArray(parsed)){

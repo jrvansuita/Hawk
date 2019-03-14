@@ -105,7 +105,7 @@ module.exports= class SaleLoader {
 
 
 
-      var index = this.sale.items.length;
+      /*var index = this.sale.items.length;
 
       this.sale.items.forEach((item)=>{
         EccosysCalls.getProduct(item.codigo, (product)=>{
@@ -119,7 +119,7 @@ module.exports= class SaleLoader {
             this._callbackHit(onCallNext, onCallOuter);
           }
         });
-      });
+      });*/
     };
 
     this.list.push(funcItemsWeight);
