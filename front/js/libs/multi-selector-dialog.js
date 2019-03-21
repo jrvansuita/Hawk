@@ -1,75 +1,42 @@
-class MuiltSelectorDialog {
-  constructor(title) {
-    this.modal = $('<div>').addClass('ms-modal');
-    this.holder = $('<div>').addClass('ms-holder');
-    this.items = $('<div>').addClass('ms-choices');
+class MultiSelectorDialog{
 
-    var $title = $('<label>').addClass('ms-title').text(title);
+  constructor(title, list, paramName, selecteds){
+    this.list = list;
+    this.selecteds = selecteds;
 
-    this.holder.append($title, this.items);
-    this.modal.append(this.holder);
-
-    this.buttons = $('<div>').addClass('ms-buttons-holder');
-    this.holder.append(this.buttons);
-  }
-
-  onNegativeButton(label, callback){
-    var button = $('<label>').addClass('ms-button material-ripple').text(label).click(()=>{
-      this.modal.remove();
-      if (callback){
-        callback();
-      }
+    this.dialog = new BaseSelectorDialog(title);
+    this._createOptions();
+    this.dialog.onNegativeButton('Cancelar')
+    .onPositiveButton('Selecionar',(data)=>{
+      window.location.href = window.location.origin + window.location.pathname + '?'+paramName+'=' + data.join('|');
     });
-
-    this.buttons.append(button);
-
-    return this;
   }
 
-  onPositiveButton(label, callback){
-    var button = $('<label>').addClass('ms-button material-ripple').text(label).click(()=>{
 
-      if (callback){
 
-        var selecteds = $('.pure-material-checkbox input:checkbox:checked').map(function() {
-          return this.name;
-        });
+  _createOptions(){
+    var arr = Object.keys(this.list);
+    this.dialog.addItem('Todos', 'all', this.selecteds == "" || this.selecteds.includes('all') , this.checkToggleAll);
 
-        var arr = selecteds.get();
+    for (var i = 0; i < arr.length; i++) {
+      this.dialog.addItem(arr[i],arr[i], this.selecteds.includes(arr[i]), this.checkToggleAll);
+    }
+  }
 
-        if (arr.length > 0){
-          callback(arr);
-        }
+  checkToggleAll(el, checked){
+
+    if ($(el).attr('name') == 'all'){
+      if (checked){ 
+        $('input:not([name="all"])').removeAttr('checked');
       }
-
-      this.modal.remove();
-    });
-
-    this.buttons.append(button);
-
-    return this;
-  }
-
-  addItem(label, tag, checked){
-    var $checkbox = $('<label>').addClass('pure-material-checkbox').attr('title',label);
-    var input = $('<input>').attr('type', 'checkbox').attr('name', tag);
-    var title = $('<span>').text(label);
-
-    $checkbox.append(input, title);
-
-    this.items.append($checkbox);
-
-    if (checked){
-      input.attr('checked', 'checked');
+    }else{
+      $('input[name="all"]').removeAttr('checked');
     }
 
-    return this;
   }
 
-
   show(){
-    $('body').append(this.modal);
-    this.modal.fadeIn(400);
+    this.dialog.show();
   }
 
 }

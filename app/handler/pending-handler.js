@@ -81,7 +81,7 @@ function sendEmailIfNeed(pending, user,  callback){
       sendEmail(sale, user, callback);
 
     }else{
-      EccosysCalls.getClient(sale.idContato, (client)=>{
+      new EccosysCalls().getClient(sale.idContato, (client)=>{
         sale.client = client;
         sendEmail(sale, user, callback);
       });
@@ -91,7 +91,7 @@ function sendEmailIfNeed(pending, user,  callback){
   }
 }
 
-function sendEmail(sale, user, callback){ 
+function sendEmail(sale, user, callback){
   var pendingEmailSender = new PendingEmailSender();
   pendingEmailSender.client(sale.client.nome, sale.client.email);
   pendingEmailSender.sale(sale);

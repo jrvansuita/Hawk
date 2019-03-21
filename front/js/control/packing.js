@@ -30,20 +30,7 @@ $(document).ready(()=>{
     }
   });
 
-  $('.ncm-input').on("keyup", function(e) {
-    if (e.which == 13){
-      var sku = $(this).data('sku');
 
-      var requestBody = {
-        sku: sku,
-        ncm: $(this).val().trim()
-      };
-      showMainInputTitle('Atualizando NCM...','/loader/circle.svg',  '#a46af1');
-      _post('/product-ncm', requestBody, (res)=>{
-        showMainInputTitle('Deu', 'checked.png');
-      });
-    }
-  });
 
   if (sale.items){
     initForPacking();
@@ -52,7 +39,7 @@ $(document).ready(()=>{
 
 function initForPacking(){
   if (sale.nfe){
-    if (sale.nfe.nfe_msg){
+    if (sale.nfe.situacao = '1'){
       showNfeRejected();
       $('.editable-infos-holder').show();
       $('#packing-done').fadeIn();
@@ -276,9 +263,12 @@ function fmtQtd(saleItem, useDif){
 
 
 function createNcmInput(ncm, sku){
-  var input = $('<input>').addClass('ncm-input editable-input').attr('placeholder','NCM').data('sku',sku).val(ncm);
+  var input = $('<input>').addClass('ncm-input editable-input').attr('placeholder','NCM').data('sku',sku).attr('tabindex','-1').val(ncm);
 
   var td = $('<td>').addClass('product-val').append(input);
+
+  //Eccosys Precisa ainda liberar um endpoint para edição de um item do pedido
+  //input.on("keyup", onEditNcm);
 
 
   return td;
@@ -469,7 +459,8 @@ function postPackingDone(){
     height: Num.def($('#sale-height').val()),
     width: Num.def($('#sale-width').val()),
     length: Num.def($('#sale-length').val()),
-    packageId: $('#sale-package-type').data('sel')
+    packageId: $('#sale-package-type').data('sel'),
+    idNfe: sale.idNotaFiscalRef
   },
   (result)=>{
     onSucess(result);
@@ -496,7 +487,7 @@ function onError(error){
 function onNfeSucess(result){
   hideLastProductView();
 
-  if (result.success.length > 0){
+  if (!result.error.length){
     result = result.success[0];
 
     if (result){
@@ -512,10 +503,11 @@ function onNfeSucess(result){
 
 function showNfeRejected(errorMsg){
 
-  var msg = errorMsg || sale.nfe.nfe_msg;
+  var msg = errorMsg || sale.nfe.nfe_msg || 'Nf-e Pendente' ;
 
   if (msg){
     hideLastProductView();
+    $('#packing-done').fadeIn();
 
     showMessage(msg, true, false);
     showMainInputTitle('Rejeição de Nfe', 'paper-alert.png', '#f1d26a');
@@ -572,5 +564,23 @@ function autoSelectPackingType(callback){
     if (packElement){
       packingTypeCombo.select(packElement);
     }
+  }
+}
+
+
+
+function onEditNcm(e) {
+  if (e.which == 13){
+    var sku = $(this).data('sku');
+
+    var requestBody = {
+      sku: sku,
+      ncm: $(this).val().trim()
+    };
+    showMainInputTitle('Atualizando NCM...','/loader/circle.svg',  '#a46af1');
+    _post('/product-ncm', requestBody, (res)=>{
+      showMainInputTitle('NCM Atualizado', 'checked.png');
+      showMessage('');
+    });
   }
 }

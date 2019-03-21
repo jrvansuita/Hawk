@@ -63,7 +63,7 @@ function clear(){
 }
 
 function handleSalePaging(page, callback) {
-  EccosysCalls.getSales(from, to, page, function(list) {
+  new EccosysCalls().getSales(from, to, page, function(list) {
     try{
       if (Array.isArray(list) && list.length > 0) {
         count += list.length;

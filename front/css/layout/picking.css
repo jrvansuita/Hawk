@@ -344,7 +344,8 @@ tr.row-padding td{
 
 }
 
-
+::placeholder
+{ color: #d2d3d4}
 
 .print-sale{
   width: 18px;
@@ -640,6 +641,7 @@ tr.row-padding td{
   margin-top: -10px;
   margin-left: 5px;
 }
+
 
 .label-transport{
   min-width: 100px;

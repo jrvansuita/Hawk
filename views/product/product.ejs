@@ -1,18 +1,24 @@
 <html>
-<%  include menus/main-menu %>
+<%  include ../menus/main-menu %>
 
 
 <head>
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-select.css">
   <link rel="stylesheet" type="text/css" href="/front/css/layout/product.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-dropdown.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
+
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-selector-dialog.css">
 
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
   <script type="text/javascript" src="/front/js/control/product.js"></script>
 
   <link rel="stylesheet" type="text/css" href="/front/css/libs/easy-autocomplete.css">
   <script type="text/javascript" src="/front/js/libs/easy-autocomplete.min.js"></script>
+  <script type="text/javascript" src="/front/js/libs/input-dialog.js"></script>
   <script type="text/javascript" src="/front/js/libs/Chart.min.js"></script>
   <script type="text/javascript" src="/front/js/libs/stock-chart.js"></script>
+  <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
 </head>
 
 
@@ -21,7 +27,7 @@
   <script>
   window.product = <%- JSON.stringify(product || null) %>
   </script>
-  <%  include menus/stock-menu %>
+  <%  include ../menus/stock-menu %>
 
 
   <div class="main-content">
@@ -194,6 +200,7 @@
                                     <td class="title-col">Estoque Físico</td>
                                     <td class="title-col">Estoque Disponível</td>
                                     <td class="title-col">Estoque Reservado</td>
+                                    <td class="title-col"></td>
                                   </tr>
                                 </table>
 
@@ -213,7 +220,8 @@
                                   <td class="title-col left">Data</td>
                                   <td class="title-col">Usuário</td>
                                   <td class="title-col">Plataforma</td>
-                                  <td class="title-col">Localização</td>
+                                  <td class="title-col">Informação</td>
+                                  <td class="title-col">Novo Valor</td>
                                 </table>
 
                               </div>

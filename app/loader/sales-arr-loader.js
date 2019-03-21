@@ -11,6 +11,12 @@ module.exports= class SalesArrLoader {
     this.createPool();
   }
 
+    setOnError(onError){
+      this.onError = onError;
+      return this;
+    }
+
+
   createPool(){
     this.pool = [];
     this.poolIndex = 0;
@@ -78,7 +84,8 @@ module.exports= class SalesArrLoader {
   _load(onFinished){
     var sale = this.getSale(this.getCurrentPoolSale());
 
-    var saleLoader = new SaleLoader(sale);
+    var saleLoader = new SaleLoader(sale)
+    .setOnError(this.onError);
 
     if (this.loadClient){
       saleLoader.loadClient(this.loadClient);

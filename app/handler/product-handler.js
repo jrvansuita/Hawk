@@ -12,7 +12,7 @@ module.exports ={
   },
 
   getByEan(ean, callback){
-    EccosysCalls.getProduct(ean, (eanProduct)=>{
+    new EccosysCalls().getProduct(ean, (eanProduct)=>{
       if (eanProduct.error){
         handleCallback(callback, eanProduct, ean);
       }else{
@@ -24,7 +24,7 @@ module.exports ={
   },
 
   getBySku(sku, father, callback){
-    EccosysCalls.getProduct(father ? getFatherSku(sku) : sku , (product)=>{
+    new EccosysCalls().getProduct(father ? getFatherSku(sku) : sku , (product)=>{
       handleCallback(callback, product, sku);
     });
   },
@@ -41,7 +41,7 @@ module.exports ={
 
   getStockHistory(sku, callback){
     if (sku){
-      EccosysCalls.getStockHistory(sku, (rows)=>{
+      new EccosysCalls().getStockHistory(sku, (rows)=>{
         callback(rows);
       });
     }else{
@@ -56,7 +56,7 @@ module.exports ={
 
       //Reduzir a obs
       var lines = product.obs.split('\n');
-      lines = lines.slice(lines.length - 5, lines.length);
+      lines = lines.slice(lines.length - 15, lines.length);
 
       lines = lines.join('\n');
 
@@ -64,26 +64,26 @@ module.exports ={
       var body = {
         codigo: product.codigo,
         localizacao: newLocal,
-        obs : lines +  "\n" + user.name + " | Desktop | " + newLocal + " | " + Dat.format(new Date())
+        obs : lines +  "\n" + user.name + " | Desktop | " + newLocal + " | " + Dat.format(new Date()) + '| Localização'
       };
 
 
-      EccosysCalls.updateProduct(body, callback);
+      new EccosysCalls().updateProduct(body, callback);
     });
   },
 
   updateNCM(sku, newNCM, user, callback) {
     this.getBySku(sku, false, (product)=>{
       newNCM = newNCM.trim();
-      var lines = product.obs.split('\n');
+      var lines = product.obs;
 
       var body = {
         codigo: product.codigo,
         cf: newNCM,
-        obs : lines +  "\n" + user.name + " | Desktop | " + newNCM + " | " + Dat.format(new Date())
+        obs : lines +  "\n" + user.name + " | Desktop | " + newNCM + " | " + Dat.format(new Date()) + '| NCM'
       };
 
-      EccosysCalls.updateProduct(body, callback);
+      new EccosysCalls().updateProduct(body, callback);
     });
   },
 
@@ -100,7 +100,7 @@ module.exports ={
       };
 
 
-      EccosysCalls.updateProductStock(product.codigo, body, callback);
+      new EccosysCalls().updateProductStock(product.codigo, body, callback);
     });
   },
 

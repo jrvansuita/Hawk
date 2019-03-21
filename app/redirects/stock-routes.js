@@ -32,7 +32,7 @@ module.exports = class ProductRoutes extends Routes{
       var skuOrEan = req.query.sku || req.query.ean;
 
       ProductLaws.load(skuOrEan, (result)=>{
-        res.render('product',{
+        res.render('product/product',{
           product : result
         });
       });
@@ -50,9 +50,12 @@ module.exports = class ProductRoutes extends Routes{
       ProductHandler.updateStock(req.body.sku, req.body.stock, req.body.user, this._resp().redirect(res));
     });
 
-
-
-
-
-
-}};
+    this._get('/barcode', (req, res) => {
+      ProductHandler.get(req.query.sku, false, (result)=>{
+        res.render('product/barcode',{
+          product : result
+        });
+      });
+    });
+  }
+};

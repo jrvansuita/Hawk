@@ -99,7 +99,7 @@ module.exports = class SaleItemSwapper{
   }
 
   _loadProduct(sku, callback){
-    EccosysCalls.getProduct(sku,(product)=>{
+    new EccosysCalls().getProduct(sku,(product)=>{
       callback(product);
     });
   }
@@ -113,7 +113,7 @@ module.exports = class SaleItemSwapper{
       observacaoInterna: currentObs + '\n' + Const.swaped_items.format(this.quantity, this.targetSku, this.swapSku, this.sale.numeroPedido)
     };
 
-    EccosysCalls.updateSale([body], ()=>{});
+    new EccosysCalls().updateSale([body], ()=>{});
   }
 
   _onError(err){
@@ -136,8 +136,8 @@ module.exports = class SaleItemSwapper{
 
         if (this._checkSaleStatus() && this._checkAllreadyHasSwapSku()){
           if (this._swapTargetSku()){
-            EccosysCalls.removeSaleItems(this.sale.numeroPedido, (res)=>{
-              EccosysCalls.insertSaleItems(this.sale.numeroPedido, this.sale.items, (res)=>{
+            new EccosysCalls().removeSaleItems(this.sale.numeroPedido, (res)=>{
+              new EccosysCalls().insertSaleItems(this.sale.numeroPedido, this.sale.items, (res)=>{
 
                 if (this.onResponse){
                   this.onResponse(true);

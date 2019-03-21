@@ -292,7 +292,8 @@ function buildProductFirstCol(item, slim, pending){
   div = $('<div>').addClass('nobreak');
   var descHolder = $('<label>').addClass('pick-value desc no-wrap').text(getProductName(item.descricao, slim));
   div.append(descHolder);
-  div.append($('<span>').addClass('pick-value right').text(getProductBrand(item.descricao)));
+  var brand = $('<span>').addClass('pick-value right').text(getProductBrand(item.descricao));
+  div.append(brand);
 
   first.append(div);
 
@@ -304,10 +305,12 @@ function buildProductFirstCol(item, slim, pending){
         var productDesc = descHolder.text();
         descHolder.text('Carregando...');
         gtin.text('');
+        brand.text('');
         handlSwapProductSale(pending.number, item.codigo, $(this).val(), parseInt(item.quantidade), (swapProduct)=>{
           descHolder.text(getProductName(swapProduct.nome, slim));
           gtin.text(swapProduct.gtin);
           sku.val(swapProduct.codigo);
+          brand.text(getProductBrand(swapProduct.nome))
           addChangedLabel(gtin);
         },(error)=>{
           descHolder.text(error.slice(0,40) + '...').attr('title',error).addClass("error").delay(3000).queue(function(next){

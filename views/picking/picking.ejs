@@ -11,8 +11,9 @@
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
   <script type="text/javascript" src="/front/js/libs/image-preview.js"></script>
 
+  <script type="text/javascript" src="/front/js/libs/base-multi-selector-dialog.js"></script>
   <script type="text/javascript" src="/front/js/libs/multi-selector-dialog.js"></script>
-  <script type="text/javascript" src="/front/js/libs/based-selector-dialog.js"></script>
+
 
   <!-- To block a sale -->
   <script type="text/javascript" src="/front/js/libs/selector-dialog.js"></script>
@@ -42,6 +43,8 @@
 
   window.selectedTransps = "<%- selectedTransps || undefined %>";
   window.selectedUfs = "<%- selectedUfs || undefined %>";
+
+  window.userSetts = <%- JSON.stringify(locals.loggedUser ? locals.loggedUser.setts ? locals.loggedUser.setts : {} : {}) %>
   </script>
 
   <%  include ../menus/picking-menu %>
@@ -63,6 +66,7 @@
           <p class="sucess msg-input">Sucesso</p>
 
           <div class="picking-selectors-holder">
+
 
             <label class="button shadow <%= selectedTransps  && !selectedTransps.includes('all')  ? 'sel-option' : '' %>"  id="select-transp">Transportes</label>
 

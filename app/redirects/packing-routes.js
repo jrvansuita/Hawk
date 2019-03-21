@@ -33,6 +33,11 @@ module.exports = class PackingRoutes extends Routes{
       PackingHandler.loadTransportTag(res, req.query.idnfe);
     });
 
+
+
+   /*** End Packing Screen ****/
+
+
     this._page('/packing/overview', (req, res) => {
       require('../builder/InvoiceChartBuilder.js').buildOverview(res.locals.loggedUser.full, (charts)=> {
         res.render('packing/packing-chart', {

@@ -18,7 +18,6 @@ module.exports = {
 
   init(onFinished) {
     if (!loadingList && PickingLaws.isFullEmpty() && !BlockHandler.hasBlockSales()) {
-      loadingList = true;
 
       PendingLaws.load(true, ()=>{
         BlockHandler.load(()=>{
@@ -40,8 +39,13 @@ module.exports = {
   },
 
   load(onFinished){
-    EccosysCalls.getPickingSales((sales) => {
+    new EccosysCalls().setOnError((error)=>{
+        loadingList = false;
+        onFinished();
+        throw error;
+      }).getPickingSales((sales) => {
       try{
+        loadingList = true;
 
         PickingLaws.set(sales);
 
@@ -52,6 +56,10 @@ module.exports = {
         if (!PickingLaws.isFullEmpty()){
 
           new SalesArrLoader(PickingLaws.getFullList())
+          .setOnError((error)=>{
+            loadingList = false;
+            throw error;
+          })
           .loadClient((sale)=>{
             if (sale.client)
               UfLaws.put(sale.client.uf);

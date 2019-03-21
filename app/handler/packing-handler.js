@@ -70,11 +70,15 @@ module.exports = {
   },
 
   loadDanfe(res, nfNumber){
-    EccosysCalls.loadDanfe(res, nfNumber);
+    new EccosysCalls().loadDanfe(res, nfNumber);
   },
 
   loadTransportTag(res, idNfe){
-    EccosysCalls.loadTransportTag(res, idNfe);
+    new EccosysCalls().loadTransportTag(res, idNfe);
+  },
+
+  updateNCM(sku, newNCM, user, callback) {
+    
   },
 
   getSalePackingBody(params){
@@ -94,7 +98,7 @@ module.exports = {
   },
 
   updateSale(params, callback){
-    EccosysCalls.updateSale(this.getSalePackingBody(params), (updateResult)=>{
+    new EccosysCalls().updateSale(this.getSalePackingBody(params), (updateResult)=>{
       if (callback){
         var result = JSON.parse(updateResult).result;
         callback(result.success.length > 0, result);
@@ -102,27 +106,37 @@ module.exports = {
     });
   },
 
-  sendNfe(user, saleNumber, callback){
-    EccosysCalls.packingPostNF(saleNumber, user, (nfResult)=>{
-      if (callback){
-        callback(nfResult);
-      }
-    });
+  sendNfe(user, params, callback){
+    if (params.idNfe.length == 0){
+      //Está enviando a nota pela primeira vez
+      new EccosysCalls().packingPostNF(user, params.saleNumber, (nfResult)=>{
+        if (callback){
+          callback(nfResult);
+        }
+      });
+    }else{
+      //A nota já está criada e estamos reenviando ela.
+      new EccosysCalls().resendRejectedNF(user, params.idNfe, (nfResult)=>{
+        if (callback){
+          callback(nfResult);
+        }
+      });
+    }
   },
 
 
   done(params, user, callback){
-    PackagesHandler.decPackStock(params.packageId);
+
 
     this.updateSale(params, (sucess, updateResult)=>{
 
       if (sucess){
-        this.sendNfe(params.saleNumber, user, (nfResult)=>{
-          nfResult =  JSON.parse(nfResult);
+        this.sendNfe(user, params, (nfResult)=>{
+          nfResult = JSON.parse(nfResult);
           console.log(nfResult);
           //'Enviou o resultado via Broadcast'
           global.io.sockets.emit(params.saleNumber, nfResult);
-          if (nfResult.success.length > 0){
+          if (!nfResult.error.length){
             onPackingDone(params, user);
           }
         });
@@ -138,6 +152,7 @@ module.exports = {
 
 function onPackingDone(params, user, callback){
   DoneLaws.remove(params.saleNumber);
+  PackagesHandler.decPackStock(params.packageId);
 
   new SaleLoader(params.saleNumber)
   .loadClient()

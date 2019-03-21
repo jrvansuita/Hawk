@@ -13,8 +13,8 @@ module.exports = class UserHandler {
       params.sector,
       params.avatar,
       params.access,
-      params.full,
-      params.active == false ? false : true,
+      params.full == 'on',
+      params.active != undefined ?  params.active == 'on' : true,
       params.token ? params.token : actual.token ? actual.token : '');
 
       //Gravando as configurações

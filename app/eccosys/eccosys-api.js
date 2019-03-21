@@ -5,11 +5,13 @@ const HOST = process.env.ECCOSYS_HOST;
 const APIKEY = process.env.ECCOSYS_API;
 const SECRET = process.env.ECCOSYS_SECRET;
 
+const Err = require('../error/error.js');
+
 
 module.exports = class EccosysApi{
 
   constructor(path){
-    this.path = path;
+    this.setPath(path);
   }
 
   setMethod(method){
@@ -22,11 +24,20 @@ module.exports = class EccosysApi{
     return this;
   }
 
+  setPath(path){
+    this.path = path;
+    return this;
+  }
+
   setBody(body){
     this.body = body;
     return this;
   }
 
+  setOnError(onError){
+    this.onError = onError;
+    return this;
+  }
 
   options(){
     var path = '/api/' + encodeURI(this.path);
@@ -56,7 +67,28 @@ module.exports = class EccosysApi{
     return options;
   }
 
+
+
+  checkErrorStatus(data){
+    global.eccoConnError = undefined;
+
+    if (
+       data.includes('Service Temporarily Unavailable') ||
+       data.includes('Bad Gateway') ||
+       data.includes('<html>')
+       ){
+
+      global.eccoConnError = true;
+      throw Err.thrw(Const.api_not_availabele + '\n' + this.path, this.user);
+    }
+
+    return data;
+  }
+
+
+
   make(onResponse){
+    var self = this;
     var req = https.request(this.options(), function(res) {
 
       var responseBody = '';
@@ -68,12 +100,15 @@ module.exports = class EccosysApi{
       });
 
       res.on('end', function() {
+        self.checkErrorStatus(responseBody);
         onResponse(responseBody, chucks);
       });
     });
 
     req.on('error', function(e) {
-      console.log('Erro na call eccosys:' + e.toString());
+      if (self.onError){
+          self.onError(new Err(e.toString(), self.user));
+      }
     });
 
     if (this.body){

@@ -1,10 +1,13 @@
 class MaterialDropdown {
-  constructor(parent, event) {
+  constructor(parent, event, pLeft) {
     this.remove();
 
     var $div = $('<div>').addClass('md-dropdown');
     $(parent).append($div);
-    this.items = $('<ul>').css('left', event.pageX -10).css('top', event.pageY - 110);
+
+    var left = pLeft ? pLeft : -10;
+
+    this.items = $('<ul>').css('left', event.pageX + left).css('top', event.pageY - 110);
     $div.append(this.items);
 
     this.items.hide();

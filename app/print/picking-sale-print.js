@@ -91,7 +91,7 @@ function loadSaleForPrint(sale, callback){
   .loadItems()
   .loadClient()
   .loadProducts((products, sale)=>{
-    
+
     if (callback){
       var shell = new SaleShell(sale);
 
@@ -106,7 +106,7 @@ function loadSaleForPrint(sale, callback){
 
 //Marca no Eccosys que o pedido já foi impresso
 function markAsPrinted(saleNumber){
-  EccosysCalls.getSale(saleNumber, (sale)=>{
+  new EccosysCalls().getSale(saleNumber, (sale)=>{
     if (sale.pickingRealizado == "N"){
 
       var body = {
@@ -115,7 +115,7 @@ function markAsPrinted(saleNumber){
         pickingRealizado: "A"
       };
 
-      EccosysCalls.updateSale([body], ()=>{});
+      new EccosysCalls().updateSale([body], ()=>{});
     }
   });
 }

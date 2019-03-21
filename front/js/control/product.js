@@ -26,7 +26,7 @@ $(document).ready(() => {
 
 function findCurrentProduct(){
   var skuOrEan = $('#search').val();
-  if (skuOrEan){
+  if (skuOrEan) {
 
     var url = window.location.origin + window.location.pathname;
     var query;
@@ -113,6 +113,10 @@ function buildChildSku(product, child){
   cols.push(buildTextCol(estoque.estoqueDisponivel).addClass('available-stock'));
   cols.push(buildTextCol(estoque.estoqueReal - estoque.estoqueDisponivel).addClass('reserved-stock'));
 
+  var $options = buildImgCol('img/dots.png', 'Opções');
+
+  cols.push($options);
+
   estoqueRealTotal+= estoque.estoqueReal;
   estoqueDisponivelTotal+= estoque.estoqueDisponivel;
   estoqueReservadoTotal+= estoque.estoqueReal - estoque.estoqueDisponivel;
@@ -139,6 +143,26 @@ function buildChildSku(product, child){
     $tr.addClass('selected');
     $tr.trigger('click');
   }
+
+
+  $options.click(function(e){
+    var drop = new MaterialDropdown($(this), e, -100);
+    drop.addItem('/img/barcode.png', 'Imprimir Etiqueta', function(){
+
+       window.open('/barcode?sku=' + child.codigo, '_blank');
+
+      /*new InputDialog('Impressão de Etiqueta de Produto', 'Quantidade')
+      .onPositiveButton('Imprimir', ()=>{
+
+      })
+      .onNegativeButton('Cancelar')
+      .show();*/
+
+
+    });
+    drop.show();
+
+  });
 
   $('#child-skus-holder').append($tr);
 }
@@ -227,7 +251,7 @@ function buildTextCol(val){
   return buildCol($('<label>').addClass('child-value').text(val));
 }
 
-function buildImgCol(path, title){
+function buildImgCol(path, title, addClass){
   return buildCol($('<img>').addClass('icon').attr('src',path).attr('title',title)).css('text-align', 'center');
 }
 
@@ -265,6 +289,7 @@ function addFooter(){
   $tr.append(buildCol(estoqueRealTotal));
   $tr.append(buildCol(estoqueDisponivelTotal));
   $tr.append(buildCol(estoqueReservadoTotal));
+  $tr.append(buildCol(''));  // Options
   $('#child-skus-holder').append($tr);
 }
 
@@ -285,20 +310,21 @@ function loadObsHistory(child){
   $('#local-history').find("tr:gt(0)").remove();
   $('#local-history').hide();
 
-
   child.obs.split('\n').forEach((line)=>{
     if (line.includes('|')){
       var lineData = line.split('|');
 
       var user = lineData[0];
       var platf = lineData[1];
-      var local = lineData[2];
-      var data = lineData[3];
+      var data = lineData[2];
+      var date = lineData[3];
+      var type = lineData[4];
 
-      var $tr = $('<tr>').append(buildTextCol(data),
+      var $tr = $('<tr>').append(buildTextCol(date),
       buildTextCol(user),
       buildImgCol(platf.includes('Mobile') ? 'img/smartphone.png':'img/pc.png', platf),
-      buildTextCol(local));
+      buildTextCol(type ? type : 'Localização'),
+      buildTextCol(data));
 
       $('#local-history').append($tr);
     }

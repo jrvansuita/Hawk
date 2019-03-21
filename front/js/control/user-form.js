@@ -33,7 +33,7 @@ $(document).ready(() => {
     }
   });
 
-  $('#delete-user').click(()=>{
+  $('#delete').click(()=>{
     if ($('#id').val().length > 0){
       $.ajax({
         url: '/user-delete',

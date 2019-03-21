@@ -14,8 +14,24 @@ const History = require('../bean/history.js');
 
 var page_count = 100;
 
-module.exports = {
-  getSales: (from, to, page, callback) => {
+module.exports = class EccosysCalls{
+
+
+    constructor(){
+     this.call = new EccosysApi();
+    }
+
+
+    setOnError(onError){
+      this.call.setOnError(onError);
+
+      return this;
+    }
+
+
+
+
+  getSales(from, to, page, callback) {
     var query = new Query('$');
 
     query.add('dataConsiderada', 'dataFaturamento');
@@ -23,52 +39,60 @@ module.exports = {
     query.addDate('toDate', to);
     query.add('count', page_count);
     query.add('offset', page_count * page);
-    new EccosysApi('pedidos' + query.build()).get((data)=>{
-      callback(JSON.parse(checkNoSale(data, '[]')));
+
+    this.call.setPath('pedidos' + query.build())
+    .get((data)=>{
+      callback(JSON.parse(data));
     });
-  },
+  }
 
   getSale(number, callback) {
     if (number == undefined){
       callback({});
     }else{
-      new EccosysApi('pedidos/' + number).get((data)=>{
-        callback(JSON.parse(checkNoSale(data, '{}'))[0]);
+
+      this.call.setPath('pedidos/' + number)
+      .get((data)=>{
+        callback(JSON.parse(data)[0]);
       });
     }
-  },
+  }
 
   getSaleItems(number, callback) {
-    new EccosysApi('pedidos/' + number + '/items').get((data)=>{
-      callback(JSON.parse(checkNoSale(data, '[]')));
+    this.call.setPath('pedidos/' + number + '/items')
+    .get((data)=>{
+      callback(JSON.parse(data));
     });
-  },
+  }
 
 
   getPickingSales(callback) {
     //Pronto para picking
-    new EccosysApi('pedidos/situacao/3').get((data)=>{
-      callback(JSON.parse(checkEccoStatus(data, '[]')));
+    this.call.setPath('pedidos/situacao/3')
+    .get((data)=>{
+      callback(JSON.parse(data));
     });
-  },
+  }
 
   getClient(id, callback) {
-    new EccosysApi('clientes/' + id).get((data)=>{
-      callback(JSON.parse(checkNoSale(data, '{}'))[0]);
+    this.call.setPath('clientes/' + id)
+    .get((data)=>{
+      callback(JSON.parse(data)[0]);
     });
-  },
+  }
 
   getNfe(numeronf, callback) {
-    new EccosysApi('notasfiscais/' + numeronf).get((data)=>{
-      callback(JSON.parse(checkEccoStatus(data, '[]'))[0]);
+    this.call.setPath('notasfiscais/' + numeronf)
+    .get((data)=>{
+      callback(JSON.parse(data)[0]);
     });
-  },
+  }
 
 
   getProduct(skuOrEan, callback) {
-    new EccosysApi('produtos/' + (Num.isEan(skuOrEan) ? 'gtin=' + skuOrEan : skuOrEan))
+    this.call.setPath('produtos/' + (Num.isEan(skuOrEan) ? 'gtin=' + skuOrEan : skuOrEan))
     .get((data)=>{
-      var parsed = JSON.parse(checkEccoStatus(data, '{}'));
+      var parsed = JSON.parse(data);
 
       if (typeof parsed == 'string'){
         callback({error : parsed});
@@ -76,7 +100,7 @@ module.exports = {
         callback(parsed);
       }
     });
-  },
+  }
 
   getSkusFromSale(sale, callback) {
     if(sale.items){
@@ -90,12 +114,12 @@ module.exports = {
         callback([]);
       }
     }
-  },
+  }
 
   getSkus(skus, callback) {
-    new EccosysApi('produtos/' + skus.join(';'))
+    this.call.setPath('produtos/' + skus.join(';'))
     .get((data)=>{
-      var parsed = JSON.parse(checkEccoStatus(data, '[]'));
+      var parsed = JSON.parse(data);
 
       if (typeof parsed == 'string'){
         throw parsed;
@@ -108,96 +132,67 @@ module.exports = {
         callback(parsed);
       }
     });
-  },
+  }
 
   getStockHistory(sku, callback) {
-    new EccosysApi('estoques/' + sku + '/registros').get((rows)=>{
-      callback(JSON.parse(rows));
+    this.call.setPath('estoques/' + sku + '/registros')
+    .get((rows)=>{
+        callback(JSON.parse(rows));
     });
-  },
+  }
 
   updateProduct(body, callback) {
-    new EccosysApi('produtos').setBody(body).put((res)=>{
+    this.call.setPath('produtos').setBody(body).put((res)=>{
       callback(JSON.parse(res));
     });
-  },
+  }
 
   updateProductStock(sku, body, callback) {
-    new EccosysApi('estoques/' + sku).setBody(body).post((res)=>{
+    this.call.setPath('estoques/' + sku).setBody(body).post((res)=>{
       callback(JSON.parse(res));
     });
-  },
+  }
 
   updateSale(body, callback) {
-    new EccosysApi('pedidos').setBody(body).put((sucess)=>{
+    this.call.setPath('pedidos').setBody(body).put((sucess)=>{
       callback(sucess);
     });
-  },
+  }
 
   packingPostNF(user, saleNumber, callback){
-    new EccosysApi('nfes/' + saleNumber).setBody({}).withUser(user).post((res)=>{
+    this.call.setPath('nfes/' + saleNumber).setBody({}).withUser(user).post((res)=>{
       callback(res);
     });
-  },
+  }
+
+  resendRejectedNF(user, idNfe, callback){
+    this.call.setPath('nfes/' + idNfe + '/autorizar').setBody({}).withUser(user).post((res)=>{
+      callback(res);
+    });
+  }
 
   loadDanfe(res, nfNumber){
-    new EccosysApi('danfes/' + nfNumber + '/pdf').download(res, nfNumber + '.pdf');
-  },
+    this.call.setPath('danfes/' + nfNumber + '/pdf').download(res, nfNumber + '.pdf');
+  }
 
   loadTransportTag(res, idNfe){
-    new EccosysApi('etiquetas/' + idNfe).download(res, idNfe + '.pdf');
-  },
+    this.call.setPath('etiquetas/' + idNfe).download(res, idNfe + '.pdf');
+  }
 
 
   removeSaleItems(saleNumber, callback){
-    new EccosysApi('pedidos/' + saleNumber + '/items').delete((res)=>{
+    this.call.setPath('pedidos/' + saleNumber + '/items').delete((res)=>{
       if (callback){
         callback(res);
       }
     });
-  },
+  }
 
   insertSaleItems(saleNumber, items, callback){
-    new EccosysApi('pedidos/' + saleNumber + '/items').setBody(items).post((res)=>{
+    this.call.setPath('pedidos/' + saleNumber + '/items').setBody(items).post((res)=>{
       if (callback){
         callback(res);
       }
     });
   }
 };
-
-
-
-
-function checkEccoStatus(data, def){
-  global.eccoConnError = undefined;
-
-  if (data.includes('Service Temporarily Unavailable') || data.includes('Bad Gateway')){
-    History.error("API Eccosys indisponível no momento.");
-    global.eccoConnError = true;
-
-    return def;
-  }else if (data[0] == ('<')){
-    console.log(data);
-    return def;
-  }else if (data.length == 0){
-    return def;
-  }
-
-  return data;
-}
-
-
-
-function checkNoSale(data, def){
-  if (!data.includes('<html>')){
-    var parsed = JSON.parse(data);
-
-    if (typeof parsed == 'string'){
-      console.log(parsed);
-      return def;
-    }
-  }
-
-  return checkEccoStatus(data, def);
-}
