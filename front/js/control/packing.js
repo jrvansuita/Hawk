@@ -38,8 +38,10 @@ $(document).ready(()=>{
 });
 
 function initForPacking(){
+  var nfeRejected = sale.nfe && sale.nfe.situacao == '1';
+
   if (sale.nfe){
-    if (sale.nfe.situacao = '1'){
+    if (nfeRejected){
       showNfeRejected();
       $('.editable-infos-holder').show();
       $('#packing-done').fadeIn();
@@ -59,6 +61,10 @@ function initForPacking(){
   loadProductsOutTable();
 
   addListeners();
+
+  if (sale.nfe && !nfeRejected){
+    $('.editable-input').prop("disabled", true);
+  }
 
   $('#product-ean').focus();
 }

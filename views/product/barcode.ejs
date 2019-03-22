@@ -10,9 +10,14 @@
   <script type="text/javascript" src="/front/js/libs/JsBarcode.all.min.js"></script>
 
   <style>
+    body{
+      display: -webkit-box;
+    }
+
     .etq-holder{
       width: fit-content;
       display:grid;
+      margin-right: 20px;
     }
 
     .bottom-holder{
@@ -59,24 +64,25 @@
 </head>
 <body>
 
-  <div class="etq-holder">
-    <span class="sku-label"><%=product.codigo%></span>
-    <svg id="barcode"></svg>
+  <% for(var i = 0; i < 2; i++) {%>
+    <div class="etq-holder">
+      <span class="sku-label"><%=product.codigo%></span>
+      <svg id="barcode"></svg>
 
-    <div class="bottom-holder">
+      <div class="bottom-holder">
 
-      <% if (product.localizacao.length == 0){%>
-        <span class="ean-label"><%=product.gtin%></span>
+        <% if (product.localizacao.length == 0){%>
+          <span class="ean-label"><%=product.gtin%></span>
 
-      <% } else {%>
-        <span class="ean-label left"><%=product.gtin%></span>
-        <span class="local-label right"><%=product.localizacao%></span>
-      <% }%>
+        <% } else {%>
+          <span class="ean-label left"><%=product.gtin%></span>
+          <span class="local-label right"><%=product.localizacao%></span>
+        <% }%>
       </div>
 
 
     </div>
-
+    <% }%>
   </body>
   </html>
 

@@ -462,4 +462,6 @@ table{
 .ncm-input{
   text-align: left;
   font-size: 13px;
+  width: fit-content;
+  max-width: 100px;
 }

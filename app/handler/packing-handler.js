@@ -78,7 +78,7 @@ module.exports = {
   },
 
   updateNCM(sku, newNCM, user, callback) {
-    
+
   },
 
   getSalePackingBody(params){
@@ -107,16 +107,16 @@ module.exports = {
   },
 
   sendNfe(user, params, callback){
-    if (params.idNfe.length == 0){
-      //Está enviando a nota pela primeira vez
-      new EccosysCalls().packingPostNF(user, params.saleNumber, (nfResult)=>{
+    if (Num.def(params.idNfe) > 0){
+      //A nota já está criada e estamos reenviando ela.
+      new EccosysCalls().resendRejectedNF(user, params.idNfe, (nfResult)=>{
         if (callback){
           callback(nfResult);
         }
       });
     }else{
-      //A nota já está criada e estamos reenviando ela.
-      new EccosysCalls().resendRejectedNF(user, params.idNfe, (nfResult)=>{
+      //Está enviando a nota pela primeira vez
+      new EccosysCalls().packingPostNF(user, params.saleNumber, (nfResult)=>{
         if (callback){
           callback(nfResult);
         }
