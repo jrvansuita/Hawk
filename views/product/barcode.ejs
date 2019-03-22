@@ -17,7 +17,7 @@
     .etq-holder{
       width: fit-content;
       display:grid;
-      margin-right: 20px;
+      margin-right: 150px;
     }
 
     .bottom-holder{
@@ -31,7 +31,7 @@
 
     .ean-label{
       display: block;
-      font-size: 12px;
+      font-size: 20px;
       text-align: center;
       margin-top: -10px;
       z-index: 1;
@@ -39,7 +39,7 @@
 
     .local-label{
       display: block;
-      font-size: 12px;
+      font-size: 20px;
       text-align: center;
       margin-top: -10px;
       z-index: 1;
@@ -47,6 +47,8 @@
     }
 
     .sku-label{
+      padding: 5px;
+      font-size: 26px;
       margin-bottom: -10px;
       z-index: 1;
       font-weight: 800;
@@ -91,8 +93,8 @@
 
     JsBarcode("#barcode", "<%=product.gtin%>", {
       lineColor: "#000",
-      width: 1.5,
-      height: 40,
+      width: 3,
+      height: 80,
       displayValue: false
     });
 
