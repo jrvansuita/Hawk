@@ -49,7 +49,7 @@ function login(code) {
       onSucess();
     },
     error: function(jqXHR, textStatus, errorThrown) {
-      $('.error').text(jqXHR.responseText).fadeIn().delay(2000).fadeOut();
+      $('.error').text(jqXHR.responseText).css('display','block').fadeIn().delay(2000).fadeOut();
       onError();
     }
   });

@@ -7,6 +7,7 @@ module.exports = class UserHandler {
   static storeFromScreen(params, callback) {
     var actual = UsersProvider.get(params.id);
 
+
     var user = new User(parseInt(params.id),
       params.name,
       params.lastName,
@@ -14,7 +15,7 @@ module.exports = class UserHandler {
       params.avatar,
       params.access,
       params.full == 'on',
-      params.active != undefined ?  params.active == 'on' : true,
+      params.active == 'on',
       params.token ? params.token : actual.token ? actual.token : '');
 
       //Gravando as configurações

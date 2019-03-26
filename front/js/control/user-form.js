@@ -53,7 +53,17 @@ $(document).ready(() => {
   if (!loggedUser.full){
     $('#user-search').attr('disabled', true);
     $('#full').attr('disabled', true);
+    $('#token').attr('disabled', true);
   }
+
+  var showActive =  (loggedUser && loggedUser.full && loggedUser.id != selectedUser.id);
+
+  $('#active').attr('disabled', !showActive);
+
+ $('.token-label').click(()=>{
+   $('#token').fadeIn();
+   $('.token-label').hide();
+ });
 
 
   loadSectors();

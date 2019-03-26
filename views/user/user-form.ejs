@@ -26,7 +26,7 @@
 <body>
 
   <script>
-
+  window.selectedUser = <%- JSON.stringify(user) %>
   window.userSetts = <%- JSON.stringify(user ? user.setts ? user.setts : {} : {}) %>
   </script>
 
@@ -80,18 +80,17 @@
           </div>
 
 
-          <%if (loggedUser && loggedUser.full){%>
-            <textarea class="input-val simple-material-input" id="token" placeholder="Token" name="token"  rows="5" title="Token de acesso a API"><%=user ? user.token : ''%></textarea>
-            <%}%>
+          <label class="token-label"> Token de Usuário </label>
+          <textarea class="input-val simple-material-input" id="token" placeholder="Token" name="token"  rows="5" title="Token de acesso a API"><%=user ? user.token : ''%></textarea>
 
 
 
-            <%if (loggedUser && loggedUser.full && loggedUser.id != user.id){%>
-              <label class="pure-material-checkbox">
+
+              <label class="pure-material-checkbox" >
                 <input type="checkbox" id="active" name="active" <%=user ? user.active ? 'checked' : '' : ''%>>
                 <span>Ativo</span>
               </label>
-              <%}%>
+
 
               <label class="pure-material-checkbox">
                 <input type="checkbox" id="full" name="full" <%=user ? user.full ? 'checked' : '' : ''%>>

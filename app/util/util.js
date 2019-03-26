@@ -201,13 +201,13 @@ var Util = {
   },
 
   papersIcon(much){
-    if (much < 5){
+    if (much <= 5){
       return 'paper';
-    }else if (much < 10){
+    }else if (much <= 10){
       return 'papers';
-    }else if (much < 49){
+    }else if (much <= 49){
       return 'many-papers';
-    }else if (much > 50){
+    }else if (much >= 50){
       return 'all-papers';
     }
   },

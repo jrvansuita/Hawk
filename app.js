@@ -27,9 +27,16 @@ app.use(cookieSession({
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
-app.use('/img', express.static('front/img'));
-app.use('/front', express.static('front'));
-app.use('/util', express.static('app/util'));
+var staticOptions = {};
+
+if (process.env.NODE_ENV){
+  staticOptions = { maxAge: 86400000*7 }; // 7 days
+}
+
+app.use('/img', express.static('front/img', staticOptions));
+app.use('/front', express.static('front', staticOptions));
+app.use('/util', express.static('app/util', staticOptions));
+
 
 var timeout = require('connect-timeout');
 app.use(timeout(60000)); // 1 minutos

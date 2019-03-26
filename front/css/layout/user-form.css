@@ -22,6 +22,8 @@ body {
   padding: 0px 15px;
 }
 
+
+
 .fields{
   text-align: left;
   width: 50%;
@@ -164,9 +166,20 @@ body {
   padding-right: 5px;
 }
 
+.token-label{
+  cursor: pointer;
+  padding-top: 25px;
+  width: 80%;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #e4e4e4;
+  font-size: 16px;
+  margin-bottom: 25px;
+  display: -webkit-box;
+  color: #848484;
+}
+
 #token{
-  /* padding-top: 25px; */
-  display: initial;
+  display: none;
   margin-right: 135px;
   height: auto;
   width: 80%;
