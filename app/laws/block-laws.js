@@ -56,7 +56,7 @@ module.exports = {
   match(block, sale){
     if (block.reasonTag.toString() == '994'){
       return sale.items && sale.items.some((item)=>{
-        return item.codigo.toLowerCase() == block.number.toLowerCase();
+        return item.codigo && (item.codigo.toLowerCase() == block.number.toLowerCase());
       });
     }else{
       return (sale.numeroPedido == block.number || sale.numeroDaOrdemDeCompra == block.number);
