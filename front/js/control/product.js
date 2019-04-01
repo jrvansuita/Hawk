@@ -326,7 +326,9 @@ function loadObsHistory(child){
       buildTextCol(type ? type : 'Localização'),
       buildTextCol(data));
 
-      $('#local-history').append($tr);
+
+      $('#local-history tr:first').after($tr);
+      //$('#local-history').append($tr);
     }
 
   });
@@ -341,6 +343,7 @@ var stockRowsHistoryMemory = {};
 function getStockRowsGrouped(childSku, callback){
   if (!stockRowsHistoryMemory[childSku]){
     _get('/product-stock-history', {sku:childSku},(rows)=>{
+      console.log(rows);
       stockRowsHistoryMemory[childSku] = groupStockRows(rows);
       callback(rows);
     });

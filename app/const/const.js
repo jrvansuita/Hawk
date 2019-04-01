@@ -24,7 +24,7 @@ module.exports = {
   cant_starting_picking_update: 'Impossível atualizar a lista de picking agora.\n Tentar novamente em {0} horas.',
   swaped_items : 'Foi realizada a troca de {0} unidade do produto {1} pelo produto {2} no pedido {3}',
   sale_not_picking: 'O Pedido {0} não está pronto para picking.',
-  product_not_in_sale: 'Produto {0} não não encontrato no pedido {1}',
+  product_not_in_sale: 'Produto {0} não foi encontrado no pedido {1}',
   product_in_sale: 'Produto {0} já está no pedido.',
   sale_in_progress: 'Este pedido está em andamento no picking!',
   sale_in_pending: 'Este pedido está nas pendências!',

@@ -105,7 +105,7 @@ module.exports = class EccosysCalls{
   getSkusFromSale(sale, callback) {
     if(sale.items){
       var skus = sale.items.map((i)=>{
-        return i.codigo;
+        return i ? i.codigo : '';
       });
 
       this.getSkus(skus, callback);

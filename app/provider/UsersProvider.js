@@ -6,8 +6,8 @@ module.exports = class UsersProvider {
   static loadAllUsers() {
     global.localUsers = {};
     User.findAll(function(err, users) {
-      users.forEach(function(user) {
-        global.localUsers[user.id] = user;
+      users.forEach(function(user, doc) {
+        global.localUsers[user.id] = user['_doc'];
       });
     });
   }

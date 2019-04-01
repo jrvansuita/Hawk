@@ -60,10 +60,6 @@ module.exports={
         title+= 'em Andamento';
         status= "colocado em atendimento";
 
-
-   console.log('Email enviado');
-   console.log(pending.sendEmail);
-
         if (pending.sendEmail){
           emailStr = '\nEnviado email para o cliente';
         }else{
