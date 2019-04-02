@@ -49,6 +49,12 @@ module.exports = {
   },
 
   loadSale(saleNumber, callback){
+    if (saleNumber == '0'){
+      console.log('loadSale');
+      console.log(new Error().stack);
+    }
+
+
     var fromDone = DoneLaws.get(saleNumber);
 
     if (fromDone && fromDone.packingReady){
@@ -153,6 +159,11 @@ module.exports = {
 function onPackingDone(params, user, callback){
   DoneLaws.remove(params.saleNumber);
   PackagesHandler.decPackStock(params.packageId);
+
+  if (params.saleNumber == '0'){
+    console.log('onPackingDone');
+    console.log(params);
+  }
 
   new SaleLoader(params.saleNumber)
   .loadClient()
