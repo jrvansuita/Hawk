@@ -16,7 +16,7 @@ module.exports = class Err{
     if (e != undefined){
       var message = e.toString();
       if (e instanceof Error){
-        message += "\n" + e.stack.split("\n")[1];
+        message += "\n" + e.stack.split('\n').slice(0, 3).join('\n');
       }
 
       return message;

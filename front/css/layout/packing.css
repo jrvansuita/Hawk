@@ -134,7 +134,9 @@ input{
 
 
 
-.pack-alert{
+
+
+.mini-alert{
   vertical-align: top;
   position: relative;
   margin-top: -4px;
@@ -142,6 +144,7 @@ input{
   width: 20px;
   height: 20px;
   display: none;
+  cursor: help;
 }
 
 

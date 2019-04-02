@@ -48,6 +48,8 @@ const Routes = require('./app/redirects/controller/routes.js');
 const UsersProvider = require('./app/provider/UsersProvider.js');
 
 app.use(function(req, res, next) {
+  res.locals.loggedUser = {};
+
   if (req.session.loggedUserID || Routes.checkIsPathNotLogged(req.path)) {
     if (req.session.loggedUserID != undefined){
       res.locals.loggedUser = UsersProvider.get(req.session.loggedUserID);

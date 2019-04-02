@@ -20,7 +20,7 @@ function isTrueStr(val){
 
 
 function onSimpleMaterialInputError(input){
-  input.addClass("simple-material-input-error").delay(1000).queue(function(next){
+  input.addClass("simple-material-input-error").delay(4000).queue(function(next){
     $(this).removeClass("simple-material-input-error");
     next();
   });

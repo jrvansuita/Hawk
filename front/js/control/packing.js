@@ -23,7 +23,10 @@ $(document).ready(()=>{
   });
 
   $('#sale-liq').blur(()=>{
-    if (Floa.def($('#sale-liq').val()) > 0){
+    var val = Floa.def($('#sale-liq').val());
+
+    if (val > 0){
+      checkSaleInputWheight(val);
       $('#sale-bru').val($('#sale-liq').val());
     }else{
       $('#sale-bru').select();
@@ -75,6 +78,18 @@ function findItem(gtin){
   return sale.items.find((each)=>{
     return each.gtin == gtin;
   });
+}
+
+function checkSaleInputWheight(inputed){
+  if ((sale.pesoLiquido * 3) < inputed){
+    var msg = 'O peso inserido é muito acima do calculado(' + Floa.weight(sale.pesoLiquido) + ')';
+
+    $('.weight-alert')
+    .attr('title',msg)
+    .show();
+  }else{
+    $('.weight-alert').hide();
+  }
 }
 
 function refreshCountProductItens(){
@@ -414,7 +429,7 @@ function checkAndLockSizePacking(pack){
 
 
 function checkAllFields(){
-  var c = checkFloat($('#sale-liq'));
+  var c = checkFloat($('#sale-liq'), !$('.weight-alert').is(':visible'));
   c = checkFloat($('#sale-bru')) & c;
   c = checkInt($('#sale-vols')) & c;
   c = checkMaterialInput($('#sale-esp')) & c;
@@ -427,8 +442,12 @@ function checkAllFields(){
   return c;
 }
 
-function checkFloat(el){
-  if (Floa.def(el.val().replace(',','.')) <= 0){
+function checkFloat(el, andThis){
+  var check = (andThis == false);
+  check = check || (Floa.def(el.val().replace(',','.')) <= 0);
+
+
+  if (check){
     onSimpleMaterialInputError(el);
     return false;
   }
