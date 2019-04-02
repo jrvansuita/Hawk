@@ -70,9 +70,11 @@ module.exports= class SaleLoader {
 
     var funcItems = (onCallNext)=>{
 
-      console.log('/----loadItems----/');
-      console.log(this.sale);
-      console.log(new Error().stack);
+      if (typeof this.sale === 'string'){
+        console.log('/----loadItems----/');
+        console.log(this.sale);
+        console.log(new Error().stack);
+      }
 
       if((!this.sale.items) || (force)){
         new EccosysCalls()
@@ -125,95 +127,95 @@ module.exports= class SaleLoader {
       /*var index = this.sale.items.length;
 
       this.sale.items.forEach((item)=>{
-        new EccosysCalls().getProduct(item.codigo, (product)=>{
-          index--;
-          item.liq = product.pesoLiq;
-          item.bru = product.pesoBruto;
-          item.local = product.localizacao;
-          item.ncm = product.cf;
+      new EccosysCalls().getProduct(item.codigo, (product)=>{
+      index--;
+      item.liq = product.pesoLiq;
+      item.bru = product.pesoBruto;
+      item.local = product.localizacao;
+      item.ncm = product.cf;
 
-          if(index == 0){
-            this._callbackHit(onCallNext, onCallOuter);
-          }
-        });
-      });*/
-    };
+      if(index == 0){
+      this._callbackHit(onCallNext, onCallOuter);
+    }
+  });
+});*/
+};
 
-    this.list.push(funcItemsWeight);
+this.list.push(funcItemsWeight);
 
-    return this;
-  }
+return this;
+}
 
-  loadNfe(onCallOuter){
-    var funcNfe = (onCallNext)=>{
+loadNfe(onCallOuter){
+  var funcNfe = (onCallNext)=>{
 
-      if (this.sale.numeroNotaFiscal && !this.sale.nfe){
-        new EccosysCalls()
-        .setOnError(this.onError)
-        .getNfe(this.sale.numeroNotaFiscal, (nfe)=>{
-          this.sale.nfe = nfe;
-          this._callbackHit(onCallNext, onCallOuter);
-        });
-      }else{
-        this._callbackHit(onCallNext, onCallOuter);
-      }
-    };
-
-    this.list.push(funcNfe);
-
-    return this;
-  }
-
-
-  loadProducts(onCallOuter){
-    var funcProducts = (onCallNext)=>{
-
+    if (this.sale.numeroNotaFiscal && !this.sale.nfe){
       new EccosysCalls()
       .setOnError(this.onError)
-      .getSkusFromSale(this.sale, (products)=>{
-        this._callbackHit(onCallNext, ()=>{
-          onCallOuter(products, this.sale);
-        });
-
-      });
-    };
-
-    this.list.push(funcProducts);
-
-    return this;
-  }
-
-  callFuncs(index){
-    if (index < this.list.length){
-      this.list[index](()=>{
-        index++;
-        this.callFuncs(index);
+      .getNfe(this.sale.numeroNotaFiscal, (nfe)=>{
+        this.sale.nfe = nfe;
+        this._callbackHit(onCallNext, onCallOuter);
       });
     }else{
-      if (typeof this.onFinished == 'function'){
-        this.onFinished(this.sale);
-        this.onFinished = null;
-      }
+      this._callbackHit(onCallNext, onCallOuter);
+    }
+  };
+
+  this.list.push(funcNfe);
+
+  return this;
+}
+
+
+loadProducts(onCallOuter){
+  var funcProducts = (onCallNext)=>{
+
+    new EccosysCalls()
+    .setOnError(this.onError)
+    .getSkusFromSale(this.sale, (products)=>{
+      this._callbackHit(onCallNext, ()=>{
+        onCallOuter(products, this.sale);
+      });
+
+    });
+  };
+
+  this.list.push(funcProducts);
+
+  return this;
+}
+
+callFuncs(index){
+  if (index < this.list.length){
+    this.list[index](()=>{
+      index++;
+      this.callFuncs(index);
+    });
+  }else{
+    if (typeof this.onFinished == 'function'){
+      this.onFinished(this.sale);
+      this.onFinished = null;
     }
   }
+}
 
-  run(onFinished){
-    this.onFinished = onFinished;
+run(onFinished){
+  this.onFinished = onFinished;
 
-    if (typeof this.sale !== 'object'){
-      this.loadSale(this.sale, (sale)=>{
-        if (sale && this.list.length != 0){
-          this.callFuncs(0);
-        }else{
-          if (onFinished){
-            onFinished(sale);
-          }
+  if (typeof this.sale !== 'object'){
+    this.loadSale(this.sale, (sale)=>{
+      if (sale && this.list.length != 0){
+        this.callFuncs(0);
+      }else{
+        if (onFinished){
+          onFinished(sale);
         }
-      });
-    }else{
-      this.callFuncs(0);
-    }
+      }
+    });
+  }else{
+    this.callFuncs(0);
   }
+}
 
 
 
