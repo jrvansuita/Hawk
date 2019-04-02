@@ -70,6 +70,10 @@ module.exports= class SaleLoader {
 
     var funcItems = (onCallNext)=>{
 
+      console.log('/----loadItems----/');
+      console.log(this.sale);
+      console.log(new Error().stack);
+
       if((!this.sale.items) || (force)){
         new EccosysCalls()
         .setOnError(this.onError)
