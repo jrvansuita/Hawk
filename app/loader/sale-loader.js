@@ -36,10 +36,10 @@ module.exports= class SaleLoader {
     .getSale(saleNumber, (sale)=>{
       this.sale = sale;
 
-          if (sale == '0'){
-            console.log('/---- Sale Zero  loadSale ----/');
-            console.log(new Error().stack);
-          }
+      if (sale == '0'){
+        console.log('/---- Sale Zero  loadSale ----/');
+        console.log(new Error().stack);
+      }
 
       onCallOuter(sale);
     });
@@ -96,9 +96,15 @@ module.exports= class SaleLoader {
           this.sale.items = items;
 
           if (items.length > 0){
-            this.sale.itemsQuantity = items.reduce(function(a, b) {
-              return a + parseFloat(b.quantidade);
-            }, 0);
+
+            if (!items.reduce){
+              Err.thrw('Era para dar o erro de reduce porque os itens estão assim: ' + items);
+            }else{
+
+              this.sale.itemsQuantity = items.reduce(function(a, b) {
+                return a + parseFloat(b.quantidade);
+              }, 0);
+            }
           }
 
           this._callbackHit(onCallNext, onCallOuter);
