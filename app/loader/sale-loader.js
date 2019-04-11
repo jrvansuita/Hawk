@@ -5,6 +5,12 @@ module.exports= class SaleLoader {
 
   constructor(data){
     this.sale = data;
+
+    if (this.sale == '0'){
+      console.log('/---- Sale Zero ----/');
+      console.log(new Error().stack);
+    }
+
     this.list = [];
   }
 
@@ -29,6 +35,12 @@ module.exports= class SaleLoader {
     .setOnError(this.onError)
     .getSale(saleNumber, (sale)=>{
       this.sale = sale;
+
+          if (sale == '0'){
+            console.log('/---- Sale Zero  loadSale ----/');
+            console.log(new Error().stack);
+          }
+
       onCallOuter(sale);
     });
   }

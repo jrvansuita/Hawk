@@ -47,7 +47,14 @@ module.exports = {
 
     HistoryStorer.pending(user.id, pending);
 
-    pending.upsert(()=>{
+    pending.upsert((doc, err)=>{
+
+    //console.log(pending);
+    //console.log('err');
+    //console.log(err);
+    //console.log('doc');
+    //console.log(pending.toObject());
+
       //Add new pending sale
       this.getList().push(pending);
       callback();

@@ -30,7 +30,7 @@ app.set('views', __dirname + '/views');
 var staticOptions = {};
 
 if (process.env.NODE_ENV){
-  staticOptions = { maxAge: 86400000*7 }; // 7 days
+  staticOptions = { maxAge: 86400000*1 }; // 1 days
 }
 
 app.use('/img', express.static('front/img', staticOptions));

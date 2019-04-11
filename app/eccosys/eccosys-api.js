@@ -79,7 +79,8 @@ module.exports = class EccosysApi{
        ){
 
       global.eccoConnError = true;
-      throw Err.thrw(Const.api_not_availabele + '\n' + this.path, this.user);
+      console.log(data);
+      throw Err.thrw(Const.api_not_available.format(data) + '\n' + this.path, this.user);
     }
 
     return data;

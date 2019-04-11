@@ -142,7 +142,7 @@ module.exports = {
           console.log(nfResult);
           //'Enviou o resultado via Broadcast'
           global.io.sockets.emit(params.saleNumber, nfResult);
-          if (!nfResult.error.length){
+          if (nfResult.error && !nfResult.error.length){
             onPackingDone(params, user);
           }
         });

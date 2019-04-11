@@ -11,7 +11,7 @@ module.exports = class UserRoutes extends Routes{
       if (user){
         this._resp().sucess(res, user);
       }else{
-        this._resp().error(res, 'Usuário não encontrado');
+        this._resp().error(res, 'Usuário ' + req.query.userId + ' não encontrado');
       }
 
     }, true);
@@ -37,15 +37,6 @@ module.exports = class UserRoutes extends Routes{
       res.status(200).send('Ok');
     }, true);
 
-
-  
-
-
-
-
   }
-
-
-
 
 };

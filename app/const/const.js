@@ -30,7 +30,7 @@ module.exports = {
   sale_in_pending: 'Este pedido está nas pendências!',
   sale_not_found: 'O pedido {0} não foi encontrado ou não existe.',
 
-  api_not_availabele : "API Eccosys indisponível no momento.",
+  api_not_available : "API Eccosys indisponível no momento. Erro: {0}",
 
 
   from_to: 'De {0} Até {1}',

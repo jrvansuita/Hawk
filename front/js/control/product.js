@@ -131,11 +131,12 @@ function buildChildSku(product, child){
   $('.label-val-title').hide();
 
   $tr.click(()=>{
-    $('.label-val-title').hide();
     $('.selected').removeClass('selected');
     $tr.addClass('selected');
     onChildSelected(child);
   });
+
+
 
   var sel = product.selected.toLowerCase();
 
@@ -298,6 +299,8 @@ var lastSelected;
 
 function onChildSelected(child){
   if (lastSelected != child.codigo){
+    $('.label-val-title').hide();
+
     loadObsHistory(child);
     loadStockHistory(child.codigo);
   }
@@ -343,9 +346,8 @@ var stockRowsHistoryMemory = {};
 function getStockRowsGrouped(childSku, callback){
   if (!stockRowsHistoryMemory[childSku]){
     _get('/product-stock-history', {sku:childSku},(rows)=>{
-      console.log(rows);
       stockRowsHistoryMemory[childSku] = groupStockRows(rows);
-      callback(rows);
+      callback(stockRowsHistoryMemory[childSku]);
     });
   }else{
     callback(stockRowsHistoryMemory[childSku]);
