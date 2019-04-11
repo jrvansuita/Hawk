@@ -1,5 +1,6 @@
 const EccosysCalls = require('../eccosys/eccosys-calls.js');
 const History = require('../bean/history.js');
+const Err = require('../error/error.js');
 
 module.exports= class SaleLoader {
 
