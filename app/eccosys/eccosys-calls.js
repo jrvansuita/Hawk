@@ -61,7 +61,9 @@ module.exports = class EccosysCalls{
   getSaleItems(number, callback) {
     this.call.setPath('pedidos/' + number + '/items')
     .get((data)=>{
-      callback(JSON.parse(data));
+      var items = JSON.parse(data);
+      
+      callback(typeof items === 'string' ? [] : items);
     });
   }
 
