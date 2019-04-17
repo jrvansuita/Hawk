@@ -103,6 +103,7 @@ module.exports= class SaleLoader {
 
             if (!items.reduce){
               console.log(items);
+              console.log(this.sale);
               Err.thrw('Era para dar o erro de reduce porque os itens estão assim: ' + items);
             }else{
 
