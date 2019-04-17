@@ -27,15 +27,9 @@ class UserSelector{
   }
 
   findUserByName(name){
-    var arr = Object.keys(this.users);
+    var ind = name.split('-')[1].trim();
 
-    for(var i = 0; i < arr.length; i++){
-      var user = this.users[arr[i]];
-
-      if (user.name.trim() == name.trim()){
-        return user;
-      }
-    }
+    return Object.values(this.users)[ind];
   }
 
   findUserByAccess(access){
@@ -62,12 +56,12 @@ class UserSelector{
 
   handle(users){
     this.users = users;
-
     this.selectorOptions = [];
 
-    Object.keys(users).forEach((key)=>{
-      if (users[key].avatar)
-      this.selectorOptions[users[key].name] = users[key].avatar;
+    Object.keys(users).forEach((key, index)=>{
+      if (users[key].avatar){
+        this.selectorOptions[users[key].name + ' - ' + index] = users[key].avatar;
+      }
     });
   }
 

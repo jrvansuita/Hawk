@@ -30,7 +30,8 @@ app.set('views', __dirname + '/views');
 var staticOptions = {};
 
 if (process.env.NODE_ENV){
-  staticOptions = { maxAge: 86400000*1 }; // 1 days
+  //Desligado o cache nos staticos
+//  staticOptions = { maxAge: 86400000*1 }; // 1 days
 }
 
 app.use('/img', express.static('front/img', staticOptions));

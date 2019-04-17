@@ -18,7 +18,10 @@ $(document).ready(() => {
   });
 
   userSelector.setOnSelect((name)=>{
+    console.log(name);
+
     var user = userSelector.findUserByName(name);
+    console.log(user);
     window.location=
     '/user-form?userId='+ user.id;
   });

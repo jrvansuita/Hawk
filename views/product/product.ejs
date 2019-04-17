@@ -38,7 +38,7 @@
           <%if (product.codigo){%>
             <a href="<%=product.img ? product.img.url : ''%>" target="_blank">
               <label id="top-sku" class="top-label"><%=product.codigo%></label>
-              <label id="top-product-name" class="top-label"><%=Str.short(product.nome.split('-')[0], 42)%></label>
+              <label id="top-product-name" class="top-label"><%=Str.short(Util.getProductName(product.nome), 42)%></label>
             </a>
             <%var brand = product.Marca ? product.Marca : ''%>
             <a href="<%=process.env.STORE_UTL + '/' + brand.replace(' ', '-').toLowerCase(); %>" target="_blank">

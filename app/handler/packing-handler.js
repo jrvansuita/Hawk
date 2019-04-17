@@ -160,11 +160,6 @@ function onPackingDone(params, user, callback){
   DoneLaws.remove(params.saleNumber);
   PackagesHandler.decPackStock(params.packageId);
 
-  if (params.saleNumber == '0'){
-    console.log('onPackingDone');
-    console.log(params);
-  }
-
   new SaleLoader(params.saleNumber)
   .loadClient()
   .loadItems()
@@ -192,6 +187,15 @@ function prepareDoneList(){
     var doneSale = doneList[i];
 
     if (!doneSale.packingReady){
+
+    if (!Util.isObject(doneSale)){
+      console.log('prepareDoneList');
+      console.log('not object');
+
+    }
+
+   console.log(doneSale);
+
       var loader = new SaleLoader(doneSale)
       .loadClient()
       .reloadItems()

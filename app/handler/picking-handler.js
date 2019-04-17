@@ -13,6 +13,7 @@ const UfLaws = require('../laws/uf-laws.js');
 const AutoBlockPicking = require('../auto/auto-block-picking.js');
 
 var loadingList = false;
+var loadingId = 0;
 
 module.exports = {
 
@@ -69,6 +70,7 @@ module.exports = {
             return !BlockHandler.checkAllBlocksAndCapture(sale);
           })
           .onEverySaleLoaded((sale)=>{
+            attachRunningChecker();
             TransportLaws.put(sale.transport);
             new AutoBlockPicking([sale]).run();
           })
@@ -152,6 +154,12 @@ module.exports = {
     return PickingLaws.getFullList().length;
   }
 
-
-
 };
+
+
+function attachRunningChecker(){
+  clearTimeout(loadingId);
+  loadingId = setTimeout(function(){
+    loadingList = false; 
+  }, 10000);
+}

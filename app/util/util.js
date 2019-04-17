@@ -45,6 +45,10 @@ var Util = {
     }
   },
 
+  isObject (value) {
+    return value && typeof value === 'object' && value.constructor === Object;
+  },
+
   selectContent: function(element) {
     var range = document.createRange();
     range.selectNodeContents(element);
@@ -218,7 +222,25 @@ var Util = {
     .sort((a, b)=>{
       return new Date(a[0]) - new Date(b[0]);
     }).reduce((obj, [k,v]) => ({...obj,[k]: v}), {});
+  },
+
+
+   getProductBrand(name, isChild){
+    var spl = name.split('-');
+    var brand = spl[spl.length + (isChild  ? -2 : -1)];
+
+
+    return brand;
+  },
+
+   getProductName(name, isChild){
+    var desc = name.split('-').slice(0, isChild ? -2: -1).join('-').trim();
+
+    return desc;
   }
+
+
+
 
 };
 

@@ -288,11 +288,10 @@ function buildProductFirstCol(item, slim, pending){
   div.append(gtin);
   first.append(div);
 
-
   div = $('<div>').addClass('nobreak');
-  var descHolder = $('<label>').addClass('pick-value desc no-wrap').text(getProductName(item.descricao, slim));
+  var descHolder = $('<label>').addClass('pick-value desc no-wrap').text(Util.getProductName(item.descricao, true));
   div.append(descHolder);
-  var brand = $('<span>').addClass('pick-value right').text(getProductBrand(item.descricao));
+  var brand = $('<span>').addClass('pick-value right').text(Util.getProductBrand(item.descricao, true));
   div.append(brand);
 
   first.append(div);
@@ -307,10 +306,10 @@ function buildProductFirstCol(item, slim, pending){
         gtin.text('');
         brand.text('');
         handlSwapProductSale(pending.number, item.codigo, $(this).val(), parseInt(item.quantidade), (swapProduct)=>{
-          descHolder.text(getProductName(swapProduct.nome, slim));
+          descHolder.text(Util.getProductName(swapProduct.nome, true));
           gtin.text(swapProduct.gtin);
           sku.val(swapProduct.codigo);
-          brand.text(getProductBrand(swapProduct.nome))
+          brand.text(Util.getProductBrand(swapProduct.nome, true))
           addChangedLabel(gtin);
         },(error)=>{
           descHolder.text(error.slice(0,40) + '...').attr('title',error).addClass("error").delay(3000).queue(function(next){
@@ -515,29 +514,6 @@ function getPendingLocal(pending){
   }
 }
 
-
-function getProductBrand(name){
-  var brand = name.split('-');
-  brand = brand.length >=2 ? brand[1].trim() : "";
-
-  if (brand.length > 10){
-    brand = brand.split(' ')[0];
-  }
-
-  return brand;
-}
-
-function getProductName(name, slim){
-  var desc = name.split('-')[0];
-
-  if (slim){
-    desc = desc.trim().split(' ');
-    if (desc.length >= 3){
-      desc = desc[0] +  ' ' + desc[desc.length-1];
-    }
-  }
-  return desc;
-}
 
 
 

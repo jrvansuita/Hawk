@@ -1,5 +1,7 @@
 const EccosysCalls = require('../eccosys/eccosys-calls.js');
 const History = require('../bean/history.js');
+
+
 const Err = require('../error/error.js');
 
 module.exports= class SaleLoader {
@@ -99,6 +101,7 @@ module.exports= class SaleLoader {
           if (items.length > 0){
 
             if (!items.reduce){
+              console.log(items);
               Err.thrw('Era para dar o erro de reduce porque os itens estão assim: ' + items);
             }else{
 
