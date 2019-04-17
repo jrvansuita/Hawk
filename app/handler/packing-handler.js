@@ -165,6 +165,8 @@ function onPackingDone(params, user, callback){
   .loadItems()
   .run((sale)=>{
     if (sale){
+      console.log('Passou no onPackingDone - run');
+      console.log(params);
       var day = Day.packing(user.id, Dat.today, sale);
 
       HistoryStorer.packing(user.id, sale, day);
