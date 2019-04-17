@@ -87,7 +87,8 @@ module.exports= class SaleLoader {
 
       if (typeof this.sale === 'string'){
         console.log('/----loadItems----/');
-        console.log(this.sale);
+        console.log(this.sale.numeroPedido);
+        console.log(this.sale.itemsQuantity);
         console.log(new Error().stack);
       }
 
