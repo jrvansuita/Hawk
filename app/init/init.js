@@ -1,3 +1,5 @@
+global.eccoConnErrors = 0;
+
 //Load enviroment variable into node process.env. See any *.env files on root dir.
 require('../init/dotenv.js');
 

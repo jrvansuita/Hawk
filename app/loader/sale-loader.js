@@ -9,9 +9,9 @@ module.exports= class SaleLoader {
   constructor(data){
     this.sale = data;
 
-    if (this.sale == '0'){
-      console.log('/---- Sale Zero ----/');
-      console.log(new Error().stack);
+    if (typeof this.sale === 'string'){
+      console.log('/----SaleLoader - constructor ----/');
+      console.log(this.sale);
     }
 
     this.list = [];
@@ -89,6 +89,7 @@ module.exports= class SaleLoader {
         console.log('/----loadItems----/');
         console.log(this.sale.numeroPedido);
         console.log(this.sale.itemsQuantity);
+        console.log(this.sale);
         console.log(new Error().stack);
       }
 

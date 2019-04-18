@@ -70,17 +70,19 @@ module.exports = class EccosysApi{
 
 
   checkErrorStatus(data){
-    global.eccoConnError = undefined;
-
     if (
-       data.includes('Service Temporarily Unavailable') ||
-       data.includes('Bad Gateway') ||
-       data.includes('<html>')
-       ){
+      data.includes('Service Temporarily Unavailable') ||
+      data.includes('Bad Gateway') ||
+      data.includes('<html>')
+    ){
 
-      global.eccoConnError = true;
+      global.eccoConnErrors++;
       console.log(data);
       throw Err.thrw(Const.api_not_available.format(data) + '\n' + this.path, this.user);
+    }else{
+      if (global.eccoConnErrors > 0){
+        global.eccoConnErrors--;
+      }
     }
 
     return data;
@@ -108,7 +110,7 @@ module.exports = class EccosysApi{
 
     req.on('error', function(e) {
       if (self.onError){
-          self.onError(new Err(e.toString(), self.user));
+        self.onError(new Err(e.toString(), self.user));
       }
     });
 
