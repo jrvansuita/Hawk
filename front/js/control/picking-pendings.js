@@ -283,7 +283,6 @@ function buildProductFirstCol(item, slim, pending){
     addChangedLabel(gtin);
   }
 
-
   div.append(sku);
   div.append(gtin);
   first.append(div);

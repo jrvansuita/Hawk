@@ -47,7 +47,6 @@ function initForPacking(){
     if (nfeRejected){
       showNfeRejected();
       $('.editable-infos-holder').show();
-      $('#packing-done').fadeIn();
     }else {
       showNfePrintControls();
     }
@@ -532,7 +531,9 @@ function showNfeRejected(errorMsg){
 
   if (msg){
     hideLastProductView();
-    $('#packing-done').fadeIn();
+    //Por enquanto não mostra o botão para reenviar porque não está pronta a função
+    //E está causando duplicidade de nota para o mesmo pedido.
+    //$('#packing-done').fadeIn();
 
     showMessage(msg, true, false);
     showMainInputTitle('Rejeição de Nfe', 'paper-alert.png', '#f1d26a');

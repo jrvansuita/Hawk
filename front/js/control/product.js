@@ -308,7 +308,6 @@ function onChildSelected(child){
   lastSelected = child.codigo;
 }
 
-
 function loadObsHistory(child){
   $('#local-history').find("tr:gt(0)").remove();
   $('#local-history').hide();
@@ -333,7 +332,6 @@ function loadObsHistory(child){
       $('#local-history tr:first').after($tr);
       //$('#local-history').append($tr);
     }
-
   });
 
   if ($('#local-history tr').length > 1){
