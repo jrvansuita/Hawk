@@ -17,184 +17,224 @@ var page_count = 100;
 module.exports = class EccosysCalls{
 
 
-    constructor(){
-     this.call = new EccosysApi();
+  constructor(){
+    this.call = new EccosysApi();
+    this.query = new Query('$');
+    this.pageCount(100);
+  }
+
+  setOnError(onError){
+    this.call.setOnError(onError);
+
+    return this;
+  }
+
+  pageCount(pageCount){
+    this.page_count = pageCount;
+    return this;
+  }
+
+  page(page){
+    this.query.add('count', this.page_count);
+    this.query.add('offset', this.page_count * page);
+    return this;
+  }
+
+  dates(from, to, considerDate){
+    if (considerDate){
+      this.query.add('dataConsiderada', considerDate);
     }
 
+    this.query.addDate('fromDate', from);
+    this.query.addDate('toDate', to);
 
-    setOnError(onError){
-      this.call.setOnError(onError);
-
-      return this;
-    }
-
-
-
-
-  getSales(from, to, page, callback) {
-    var query = new Query('$');
-
-    query.add('dataConsiderada', 'dataFaturamento');
-    query.addDate('fromDate', from);
-    query.addDate('toDate', to);
-    query.add('count', page_count);
-    query.add('offset', page_count * page);
-
-    this.call.setPath('pedidos' + query.build())
-    .get((data)=>{
-      callback(JSON.parse(data));
-    });
+    return this;
   }
 
-  getSale(number, callback) {
-    if (number == undefined){
-      callback({});
-    }else{
-
-      this.call.setPath('pedidos/' + number)
-      .get((data)=>{
-        callback(JSON.parse(data)[0]);
-      });
-    }
+  order(order){
+    this.query.add('order', order);
+    return this;
   }
 
-  getSaleItems(number, callback) {
-    this.call.setPath('pedidos/' + number + '/items')
-    .get((data)=>{
-      var items = JSON.parse(data);
-      
-      callback(typeof items === 'string' ? [] : items);
-    });
+  active(){
+    this.query.add('filter', 'situacao=A');
+    return this;
   }
 
+  /*getSales(from, to, page, callback) {
+  var query = new Query('$');
 
-  getPickingSales(callback) {
-    //Pronto para picking
-    this.call.setPath('pedidos/situacao/3')
-    .get((data)=>{
-      callback(JSON.parse(data));
-    });
-  }
+  query.add('dataConsiderada', 'dataFaturamento');
+  query.addDate('fromDate', from);
+  query.addDate('toDate', to);
+  query.add('count', page_count);
+  query.add('offset', page_count * page);
 
-  getClient(id, callback) {
-    this.call.setPath('clientes/' + id)
+  this.call.setPath('pedidos' + query.build())
+  .get((data)=>{
+  callback(JSON.parse(data));
+});
+}
+*/
+
+
+getSale(number, callback) {
+  if (number == undefined){
+    callback({});
+  }else{
+
+    this.call.setPath('pedidos/' + number)
     .get((data)=>{
       callback(JSON.parse(data)[0]);
     });
   }
+}
 
-  getNfe(numeronf, callback) {
-    this.call.setPath('notasfiscais/' + numeronf)
-    .get((data)=>{
-      callback(JSON.parse(data)[0]);
-    });
-  }
+getSaleItems(number, callback) {
+  this.call.setPath('pedidos/' + number + '/items')
+  .get((data)=>{
+    var items = JSON.parse(data);
+
+    callback(typeof items === 'string' ? [] : items);
+  });
+}
 
 
-  getProduct(skuOrEan, callback) {
-    this.call.setPath('produtos/' + (Num.isEan(skuOrEan) ? 'gtin=' + skuOrEan : skuOrEan))
-    .get((data)=>{
-      var parsed = JSON.parse(data);
+getPickingSales(callback) {
+  //Pronto para picking
+  this.call.setPath('pedidos/situacao/3')
+  .get((data)=>{
+    callback(JSON.parse(data));
+  });
+}
 
-      if (typeof parsed == 'string'){
-        callback({error : parsed});
-      }else{
-        callback(parsed);
-      }
-    });
-  }
+getClient(id, callback) {
+  this.call.setPath('clientes/' + id)
+  .get((data)=>{
+    callback(JSON.parse(data)[0]);
+  });
+}
 
-  getSkusFromSale(sale, callback) {
-    if(sale.items){
-      var skus = sale.items.map((i)=>{
-        return i ? i.codigo : '';
-      });
+getNfe(numeronf, callback) {
+  this.call.setPath('notasfiscais/' + numeronf)
+  .get((data)=>{
+    callback(JSON.parse(data)[0]);
+  });
+}
 
-      this.getSkus(skus, callback);
+
+getProducts(callback) {
+  this.call.setPath('produtos' + this.query.build())
+  .get((data)=>{
+    callback(JSON.parse(data));
+  });
+}
+
+
+getProduct(skuOrEan, callback) {
+  this.call.setPath('produtos/' + (Num.isEan(skuOrEan) ? 'gtin=' + skuOrEan : skuOrEan))
+  .get((data)=>{
+    var parsed = JSON.parse(data);
+
+    if (typeof parsed == 'string'){
+      callback({error : parsed});
     }else{
-      if (callback){
-        callback([]);
-      }
+      callback(parsed);
+    }
+  });
+}
+
+getSkusFromSale(sale, callback) {
+  if(sale.items){
+    var skus = sale.items.map((i)=>{
+      return i ? i.codigo : '';
+    });
+
+    this.getSkus(skus, callback);
+  }else{
+    if (callback){
+      callback([]);
     }
   }
+}
 
-  getSkus(skus, callback) {
-    this.call.setPath('produtos/' + skus.join(';'))
-    .get((data)=>{
-      var parsed = JSON.parse(data);
+getSkus(skus, callback) {
+  this.call.setPath('produtos/' + skus.join(';'))
+  .get((data)=>{
+    var parsed = JSON.parse(data);
 
-      if (typeof parsed == 'string'){
-        throw parsed;
-      }else{
-        //Se o resultado é 1
-        if (!Array.isArray(parsed)){
-          parsed = [parsed];
-        }
-
-        callback(parsed);
+    if (typeof parsed == 'string'){
+      throw parsed;
+    }else{
+      //Se o resultado é 1
+      if (!Array.isArray(parsed)){
+        parsed = [parsed];
       }
-    });
-  }
 
-  getStockHistory(sku, callback) {
-    this.call.setPath('estoques/' + sku + '/registros')
-    .get((rows)=>{
-        callback(JSON.parse(rows));
-    });
-  }
+      callback(parsed);
+    }
+  });
+}
 
-  updateProduct(body, callback) {
-    this.call.setPath('produtos').setBody(body).put((res)=>{
-      callback(JSON.parse(res));
-    });
-  }
+getStockHistory(sku, callback) {
+  this.call.setPath('estoques/' + sku + '/registros' +  this.query.build())
+  .get((rows)=>{
+    callback(JSON.parse(rows));
+  });
+}
 
-  updateProductStock(sku, body, callback) {
-    this.call.setPath('estoques/' + sku).setBody(body).post((res)=>{
-      callback(JSON.parse(res));
-    });
-  }
+updateProduct(body, callback) {
+  this.call.setPath('produtos').setBody(body).put((res)=>{
+    callback(JSON.parse(res));
+  });
+}
 
-  updateSale(body, callback) {
-    this.call.setPath('pedidos').setBody(body).put((sucess)=>{
-      callback(sucess);
-    });
-  }
+updateProductStock(sku, body, callback) {
+  this.call.setPath('estoques/' + sku).setBody(body).post((res)=>{
+    callback(JSON.parse(res));
+  });
+}
 
-  packingPostNF(user, saleNumber, callback){
-    this.call.setPath('nfes/' + saleNumber).setBody({}).withUser(user).post((res)=>{
+updateSale(body, callback) {
+  this.call.setPath('pedidos').setBody(body).put((sucess)=>{
+    callback(sucess);
+  });
+}
+
+packingPostNF(user, saleNumber, callback){
+  this.call.setPath('nfes/' + saleNumber).setBody({}).withUser(user).post((res)=>{
+    callback(res);
+  });
+}
+
+resendRejectedNF(user, idNfe, callback){
+  this.call.setPath('nfes/' + idNfe + '/autorizar').setBody({}).withUser(user).post((res)=>{
+    callback(res);
+  });
+}
+
+loadDanfe(res, nfNumber){
+  this.call.setPath('danfes/' + nfNumber + '/pdf').download(res, nfNumber + '.pdf');
+}
+
+loadTransportTag(res, idNfe){
+  this.call.setPath('etiquetas/' + idNfe).download(res, idNfe + '.pdf');
+}
+
+
+removeSaleItems(saleNumber, callback){
+  this.call.setPath('pedidos/' + saleNumber + '/items').delete((res)=>{
+    if (callback){
       callback(res);
-    });
-  }
+    }
+  });
+}
 
-  resendRejectedNF(user, idNfe, callback){
-    this.call.setPath('nfes/' + idNfe + '/autorizar').setBody({}).withUser(user).post((res)=>{
+insertSaleItems(saleNumber, items, callback){
+  this.call.setPath('pedidos/' + saleNumber + '/items').setBody(items).post((res)=>{
+    if (callback){
       callback(res);
-    });
-  }
-
-  loadDanfe(res, nfNumber){
-    this.call.setPath('danfes/' + nfNumber + '/pdf').download(res, nfNumber + '.pdf');
-  }
-
-  loadTransportTag(res, idNfe){
-    this.call.setPath('etiquetas/' + idNfe).download(res, idNfe + '.pdf');
-  }
-
-
-  removeSaleItems(saleNumber, callback){
-    this.call.setPath('pedidos/' + saleNumber + '/items').delete((res)=>{
-      if (callback){
-        callback(res);
-      }
-    });
-  }
-
-  insertSaleItems(saleNumber, items, callback){
-    this.call.setPath('pedidos/' + saleNumber + '/items').setBody(items).post((res)=>{
-      if (callback){
-        callback(res);
-      }
-    });
-  }
+    }
+  });
+}
 };

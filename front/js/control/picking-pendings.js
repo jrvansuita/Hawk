@@ -259,7 +259,7 @@ function buildProductFirstCol(item, slim, pending){
   .attr('placeholder', item.codigo)
   .dblclick(()=>{
     window.open(
-      '/stock?sku=' + item.codigo,
+      '/product?sku=' + item.codigo,
       '_blank' // <- This is what makes it open in a new window.
     );
   });

@@ -1,9 +1,9 @@
 .panels{
-  /* height: -webkit-fill-available; */
   display: flex;
   max-width: 95%;
   /* max-height: 95%; */
   margin: auto;
+  height: auto;
 }
 
 .main-content{
@@ -87,8 +87,8 @@
   text-align: center;
   border-radius: 10px;
   background: white;
-  min-height: 180;
-  max-height: 260;
+  min-height: 180px;
+  max-height: 260px;
 }
 
 

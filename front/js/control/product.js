@@ -344,6 +344,7 @@ var stockRowsHistoryMemory = {};
 function getStockRowsGrouped(childSku, callback){
   if (!stockRowsHistoryMemory[childSku]){
     _get('/product-stock-history', {sku:childSku},(rows)=>{
+      console.log(rows);
       stockRowsHistoryMemory[childSku] = groupStockRows(rows);
       callback(stockRowsHistoryMemory[childSku]);
     });

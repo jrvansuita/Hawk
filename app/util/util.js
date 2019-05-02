@@ -237,8 +237,59 @@ var Util = {
     var desc = name.split('-').slice(0, isChild ? -2: -1).join('-').trim();
 
     return desc;
-  }
+  },
 
+
+  diagTitle(type){
+    switch(type) {
+      case 0:
+      return 'Produtos sem Foto';
+      case 1:
+      return 'Produtos sem Localização';
+      case 2:
+      return 'Produtos sem Peso';
+      case 3:
+      return 'Produtos sem Vendas';
+      case 4:
+      return 'Produtos sem Marca';
+      case 5:
+      return 'Produtos sem Cor';
+      case 6:
+      return 'Produtos sem Preço de Custo'
+      case 7:
+      return 'Produtos sem Departamento'
+      case 8:
+      return 'Produtos sem Gênero'
+      default:
+      return 'Não encontrado';
+    }
+ },
+
+
+ diagIcon(type){
+   switch(type) {
+     case 0:
+     return 'photo';
+     case 1:
+     return 'no-local';
+     case 2:
+     return 'no-weight';
+     case 3:
+     return 'calc';
+     case 4:
+     return 'tags';
+     case 5:
+     return 'color';
+     case 6:
+     return 'price';
+     case 7:
+     return 'category';
+     case 7:
+     return 'gender';
+     default:
+     return 'question-mark';
+   }
+ }
 
 
 

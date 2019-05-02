@@ -8,12 +8,6 @@ module.exports= class SaleLoader {
 
   constructor(data){
     this.sale = data;
-
-    if (typeof this.sale === 'string'){
-      console.log('/----SaleLoader - constructor ----/');
-      console.log(this.sale);
-    }
-
     this.list = [];
   }
 
@@ -84,14 +78,6 @@ module.exports= class SaleLoader {
     var self = this;
 
     var funcItems = (onCallNext)=>{
-
-      if (typeof this.sale === 'string'){
-        console.log('/----loadItems----/');
-        console.log(this.sale.numeroPedido);
-        console.log(this.sale.itemsQuantity);
-        console.log(this.sale);
-        console.log(new Error().stack);
-      }
 
       if((!this.sale.items) || (force)){
         new EccosysCalls()

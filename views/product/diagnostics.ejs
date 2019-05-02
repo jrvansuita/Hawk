@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<%include ../menus/main-menu %>
+
+<head>
+  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/diagnostics.css">
+
+  <script type="text/javascript" src="front/js/libs/broadcast.js"></script>
+  <script type="text/javascript" src="front/js/libs/socket.io.slim.js"></script>
+
+  <script type="text/javascript" src="/front/js/control/diagnostics.js"></script>
+
+</head>
+
+<body>
+  <script>
+  window.sums = <%- JSON.stringify(sums || null) %>
+  </script>
+
+  <%include ../menus/stock-menu %>
+
+  <div class="main-content">
+
+
+    <div class="top-controlers shadow">
+
+      <label class="erros-msg">Foram encontrados <b><%=sums.map(item => item.sum_count).reduce((prev, next) => prev + next, 0);%></b> produtos com problemas.</label>
+      <img src='/img/loader/circle.svg' class="loading-circle"/>
+      <label class="start-time"></label>
+      <label class="button shadow" id="run">Analisar</label>
+    </div>
+
+
+
+
+
+    <div class="ind-holder">
+      <%sums.forEach(item=>{
+
+        %>
+        <div class="ind-item shadow" data-type="<%=item._id.type%>">
+          <div class="ind-header">
+            <label class="ind-title"><%=Util.diagTitle(item._id.type)%></label>
+            <img class="ind-icon" src="img/<%=Util.diagIcon(item._id.type)%>.png"/>
+          </div>
+
+          <div class="ind-footer">
+            <span class="ind-count"><%=item.sum_count%></span>
+          </div>
+
+        </div>
+        <%
+
+      });%>
+
+    </div>
+
+    <%if (sums.length > 0){%>
+      <div class="ind-rows-holder">
+
+      </div>
+
+      <%
+
+    }%>
+
+
+
+
+
+      <div class="sku-fixes-modal">
+          <div class="sku-fixes-holder shadow">
+
+          </div>
+      </div>
+
+  </div>
+
+
+
+
+
+</body>
+</html>

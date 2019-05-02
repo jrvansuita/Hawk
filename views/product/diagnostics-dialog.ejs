@@ -1,0 +1,48 @@
+
+<div class="fixes-main">
+
+  <div class="fixes-left">
+
+    <div class="top-image-holder">
+      <a href="<%=product ? product.url : ''%>" target="_blank">
+        <label class="sku-name"><%=product ? Str.short(Util.getProductName(product.name), 42): ''%></label>
+      </a>
+      <%var brand = product ? Util.getProductBrand(product.name) : ''%>
+      <a href="<%=process.env.STORE_UTL + '/' + brand.replace(' ', '-').toLowerCase(); %>" target="_blank">
+        <label class="sku-brand"><%=brand%></label>
+      </a>
+
+    </div>
+    <div class="image-holder">
+
+      <img src="<%=product ? product.image : ''%>" onerror="this.src='/img/product-placeholder.png'"/>
+    </div>
+
+  </div>
+
+  <div class="fixes-right">
+
+    <%data.forEach(item=>{%>
+
+      <label class="fixes-sku-list copiable"><%=item.sku%></label>
+
+      <div class="fixes-sku-badges">
+        <%item.fixes.forEach(type=>{%>
+
+           <div class="badge-item">
+             <img class="ind-icon" src="img/<%=Util.diagIcon(type)%>.png"/>
+             <label class="ind-title"><%=Util.diagTitle(type)%></label>
+           </div>
+
+        <%});%>
+      </div>
+
+
+
+    <%});%>
+      </div>
+
+
+  </div>
+
+</div>

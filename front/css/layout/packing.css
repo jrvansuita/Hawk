@@ -75,10 +75,10 @@ input{
 
 .info{
   overflow: hidden;
-  white-space: nowrap;
+  white-space: pre-wrap;
   font-size: 15px;
   min-width: 100px;
-  display: -webkit-box;
+ display: -webkit-box;
 }
 
 .highlighted{
@@ -121,8 +121,10 @@ input{
   margin-left: 0px;
   margin-right: 6px;
   width: 35px;
+  min-width: 35px;
   display: inline-block;
   height: 35px;
+  min-height: 35px;
   vertical-align: middle;
 }
 
@@ -130,6 +132,10 @@ input{
   width: 25px;
   height: 25px;
   vertical-align: middle;
+}
+
+.circle.icon {
+    border: 0 !important;
 }
 
 

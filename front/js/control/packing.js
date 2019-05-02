@@ -226,7 +226,7 @@ function buildProductLine(saleItem, data){
   }
 
   cols.push(createProductVal(saleItem.codigo).addClass('copiable').dblclick(()=>{
-    window.open('/stock?sku=' + saleItem.codigo,'_blank');
+    window.open('/product?sku=' + saleItem.codigo,'_blank');
   }));
   cols.push(createProductVal(saleItem.gtin));
   cols.push(createNcmInput(saleItem.ncm, saleItem.codigo));

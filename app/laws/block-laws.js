@@ -56,7 +56,7 @@ module.exports = {
   match(block, sale){
     if (block.reasonTag.toString() == '994'){
       return sale.items && sale.items.some((item)=>{
-        return item.codigo && (item.codigo.toLowerCase() == block.number.toLowerCase());
+        return skuComparation(item.codigo, block.number);
       });
     }else{
       return (sale.numeroPedido == block.number || sale.numeroDaOrdemDeCompra == block.number);
@@ -114,6 +114,17 @@ module.exports = {
     this.list().splice(index, 1);
   }
 
-
-
 };
+
+
+function skuComparation(sku, macthingStr){
+  if (sku){
+    if (!macthingStr.includes('-')){
+      sku = sku.split('-')[0];
+    }
+
+    return sku.toLowerCase() == macthingStr.toLowerCase();
+  }
+
+  return false;
+}

@@ -71,6 +71,17 @@
 
               <td>
                 <div class="status-holder">
+                  <img class="circle shadow icon" src="/img/<%=sale? Util.getSaleSituationIcon(parseInt(sale.situacao)) : 'alert'%>.png" />
+
+                  <div class="field skrink">
+                    <label class="field-title">Situação</label>
+                    <label class="info"><%=sale ? Util.getSaleSituationName(parseInt(sale.situacao)) : ''%></label>
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <div class="status-holder">
                   <img class="circle shadow icon" src="/img/<%=sale ?  'transport/' + sale.transport.toLowerCase() : 'question-mark'%>.png" />
 
                   <div class="field skrink">
@@ -79,6 +90,8 @@
                   </div>
                 </div>
               </td>
+
+
             </tr>
 
             <tr>
@@ -105,13 +118,18 @@
               </td>
 
               <td>
-                <div class="status-holder">
-                  <img class="circle shadow icon" src="/img/<%=sale? Util.getSaleSituationIcon(parseInt(sale.situacao)) : 'alert'%>.png" />
+                <div class="field">
+                  <label class="field-title">Endereço</label>
+                  <%
+                  var address = '';
 
-                  <div class="field skrink">
-                    <label class="field-title">Situação</label>
-                    <label class="info"><%=sale ? Util.getSaleSituationName(parseInt(sale.situacao)) : ''%></label>
-                  </div>
+                  if(sale && sale.client){
+                    address = Str.short(sale.client.endereco, 30) + ', ' + sale.client.enderecoNro +
+                    '\n' + sale.client.bairro + ' ' + sale.client.cep;
+                  }
+
+                  %>
+                  <label class="info" style="font-size: 12px;"><%=address%></label>
                 </div>
               </td>
 
@@ -126,7 +144,21 @@
                 </div>
               </td>
 
-            </tr>
+
+              <td>
+                <%
+                if (sale.pickUser != undefined){%>
+                  <div class="status-holder">
+                    <img class="circle shadow icon" src="<%=sale.pickUser.id == 404 ? 'img/system.png' : sale.pickUser.avatar %>" title="<%=sale.pickUser.name%>" />
+
+                    <div class="field skrink">
+                      <label class="field-title">Usuário Picking</label>
+                      <label class="info"><%=sale.pickUser.name%></label>
+                    </div>
+                  </div>
+                  <%}%>
+                </td>
+              </tr>
 
 
               <tr class="editable-infos-holder line-here">
@@ -170,6 +202,8 @@
 
 
                 <td></td>
+                <td></td>
+
               </tr>
 
               <tr class="editable-infos-holder">
@@ -201,6 +235,7 @@
                   </div>
                 </td>
 
+                <td></td>
                 <td></td>
               </tr>
 
