@@ -79,30 +79,30 @@ module.exports= class SaleLoader {
 
     var funcItems = (onCallNext)=>{
 
-      if((!self.sale.items) || (force)){
+      if((!this.sale.items) || (force)){
         new EccosysCalls()
-        .setOnError(self.onError)
-        .getSaleItems(self.sale.numeroPedido, (items) => {
+        .setOnError(this.onError)
+        .getSaleItems(this.sale.numeroPedido, (items) => {
 
-          if (!items.reduce){
+          if (this.sale instanceof String){
             console.log(items);
-            console.log(self.sale.numeroPedido);
-            Err.thrw('Era para dar o erro de reduce ('+self.sale.numeroPedido+') porque os itens estão assim: ' + items);
+            console.log(this.sale.numeroPedido);
+            Err.thrw('Era para dar o erro de reduce ('+this.sale.numeroPedido+') porque os itens estão assim: ' + items);
           }else{
 
-            self.sale.transport = Util.twoNames(self.sale.transportador, Const.no_transport);
-            self.sale.items = items;
+            this.sale.transport = Util.twoNames(this.sale.transportador, Const.no_transport);
+            this.sale.items = items;
 
-            
-            self.sale.itemsQuantity = items.reduce(function(a, b) {
+
+            this.sale.itemsQuantity = items.reduce(function(a, b) {
               return a + parseFloat(b.quantidade);
             }, 0);
           }
 
-          self._callbackHit(onCallNext, onCallOuter);
+          this._callbackHit(onCallNext, onCallOuter);
         });
       }else{
-        self._callbackHit(onCallNext, onCallOuter);
+        this._callbackHit(onCallNext, onCallOuter);
       }
     };
 

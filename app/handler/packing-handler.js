@@ -161,7 +161,8 @@ module.exports = {
 };
 
 function onPackingRejected(params, user, result){
-  HistoryStorer.packingRejected(user.id, params.saleNumber, result.error[0].erro);
+  var error = result.error[0].erro.split('\n')[0];
+  HistoryStorer.packingRejected(user.id, params.saleNumber, error);
   DoneLaws.remove(params.saleNumber);
 }
 
