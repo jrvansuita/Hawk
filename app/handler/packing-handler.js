@@ -142,8 +142,12 @@ module.exports = {
           console.log(nfResult);
           //'Enviou o resultado via Broadcast'
           global.io.sockets.emit(params.saleNumber, nfResult);
-          if (nfResult.error && !nfResult.error.length){
+          var sucess = !nfResult.error || !nfResult.error.length;
+
+          if (sucess){
             onPackingDone(params, user);
+          }else{
+            onPackingRejected(params, user, nfResult);
           }
         });
       }
@@ -156,7 +160,12 @@ module.exports = {
   }
 };
 
-function onPackingDone(params, user, callback){
+function onPackingRejected(params, user, result){
+  HistoryStorer.packingRejected(user.id, params.saleNumber, result.error[0].erro);
+  DoneLaws.remove(params.saleNumber);
+}
+
+function onPackingDone(params, user){
   DoneLaws.remove(params.saleNumber);
   PackagesHandler.decPackStock(params.packageId);
 

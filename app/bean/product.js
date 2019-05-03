@@ -21,23 +21,28 @@ module.exports = class Product extends DataAccess {
         { 'sku': {
           "$regex": keyValue,
           "$options": "i"
-          }
-        },
-
-        { 'name': {
-          "$regex": keyValue,
-          "$options": "i"
         }
+      },
+
+      { 'name': {
+        "$regex": keyValue,
+        "$options": "i"
       }
-    ]
-  };
+    }
+  ]
+};
 
-  this.staticAccess()
-  .find(query)
-  .limit(limit)
-  .exec(callback);
-
-
+this.staticAccess()
+.find(query)
+.limit(limit)
+.exec(callback);
 }
+
+static get(sku, callback){
+  Product.findOne(Product.getKeyQuery(sku.split('-')[0]), (err, product)=>{
+    callback(product);
+  });
+}
+
 
 };

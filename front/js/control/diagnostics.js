@@ -1,3 +1,5 @@
+
+
 $(document).ready(()=>{
 
   $('#run').click(()=>{
@@ -47,11 +49,14 @@ function buildIndRows(rows){
 
 
     var $name = $('<label>').addClass('row-name').text(row.brand);
-    var $sku = $('<label>').addClass('row-sku copiable').text(' ' + row.sku).dblclick(()=>{
-      window.open('/product?sku=' + row.sku,'_blank');
-    });
+    var $sku = $('<label>').addClass('row-sku copiable').text(' ' + row.sku)
 
     var $subsHolder = $('<div>').addClass('subs-holder').append($name, $sku);
+
+    $subsHolder.dblclick((e)=>{
+      e.stopPropagation();
+      window.open('/product?sku=' + row.sku,'_blank');
+    });
 
     var $div =  $('<div>').addClass('row-item shadow').append($img, $subsHolder);
     $div.click(()=>{
@@ -62,9 +67,7 @@ function buildIndRows(rows){
     $div.hide().fadeIn();
   });
 
-
-
-  buindCopiable();
+  bindCopiable();
 }
 
 

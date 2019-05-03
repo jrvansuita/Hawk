@@ -245,3 +245,18 @@ a{
 .badge-item{
   padding-top: 4px;
 }
+
+.fixes-sku-badges{
+  width: 100%;
+}
+
+.fix-this{
+  width: 25px !important;
+  height: 25px !important;
+}
+
+.fix-this:hover{
+  cursor: pointer;
+  transform: scale(1.05);
+  opacity: 0.8;
+}

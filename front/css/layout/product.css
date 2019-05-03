@@ -1,14 +1,13 @@
 .panels{
-  display: -webkit-box;
+  display: flex;
   max-width: 95%;
-  max-height: 100%;
   margin: auto;
-  height: -webkit-fill-available;
 }
 
 .main-content{
   margin-top: 100px !important;
-  padding-bottom: 5px;
+  /* padding-bottom: 5px; */
+  height: 100%;
   overflow-y: scroll !important;
 }
 
@@ -17,18 +16,18 @@
   margin-top: 5px;
   margin-left: 15px;
   margin-right: 15px;
-  height: -webkit-fill-available;
+  height: 90%;
   flex: 0 1 45%;
   max-width: 45%;
-  margin-bottom: 40px;
+  /* margin-bottom: 140px; */
 }
 
 .main-panel{
-  margin-right: 15px;
+  /* margin-right: 15px; */
   flex: 0 80%;
   padding-bottom: 10px;
   display: flex;
-  height: 100%;
+  height: 94%;
   flex-wrap: wrap;
   align-items: flex-start;
   flex-direction: column;
@@ -325,19 +324,20 @@ tr.selected td{
   flex: 1;
   vertical-align: super;
   width: 100%;
-  height: fit-content;
-  max-height: 50%;
+  height: -webkit-fill-available;
+  max-height: 100%;
   padding-top: 15px;
   display: flex;
+  margin-bottom: 40px;
 }
 
 .bottom-box{
   padding-bottom: 2px;
-  height: 100%;
+  /* height: 100%; */
   vertical-align: super;
   display: block;
   width: 50%;
-  margin-bottom: 45px;
+  /* margin-bottom: 45px; */
 }
 
 .bottom-box:first-of-type{
@@ -365,8 +365,8 @@ table{
 
 .overflow{
   overflow-y: auto;
-  height: 400px;
   overflow-x: hidden;
+  height: 100%;
 }
 
 .obs td.td-child{

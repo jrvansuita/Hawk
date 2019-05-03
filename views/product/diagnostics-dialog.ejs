@@ -32,6 +32,8 @@
            <div class="badge-item">
              <img class="ind-icon" src="img/<%=Util.diagIcon(type)%>.png"/>
              <label class="ind-title"><%=Util.diagTitle(type)%></label>
+
+             <img class="ind-icon right fix-this" src="img/restart.png" data-sku="<%=item.sku%>" data-type="<%=type%>"/>
            </div>
 
         <%});%>
@@ -42,6 +44,29 @@
     <%});%>
       </div>
 
+    <script type="text/javascript">
+      $(document).ready(()=>{
+        $('.fix-this').click(function(){
+          $(this).attr('src', 'img/loader/circle.svg');
+          var sku = $(this).data('sku');
+
+          _post('/check-product-diagnostic', {sku: sku},(data)=>{
+            var type = $(this).data('type');
+            var obj = data.data.find((item)=>{return item.sku == sku});
+
+            var fixed = !obj || !obj.fixes.includes(type);
+
+            if (fixed){
+              $(this).attr('src', 'img/checked.png');
+              $(this).unbind('click');
+            }else{
+              $(this).attr('src', 'img/restart-error.png');
+            }
+          });
+        });
+      });
+
+    </script>
 
   </div>
 

@@ -48,6 +48,14 @@ module.exports = class ProductRoutes extends Routes{
       });
     });
 
+    this._post('/check-product-diagnostic', (req, res) => {
+      new ProductDiagnostics().resync(req.body.sku, ()=>{
+        new DiagnosticsProvider().loadBySku(req.body.sku, (all, product)=>{
+          res.status(200).send({data : all, product: product});
+        });
+      });
+    });
+
     this._post('/run-product-diagnostics', (req, res) => {
       new ProductDiagnostics().sync();
       res.status(200).send('Ok');
@@ -58,7 +66,6 @@ module.exports = class ProductRoutes extends Routes{
         this._resp().sucess(res, all);
       });
     });
-
 
     this._get('/fixes-dialog', (req, res) => {
       new DiagnosticsProvider().loadBySku(req.query.sku, (all, product)=>{

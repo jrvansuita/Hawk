@@ -8,18 +8,18 @@ $(document).ready(() => {
   });
 
 
-  if (userSetts[9]){
-    $('#select-uf').click(function(){
-      new MultiSelectorDialog('Selecione os Estados', ufList, 'uf', selectedUfs)
-      .show();
-    });
 
-    $('#select-transp').click(function(){
-      new MultiSelectorDialog('Selecione as Transportadoras', transportList, 'transp', selectedTransps)
-      .show();
-    });
+  $('#select-uf').click(function(){
+    new MultiSelectorDialog('Selecione os Estados', ufList, 'uf', selectedUfs, userSetts[9] != undefined)
+    .show();
+  });
 
-  }
+  $('#select-transp').click(function(){
+    new MultiSelectorDialog('Selecione as Transportadoras', transportList, 'transp', selectedTransps, userSetts[9] != undefined)
+    .show();
+  });
+
+
 
   $(".blocked-sale-label[data-reason='994']").dblclick(function(){
     window.open(

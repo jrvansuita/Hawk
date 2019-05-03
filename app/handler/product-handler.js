@@ -31,7 +31,7 @@ module.exports ={
 
   getImage(sku, callback){
     if (sku){
-      Product.findOne(Product.getKeyQuery(getFatherSku(sku)), (err, product)=>{
+      Product.get(getFatherSku(sku), (product)=>{
         callback(product);
       });
     }else{

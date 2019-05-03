@@ -47,6 +47,18 @@ module.exports={
     });
   },
 
+  packingRejected(userId, saleNumber, error){
+    onTry(()=>{
+      var message = 'Pedido: ' + saleNumber;
+      
+      if (error){
+        message += '\nError: ' + error;
+      }
+
+      History.notify(userId, 'Packing Rejeitado', message, 'Packing');
+    });
+  },
+
   pending(userId, pending){
     onTry(()=>{
       var title = 'Pendência ';

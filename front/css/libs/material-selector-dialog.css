@@ -21,7 +21,6 @@
   display: block;
   border-radius: 2px;
   padding: 0px 15px;
-  padding-top: 20px;
   padding-bottom: 12px;
   -webkit-box-shadow: 2px 2px 24px 0px rgba(0,0,0,0.75);
   -moz-box-shadow: 2px 2px 24px 0px rgba(0,0,0,0.75);
@@ -54,6 +53,8 @@
   font-size: 14px;
   font-weight: 600;
   color: #025f54;
+  margin-top: 20px;
+  display: -webkit-box;
 }
 
 .ms-items  img {

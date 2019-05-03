@@ -15,9 +15,9 @@ module.exports = class ProductDiagnostics{
     this.productsAnalyzed++;
     var attrs = getProductAttrs(product);
 
-    isPhotoMissing(product, ()=>{
+    if (isPhotoMissing(product)){
       this._storeFix(product, Fix.enum().PHOTO);
-    });
+    }
 
     if (isLocalMissing(product)){
       this._storeFix(product, Fix.enum().LOCAL);
@@ -51,13 +51,15 @@ module.exports = class ProductDiagnostics{
       this._storeFix(product, Fix.enum().GENDER);
     }
 
-    this._emitBroadcast();
+    if (this.sendBroadcast){
+      this._emitBroadcast();
+    }
+
     callback();
   }
 
   _storeFix(product, type){
     Fix.put(product, type);
-    console.log('Produto: ' + product.codigo + ' Type: ' + type);
     this.fixesFound++;
   }
 
@@ -69,6 +71,38 @@ module.exports = class ProductDiagnostics{
     });
   }
 
+
+
+  _checkSingleSku(sku, callback){
+    //Remove all from this sku
+    Fix.removeAll({sku: sku}, (err)=>{
+
+      //Capture the eccosys product
+      new EccosysCalls()
+      .getProduct(sku, (product)=>{
+
+        //Capture feed product
+        Product.get(sku , (feedProduct)=>{
+          product.feedProduct = feedProduct;
+
+          //Capture stock history
+          new EccosysCalls()
+          .pageCount(5)
+          .page(0)
+          .order('DESC')
+          .getStockHistory(sku, (stocks)=>{
+
+            //Analyze the product
+            this._analizeProducts(product, stocks, ()=>{
+              callback();
+            });
+          });
+        });
+      });
+    });
+  }
+
+
   _loadCurrentProducts(callback){
     this.index++;
 
@@ -77,19 +111,8 @@ module.exports = class ProductDiagnostics{
       var sku = item.codigo;
 
       if (item.gtin != ''){
-        new EccosysCalls()
-        .getProduct(sku, (product)=>{
-
-          new EccosysCalls()
-          .pageCount(5)
-          .page(0)
-          .order('DESC')
-          .getStockHistory(sku, (stocks)=>{
-            this._analizeProducts(product, stocks, ()=>{
-              this._loadCurrentProducts(callback);
-            });
-          });
-
+        this._checkSingleSku(sku, ()=>{
+          this._loadCurrentProducts(callback);
         });
       }else{
         this._loadCurrentProducts(callback);
@@ -109,8 +132,6 @@ module.exports = class ProductDiagnostics{
       this.currentList = items;
       this.index = -1;
 
-      console.log('Carregou ' + items.length + ' produtos');
-
       this._loadCurrentProducts(()=>{
         this._loadCurrentPage();
       });
@@ -120,7 +141,15 @@ module.exports = class ProductDiagnostics{
   }
 
   sync(){
+    this.sendBroadcast = true;
     this._loadCurrentPage();
+  }
+
+
+  resync(sku, callback){
+    this._checkSingleSku(sku, ()=>{
+      callback();
+    });
   }
 
 };
@@ -166,9 +195,5 @@ function isGenderMissing(attrNames){
 }
 
 function isPhotoMissing(product, callback){
-  Product.findOne(Product.getKeyQuery(product.codigo.split('-')[0]), (err, product)=>{
-    if (!product || !product.image){
-      callback(product);
-    }
-  });
+  return !product.feedProduct || !product.feedProduct.image;
 }

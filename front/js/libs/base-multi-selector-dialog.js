@@ -1,12 +1,16 @@
 class BaseSelectorDialog {
-  constructor(title) {
+  constructor(title, canEdit) {
+    this.canEdit = canEdit;
     this.modal = $('<div>').addClass('ms-modal');
     this.holder = $('<div>').addClass('ms-holder');
     this.items = $('<div>').addClass('ms-choices');
 
-    var $title = $('<label>').addClass('ms-title').text(title);
+    if (canEdit){
+      var $title = $('<label>').addClass('ms-title').text(title);
+      this.holder.append($title);
+    }
 
-    this.holder.append($title, this.items);
+    this.holder.append(this.items);
     this.modal.append(this.holder);
 
     this.buttons = $('<div>').addClass('ms-buttons-holder');
@@ -63,11 +67,15 @@ class BaseSelectorDialog {
       input.attr('checked', 'checked');
     }
 
-    input.change(function() {
-      if (onCheck){
-        onCheck(this, this.checked);
-      }
-    });
+    if (this.canEdit){
+      input.change(function() {
+        if (onCheck){
+          onCheck(this, this.checked);
+        }
+      });
+    }else{
+      input.attr('disabled', true);
+    }
 
     return this;
   }
@@ -76,6 +84,8 @@ class BaseSelectorDialog {
   show(){
     $('body').append(this.modal);
     this.modal.fadeIn(400);
+
+
   }
 
 }

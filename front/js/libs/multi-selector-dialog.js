@@ -1,15 +1,21 @@
 class MultiSelectorDialog{
 
-  constructor(title, list, paramName, selecteds){
+  constructor(title, list, paramName, selecteds, canEdit){
     this.list = list;
     this.selecteds = selecteds;
 
-    this.dialog = new BaseSelectorDialog(title);
+
+    this.dialog = new BaseSelectorDialog(title, canEdit);
     this._createOptions();
-    this.dialog.onNegativeButton('Cancelar')
-    .onPositiveButton('Selecionar',(data)=>{
-      window.location.href = window.location.origin + window.location.pathname + '?'+paramName+'=' + data.join('|');
-    });
+
+
+    this.dialog.onNegativeButton('Cancelar');
+    
+    if (canEdit){
+      this.dialog.onPositiveButton('Selecionar',(data)=>{
+        window.location.href = window.location.origin + window.location.pathname + '?'+paramName+'=' + data.join('|');
+      });
+    }
   }
 
 
@@ -26,7 +32,7 @@ class MultiSelectorDialog{
   checkToggleAll(el, checked){
 
     if ($(el).attr('name') == 'all'){
-      if (checked){ 
+      if (checked){
         $('input:not([name="all"])').removeAttr('checked');
       }
     }else{

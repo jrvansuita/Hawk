@@ -42,8 +42,9 @@ $(document).ready(()=>{
 
 function initForPacking(){
   var nfeRejected = sale.nfe && sale.nfe.situacao == '1';
+  var nfeCreated = sale.nfe || sale.numeroNotaFiscal;
 
-  if (sale.nfe){
+  if (nfeCreated){
     if (nfeRejected){
       showNfeRejected();
       $('.editable-infos-holder').show();
@@ -64,7 +65,7 @@ function initForPacking(){
 
   addListeners();
 
-  if (sale.nfe && !nfeRejected){
+  if (nfeCreated && !nfeRejected){
     $('.editable-input').prop("disabled", true);
   }
 

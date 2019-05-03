@@ -52,12 +52,11 @@ module.exports = class DiagnosticsProvider{
       }
     });
 
-console.log(grouped);
     return Object.values(grouped);
   }
 
   loadBySku(sku, callback){
-    Product.findOne(Product.getKeyQuery(sku), (err, product)=>{
+    Product.get(sku, (product)=>{
       Fix.findBySku(sku, (err, all)=>{
         callback(this.groupSku(all), product);
       });
