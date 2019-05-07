@@ -284,7 +284,7 @@ var Util = {
      return 'price';
      case 7:
      return 'category';
-     case 7:
+     case 8:
      return 'gender';
      default:
      return 'question-mark';

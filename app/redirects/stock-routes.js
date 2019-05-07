@@ -40,6 +40,18 @@ module.exports = class ProductRoutes extends Routes{
       });
     });
 
+    this._get('/product-print-locals', (req, res) => {
+      if(req.query.product){
+        res.render('product/local-list', {product : req.query.product});
+      }else{
+        ProductHandler.getBySku(req.query.sku, false, (result)=>{
+          res.render('product/local-list',{
+            product : result
+          });
+        });
+      }
+    });
+
 
 
     this._page('/diagnostics', (req, res) => {

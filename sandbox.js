@@ -1,9 +1,5 @@
 require('./app/init/init.js');
 
-const Pending = require('./app/bean/pending.js');
+const JobProducts = require('./app/jobs/job-products.js');
 
-Pending.findAll(function(err, pendings){
-
-  console.log(err);
-  console.log(Object.keys(pendings[0]));
-  });
+new JobProducts().run();

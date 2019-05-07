@@ -8,6 +8,12 @@
   <script type="text/javascript" src="/front/js/libs/JsBarcode.all.min.js"></script>
   <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script type="text/javascript" src="/front/js/control/picking-print.js"></script>
+
+
+  <link rel="icon" href="/img/icon/favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="/img/icon/favicon.ico" type="image/x-icon" />
+
+
 </head>
 <body>
 
@@ -53,7 +59,7 @@
             <span class="sku"><%=item.sku%></span>
           </td>
           <td class="col-ean">
-            <span class="ean"><%= item.ean.slice(9, item.ean.length)%></span>
+            <span class="ean"><%= !item.ean? 'Sem EAN' : item.ean.slice(9, item.ean.length)%></span>
           </td>
 
           <td class="col-local">

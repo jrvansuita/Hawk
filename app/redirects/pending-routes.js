@@ -2,6 +2,7 @@ const Routes = require('../redirects/controller/routes.js');
 const PendingLaws = require('../laws/pending-laws.js');
 const PendingHandler = require('../handler/pending-handler.js');
 const SaleItemSwapper = require('../swap/sale-item-swapper.js');
+const EccosysCalls = require('../eccosys/eccosys-calls.js');
 
 module.exports = class PendingRoutes extends Routes{
 
@@ -14,6 +15,29 @@ module.exports = class PendingRoutes extends Routes{
             pendingSales: list});
           });
         }
+      });
+
+      this._get('/pending-print-list', (req, res) => {
+
+        var list = PendingLaws.getFromStatus(req.query.status);
+
+
+        var skus = list.map((p)=>{
+          return p.sale.items.map((i)=>{
+            return i.codigo;
+          }).join(';');
+        });
+
+
+        new EccosysCalls().getSkus(skus, (products)=>{
+          res.render('pending/print-list', {
+            list: list,
+            products : products,
+            status : req.query.status
+          });
+        });
+
+
       });
 
       this._post('/start-pending', (req, res, body, locals) => {

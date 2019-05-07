@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>Localizações | <%=product.codigo%></title>
+
+  <link rel="icon" href="/img/icon/favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="/img/icon/favicon.ico" type="image/x-icon" />
+
+
+
+
+  <style>
+  .big{
+    font-weight: 800;
+    font-size: 22px;
+  }
+
+  .local{
+    font-weight: 800;
+    font-size: 18px;
+  }
+
+  span{
+    font-size:17px;
+    font-family: sans-serif;
+  }
+
+  .top{
+    padding-bottom: 17px;
+    border-bottom: 1px solid #989898;
+  }
+
+  .history-holder{
+    padding: 10px 0px;
+  }
+
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  td{
+    padding: 12px 0px;
+  }
+
+  table{
+    width: 100%;
+    max-width: 100%;
+    background-color: transparent;
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+  .gtin{
+    padding: 5px 15px;
+  }
+  </style>
+
+</head>
+
+<body>
+
+
+
+  <div class="top">
+    <p>
+      <span class="big"><%=product.codigo%></span>
+      <span class="gtin"><%=product.gtin%></span>
+      <span class="big" style="float:right"><%=Dat.formatwTime(new Date())%></span>
+    </p>
+    <span><%=Util.getProductName(product.nome, true)%></span>
+    <span style="float:right"><%=Util.getProductBrand(product.nome, true)%></span>
+  </div>
+
+  <div class="history-holder">
+
+
+    <table>
+
+
+      <%product.obs.split('\n').reverse().forEach((line)=>{%>
+        <%
+        var lineData = line.split('|');
+
+        var user = lineData[0];
+        var platf = lineData[1];
+        var data = lineData[2];
+        var date = lineData[3];
+        var type = lineData[4];
+
+        if ((type == undefined) || (type.trim() == 'Localização')){
+
+          %>
+          <tr>
+            <td colspan="8">
+              <span class="local"><%=data%></span>
+            </td>
+
+            <td>
+              <span><%=date%></span>
+            </td>
+            <td>
+              <span><%=platf%></span>
+            </td>
+            <td>
+              <span><%=user%></span>
+            </td>
+          </tr>
+
+          <%}});%>
+
+        </table>
+
+      </div>
+
+    </body>
+    </html>

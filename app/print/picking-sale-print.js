@@ -19,7 +19,7 @@ module.exports = class PickingSalePrint{
   _loadFromProgressOrDone(){
     var sale = InprogressLaws.get(this.saleNumber) || DoneLaws.get(this.saleNumber);
 
-    loadSaleForPrint(sale || saleNumber, (shell)=>{
+    loadSaleForPrint(sale || this.saleNumber, (shell)=>{
       this._fisnish(shell);
     });
   }

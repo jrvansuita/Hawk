@@ -22,7 +22,13 @@ $(document).ready(() => {
       findCurrentProduct();
     }
   });
+
+  $('.print-local').click((e)=>{
+    window.open('/product-print-locals?sku=' + (lastSelected ? lastSelected: product.codigo), '_blank');
+  });
 });
+
+
 
 function findCurrentProduct(){
   var skuOrEan = $('#search').val();
@@ -150,22 +156,22 @@ function buildChildSku(product, child){
     var drop = new MaterialDropdown($(this), e, -100);
     drop.addItem('/img/barcode.png', 'Imprimir Etiqueta', function(){
 
-       window.open('/barcode?sku=' + child.codigo, '_blank');
+      window.open('/barcode?sku=' + child.codigo, '_blank');
 
       /*new InputDialog('Impressão de Etiqueta de Produto', 'Quantidade')
       .onPositiveButton('Imprimir', ()=>{
 
-      })
-      .onNegativeButton('Cancelar')
-      .show();*/
+    })
+    .onNegativeButton('Cancelar')
+    .show();*/
 
-
-    });
-    drop.show();
 
   });
+  drop.show();
 
-  $('#child-skus-holder').append($tr);
+});
+
+$('#child-skus-holder').append($tr);
 }
 
 

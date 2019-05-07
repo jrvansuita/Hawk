@@ -2,6 +2,7 @@
   display: flex;
   max-width: 95%;
   margin: auto;
+  height: 100%;
 }
 
 .main-content{
@@ -380,4 +381,15 @@ table{
   font-size: 13px;
   font-weight: 400;
   padding: 12px;
+}
+
+.print-local{
+  float: right;
+  width: 22px;
+  height: 22px;
+}
+
+.print-local:hover{
+  cursor: pointer;
+  transform: scale(1.1);
 }

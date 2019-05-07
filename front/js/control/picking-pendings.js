@@ -23,26 +23,38 @@ $(document).ready(() => {
     e.stopPropagation();
   });
 
-  if (Sett.get(loggedUser, 10)){
-    if (isWideOpen() && ($('.pending-item.not-solved').length > 0)){
 
-      var icon = $('<img>').attr('src','img/dots.png').addClass('dots-glyph');
-      var div = $('<div>').css('display','inline-flex').append(icon);
+  if (isWideOpen() && ($('.pending-item.not-solved').length > 0)){
 
-      div.click(function(e){
+
+    $('.menu-dots').each((index, el)=>{
+      $(el).click(function(e){
         var drop = new MaterialDropdown($(this), e);
 
-        drop.addItem('/img/send-mass-email.png', 'Enviar Todos E-mails', function(){
-          icon.attr('src','/img/loader/circle.svg');
-          doallSolvingPendingSale();
+        if ($(el).hasClass('menu-red-top')){
+          if (Sett.get(loggedUser, 10)){
+            drop.addItem('/img/send-mass-email.png', 'Enviar Todos E-mails', function(){
+              icon.attr('src','/img/loader/circle.svg');
+              doallSolvingPendingSale();
+            });
+          }
+        }
+
+        drop.addItem('/img/print.png', 'Imprimir Listagem', function(){
+          window.open(
+            '/pending-print-list?status=' +  ($(el).hasClass('menu-red-top') ? 0 : ($(el).hasClass('menu-orange-top')? 1 : 2)),
+            '_blank' // <- This is what makes it open in a new window.
+          );
         });
 
         drop.show();
+
       });
 
-      $('.pending-box.red-top>.pick-header>.header-count').append(div);
-    }
+    });
+
   }
+
 });
 
 
@@ -164,7 +176,7 @@ function getLastBottomBarOption(pending){
     }
 
     if (pending.status == 1){
-      var block = $('<img>').addClass('button block-pending').attr('src','/img/block.png').attr('title','Bloquear').click((e) =>{
+      var block = $('<img>').addClass('block-pending').attr('src','/img/block.png').attr('title','Bloquear').click((e) =>{
         hidePedingItemModal();
         e.stopPropagation();
 
@@ -288,7 +300,7 @@ function buildProductFirstCol(item, slim, pending){
   first.append(div);
 
   div = $('<div>').addClass('nobreak');
-  var descHolder = $('<label>').addClass('pick-value desc no-wrap').text(Util.ellipsis(Util.getProductName(item.descricao, true), 20));
+  var descHolder = $('<label>').addClass('pick-value desc no-wrap').text(Util.ellipsis(Util.getProductName(item.descricao, true), 50));
   div.append(descHolder);
   var brand = $('<span>').addClass('pick-value right').text(Util.getProductBrand(item.descricao, true));
   div.append(brand);

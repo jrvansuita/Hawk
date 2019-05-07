@@ -1,12 +1,23 @@
 
 
 
-  <div class="col pending-sales" style="display:block">
+<div class="col pending-sales" style="display:block">
 
-    <div class="pick-box shadow pending-box <%= typeof topClass == "undefined" ? 'red-top' : topClass %>">
-      <div class="pick-header" style="padding-right: 15px;">
-        <span class="label header-title"><%= typeof label == "undefined" ? 'Pendências' :  label %></span>
-        <span class="label header-count green-title pending-count" data-count="<%=pendingSales.length%>"><%=pendingSales.length%> </span>
+  <div class="pick-box shadow pending-box <%= typeof topClass == "undefined" ? 'red-top' : topClass %>">
+    <div class="pick-header" style="padding-right: 15px;">
+      <span class="label header-title"><%= typeof label == "undefined" ? 'Pendências' :  label %></span>
+
+
+      <span class="label header-count green-title pending-count" data-count="<%=pendingSales.length%>">
+
+        <%=pendingSales.length%>
+
+        <%if (typeof topClass != "undefined"){%>
+          <div style="display: inline-flex;" class="menu-dots <%='menu-' + topClass%>"><img src="img/dots.png" class="dots-glyph"/> </div>
+          <%}%>
+        </span>
+
+
       </div>
 
 
@@ -34,7 +45,7 @@
                   <td><span class="pick-value green-title copiable"><%=sale.numeroPedido %></span>
 
                   </td>
-                  <td><span class="pick-value"><%=sale.transport %></span></td>
+                  <td><span class="pick-value"><%=pending.local%></span></td>
                   <td><span class="pick-value copiable" style="float:right"><%=sale.numeroDaOrdemDeCompra%></span></td>
                 </tr>
                 <tr>

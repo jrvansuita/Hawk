@@ -38,6 +38,13 @@ module.exports = {
   },
 
 
+  getFromStatus(status){
+    return this.getList().filter((pending)=>{
+      return pending.status == status;
+    });
+  },
+
+
   //---- Store Elements ----//
 
   store(sale, local, user, callback){

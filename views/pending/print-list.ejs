@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>Lista de Pendências</title>
+
+  <link rel="icon" href="/img/icon/favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="/img/icon/favicon.ico" type="image/x-icon" />
+
+
+  <style>
+    .title{
+      padding-bottom: 25px;
+      margin: auto;
+      font-size: 23px;
+      display: -webkit-box;
+      font-weight: 700;
+    }
+
+    .big{
+      font-weight: 800;
+      font-size: 22px;
+    }
+
+
+    span{
+      font-size:17px;
+      font-family: sans-serif;
+    }
+
+    td{
+      padding: 6px 10px;
+    }
+
+    table{
+      width: 100%;
+      max-width: 100%;
+      background-color: transparent;
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
+
+    .gtin{
+      padding: 0px 15px;
+      float:right;
+    }
+
+    .last-row td{
+      border-top: 1px solid #989898;
+      border-bottom: 1px solid #989898;
+      background: #f1f1f1;
+    }
+
+    .small>span{
+      font-size: 14px !important;
+    }
+
+    .small{
+      padding-top: 1px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed;
+    }
+
+    .qtd-border{
+      border: 2px solid black;
+      padding: 3px 6px;
+    }
+    .sku{
+      font-weight: 700;
+    }
+
+
+  </style>
+
+</head>
+
+<body>
+
+  <div style="display:flex">
+    <span class="title"><%= status == 0 ? 'Pendências não Atendidas' : (status == 1 ? 'Pendências em Atendimento' : 'Pendências Resolvidas')%></span>
+    <span style="float:right" class="big"><%=list.length%></span>
+
+  </div>
+
+  <table>
+
+
+    <%list.forEach((pending)=>{%>
+      <tr class="last-row">
+        <td colspan="3">  <span class="big"><%=pending.number%></span></td>
+        <td colspan="2">  <span class="big" style="float:right"><%=pending.local%></span></td>
+      </tr>
+
+      <%pending.sale.items.forEach((item)=>{%>
+        <tr>
+          <td></td>
+
+          <td>
+            <span class="sku"><%=item.codigo%></span>
+            <span class="gtin"><%= !item.gtin? 'Sem EAN' : item.gtin.slice(9, item.gtin.length)%></span>
+          </td>
+
+          <%var localProduct = products.find((i)=>{
+            return i.codigo == item.codigo;
+          })%>
+          <td colspan="2">
+            <span>
+              <%=localProduct ? localProduct.localizacao : 'Não Encontrado'%>
+            </span>
+          </td>
+          <td>
+            <%var qtdBorderClass = (item.quantidade > 1 ? 'qtd-border' : '')%>
+            <span class="<%=qtdBorderClass%>" style="float: right"><%=item.quantidade%></span>
+          </td>
+        </tr>
+
+        <tr>
+          <td></td>
+
+          <td colspan="3" class="small">
+            <span><%=Util.ellipsis(Util.getProductName(item.descricao, item.codigo.includes('-')),30)%></span>
+          </td>
+          <td class="small">
+            <span><%=Util.ellipsis(Util.getProductBrand(item.descricao, item.codigo.includes('-')),10)%></span>
+          </td>
+        </tr>
+
+        <%});%>
+
+        <%})%>
+
+      </table>
+    </body>
+    </html>
