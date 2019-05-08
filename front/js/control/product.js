@@ -385,7 +385,7 @@ function groupStockRows(rows){
 
   rows.forEach((i)=>{
     var user = i.obs.split('-');
-    var id = Dat.id(new Date(i.data)) + (i.es == 'S' ? i.es : '') + (user.length > 1 ? user[1] : '');
+    var id = Dat.id(new Date(i.data)) + (i.es == 'S' ? i.es : '') + (user.length > 1 ? user[1] : '') + (i.obs.includes('Desktop') ? '1' :'0');
 
     if (groupArr[id]){
       groupArr[id].quantidade += parseInt(i.quantidade);

@@ -30,7 +30,7 @@ module.exports = {
   },
 
   error(res, e){
-    console.log('Printing error:' + e.toString());
+    console.log('Printing error: ' + e.toString());
 
     var userId = res.locals.loggedUser ? res.locals.loggedUser.id : 0;
     History.handle(e, userId);

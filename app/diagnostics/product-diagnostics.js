@@ -171,7 +171,7 @@ function isSalesMissing(product, stocks){
   var isMoreThan10Days = Dat.daysDif(product.dtCriacao, new Date()) > 9;
   var hasSales = stocks.some((i)=>{ return parseFloat(i.quantidade) < 0 && (parseInt(i.idOrigem) > 0) });
 
-  return isMoreThan10Days && !hasSales;
+  return isMoreThan10Days && !hasSales && !isPhotoMissing(product);
 }
 
 function isColorMissing(attrNames){
@@ -183,7 +183,7 @@ function isBrandMissing(attrNames){
 }
 
 function isCostPriceMissing(product){
-  return parseFloat(product.precoCusto) == 0;
+  return (parseFloat(product.precoCusto) == 0) || (parseFloat(product.precoCusto) > parseFloat(product.preco));
 }
 
 function isDepartmentMissing(attrNames){
@@ -194,6 +194,6 @@ function isGenderMissing(attrNames){
   return !attrNames.includes('Genero') || !attrNames.includes('Gênero');
 }
 
-function isPhotoMissing(product, callback){
+function isPhotoMissing(product){
   return !product.feedProduct || !product.feedProduct.image;
 }

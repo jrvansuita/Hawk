@@ -96,7 +96,10 @@ module.exports ={
         codigo: product.codigo,
         quantidade: Math.abs(stock),
         es: stock < 0 ? 'S' : 'E',
-        obs : " Desktop - " +  user.name
+        obs : " Desktop - " +  user.name,
+        //Manter o mesmo preço
+        custoLancamento : product.precoCusto,
+        preco: product.preco
       };
 
 
