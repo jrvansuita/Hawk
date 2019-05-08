@@ -300,7 +300,7 @@ function buildProductFirstCol(item, slim, pending){
   first.append(div);
 
   div = $('<div>').addClass('nobreak');
-  var descHolder = $('<label>').addClass('pick-value desc no-wrap').text(Util.ellipsis(Util.getProductName(item.descricao, true), 50));
+  var descHolder = $('<label>').addClass('pick-value desc no-wrap').text(Util.ellipsis(Util.getProductName(item.descricao, true), 25));
   div.append(descHolder);
   var brand = $('<span>').addClass('pick-value right').text(Util.getProductBrand(item.descricao, true));
   div.append(brand);

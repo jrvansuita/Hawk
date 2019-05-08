@@ -24,7 +24,9 @@ $(document).ready(() => {
   });
 
   $('.print-local').click((e)=>{
-    window.open('/product-print-locals?sku=' + (lastSelected ? lastSelected: product.codigo), '_blank');
+    if (lastSelected){
+      window.open('/product-print-locals?sku=' + lastSelected , '_blank');
+    }
   });
 });
 
