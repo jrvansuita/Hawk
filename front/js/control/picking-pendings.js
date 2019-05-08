@@ -31,10 +31,10 @@ $(document).ready(() => {
       $(el).click(function(e){
         var drop = new MaterialDropdown($(this), e);
 
-        if ($(el).hasClass('menu-red-top')){
+        if ($(el).hasClass('menu-red-top')){ 
           if (Sett.get(loggedUser, 10)){
             drop.addItem('/img/send-mass-email.png', 'Enviar Todos E-mails', function(){
-              icon.attr('src','/img/loader/circle.svg');
+              $('.menu-red-top>.dots-glyph').attr('src','/img/loader/circle.svg');
               doallSolvingPendingSale();
             });
           }
