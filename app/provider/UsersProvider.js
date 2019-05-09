@@ -43,6 +43,7 @@ module.exports = class UsersProvider {
       }else{
         for (var key in global.localUsers) {
           if (global.localUsers.hasOwnProperty(key)) {
+
             if (global.localUsers[key].access === code){
               return global.localUsers[key];
             }

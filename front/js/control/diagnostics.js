@@ -43,31 +43,53 @@ function startIntervalTimer(startTime){
 
 
 function buildIndRows(rows){
-  rows.forEach((row)=>{
 
-    var $img = $('<img>').addClass('row-img').attr('src', '/sku-image?def=img/product-placeholder.png&sku=' + row.sku);
-
-
-    var $name = $('<label>').addClass('row-name').text(row.brand);
-    var $sku = $('<label>').addClass('row-sku copiable').text(' ' + row.sku)
-
-    var $subsHolder = $('<div>').addClass('subs-holder').append($name, $sku);
-
-    $subsHolder.dblclick((e)=>{
-      e.stopPropagation();
-      window.open('/product?sku=' + row.sku,'_blank');
-    });
-
-    var $div =  $('<div>').addClass('row-item shadow').append($img, $subsHolder);
-    $div.click(()=>{
-      showSkuFixesDialog(row.sku);
-    });
-
-    $('.ind-rows-holder').append($div);
-    $div.hide().fadeIn();
+  var brands = rows.map((row)=>{
+    return row.brand;
+  }).filter(function(item, pos, self) {
+    return self.indexOf(item) == pos;
   });
 
+  brands.forEach(brand=>{
+    var $brandGroup = $('<div>').addClass('brand-group');
+    var $brandTitle = $('<span>').addClass('brand-title').append(brand);
+    var $itemsHolder = $('<div>').addClass('items-brand-holder');
+
+    $brandGroup.append($brandTitle, $itemsHolder);
+
+    rows.forEach((row)=>{
+      if (row.brand == brand){
+        buildSingleRow($itemsHolder, row);
+      }
+    });
+
+    $('.ind-rows-holder').append($brandGroup);
+  });
+
+
   bindCopiable();
+}
+
+function buildSingleRow(holder, row){
+  var $img = $('<img>').addClass('row-img').attr('src', '/sku-image?def=img/product-placeholder.png&sku=' + row.sku);
+
+
+  var $name = $('<label>').addClass('row-name').text(row.brand);
+  var $sku = $('<label>').addClass('row-sku copiable').text(' ' + row.sku)
+
+  var $subsHolder = $('<div>').addClass('subs-holder').append($name, $sku);
+
+  $subsHolder.dblclick((e)=>{
+    e.stopPropagation();
+    window.open('/product?sku=' + row.sku,'_blank');
+  });
+
+  var $div =  $('<div>').addClass('row-item shadow').append($img, $subsHolder);
+  $div.click(()=>{
+    showSkuFixesDialog(row.sku);
+  });
+
+  holder.append($div);
 }
 
 

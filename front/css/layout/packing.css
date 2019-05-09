@@ -77,8 +77,9 @@ input{
   overflow: hidden;
   white-space: pre-wrap;
   font-size: 15px;
-  min-width: 100px;
- display: -webkit-box;
+  width: auto;
+  max-width: 250px;
+  display: -webkit-box;
 }
 
 .highlighted{
@@ -103,11 +104,11 @@ input{
 }
 
 .field{
-  min-width: 100px;
+  padding-right: 15px;
   margin-bottom: 8px;
   vertical-align: middle;
   display: inline-block;
-  width: fit-content;
+  width: max-content;
 }
 
 

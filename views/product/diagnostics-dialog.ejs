@@ -8,7 +8,7 @@
         <label class="sku-name"><%=product ? Str.short(Util.getProductName(product.name), 42): ''%></label>
       </a>
       <%var brand = product ? Util.getProductBrand(product.name) : ''%>
-      <a href="<%=process.env.STORE_UTL + '/' + brand.replace(' ', '-').toLowerCase(); %>" target="_blank">
+      <a href="<%=process.env.STORE_UTL + '/' + brand.trim().replace(' ', '-').toLowerCase(); %>" target="_blank">
         <label class="sku-brand"><%=brand%></label>
       </a>
 
@@ -38,7 +38,7 @@
 
         <%});%>
       </div>
-
+ 
 
 
     <%});%>
@@ -63,6 +63,12 @@
               $(this).attr('src', 'img/restart-error.png');
             }
           });
+        });
+
+
+        $('.fixes-sku-list.copiable').dblclick(function(e){
+          e.stopPropagation();
+          window.open('/product?sku=' + $(this).text(),'_blank');
         });
       });
 

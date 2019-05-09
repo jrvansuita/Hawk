@@ -23,6 +23,7 @@
 
   span{
     font-size:17px;
+    font-weight: 500;
     font-family: sans-serif;
   }
 
@@ -33,6 +34,7 @@
 
   .history-holder{
     padding: 10px 0px;
+        width: 100%;
   }
 
 
@@ -40,7 +42,7 @@
     background-color: #f2f2f2;
   }
   td{
-    padding: 12px 0px;
+    padding: 12px 5px;
   }
 
   table{
@@ -66,7 +68,7 @@
     <p>
       <span class="big"><%=product.codigo%></span>
       <span class="gtin"><%=product.gtin%></span>
-      <span class="big" style="float:right"><%=Dat.formatwTime(new Date())%></span>
+      <span  style="float:right"><%=Dat.formatwTime(new Date())%></span>
     </p>
     <span><%=Util.getProductName(product.nome, true)%></span>
     <span style="float:right"><%=Util.getProductBrand(product.nome, true)%></span>
@@ -92,7 +94,7 @@
 
           %>
           <tr>
-            <td colspan="8">
+            <td>
               <span class="local"><%=data%></span>
             </td>
 

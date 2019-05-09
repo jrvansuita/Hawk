@@ -41,7 +41,7 @@
 }
 
 .top-image-holder{
-  padding: 2px 15px;
+  /* padding: 2px 15px; */
   background-color: #efebeb;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
@@ -54,6 +54,7 @@
   padding: 3px 1px;
   font-size: 13px;
   cursor: default;
+  padding: 2px 5px;
   font-weight: 400;
 }
 
@@ -392,4 +393,11 @@ table{
 .print-local:hover{
   cursor: pointer;
   transform: scale(1.1);
+}
+
+.editable-input{
+  width: fit-content;
+  min-width: 100px;
+  max-width: 100%;
+  margin: auto;
 }

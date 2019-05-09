@@ -107,6 +107,25 @@ module.exports ={
     });
   },
 
+  updateWeight(sku, weight, user, callback){
+
+    weight = Floa.floa(weight);
+
+    this.getBySku(sku, false, (product)=>{
+
+      var lines = product.obs;
+
+      var body = {
+        codigo: product.codigo,
+        pesoLiq: Math.abs(weight),
+        pesoBruto: Math.abs(weight),
+        obs : lines +  "\n" + user.name + " | Desktop | " + Floa.weight(weight) + " | " + Dat.format(new Date()) + '| Peso'
+      };
+
+      new EccosysCalls().updateProduct(body, callback);
+    });
+  },
+
   searchAutoComplete(typing, callback){
     Product.likeThis(typing, 150, (err, products)=>{
       callback(products);

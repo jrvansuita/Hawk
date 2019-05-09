@@ -516,7 +516,6 @@ tr.row-padding td{
 
 
 .blocked-rules-holder{
-  padding-top: 12px;
   display: flex;
   flex-wrap: wrap;
   width: fit-content;

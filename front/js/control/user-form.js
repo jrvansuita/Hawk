@@ -61,13 +61,19 @@ $(document).ready(() => {
 
   var showActive =  (loggedUser && loggedUser.full && loggedUser.id != selectedUser.id);
 
-  $('#active').attr('disabled', !showActive);
+  if (!showActive){
+    $('#active').parent().removeClass('active').addClass('disabled');
+  }
 
- $('.token-label').click(()=>{
-   $('#token').fadeIn();
-   $('.token-label').hide();
- });
+  $('.token-label').click(()=>{
+    $('#token').fadeIn();
+    $('.token-label').hide();
+  });
 
+
+  $('.disabled').click((e)=>{
+    e.preventDefault();
+  });
 
   loadSectors();
   loadSetts();
@@ -183,9 +189,9 @@ function buildCurrentGroup(groups, index, titles){
     var input = $('<input>').attr('type', 'checkbox').attr('name', 'sett-' + settItem.id);
     var title = $('<span>').text(settItem.name);
 
-   if (userSetts[settItem.id]){
-     input.attr('checked', 'checked');
-   }
+    if (userSetts[settItem.id]){
+      input.attr('checked', 'checked');
+    }
 
     row.append(input, title);
     div.append(row);

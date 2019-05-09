@@ -17,21 +17,22 @@ $(document).ready(() => {
     e.stopPropagation();
   });
 
-  $('.pending-item').click(function(e){
-    var saleNumber = $(this).data('sale').split('-')[1];
-    loadPendingSaleItems($(this), getPendingSale(saleNumber));
-    e.stopPropagation();
-  });
+  if (userSetts[3] != undefined){
+    $('.pending-item').click(function(e){
+      var saleNumber = $(this).data('sale').split('-')[1];
+      loadPendingSaleItems($(this), getPendingSale(saleNumber));
+      e.stopPropagation();
+    });
+  }
 
 
-  if (isWideOpen() && ($('.pending-item.not-solved').length > 0)){
-
+  if (isWideOpen()){
 
     $('.menu-dots').each((index, el)=>{
       $(el).click(function(e){
         var drop = new MaterialDropdown($(this), e);
 
-        if ($(el).hasClass('menu-red-top')){ 
+        if ($(el).hasClass('menu-red-top')){
           if (Sett.get(loggedUser, 10)){
             drop.addItem('/img/send-mass-email.png', 'Enviar Todos E-mails', function(){
               $('.menu-red-top>.dots-glyph').attr('src','/img/loader/circle.svg');

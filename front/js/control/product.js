@@ -120,6 +120,7 @@ function buildChildSku(product, child){
   cols.push(buildStockCol(child));
   cols.push(buildTextCol(estoque.estoqueDisponivel).addClass('available-stock'));
   cols.push(buildTextCol(estoque.estoqueReal - estoque.estoqueDisponivel).addClass('reserved-stock'));
+  cols.push(buildWeightCol(child));
 
   var $options = buildImgCol('img/dots.png', 'Opções');
 
@@ -208,7 +209,9 @@ function buildLocalCol(product){
 }
 
 function buildStockCol(product){
-  var $valElement = buildInput(product._Estoque.estoqueReal, true);
+  var $valElement = buildInput(product._Estoque.estoqueReal);
+
+  $valElement.attr('onkeypress',"return Num.isNumberKey(event);").attr('maxlenght','5');
 
   bindEvents($valElement, true, true);
 
@@ -226,7 +229,12 @@ function buildStockCol(product){
 
 
         _post('/product-stock',requestBody , (res)=>{
-          handleInputUpdate($(this), res, $(this).data('value') + val);
+          console.log(parseInt($(this).data('value')));
+          console.log(val);
+
+          console.log(parseInt($(this).data('value')) + val);
+
+          handleInputUpdate($(this), res, parseInt($(this).data('value')) + val);
 
           var $disp = $(this).closest('tr').find('.available-stock .child-value');
 
@@ -242,16 +250,44 @@ function buildStockCol(product){
   return buildCol($valElement);
 }
 
-function buildInput(val, isNum){
+
+function buildWeightCol(product){
+  var $valElement = buildInput(Floa.weight(product.pesoLiq));
+  $valElement.attr('onkeypress',"return Floa.isFloatKey(event);").attr('maxlenght','6');
+
+  bindEvents($valElement, true, true);
+
+  $valElement.change(function(e, v){
+    if (currentUser){
+      if ($(this).val()){
+        showLoadingStatus();
+        var val = Floa.weight(Floa.floa($(this).val()));
+
+        var requestBody = {
+          sku: product.codigo,
+          weight: val,
+          user: currentUser
+        };
+
+        _post('/product-weight', requestBody , (res)=>{
+          handleInputUpdate($(this), res, val);
+        });
+      }
+    }
+  })
+  //Ao abrir a tela os campos de edição são desabilitados
+  .attr('disabled', true);
+
+
+  return buildCol($valElement);
+}
+
+function buildInput(val){
   var $valElement;
-  $valElement = $('<input>').attr('value',val)
+  $valElement = $('<input>').attr('value', val)
   .addClass('child-value editable-input')
   .attr('placeholder', val)
   .data('value', val);
-
-  if (isNum){
-    $valElement.attr('onkeypress',"return Num.isNumberKey(event);").attr('maxlenght','5');
-  }
 
   return $valElement;
 }
@@ -298,6 +334,7 @@ function addFooter(){
   $tr.append(buildCol(estoqueRealTotal));
   $tr.append(buildCol(estoqueDisponivelTotal));
   $tr.append(buildCol(estoqueReservadoTotal));
+  $tr.append(buildCol(''));  // Weight
   $tr.append(buildCol(''));  // Options
   $('#child-skus-holder').append($tr);
 }
@@ -478,7 +515,7 @@ function loadLayoutHistory(rows){
     }
   }
 
-  function bindEvents($el, blurOnEnter, clearOnFocus){
+  function bindEvents($el, blurOnEnter, clearOnFocus, selOnFocus){
     $el.click(function(e){
       e.stopPropagation();
     });
@@ -491,7 +528,9 @@ function loadLayoutHistory(rows){
       });
 
       $el.focusout(function(e){
-        $(this).val(lastVal);
+        if ($(this).val() == ''){
+          $(this).val(lastVal);
+        }
       });
     }
 

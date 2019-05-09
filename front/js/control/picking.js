@@ -177,16 +177,18 @@ $(document).ready(() => {
     }
   });
 
-  $('.table-sale-blocked-holder').click(function(e){
-    var blockNumber = $(this).data('blocknumber');
+  if (userSetts[11] != undefined){
+    $('.table-sale-blocked-holder').click(function(e){
+      var blockNumber = $(this).data('blocknumber');
 
-    var drop = new MaterialDropdown($(this), e);
-    drop.addItem('/img/delete.png', 'Remover', function(){
-      new BlockedPost(blockNumber).call();
+      var drop = new MaterialDropdown($(this), e);
+      drop.addItem('/img/delete.png', 'Remover', function(){
+        new BlockedPost(blockNumber).call();
+      });
+
+      drop.show();
     });
-
-    drop.show();
-  });
+  }
 
   $('.done-sale-item').click(function(e){
     var saleId = $(this).data('saleid').split('-')[1];
@@ -197,9 +199,12 @@ $(document).ready(() => {
       openPrintPickingSale(sale, $('#user-logged-id').text());
     });
 
-    drop.addItem('/img/back.png', 'Reseparar', function(){
-      doneSaleRestart(sale);
-    });
+
+    if (userSetts[12] != undefined){
+      drop.addItem('/img/back.png', 'Reseparar', function(){
+        doneSaleRestart(sale);
+      });
+    }
 
     drop.onMouseLeave(()=>{
       $( "#user-id" ).focus();

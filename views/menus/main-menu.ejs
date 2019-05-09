@@ -95,13 +95,17 @@
       </a>
     </li>
 
-    <li class="menu-item ">
-      <a href="/settings">
-        <div class="menu-button title">
-          Configurações
-        </div>
-      </a>
-    </li>
+    <%if (locals.loggedUser && locals.loggedUser.full){%>
+      <li class="menu-item ">
+        <a href="/settings">
+          <div class="menu-button title">
+            Configurações
+          </div>
+        </a>
+      </li>
+      <%}%>
+
+
   </ul>
 
   <div class=" user-logged-holder">

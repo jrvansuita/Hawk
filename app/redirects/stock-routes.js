@@ -100,6 +100,10 @@ module.exports = class ProductRoutes extends Routes{
       ProductHandler.updateStock(req.body.sku, req.body.stock, req.body.user, this._resp().redirect(res));
     });
 
+    this._post('/product-weight', (req, res) => {
+      ProductHandler.updateWeight(req.body.sku, req.body.weight, req.body.user, this._resp().redirect(res));
+    });
+
     this._get('/barcode', (req, res) => {
       ProductHandler.get(req.query.sku, false, (result)=>{
         res.render('product/barcode',{

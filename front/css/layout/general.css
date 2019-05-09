@@ -307,3 +307,7 @@ table{
   border: 2px #1c796b;
   border-style: none none solid none;
 }
+
+.disabled{
+  opacity: 0.6 !important;
+}

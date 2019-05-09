@@ -9,65 +9,68 @@
 
 
   <style>
-    .title{
-      padding-bottom: 25px;
-      margin: auto;
-      font-size: 23px;
-      display: -webkit-box;
-      font-weight: 700;
-    }
+  .title{
+    padding-bottom: 25px;
+    margin: auto;
+    font-size: 23px;
+    display: -webkit-box;
+    font-weight: 700;
+  }
 
-    .big{
-      font-weight: 800;
-      font-size: 22px;
-    }
+  .big{
+    font-weight: 800;
+    font-size: 22px;
+  }
 
 
-    span{
-      font-size:17px;
-      font-family: sans-serif;
-    }
+  span{
+    font-weight: 500;
+    font-size:18px;
+    font-family: sans-serif;
+  }
 
-    td{
-      padding: 6px 10px;
-    }
+  td{
+    padding: 6px 10px;
+  }
 
-    table{
-      width: 100%;
-      max-width: 100%;
-      background-color: transparent;
-      border-collapse: collapse;
-      border-spacing: 0;
-    }
+  table{
+    width: 100%;
+    max-width: 100%;
+    background-color: transparent;
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
 
-    .gtin{
-      padding: 0px 15px;
-      float:right;
-    }
+  .gtin{
+    padding: 0px 15px;
+    float:right;
+  }
 
-    .last-row td{
-      border-top: 1px solid #989898;
-      border-bottom: 1px solid #989898;
-      background: #f1f1f1;
-    }
+  .last-row td{
+    border-top: 1px solid #989898;
+    border-bottom: 1px solid #989898;
+    background: #f1f1f1;
+  }
 
-    .small>span{
-      font-size: 14px !important;
-    }
+  .small>span{
+    font-size: 14px !important;
+  }
 
-    .small{
-      padding-top: 1px;
-      padding-bottom: 8px;
-      border-bottom: 1px dashed;
-    }
+  .small{
+    padding-top: 1px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed;
+  }
 
-    .qtd-border{
-      border: 2px solid black;
-      padding: 3px 6px;
-    }
-    .sku{
-      font-weight: 700;
-    }
+  .qtd-border{
+    border: 2px solid black;
+    padding: 3px 6px;
+  }
+  .hard{
+    font-size: 19px;
+    font-weight: 600;
+  }
+
 
 
   </style>
@@ -96,7 +99,7 @@
           <td></td>
 
           <td>
-            <span class="sku"><%=item.codigo%></span>
+            <span class="hard"><%=item.codigo%></span>
             <span class="gtin"><%= !item.gtin? 'Sem EAN' : item.gtin.slice(9, item.gtin.length)%></span>
           </td>
 
@@ -104,7 +107,7 @@
             return i.codigo == item.codigo;
           })%>
           <td colspan="2">
-            <span>
+            <span class="hard">
               <%=localProduct ? localProduct.localizacao : 'Não Encontrado'%>
             </span>
           </td>

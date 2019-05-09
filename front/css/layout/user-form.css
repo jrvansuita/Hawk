@@ -16,7 +16,7 @@ body {
 }
 
 .main-form{
-  height: 400px;
+  height: 500px;
   text-align: center;
   margin: auto;
   padding: 0px 15px;
@@ -55,6 +55,7 @@ body {
   display: block;
   float: right;
   height: auto;
+  /* padding-left: 2px; */
 }
 
 .scroll{
@@ -139,7 +140,7 @@ body {
 }
 
 .setts-group{
-  margin: 0px 5px;
+  margin: 0px 16px;
   padding-bottom: 8px;
   text-align: left;
   display: block;
@@ -162,7 +163,7 @@ body {
   display: block;
   text-align: left;
   vertical-align: middle;
-  padding-top: 5px;
+  padding-top: 8px;
   padding-right: 5px;
 }
 
