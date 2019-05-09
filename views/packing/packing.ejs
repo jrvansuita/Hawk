@@ -113,7 +113,7 @@
               <td>
                 <div class="field">
                   <label class="field-title">Cidade</label>
-                  <label class="info"><%=sale && sale.client ? Str.short(sale.client.cidade,20) : ''%></label>
+                  <label class="info"style="font-size: 12px; max-width:100px"><%=sale && sale.client ? Str.short(sale.client.cidade,20) : ''%></label>
                 </div>
               </td>
 
@@ -124,7 +124,7 @@
                   var address = '';
 
                   if(sale && sale.client){
-                    address = Str.short(sale.client.endereco, 30) + ', ' + sale.client.enderecoNro +
+                    address = Str.short(sale.client.endereco, 20) + ', ' + sale.client.enderecoNro +
                     '\n' + sale.client.bairro + ' ' + sale.client.cep;
                   }
 

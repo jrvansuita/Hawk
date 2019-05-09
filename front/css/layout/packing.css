@@ -76,9 +76,8 @@ input{
 .info{
   overflow: hidden;
   white-space: pre-wrap;
-  font-size: 15px;
   width: auto;
-  max-width: 250px;
+  text-overflow: ellipsis;
   display: -webkit-box;
 }
 
@@ -104,11 +103,9 @@ input{
 }
 
 .field{
-  padding-right: 15px;
   margin-bottom: 8px;
   vertical-align: middle;
   display: inline-block;
-  width: max-content;
 }
 
 
@@ -272,12 +269,13 @@ table{
   vertical-align: middle;
   margin: auto;
   padding: 0;
-  min-width: 170px;
   display: inline-flex;
 }
 
 .status-holder .info{
   font-size: 13px;
+  width: 70px;
+  text-overflow: ellipsis;
 }
 
 
