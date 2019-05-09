@@ -17,7 +17,7 @@ $(document).ready(() => {
     e.stopPropagation();
   });
 
-  if (userSetts[3] != undefined){
+  if (Sett.get(loggedUser, 3)){
     $('.pending-item').click(function(e){
       var saleNumber = $(this).data('sale').split('-')[1];
       loadPendingSaleItems($(this), getPendingSale(saleNumber));
