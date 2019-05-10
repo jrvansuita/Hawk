@@ -182,7 +182,7 @@ function getLastBottomBarOption(pending){
         e.stopPropagation();
 
         new BlockedSelector().onSelect((reason)=>{
-          new BlockedPost(pending.number, reason).call();
+          new BlockedPost(pending.number, reason).isPending().call();
         }).show();
       });
 
@@ -287,9 +287,7 @@ function buildProductFirstCol(item, slim, pending){
   });
 
 
-  var gtinStr = slim ? item.gtin.slice(9, item.gtin.length) : item.gtin;
-
-  var gtin = $('<span>').addClass('pick-value right').text(gtinStr);
+  var gtin = $('<span>').addClass('pick-value right').text(item.gtin.slice(9, item.gtin.length));
 
 
   if (item.changed || item.observacao.includes('changed')){

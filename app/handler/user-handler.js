@@ -38,7 +38,8 @@ module.exports = class UserHandler {
 
     callback(user.id);
 
-    UsersProvider.addUser(user);
+    //toObject removes unwanted attrs
+    UsersProvider.addUser(user.toObject());
   }
 
 

@@ -89,6 +89,13 @@ module.exports = class PickingRoutes extends Routes{
       BlockHandler.toggle(req.body.blockNumber, req.session.loggedUserID, req.body.reasonTag, this._resp().redirect(res));
     });
 
+    this._post(['/picking/block-pending'], (req, res) => {
+      BlockHandler.toggle(req.body.blockNumber, req.session.loggedUserID, req.body.reasonTag, ()=>{
+        PendingLaws.remove(req.body.blockNumber);
+        this._resp().redirect(res)
+      });
+    });
+
     this._post('/picking-done-restart', (req, res, body, locals, session) => {
       PickingHandler.restart(req.session.loggedUserID, req.body.sale, this._resp().redirect(res));
     });

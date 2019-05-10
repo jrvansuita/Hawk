@@ -67,7 +67,7 @@ module.exports = class UsersProvider {
     var user = UsersProvider.get(userId);
 
     if (user === undefined || user.id < 1000) {
-      Err.thrw("Usuário não existe.");
+      Err.thrw("Usuário " + userId + " não existe.");
     }
 
     if (!user.active){

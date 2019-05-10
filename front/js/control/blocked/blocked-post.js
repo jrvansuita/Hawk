@@ -4,15 +4,22 @@ class BlockedPost{
   constructor(blockNumber, reason){
     this.blockNumber = blockNumber;
     this.reason = reason;
+    this.url = "/picking/toggle-block";
+  }
+
+  isPending(){
+    this.url = "/picking/block-pending";
+    return this;
   }
 
   onError(callback){
     this.errorListener = callback;
+    return this;
   }
 
   call(){
     $.ajax({
-      url: "/picking/toggle-block",
+      url: this.url,
       type: "post",
       data: {
         blockNumber: this.blockNumber,

@@ -26,6 +26,15 @@ var Util = {
     return JSON.parse(JSON.stringify(object));
   },
 
+  removeAttrs(object, keep){
+    return Object.keys(object).reduce((obj, key) => {
+      if (keep.includes(key)) {
+        obj[key] = object[key]
+      }
+      return obj
+    }, {});
+  },
+
 
   forProperty(object, callback){
     for (var key in object) {
@@ -225,7 +234,7 @@ var Util = {
   },
 
 
-   getProductBrand(name, isChild){
+  getProductBrand(name, isChild){
     var spl = name.split('-');
     var brand = spl[spl.length + (isChild  ? -2 : -1)];
 
@@ -233,7 +242,7 @@ var Util = {
     return brand;
   },
 
-   getProductName(name, isChild){
+  getProductName(name, isChild){
     var desc = name.split('-').slice(0, isChild ? -2: -1).join('-').trim();
 
     return desc;
@@ -263,33 +272,33 @@ var Util = {
       default:
       return 'Não encontrado';
     }
- },
+  },
 
 
- diagIcon(type){
-   switch(type) {
-     case 0:
-     return 'photo';
-     case 1:
-     return 'no-local';
-     case 2:
-     return 'no-weight';
-     case 3:
-     return 'calc';
-     case 4:
-     return 'tags';
-     case 5:
-     return 'color';
-     case 6:
-     return 'price';
-     case 7:
-     return 'category';
-     case 8:
-     return 'gender';
-     default:
-     return 'question-mark';
-   }
- }
+  diagIcon(type){
+    switch(type) {
+      case 0:
+      return 'photo';
+      case 1:
+      return 'no-local';
+      case 2:
+      return 'no-weight';
+      case 3:
+      return 'calc';
+      case 4:
+      return 'tags';
+      case 5:
+      return 'color';
+      case 6:
+      return 'price';
+      case 7:
+      return 'category';
+      case 8:
+      return 'gender';
+      default:
+      return 'question-mark';
+    }
+  }
 
 
 

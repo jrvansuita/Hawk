@@ -1,5 +1,12 @@
 module.exports = class DataAccess {
 
+  toObject(){
+    delete this.__v;
+    delete this._id;
+    delete this['$setOnInsert'];
+
+    return this;
+  }
   /*raw() {
   console.log(Schema.Raw(this));
 }*/

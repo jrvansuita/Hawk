@@ -28,8 +28,6 @@ module.exports = {
     return BlockLaws.get(blockNumber);
   },
 
-
-
   checkAllBlocksAndCapture(sale){
     var isBlocked = false;
     var rules = BlockLaws.rules();
@@ -46,15 +44,11 @@ module.exports = {
   },
 
 
-  _removeFromPendingSalesIfNeeded(blockRule){
-    if (blockRule.reasonTag.toString() !== '994'){
-      PendingLaws.remove(blockRule.number);
-    }
-  },
+
 
   _checkAndRestoreBlockedSalesToPicking(){
     BlockLaws.refreshBlockedSales((sale)=>{
-        PickingLaws.add(sale);
+      PickingLaws.add(sale);
     });
   },
 
@@ -71,7 +65,6 @@ module.exports = {
   store(blockNumber, user, reasonTag, callback){
     BlockLaws.store(blockNumber, user, reasonTag, (blockRule)=>{
       HistoryStorer.blocked(user.id, blockNumber, true);
-      this._removeFromPendingSalesIfNeeded(blockRule);
       this._checkAndBlockSaleFromPicking(blockRule);
       callback();
     });
@@ -94,6 +87,31 @@ module.exports = {
     }else{
       this.store(blockNumber, user, reasonTag, callback);
     }
+  },
+
+
+  pendingSkus(sale, user){
+    var skus = sale.items.map((i)=>{
+      return i.codigo;
+    });
+
+
+    blockSkusRun =  (skus, index, callback) => {
+      if (skus[index]){
+        BlockLaws.store(skus[index], user, '994', (blockRule)=>{
+          console.log(blockRule);
+          this._checkAndBlockSaleFromPicking(blockRule);
+          index++;
+          blockSkusRun(skus, index, callback);
+        });
+      }else{
+        callback();
+      }
+    };
+
+    blockSkusRun(skus, 0, ()=>{
+      HistoryStorer.blockedPendingSkus(user.id, skus, sale.numeroPedido);
+    });
   },
 
 

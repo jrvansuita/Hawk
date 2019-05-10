@@ -20,6 +20,12 @@ module.exports={
     History.notify(userId, blocked ? 'Picking Bloqueado' : 'Picking Desbloqueado', message, 'Bloqueio');
   },
 
+  blockedPendingSkus(userId, skus, pendingNumber){
+    var message = 'Alguns skus foram bloquados automaticamente pelo pedido de pendência ' + pendingNumber + '\nCódigos: ' + skus.join(',');
+
+    History.notify(userId, 'Picking Bloqueado' , message, 'Bloqueio');
+  },
+
   picking(userId, sale, day){
     onTry(()=>{
       var message = 'Pedido: ' + sale.numeroPedido + (sale.client ? ' - ' + sale.client.nome : '');
@@ -50,7 +56,7 @@ module.exports={
   packingRejected(userId, saleNumber, error){
     onTry(()=>{
       var message = 'Pedido: ' + saleNumber;
-      
+
       if (error){
         message += '\nError: ' + error;
       }

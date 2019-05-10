@@ -5,6 +5,7 @@ const InprogressLaws = require('../laws/inprogress-laws.js');
 const EccosysCalls = require('../eccosys/eccosys-calls.js');
 const PendingEmailSender = require('../email/sender/pending-email-sender.js');
 const HistoryStorer = require('../history/history-storer.js');
+const BlockHandler = require('../handler/block-handler.js');
 
 module.exports = {
 
@@ -33,10 +34,11 @@ module.exports = {
     }
   },
 
-  store(sale, local,user, callback){
+  store(sale, local, user, callback){
     PendingLaws.store(sale, local, user, ()=>{
       PickingLaws.remove(sale);
       InprogressLaws.remove(sale.numeroPedido);
+      BlockHandler.pendingSkus(sale, user);
 
       callback();
     });
