@@ -90,7 +90,7 @@ module.exports = class PickingRoutes extends Routes{
     });
 
     this._post(['/picking/block-pending'], (req, res) => {
-      BlockHandler.toggle(req.body.blockNumber, req.session.loggedUserID, req.body.reasonTag, ()=>{
+      BlockHandler.toggle(req.body.blockNumber, req.body.userId ? req.body.userId : req.session.loggedUserID, req.body.reasonTag, ()=>{
         PendingLaws.remove(req.body.blockNumber);
         this._resp().redirect(res)
       });

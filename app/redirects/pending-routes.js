@@ -41,7 +41,7 @@ module.exports = class PendingRoutes extends Routes{
       });
 
       this._post('/start-pending', (req, res, body, locals) => {
-        PendingHandler.store(body.pendingSale, body.local, locals.loggedUser, this._resp().redirect(res));
+        PendingHandler.store(body.pendingSale, body.local, body.pendingSale.pickUser, this._resp().redirect(res));
       });
 
       this._post('/pending-status', (req, res, body, locals) => {

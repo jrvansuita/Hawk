@@ -17,7 +17,7 @@ module.exports={
   blocked(userId, blockNumber, blocked){
     var message = 'O código ' + blockNumber + ' foi ' + (blocked ? 'bloqueado' : 'desbloqueado');
 
-    History.notify(userId, blocked ? 'Picking Bloqueado' : 'Picking Desbloqueado', message, 'Bloqueio');
+    History.notify(userId, blocked ? 'Picking Bloqueado' : 'Picking Desbloqueado', message, 'Bloqueio'); 
   },
 
   blockedPendingSkus(userId, skus, pendingNumber){

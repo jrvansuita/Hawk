@@ -21,12 +21,12 @@ module.exports= class AutoBlockPicking {
       hasToBlock =  reasonStock || reasonLocal;
 
     }
-    
+
     return hasToBlock;
   }
 
   onCheckStock(sale, products, index, onTerminate){
-    if (index < products.length){
+    if (products[index]){
       var product = products[index];
 
       index++;

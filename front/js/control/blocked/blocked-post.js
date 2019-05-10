@@ -12,6 +12,12 @@ class BlockedPost{
     return this;
   }
 
+  setUserId(userId){
+    this.userId = userId;
+    return this;
+  }
+
+
   onError(callback){
     this.errorListener = callback;
     return this;
@@ -23,7 +29,8 @@ class BlockedPost{
       type: "post",
       data: {
         blockNumber: this.blockNumber,
-        reasonTag : this.reason ? this.reason.tag : null
+        reasonTag : this.reason ? this.reason.tag : null,
+        userId :this.userId 
       },
       success: function(response) {
         window.location.reload();
