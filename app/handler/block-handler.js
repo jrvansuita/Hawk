@@ -3,6 +3,7 @@ const PendingLaws = require('../laws/pending-laws.js');
 const HistoryStorer = require('../history/history-storer.js');
 const PickingLaws = require('../laws/picking-laws.js');
 const UsersProvider = require('../provider/UsersProvider.js');
+const BlockRule = require('../bean/block-rule.js');
 
 module.exports = {
 
@@ -52,21 +53,26 @@ module.exports = {
     });
   },
 
-  _checkAndBlockSaleFromPicking(blockRule){
+  _checkAndBlockSaleFromPicking(blockRule, callback){
+    var salesBlocked = 0;
     //Remove all sales that matchs the new block
     //Not using PickingLaws.filter because I need to keep no mutated the object global.staticPickingList
     PickingLaws.getFullList().forEach((eachSale)=>{
       if (BlockLaws.checkAndCapture(blockRule, eachSale)){
         PickingLaws.remove(eachSale);
+        salesBlocked++;
       }
     });
+
+    if (callback){
+      callback(salesBlocked);
+    }
   },
 
   store(blockNumber, user, reasonTag, callback){
     BlockLaws.store(blockNumber, user, reasonTag, (blockRule)=>{
       HistoryStorer.blocked(user.id, blockNumber, true);
-      this._checkAndBlockSaleFromPicking(blockRule);
-      callback();
+      this._checkAndBlockSaleFromPicking(blockRule, callback);
     });
   },
 
@@ -89,28 +95,41 @@ module.exports = {
     }
   },
 
-
   pendingSkus(sale, user){
     var skus = sale.items.map((i)=>{
       return i.codigo;
     });
 
+    //Crio uma funcation para iterar automaticamente
+    blockSkusRun =  (skus, index, count, callback) => {
+      var sku = skus[index]; 
 
-    blockSkusRun =  (skus, index, callback) => {
-      if (skus[index]){
-        BlockLaws.store(skus[index], user, '994', (blockRule)=>{
-          console.log(blockRule);
-          this._checkAndBlockSaleFromPicking(blockRule);
-          index++;
-          blockSkusRun(skus, index, callback);
+      if (sku){
+        //Crio uma regra de bloqueio
+        var blockRule = new BlockRule(sku, user,  '994');
+
+        //Verifico se com essa regra, bloqueia algum pedido
+        this._checkAndBlockSaleFromPicking(blockRule, (blocksCount)=>{
+
+          if (blocksCount){
+            //Se bloquear 1 ou mais pedidos, eu incluo o registro na tabela
+            BlockLaws.put(blockRule, (blockRule)=>{
+              count += blocksCount;
+              index++;
+              blockSkusRun(skus, index, count, callback);
+            });
+          }
+
         });
       }else{
-        callback();
+        callback(count);
       }
     };
 
-    blockSkusRun(skus, 0, ()=>{
-      HistoryStorer.blockedPendingSkus(user.id, skus, sale.numeroPedido);
+    blockSkusRun(skus, 0, 0, (salesBlockedCount)=>{
+      if (salesBlockedCount){
+        HistoryStorer.blockedPendingSkus(user.id, skus, sale.numeroPedido, salesBlockedCount);
+      }
     });
   },
 

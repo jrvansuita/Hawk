@@ -17,11 +17,17 @@ module.exports={
   blocked(userId, blockNumber, blocked){
     var message = 'O código ' + blockNumber + ' foi ' + (blocked ? 'bloqueado' : 'desbloqueado');
 
-    History.notify(userId, blocked ? 'Picking Bloqueado' : 'Picking Desbloqueado', message, 'Bloqueio'); 
+    History.notify(userId, blocked ? 'Picking Bloqueado' : 'Picking Desbloqueado', message, 'Bloqueio');
   },
 
-  blockedPendingSkus(userId, skus, pendingNumber){
-    var message = 'Alguns skus foram bloquados automaticamente pelo pedido de pendência ' + pendingNumber + '\nCódigos: ' + skus.join(',');
+  blockedPendingSkus(userId, skus, pendingNumber, salesBlockeds){
+    var message = 'Alguns skus foram bloquados automaticamente pelo pedido de pendência ' + pendingNumber;
+
+    if (salesBlockeds){ 
+      message+= '\nForam bloqueados +' + salesBlockeds + ' pedidos que continham os mesmos produtos';
+    }
+
+    message += '\nSkus Bloqueados: ' + skus.join(', ');
 
     History.notify(userId, 'Picking Bloqueado' , message, 'Bloqueio');
   },
