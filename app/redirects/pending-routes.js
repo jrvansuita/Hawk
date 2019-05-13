@@ -49,13 +49,13 @@ module.exports = class PendingRoutes extends Routes{
       });
 
       this._post('/picking-pending-restart', (req, res, body, locals) => {
-        PendingHandler.restart(body.pendingSale, body.pendingSale.pickUser, this._resp().redirect(res));
+        PendingHandler.restart(body.pendingSale, body.pendingSale.sale.pickUser, this._resp().redirect(res));
       });
 
       this._post('/pending-swap-items', (req, res, body, locals) => {
         //if (locals.loggedUser.full){
         new SaleItemSwapper(body.saleNumber, locals.loggedUser.id)
-        .on(body.targetSku)
+        .on(body.targetSku) 
         .to(body.swapSku)
         .with(body.quantity)
         .go(this._resp().redirect(res));
