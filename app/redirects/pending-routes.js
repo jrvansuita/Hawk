@@ -49,7 +49,7 @@ module.exports = class PendingRoutes extends Routes{
       });
 
       this._post('/picking-pending-restart', (req, res, body, locals) => {
-        PendingHandler.restart(body.pendingSale, locals.loggedUser, this._resp().redirect(res));
+        PendingHandler.restart(body.pendingSale, body.pendingSale.pickUser, this._resp().redirect(res));
       });
 
       this._post('/pending-swap-items', (req, res, body, locals) => {

@@ -183,12 +183,14 @@ a{
 .fixes-right{
   flex: 0 80%;
   min-width: 400px;
-  padding: 15px;
-  display: flex;
+  /* padding: 5px 10px; */
+  display: grid;
   height: 100%;
   flex-wrap: wrap;
   align-items: flex-start;
   flex-direction: column;
+  max-height: 500px;
+  overflow-y: auto;
 }
 
 .top-image-holder {
@@ -227,24 +229,27 @@ a{
 }
 
 .fixes-sku-list{
-  padding-top: 10px;
-  padding-left: 10px;
-  padding-bottom: 5px;
-  border-bottom: 1px solid #efe8e8;
-  width: -webkit-fill-available;
+  /* padding-top: 10px; */
+  /* padding-left: 10px; */
+  /* padding-bottom: 5px; */
+  /* border-bottom: 1px solid #efe8e8; */
+  /* width: 100%; */
   color: #444546;
+  /* display: -webkit-box; */
   font-weight: 800;
 }
 
-.badge-item .ind-icon{width: 30px;height: 30px;padding: 3px;}
+.badge-item .ind-icon{width: 28px;height: 28px;padding: 3px;}
 .badge-item .ind-title{word-break: break-all;width: fit-content;font-size: 14px;margin: 0;padding: 10px 0px;font-weight: 500;}
 
 .badge-item{
-  padding-top: 4px;
+  /* padding-top: 4px; */
 }
 
 .fixes-sku-badges{
   width: 100%;
+  padding: 0px 15px;
+  width: -webkit-fill-available;
 }
 
 .fix-this{
@@ -259,13 +264,13 @@ a{
 }
 
 .brand-group{
-    padding-top: 15px;
-    margin-top: 15px;
-    border-top: 1px solid #dedddd;
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    display: inline-block;
+  padding-top: 15px;
+  margin-top: 15px;
+  border-top: 1px solid #dedddd;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: inline-block;
 }
 
 .brand-title{
@@ -278,4 +283,25 @@ a{
 .items-brand-holder{
   display: -webkit-box;
   max-width: 100%;
+}
+
+.dots-glyph{
+  float: right;
+  margin-right: 12px;
+}
+
+.top-sku{
+  display: block;
+  background: #f9f9f9;
+  border-top: 1px solid #efe8e8;
+  padding: 10px 8px;
+  border-bottom: 1px solid #efe8e8;
+}
+
+
+.menu-dots{
+  width: 30px;
+  height: auto;
+  float: right;
+  position: relative;
 }

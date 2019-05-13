@@ -548,7 +548,7 @@ function loadLayoutHistory(rows){
     var stock = child._Estoque;
     var hasLocal = child.localizacao.length > 0;
 
-    if (!hasLocal){
+    if (!hasLocal || (stock.estoqueDisponivel < 0) || parseFloat(child.pesoLiq) == 0){
       //Red
       $(el).css('background-color', '#ff000026');
       return;
@@ -557,12 +557,6 @@ function loadLayoutHistory(rows){
     if (stock.estoqueReal < 1){
       //Yellow
       $(el).css('background-color', '#ffe20026');
-      return;
-    }
-
-    if (stock.estoqueDisponivel < 0){
-      //Red
-      $(el).css('background-color', '#ff000026');
       return;
     }
   }

@@ -112,13 +112,13 @@ function showLoading(){
 function showSkuFixesDialog(sku){
   $('.sku-fixes-modal').show();
 
-  $('.sku-fixes-modal').click(function (e){
-    e.stopPropagation();
+  $('.sku-fixes-modal').one('click', function (e){
     $('.sku-fixes-holder').empty();
     $('.sku-fixes-modal').hide();
+    e.stopPropagation();
   });
 
-  $('.sku-fixes-holder').click(function (e){
+  $('.sku-fixes-holder').one('click', function (e){
     e.stopPropagation();
   });
 

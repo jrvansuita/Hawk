@@ -276,7 +276,7 @@ table{
 .dots-glyph:hover {
   background-color: #f3f3f3;
   transform: scale(1.2);
-  cursor: pointer;
+  cursor: pointer !important;
   border-radius: 50%;
 }
 

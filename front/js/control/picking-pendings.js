@@ -17,13 +17,13 @@ $(document).ready(() => {
     e.stopPropagation();
   });
 
-  if (Sett.get(loggedUser, 3)){
+
     $('.pending-item').click(function(e){
       var saleNumber = $(this).data('sale').split('-')[1];
       loadPendingSaleItems($(this), getPendingSale(saleNumber));
       e.stopPropagation();
     });
-  }
+
 
 
   if (isWideOpen()){
@@ -167,7 +167,11 @@ function getMiddleBottomBarOptions(pending){
 function getLastBottomBarOption(pending){
   var div = $('<div>');
 
-  if ((pending.status < 2 && isWideOpen()) || (pending.status == 2 && !isWideOpen()) ){
+  //Esta na tela de pendencia 
+  if ((pending.status < 2 && isWideOpen()) ||
+  //Esta na tela de picking e tem a permissao
+  (pending.status == 2 && !isWideOpen() && (Sett.get(loggedUser, 3))))
+  {
     var solve = $('<label>').addClass('button shadow solve-pending').append(getPendingItemButtonLabel(pending)).click(function(){
       onPendingItemButtonClicked($(this), pending);
     });

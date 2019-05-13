@@ -22,58 +22,85 @@
 
   <div class="fixes-right">
 
-    <%data.forEach(item=>{%>
+    <%data.forEach((item,index)=>{%>
+      <div class="top-sku">
+        <label class="fixes-sku-list copiable"><%=item.sku%></label>
 
-      <label class="fixes-sku-list copiable"><%=item.sku%></label>
+        <%if (index == 0){%>
+          <div class="menu-dots">
+            <img src="img/dots.png" class="dots-glyph" />
+          </div>
 
-      <div class="fixes-sku-badges">
-        <%item.fixes.forEach(type=>{%>
-
-           <div class="badge-item">
-             <img class="ind-icon" src="img/<%=Util.diagIcon(type)%>.png"/>
-             <label class="ind-title"><%=Util.diagTitle(type)%></label>
-
-             <img class="ind-icon right fix-this" src="img/restart.png" data-sku="<%=item.sku%>" data-type="<%=type%>"/>
-           </div>
-
-        <%});%>
-      </div>
- 
+          <%}%>
+        </div>
 
 
-    <%});%>
-      </div>
+        <div class="fixes-sku-badges">
+          <%item.fixes.forEach(type=>{%>
 
-    <script type="text/javascript">
-      $(document).ready(()=>{
-        $('.fix-this').click(function(){
-          $(this).attr('src', 'img/loader/circle.svg');
-          var sku = $(this).data('sku');
+            <div class="badge-item">
+              <img class="ind-icon" src="img/<%=Util.diagIcon(type)%>.png"/>
+              <label class="ind-title"><%=Util.diagTitle(type)%></label>
 
-          _post('/check-product-diagnostic', {sku: sku},(data)=>{
-            var type = $(this).data('type');
-            var obj = data.data.find((item)=>{return item.sku == sku});
+              <img class="ind-icon right fix-this" src="img/restart.png" data-sku="<%=item.sku%>" data-type="<%=type%>"/>
+            </div>
 
-            var fixed = !obj || !obj.fixes.includes(type);
+            <%});%>
+          </div>
 
-            if (fixed){
-              $(this).attr('src', 'img/checked.png');
-              $(this).unbind('click');
-            }else{
-              $(this).attr('src', 'img/restart-error.png');
-            }
+
+
+          <%});%>
+        </div>
+
+        <script type="text/javascript">
+          $(document).ready(()=>{
+            $('.fix-this').click(function(e){
+              $(this).attr('src', 'img/loader/circle.svg');
+              var sku = $(this).data('sku');
+
+              _post('/check-product-diagnostic', {sku: sku},(data)=>{
+                var type = $(this).data('type');
+                var obj = data.data.find((item)=>{return item.sku == sku});
+
+                var fixed = !obj || !obj.fixes.includes(type);
+
+                if (fixed){
+                  $(this).attr('src', 'img/checked.png');
+                  $(this).unbind('click');
+                }else{
+                  $(this).attr('src', 'img/restart-error.png');
+                }
+              });
+
+              e.stopPropagation();
+            });
+
+
+            $('.fixes-sku-list.copiable').dblclick(function(e){
+              e.stopPropagation();
+              window.open('/product?sku=' + $(this).text(),'_blank');
+            });
+
+            $('.menu-dots').click(function(e){
+              var drop = new MaterialDropdown($(this), e);
+
+              drop.addItem('/img/restart-plus.png', 'Checar Todos', function(e){
+                 $('.fix-this').trigger('click');
+                 e.stopPropagation();
+              });
+
+              /*drop.addItem('/img/recycle.png', 'Descartar', function(e){
+                e.stopPropagation();
+              });*/
+              drop.show();
+
+              e.stopPropagation();
+            });
           });
-        });
 
+        </script>
 
-        $('.fixes-sku-list.copiable').dblclick(function(e){
-          e.stopPropagation();
-          window.open('/product?sku=' + $(this).text(),'_blank');
-        });
-      });
+      </div>
 
-    </script>
-
-  </div>
-
-</div>
+    </div>

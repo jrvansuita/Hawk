@@ -197,15 +197,6 @@ function prepareDoneList(){
     var doneSale = doneList[i];
 
     if (!doneSale.packingReady){
-
-    if (!Util.isObject(doneSale)){
-      console.log('prepareDoneList');
-      console.log('not object');
-      console.log(doneSale);
-    }
-
-
-
       var loader = new SaleLoader(doneSale)
       .loadClient()
       .reloadItems()
