@@ -298,7 +298,20 @@ var Util = {
       default:
       return 'question-mark';
     }
+  },
+
+  getGenderIcon(gender){
+    if (gender.toLowerCase().includes('fema')){
+      return 'boy.png';
+    }if (gender.toLowerCase().includes('male')){
+      return 'girl.png';
+    }else{
+      return 'baby.png';
+    }
   }
+
+
+
 
 
 

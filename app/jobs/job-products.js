@@ -16,13 +16,24 @@ module.exports = class JobProducts extends Controller{
       var items = xml.rss.channel[0].item;
       items.forEach((item, index) => {
 
-        var sku = getVal(item, "id");
-        var name = getVal(item, "title");
-        var url = getVal(item, "link");
-        var image = getVal(item, "image_link");
-        var price = getVal(item, "price");
+        var title = FeedXml.val(item, "title");
 
-        var product = new Product(sku, name, url, image, price);
+
+        var sku = FeedXml.val(item, "id");
+        var name = Util.getProductName(title, sku.includes('-'));
+        var brand = FeedXml.val(item, "brand");
+
+        var url = FeedXml.val(item, "link");
+        var image = FeedXml.val(item, "image_link");
+        var price = FeedXml.val(item, "price");
+
+        var types = FeedXml.val(item, "product_type").split('>');
+        var category = types[types.length-1].trim();
+        var gender = FeedXml.val(item, "gender");
+        var color = FeedXml.val(item, "color");
+        var quantity = FeedXml.val(item, "quantity");
+
+        var product = new Product(sku, name, brand, url, image, price, category, gender, color, quantity);
         product.upsert();
       });
 
@@ -30,15 +41,3 @@ module.exports = class JobProducts extends Controller{
     });
   }
 };
-
-
-
-function getVal(item, name){
-  var data = item["g:" + name] || item[name];
-
-  if (data.length > 0){
-    return data[0];
-
-  }
-  return '';
-}

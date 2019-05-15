@@ -3,6 +3,7 @@ const ProductLaws = require('../laws/product-laws.js');
 const ProductHandler = require('../handler/product-handler.js');
 const ProductDiagnostics = require('../diagnostics/product-diagnostics.js');
 const DiagnosticsProvider = require('../diagnostics/diagnostics-provider.js');
+const ProductBoard = require('../provider/product-board-provider.js');
 
 module.exports = class ProductRoutes extends Routes{
 
@@ -108,6 +109,19 @@ module.exports = class ProductRoutes extends Routes{
       ProductHandler.get(req.query.sku, false, (result)=>{
         res.render('product/barcode',{
           product : result
+        });
+      });
+    });
+
+
+
+
+
+
+    this._page('/product-board', (req, res) => {
+      ProductBoard.run((result)=>{
+        res.render('product/board',{
+          data : result
         });
       });
     });

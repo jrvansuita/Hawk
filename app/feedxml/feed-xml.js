@@ -29,3 +29,15 @@ exports.get = (onEnd) => {
 
   req.end();
 };
+
+
+
+exports.val = (item, name)=>{
+  var data = item["g:" + name] || item[name];
+
+  if (data.length > 0){
+    return data[0];
+
+  }
+  return '';
+};

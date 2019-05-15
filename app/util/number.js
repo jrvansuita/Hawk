@@ -33,6 +33,10 @@ var Num = {
     }
   },
 
+  points(n) {
+    return this.int(n).toLocaleString('pt-BR', {maximumFractionDigits:2}).replace(',','.');
+  },
+
   def(num, def) {
     return ((num !== undefined) && (typeof(parseInt(num)) === 'number')) ? this.int(num) : (def === undefined ? 0 : def);
   },

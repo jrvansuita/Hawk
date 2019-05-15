@@ -1,0 +1,102 @@
+<html lang="en" dir="ltr">
+<%include ../menus/main-menu %>
+<head>
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/product-board.css">
+  <script type="text/javascript" src="/front/js/control/product-board.js"></script>
+
+</head>
+<body>
+  <%include ../menus/stock-menu %>
+
+  <script>
+  window.data = <%- JSON.stringify(data || null) %>
+  </script>
+
+  <div class="main">
+    <div class="left">
+
+
+      <div class="shadow box">
+        <label class="title-box">Todos os Gêneros</label>
+
+        <div class="box-items-holder">
+
+
+          <%data.gender.forEach(item=>{%>
+
+            <div class="box-item">
+              <img class="graph" src="img/<%=Util.getGenderIcon(item.title)%>" alt=""/>
+
+              <div class="box-item-text">
+                <label class="data-title"><%=item.title%></label>
+                <label class="data-quantity" title="<%=Num.points(item.quantity)%>"><%=Num.format(item.quantity)%></label>
+                <label class="data-count" title="<%=Num.points(item.count)%>"><%=Num.format(item.count)%></label>
+              </div>
+            </div>
+            <%});%>
+          </div>
+        </div>
+
+
+        <div class="shadow box">
+          <label class="title-box">Todas as Cores</label>
+
+          <div class="box-items-holder">
+            <%data.color.forEach(item=>{%>
+
+              <div class="box-item">
+                <label class="color-circle graph cl-<%=item.title.replace(/\s/g, '')%>" title="<%=Str.capitalize(item.title)%>"></label>
+
+                <div class="box-item-text">
+                  <label class="data-quantity" title="<%=Num.points(item.quantity)%>"><%=Num.format(item.quantity)%></label>
+                  <label class="data-count" title="<%=Num.points(item.count)%>"><%=Num.format(item.count)%></label>
+                </div>
+              </div>
+              <%});%>
+            </div>
+          </div>
+
+
+
+
+      </div>
+
+      <div class="right">
+
+
+        <div class="shadow box">
+          <label class="title-box">Todas as Marcas</label>
+
+          <div class="box-lines-holder">
+            <%data.brand.forEach(item=>{%>
+
+              <div class="line-item">
+                  <label class="data-title"><%=item.title%></label>
+                  <label class="data-quantity" title="<%=Num.points(item.quantity)%>"><%=Num.format(item.quantity)%></label>
+                  <label class="data-count" title="<%=Num.points(item.count)%>"><%=Num.format(item.count)%></label>
+                </div>
+              <%});%>
+            </div>
+          </div>
+
+
+          <div class="shadow box">
+            <label class="title-box">Todas as Categorias</label>
+
+            <div class="box-lines-holder">
+              <%data.category.forEach(item=>{%>
+
+                <div class="line-item">
+                    <label class="data-title"><%=item.title%></label>
+                    <label class="data-quantity" title="<%=Num.points(item.quantity)%>"><%=Num.format(item.quantity)%></label>
+                    <label class="data-count" title="<%=Num.points(item.count)%>"><%=Num.format(item.count)%></label>
+                  </div>
+                <%});%>
+              </div>
+            </div>
+
+      </div>
+    </div>
+
+  </body>
+  </html>

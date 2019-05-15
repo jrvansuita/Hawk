@@ -31,6 +31,10 @@ var Str = {
 
   normalize(str){
     return str.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+  },
+
+  capitalize(s){
+    return s && s[0].toUpperCase() + s.slice(1);
   }
 
 };

@@ -181,7 +181,7 @@ $(document).ready(() => {
     $('.table-sale-blocked-holder').click(function(e){
       var blockNumber = $(this).data('blocknumber');
 
-      var drop = new MaterialDropdown($(this), e);
+      var drop = new MaterialDropdown($(this), e, true);
       drop.addItem('/img/delete.png', 'Remover', function(){
         new BlockedPost(blockNumber).call();
       });
@@ -194,7 +194,7 @@ $(document).ready(() => {
     var saleId = $(this).data('saleid').split('-')[1];
     var sale = $(this).data('sale').split('-')[1];
 
-    var drop = new MaterialDropdown($(this), e);
+    var drop = new MaterialDropdown($(this), e, true);
     drop.addItem('/img/print.png', 'Imprimir', ()=>{
       openPrintPickingSale(sale, $('#user-logged-id').text());
     });
