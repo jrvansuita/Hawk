@@ -92,7 +92,7 @@ module.exports = class PickingRoutes extends Routes{
     this._post(['/picking/block-pending'], (req, res) => {
       BlockHandler.toggle(req.body.blockNumber, req.body.userId ? req.body.userId : req.session.loggedUserID, req.body.reasonTag, ()=>{
         PendingLaws.remove(req.body.blockNumber);
-        this._resp().redirect(res)
+        this._resp().redirect(res);
       });
     });
 
@@ -114,9 +114,13 @@ module.exports = class PickingRoutes extends Routes{
     this._get('/picking-line', (req, res, body, locals, session) => {
       const PickingLaws = require('../laws/picking-laws.js');
       const BlockLaws = require('../laws/block-laws.js');
+
       res.render('picking/line', {line : PickingLaws.getFullList(),
-                                  blocks: BlockLaws.list()});
+                                  blocks: BlockLaws.list(),
+                                rules: BlockLaws.rules()});
     });
+
+
 
 
   }

@@ -16,8 +16,68 @@
     <div class="left">
 
 
-      <div class="shadow box">
-        <label class="title-box">Todos os Gêneros</label>
+      <div class="shadow box fit-box">
+        <div class="line-title line-item">
+          <label class="title-box">Todos os Produtos</label>
+        </div>
+
+        <div class="box-items-holder">
+
+          <div class="box-item">
+            <img class="graph" src="img/depot.png" alt=""/>
+            <% var total = data.brand.reduce(function(a, b) { return a + b.quantity; }, 0);%>
+            <div class="box-item-text">
+              <label class="data-title" title="<%=Num.points(total)%>"><%=Num.format(total)%></label>
+              <label class="data-quantity">Produtos</label>
+            </div>
+          </div>
+
+
+          <div class="box-item">
+            <img class="graph" src="img/box.png" alt=""/>
+            <% var total = data.brand.reduce(function(a, b) { return a + b.count; }, 0);%>
+            <div class="box-item-text">
+              <label class="data-title" title="<%=Num.points(total)%>"><%=Num.format(total)%></label>
+              <label class="data-quantity">Skus</label>
+            </div>
+          </div>
+
+          <div class="box-item">
+            <img class="graph" src="img/tags.png" alt=""/>
+            <% var total = data.brand.length;%>
+            <div class="box-item-text">
+              <label class="data-title" title="<%=Num.points(total)%>"><%=Num.format(total)%></label>
+              <label class="data-quantity">Marcas</label>
+            </div>
+          </div>
+
+          <div class="box-item">
+            <img class="graph" src="img/category.png" alt=""/>
+            <% var total = data.category.length;%>
+            <div class="box-item-text">
+              <label class="data-title" title="<%=Num.points(total)%>"><%=Num.format(total)%></label>
+              <label class="data-quantity">Categorias</label>
+            </div>
+          </div>
+
+          <div class="box-item">
+            <img class="graph" src="img/color.png" alt=""/>
+            <% var total = data.color.length;%>
+            <div class="box-item-text">
+              <label class="data-title" title="<%=Num.points(total)%>"><%=Num.format(total)%></label>
+              <label class="data-quantity">Cores</label>
+            </div>
+          </div>
+
+
+          </div>
+        </div>
+
+      <div class="shadow box fit-box">
+        <div class="line-title line-item">
+          <label class="title-box">Todos os Gêneros</label>
+        </div>
+
 
         <div class="box-items-holder">
 
@@ -25,12 +85,11 @@
           <%data.gender.forEach(item=>{%>
 
             <div class="box-item">
-              <img class="graph" src="img/<%=Util.getGenderIcon(item.title)%>" alt=""/>
+              <img class="graph" src="img/<%=Util.getGenderIcon(item.title)%>" title="<%=Str.capitalize(item.title)%>"/>
 
               <div class="box-item-text">
-                <label class="data-title"><%=item.title%></label>
-                <label class="data-quantity" title="<%=Num.points(item.quantity)%>"><%=Num.format(item.quantity)%></label>
-                <label class="data-count" title="<%=Num.points(item.count)%>"><%=Num.format(item.count)%></label>
+                <label class="data-title" title="<%=Num.points(item.quantity)%>"><%=Num.format(item.quantity)%></label>
+                <label class="data-quantity" title="<%=Num.points(item.count)%>"><%=Num.format(item.count)%></label>
               </div>
             </div>
             <%});%>
@@ -38,8 +97,12 @@
         </div>
 
 
-        <div class="shadow box">
-          <label class="title-box">Todas as Cores</label>
+        <div class="shadow box fit-box">
+          <div class="line-title line-item">
+            <label class="title-box">Todas as Cores</label>
+
+            <label class="data-quantity"><%=data.color.length%></label>
+          </div>
 
           <div class="box-items-holder">
             <%data.color.forEach(item=>{%>
@@ -59,44 +122,50 @@
 
 
 
-      </div>
-
-      <div class="right">
+        </div>
 
 
-        <div class="shadow box">
-          <label class="title-box">Todas as Marcas</label>
 
-          <div class="box-lines-holder">
-            <%data.brand.forEach(item=>{%>
 
-              <div class="line-item">
-                  <label class="data-title"><%=item.title%></label>
-                  <label class="data-quantity" title="<%=Num.points(item.quantity)%>"><%=Num.format(item.quantity)%></label>
-                  <label class="data-count" title="<%=Num.points(item.count)%>"><%=Num.format(item.count)%></label>
+        <div class="right">
+
+
+          <% var attrs = ['brand', 'category']
+             var titles = ['Todas as Marcas', 'Todas as Categorias']
+
+          attrs.forEach((attr, index)=>{
+            var total = data[attr].length;%>
+
+            <div class="shadow box">
+              <div class="box-lines-holder">
+                <div class="line-title line-item">
+                  <label class="title-box"><%=titles[index]%></label>
+
+                  <label class="data-quantity" title="<%=Num.points(total)%>"><%=Num.format(total)%></label>
                 </div>
+
+                <%data[attr].forEach(item=>{%>
+
+                  <div class="line-item">
+                    <label class="data-title"><%=item.title%>
+                      <label class="count-label" title="<%=Num.points(item.count)%>"><%=Num.format(item.count)%></label>
+                    </label>
+                    <label class="data-quantity" title="<%=Num.points(item.quantity)%>"><%=Num.format(item.quantity)%></label>
+
+                  </div>
+                  <%});%>
+                </div>
+              </div>
+
+
               <%});%>
+
+
+
+
+
             </div>
           </div>
 
-
-          <div class="shadow box">
-            <label class="title-box">Todas as Categorias</label>
-
-            <div class="box-lines-holder">
-              <%data.category.forEach(item=>{%>
-
-                <div class="line-item">
-                    <label class="data-title"><%=item.title%></label>
-                    <label class="data-quantity" title="<%=Num.points(item.quantity)%>"><%=Num.format(item.quantity)%></label>
-                    <label class="data-count" title="<%=Num.points(item.count)%>"><%=Num.format(item.count)%></label>
-                  </div>
-                <%});%>
-              </div>
-            </div>
-
-      </div>
-    </div>
-
-  </body>
-  </html>
+        </body>
+        </html>

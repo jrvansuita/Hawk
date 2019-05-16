@@ -102,7 +102,7 @@ module.exports = {
 
     //Crio uma funcation para iterar automaticamente
     blockSkusRun =  (skus, index, count, callback) => {
-      var sku = skus[index]; 
+      var sku = skus[index];
 
       if (sku){
         //Crio uma regra de bloqueio
@@ -113,7 +113,7 @@ module.exports = {
 
           if (blocksCount){
             //Se bloquear 1 ou mais pedidos, eu incluo o registro na tabela
-            BlockLaws.put(blockRule, (blockRule)=>{
+            BlockLaws.storeFrom(blockRule, (blockRule)=>{
               count += blocksCount;
               index++;
               blockSkusRun(skus, index, count, callback);

@@ -83,17 +83,19 @@ module.exports = {
     });
   },
 
-
-  put(blockRule, callback){
-    this.rules().push(blockRule);
-
-    blockRule.upsert(()=>{
-      callback(blockRule);
-    });
+  storeFrom(blockRule, callback){
+    //Cria um novo block rule para não enviar as quantidades de blockqueados
+    this.store(rule.number, rule.user, rule.reasonTag, callback);
   },
 
   store(blockNumber, user, reasonTag, callback){
-    this.put(new BlockRule(blockNumber, user, reasonTag), callback);
+    var rule = new BlockRule(blockNumber, user, reasonTag);
+
+    this.rules().push(rule);
+
+    rule.upsert(()=>{
+      callback(rule);
+    });
   },
 
   remove(blockRule, callback){

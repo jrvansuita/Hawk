@@ -26,6 +26,10 @@ module.exports = {
   },
 
   sucess(res, r){
+    if (typeof r == 'number'){
+      r = r.toString();
+    }
+
     res.status(200).send(r);
   },
 

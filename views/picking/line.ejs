@@ -6,6 +6,7 @@
 
   <style>
   table{
+    border-collapse: collapse;
     display: inline;
     font-family: sans-serif;
     font-size: 15px;
@@ -18,17 +19,31 @@
     font-weight: 500px;
     color: rgb(98, 94, 102);
   }
+
+  .line-here td{
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-top: 2px solid #989898;
+  }
+  td{
+    padding-right: 10px;
+  }
+
+  .highlight td{
+  background-color: #77ff7c85;
+  }
   </style>
 </head>
 <body>
   <script type="text/javascript">
   window.line = <%- JSON.stringify(line || null) %>
   window.blocks = <%- JSON.stringify(blocks || null) %>
+  window.rules = <%- JSON.stringify(rules || null) %>
   </script>
 
   <div class="main">
 
-    <table class="sales">
+    <table>
       <tr>
         <td>Pedido</td>
         <td>Cliente</td>
@@ -39,7 +54,7 @@
 
       <%line.forEach((each)=>{
         %>
-        <tr>
+        <tr class="line-here">
           <td><%=each.numeroPedido%></td>
           <td><%=each.client ? each.client.nome : 'NONE'%></td>
           <td><%=Dat.format(new Date(each.data))%></td>
@@ -65,15 +80,15 @@
           });%>
         </table>
 
-        <table class="blocks">
-          <tr>
+        <table >
+          <tr >
             <td>Pedido</td>
             <td>Bloqueio</td>
           </tr>
 
           <%blocks.forEach((each)=>{
             %>
-            <tr>
+            <tr class="line-here">
               <td><%=each.numeroPedido%></td>
               <td>'Bloqueado'</td>
             </tr>
@@ -95,6 +110,29 @@
 
 
           </table>
+
+
+          <table>
+            <tr>
+              <td>Block Rule</td>
+              <td>Blockings</td>
+              <td>Data</td>
+              <td>User</td>
+
+            </tr>
+
+            <%Object.values(rules).forEach((each)=>{
+              %>
+              <tr class="line-here <%=each.blockings > 0 ? 'highlight' : ''%> ">
+                <td><%=each.number%></td>
+                <td><%=each.blockings%></td>
+                <td><%=Dat.format(each.blockDate)%></td>
+                <td><%=each.user.name%></td>
+              </tr>
+           <%})%>
+
+
+            </table>
         </div>
 
       </body>

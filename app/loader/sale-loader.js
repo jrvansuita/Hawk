@@ -84,20 +84,22 @@ module.exports= class SaleLoader {
         .setOnError(this.onError)
         .getSaleItems(this.sale.numeroPedido, (items) => {
 
-          if (this.sale instanceof String){
-            console.log(items);
-            console.log(this.sale.numeroPedido);
-            Err.thrw('Era para dar o erro de reduce ('+this.sale.numeroPedido+') porque os itens estão assim: ' + items);
-          }else{
 
+          try{
             this.sale.transport = Util.twoNames(this.sale.transportador, Const.no_transport);
             this.sale.items = items;
-
-
-            this.sale.itemsQuantity = items.reduce(function(a, b) {
-              return a + parseFloat(b.quantidade);
-            }, 0);
+          }catch(e){
+            console.log(items);
+            console.log(this.sale);
+            console.log(this.sale.numeroPedido);
+            Err.thrw('Era para dar o erro de 0 transport ('+this.sale+') porque os itens estão assim: ' + items);
           }
+
+
+          this.sale.itemsQuantity = items.reduce(function(a, b) {
+            return a + parseFloat(b.quantidade);
+          }, 0);
+
 
           this._callbackHit(onCallNext, onCallOuter);
         });
