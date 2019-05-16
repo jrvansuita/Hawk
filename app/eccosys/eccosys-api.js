@@ -118,7 +118,6 @@ module.exports = class EccosysApi{
       req.write(JSON.stringify(this.body));
     }
 
-    console.log(this.options());
 
     req.end();
   }
