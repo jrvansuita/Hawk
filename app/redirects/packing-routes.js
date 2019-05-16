@@ -26,10 +26,12 @@ module.exports = class PackingRoutes extends Routes{
     });
 
     this._get('/packing-danfe', (req, res) => {
+      req.setTimeout(3600000);
       PackingHandler.loadDanfe(res, req.query.nfe);
     });
 
     this._get('/packing-transport-tag', (req, res) => {
+      req.setTimeout(3600000);
       PackingHandler.loadTransportTag(res, req.query.idnfe);
     });
 

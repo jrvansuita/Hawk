@@ -39,8 +39,8 @@ app.use('/front', express.static('front', staticOptions));
 app.use('/util', express.static('app/util', staticOptions));
 
 
-var timeout = require('connect-timeout');
-app.use(timeout(60000)); // 1 minutos
+var server = app.listen();
+server.setTimeout(120000); // 2 minutos
 
 const Routes = require('./app/redirects/controller/routes.js');
 
