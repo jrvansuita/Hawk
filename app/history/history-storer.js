@@ -23,7 +23,7 @@ module.exports={
   blockedPendingSkus(userId, skus, pendingNumber, salesBlockeds){
     var message = 'Alguns skus foram bloquados automaticamente pelo pedido de pendência ' + pendingNumber;
 
-    if (salesBlockeds){ 
+    if (salesBlockeds){
       message+= '\nForam bloqueados +' + salesBlockeds + ' pedidos que continham os mesmos produtos';
     }
 
@@ -43,6 +43,19 @@ module.exports={
       }
 
       History.notify(userId, day ? 'Picking Finalizado' : 'Picking Iniciado', message, 'Picking');
+    });
+  },
+
+  packingTeste(userId, params, reenvio){
+    onTry(()=>{
+      
+      if (reenvio){
+        var message = 'Pedido reenviado ' + params.saleNumber;
+      }else{
+        var message = 'Pedido enviado ' + params.saleNumber;
+      }
+
+      History.notify(userId, reenvio ? 'Packing Reenviado' : 'Packing Enviado', message, 'Packing');
     });
   },
 
