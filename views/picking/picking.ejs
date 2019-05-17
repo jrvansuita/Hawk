@@ -282,47 +282,51 @@
                     </div>
 
 
-                    <div class="col" style="display:block">
-                      <div class="pick-box shadow green-top">
-                        <div class="pick-header">
-                          <span class="label header-title">Separado</span>
-                          <span class="label header-count green-title"><%=donePickings.length%></span>
-                        </div>
 
-                        <%if (donePickings.length === 0){
-                          %><span class="pick-hint">Nenhum picking pronto</span>
-                          <%
-                        }else {%>
-
-                          <table width="100%" class="scrollable-table">
-
-                            <tr class="dotted-line">
-                              <td><span class="pick-value">Pedido</span></td>
-                              <td><span class="pick-value">Transp.</span></td>
-                              <td><span class="pick-value">Data</span></td>
-                              <td><span class="pick-value" style="float:right">Em aberto</span></td>
-                            </tr>
-
-                            <%
-                            donePickings.reverse().forEach(function(sale, index){
-                              %>
-                              <tr class="clickable-mini-item done-sale-item"  data-saleid="done-<%=sale.id%>" data-sale="done-<%=sale.numeroPedido%>">
-                                <td><span class="pick-value green-title"><%=sale.numeroPedido %></span></td>
-                                <td><span class="pick-value"><%=Util.twoNames(sale.transportador, 'Retirada')%> </span></td>
-                                <td><span class="pick-value" ><%= Dat.format(new Date(sale.data))%></span></td>
-                                <td><span class="pick-value" style="float:right"><%=Dat.daysDif(new Date(sale.data), new Date()) + ' Dias'%></span></td>
-                              </tr>
-
-                              <%
-                            });
-                            %>
-                          </table>
-                          <%}%>
-                        </div>
-                      </div>
 
 
                       <% include ../pending/picking-pendings %>
+
+
+
+                      <div class="col" style="display:block">
+                        <div class="pick-box shadow green-top">
+                          <div class="pick-header">
+                            <span class="label header-title">Separado</span>
+                            <span class="label header-count green-title"><%=donePickings.length%></span>
+                          </div>
+
+                          <%if (donePickings.length === 0){
+                            %><span class="pick-hint">Nenhum picking pronto</span>
+                            <%
+                          }else {%>
+
+                            <table width="100%" class="scrollable-table">
+
+                              <tr class="dotted-line">
+                                <td><span class="pick-value">Pedido</span></td>
+                                <td><span class="pick-value">Transp.</span></td>
+                                <td><span class="pick-value">Data</span></td>
+                                <td><span class="pick-value" style="float:right">Em aberto</span></td>
+                              </tr>
+
+                              <%
+                              donePickings.forEach(function(sale, index){
+                                %>
+                                <tr class="clickable-mini-item done-sale-item"  data-saleid="done-<%=sale.id%>" data-sale="done-<%=sale.numeroPedido%>">
+                                  <td><span class="pick-value green-title"><%=sale.numeroPedido %></span></td>
+                                  <td><span class="pick-value"><%=Util.twoNames(sale.transportador, 'Retirada')%> </span></td>
+                                  <td><span class="pick-value" ><%= Dat.format(new Date(sale.data))%></span></td>
+                                  <td><span class="pick-value" style="float:right"><%=Dat.daysDif(new Date(sale.data), new Date()) + ' Dias'%></span></td>
+                                </tr>
+
+                                <%
+                              });
+                              %>
+                            </table>
+                            <%}%>
+                          </div>
+                        </div>
                     </div>
                   </div>
                 </body>

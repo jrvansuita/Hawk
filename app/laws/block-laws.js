@@ -85,7 +85,7 @@ module.exports = {
 
   storeFrom(blockRule, callback){
     //Cria um novo block rule para não enviar as quantidades de blockqueados
-    this.store(rule.number, rule.user, rule.reasonTag, callback);
+    this.store(blockRule.number, blockRule.user, blockRule.reasonTag, callback);
   },
 
   store(blockNumber, user, reasonTag, callback){
