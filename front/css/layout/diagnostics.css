@@ -99,6 +99,7 @@ a{
   width: 80%;
   max-width: 80%;
   margin: auto;
+  margin-bottom: 100px;
   position: relative;
 }
 
@@ -276,8 +277,8 @@ a{
 .brand-title{
   font-size: 18px;
   font-weight: 500;
-  padding: 15px 5px;
-  display: -webkit-box;
+  padding: 0px 5px 10px 5px;
+  display: block;
 }
 
 .items-brand-holder{
@@ -304,4 +305,10 @@ a{
   height: auto;
   float: right;
   position: relative;
+}
+
+.brand-total{
+  float: right;
+  color: #908888;
+  font-size: 15px;
 }

@@ -108,7 +108,7 @@
             <%data.color.forEach(item=>{%>
 
               <div class="box-item">
-                <label class="color-circle graph cl-<%=item.title.replace(/\s/g, '')%>" title="<%=Str.capitalize(item.title)%>"></label>
+                <label class="color-circle cl-<%=item.title.replace(/\s/g, '')%>" title="<%=Str.capitalize(item.title)%>"></label>
 
                 <div class="box-item-text">
                   <label class="data-quantity" title="<%=Num.points(item.quantity)%>"><%=Num.format(item.quantity)%></label>

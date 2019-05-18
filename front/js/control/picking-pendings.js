@@ -167,7 +167,7 @@ function getMiddleBottomBarOptions(pending){
 function getLastBottomBarOption(pending){
   var div = $('<div>');
 
-  //Esta na tela de pendencia 
+  //Esta na tela de pendencia
   if ((pending.status < 2 && isWideOpen()) ||
   //Esta na tela de picking e tem a permissao
   (pending.status == 2 && !isWideOpen() && (Sett.get(loggedUser, 3))))
@@ -516,7 +516,7 @@ function updatePendingSales(pending){
 }
 
 function isBlocked(pending){
-  return false; //pending.status == 0 && Dat.hoursDif(pending.updateDate, new Date()) <= 1;
+  return  false; //pending.status == 0 && Dat.hoursDif(pending.updateDate, new Date()) <= 2;
 }
 
 

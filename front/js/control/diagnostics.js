@@ -52,16 +52,24 @@ function buildIndRows(rows){
 
   brands.forEach(brand=>{
     var $brandGroup = $('<div>').addClass('brand-group');
-    var $brandTitle = $('<span>').addClass('brand-title').append(brand);
+
+   var $brandLabel = $('<label>').append(brand);
+   var $brandTotal = $('<label>').addClass('brand-total');
+
+    var $brandTitle = $('<span>').addClass('brand-title').append($brandLabel, $brandTotal);
     var $itemsHolder = $('<div>').addClass('items-brand-holder');
 
     $brandGroup.append($brandTitle, $itemsHolder);
 
+    var count = 0;
     rows.forEach((row)=>{
       if (row.brand == brand){
+        count++;
         buildSingleRow($itemsHolder, row);
       }
     });
+
+    $brandTotal.append(count);
 
     $('.ind-rows-holder').append($brandGroup);
   });
