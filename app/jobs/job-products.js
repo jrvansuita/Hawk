@@ -13,31 +13,37 @@ module.exports = class JobProducts extends Controller{
     History.job('Atualização de Produtos', 'Atualizando produtos através do feed xml', 'XML');
 
     FeedXml.get((xml) =>{
-      var items = xml.rss.channel[0].item;
-      items.forEach((item, index) => {
+      if (xml){
+        var items = xml.feed.item;
+        items.forEach((item, index) => {
 
-        var title = FeedXml.val(item, "title");
+          var sku = FeedXml.val(item, "sku");
+          var name = Util.getProductName(FeedXml.val(item, "name"), sku.includes('-'));
+          var brand = FeedXml.val(item, "brand");
 
+          var url = FeedXml.val(item, "link");
+          var image = FeedXml.val(item, "image");
+          var price = FeedXml.val(item, "price");
 
-        var sku = FeedXml.val(item, "id");
-        var name = Util.getProductName(title, sku.includes('-'));
-        var brand = FeedXml.val(item, "brand");
+          var category = FeedXml.val(item, "department");
+          var gender = FeedXml.val(item, "gender");
+          var color = FeedXml.val(item, "color");
+          var quantity = FeedXml.val(item, "quantity");
 
-        var url = FeedXml.val(item, "link");
-        var image = FeedXml.val(item, "image_link");
-        var price = FeedXml.val(item, "price");
+          var year = FeedXml.val(item, "collection");
+          var season = FeedXml.val(item, "season");
+          var age = FeedXml.val(item, "age");
 
-        var types = FeedXml.val(item, "product_type").split('>');
-        var category = types[types.length-1].trim();
-        var gender = FeedXml.val(item, "gender");
-        var color = FeedXml.val(item, "color");
-        var quantity = FeedXml.val(item, "quantity");
+          var product = new Product(sku, name, brand, url,
+            image, price, category,
+            gender, color, quantity,
+            age, year, season);
 
-        var product = new Product(sku, name, brand, url, image, price, category, gender, color, quantity);
-        product.upsert();
+            product.upsert();
+          });
+
+          controller.terminate();
+        }
       });
-
-      controller.terminate();
-    });
-  }
-};
+    }
+  };

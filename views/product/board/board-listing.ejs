@@ -1,0 +1,26 @@
+<%attrs.forEach((attr, index)=>{
+  var total = data[attr].length;%>
+
+  <div class="shadow box">
+    <div class="box-lines-holder">
+      <div class="line-title line-item">
+        <label class="title-box"><%=titles[index]%></label>
+
+        <label class="data-quantity" title="<%=Num.points(total)%>"><%=Num.format(total)%></label>
+      </div>
+
+      <%data[attr].forEach(item=>{%>
+
+        <div class="line-item">
+          <label class="data-title"><%=item.title%>
+            <label class="count-label" title="<%=Num.points(item.count)%>"><%=Num.format(item.count)%></label>
+          </label>
+          <label class="data-quantity" title="<%=Num.points(item.quantity)%>"><%=Num.format(item.quantity)%></label>
+
+        </div>
+        <%});%>
+      </div>
+    </div>
+
+
+    <%});%>

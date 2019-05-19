@@ -120,7 +120,7 @@ module.exports = class ProductRoutes extends Routes{
 
     this._page('/product-board', (req, res) => {
       ProductBoard.run((result)=>{
-        res.render('product/board',{
+        res.render('product/board/board',{
           data : result
         });
       });
