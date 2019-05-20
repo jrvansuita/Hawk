@@ -56,8 +56,8 @@ module.exports = {
   _checkAndBlockSaleFromPicking(blockRule, callback){
     var salesBlocked = 0;
     //Remove all sales that matchs the new block
-    //Not using PickingLaws.filter because I need to keep no mutated the object global.staticPickingList
-    PickingLaws.getFullList().forEach((eachSale)=>{
+    //Using slice() to create a copy to not remove from the list itselfs
+    PickingLaws.getFullList().slice().forEach((eachSale)=>{
       if (BlockLaws.checkAndCapture(blockRule, eachSale)){
         PickingLaws.remove(eachSale);
         salesBlocked++;

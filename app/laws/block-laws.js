@@ -41,14 +41,10 @@ module.exports = {
   checkAndCapture(block, sale){
     var match = this.match(block, sale);
 
-    if (!block.blockings){
-      block.blockings = 0;
-    }
-
     if (match){
       console.log('Block ' + sale.numeroPedido + ' -> ' + block.number);
       this.capture(sale);
-      block.blockings++;
+      block.blockings = ++block.blockings || 0;
     }
 
     return match;
@@ -84,8 +80,11 @@ module.exports = {
   },
 
   storeFrom(blockRule, callback){
+    this.rules().push(blockRule);
     //Cria um novo block rule para não enviar as quantidades de blockqueados
-    this.store(blockRule.number, blockRule.user, blockRule.reasonTag, callback);
+    new BlockRule(blockRule.number, blockRule.user, blockRule.reasonTag).upsert(()=>{
+      callback(blockRule);
+    });
   },
 
   store(blockNumber, user, reasonTag, callback){

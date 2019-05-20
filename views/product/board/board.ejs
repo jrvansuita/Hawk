@@ -1,12 +1,12 @@
 <html lang="en" dir="ltr">
-<%include ../menus/main-menu %>
+<%include ../../menus/main-menu %>
 <head>
   <link rel="stylesheet" type="text/css" href="/front/css/layout/product-board.css">
   <script type="text/javascript" src="/front/js/control/product-board.js"></script>
 
 </head>
 <body>
-  <%include ../menus/stock-menu %>
+  <%include ../../menus/stock-menu %>
 
   <script>
   window.data = <%- JSON.stringify(data || null) %>
@@ -24,11 +24,11 @@
         <div class="box-items-holder">
 
           <div class="box-item">
-            <img class="graph" src="img/depot.png" alt=""/>
+            <img class="graph" src="img/chart.png" alt=""/>
             <% var total = data.brand.reduce(function(a, b) { return a + b.quantity; }, 0);%>
             <div class="box-item-text">
               <label class="data-title" title="<%=Num.points(total)%>"><%=Num.format(total)%></label>
-              <label class="data-quantity">Produtos</label>
+              <label class="data-quantity">Items</label>
             </div>
           </div>
 
@@ -70,8 +70,8 @@
           </div>
 
 
-          </div>
         </div>
+      </div>
 
       <div class="shadow box fit-box">
         <div class="line-title line-item">
@@ -108,10 +108,10 @@
             <%data.color.forEach(item=>{%>
 
               <div class="box-item">
-                <label class="color-circle graph cl-<%=item.title.replace(/\s/g, '')%>" title="<%=Str.capitalize(item.title)%>"></label>
+                <label class="color-circle cl-<%=item.title.replace(/\s/g, '')%>" title="<%=Str.capitalize(item.title)%>"></label>
 
                 <div class="box-item-text">
-                  <label class="data-quantity" title="<%=Num.points(item.quantity)%>"><%=Num.format(item.quantity)%></label>
+                  <label class="data-title" title="<%=Num.points(item.quantity)%>"><%=Num.format(item.quantity)%></label>
                   <label class="data-count" title="<%=Num.points(item.count)%>"><%=Num.format(item.count)%></label>
                 </div>
               </div>
@@ -130,42 +130,29 @@
         <div class="right">
 
 
-          <% var attrs = ['brand', 'category']
-             var titles = ['Todas as Marcas', 'Todas as Categorias']
+          <div class="single-right-col">
+            <%
+            var attrs = ['season','age', 'year'];
+            var titles = ['Todas as Estações', 'Todas as Idades', 'Todos os Anos'];
+            %>
 
-          attrs.forEach((attr, index)=>{
-            var total = data[attr].length;%>
+            <%- include('../board/board-listing', {attrs: attrs, titles : titles });  %>
 
-            <div class="shadow box">
-              <div class="box-lines-holder">
-                <div class="line-title line-item">
-                  <label class="title-box"><%=titles[index]%></label>
-
-                  <label class="data-quantity" title="<%=Num.points(total)%>"><%=Num.format(total)%></label>
-                </div>
-
-                <%data[attr].forEach(item=>{%>
-
-                  <div class="line-item">
-                    <label class="data-title"><%=item.title%>
-                      <label class="count-label" title="<%=Num.points(item.count)%>"><%=Num.format(item.count)%></label>
-                    </label>
-                    <label class="data-quantity" title="<%=Num.points(item.quantity)%>"><%=Num.format(item.quantity)%></label>
-
-                  </div>
-                  <%});%>
-                </div>
-              </div>
-
-
-              <%});%>
-
-
-
-
-
-            </div>
           </div>
 
-        </body>
-        </html>
+          <%
+          var attrs = ['brand', 'category'];
+          var titles = ['Todas as Marcas', 'Todas as Categorias'];
+          %>
+
+          <%- include('../board/board-listing', {attrs: attrs, titles : titles });  %>
+
+
+
+
+
+        </div>
+      </div>
+
+    </body>
+    </html>

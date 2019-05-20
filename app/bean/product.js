@@ -1,6 +1,6 @@
 module.exports = class Product extends DataAccess {
 
-  constructor(sku, name, brand, url, image, price, category, gender, color, quantity) {
+  constructor(sku, name, brand, url, image, price, category, gender, color, quantity, age, year, season) {
     super();
     this.sku = Str.def(sku);
     this.name = Str.def(name);
@@ -13,6 +13,10 @@ module.exports = class Product extends DataAccess {
     this.gender = Str.def(gender);
     this.color = Str.def(color);
     this.quantity = Num.def(quantity);
+
+    this.age = Str.def(age);
+    this.year = Str.def(year);
+    this.season = Str.def(season);
   }
 
   static getKey() {

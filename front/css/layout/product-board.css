@@ -4,37 +4,37 @@ html,body {
 
 .main{
   display: flex;
+  overflow: hidden;
   max-height: 100%;
   height: 100%;
-  /* margin-top: 100px; */
 }
 
 .left{
   padding-left: 25px;
   padding-bottom: 25px;
   flex: 0 1 30%;
-  max-height: 100%;
-  height: 100%;
+  overflow-y: auto;
+  height: calc(100% - 145px);
   display: block;
   padding-top: 100px;
 }
 
 .right{
   flex: 0 1 70%;
-  max-height: 100%;
-  display: -webkit-inline-box;
+  display: -webkit-box;
   position: relative;
-  padding-top: 100px;
-  height: 99%;
+  margin-top: 100px;
+  height: calc(100% - 120px);
 }
 
 .box{
   display: block;
-  /* margin-top: 15px; */
   margin-right: 15px;
   position: relative;
-  max-height: 90%;
+  max-height: 100%;
   height: 100%;
+  min-width: 250px;
+  max-width: 300px;
 }
 
 .box-items-holder{
@@ -60,15 +60,18 @@ html,body {
   width: -webkit-fill-available;
 }
 
-.fit-box{
-  max-height: fit-content;
-  margin-bottom: 15px;
-}
+.fit-box{min-width: 400px;max-width: 500px;height: fit-content;margin-bottom: 15px;max-height: fit-content;}
 
-.box-lines-holder{width: fit-content;min-width: 300px;max-height: 100%;position: relative;overflow-y: auto;height: 99%;}
+.box-lines-holder{
+  width: 100%;
+  max-height: 100%;
+  position: relative;
+  overflow-y: auto;
+  height: 99%;
+  }
 
 .box-item{
-  padding: 6px 5px;
+  padding: 6px 0px;
   display: -webkit-inline-box;
   min-width: 90px;
 }
@@ -123,13 +126,13 @@ html,body {
   margin-left: 5px;
   margin-right: 3px;
   margin-top: 3px;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
 }
 
 .color-circle{
-  width: 35px;
-  height: 35px;
+  width: 32px;
+  height: 32px;
   border: solid 2px #efefef;
   border-radius: 50%;
   background-color: #989898;
@@ -251,5 +254,15 @@ html,body {
   border: 1px solid #ecdfdf;
   padding: 2px 6px !important;
   font-size: 11px;
-  color: #1f1f1f !important;
+  color: #908d8d !important;
 }
+
+
+.single-right-col{padding-left: 1px;}
+
+.single-right-col {
+  overflow-y: auto;
+  display: block;
+}
+
+.single-right-col .box{height: fit-content;margin-bottom: 15px;}

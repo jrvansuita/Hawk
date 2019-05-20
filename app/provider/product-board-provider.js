@@ -30,14 +30,14 @@ module.exports = {
 
   load(callback){
     var result = {};
-    var attrs = ['brand', 'category', 'color', 'gender'];
+    var attrs = ['brand', 'category', 'color', 'gender', 'year', 'age', 'season'];
 
 
     Product.findAll((err, all) =>{
 
       all.forEach((each)=>{
         attrs.forEach(attr=>{
-          var attrValue = each['_doc'][attr];
+          var attrValue = each._doc[attr];
 
           attrValue = attrValue ? attrValue.trim().toLowerCase() : false;
 

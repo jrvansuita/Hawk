@@ -341,7 +341,11 @@ tr.row-padding td{
 
 .blocked{
   background-color: #6a6d6d !important;
+}
 
+
+.blocked:hover{
+  background-color: #6a6d6d !important;
 }
 
 ::placeholder

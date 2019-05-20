@@ -18,6 +18,7 @@ exports.get = (onEnd) => {
     res.on('end', function() {
       var parseString = require('xml2js').parseString;
       parseString(xmlStr, function (err, xml) {
+        console.log(err);
         onEnd(xml);
       });
     });
@@ -33,7 +34,7 @@ exports.get = (onEnd) => {
 
 
 exports.val = (item, name)=>{
-  var data = item["g:" + name] || item[name];
+  var data = item[name];
 
   if (data.length > 0){
     return data[0];

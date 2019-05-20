@@ -72,14 +72,14 @@ module.exports = {
           .onEverySaleLoaded((sale)=>{
             attachRunningChecker();
             TransportLaws.put(sale.transport);
-            new AutoBlockPicking([sale]).run();
+            //new AutoBlockPicking([sale]).run();
           })
           .onLastSaleLoaded(()=>{
             loadingList = false;
           })
           .run(onFinished);
 
-        }else{
+        }else{ 
           loadingList = false;
           onFinished();
         }
@@ -160,6 +160,6 @@ module.exports = {
 function attachRunningChecker(){
   clearTimeout(loadingId);
   loadingId = setTimeout(function(){
-    loadingList = false; 
+    loadingList = false;
   }, 10000);
 }

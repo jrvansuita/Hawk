@@ -169,12 +169,12 @@ function isWeightMissing(product){
 }
 
 function isLocalMissing(product){
-  return product.localizacao == '' && (product._Estoque.estoqueReal > 0);
+  return product.localizacao == '' && (product._Estoque.estoqueReal > 0) && !isPhotoMissing(product);
 }
 
 function isSalesMissing(product, stocks){
   var isMoreThan10Days = Dat.daysDif(product.dtCriacao, new Date()) > 9;
-  var hasSales = stocks.some((i)=>{ return parseFloat(i.quantidade) < 0 && (parseInt(i.idOrigem) > 0) });
+  var hasSales = stocks.some((i)=>{ return parseFloat(i.quantidade) < 0 && (parseInt(i.idOrigem) > 0); });
 
   return isMoreThan10Days && !hasSales && !isPhotoMissing(product);
 }

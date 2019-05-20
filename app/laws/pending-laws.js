@@ -16,9 +16,19 @@ module.exports = {
     });
   },
 
+  setOrder(){
+    var order = [3,0,1];
+
+   this.getList().sort((a, b) => {
+      return a.status == b.status ? new Date(b.updateDate).getTime() - new Date(a.updateDate).getTime() : order.indexOf(a.status) - order.indexOf(b.status);
+    });
+  },
+
   update(pending, callback){
-    Pending.upsert(Pending.getKeyQuery(pending.number), pending, function(err, doc){
+    Pending.upsert(Pending.getKeyQuery(pending.number), pending, (err, doc)=>{
       updatePendingSale(pending);
+      this.setOrder();
+
       if (callback){
         callback(pending, err);
       }
@@ -30,9 +40,11 @@ module.exports = {
   load(clear, callback){
     if (clear || (this.getList().length == 0)){
       loadAllPendingSalesFromDB(()=>{
+        this.setOrder();
         callback(this.getList());
       });
     }else{
+      this.setOrder();
       callback(this.getList());
     }
   },
@@ -56,14 +68,10 @@ module.exports = {
 
     pending.upsert((doc, err)=>{
 
-    //console.log(pending);
-    //console.log('err');
-    //console.log(err);
-    //console.log('doc');
-    //console.log(pending.toObject());
-
       //Add new pending sale
       this.getList().push(pending);
+      this.setOrder();
+
       callback();
     });
   },
