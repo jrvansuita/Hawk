@@ -71,7 +71,7 @@ function buildIndRows(rows){
 }
 
 function buildSingleRow(holder, row){
-  var $img = $('<img>').addClass('row-img').attr('src', '/sku-image?def=img/product-placeholder.png&sku=' + row.sku);
+  var $img = $('<img>').addClass('row-img').attr('src', '/sku-image?sku=' + row.sku).attr('onerror',"this.src='img/product-placeholder.png'");
 
 
   var $name = $('<label>').addClass('row-name').text(row.brand);

@@ -117,6 +117,11 @@ a{
   background-color: #f1eeee;
 }
 
+.ind-item:hover, .ind-item:hover *{
+    cursor: pointer;
+}
+
+
 .row-name{
   display: inline-block;
   padding: 10px 8px;

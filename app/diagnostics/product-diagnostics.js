@@ -81,23 +81,28 @@ module.exports = class ProductDiagnostics{
       new EccosysCalls()
       .getProduct(sku, (product)=>{
 
-        //Capture feed product
-        Product.get(sku , (feedProduct)=>{
-          product.feedProduct = feedProduct;
+        //Product doesnt exists anymore
+        if (product.error){
+          callback();
+        }else{    
+          //Capture feed product
+          Product.get(sku , (feedProduct)=>{
+            product.feedProduct = feedProduct;
 
-          //Capture stock history
-          new EccosysCalls()
-          .pageCount(5)
-          .page(0)
-          .order('DESC')
-          .getStockHistory(sku, (stocks)=>{
+            //Capture stock history
+            new EccosysCalls()
+            .pageCount(5)
+            .page(0)
+            .order('DESC')
+            .getStockHistory(sku, (stocks)=>{
 
-            //Analyze the product
-            this._analizeProducts(product, stocks, ()=>{
-              callback();
+              //Analyze the product
+              this._analizeProducts(product, stocks, ()=>{
+                callback();
+              });
             });
           });
-        });
+        }
       });
     });
   }
