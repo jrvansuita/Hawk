@@ -24,11 +24,11 @@
         <div class="box-items-holder">
 
           <div class="box-item">
-            <img class="graph" src="img/depot.png" alt=""/>
+            <img class="graph" src="img/chart.png" alt=""/>
             <% var total = data.brand.reduce(function(a, b) { return a + b.quantity; }, 0);%>
             <div class="box-item-text">
               <label class="data-title" title="<%=Num.points(total)%>"><%=Num.format(total)%></label>
-              <label class="data-quantity">Produtos</label>
+              <label class="data-quantity">Items</label>
             </div>
           </div>
 
@@ -111,7 +111,7 @@
                 <label class="color-circle cl-<%=item.title.replace(/\s/g, '')%>" title="<%=Str.capitalize(item.title)%>"></label>
 
                 <div class="box-item-text">
-                  <label class="data-quantity" title="<%=Num.points(item.quantity)%>"><%=Num.format(item.quantity)%></label>
+                  <label class="data-title" title="<%=Num.points(item.quantity)%>"><%=Num.format(item.quantity)%></label>
                   <label class="data-count" title="<%=Num.points(item.count)%>"><%=Num.format(item.count)%></label>
                 </div>
               </div>

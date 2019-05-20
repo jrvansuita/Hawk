@@ -71,7 +71,7 @@ html,body {
   }
 
 .box-item{
-  padding: 6px 5px;
+  padding: 6px 0px;
   display: -webkit-inline-box;
   min-width: 90px;
 }
@@ -126,13 +126,13 @@ html,body {
   margin-left: 5px;
   margin-right: 3px;
   margin-top: 3px;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
 }
 
 .color-circle{
-  width: 35px;
-  height: 35px;
+  width: 32px;
+  height: 32px;
   border: solid 2px #efefef;
   border-radius: 50%;
   background-color: #989898;
@@ -254,7 +254,7 @@ html,body {
   border: 1px solid #ecdfdf;
   padding: 2px 6px !important;
   font-size: 11px;
-  color: #1f1f1f !important;
+  color: #908d8d !important;
 }
 
 
