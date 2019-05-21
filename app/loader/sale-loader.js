@@ -7,6 +7,8 @@ const Err = require('../error/error.js');
 module.exports= class SaleLoader {
 
   constructor(data){
+    this.initialData = data;
+
     this.sale = data;
     this.list = [];
   }
@@ -92,7 +94,7 @@ module.exports= class SaleLoader {
             console.log(items);
             console.log(this.sale);
             console.log(this.sale.numeroPedido);
-            Err.thrw('Era para dar o erro de 0 transport ('+this.sale+') porque os itens estão assim: ' + items);
+            Err.thrw('Era para dar o erro de 0 transport '+this.sale+ ' - ' + this.initialData + '\n' + new Error();
           }
 
 
