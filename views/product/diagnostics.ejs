@@ -11,7 +11,7 @@
 
   <script type="text/javascript" src="/front/js/control/diagnostics.js"></script>
   <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
-  
+
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-dropdown.css">
 
 
@@ -32,7 +32,9 @@
       <label class="erros-msg">Foram encontrados <b><%=sums.map(item => item.sum_count).reduce((prev, next) => prev + next, 0);%></b> produtos com problemas.</label>
       <img src='/img/loader/circle.svg' class="loading-circle"/>
       <label class="start-time"></label>
-      <label class="button shadow" id="run">Analisar</label>
+
+      <label class="button shadow" id="sync">Analizar</label>
+      <label class="button shadow" id="refresh">Atualizar</label>
     </div>
 
 

@@ -2,10 +2,18 @@
 
 $(document).ready(()=>{
 
-  $('#run').click(()=>{
+  $('#sync').click(()=>{
     showLoading();
 
     _post('/run-product-diagnostics', {}, ()=>{
+      console.log('rodou');
+    });
+  });
+
+  $('#refresh').click(()=>{
+    showLoading();
+
+    _post('/run-product-diagnostics', {refresh:true}, ()=>{
       console.log('rodou');
     });
   });
@@ -113,7 +121,8 @@ function bindCopiable(){
 
 
 function showLoading(){
-  $('#run').hide();
+  $('#sync').hide();
+  $('#refresh').hide();
   $('.loading-circle').show();
 }
 

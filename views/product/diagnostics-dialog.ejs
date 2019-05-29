@@ -5,9 +5,12 @@
 
     <div class="top-image-holder">
       <a href="<%=product ? product.url : ''%>" target="_blank">
-        <label class="sku-name"><%=product ? Str.short(Util.getProductName(product.name), 42): ''%></label>
+        <label class="sku-name"><%=product ? Str.short(product.name, 42): ''%></label>
       </a>
-      <%var brand = product ? Util.getProductBrand(product.name) : ''%>
+      <%
+
+
+      var brand = product ? product.brand || '' : ''%>
       <a href="<%=process.env.STORE_UTL + '/' + brand.trim().replace(' ', '-').toLowerCase(); %>" target="_blank">
         <label class="sku-brand"><%=brand%></label>
       </a>

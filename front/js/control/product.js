@@ -179,7 +179,7 @@ $('#child-skus-holder').append($tr);
 
 
 function buildLocalCol(product){
-  var $valElement = buildInput(product.localizacao);
+  var $valElement = buildInput(product.localizacao, 14);
 
   bindEvents($valElement, true);
 
@@ -201,15 +201,13 @@ function buildLocalCol(product){
         });
       }
     }
-  })
-  //Ao abrir a tela os campos de edição são desabilitados
-  .attr('disabled', true);
+  });
 
   return buildCol($valElement);
 }
 
 function buildStockCol(product){
-  var $valElement = buildInput(product._Estoque.estoqueReal);
+  var $valElement = buildInput(product._Estoque.estoqueReal, 7);
 
   $valElement.attr('onkeypress',"return Num.isNumberKey(event);").attr('maxlenght','5');
 
@@ -242,9 +240,7 @@ function buildStockCol(product){
         });
       }
     }
-  })
-  //Ao abrir a tela os campos de edição são desabilitados
-  .attr('disabled', true);
+  });
 
 
   return buildCol($valElement);
@@ -252,7 +248,9 @@ function buildStockCol(product){
 
 
 function buildWeightCol(product){
-  var $valElement = buildInput(Floa.weight(product.pesoLiq));
+  var $valElement = buildInput(Floa.weight(product.pesoLiq), 15);
+
+
   $valElement.attr('onkeypress',"return Floa.isFloatKey(event);").attr('maxlenght','6');
 
   bindEvents($valElement, true, true);
@@ -274,22 +272,25 @@ function buildWeightCol(product){
         });
       }
     }
-  })
-  //Ao abrir a tela os campos de edição são desabilitados
-  .attr('disabled', true);
+  });
 
 
   return buildCol($valElement);
 }
 
-function buildInput(val){
-  var $valElement;
-  $valElement = $('<input>').attr('value', val)
+function buildInput(val, canEditPermission){
+  var el = $('<input>').attr('value', val)
   .addClass('child-value editable-input')
   .attr('placeholder', val)
-  .data('value', val);
+  .data('value', val)
+  //Ao abrir a tela os campos de edição são desabilitados
+  .attr('disabled', true);
 
-  return $valElement;
+  if ((canEditPermission > 0) && Sett.get(loggedUser, canEditPermission)){
+    el.addClass('can-edit');
+  }
+
+  return el;
 }
 
 function buildTextCol(val){
@@ -607,7 +608,7 @@ function loadLayoutHistory(rows){
   function unlock(user){
     $('#lock-icon').hide().attr('src','/img/unlocked.png').fadeIn();
     currentUser = user;
-    $('.editable-input').attr('disabled', false);
+    $(".editable-input.can-edit").attr('disabled', false);
   }
 
   function errorLock(user){
@@ -660,7 +661,7 @@ function loadLayoutHistory(rows){
   }
 
   function checkPermissionUser(){
-    if (Sett.every(loggedUser,[4,7])){
+    if (Sett.every(loggedUser,[4])){
       unlock(loggedUser);
     }
   }

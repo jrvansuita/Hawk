@@ -177,7 +177,7 @@
                           <input type="text" id="search" value="<%=product.selected ? product.selected : product.codigo%>" class="<%=product.error? 'simple-material-input-error simple-material-input' : 'simple-material-input'%>" placeholder="Pesquisar"/>
                           <label class="top-label sub search-hint">SKU ou EAN</label>
 
-                          <%if (Sett.get(locals.loggedUser,7)){%>
+                          <%if (Sett.some(locals.loggedUser,[7,14])){%>
                             <img id="lock-icon" src="/img/lock.png" class="lock"/>
                             <input type="text" id="lock-user-id"/>
                             <%}%>

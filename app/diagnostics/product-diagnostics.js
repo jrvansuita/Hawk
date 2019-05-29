@@ -15,20 +15,29 @@ module.exports = class ProductDiagnostics{
     this.productsAnalyzed++;
     var attrs = getProductAttrs(product);
 
+
+    // --- Cascata --- //
     if (isPhotoMissing(product)){
       this._storeFix(product, Fix.enum().PHOTO);
     }
 
-    if (isLocalMissing(product)){
-      this._storeFix(product, Fix.enum().LOCAL);
+    else if (noLocalHasStock(product)){
+     this._storeFix(product, Fix.enum().NO_LOCAL_HAS_STOCK);
     }
+
+    else if (hasLocalNoStock(product, stocks)){
+      this._storeFix(product, Fix.enum().HAS_LOCAL_NO_STOCK);
+    }
+
+    else if (isSalesMissing(product, stocks)){
+      this._storeFix(product, Fix.enum().SALE);
+    }
+
+    // --- Cascata --- //
+
 
     if (isWeightMissing(product)){
       this._storeFix(product, Fix.enum().WEIGHT);
-    }
-
-    if (isSalesMissing(product, stocks)){
-      this._storeFix(product, Fix.enum().SALE);
     }
 
     if (isCostPriceMissing(product)){
@@ -72,8 +81,20 @@ module.exports = class ProductDiagnostics{
   }
 
 
+  _checkRangeSku(skus, index, callback){
+    this._checkSingleSku(skus[index], ()=>{
+      index++
+
+      if (skus.length > index){
+        this._checkRangeSku(skus, index, callback);
+      }else{
+        callback();
+      }
+    });
+  }
 
   _checkSingleSku(sku, callback){
+
     //Remove all from this sku
     Fix.removeAll({sku: sku}, (err)=>{
 
@@ -84,14 +105,14 @@ module.exports = class ProductDiagnostics{
         //Product doesnt exists anymore
         if (product.error){
           callback();
-        }else{    
+        }else{
           //Capture feed product
           Product.get(sku , (feedProduct)=>{
             product.feedProduct = feedProduct;
 
             //Capture stock history
             new EccosysCalls()
-            .pageCount(5)
+            .pageCount(15)
             .page(0)
             .order('DESC')
             .getStockHistory(sku, (stocks)=>{
@@ -145,9 +166,26 @@ module.exports = class ProductDiagnostics{
     this.page++;
   }
 
+  _resyncStoredSkus(){
+    Fix.findAll((err, docs)=>{
+
+      var skus = docs.map(i=> i.sku);
+
+
+      this._checkRangeSku(skus, 0, ()=>{
+
+      });
+    });
+  }
+
   sync(){
     this.sendBroadcast = true;
     this._loadCurrentPage();
+  }
+
+  refresh(){
+    this.sendBroadcast = true;
+    this._resyncStoredSkus();
   }
 
 
@@ -168,15 +206,17 @@ function isWeightMissing(product){
   return (parseFloat(product.pesoLiq) * parseFloat(product.pesoBruto)) == 0;
 }
 
-function isLocalMissing(product){
-  return product.localizacao == '' && (product._Estoque.estoqueReal > 0) && !isPhotoMissing(product);
+function noLocalHasStock(product){
+  return product.localizacao == '' && (product._Estoque.estoqueReal > 0);
+}
+
+function hasLocalNoStock(product, stocks){
+  return product.localizacao != '' && (product._Estoque.estoqueReal == 0) && !hasSales(stocks);
 }
 
 function isSalesMissing(product, stocks){
   var isMoreThan10Days = Dat.daysDif(product.dtCriacao, new Date()) > 9;
-  var hasSales = stocks.some((i)=>{ return parseFloat(i.quantidade) < 0 && (parseInt(i.idOrigem) > 0); });
-
-  return isMoreThan10Days && !hasSales && !isPhotoMissing(product);
+  return isMoreThan10Days && !hasSales(stocks);
 }
 
 function isColorMissing(attrNames){
@@ -201,4 +241,8 @@ function isGenderMissing(attrNames){
 
 function isPhotoMissing(product){
   return !product.feedProduct || !product.feedProduct.image;
+}
+
+function hasSales(stocks){
+  return stocks.some((i)=>{ return parseFloat(i.quantidade) < 0 && (parseInt(i.idOrigem) > 0); });
 }

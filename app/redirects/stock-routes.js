@@ -70,7 +70,13 @@ module.exports = class ProductRoutes extends Routes{
     });
 
     this._post('/run-product-diagnostics', (req, res) => {
-      new ProductDiagnostics().sync();
+
+      if (req.body.refresh){
+        new ProductDiagnostics().refresh();
+      }else{
+        new ProductDiagnostics().sync();
+      }
+
       res.status(200).send('Ok');
     });
 

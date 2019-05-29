@@ -6,7 +6,7 @@ a{
 .ind-holder{
   max-width: 80%;
   margin: auto;
-  display: -webkit-box;
+  display: flex;
 }
 
 .ind-item{
@@ -14,11 +14,10 @@ a{
   width: fit-content;
   margin-right: 15px;
   margin-bottom: 15px;
+  position: relative;
 }
 
-.ind-header{
-
-}
+.ind-header{height: 75%;}
 
 .ind-icon{
   padding: 10px;
@@ -31,7 +30,7 @@ a{
 }
 
 .ind-title{
-  font-size: 18px;
+  font-size: 1em;
   text-overflow: ellipsis;
   display: -webkit-inline-box;
   padding: 20px 5px;
@@ -209,6 +208,7 @@ a{
   color: #272424;
   cursor: pointer;
   font-size: 14px;
+  font-weight: 600;
 }
 
 .image-holder {

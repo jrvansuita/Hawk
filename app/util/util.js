@@ -239,13 +239,13 @@ var Util = {
     var brand = spl[spl.length + (isChild  ? -2 : -1)];
 
 
-    return brand;
+    return brand || '';
   },
 
   getProductName(name, isChild){
     var desc = name.split('-').slice(0, isChild ? -2: -1).join('-').trim();
 
-    return desc;
+    return desc || '';
   },
 
 
@@ -254,7 +254,7 @@ var Util = {
       case 0:
       return 'Produtos sem Foto';
       case 1:
-      return 'Produtos sem Localização';
+      return 'Produtos sem Localização e Com estoque';
       case 2:
       return 'Produtos sem Peso';
       case 3:
@@ -269,6 +269,9 @@ var Util = {
       return 'Produtos sem Departamento'
       case 8:
       return 'Produtos sem Gênero'
+      case 9:
+      return 'Produtos com Localização e Sem estoque';
+
       default:
       return 'Não encontrado';
     }
@@ -295,6 +298,8 @@ var Util = {
       return 'category';
       case 8:
       return 'gender';
+      case 9:
+      return 'local-no-stock';
       default:
       return 'question-mark';
     }

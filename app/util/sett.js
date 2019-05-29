@@ -13,6 +13,16 @@ var Sett = {
         });
       }
     }
+  },
+
+  some(user, setts){
+    if (user){
+      if (setts instanceof Array){
+        return setts.some((each)=>{
+          return this.get(user, each);
+        });
+      }
+    }
   }
 };
 
@@ -20,4 +30,3 @@ var Sett = {
 
 if (typeof module != 'undefined')
 module.exports = Sett;
- 
