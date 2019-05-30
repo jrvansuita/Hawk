@@ -1,10 +1,13 @@
 
 var fixEnum = {
-  PHOTO: 0, // Foto faltando
+  NO_PHOTO: 0, // Foto faltando
+  NO_PHOTO_REGISTERING: 10, // Foto faltando mais produto em cadastro
 
   NO_LOCAL_HAS_STOCK: 1, // Localização faltando mais o produto tem estoque
   HAS_LOCAL_NO_STOCK: 9, // Tem Localização mais o produto nunca teve nenhum lançamento de estoque
-  
+
+
+
   WEIGHT: 2, // Peso faltando
   SALE: 3, //Não vendeu o produto
   BRAND: 4, //Sem marca

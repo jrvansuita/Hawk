@@ -45,12 +45,19 @@ module.exports = {
   },
 
   incStatus(pending, user, callback){
-    var findedPending  = PendingLaws.find(pending.number);
-    findedPending.sendEmail =  pending.sendEmail != undefined && pending.sendEmail.toString() == 'true';
+    var foundPending  = PendingLaws.find(pending.number);
 
-    sendEmailIfNeed(findedPending, user, ()=>{
-      PendingLaws.incrementStatus(findedPending, user, callback);
-    });
+    if (foundPending.status < 2){
+
+      foundPending.sendEmail = pending.sendEmail != undefined && pending.sendEmail.toString() == 'true';
+
+      sendEmailIfNeed(foundPending, user, ()=>{
+        PendingLaws.incrementStatus(foundPending, user, callback);
+      });
+    }else{
+      //A tela não foi atualizada, porque esse pedido já não pode mais ser incrementado
+      callback();
+    }
   },
 
   restart(pending, user, callback){

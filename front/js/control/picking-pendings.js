@@ -18,11 +18,11 @@ $(document).ready(() => {
   });
 
 
-    $('.pending-item').click(function(e){
-      var saleNumber = $(this).data('sale').split('-')[1];
-      loadPendingSaleItems($(this), getPendingSale(saleNumber));
-      e.stopPropagation();
-    });
+  $('.pending-item').click(function(e){
+    var saleNumber = $(this).data('sale').split('-')[1];
+    loadPendingSaleItems($(this), getPendingSale(saleNumber));
+    e.stopPropagation();
+  });
 
 
 
@@ -465,10 +465,14 @@ function restartPendingSale(pending){
 }
 
 function rebuildSpawItem(actualClass, nextClass , resultPending){
-  updatePendingSales(resultPending);
-  var $this = $('.'+actualClass+'.mini-item-modal');
+  hidePedingItemModal();
 
-  $this.removeClass(actualClass).addClass(nextClass);
+  if (resultPending){
+    updatePendingSales(resultPending);
+    var $this = $('.'+actualClass+'.mini-item-modal');
+
+    $this.removeClass(actualClass).addClass(nextClass);
+  }
 
   $this.delay(1000).fadeOut(400, function() {
     $this.remove();
@@ -477,9 +481,6 @@ function rebuildSpawItem(actualClass, nextClass , resultPending){
       window.location.reload();
     }, 300);
   });
-
-  hidePedingItemModal();
-
 
 }
 

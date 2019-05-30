@@ -18,11 +18,15 @@ module.exports = class ProductDiagnostics{
 
     // --- Cascata --- //
     if (isPhotoMissing(product)){
-      this._storeFix(product, Fix.enum().PHOTO);
+      if (hasStock(product) || hasLocal(product)){
+        this._storeFix(product, Fix.enum().NO_PHOTO);
+      }else{
+        this._storeFix(product, Fix.enum().NO_PHOTO_REGISTERING);
+      }
     }
 
     else if (noLocalHasStock(product)){
-     this._storeFix(product, Fix.enum().NO_LOCAL_HAS_STOCK);
+      this._storeFix(product, Fix.enum().NO_LOCAL_HAS_STOCK);
     }
 
     else if (hasLocalNoStock(product, stocks)){
@@ -201,17 +205,24 @@ function getProductAttrs(product){
   return product._Atributos.map((i)=>{return i.descricao});
 }
 
-
 function isWeightMissing(product){
-  return (parseFloat(product.pesoLiq) * parseFloat(product.pesoBruto)) == 0;
+  return ((parseFloat(product.pesoLiq) * parseFloat(product.pesoBruto)) == 0) && !isPhotoMissing(product);
+}
+
+function hasStock(product){
+  return product._Estoque.estoqueReal > 0;
+}
+
+function hasLocal(product){
+  return product.localizacao != '';
 }
 
 function noLocalHasStock(product){
-  return product.localizacao == '' && (product._Estoque.estoqueReal > 0);
+  return !hasLocal(product) && hasStock(product);
 }
 
 function hasLocalNoStock(product, stocks){
-  return product.localizacao != '' && (product._Estoque.estoqueReal == 0) && !hasSales(stocks);
+  return hasLocal(product) && !hasStock(product) && !hasSales(stocks);
 }
 
 function isSalesMissing(product, stocks){

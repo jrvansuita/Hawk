@@ -271,6 +271,8 @@ var Util = {
       return 'Produtos sem Gênero'
       case 9:
       return 'Produtos com Localização e Sem estoque';
+      case 9:
+      return 'Produtos em cadastro';
 
       default:
       return 'Não encontrado';
@@ -300,6 +302,9 @@ var Util = {
       return 'gender';
       case 9:
       return 'local-no-stock';
+      case 10:
+      return 'registring';
+
       default:
       return 'question-mark';
     }
