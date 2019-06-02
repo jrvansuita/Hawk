@@ -461,12 +461,6 @@ table{
 }
 
 
-.button:focus{
-  background-color: #4CAF50 !important;
-  outline:0;
-  font-weight: 800;
-}
-
 .ncm-input{
   text-align: left;
   font-size: 13px;

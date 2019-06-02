@@ -89,6 +89,10 @@ var Util = {
   },
 
   hashCode: function(str) {
+    if (str){
+      str = str.toString().toLowerCase().trim();
+    }
+
     var hash = 0;
     for (var i = 0; i < str.length; i++) {
       hash = str.charCodeAt(i) + ((hash << 5) - hash);
@@ -96,9 +100,9 @@ var Util = {
     return hash;
   },
 
-  strToColor: function(str) {
+  strToColor: function(str, alpha) {
     var shortened = this.hashCode(str) % 160;
-    return 'hsl(' + shortened + ', 45%, 60%)';
+    return 'hsl(' + shortened + ', 45%, 60%'+ (alpha ? ', ' + alpha : '') + ')';
   },
 
   historyTagColor(tag){
@@ -271,8 +275,8 @@ var Util = {
       return 'Produtos sem Gênero'
       case 9:
       return 'Produtos com Localização e Sem estoque';
-      case 9:
-      return 'Produtos em cadastro';
+      case 10:
+      return 'Produtos aguardando entrada';
 
       default:
       return 'Não encontrado';
@@ -318,16 +322,84 @@ var Util = {
     }else{
       return 'baby.png';
     }
-  }
+  },
+
+  colorVal: function(str, alpha) {
+    var color = Colors[str.replace(' ', '').toLowerCase()];
+
+    return color ? '#' + color + (alpha ? alpha : '') : undefined;
+  },
+
+
+  colorBrightness(color) {
+
+    // Variables for red, green, blue values
+    var r, g, b, hsp;
+
+    // Check the format of the color, HEX or RGB?
+    if (color.match(/^rgb/)) {
+
+      // If HEX --> store the red, green, blue values in separate variables
+      color = color.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/);
+
+      r = color[1];
+      g = color[2];
+      b = color[3];
+    }
+    else {
+
+      // If RGB --> Convert it to HEX: http://gist.github.com/983661
+      color = +("0x" + color.slice(1).replace(
+        color.length < 5 && /./g, '$&$&'));
+
+        r = color >> 16;
+        g = color >> 8 & 255;
+        b = color & 255;
+      }
+
+      // HSP (Highly Sensitive Poo) equation from http://alienryderflex.com/hsp.html
+      hsp = Math.sqrt(
+        0.299 * (r * r) +
+        0.587 * (g * g) +
+        0.114 * (b * b)
+      );
+
+      return hsp;
+    }
+
+
+
+  };
 
 
 
 
 
+  var Colors = {
+    vermelho: 'f33a26',
+    azul: '4984f9',
+    azulmarinho: '072586',
+    amarelo: 'fde300',
+    verde: '2ed268',
+    rosa: 'ff89ee',
+    pink: 'ce50a1',
+    salmao: 'f99a84',
+    offwhite: 'fbf7f5',
+    branco: 'ffffff',
+    cinza: '979798',
+    laranja: 'e69939',
+    preto: '4a4646',
+    roxo: 'aa6bc7',
+    bordo: '964242',
+    royal: '4a49a7',
+    marrom: '8c6751',
+    bege: 'e0cebc',
+    lilas: 'a79bd8',
+    jeans: '8699b3',
+    dourado: 'deb647',
+    vinho: '904366'
+  };
 
-};
 
-
-
-if (typeof module != 'undefined')
-module.exports = Util;
+  if (typeof module != 'undefined')
+  module.exports = Util;

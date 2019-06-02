@@ -4,6 +4,7 @@ const ProductHandler = require('../handler/product-handler.js');
 const ProductDiagnostics = require('../diagnostics/product-diagnostics.js');
 const DiagnosticsProvider = require('../diagnostics/diagnostics-provider.js');
 const ProductBoard = require('../provider/product-board-provider.js');
+const ProductListProvider = require('../provider/product-list-provider.js');
 
 module.exports = class ProductRoutes extends Routes{
 
@@ -57,7 +58,7 @@ module.exports = class ProductRoutes extends Routes{
 
     this._page('/diagnostics', (req, res) => {
       new DiagnosticsProvider().sums((data)=>{
-        res.render('product/diagnostics', {sums : data});
+        res.render('product/diag/diagnostics', {sums : data});
       });
     });
 
@@ -88,7 +89,7 @@ module.exports = class ProductRoutes extends Routes{
 
     this._get('/fixes-dialog', (req, res) => {
       new DiagnosticsProvider().loadBySku(req.query.sku, (all, product)=>{
-        res.render('product/diagnostics-dialog', {data : all, product: product});
+        res.render('product/diag/diagnostics-dialog', {data : all, product: product});
       });
     });
 
@@ -131,5 +132,27 @@ module.exports = class ProductRoutes extends Routes{
         });
       });
     });
+
+
+
+    this._page('/product-list', (req, res) => {
+      res.locals.productListQuery = req.body.query || req.session.productListQuery;
+      res.render('product/board/product-list');
+    });
+
+    this._post('/product-list', (req, res) => {
+      req.session.productListQuery = req.body.query;
+      this._resp().sucess(res);
+    });
+
+
+    this._get('/product-list-page', (req, res) => {
+     req.session.productListQuery = req.query.query;
+      ProductListProvider.load(req.query.query, req.query.page, (data, info)=>{
+        this._resp().sucess(res, {data, info});
+      });
+    });
+
+
   }
 };

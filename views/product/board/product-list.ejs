@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<%include ../../menus/main-menu %>
+<head>
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/product-list.css">
+  <script type="text/javascript" src="/front/js/control/product-list.js"></script>
+
+  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+  <script type="text/javascript" src="/front/js/libs/image-preview.js"></script>
+</head>
+<body>
+  <%include ../../menus/stock-menu %>
+  <script>
+  window.memoryQuery = <%- JSON.stringify(locals.productListQuery ? locals.productListQuery : {}) %>
+  </script>
+
+  <div class="main ">
+
+    <div class="top shadow">
+
+
+      <div class="search-box">
+        <input type="text" id="search-input"  class="simple-material-input" placeholder="Pesquisar Produtos" autocomplete="off"/>
+        <label class="button shadow" id="search-button" tabindex="0">Buscar</label>
+        <label id="totals"></label>
+      </div>
+
+      <div class="tag-box">
+
+      </div>
+    </div>
+
+
+    <div class="content-scroll">
+
+      <div class="content shadow">
+
+
+      </div>
+
+
+
+
+    </div>
+
+  </div>
+
+</body>
+</html>

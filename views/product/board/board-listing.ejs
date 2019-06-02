@@ -11,7 +11,7 @@
 
       <%data[attr].forEach(item=>{%>
 
-        <div class="line-item">
+        <div class="line-item clickable" data-attr="<%=attr%>" data-value="<%=item.title%>">
           <label class="data-title"><%=item.title%>
             <label class="count-label" title="<%=Num.points(item.count)%>"><%=Num.format(item.count)%></label>
           </label>

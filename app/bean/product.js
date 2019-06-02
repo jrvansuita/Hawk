@@ -23,34 +23,81 @@ module.exports = class Product extends DataAccess {
     return ['sku'];
   }
 
-  static likeThis(keyValue, limit, callback){
-    var query  = {
+  static likeQuery(value){
+    if (!value){
+      return {};
+    }
+
+    return {
       $or: [
         //{ 'sku': new RegExp(keyValue, "i") },
 
         { 'sku': {
-          "$regex": keyValue,
+          "$regex": value,
           "$options": "i"
         }
       },
 
       { 'name': {
-        "$regex": keyValue,
+        "$regex": value,
         "$options": "i"
       }
+    },
+
+    { 'brand': {
+      "$regex": value,
+      "$options": "i"
     }
+  }
   ]
 };
+}
 
-this.staticAccess()
-.find(query)
-.limit(limit)
-.exec(callback);
+static likeThis(keyValue, limit, callback){
+  var query = likeQuery(keyValue);
+
+  this.staticAccess()
+  .find(query)
+  .limit(limit)
+  .exec(callback);
 }
 
 static get(sku, callback){
   Product.findOne(Product.getKeyQuery(sku.split('-')[0]), (err, product)=>{
     callback(product);
+  });
+}
+
+static paging(query, page, callback){
+  page--;//Convert to index;
+
+  var rowsPerPage = 50;
+
+  Product.aggregate([
+    { $match: query },
+    {
+      $facet: {
+        items: [
+          { $sort: {"quantity": -1} },
+          { $skip: page * rowsPerPage },
+          { $limit: rowsPerPage },
+        ],
+        info: [
+          { $group: {
+            _id: null,
+            count: {
+              $sum: 1
+            },
+            sum_quantity: {
+              $sum: "$quantity"
+            }
+           } },
+        ],
+      },
+    },
+  ],function(err, res) {
+    if (callback)
+    callback(err, res);
   });
 }
 

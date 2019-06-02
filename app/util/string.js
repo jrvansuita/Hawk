@@ -34,7 +34,7 @@ var Str = {
   },
 
   capitalize(s){
-    return s && s[0].toUpperCase() + s.slice(1);
+    return  s.split(" ").map(function(w) { return w.charAt(0).toUpperCase() + w.substr(1) }).join(" ");
   }
 
 };

@@ -3,7 +3,7 @@
 <head>
   <link rel="stylesheet" type="text/css" href="/front/css/layout/product-board.css">
   <script type="text/javascript" src="/front/js/control/product-board.js"></script>
-
+<script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
 </head>
 <body>
   <%include ../../menus/stock-menu %>
@@ -84,7 +84,7 @@
 
           <%data.gender.forEach(item=>{%>
 
-            <div class="box-item">
+            <div class="box-item clickable" data-attr="gender" data-value="<%=item.title%>">
               <img class="graph" src="img/<%=Util.getGenderIcon(item.title)%>" title="<%=Str.capitalize(item.title)%>"/>
 
               <div class="box-item-text">
@@ -107,7 +107,7 @@
           <div class="box-items-holder">
             <%data.color.forEach(item=>{%>
 
-              <div class="box-item">
+              <div class="box-item clickable" data-attr="color" data-value="<%=item.title%>">
                 <label class="color-circle cl-<%=item.title.replace(/\s/g, '')%>" title="<%=Str.capitalize(item.title)%>"></label>
 
                 <div class="box-item-text">

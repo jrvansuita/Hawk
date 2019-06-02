@@ -39,23 +39,30 @@ module.exports = {
         attrs.forEach(attr=>{
           var attrValue = each._doc[attr];
 
-          attrValue = attrValue ? attrValue.trim().toLowerCase() : false;
+          attrValue = attrValue ? attrValue.toLowerCase().trim() : false;
 
           if (attrValue){
-            if (result[attr] && result[attr][attrValue]){
-              result[attr][attrValue].quantity += each.quantity;
-              result[attr][attrValue].count++;
-            }else{
-              if (!result[attr]){
-                result[attr]={};
+            attrValue.split(',').forEach((eachValue)=>{
+              eachValue = eachValue.trim();
+
+              if (result[attr] && result[attr][eachValue]){
+                result[attr][eachValue].quantity += each.quantity;
+                result[attr][eachValue].count++;
+              }else{
+                if (!result[attr]){
+                  result[attr]={};
+                }
+
+                result[attr][eachValue] = {
+                  title: eachValue,
+                  quantity : each.quantity,
+                  count : 1
+                };
               }
 
-              result[attr][attrValue] = {
-                title: attrValue,
-                quantity : each.quantity,
-                count : 1
-              };
-            }
+            });
+
+
           }
         });
       });
