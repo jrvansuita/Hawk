@@ -13,7 +13,7 @@ function loadFromMemory(){
       var attr = key;
 
       value.split('|').forEach((each)=>{
-        selectAndPlaceTag(each, attr);
+        selectAndPlaceTag(Str.capitalize(each), attr);
       });
     });
 
@@ -218,7 +218,9 @@ function selectAndPlaceTag(value, attr){
 }
 
 function createSingleTag(value, attr){
-  return $('<span>').addClass('tag').append(value).attr('data-value', value).attr('data-attr', attr);
+  return $('<span>').addClass('tag').append(value)
+  .attr('data-value', value)
+  .attr('data-attr', attr);
 }
 
 function applyTagColor(tag){
