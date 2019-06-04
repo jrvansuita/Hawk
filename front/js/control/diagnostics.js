@@ -109,14 +109,6 @@ function buildSingleRow(holder, row){
 }
 
 
-function bindCopiable(){
-  $('.copiable').click(function(e){
-    Util.selectContent(this);
-    Util.copySeleted();
-    $(this).select();
-    e.stopPropagation();
-  });
-}
 
 
 

@@ -177,7 +177,7 @@ function onPackingDone(params, user){
   .loadItems()
   .run((sale)=>{
     if (sale){
-      var day = Day.packing(user.id, Dat.today, sale);
+      var day = Day.packing(user.id, Dat.today(), sale);
 
       HistoryStorer.packing(user.id, sale, day);
 

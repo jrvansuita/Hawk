@@ -340,12 +340,7 @@ function addListeners(){
     window.open('/packing-transport-tag?idnfe=' + sale.idNotaFiscalRef, '_blank');
   });
 
-  $('.copiable').click(function(e){
-    Util.selectContent(this);
-    Util.copySeleted();
-    $(this).select();
-    e.stopPropagation();
-  });
+  bindCopiable();
 
 
   $('.icon-open-list').click(function(e){

@@ -14,7 +14,8 @@ var fixEnum = {
   COLOR: 5, //Sem cor
   COST: 6, //Sem preço de custo
   DEPARTMENT: 7, //Departamento faltando
-  GENDER: 8, //Gênero faltando
+  GENDER: 8, //Gênero faltando ou errado
+  NO_STOCK_MAGENTO: 11, //Sem stock no magento
 
 
 }

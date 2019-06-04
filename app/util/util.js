@@ -272,11 +272,13 @@ var Util = {
       case 7:
       return 'Produtos sem Departamento'
       case 8:
-      return 'Produtos sem Gênero'
+      return 'Produtos com Gênero incorreto'
       case 9:
       return 'Produtos com Localização e Sem estoque';
       case 10:
       return 'Produtos aguardando entrada';
+      case 11:
+      return 'Produtos sem estoque no Magento';
 
       default:
       return 'Não encontrado';
@@ -308,6 +310,8 @@ var Util = {
       return 'local-no-stock';
       case 10:
       return 'registring';
+      case 11:
+      return 'not-visible';
 
       default:
       return 'question-mark';

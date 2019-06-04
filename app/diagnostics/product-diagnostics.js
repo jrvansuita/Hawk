@@ -15,6 +15,8 @@ module.exports = class ProductDiagnostics{
     this.productsAnalyzed++;
     var attrs = getProductAttrs(product);
 
+    console.log(product.feedProduct);
+
 
     // --- Cascata --- //
     if (isPhotoMissing(product)){
@@ -42,6 +44,10 @@ module.exports = class ProductDiagnostics{
 
     if (isWeightMissing(product)){
       this._storeFix(product, Fix.enum().WEIGHT);
+    }
+
+    if (isMagentoStockMissing(product)){
+      this._storeFix(product, Fix.enum().NO_STOCK_MAGENTO);
     }
 
     if (isCostPriceMissing(product)){
@@ -224,6 +230,11 @@ function noLocalHasStock(product){
 function hasLocalNoStock(product, stocks){
   return hasLocal(product) && !hasStock(product) && !hasSales(stocks);
 }
+
+function isMagentoStockMissing(product){
+  return product.feedProduct && product.feedProduct.quantity == 0;
+}
+
 
 function isSalesMissing(product, stocks){
   var isMoreThan10Days = Dat.daysDif(product.dtCriacao, new Date()) > 9;

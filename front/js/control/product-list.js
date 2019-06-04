@@ -38,7 +38,6 @@ $(document).ready(()=>{
   $('#search-button').click(()=>{
     page = 0;
     $('.content').empty();
-
     loadList();
   });
 
@@ -71,11 +70,14 @@ function loadList(){
       attrs: getAttrsTags()
     }
   },(result)=>{
+    loading = false;
     showMessageTotals(result.info);
+
     result.data.forEach((each)=>{
       addProductLayout(each);
-      loading = false;
     });
+
+    bindCopiable();
   });
 }
 

@@ -1,9 +1,5 @@
 $(document).ready(() => {
-  $('.copiable').click(function(e){
-    Util.selectContent(this);
-    Util.copySeleted();
-    e.stopPropagation();
-  });
+  bindCopiable();
 
 
   $('img.avatar-img').error(function(){
@@ -35,4 +31,17 @@ function checkMaterialInput(el){
   }
 
   return true;
+}
+
+
+function bindCopiable(){
+  var event = function(e){
+    Util.selectContent(this);
+    Util.copySeleted();
+    $(this).select();
+    e.stopPropagation();
+  };
+
+
+  $('.copiable').off('click', event).on('click', event);
 }

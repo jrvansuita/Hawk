@@ -54,7 +54,7 @@ module.exports = class Product extends DataAccess {
 }
 
 static likeThis(keyValue, limit, callback){
-  var query = likeQuery(keyValue);
+  var query = this.likeQuery(keyValue);
 
   this.staticAccess()
   .find(query)
