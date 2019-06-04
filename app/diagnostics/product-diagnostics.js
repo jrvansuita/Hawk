@@ -15,9 +15,6 @@ module.exports = class ProductDiagnostics{
     this.productsAnalyzed++;
     var attrs = getProductAttrs(product);
 
-    console.log(product.feedProduct);
-
-
     // --- Cascata --- //
     if (isPhotoMissing(product)){
       if (hasStock(product) || hasLocal(product)){

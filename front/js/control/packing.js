@@ -1,6 +1,8 @@
 $(document).ready(()=>{
 
-  $('#search-sale').select();
+  if (sale && !sale.error){
+    $('#search-sale').select();
+  }
 
   $('#product-ean').on("keyup", function(e) {
     if (e.which == 13 && $(this).val().length>10){

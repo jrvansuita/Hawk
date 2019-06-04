@@ -8,6 +8,8 @@ module.exports={
     var typeStr = data.type;
     data.type = data.type.toString().toLowerCase();
 
+    data.points = parseInt(data.points);
+
     if (data.type == 'packing'){
       data.type = 'invoice';
     }

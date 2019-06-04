@@ -34,12 +34,6 @@ module.exports= class SaleLoader {
     .setOnError(this.onError)
     .getSale(saleNumber, (sale)=>{
       this.sale = sale;
-
-      if (sale == '0'){
-        console.log('/---- Sale Zero  loadSale ----/');
-        console.log(new Error().stack);
-      }
-
       onCallOuter(sale);
     });
   }

@@ -82,10 +82,9 @@ getSale(number, callback) {
   if (number == undefined){
     callback({});
   }else{
-
     this.call.setPath('pedidos/' + number)
     .get((data)=>{
-      callback(JSON.parse(data)[0]);
+      callback(typeof data == 'string' ? undefined : JSON.parse(data)[0]);
     });
   }
 }
