@@ -61,22 +61,6 @@ module.exports = class EccosysCalls{
     return this;
   }
 
-  /*getSales(from, to, page, callback) {
-  var query = new Query('$');
-
-  query.add('dataConsiderada', 'dataFaturamento');
-  query.addDate('fromDate', from);
-  query.addDate('toDate', to);
-  query.add('count', page_count);
-  query.add('offset', page_count * page);
-
-  this.call.setPath('pedidos' + query.build())
-  .get((data)=>{
-  callback(JSON.parse(data));
-});
-}
-*/
-
 
 getSale(number, callback) {
   if (number == undefined){

@@ -13,7 +13,10 @@ module.exports = class Day extends DataAccess {
   }
 
   static packing(userId, date, sale) {
-    var points = ((parseFloat(sale.totalProdutos)/sale.itemsQuantity)/80)*(sale.itemsQuantity*0.5);
+    var items = parseInt(sale.itemsQuantity);
+    var total = parseFloat(sale.totalProdutos);
+
+    var points = ((total/items)/100) * (sale.itemsQuantity * 0.1);
 
     return new Day(userId, date, 'invoice', sale.totalProdutos, 1, points);
   }

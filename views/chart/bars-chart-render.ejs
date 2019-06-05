@@ -1,7 +1,7 @@
 <div class="bars-holder">
   <% item.getBars().forEach(function(bar){
     if (parseInt(bar.getValue()) != 0){%>
-    <div class="bar shadow grow-bar" data-height="<%=bar.getHeight()%>" data-name="<%=bar.name%>" style="background-color: #<%=bar.getValue()>0 ? bar.barColor : 'ec7269' %>">
+    <div class="bar shadow grow-bar" title="<%=Num.points(bar.getValue())%>" data-height="<%=bar.getHeight()%>" data-name="<%=bar.name%>" style="background-color: #<%=bar.getValue()>0 ? bar.barColor : 'ec7269' %>">
       <span class="bar-value"><%=Num.format(bar.getValue());%></span>
     </div>
 

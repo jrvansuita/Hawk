@@ -26,6 +26,8 @@ module.exports = {
       }
     }
 
+   //Acima de 0
+   attrs.quantity =   {$gt: 0};
 
    var result = Object.assign(Product.likeQuery(query.value), attrs);
 

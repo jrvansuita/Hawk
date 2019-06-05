@@ -31,9 +31,11 @@ module.exports = {
   load(callback){
     var result = {};
     var attrs = ['brand', 'category', 'color', 'gender', 'year', 'age', 'season'];
+    var query = {quantity : {$gt: 0}};
 
 
-    Product.findAll((err, all) =>{
+    Product.find(query,
+      (err, all) =>{
 
       all.forEach((each)=>{
         attrs.forEach(attr=>{
