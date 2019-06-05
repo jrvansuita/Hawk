@@ -107,7 +107,13 @@ function loadSaleForPrint(sale, callback){
 //Marca no Eccosys que o pedido já foi impresso
 function markAsPrinted(saleNumber){
   new EccosysCalls().getSale(saleNumber, (sale)=>{
-    if (sale.pickingRealizado == "N"){
+
+    if (!sale){
+      throw 'Sale not defined ' + saleNumber;
+    }
+
+
+    if (sale && sale.pickingRealizado == "N"){
 
       var body = {
         situacao: sale.situacao,
