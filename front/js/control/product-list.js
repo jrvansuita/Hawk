@@ -1,5 +1,6 @@
 var page = 0;
 var loading = false;
+var productsListCount = 0;
 
 function loadFromMemory(){
   console.log(memoryQuery);
@@ -34,9 +35,13 @@ $(document).ready(()=>{
     }
   });
 
-
+  $('#show-no-quantity').click(()=>{
+     $('#search-button').focus();
+  });
+  
   $('#search-button').click(()=>{
     page = 0;
+    productsListCount = 0;
     $('.content').empty();
     loadList();
   });
@@ -67,13 +72,15 @@ function loadList(){
   _get('/product-list-page',{page : page,
     query: {
       value: $('#search-input').val(),
-      attrs: getAttrsTags()
+      attrs: getAttrsTags(),
+      noQuantity: $('#show-no-quantity').is(":checked")
     }
   },(result)=>{
     loading = false;
     showMessageTotals(result.info);
 
     result.data.forEach((each)=>{
+      productsListCount++;
       addProductLayout(each);
     });
 
@@ -110,13 +117,15 @@ function createImgProduct(product){
   .addClass('thumb')
   .attr('onerror',"this.src='img/product-placeholder.png'");
 
+  var counter = $('<label>').addClass('counter-circle').append(productsListCount);
+
   new ImagePreview(img).hover((self)=>{
     _get('/product-image', {sku: product.sku },(product)=>{
       self.show(product.image);
     });
   });
 
-  return imgHolder.append(img);
+  return imgHolder.append(counter, img);
 }
 
 
@@ -154,18 +163,23 @@ function createTags(product){
   var $brand = createClickableTag(product.brand, 'brand');
 
   var $cat = [];
-  product.category.split(',').forEach((each)=>{
-    $cat.push(createClickableTag(each.trim(), 'category'));
-  });
+  if (product.category){
+    product.category.split(',').forEach((each)=>{
+      $cat.push(createClickableTag(each.trim(), 'category'));
+    });
+  }
 
   var $gender = createClickableTag(product.gender, 'gender');
   var $color = createClickableTag(product.color, 'color');
   var $season = createClickableTag(product.season, 'season');
 
+
   var $age = [];
-  product.age.split(',').forEach((each)=>{
-    $age.push(createClickableTag(each.trim(), 'age'));
-  });
+  if (product.age){
+    product.age.split(',').forEach((each)=>{
+      $age.push(createClickableTag(each.trim(), 'age'));
+    });
+  }
 
 
   var $year = createClickableTag(product.year, 'year');
@@ -272,10 +286,6 @@ function getAttrsTags(){
 
     attrs[attr] = attrs[attr] ? attrs[attr] +  '|' + value : value;
   });
-
-
-  console.log(attrs);
-
 
   return attrs;
 }

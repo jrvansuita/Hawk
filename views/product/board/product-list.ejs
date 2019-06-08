@@ -2,6 +2,7 @@
 <html lang="en" dir="ltr">
 <%include ../../menus/main-menu %>
 <head>
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-checkbox.css">
   <link rel="stylesheet" type="text/css" href="/front/css/layout/product-list.css">
   <script type="text/javascript" src="/front/js/control/product-list.js"></script>
 
@@ -26,6 +27,11 @@
       </div>
 
       <div class="tag-box">
+
+        <label class="pure-material-checkbox">
+          <input type="checkbox" id="show-no-quantity" <%=locals.productListQuery && locals.productListQuery.noQuantity == 'true' ? 'checked' : '' %>>
+          <span>Mostrar Produtos sem estoque</span>
+        </label>
 
       </div>
     </div>
