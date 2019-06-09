@@ -156,7 +156,7 @@ function buildChildSku(product, child){
 
 
   $options.click(function(e){
-    var drop = new MaterialDropdown($(this), e, true);
+    var drop = new MaterialDropdown($(this), e, false);
     drop.addItem('/img/barcode.png', 'Imprimir Etiqueta', function(){
 
       window.open('/barcode?sku=' + child.codigo, '_blank');

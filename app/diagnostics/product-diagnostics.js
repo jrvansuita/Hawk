@@ -33,7 +33,11 @@ module.exports = class ProductDiagnostics{
     }
 
     else if (isSalesMissing(product, stocks)){
-      this._storeFix(product, Fix.enum().SALE);
+      if (isMagentoProblem(product)){
+        this._storeFix(product, Fix.enum().MAGENTO_PROBLEM);
+      }else{
+        this._storeFix(product, Fix.enum().SALE);
+      }
     }
 
     // --- Cascata --- //
@@ -43,9 +47,7 @@ module.exports = class ProductDiagnostics{
       this._storeFix(product, Fix.enum().WEIGHT);
     }
 
-    if (isMagentoStockMissing(product)){
-      this._storeFix(product, Fix.enum().NO_STOCK_MAGENTO);
-    }
+
 
     if (isCostPriceMissing(product)){
       this._storeFix(product, Fix.enum().COST);
@@ -209,7 +211,8 @@ function getProductAttrs(product){
 }
 
 function isWeightMissing(product){
-  return ((parseFloat(product.pesoLiq) * parseFloat(product.pesoBruto)) == 0) && !isPhotoMissing(product);
+  //Considerar somente o peso liquido
+  return (parseFloat(product.pesoLiq) /* * parseFloat(product.pesoBruto))*/ == 0) && !isPhotoMissing(product);
 }
 
 function hasStock(product){
@@ -228,8 +231,8 @@ function hasLocalNoStock(product, stocks){
   return hasLocal(product) && !hasStock(product) && !hasSales(stocks);
 }
 
-function isMagentoStockMissing(product){
-  return product.feedProduct && product.feedProduct.quantity == 0;
+function isMagentoProblem(product){
+  return (!product.feedProduct) || (product.feedProduct && product.feedProduct.quantity == 0);
 }
 
 

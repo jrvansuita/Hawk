@@ -1,6 +1,5 @@
 
-.md-dropdown{
-}
+.md-dropdown{z-index: 9999;}
 
 
 .md-dropdown a, li {

@@ -14,6 +14,7 @@ const AutoBlockPicking = require('../auto/auto-block-picking.js');
 
 var loadingList = false;
 var loadingId = 0;
+var openSalesCount = 0;
 
 module.exports = {
 
@@ -26,7 +27,8 @@ module.exports = {
         });
       });
     } else {
-        onFinished();
+      onFinished();
+      loadOpenSales();
     }
   },
 
@@ -41,10 +43,10 @@ module.exports = {
 
   load(onFinished){
     new EccosysCalls().setOnError((error)=>{
-        loadingList = false;
-        onFinished();
-        throw error;
-      }).getPickingSales((sales) => {
+      loadingList = false;
+      onFinished();
+      throw error;
+    }).getPickingSales((sales) => {
       try{
         loadingList = true;
 
@@ -63,7 +65,7 @@ module.exports = {
           })
           .loadClient((sale)=>{
             if (sale.client)
-              UfLaws.put(sale.client.uf);
+            UfLaws.put(sale.client.uf);
           })
           .loadItems(true)
           .onFilter((sale)=>{
@@ -79,7 +81,7 @@ module.exports = {
           })
           .run(onFinished);
 
-        }else{ 
+        }else{
           loadingList = false;
           onFinished();
         }
@@ -152,6 +154,10 @@ module.exports = {
 
   getPickingSalesTotalCount(){
     return PickingLaws.getFullList().length;
+  },
+
+  getOpenSalesCount(){
+    return openSalesCount;
   }
 
 };
@@ -162,4 +168,16 @@ function attachRunningChecker(){
   loadingId = setTimeout(function(){
     loadingList = false;
   }, 10000);
+}
+
+var openSalesController = 0;
+
+function loadOpenSales(){
+  if (openSalesController < new Date().getTime()){
+    //Add +30 min to now
+    openSalesController = new Date().getTime() + 1.8e+6;
+    new EccosysCalls().getOpenSales((sales) => {
+      openSalesCount = sales.length;
+    });
+  }
 }

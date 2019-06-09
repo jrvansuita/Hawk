@@ -17,7 +17,8 @@ function loadFromMemory(){
         selectAndPlaceTag(Str.capitalize(each), attr);
       });
     });
-
+  }else{
+    toggleTagBox(true);
   }
 }
 
@@ -36,9 +37,9 @@ $(document).ready(()=>{
   });
 
   $('#show-no-quantity').click(()=>{
-     $('#search-button').focus();
+    $('#search-button').focus();
   });
-  
+
   $('#search-button').click(()=>{
     page = 0;
     productsListCount = 0;
@@ -50,6 +51,23 @@ $(document).ready(()=>{
     if (e.which == 13){
       $(this).click();
     }
+  });
+
+  $('.icon-open').click(()=>{
+    toggleTagBox();
+  });
+
+  $('.menu-dots').click(function(e){
+    var drop = new MaterialDropdown($(this), e);
+    drop.addItem('/img/copy.png', 'Copiar Skus', function(){
+      var val = '';
+      $(".sku.copiable").each(function() {
+        val += '\n' + $(this).text();
+      });
+
+      Util.copySeleted(val);
+    });
+    drop.show();
   });
 });
 
@@ -228,15 +246,15 @@ function selectAndPlaceTag(value, attr){
     $('.tag-box').append(tag);
 
     if (!$('.tag-box').is(':visible')){
-      $('.tag-box').fadeIn();
+      toggleTagBox(true);
     }
   }
 }
 
 function createSingleTag(value, attr){
   return $('<span>').addClass('tag').append(value)
-  .attr('data-value', value)
-  .attr('data-attr', attr);
+  .attr('data-value', value.toString().toLowerCase())
+  .attr('data-attr', attr ? attr.toLowerCase() : '');
 }
 
 function applyTagColor(tag){
@@ -288,4 +306,15 @@ function getAttrsTags(){
   });
 
   return attrs;
+}
+
+
+function toggleTagBox(forceOpen){
+  if ($('.icon-open').hasClass('is-closed') || forceOpen ){
+    $('.icon-open').addClass('is-open').removeClass('is-closed');
+    $('.tag-box').show();
+  }else{
+    $('.icon-open').removeClass('is-open').addClass('is-closed');
+    $('.tag-box').hide();
+  }
 }

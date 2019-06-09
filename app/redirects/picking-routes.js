@@ -72,7 +72,9 @@ module.exports = class PickingRoutes extends Routes{
             pendingSales: PendingLaws.getList(),
             donePickings: DoneLaws.getList(),
             blockedRules: BlockHandler.rules(),
-            blockedSalesCount: BlockHandler.getBlockedSalesCount()
+            blockedSalesCount: BlockHandler.getBlockedSalesCount(),
+
+            openSalesCount: PickingHandler.getOpenSalesCount()
           });
         }
       });
