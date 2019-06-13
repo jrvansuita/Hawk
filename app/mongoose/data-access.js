@@ -137,7 +137,7 @@ static aggregate(query, callback) {
   //Update using provided query and data
   static updateAll(query, data, callback) {
     delete data.__v;
-    this.staticAccess().update(query, data, {
+    this.staticAccess().updateMany(query, data, {
       multi: true
     }, (err, doc) => {
       if (callback)

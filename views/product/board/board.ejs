@@ -2,8 +2,16 @@
 <%include ../../menus/main-menu %>
 <head>
   <link rel="stylesheet" type="text/css" href="/front/css/layout/product-board.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-dropdown.css">
+
   <script type="text/javascript" src="/front/js/control/product-board.js"></script>
-<script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+  <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
+
+  <script type="text/javascript" src="front/js/libs/broadcast.js"></script>
+  <script type="text/javascript" src="front/js/libs/socket.io.slim.js"></script>
+
+
 </head>
 <body>
   <%include ../../menus/stock-menu %>
@@ -19,6 +27,10 @@
       <div class="shadow box fit-box">
         <div class="line-title line-item">
           <label class="title-box">Todos os Produtos</label>
+
+          <div class="menu-dots">
+            <img src="img/dots.png" class="dots-glyph" />
+          </div>
         </div>
 
         <div class="box-items-holder">

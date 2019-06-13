@@ -120,11 +120,6 @@ module.exports = class ProductRoutes extends Routes{
       });
     });
 
-
-
-
-
-
     this._page('/product-board', (req, res) => {
       ProductBoard.run((result)=>{
         res.render('product/board/board',{
@@ -133,7 +128,15 @@ module.exports = class ProductRoutes extends Routes{
       });
     });
 
+    this._post('/product-board-reset', (req, res) => {
+      const JobProducts = require('../jobs/job-products.js');
+      new JobProducts().run(()=>{
+        console.log('Chamou aqui');
+        ProductBoard.reset();
+      });
 
+      this._resp().sucess(res);
+    });
 
     this._page('/product-list', (req, res) => {
       res.locals.productListQuery = req.body.query || req.session.productListQuery;
@@ -147,7 +150,7 @@ module.exports = class ProductRoutes extends Routes{
 
 
     this._get('/product-list-page', (req, res) => {
-     req.session.productListQuery = req.query.query;
+      req.session.productListQuery = req.query.query;
       ProductListProvider.load(req.query.query, req.query.page, (data, info)=>{
         this._resp().sucess(res, {data, info});
       });

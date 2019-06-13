@@ -7,12 +7,17 @@ const History = require('../bean/history.js');
 
 module.exports = class JobProducts extends Controller{
 
-  run(){
+  run(callback){
     var controller = this;
 
     History.job('Atualização de Produtos', 'Atualizando produtos através do feed xml', 'XML');
 
-    FeedXml.get((xml) =>{
+    //  Product.updateAll({quantity : {$gt: 0}},{quantity: 0}, (err, dos)=>{
+    //Zera as quantidades em estoque para depois atualizar.
+
+    //await sleep(2000);
+
+    FeedXml.get((xml) => {
       if (xml){
         var items = xml.feed.item;
         items.forEach((item, index) => {
@@ -39,11 +44,37 @@ module.exports = class JobProducts extends Controller{
             gender, color, quantity,
             age, year, season);
 
+            if (product.sku == 'CB456vc'){
+              console.log(item);
+              console.log(product);
+            }
+
             product.upsert();
           });
 
+
+
           controller.terminate();
+          console.log('Atualização de produtos concluída');
+
+          if (callback){
+            callback();
+          }
+
         }
       });
+
+      //  });
+
     }
   };
+
+
+
+
+
+  /*function sleep(ms){
+  return new Promise(resolve=>{
+  setTimeout(resolve,ms)
+})
+}*/

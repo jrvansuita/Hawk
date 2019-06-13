@@ -10,6 +10,13 @@ module.exports = {
     callback(this.order(r));
   },
 
+  reset(){
+    loadedResults = undefined;
+    this.run(()=>{
+      console.log('Emitiu');
+      global.io.sockets.emit('product-board-reset', {'teste':true});
+    });
+  },
 
   order(result){
     Object.keys(result).forEach((attr)=>{

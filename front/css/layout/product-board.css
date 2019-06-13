@@ -28,6 +28,7 @@ html,body {
   height: calc(100% - 120px);
 }
 
+
 .box{
   display: block;
   margin-right: 15px;
@@ -69,7 +70,7 @@ html,body {
   position: relative;
   overflow-y: auto;
   height: 99%;
-  }
+}
 
 .box-item{
   padding: 6px 0px;
@@ -267,3 +268,9 @@ html,body {
 }
 
 .single-right-col .box{height: fit-content;margin-bottom: 15px;}
+
+
+.menu-dots {
+  float: right;
+  margin-top: 2px;
+}
