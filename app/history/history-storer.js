@@ -46,19 +46,6 @@ module.exports={
     });
   },
 
-  packingTeste(userId, params, reenvio){
-    onTry(()=>{
-
-      if (reenvio){
-        var message = 'Pedido reenviado ' + params.saleNumber;
-      }else{
-        var message = 'Pedido enviado ' + params.saleNumber;
-      }
-
-      History.notify(userId, reenvio ? 'Packing Reenviado' : 'Packing Enviado', message, 'Packing');
-    });
-  },
-
   packing(userId, sale, day){
     onTry(()=>{
       var message = 'Pedido: ' + sale.numeroPedido +  (sale.client ? ' - ' + sale.client.nome : '');
@@ -72,12 +59,12 @@ module.exports={
     });
   },
 
-  packingRejected(userId, saleNumber, error){
+  packingRejected(userId, saleNumber, oc,  error){
     onTry(()=>{
-      var message = 'Pedido: ' + saleNumber;
+      var message = 'Pedido: ' + saleNumber + ' - Ordem de Compra: ' + oc;
 
       if (error){
-        message += '\nError: ' + error;
+        message += '\nErro: ' + error;
       }
 
       History.notify(userId, 'Packing Rejeitado', message, 'Packing');

@@ -131,7 +131,6 @@ module.exports = class ProductRoutes extends Routes{
     this._post('/product-board-reset', (req, res) => {
       const JobProducts = require('../jobs/job-products.js');
       new JobProducts().run(()=>{
-        console.log('Chamou aqui');
         ProductBoard.reset();
       });
 

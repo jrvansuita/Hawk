@@ -16,9 +16,8 @@ $(document).ready(()=>{
 
 
   new Broadcast('product-board-reset').onReceive((data)=>{
-    //window.location.reload();
+    window.location.reload();
     console.log('Reload recebeu');
-    console.log(data);
   });
 
 
@@ -26,7 +25,9 @@ $(document).ready(()=>{
     var drop = new MaterialDropdown($(this), e);
 
     drop.addItem('/img/refresh.png', 'Atualizar', function(e){
-      $(this).find('.dots-glyph').attr('src','/loader/circle.svg');
+      var $menu = $(this).closest('.menu-dots');
+      $menu.unbind('click');
+      $menu.find('.dots-glyph').attr('src','img/loader/circle.svg');
 
       _post('/product-board-reset', {}, ()=>{
         console.log('Rodou o reset');

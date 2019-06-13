@@ -20,7 +20,7 @@ module.exports = class ProductDiagnostics{
       if (hasStock(product) || hasLocal(product)){
         this._storeFix(product, Fix.enum().NO_PHOTO);
       }else{
-        this._storeFix(product, Fix.enum().NO_PHOTO_REGISTERING);
+        this._storeFix(product, Fix.enum().REGISTERING);
       }
     }
 
@@ -34,7 +34,11 @@ module.exports = class ProductDiagnostics{
 
     else if (isSalesMissing(product, stocks)){
       if (isMagentoProblem(product)){
-        this._storeFix(product, Fix.enum().MAGENTO_PROBLEM);
+        if (hasStock(product)){
+          this._storeFix(product, Fix.enum().MAGENTO_PROBLEM);
+        }else{
+          this._storeFix(product, Fix.enum().REGISTERING);
+        }
       }else{
         this._storeFix(product, Fix.enum().SALE);
       }

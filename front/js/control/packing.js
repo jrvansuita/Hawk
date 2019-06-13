@@ -474,6 +474,7 @@ function postPackingDone(){
 
   _post('packing-done', {
     saleNumber: sale.numeroPedido,
+    oc: sale.numeroDaOrdemDeCompra,
     liqWeigth : Floa.def($('#sale-liq').val()),
     bruWeigth : Floa.def($('#sale-bru').val()),
     vols: Num.def($('#sale-vols').val()),

@@ -18,7 +18,6 @@ exports.get = (onEnd) => {
     res.on('end', function() {
       var parseString = require('xml2js').parseString;
       parseString(xmlStr, function (err, xml) {
-        console.log(err);
         onEnd(xml);
       });
     });

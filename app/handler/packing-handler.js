@@ -114,7 +114,6 @@ module.exports = {
 
   sendNfe(user, params, callback){
     if (Num.def(params.idNfe) > 0){
-      HistoryStorer.packingTeste(user.id, params, true);
       //A nota já está criada e estamos reenviando ela.
       new EccosysCalls().resendRejectedNF(user, params.idNfe, (nfResult)=>{
         if (callback){
@@ -122,7 +121,6 @@ module.exports = {
         }
       });
     }else{
-      HistoryStorer.packingTeste(user.id, params, false);
       //Está enviando a nota pela primeira vez
       new EccosysCalls().packingPostNF(user, params.saleNumber, (nfResult)=>{
         if (callback){
@@ -164,7 +162,7 @@ module.exports = {
 
 function onPackingRejected(params, user, result){
   var error = result.error[0].erro.split('\n')[0];
-  HistoryStorer.packingRejected(user.id, params.saleNumber, error);
+  HistoryStorer.packingRejected(user.id, params.saleNumber, params.oc, error);
   DoneLaws.remove(params.saleNumber);
 }
 

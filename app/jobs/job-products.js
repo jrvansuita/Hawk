@@ -12,59 +12,54 @@ module.exports = class JobProducts extends Controller{
 
     History.job('Atualização de Produtos', 'Atualizando produtos através do feed xml', 'XML');
 
-    //  Product.updateAll({quantity : {$gt: 0}},{quantity: 0}, (err, dos)=>{
-    //Zera as quantidades em estoque para depois atualizar.
+    Product.updateAll({quantity : {$gt: 0}},{quantity: 0}, (err, dos)=>{
+      //Zera as quantidades em estoque para depois atualizar.
 
-    //await sleep(2000);
+      //await sleep(2000);
 
-    FeedXml.get((xml) => {
-      if (xml){
-        var items = xml.feed.item;
-        items.forEach((item, index) => {
+      FeedXml.get((xml) => {
+        if (xml){
+          var items = xml.feed.item;
+          items.forEach((item, index) => {
 
-          var sku = FeedXml.val(item, "sku");
-          var name = Util.getProductName(FeedXml.val(item, "name"), sku.includes('-'));
-          var brand = FeedXml.val(item, "brand").trim();
+            var sku = FeedXml.val(item, "sku");
+            var name = Util.getProductName(FeedXml.val(item, "name"), sku.includes('-'));
+            var brand = FeedXml.val(item, "brand").trim();
 
-          var url = FeedXml.val(item, "link");
-          var image = FeedXml.val(item, "image");
-          var price = FeedXml.val(item, "price");
+            var url = FeedXml.val(item, "link");
+            var image = FeedXml.val(item, "image");
+            var price = FeedXml.val(item, "price");
 
-          var category = FeedXml.val(item, "department");
-          var gender = Str.capitalize(FeedXml.val(item, "gender")).trim();
-          var color = Str.capitalize(FeedXml.val(item, "color")).trim();
-          var quantity = FeedXml.val(item, "quantity");
+            var category = FeedXml.val(item, "department");
+            var gender = Str.capitalize(FeedXml.val(item, "gender")).trim();
+            var color = Str.capitalize(FeedXml.val(item, "color")).trim();
+            var quantity = FeedXml.val(item, "quantity");
 
-          var year = FeedXml.val(item, "collection");
-          var season = FeedXml.val(item, "season");
-          var age = FeedXml.val(item, "age");
+            var year = FeedXml.val(item, "collection");
+            var season = FeedXml.val(item, "season");
+            var age = FeedXml.val(item, "age");
 
-          var product = new Product(sku, name, brand, url,
-            image, price, category,
-            gender, color, quantity,
-            age, year, season);
+            var product = new Product(sku, name, brand, url,
+              image, price, category,
+              gender, color, quantity,
+              age, year, season);
 
-            if (product.sku == 'CB456vc'){
-              console.log(item);
-              console.log(product);
+              product.upsert();
+            });
+
+
+
+            controller.terminate();
+            console.log('Atualização de produtos concluída');
+
+            if (callback){
+              callback();
             }
 
-            product.upsert();
-          });
-
-
-
-          controller.terminate();
-          console.log('Atualização de produtos concluída');
-
-          if (callback){
-            callback();
           }
+        });
 
-        }
       });
-
-      //  });
 
     }
   };

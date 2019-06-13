@@ -1,7 +1,7 @@
 
 var fixEnum = {
   NO_PHOTO: 0, // Foto faltando
-  NO_PHOTO_REGISTERING: 10, // Foto faltando mais produto em cadastro
+  REGISTERING: 10, // Produto em fase de cadastro
 
   NO_LOCAL_HAS_STOCK: 1, // Localização faltando mais o produto tem estoque
   HAS_LOCAL_NO_STOCK: 9, // Tem Localização mais o produto nunca teve nenhum lançamento de estoque

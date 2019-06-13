@@ -14,7 +14,7 @@ module.exports = {
     loadedResults = undefined;
     this.run(()=>{
       console.log('Emitiu');
-      global.io.sockets.emit('product-board-reset', {'teste':true});
+      global.io.sockets.emit('product-board-reset', {});
     });
   },
 
