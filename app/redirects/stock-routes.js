@@ -148,7 +148,6 @@ module.exports = class ProductRoutes extends Routes{
       this._resp().sucess(res);
     });
 
-
     this._get('/product-list-page', (req, res) => {
       req.session.productListQuery = req.query.query;
       ProductListProvider.load(req.query.query, req.query.page, (data, info)=>{

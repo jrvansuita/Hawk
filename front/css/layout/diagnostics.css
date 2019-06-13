@@ -4,7 +4,7 @@ a{
 }
 
 .ind-holder{
-  max-width: 80%;
+  max-width: 90%;
   margin: auto;
   display: block;
 }
@@ -12,21 +12,23 @@ a{
 .ind-item{
   display: inline-block;
   width: fit-content;
-  margin-right: 15px;
-  margin-bottom: 15px;
+  margin-right: 10px;
+  margin-bottom: 10px;
   position: relative;
 }
 
 .ind-header{
-  height: 90px;
+  padding-top: 8px;
+  height: 60px;
   min-height: fit-content;
-  min-width: 210px;
+  min-width: 20px;
   }
 
   .ind-icon{
-    padding: 10px;
-    width: 40px;
-    height: 40px;
+    /* padding: 5px; */
+    width: 30px;
+    margin-right: 6px;
+    height: 30px;
   }
 
   .ind-item * {
@@ -34,43 +36,43 @@ a{
   }
 
   .ind-title{
-    font-size: 15px;
+    font-size: 14px;
     text-overflow: ellipsis;
     display: -webkit-inline-box;
-    padding: 15px 5px;
-    width: 120px;
+    width: 100px;
+    padding-left: 6px;
     vertical-align: top;
     font-weight: 600;
-    color: #4a4a4c;
-    margin-left: 10px;
+    color: #616163;
+    margin-left: 5px;
   }
 
 
   .ind-count{
-    font-size: 18px;
-    padding: 0px 15px;
-    margin-bottom: 15px;
+    font-size: 16px;
+    padding: 0px 10px;
     display: -webkit-box;
-    font-weight: 800;
-    color: #81868a;
+    font-weight: 1000;
+    color: #ada8a8;
+    margin-bottom: 8px;
   }
 
 
   .top-controlers{
-    width: 80%;
+    width: 90%;
     height: auto;
-    padding: 25px 15px;
+    padding: 15px 10px;
     margin: auto;
-    margin-top: 25px;
-    margin-bottom: 20px;
+    margin-top: 15px;
+    margin-bottom: 10px;
     border-top: 3px solid #658ee4;
   }
 
   .erros-msg{
     color: #4a4a4c;
-    font-size: 19px;
+    font-size: 16px;
     font-weight: 800;
-    padding: 10px 5px;
+    padding: 5px 5px;
   }
 
   #run{
@@ -82,25 +84,19 @@ a{
 
   .loading-circle{
     display: none;
-    max-width: 30px;
-    float: right;
-    margin-top: -5px;
-    max-height: 30px;
+    max-width: 20px;
+    margin-right: 0px;
   }
 
   .start-time{
-    float: right;
-    padding-right: 10px;
-    vertical-align: middle;
-    padding: 5px 10px;
-    margin-top: -5px;
+    padding: 5px 0px;
     font-weight: 600;
+    font-size: 13px;
+    color: #616163;
   }
 
   .ind-rows-holder{
-    display: -webkit-box;
-    width: 80%;
-    max-width: 80%;
+    max-width: 90%;
     margin: auto;
     margin-bottom: 100px;
     position: relative;
@@ -129,22 +125,23 @@ a{
   .row-name{
     display: inline-block;
     padding: 10px 8px;
-    font-size: 14px;
+    font-size: 12px;
     color: #443c3c;
   }
 
   .row-sku{
     display: inline-block;
     padding: 10px 8px;
+    font-size: 13px;
   }
 
   .row-img{
     display: -webkit-box;
     width: auto;
-    min-height: 100px;
-    max-height: 100px;
+    min-height: 90px;
+    max-height: 90px;
     margin: auto;
-    padding: 10px;
+    padding: 5px;
   }
 
 
@@ -279,15 +276,17 @@ a{
     border-top: 1px solid #dedddd;
     width: 100%;
     max-width: 100%;
+    min-width: 100%;
     height: auto;
     display: inline-block;
   }
 
   .brand-title{
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 500;
     padding: 0px 5px 10px 5px;
     display: block;
+    color: #464141;
   }
 
   .items-brand-holder{
@@ -297,7 +296,8 @@ a{
 
   .dots-glyph{
     float: right;
-    margin-right: 12px;
+    margin-right: 5px;
+    margin-left: 10px;
   }
 
   .top-sku{
@@ -321,3 +321,14 @@ a{
     color: #908888;
     font-size: 15px;
   }
+
+.main-menu-dots{display: list-item;float: right;}
+
+#sync {
+    margin-top: -6px;
+}
+
+
+.main-menu-dots>.md-dropdown{
+  right: 200px;
+}

@@ -10,14 +10,17 @@ $(document).ready(()=>{
     });
   });
 
-  $('#refresh').click(()=>{
-    showLoading();
+  $('.main-menu-dots').click(function(e){
+    var drop = new MaterialDropdown($(this), e);
+    drop.addItem('/img/restart.png', 'Atualizar Problemas', function(){
+      showLoading();
 
-    _post('/run-product-diagnostics', {refresh:true}, ()=>{
-      console.log('rodou');
+      _post('/run-product-diagnostics', {refresh:true}, ()=>{
+        console.log('rodou');
+      });
     });
+    drop.show();
   });
-
 
   new Broadcast('product-diagnostics').onReceive((result)=>{
     var msg = 'Foram avaliados ' + result.productsAnalyzed + ' skus e foram encontrados ' + result.fixesFound + ' problemas.';
@@ -114,7 +117,7 @@ function buildSingleRow(holder, row){
 
 function showLoading(){
   $('#sync').hide();
-  $('#refresh').hide();
+  $('.main-menu-dots').hide();
   $('.loading-circle').show();
 }
 

@@ -74,6 +74,7 @@
 
 
           </div>
+
         </div>
 
         <div class="pick-box shadow upcoming-box">
@@ -94,6 +95,9 @@
               </span>
             </div>
 
+            <%if (openSalesCount){%>
+              <label class="open-sales-label">+<%=openSalesCount%> Em aberto</label>
+            <%}%>
 
             <%
             previewPickingSales.slice(0, 6).forEach(function(preview){

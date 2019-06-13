@@ -278,7 +278,7 @@ var Util = {
       case 10:
       return 'Produtos aguardando entrada';
       case 11:
-      return 'Produtos sem estoque no Magento';
+      return 'Produtos inconsistentes no Magento';
 
       default:
       return 'Não encontrado';

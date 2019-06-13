@@ -1,5 +1,6 @@
 var page = 0;
 var loading = false;
+var productsListCount = 0;
 
 function loadFromMemory(){
   console.log(memoryQuery);
@@ -16,7 +17,8 @@ function loadFromMemory(){
         selectAndPlaceTag(Str.capitalize(each), attr);
       });
     });
-
+  }else{
+    toggleTagBox(true);
   }
 }
 
@@ -34,9 +36,13 @@ $(document).ready(()=>{
     }
   });
 
+  $('#show-no-quantity').click(()=>{
+    $('#search-button').focus();
+  });
 
   $('#search-button').click(()=>{
     page = 0;
+    productsListCount = 0;
     $('.content').empty();
     loadList();
   });
@@ -45,6 +51,23 @@ $(document).ready(()=>{
     if (e.which == 13){
       $(this).click();
     }
+  });
+
+  $('.icon-open').click(()=>{
+    toggleTagBox();
+  });
+
+  $('.menu-dots').click(function(e){
+    var drop = new MaterialDropdown($(this), e);
+    drop.addItem('/img/copy.png', 'Copiar Skus', function(){
+      var val = '';
+      $(".sku.copiable").each(function() {
+        val += '\n' + $(this).text();
+      });
+
+      Util.copySeleted(val);
+    });
+    drop.show();
   });
 });
 
@@ -67,13 +90,15 @@ function loadList(){
   _get('/product-list-page',{page : page,
     query: {
       value: $('#search-input').val(),
-      attrs: getAttrsTags()
+      attrs: getAttrsTags(),
+      noQuantity: $('#show-no-quantity').is(":checked")
     }
   },(result)=>{
     loading = false;
     showMessageTotals(result.info);
 
     result.data.forEach((each)=>{
+      productsListCount++;
       addProductLayout(each);
     });
 
@@ -110,13 +135,15 @@ function createImgProduct(product){
   .addClass('thumb')
   .attr('onerror',"this.src='img/product-placeholder.png'");
 
+  var counter = $('<label>').addClass('counter-circle').append(productsListCount);
+
   new ImagePreview(img).hover((self)=>{
     _get('/product-image', {sku: product.sku },(product)=>{
       self.show(product.image);
     });
   });
 
-  return imgHolder.append(img);
+  return imgHolder.append(counter, img);
 }
 
 
@@ -154,18 +181,23 @@ function createTags(product){
   var $brand = createClickableTag(product.brand, 'brand');
 
   var $cat = [];
-  product.category.split(',').forEach((each)=>{
-    $cat.push(createClickableTag(each.trim(), 'category'));
-  });
+  if (product.category){
+    product.category.split(',').forEach((each)=>{
+      $cat.push(createClickableTag(each.trim(), 'category'));
+    });
+  }
 
   var $gender = createClickableTag(product.gender, 'gender');
   var $color = createClickableTag(product.color, 'color');
   var $season = createClickableTag(product.season, 'season');
 
+
   var $age = [];
-  product.age.split(',').forEach((each)=>{
-    $age.push(createClickableTag(each.trim(), 'age'));
-  });
+  if (product.age){
+    product.age.split(',').forEach((each)=>{
+      $age.push(createClickableTag(each.trim(), 'age'));
+    });
+  }
 
 
   var $year = createClickableTag(product.year, 'year');
@@ -214,15 +246,15 @@ function selectAndPlaceTag(value, attr){
     $('.tag-box').append(tag);
 
     if (!$('.tag-box').is(':visible')){
-      $('.tag-box').fadeIn();
+      toggleTagBox(true);
     }
   }
 }
 
 function createSingleTag(value, attr){
   return $('<span>').addClass('tag').append(value)
-  .attr('data-value', value)
-  .attr('data-attr', attr);
+  .attr('data-value', value.toString().toLowerCase())
+  .attr('data-attr', attr ? attr.toLowerCase() : '');
 }
 
 function applyTagColor(tag){
@@ -273,9 +305,16 @@ function getAttrsTags(){
     attrs[attr] = attrs[attr] ? attrs[attr] +  '|' + value : value;
   });
 
-
-  console.log(attrs);
-
-
   return attrs;
+}
+
+
+function toggleTagBox(forceOpen){
+  if ($('.icon-open').hasClass('is-closed') || forceOpen ){
+    $('.icon-open').addClass('is-open').removeClass('is-closed');
+    $('.tag-box').show();
+  }else{
+    $('.icon-open').removeClass('is-open').addClass('is-closed');
+    $('.tag-box').hide();
+  }
 }

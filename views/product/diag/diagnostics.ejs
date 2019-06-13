@@ -29,12 +29,15 @@
 
     <div class="top-controlers shadow">
 
-      <label class="erros-msg">Foram encontrados <b><%=sums.map(item => item.sum_count).reduce((prev, next) => prev + next, 0);%></b> produtos com problemas.</label>
+      <label class="erros-msg">Foram encontrados <b><%=Num.points(sums.map(item => item.sum_count).reduce((prev, next) => prev + next, 0))%></b> produtos com problemas.</label>
       <img src='/img/loader/circle.svg' class="loading-circle"/>
       <label class="start-time"></label>
 
+      <div class="main-menu-dots">
+        <img src="img/dots.png" class="dots-glyph"/>
+      </div>
+
       <label class="button shadow" id="sync">Analizar</label>
-      <label class="button shadow" id="refresh">Atualizar</label>
     </div>
 
 
@@ -52,7 +55,7 @@
           </div>
 
           <div class="ind-footer">
-            <span class="ind-count"><%=item.sum_count%></span>
+            <span class="ind-count"><%=Num.points(item.sum_count)%></span>
           </div>
 
         </div>

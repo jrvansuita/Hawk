@@ -62,163 +62,171 @@ module.exports = class EccosysCalls{
   }
 
 
-getSale(number, callback) {
-  if (number == undefined){
-    callback({});
-  }else{
-    this.call.setPath('pedidos/' + number)
+  getSale(number, callback) {
+    if (number == undefined){
+      callback({});
+    }else{
+      this.call.setPath('pedidos/' + number)
+      .get((data)=>{
+        data = JSON.parse(data);
+        callback(typeof data == 'string' ? undefined : data[0]);
+      });
+    }
+  }
+
+  getSaleItems(number, callback) {
+    this.call.setPath('pedidos/' + number + '/items')
     .get((data)=>{
-      data = JSON.parse(data);
-      callback(typeof data == 'string' ? undefined : data[0]);
+      var items = JSON.parse(data);
+
+      callback(typeof items === 'string' ? [] : items);
     });
   }
-}
-
-getSaleItems(number, callback) {
-  this.call.setPath('pedidos/' + number + '/items')
-  .get((data)=>{
-    var items = JSON.parse(data);
-
-    callback(typeof items === 'string' ? [] : items);
-  });
-}
 
 
-getPickingSales(callback) {
-  //Pronto para picking
-  this.call.setPath('pedidos/situacao/3')
-  .get((data)=>{
-    callback(JSON.parse(data));
-  });
-}
-
-getClient(id, callback) {
-  this.call.setPath('clientes/' + id)
-  .get((data)=>{
-    callback(JSON.parse(data)[0]);
-  });
-}
-
-getNfe(numeronf, callback) {
-  this.call.setPath('notasfiscais/' + numeronf)
-  .get((data)=>{
-    callback(JSON.parse(data)[0]);
-  });
-}
-
-
-getProducts(callback) {
-  this.call.setPath('produtos' + this.query.build())
-  .get((data)=>{
-    callback(JSON.parse(data));
-  });
-}
-
-
-getProduct(skuOrEan, callback) {
-  this.call.setPath('produtos/' + (Num.isEan(skuOrEan) ? 'gtin=' + skuOrEan : skuOrEan))
-  .get((data)=>{
-    var parsed = JSON.parse(data);
-
-    if (typeof parsed == 'string'){
-      callback({error : parsed});
-    }else{
-      callback(parsed);
-    }
-  });
-}
-
-getSkusFromSale(sale, callback) {
-  if(sale.items){
-    var skus = sale.items.map((i)=>{
-      return i ? i.codigo : '';
-    });
-
-    this.getSkus(skus, callback);
-  }else{
-    if (callback){
-      callback([]);
-    }
+  getPickingSales(callback) {
+    this.getSalesBySituation(3, callback);
   }
-}
 
-getSkus(skus, callback) {
-  this.call.setPath('produtos/' + skus.join(';'))
-  .get((data)=>{
-    var parsed = JSON.parse(data);
+  getOpenSales(callback) {
+    this.getSalesBySituation(0, callback);
+  }
 
-    if (typeof parsed == 'string'){
-      throw parsed;
-    }else{
-      //Se o resultado é 1
-      if (!Array.isArray(parsed)){
-        parsed = [parsed];
+  getSalesBySituation(situation, callback) {
+    //Pronto para picking
+    this.call.setPath('pedidos/situacao/' + situation)
+    .get((data)=>{
+      callback(JSON.parse(data));
+    });
+  }
+
+  getClient(id, callback) {
+    this.call.setPath('clientes/' + id)
+    .get((data)=>{
+      callback(JSON.parse(data)[0]);
+    });
+  }
+
+  getNfe(numeronf, callback) {
+    this.call.setPath('notasfiscais/' + numeronf)
+    .get((data)=>{
+      callback(JSON.parse(data)[0]);
+    });
+  }
+
+
+  getProducts(callback) {
+    this.call.setPath('produtos' + this.query.build())
+    .get((data)=>{
+      callback(JSON.parse(data));
+    });
+  }
+
+
+  getProduct(skuOrEan, callback) {
+    this.call.setPath('produtos/' + (Num.isEan(skuOrEan) ? 'gtin=' + skuOrEan : skuOrEan))
+    .get((data)=>{
+      var parsed = JSON.parse(data);
+
+      if (typeof parsed == 'string'){
+        callback({error : parsed});
+      }else{
+        callback(parsed);
       }
+    });
+  }
 
-      callback(parsed);
+  getSkusFromSale(sale, callback) {
+    if(sale.items){
+      var skus = sale.items.map((i)=>{
+        return i ? i.codigo : '';
+      });
+
+      this.getSkus(skus, callback);
+    }else{
+      if (callback){
+        callback([]);
+      }
     }
-  });
-}
+  }
 
-getStockHistory(sku, callback) {
-  this.call.setPath('estoques/' + sku + '/registros' +  this.query.build())
-  .get((rows)=>{
-    callback(JSON.parse(rows));
-  });
-}
+  getSkus(skus, callback) {
+    this.call.setPath('produtos/' + skus.join(';'))
+    .get((data)=>{
+      var parsed = JSON.parse(data);
 
-updateProduct(body, callback) {
-  this.call.setPath('produtos').setBody(body).put((res)=>{
-    callback(JSON.parse(res));
-  });
-}
+      if (typeof parsed == 'string'){
+        throw parsed;
+      }else{
+        //Se o resultado é 1
+        if (!Array.isArray(parsed)){
+          parsed = [parsed];
+        }
 
-updateProductStock(sku, body, callback) {
-  this.call.setPath('estoques/' + sku).setBody(body).post((res)=>{
-    callback(JSON.parse(res));
-  });
-}
+        callback(parsed);
+      }
+    });
+  }
 
-updateSale(body, callback) {
-  this.call.setPath('pedidos').setBody(body).put((sucess)=>{
-    callback(sucess);
-  });
-}
+  getStockHistory(sku, callback) {
+    this.call.setPath('estoques/' + sku + '/registros' +  this.query.build())
+    .get((rows)=>{
+      callback(JSON.parse(rows));
+    });
+  }
 
-packingPostNF(user, saleNumber, callback){
-  this.call.setPath('nfes/' + saleNumber).setBody({}).withUser(user).post((res)=>{
-    callback(res);
-  });
-}
+  updateProduct(body, callback) {
+    this.call.setPath('produtos').setBody(body).put((res)=>{
+      callback(JSON.parse(res));
+    });
+  }
 
-resendRejectedNF(user, idNfe, callback){
-  this.call.setPath('nfes/' + idNfe + '/autorizar').setBody({}).withUser(user).post((res)=>{
-    callback(res);
-  });
-}
+  updateProductStock(sku, body, callback) {
+    this.call.setPath('estoques/' + sku).setBody(body).post((res)=>{
+      callback(JSON.parse(res));
+    });
+  }
 
-loadDanfe(res, nfNumber){
-  this.call.setPath('danfes/' + nfNumber + '/pdf').download(res, nfNumber + '.pdf');
-}
+  updateSale(body, callback) {
+    this.call.setPath('pedidos').setBody(body).put((sucess)=>{
+      callback(sucess);
+    });
+  }
 
-loadTransportTag(res, idNfe){
-  this.call.setPath('etiquetas/' + idNfe).download(res, idNfe + '.pdf');
-}
-
-
-removeSaleItems(saleNumber, callback){
-  this.call.setPath('pedidos/' + saleNumber + '/items').delete((res)=>{
-    if (callback){
+  packingPostNF(user, saleNumber, callback){
+    this.call.setPath('nfes/' + saleNumber).setBody({}).withUser(user).post((res)=>{
       callback(res);
-    }
-  });
-}
+    });
+  }
 
-insertSaleItems(saleNumber, items, callback){
-  this.call.setPath('pedidos/' + saleNumber + '/items').setBody(items).post((res)=>{
-    if (callback){
+  resendRejectedNF(user, idNfe, callback){
+    this.call.setPath('nfes/' + idNfe + '/autorizar').setBody({}).withUser(user).post((res)=>{
       callback(res);
-    }
-  });
-}
+    });
+  }
+
+  loadDanfe(res, nfNumber){
+    this.call.setPath('danfes/' + nfNumber + '/pdf').download(res, nfNumber + '.pdf');
+  }
+
+  loadTransportTag(res, idNfe){
+    this.call.setPath('etiquetas/' + idNfe).download(res, idNfe + '.pdf');
+  }
+
+
+  removeSaleItems(saleNumber, callback){
+    this.call.setPath('pedidos/' + saleNumber + '/items').delete((res)=>{
+      if (callback){
+        callback(res);
+      }
+    });
+  }
+
+  insertSaleItems(saleNumber, items, callback){
+    this.call.setPath('pedidos/' + saleNumber + '/items').setBody(items).post((res)=>{
+      if (callback){
+        callback(res);
+      }
+    });
+  }
 };

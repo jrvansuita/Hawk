@@ -15,7 +15,7 @@ var fixEnum = {
   COST: 6, //Sem preço de custo
   DEPARTMENT: 7, //Departamento faltando
   GENDER: 8, //Gênero faltando ou errado
-  NO_STOCK_MAGENTO: 11, //Sem stock no magento
+  MAGENTO_PROBLEM: 11, //Ou nao vem no feed ou Sem stock no magento
 
 
 }
