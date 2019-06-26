@@ -63,6 +63,30 @@ module.exports = class UsersProvider {
   }
 
 
+
+  static getByGroup() {
+    var data = {};
+
+    for (var key in global.localUsers) {
+      if (global.localUsers.hasOwnProperty(key)) {
+        var user = global.localUsers[key];
+        if (!user.title){
+          user.title = 'none';
+        }
+
+        var group = Str.normalize(user.title).toLowerCase();
+
+        if (data[group]){
+          data[group].push(user);
+        }else{
+          data[group] = [user];
+        }
+      }
+    }
+
+    return data;
+  }
+
   static checkUserExists(userId) {
     var user = UsersProvider.get(userId);
 

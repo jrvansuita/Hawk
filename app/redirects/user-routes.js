@@ -26,6 +26,10 @@ module.exports = class UserRoutes extends Routes{
       res.render('user/user-form',{user: user});
     }, true);
 
+    this._page('/team-board', (req, res) => {
+      res.render('performance/team-board',{data:  UsersProvider.getByGroup()});
+    });
+
     this._post('/user-form', (req, res) => {
       UsersHandler.storeFromScreen(req.body, (userId)=>{
         res.redirect("/user-form?userId=" + userId);

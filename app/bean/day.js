@@ -16,13 +16,15 @@ module.exports = class Day extends DataAccess {
     var items = parseInt(sale.itemsQuantity);
     var total = parseFloat(sale.totalProdutos);
 
-    var points = ((total/items)/100) * (sale.itemsQuantity * 0.1);
+    var points = ((total/items)/122) * (sale.itemsQuantity * 0.234);
 
     return new Day(userId, date, 'invoice', sale.totalProdutos, 1, points);
   }
 
   static picking(userId, date, items, secs) {
-    var points = ((items) / (secs/items)) * 2;
+    //Removido o calculo usando os secs porque os usuários estavam roubando.
+    //var points = ((items) / (secs/items)) * 2;
+    var points = items / 100;
 
     return new Day(userId, date, 'picking', items, secs, points);
   }

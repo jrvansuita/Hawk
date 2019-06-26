@@ -1,0 +1,113 @@
+
+<html>
+<%  include ../menus/main-menu %>
+<head>
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/team-board.css">
+</head>
+<body>
+  <%  include ../menus/performance-menu %>
+  <script>
+  window.data = <%- JSON.stringify(data) %>
+  </script>
+
+
+
+  <%
+
+  var groups = [{
+    title: "Reposição",
+    subtitle: "Localizar, Guardar e Repor",
+    stamps: ["Concentração", "Determinação", "Responsabilidade"],
+    explaning: "A localização e reposição dos produtos é o início do ciclo de estoque. É fundamental que se faça o registro da localização no produto para que a equipe de Picking possa encontrar na hora de separar o pedido. A equipe precisa ter responsabiliade e concentração para realizar os procedimentos de forma correta."
+  },
+
+  {
+    title: "Conferência",
+    subtitle: "Contar, Lançar Estoque e Conferir",
+    stamps: ["Agilidade", "Organização", "Atenção"],
+    explaning: "O gupro precisa trabalhar em conjunto e com agilidade para dar vazão a entrada de mercadorias diariamente. A conferencia dos produtos deve acontecer de forma rápida e com atenção. Todas as entregas são recebidas com nota fiscal, que deve ser conferida e remetida ao financeiro com um resumo da conferência."
+  },
+
+
+  {
+    title: "Pendência",
+    subtitle: "Procurar, Investigar e Descobrir",
+    stamps: ["Experiência", "Determinação"],
+    explaning: "As pendências acontecem por dois motivos somente. Ou o estoque para aquele produto foi lançado errado, ou a localização do produto é inexistente/incorreta. Os responsáveis devem verificar o histórico de localizações, as localizações dos outros tamanhos do produto ou dentro dos produtos que estão entrando para o estoque."
+  },
+
+
+  {
+    title: "Picking",
+    subtitle: "Procurar, Encontrar e Separar",
+    stamps: ["Eficiência", "Velocidade", "Concentração", "Determinação"],
+    explaning: "O Picking dos pedidos deve ser feito com muita rapidez e concentração. Os itens dos pedido devem ser separados corretamente, sob perca de pontos a cada erro. Todo pedido separado gera pontos que trazem bônus aos separadores. Ao não encontrar itens do pedido, o separador."
+  },
+
+  {
+    title: "Packing",
+    subtitle: "Conferir, Embalar e Faturar",
+    stamps: ["Velocidade", "Concentração", "Determinação"],
+    explaning: "lalalalalalalal."
+  },
+
+
+  {
+    title: "Devolução",
+    subtitle: "Procurar, Encontrar e Separar",
+    stamps: ["Eficiência", "Velocidade", "Concentração", "Determinação"],
+    explaning: "lalalalalala."
+  }
+  ];
+
+
+
+
+  %>
+
+
+
+
+
+
+  <div class="main-content">
+    <%groups.forEach(group =>{%>
+      <div class="group-box shadow">
+
+        <p class="title-box"><%=group.title%></p>
+        <p class="subtitle-box"><%=group.subtitle%></p>
+
+        <div class="stamps-box">
+          <%group.stamps.forEach(stamp =>{%>
+            <span class="stamp-item"><span class="stamp-circle <%=Str.normalize(stamp).toLowerCase()%>"></span><%=stamp%></span>
+            <%})%>
+          </div>
+
+          <span class="group-explaning"><%=group.explaning%></span>
+
+          <%
+          var groupVar = Str.normalize(group.title).toLowerCase();
+
+          if (data[groupVar]){%>
+            <p class="team-title">Equipe</p>
+
+            <div class="team-box">
+              <%data[groupVar].forEach((user, index)=>{%>
+                <a href="/profile/performance?userid=<%=user ? user.id : 0%>">
+                  <img class="avatar-img circle shadow" src="<%=user ? user.avatar : ''%>"  data-userid="<%=user ? user.id : 0%>"/>
+                </a>
+                <%});%>
+              </div>
+
+              <%}%>
+
+            </div>
+
+
+            <%})%>
+
+          </div>
+
+
+        </body>
+        </html>

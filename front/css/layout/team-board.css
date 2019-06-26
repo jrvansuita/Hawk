@@ -1,0 +1,104 @@
+.main-content{
+  margin-top: 100px;
+  display: -webkit-box;
+}
+
+
+.group-box {
+  max-width: 600px;
+  margin-left: 20px;
+  min-height: 270px;
+  margin-bottom: 20px;
+  padding: 10px 15px;
+  display: inline-grid;
+}
+
+
+.title-box {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin: 0;
+  margin-bottom: 5px;
+}
+
+.subtitle-box {
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin: 0;
+  margin-bottom: 15px;
+  color: #7b7575;
+}
+
+.group-explaning{
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #7b7575;
+}
+
+.team-title{
+  font-size: 0.9rem;
+  font-weight: 300;
+}
+
+
+.stamps-box {
+  display: block;
+  margin-bottom: 15px;
+}
+
+
+.stamp-circle {
+  width: 8px;
+  display: inline-block;
+  height: 8px;
+  border-radius: 50%;
+  margin-bottom: 1px;
+  margin-right: 5px;
+  background: #4c565f;
+}
+
+.stamp-item{
+  margin-right: 8px;
+  font-size: 14px;
+}
+
+
+.team-box {
+  display: -webkit-box;
+}
+
+.team-box > a {
+  display: -webkit-box;
+  max-width: 30px;
+}
+
+.team-box > a > img {
+  display: -webkit-box;
+  max-width: 40px;
+  max-height: 40px;
+}
+
+
+.concentracao{
+  background: #0784f5;
+}
+
+.responsabilidade{
+  background: #ff9f02;
+}
+
+.determinacao{
+  background: #00ffa6;
+}
+
+.organizacao {
+    background: #ff0000;
+}
+
+.agilidade {
+    background: #19c30a;
+}
+
+.atencao {
+    background: #ff00da;
+}
