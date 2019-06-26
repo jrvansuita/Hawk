@@ -12,11 +12,10 @@ const UsersProvider = require('../provider/UsersProvider.js');
 module.exports = class PickingRoutes extends Routes{
 
   attach(){
-    this._page('/picking/achievements', (req, res) => {
-      var PickingAchievGridBuilder = require('../builder/PickingAchievGridBuilder.js');
-      var builder = new PickingAchievGridBuilder();
+    this._page('/picking/records', (req, res) => {
+      var builder = new (require('../builder/picking-records-builder.js'))();
       builder.init(res.locals.loggedUser.full, (data) => {
-          res.render('picking/picking-achiev', {
+          res.render('picking/picking-records', {
             data: data
           });
       });

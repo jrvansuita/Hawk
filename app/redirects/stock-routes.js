@@ -73,7 +73,7 @@ module.exports = class ProductRoutes extends Routes{
     this._post('/run-product-diagnostics', (req, res) => {
 
       if (req.body.refresh){
-        new ProductDiagnostics().refresh();
+        new ProductDiagnostics().refresh(req.body.brand);
       }else{
         new ProductDiagnostics().sync();
       }

@@ -45,7 +45,7 @@
               <img class="ind-icon" src="img/<%=Util.diagIcon(type)%>.png"/>
               <label class="ind-title"><%=Util.diagTitle(type)%></label>
 
-              <img class="ind-icon right fix-this" src="img/restart.png" data-sku="<%=item.sku%>" data-type="<%=type%>"/>
+              <img class="right f-icon fix" src="img/restart.png" data-sku="<%=item.sku%>" data-type="<%=type%>"/>
             </div>
 
             <%});%>
@@ -58,7 +58,7 @@
 
         <script type="text/javascript">
           $(document).ready(()=>{
-            $('.fix-this').click(function(e){
+            $('.f-icon').click(function(e){
               $(this).attr('src', 'img/loader/circle.svg');
               var sku = $(this).data('sku');
 
@@ -71,8 +71,16 @@
                 if (fixed){
                   $(this).attr('src', 'img/checked.png');
                   $(this).unbind('click');
+                  $(this).removeClass('fix').addClass('fixed');
                 }else{
                   $(this).attr('src', 'img/restart-error.png');
+                }
+
+                if ($('.f-icon.fix').length == 0){
+                  $('.sku-fixes-modal').delay(500).fadeOut(400, ()=>{
+                    $('.sku-fixes-modal').trigger('click');
+                    $(".row-item[data-sku='"+sku.split('-')[0]+"']").fadeOut(600);
+                  });
                 }
               });
 
@@ -89,7 +97,7 @@
               var drop = new MaterialDropdown($(this), e);
 
               drop.addItem('/img/restart-plus.png', 'Checar Todos', function(e){
-                 $('.fix-this').trigger('click');
+                 $('.f-icon').trigger('click');
                  e.stopPropagation();
               });
 

@@ -24,10 +24,12 @@ $(document).ready(()=>{
 
   new Broadcast('product-diagnostics').onReceive((result)=>{
     var msg = 'Foram avaliados ' + result.productsAnalyzed + ' skus e foram encontrados ' + result.fixesFound + ' problemas.';
+    console.log(msg);
 
-    $('.erros-msg').text(msg);
+    $('.errors-msg').text(msg);
     startIntervalTimer(result.startTime);
     showLoading();
+    attachFinisherController();
   });
 
 
@@ -43,12 +45,19 @@ $(document).ready(()=>{
 
 });
 
+var timerIntervalId = 0;
+
 function startIntervalTimer(startTime){
   if (startTime){
-    window.setInterval(()=> {
-      var diftime = new Date().getTime() - new Date(startTime).getTime();
-      $(".start-time").text((diftime/1000).toString().toMMSS());
-    }, 1000);
+    if (timerIntervalId == 0){
+      timerIntervalId = setInterval(()=> {
+        var diftime = new Date().getTime() - new Date(startTime).getTime();
+        $(".start-time").text((diftime/1000).toString().toMMSS());
+      }, 1000);
+    }
+  }else{
+    clearInterval(timerIntervalId);
+    timerIntervalId = 0;
   }
 }
 
@@ -62,12 +71,38 @@ function buildIndRows(rows){
   });
 
   brands.forEach(brand=>{
+
     var $brandGroup = $('<div>').addClass('brand-group');
 
-   var $brandLabel = $('<label>').append(brand);
-   var $brandTotal = $('<label>').addClass('brand-total');
+    var $brandLabel = $('<label>').append(brand);
+    var $brandTotal = $('<label>').addClass('brand-total');
 
-    var $brandTitle = $('<span>').addClass('brand-title').append($brandLabel, $brandTotal);
+    var $brandMenu = $('<div>').addClass('main-menu-dots').append($('<img>').attr('src','img/dots.png').addClass('dots-glyph'));
+    $brandMenu.click(function(e){
+      var drop = new MaterialDropdown($(this), e);
+      drop.addItem('/img/copy.png', 'Copiar Skus', function(){
+        var val = '';
+        $(this).closest('.brand-group').find(".row-sku.copiable").each(function() {
+          val += '\n' + $(this).text();
+        });
+
+        Util.copySeleted(val);
+      });
+
+      drop.addItem('/img/restart.png', 'Atualizar Marca', function(){
+        showLoading("Carregando produtos...");
+
+        _post('/run-product-diagnostics', {refresh:true, brand: brand}, ()=>{
+          console.log('rodou');
+        });
+      });
+
+
+      drop.show();
+    })
+
+
+    var $brandTitle = $('<span>').addClass('brand-title').append($brandLabel, $brandMenu, $brandTotal);
     var $itemsHolder = $('<div>').addClass('items-brand-holder');
 
     $brandGroup.append($brandTitle, $itemsHolder);
@@ -103,7 +138,7 @@ function buildSingleRow(holder, row){
     window.open('/product?sku=' + row.sku,'_blank');
   });
 
-  var $div =  $('<div>').addClass('row-item shadow').append($img, $subsHolder);
+  var $div =  $('<div>').addClass('row-item shadow').attr('data-sku' , row.sku).append($img, $subsHolder);
   $div.click(()=>{
     showSkuFixesDialog(row.sku);
   });
@@ -115,7 +150,12 @@ function buildSingleRow(holder, row){
 
 
 
-function showLoading(){
+function showLoading(showLabel){
+  if (showLabel){
+    $('.errors-msg').text(showLabel);
+  }
+
+
   $('#sync').hide();
   $('.main-menu-dots').hide();
   $('.loading-circle').show();
@@ -137,4 +177,24 @@ function showSkuFixesDialog(sku){
   $('.sku-fixes-holder').load('/fixes-dialog?sku=' + sku,()=>{
     bindCopiable();
   });
+}
+
+
+
+function attachFinisherController(){
+  clearTimeout(loadingId);
+  loadingId = setTimeout(finishedLoading, 5000);
+}
+
+var loadingId = 0;
+
+
+function finishedLoading(){
+  $('.errors-msg').text("Processo de atualização finalizado.");
+
+  $('#sync').show();
+  $('.main-menu-dots').show();
+  $('.loading-circle').hide();
+  $(".start-time").text("");
+  startIntervalTimer(null);
 }

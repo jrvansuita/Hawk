@@ -279,6 +279,8 @@ var Util = {
       return 'Produtos aguardando entrada';
       case 11:
       return 'Produtos inconsistentes no Magento';
+      case 12:
+      return 'Ncm incorreto ou não encontrado';
 
       default:
       return 'Não encontrado';
@@ -312,6 +314,8 @@ var Util = {
       return 'registring';
       case 11:
       return 'not-visible';
+      case 12:
+      return 'paper-blocked';
 
       default:
       return 'question-mark';

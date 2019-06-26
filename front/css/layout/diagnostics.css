@@ -68,7 +68,7 @@ a{
     border-top: 3px solid #658ee4;
   }
 
-  .erros-msg{
+  .errors-msg{
     color: #4a4a4c;
     font-size: 16px;
     font-weight: 800;
@@ -250,7 +250,7 @@ a{
   .badge-item .ind-title{word-break: break-all;width: fit-content;font-size: 14px;margin: 0;padding: 10px 0px;font-weight: 500;}
 
   .badge-item{
-    /* padding-top: 4px; */
+    padding-top: 4px;
   }
 
   .fixes-sku-badges{
@@ -259,12 +259,13 @@ a{
     width: -webkit-fill-available;
   }
 
-  .fix-this{
+  .f-icon{
     width: 25px !important;
     height: 25px !important;
+    margin-top: 3px;
   }
 
-  .fix-this:hover{
+  .f-icon:hover{
     cursor: pointer;
     transform: scale(1.05);
     opacity: 0.8;
@@ -322,7 +323,7 @@ a{
     font-size: 15px;
   }
 
-.main-menu-dots{display: list-item;float: right;}
+.main-menu-dots{display: block;float: right;}
 
 #sync {
     margin-top: -6px;

@@ -461,9 +461,17 @@ function checkInt(el){
   return true;
 }
 
+
+var packingClicked = false;
+
 function packingClick(){
-  if (checkAllFields()){
-    postPackingDone();
+  if (!packingClicked){
+
+    packingClicked = true;
+
+    if (checkAllFields()){
+      postPackingDone();
+    }
   }
 }
 
@@ -486,8 +494,14 @@ function postPackingDone(){
     idNfe: sale.idNotaFiscalRef
   },
   (result)=>{
+
+    packingClicked = false;
+
     onSucess(result);
   },(error, message)=>{
+
+    packingClicked = false;
+
     onError(error);
   });
 }
@@ -496,6 +510,8 @@ function onSucess(result){
   if (result.code == 200){
     showMainInputTitle('Enviando Nf-e...','/loader/circle.svg',  '#7eb5f1');
     new Broadcast(sale.numeroPedido).onReceive((result)=>{
+      console.log('Recebeu retorno do faturamento');
+      console.log("Pedido: " + sale.numeroPedido);
       onNfeSucess(result);
     });
   }

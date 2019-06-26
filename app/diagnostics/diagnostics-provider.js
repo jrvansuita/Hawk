@@ -22,7 +22,7 @@ module.exports = class DiagnosticsProvider{
           sku : skuFather,
           type: item.type,
           name: Util.getProductName(item.name, isChild),
-          brand: Util.getProductBrand(item.name, isChild),
+          brand: Util.getProductBrand(item.name, isChild).trim(),
         };
       }
     });

@@ -65,12 +65,11 @@ module.exports = class PackingRoutes extends Routes{
 
 
 
-    this._page('/packing/achievements', (req, res) => {
-      var InvoiceAchievGridBuilder = require('../builder/InvoiceAchievGridBuilder.js');
-      var builder = new InvoiceAchievGridBuilder();
+    this._page('/packing/records', (req, res) => {
+      var builder = new (require('../builder/packing-records-builder.js'))();
       builder.init(res.locals.loggedUser.full,
         (data) => {
-          res.render('packing/packing-achiev', {
+          res.render('packing/packing-records', {
             data: data
           });
         });

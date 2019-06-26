@@ -17,6 +17,8 @@ var fixEnum = {
   GENDER: 8, //Gênero faltando ou errado
   MAGENTO_PROBLEM: 11, //Ou nao vem no feed ou Sem stock no magento
 
+  NCM: 12 //Ncm inexistente ou incorreto
+
 
 }
 
@@ -45,6 +47,14 @@ module.exports = class Fix extends DataAccess {
     Fix.find({sku : regexp}, callback);
   }
 
+  static findByBrand(brandName, callback){
+    Fix.find({ 'name': {
+      "$regex": brandName,
+      "$options": "i"
+    }}, callback);
+  }
+
+
   static put(product, type){
     new Fix(product.codigo, product.nome, type).upsert();
   }
@@ -71,6 +81,7 @@ module.exports = class Fix extends DataAccess {
       callback(err, res);
     });
   }
+
 
 
 };

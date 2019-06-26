@@ -66,7 +66,7 @@ var Num = {
   },
 
   extract(str){
-    return parseInt(str.match(/[0-9]+/g));
+    return parseInt(str.match(/[0-9]+/g).join(''));
   }
 
 };

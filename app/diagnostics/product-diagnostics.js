@@ -15,6 +15,7 @@ module.exports = class ProductDiagnostics{
     this.productsAnalyzed++;
     var attrs = getProductAttrs(product);
 
+
     // --- Cascata --- //
     if (isPhotoMissing(product)){
       if (hasStock(product) || hasLocal(product)){
@@ -51,7 +52,9 @@ module.exports = class ProductDiagnostics{
       this._storeFix(product, Fix.enum().WEIGHT);
     }
 
-
+    if (isNcmProblem(product)){
+      this._storeFix(product, Fix.enum().NCM);
+    }
 
     if (isCostPriceMissing(product)){
       this._storeFix(product, Fix.enum().COST);
@@ -115,8 +118,8 @@ module.exports = class ProductDiagnostics{
       new EccosysCalls()
       .getProduct(sku, (product)=>{
 
-        //Product doesnt exists anymore
-        if (product.error){
+        //Product doesnt exists anymore Or is inactive
+        if (product.error || product.situacao == "I"){
           callback();
         }else{
           //Capture feed product
@@ -179,16 +182,23 @@ module.exports = class ProductDiagnostics{
     this.page++;
   }
 
-  _resyncStoredSkus(){
-    Fix.findAll((err, docs)=>{
 
-      var skus = docs.map(i=> i.sku);
 
+  _resyncStoredSkus(brandName){
+    var handler = (err, docs)=>{
+      
+      var skus = [...new Set(docs.map(i=> i.sku))];
 
       this._checkRangeSku(skus, 0, ()=>{
 
       });
-    });
+    };
+
+    if (brandName){
+      Fix.findByBrand(brandName, handler);
+    }else{
+      Fix.findAll(handler);
+    }
   }
 
   sync(){
@@ -196,9 +206,9 @@ module.exports = class ProductDiagnostics{
     this._loadCurrentPage();
   }
 
-  refresh(){
+  refresh(byBrandName){
     this.sendBroadcast = true;
-    this._resyncStoredSkus();
+    this._resyncStoredSkus(byBrandName);
   }
 
 
@@ -271,4 +281,10 @@ function isPhotoMissing(product){
 
 function hasSales(stocks){
   return stocks.some((i)=>{ return parseFloat(i.quantidade) < 0 && (parseInt(i.idOrigem) > 0); });
+}
+
+
+function isNcmProblem(product){
+  var regexp = new RegExp("[0-9]{8}", "g");
+  return !product.cf || !regexp.test(Num.extract(product.cf));
 }

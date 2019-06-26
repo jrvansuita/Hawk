@@ -1,8 +1,8 @@
-var AchievProvider = require('../provider/AchievProvider.js');
+var RecordsProvider = require('../provider/records-provider.js');
 var Day = require('../bean/day.js');
 
 
-module.exports = class PickingAchievGridBuilder {
+module.exports = class {
 
   init(full, callback) {
     this.full = full;
@@ -13,13 +13,14 @@ module.exports = class PickingAchievGridBuilder {
   build() {
     var _self = this;
 
-    this.provider = new AchievProvider("picking");
-
+    this.provider = new RecordsProvider("invoice");
     this.provider.onAddRowListener(function(row, achievItem){
       achievItem.user = row.user;
-      achievItem.addBar('Segundos/Item', row.sum_count/row.sum_total, '5f7ce8');
+      achievItem.addBar('Pedidos', row.sum_count, '14b5a6');
       achievItem.addBar('Pontos', row.sum_points, '1da8b9', true);
-      achievItem.addBar('Itens', row.sum_total, '03c184');
+      if (_self.full){
+        achievItem.addBar('Receita', row.sum_total, '03c184');
+      }
     });
 
     this.provider.onResultListener(function(resultData){

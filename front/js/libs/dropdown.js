@@ -9,7 +9,7 @@ class MaterialDropdown {
       this.items = $('<ul>').css('left', event.pageX).css('top', event.pageY - 110);
       $div.css('position', 'inherit');
     }else{
-      $div.css('position', 'fixed');
+      $div.css('position', 'static');
       this.items = $('<ul>');
     }
 
