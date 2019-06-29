@@ -1,0 +1,53 @@
+<%
+
+var comingMonths = (monthItem.month >= new Date().getMonth()) && (recordYear.year == new Date().getFullYear());
+
+%>
+
+<div class="shadow grid-item">
+
+  <%
+  var isRecord = monthItem.month == recordYear.record;
+  if (isRecord){
+    %><img class="record" src="/img/record.png"/><%
+  }
+  %>
+
+  <%var winner = monthItem.getWinners().length > 0 ? monthItem.getWinners()[0] : null %>
+
+
+  <div class="champ-holder <%= comingMonths ? 'obfuscated' : ''%> <%= !winner ? 'wide' : ''%>">
+    <label class="label month-desc"><%=monthItem.monthDesc%></label>
+
+   <%if (winner){%>
+      <div class="winner-holder" style="display: block">
+        <%- include('../records/avatar-crown', {winner: winner ? winner.user : null, isRecord: isRecord, isPodium: false, position : -1});  %>
+        <%- include('../records/dots-holder', {bars: (winner ? winner.getBars() : []), isPodium: false });  %>
+      </div>
+   <%}else{%>
+        <img class="comming-soon"  src="/img/comming-soon.png" />
+        <label class="dot-value label comming-text"> Faltam <%=Dat.daysDif(new Date(), Dat.firstDayOfMonth(monthItem.month))%> dias </label>
+    <%}%>
+
+  </div>
+
+
+
+
+  <%if (monthItem.getWinners().length > 0) {%>
+
+    <div class="podium-holder <%= comingMonths ? 'obfuscated' : ''%>">
+
+      <%monthItem.getWinners().slice(1).forEach((winner, index)=>{%>
+
+        <div class="winner-holder" >
+          <%- include('../records/avatar-crown', {winner: winner.user, isRecord : false, isPodium: true, position: index});  %>
+          <%- include('../records/dots-holder', {bars: winner.getBars(), isPodium: true});  %>
+        </div>
+
+        <%});%>
+
+      </div>
+
+      <%}%>
+</div>

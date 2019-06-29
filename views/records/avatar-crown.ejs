@@ -1,0 +1,34 @@
+<div class="avatar-holder">
+
+  <% if (winner && !isPodium){ %>
+    <img class="crown <%= isRecord ? 'record-crown' : ''%>"  src="<%=isRecord ? '/img/record_crown.png' : '/img/crown.png'%>" />
+  <%}%>
+
+
+
+  <% if (isPodium){ %>
+     <img class="medal" src="<%=position == 0 ? '/img/gold-medal.png' : (position == 1 ? '/img/silver-medal.png' : (position == 2 ? '/img/bronze-medal.png' : ''))%>" />
+  <%}%>
+
+
+  <a href="/profile/performance?userid=<%=winner ? winner.id : 0%>">
+    <img class="avatar-img circle shadow <%= isPodium ? 'podium-avatar' : ''%>" title="<%=winner ? winner.name : ''%>" src="<%=winner ? winner.avatar : ''%>"  data-userid="<%=winner ? winner.id : 0%>"/>
+  </a>
+
+
+
+
+  <% if (isRecord){ %>
+    <img class="double-diamong"  src="/img/double-diamond.png" />
+  <%}%>
+
+
+
+  <% if (!isPodium){ %>
+     <img class="laurel"  src="/img/laurel.png" />
+     <img class="ribbon <%= isRecord ? 'record-ribbon' : ''%>"  src="<%= isRecord ? '/img/record-ribbon.png' : '/img/red-ribbon.png'%>" />
+     <label class="label avatar-name <%= isRecord ? 'record-name' : ''%>"><%= winner ? winner.name ||  'Indefinido': 'Indefinido'%></label>
+  <%}%>
+
+
+</div>

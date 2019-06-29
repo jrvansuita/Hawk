@@ -1,0 +1,53 @@
+<link rel="stylesheet" type="text/css" href="/front/css/layout/achiev.css">
+
+<%
+var curYear;
+%>
+
+
+<script>
+  window.data = <%- JSON.stringify(data || null) %>
+
+</script>
+
+
+<div class="rules shadow">
+  <label class="rule-title">Regras e Recompensas</label>
+
+  <div class="winners-places">
+
+    <img src="/img/leaderboard.png" class="leaders-icon">
+
+    <div class="rules-box">
+
+    <div class="champion-rule">
+      <span class="rule-row"> <img class="rule-icon"  src="/img/two-money.png" /> R$ 250,00</span>
+      <span class="rule-row"> <img class="rule-icon"  src="/img/restart.png" /> R$ 50,00/Mês</span>
+
+    </div>
+
+    </div>
+  </div>
+
+
+</div>
+
+
+<%data.forEach((recordYear)=>{%>
+  <% if(curYear != recordYear.year){
+    curYear = recordYear.year;
+    %>
+    <label class="label year-title">
+      <%=recordYear.year%>
+    </label>
+
+    <%}%>
+
+    <div class="achivments-holder">
+
+
+      <%recordYear.getItems().forEach((monthItem)=>{%>
+        <%- include('../records/month-item', {recordYear: recordYear, monthItem: monthItem });  %>
+        <%});%>
+      </div>
+      <%});%>

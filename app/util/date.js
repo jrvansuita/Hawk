@@ -110,8 +110,10 @@ var Dat = {
     return lastWeek;
   },
 
-  firstDayOfMonth() {
-    return new Date(Date.UTC(getCurrentYear(), getCurrentMonth(), 1, 0));
+
+
+  firstDayOfMonth(monthIndex) {
+    return new Date(Date.UTC(getCurrentYear(), monthIndex ? monthIndex : getCurrentMonth(), 1, 0));
   },
 
   lastDayOfMonth() {

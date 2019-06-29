@@ -1,34 +1,35 @@
 const Day = require('../bean/day.js');
 var UsersProvider = require('../provider/UsersProvider.js');
-var Achiev = require('../bean/achiev.js');
+var RecordYear = require('../bean/record-year.js');
+const User = require('../bean/user.js');
 
 //Possible parameters [sum_count, sum_total, sum_points]
 const sum_field = "sum_points";
 
-module.exports = class AchievProvider {
+module.exports = class {
 
   constructor(type) {
     this.type = type;
   }
 
-  onAddRowListener(func){
-    this.onAddRowFunc = func;
+  onAddWinnersListener(func){
+    this.onAddWinnersFunc = func;
   }
 
   onResultListener(func){
     this.onResultFunc = func;
   }
 
-  load(onAddRowFunc) {
+  load(onAddWinnersFunc) {
     runAggregate(this.type, (err, res) => {
       loadUsers(res);
-      loadEveryMonth(res, this.onAddRowFunc, this.onResultFunc);
+      loadEveryMonth(res, this.onAddWinnersFunc, this.onResultFunc);
     });
   }
 };
 
 
-function loadEveryMonth(res, onAddRowFunc, onResultFunc){
+function loadEveryMonth(res, onAddWinnersFunc, onResultFunc){
   var resultData = [];
   var currentYear = new Date().getFullYear();
   var year = currentYear;
@@ -36,7 +37,7 @@ function loadEveryMonth(res, onAddRowFunc, onResultFunc){
   while (year >= currentYear - 1) {
     var month = 11;
 
-    var achiev = new Achiev(year);
+    var recordYear = new RecordYear(year);
 
     while (month >= 0) {
 
@@ -46,18 +47,28 @@ function loadEveryMonth(res, onAddRowFunc, onResultFunc){
         return a[sum_field] - b[sum_field];
       });
 
-      var row = arr[arr.length - 1];
+      if (arr.length > 0){
+        var champ = arr[arr.length - 1];
+        var one = arr[arr.length - 2];
+        var two = arr[arr.length - 3];
+        var three = arr[arr.length - 4];
 
-      var achievItem = achiev.addItem(month);
+        var winnersRows = [champ, one, two, three];
+      }
 
-      if (row) {
-        achievItem = onAddRowFunc(row, achievItem);
+      var monthItem = recordYear.addMonthItem(month);
+
+      if (winnersRows) {
+        for (winner of winnersRows) {
+          onAddWinnersFunc(winner, monthItem);
+        }
       }
 
       month--;
     }
 
-    resultData.push(achiev);
+    recordYear.loadRecords();
+    resultData.push(recordYear);
     year--;
   }
 
@@ -79,6 +90,7 @@ function runAggregate(_type, callback) {
           $month: "$date"
         },
         userId: "$userId"
+
       },
       sum_count: {
         $sum: "$count"
@@ -99,6 +111,8 @@ function runAggregate(_type, callback) {
 
 function loadUsers(data) {
   data.forEach((item) => {
-    item.user = global.localUsers[item._id.userId];
+    var u = global.localUsers[item._id.userId];
+
+    item.user = User.suppress(u);
   });
 }

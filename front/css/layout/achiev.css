@@ -5,47 +5,70 @@
   margin-left: auto;
   margin-right: auto;
   grid-template-columns: repeat(4, 0fr);
-  grid-gap: 5px;
+  grid-gap: 12px;
+}
+
+.achivments-holder:last-child{
+  margin-bottom: 100px;
 }
 
 .grid-item {
   flex-basis: 33%;
-  padding: 10px;
+  padding: 15px 10px 0px 10px;
   margin: 2px;
-  display: inline-grid;
-  width: 180px;
-  height: 150px;
+  display: -webkit-inline-box;
+  min-width: 300px;
+  min-height: 200px;
+  width: -webkit-fill-available;
 }
 
-.inner-achiev {
-  display: flex;
-  width: fit-content;
+.winner-holder {
+  display: -webkit-box;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 18px;
 }
 
 .avatar-holder {
   display: block;
-  vertical-align: middle;
-  margin-top: auto;
   height: fit-content;
-  margin-bottom: auto;
+  vertical-align: middle;
+  position: relative;
 }
 
 .avatar-img {
   margin-left: auto;
   margin-right: auto;
   display: block;
+  z-index: 444;
+  position: relative;
 }
 
 .avatar-name {
-  font-size: 11px;
+  font-size: 12px;
   text-align: center;
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
   display: block;
+  font-family: sans-serif;
   min-width: 50px;
+  font-weight: 400;
+  padding: 3px 6px;
+  color: white;
+  margin-top: -2px;
+  z-index: 4459999;
+  text-shadow: 2px 2px 2px rgb(156, 156, 156);
+  background: unset;
+  position: relative;
+}
+
+.record-name{
+  color: #f8ff13 !important;
+  text-shadow: 2px 2px 2px rgba(115, 103, 103, 0.64);
+  font-weight: bold;
+  font-family: sans-serif;
 }
 
 .month-desc {
@@ -53,6 +76,9 @@
   margin-left: auto;
   margin-right: auto;
   display: block;
+  margin-bottom: 5px;
+  font-size: 18px;
+  font-weight: 800;
 }
 
 .dot-item {
@@ -70,12 +96,23 @@
 
 .dot {
   display: inline-block;
-  width: 20px !important;
-  height: 20px !important;
+  width: 10px !important;
+  height: 10px !important;
+  margin-bottom: -2px;
+  border: 0;
 }
 
 .dot-value {
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: right;
+  margin-top: -3px;
+  margin-left: 4px;
+}
+
+.podium-avatar{
+  width: 48px !important;
+  height: 48px !important;
 }
 
 .crown {
@@ -84,11 +121,14 @@
   z-index: 100;
   display: block;
   margin-bottom: -3px;
-  height: 23px;
+  height: 25px;
 }
 
 .record-crown{
-  height: 20px;
+  margin-bottom: -4px;
+  height: 25px;
+  transform: rotate(-10deg);
+  padding-right: 10px;
 }
 
 .year-title {
@@ -97,11 +137,124 @@
   margin-right: auto;
   display: block;
   margin-top: 20px;
+  font-size: 18px;
 }
 
 .record{
-  height: 30px;
+  height: 35px;
   position: absolute;
+  z-index: 555;
+  margin-left: -3px;
+  margin-top: -15px;
+}
+
+.podium-holder{
+  transform: scale(0.9);
+  margin-top: -8px;
+  position: relative;
+  margin-right: 10px;
+}
+
+.linear-dots{
+  display: block;
+  max-width: 150px;
+}
+
+.linear-dots > .dot-item{
+  display: block;
+}
+
+.linear-dots > .dot-item > .dot-value{
   float: right;
-  margin-left: 140px;
+  margin-top: 3px;
+  font-weight: 800;
+}
+
+
+.champ-holder {
+  margin-right: 10px;
+  min-width: 155px;
+}
+
+.dot-label{
+  font-size: 13px;
+  font-weight: 600;
+}
+
+
+img.medal {
+  position: absolute;
+  margin-top: 33px;
+  z-index: -1;
+  width: 45px;
+}
+
+.avatar-holder > a{
+  z-index: 23;
+  position: relative;
+}
+
+img.laurel{
+  margin-left: 38.5px;
+  margin-top: -50px;
+  z-index: 1;
+  width: 77px;
+  position: absolute;
+}
+
+img.ribbon {
+  position: absolute;
+  margin-top: -2px;
+  z-index: 44;
+  width: 110px;
+  height: 33px;
+  margin-left: 22px;
+}
+
+
+img.double-diamong {
+  position: absolute;
+  margin-top: -24px;
+  width: 110px;
+  margin-left: 21.5px;
+}
+
+
+.obfuscated{
+  opacity: 0.7;
+}
+
+.wide{
+  width: 100%;
+}
+
+
+img.comming-soon {
+  width: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  display: -webkit-box;
+  margin-top: 40px;
+}
+
+.comming-text{
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  display: -webkit-box;
+  margin-top: 5px;
+  text-align: center;
+}
+
+.rules{
+  display: -webkit-box;
+  padding: 5px;
+  width: 50%;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.rule-title{
+  
 }

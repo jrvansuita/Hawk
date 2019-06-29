@@ -27,7 +27,7 @@ var Num = {
 
   format(n, keepInt) {
     if ((this.def(n) < 1000) || (keepInt && this.isInt(n))) {
-      return this.int(n);
+      return this.points(n);
     } else {
       return this.reduceFloat(n);
     }

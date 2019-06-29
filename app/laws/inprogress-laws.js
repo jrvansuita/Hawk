@@ -2,6 +2,7 @@ const UsersProvider = require('../provider/UsersProvider.js');
 const Day = require('../bean/day.js');
 const HistoryStorer = require('../history/history-storer.js');
 const Err = require('../error/error.js');
+const User = require('../bean/user.js');
 
 //Current picking
 global.inprogressPicking = {};
@@ -52,7 +53,7 @@ module.exports = {
     sale.begin = begin;
     sale.end = null;
     sale.doNotCount = doNotCount;
-    sale.pickUser = UsersProvider.get(userId);
+    sale.pickUser = User.suppress(UsersProvider.get(userId));
     this.object()[userId] = sale;
 
     //HistoryStorer.picking(userId, sale, null);
@@ -100,7 +101,7 @@ function checkEndTime(sale, userId){
   secs = secs < 0 ? 0 : secs;
 
   //Calcula 3 segundos por item do pedido no mínimo
-  var minSecs = sale.itemsQuantity * 3;
+  var minSecs = sale.itemsQuantity * 15;
   if ((secs < minSecs) && (process.env.NODE_ENV != undefined)){
     Err.thrw(Const.insufficient_picking_time.format(sale.numeroPedido, minSecs, parseInt(secs)), userId);
   }

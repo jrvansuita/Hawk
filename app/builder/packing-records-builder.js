@@ -14,12 +14,14 @@ module.exports = class {
     var _self = this;
 
     this.provider = new RecordsProvider("invoice");
-    this.provider.onAddRowListener(function(row, achievItem){
-      achievItem.user = row.user;
-      achievItem.addBar('Pedidos', row.sum_count, '14b5a6');
-      achievItem.addBar('Pontos', row.sum_points, '1da8b9', true);
+    this.provider.onAddWinnersListener(function(row, item){
+      var winner = item.addWinner(row.user);
+
+
+      winner.addBar('Pedidos', row.sum_count, '09c8ca');
+      winner.addBar('Pontos', row.sum_points, '6a73f7', true);
       if (_self.full){
-        achievItem.addBar('Receita', row.sum_total, '03c184');
+        winner.addBar('Receita', row.sum_total, '05c70d');
       }
     });
 

@@ -1,0 +1,30 @@
+<div class="dots-holder <%=isPodium ? "": 'linear-dots'%>" >
+
+  <%
+
+  if (bars.length > 0){
+
+    bars.forEach((bar)=>{%>
+
+      <div class="dot-item">
+
+        <div class="dot circle" style="background-color: #<%=bar.barColor%>" title="<%=Num.points(bar.value)%>"> </div>
+
+        <%if (!isPodium){%>
+          <label class="dot-label label"> <%=bar.name%> </label>
+          <%}%>
+
+
+          <label class="dot-value label"  title="<%=Num.points(bar.value)%>"> <%=Num.format(bar.value, true)%> </label>
+        </div>
+
+
+
+        <%});
+
+      }
+      %>
+
+
+
+    </div>

@@ -15,11 +15,13 @@ module.exports = class  {
 
     this.provider = new RecordsProvider("picking");
 
-    this.provider.onAddRowListener(function(row, achievItem){
-      achievItem.user = row.user;
-      achievItem.addBar('Segundos/Item', row.sum_count/row.sum_total, '5f7ce8');
-      achievItem.addBar('Pontos', row.sum_points, '1da8b9', true);
-      achievItem.addBar('Itens', row.sum_total, '03c184');
+    this.provider.onAddWinnersListener(function(row, item){
+
+      var winner = item.addWinner(row.user);
+
+      winner.addBar('Segundos/Item', row.sum_count/row.sum_total, '5f7ce8');
+      winner.addBar('Pontos', row.sum_points, '1da8b9', true);
+      winner.addBar('Itens', row.sum_total, '03c184');
     });
 
     this.provider.onResultListener(function(resultData){
