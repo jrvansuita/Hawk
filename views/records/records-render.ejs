@@ -11,20 +11,50 @@ var curYear;
 </script>
 
 
+<%
+  locals.prizes = [
+
+  {perc: 0, bonus:250, extra:50},
+  {perc: 90, bonus:150 },
+  {perc: 80, bonus:100 },
+  {perc: 75, bonus:50 }
+
+  ];
+%>
+
 <div class="rules shadow">
   <label class="rule-title">Regras e Recompensas</label>
 
   <div class="winners-places">
 
-    <img src="/img/leaderboard.png" class="leaders-icon">
+    <!--<img src="/img/leaderboard.png" class="leaders-icon">-->
 
     <div class="rules-box">
 
-    <div class="champion-rule">
-      <span class="rule-row"> <img class="rule-icon"  src="/img/two-money.png" /> R$ 250,00</span>
-      <span class="rule-row"> <img class="rule-icon"  src="/img/restart.png" /> R$ 50,00/Mês</span>
+       <div class="winner-box-rule">
+         <img src="/img/laurel-winner.png" class="winner-main-icon champion">
+         <img src="/img/champ-trophy.png" class="winner-main-icon trophy">
+         <span class="rule-row"> <img class="rule-icon"  src="/img/money-stack.png" /> <%=Num.money(locals.prizes[0].bonus)%></span>
+         <span class="rule-row"> <img class="rule-icon"  src="/img/restart-plus.png" /> R$ 50,00/Mês</span>
+       </div>
 
-    </div>
+       <div class="winner-box-rule">
+         <img src="/img/gold-winner.png" class="winner-main-icon">
+         <span class="rule-row"> <img class="rule-icon"  src="/img/two-money.png" /> <%=Num.money(locals.prizes[1].bonus)%></span>
+         <span class="rule-row"> <img class="rule-icon"  src="/img/goal.png" /> <%=Num.percent(locals.prizes[1].perc, true)%> do Campeão</span>
+       </div>
+
+       <div class="winner-box-rule">
+         <img src="/img/silver-winner.png" class="winner-main-icon">
+         <span class="rule-row"> <img class="rule-icon"  src="/img/money-coin.png" /> <%=Num.money(locals.prizes[2].bonus)%></span>
+         <span class="rule-row"> <img class="rule-icon"  src="/img/goal.png" /> <%=Num.percent(locals.prizes[2].perc, true)%> do Campeão</span>
+       </div>
+
+       <div class="winner-box-rule">
+         <img src="/img/bronze-winner.png" class="winner-main-icon">
+         <span class="rule-row"> <img class="rule-icon"  src="/img/money.png" /> <%=Num.money(locals.prizes[3].bonus)%></span>
+         <span class="rule-row"> <img class="rule-icon"  src="/img/goal.png" /> <%=Num.percent(locals.prizes[3].perc, true)%> do Campeão</span>
+       </div>
 
     </div>
   </div>

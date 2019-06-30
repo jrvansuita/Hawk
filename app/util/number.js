@@ -1,7 +1,7 @@
 var Num = {
 
-  money: function(val) {
-    return 'R$ ' + parseFloat(val).toFixed(2).toString().replace('.', ',');
+  money: function(val, trunc) {
+    return 'R$ ' + parseFloat(val).toFixed(trunc ? 0 : 2).toString().replace('.', ',');
   },
 
   reduceFloat: function(number) {
@@ -67,6 +67,10 @@ var Num = {
 
   extract(str){
     return parseInt(str.match(/[0-9]+/g).join(''));
+  },
+
+  percent(num, trunc){
+    return parseFloat(num).toFixed(trunc ? 0 : 2).toString() + '%';
   }
 
 };

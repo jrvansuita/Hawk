@@ -8,6 +8,10 @@
   grid-gap: 12px;
 }
 
+.label{
+  background: transparent;
+}
+
 .achivments-holder:last-child{
   margin-bottom: 100px;
 }
@@ -27,7 +31,11 @@
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 18px;
+  margin-bottom: 40px;
+}
+
+.winner-holder:last-child{
+  margin-bottom: 10px;
 }
 
 .avatar-holder {
@@ -42,6 +50,7 @@
   margin-right: auto;
   display: block;
   z-index: 444;
+  background: white;
   position: relative;
 }
 
@@ -145,7 +154,7 @@
   position: absolute;
   z-index: 555;
   margin-left: -3px;
-  margin-top: -15px;
+  margin-top: -19px;
 }
 
 .podium-holder{
@@ -184,7 +193,7 @@
 
 img.medal {
   position: absolute;
-  margin-top: 33px;
+  margin-top: 38px;
   z-index: -1;
   width: 45px;
 }
@@ -220,10 +229,6 @@ img.double-diamong {
 }
 
 
-.obfuscated{
-  opacity: 0.7;
-}
-
 .wide{
   width: 100%;
 }
@@ -247,14 +252,167 @@ img.comming-soon {
 }
 
 .rules{
-  display: -webkit-box;
-  padding: 5px;
-  width: 50%;
+  display: block;
+  padding: 12px 18px;
+  width: fit-content;
+  min-width: 60%;
   margin-top: 30px;
   margin-left: auto;
   margin-right: auto;
 }
 
 .rule-title{
-  
+  font-size: 15px;
+  color: #757575 !important;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  font-weight: 800;
+  display: -webkit-box;
+}
+
+.winners-places {
+  display: block;
+  width: fit-content;
+  text-align: center;
+  vertical-align: middle;
+  margin-top: 15px;
+  margin: auto;
+}
+
+
+.rule-row{
+  display: -webkit-box;
+  font-size: 13px;
+  color: #656161;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+
+.rules-box {
+  text-align: center;
+  width: auto;
+  display: -webkit-inline-box;
+  vertical-align: top;
+  margin-bottom: 5px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.winner-main-icon{
+  width: 65px;
+  margin-left: auto;
+  margin-right: auto;
+  display: -webkit-box;
+  margin-bottom: 5px;
+}
+
+
+.rule-icon{width: 25px;height: 25px;margin-bottom: -5px;margin-right: 3px;}
+
+.winner-box-rule{
+  padding-right: 5%;
+  min-width: fit-content;
+  padding-left: 5%;
+  width: fit-content;
+  display: block;
+  border-right: 1px dashed #d8d2d2;
+}
+
+
+.winner-box-rule:last-child{
+  border-right: white;
+}
+
+.trophy{
+  margin-top: -70px;
+  margin-left: 23px;
+}
+
+
+.champion {
+  width: 100px;
+}
+
+
+img.dot.icon {
+  width: 20px !important;
+  height: 20px !important;
+  margin-top: -5px;
+  margin-left: -5px;
+  margin-right: -3;
+}
+
+
+span.percent {
+  background: #1aa922;
+  border-radius: 50%;
+  width: 26px;
+  position: absolute;
+  line-height: 24px;
+  vertical-align: middle;
+  margin-left: 24px;
+  margin-top: -16px;
+  color: white;
+  padding: 0px 1px;
+  font-size: 10px;
+  text-align: center;
+  z-index: 9999;
+  border: 1.5px solid white;
+  text-shadow: 2px 2px 2px rgba(119, 111, 111, 0.77);
+}
+
+.current-month{
+  border-top: 4px solid #3476d2;
+  background-image: repeating-linear-gradient(     -45deg,     transparent,     transparent 1rem,     #cccccc33 1rem,     #cccccc33 2rem     );
+  background-size: 200% 200%;
+  animation: barberpole 10s linear infinite;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, .20), 0 2px 3px -10px rgba(0, 0, 0, .25), 0 2px 7px 0 rgba(0, 0, 0, .23);
+  border-radius: 8px;
+
+  -webkit-box-shadow: 4px 7px 8px -5px rgba(135,127,135,1);
+  -moz-box-shadow: 4px 7px 8px -5px rgba(135,127,135,1);
+  box-shadow: 4px 7px 8px -5px rgba(135,127,135,1);
+
+}
+
+
+.open-month{
+  border-top: 4px solid #f9a20e;
+  opacity: 1;
+}
+
+.closed-month{
+  border-top: 4px solid #0eca3d;
+  opacity: 1;
+}
+
+.current-month .avatar-img{
+  opacity: 0.7;
+}
+
+
+
+  @keyframes barberpole {
+    100% {
+      background-position: 100% 100%;
+    }
+  }
+
+
+.current-timer > img{
+  margin: auto;
+  width: 40px;
+}
+
+.current-timer{
+  color: #6f6a6a;
+  font-size: 14px;
+  display: grid;
+  text-align: center;
+  max-width: 130px;
+  margin-top: -25px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 15px;
 }

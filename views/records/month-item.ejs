@@ -1,10 +1,19 @@
 <%
+var itemClass = 'closed-month';
 
-var comingMonths = (monthItem.month >= new Date().getMonth()) && (recordYear.year == new Date().getFullYear());
-
+if (recordYear.year == new Date().getFullYear()){
+  if (monthItem.month == new Date().getMonth()){
+    itemClass = 'current-month';
+  }else if (monthItem.month > new Date().getMonth()){
+    itemClass = 'open-month';
+  }
+}
 %>
 
-<div class="shadow grid-item">
+<div class="shadow grid-item <%=itemClass%>">
+
+
+
 
   <%
   var isRecord = monthItem.month == recordYear.record;
@@ -16,36 +25,60 @@ var comingMonths = (monthItem.month >= new Date().getMonth()) && (recordYear.yea
   <%var winner = monthItem.getWinners().length > 0 ? monthItem.getWinners()[0] : null %>
 
 
-  <div class="champ-holder <%= comingMonths ? 'obfuscated' : ''%> <%= !winner ? 'wide' : ''%>">
+  <div class="champ-holder <%= !winner ? 'wide' : ''%>">
     <label class="label month-desc"><%=monthItem.monthDesc%></label>
 
    <%if (winner){%>
+
+     <%var goal = winner.getBars().find(i=> {return i.countForRecord});%>
+
+     <%
+        var champs = recordYear.items.filter(i => {return i.month <= monthItem.month}).map((i)=> {return i.winners[0]}).filter(Boolean);
+        var timesChamp = champs.filter(i => {return i.user.id == winner.user.id}).length -1;
+      %>
+
       <div class="winner-holder" style="display: block">
-        <%- include('../records/avatar-crown', {winner: winner ? winner.user : null, isRecord: isRecord, isPodium: false, position : -1});  %>
-        <%- include('../records/dots-holder', {bars: (winner ? winner.getBars() : []), isPodium: false });  %>
+        <%- include('../records/avatar-crown', {winner: winner ? winner.user : null, isRecord: isRecord, position : 0, isPodium:false});  %>
+        <%- include('../records/dots-holder', {bars: (winner ? winner.getBars() : []), isPodium:false, position : 0, goalAchieved: true, timesChamp : timesChamp});  %>
       </div>
+
+      <%if (itemClass == 'current-month'){%>
+       <div class="current-timer">
+         <img src="/img/timer.png" />
+         Encerra em <%=(Dat.lastDayOfMonth().getDate() - new Date().getDate()) + 1 %> dias
+       </div>
+     <%}%>
    <%}else{%>
         <img class="comming-soon"  src="/img/comming-soon.png" />
-        <label class="dot-value label comming-text"> Faltam <%=Dat.daysDif(new Date(), Dat.firstDayOfMonth(monthItem.month))%> dias </label>
+        <label class="dot-value label comming-text"> Faltam <%=Dat.daysDif(new Date(), Dat.firstDayOfMonth(monthItem.month)) + 1%> dias </label>
     <%}%>
 
   </div>
 
 
 
-
   <%if (monthItem.getWinners().length > 0) {%>
 
-    <div class="podium-holder <%= comingMonths ? 'obfuscated' : ''%>">
+    <div class="podium-holder">
 
-      <%monthItem.getWinners().slice(1).forEach((winner, index)=>{%>
+      <%
+       monthItem.getWinners().forEach((winner, index)=>{
+       if (index > 0){
+
+          var currentValue = winner.getBars().find(i=> {return i.countForRecord});
+          var perncentGoal = (currentValue.value * 100) / goal.value;
+          var goalAchieved = perncentGoal >= locals.prizes[index].perc;
+
+      %>
 
         <div class="winner-holder" >
-          <%- include('../records/avatar-crown', {winner: winner.user, isRecord : false, isPodium: true, position: index});  %>
-          <%- include('../records/dots-holder', {bars: winner.getBars(), isPodium: true});  %>
+          <%- include('../records/avatar-crown', {winner: winner.user,  isPodium: true, position: index, isRecord:false, perncentGoal : perncentGoal, goalAchieved: goalAchieved});  %>
+          <%- include('../records/dots-holder', {bars: winner.getBars(), isPodium: true, position: index, isRecord:false, perncentGoal : perncentGoal, goalAchieved: goalAchieved});  %>
         </div>
 
-        <%});%>
+        <%}
+      });
+      %>
 
       </div>
 

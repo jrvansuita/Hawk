@@ -1,3 +1,5 @@
+
+
 <div class="avatar-holder">
 
   <% if (winner && !isPodium){ %>
@@ -7,12 +9,18 @@
 
 
   <% if (isPodium){ %>
-     <img class="medal" src="<%=position == 0 ? '/img/gold-medal.png' : (position == 1 ? '/img/silver-medal.png' : (position == 2 ? '/img/bronze-medal.png' : ''))%>" />
+     <img class="medal" src="<%=position == 1 ? '/img/gold-medal.png' : (position == 2 ? '/img/silver-medal.png' : (position == 3 ? '/img/bronze-medal.png' : ''))%>" />
   <%}%>
 
 
   <a href="/profile/performance?userid=<%=winner ? winner.id : 0%>">
+
+    <%if(typeof perncentGoal !== 'undefined'){%>
+      <span class="percent shadow <%=goalAchieved ? '' : 'red'%>" > <%=Num.percent(perncentGoal, true)%> </span>
+    <%}%>
+
     <img class="avatar-img circle shadow <%= isPodium ? 'podium-avatar' : ''%>" title="<%=winner ? winner.name : ''%>" src="<%=winner ? winner.avatar : ''%>"  data-userid="<%=winner ? winner.id : 0%>"/>
+
   </a>
 
 
