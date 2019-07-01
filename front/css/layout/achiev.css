@@ -194,6 +194,7 @@
 img.medal {
   position: absolute;
   margin-top: 38px;
+  margin-left: 2px;
   z-index: -1;
   width: 45px;
 }
@@ -265,7 +266,7 @@ img.comming-soon {
   font-size: 15px;
   color: #757575 !important;
   padding-top: 6px;
-  padding-bottom: 6px;
+  padding-bottom: 16px;
   font-weight: 800;
   display: -webkit-box;
 }
@@ -277,7 +278,7 @@ img.comming-soon {
   vertical-align: middle;
   margin-top: 15px;
   margin: auto;
-} 
+}
 
 
 .rule-row{
@@ -406,6 +407,8 @@ span.percent {
 }
 
 .current-timer{
+  animation: leaves 0.8s ease-in-out infinite alternate;
+
   color: #6f6a6a;
   font-size: 14px;
   display: grid;
@@ -415,4 +418,14 @@ span.percent {
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 15px;
+}
+
+
+@keyframes leaves {
+    0% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(1.1);
+    }
 }
