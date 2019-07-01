@@ -1,6 +1,8 @@
 .main-content{
   margin-top: 100px;
   display: -webkit-box;
+  overflow-y: auto;
+  padding-bottom: 40px;
 }
 
 
@@ -92,13 +94,17 @@
 }
 
 .organizacao {
-    background: #ff0000;
+  background: #ff0000;
 }
 
 .agilidade {
-    background: #19c30a;
+  background: #19c30a;
 }
 
 .atencao {
-    background: #ff00da;
+  background: #ff00da;
+}
+
+.group-box:last-child{
+  margin-bottom: 150px; 
 }

@@ -4,21 +4,39 @@
 
   if (bars.length > 0){
 
+
+   if (goalAchieved){
+     bars.push({name: "Bônus", bonus: true, value: locals.prizes[position].bonus, barColor : "f3d704"});
+   }
+
+   if (!isPodium && timesChamp > 0){
+     bars.push({name: "Extra", bonus: true, value: locals.prizes[position].extra * timesChamp, barColor : "5f5a5a"});
+   }
+
+
     bars.forEach((bar)=>{%>
 
       <div class="dot-item">
 
         <div class="dot circle" style="background-color: #<%=bar.barColor%>" title="<%=Num.points(bar.value)%>"> </div>
 
+
         <%if (!isPodium){%>
           <label class="dot-label label"> <%=bar.name%> </label>
           <%}%>
 
 
-          <label class="dot-value label"  title="<%=Num.points(bar.value)%>"> <%=Num.format(bar.value, true)%> </label>
+          <%
+
+          var valueFormated = bar.bonus ? Num.money(bar.value, true) : Num.format(bar.value, true);
+          var titleFormated = bar.bonus ? Num.money(bar.value, true) : Num.points(bar.value, true);
+
+          %>
+
+          <label class="dot-value label"  title="<%=titleFormated%>" > <%=valueFormated%> </label>
+
+
         </div>
-
-
 
         <%});
 

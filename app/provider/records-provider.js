@@ -113,6 +113,6 @@ function loadUsers(data) {
   data.forEach((item) => {
     var u = global.localUsers[item._id.userId];
 
-    item.user = User.suppress(u);
+    item.user = u ? User.suppress(u) : {id: item._id.userId} ;
   });
 }
