@@ -23,13 +23,8 @@ module.exports = class Day extends DataAccess {
 
   static picking(userId, date, items, secs) {
     //Removido o calculo usando os secs porque os usuários estavam roubando.
-<<<<<<< HEAD
-    //var points = ((items) / (secs/items)) * 1.31;
     var points = items / 12.53;
-=======
-    var points = (items / (secs/items)) * 1.67;
-    //var points = items / 22.53;
->>>>>>> 049e80b323b536b6b1ad04cd2c54c1a88cfce5a6
+    //var points = (items / (secs/items)) * 1.67;
 
     return new Day(userId, date, 'picking', items, secs, points);
   }
