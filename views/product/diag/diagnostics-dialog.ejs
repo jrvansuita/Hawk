@@ -94,7 +94,7 @@
             });
 
             $('.menu-dots').click(function(e){
-              var drop = new MaterialDropdown($(this), e);
+              var drop = new MaterialDropdown($(this), e, false, true);
 
               drop.addItem('/img/restart-plus.png', 'Checar Todos', function(e){
                  $('.f-icon').trigger('click');

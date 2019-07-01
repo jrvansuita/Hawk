@@ -9,7 +9,6 @@ module.exports = class UserHandler {
 
     var user = new User(parseInt(params.id),
     params.name,
-    params.lastName,
     params.sector,
     params.avatar,
     params.access,

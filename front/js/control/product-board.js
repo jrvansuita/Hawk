@@ -22,7 +22,7 @@ $(document).ready(()=>{
 
 
   $('.menu-dots').click(function(e){
-    var drop = new MaterialDropdown($(this), e);
+    var drop = new MaterialDropdown($(this), e, false, true);
 
     drop.addItem('/img/refresh.png', 'Atualizar', function(e){
       var $menu = $(this).closest('.menu-dots');

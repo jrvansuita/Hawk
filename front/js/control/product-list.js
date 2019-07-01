@@ -58,7 +58,7 @@ $(document).ready(()=>{
   });
 
   $('.menu-dots').click(function(e){
-    var drop = new MaterialDropdown($(this), e);
+    var drop = new MaterialDropdown($(this), e, false, true);
     drop.addItem('/img/copy.png', 'Copiar Skus', function(){
       var val = '';
       $(".sku.copiable").each(function() {

@@ -1,5 +1,5 @@
 class MaterialDropdown {
-  constructor(parent, event, bindMousePosition) {
+  constructor(parent, event, bindMousePosition, fixed) {
     this.remove();
 
     var $div = $('<div>').addClass('md-dropdown');
@@ -9,7 +9,11 @@ class MaterialDropdown {
       this.items = $('<ul>').css('left', event.pageX).css('top', event.pageY - 110);
       $div.css('position', 'inherit');
     }else{
-      $div.css('position', 'static');
+      if (fixed){
+        $div.css('position', 'fixed');
+      }else{
+        $div.css('position', 'static');
+      }
       this.items = $('<ul>');
     }
 
