@@ -11,3 +11,7 @@ EMAIL_PASS=?
 TZ=Timezone
 NODE_ENV=PROD
 MAX_SALES_ON_DEV=12
+
+IMGUR_CLIENT_ID=eb572c9193360fe
+IMGUR_EMAIL=vansuita.jr@gmail.com
+IMGUR_PASS=1VansuitaBoutique

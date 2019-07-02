@@ -15,8 +15,13 @@
   <script src="front/js/libs/autocomplete.js" charset="utf-8"></script>
   <script type="text/javascript" src="/front/js/control/general.js"></script>
 
+
   <link rel="stylesheet" type="text/css" href="/front/css/libs/easy-autocomplete.css">
   <script type="text/javascript" src="/front/js/libs/easy-autocomplete.min.js"></script>
+
+  <script type="text/javascript" src="/front/js/libs/croppie.js"></script>
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/croppie.css">
+
 
   <title>Hawk</title>
   <link rel="icon" href="/img/icon/favicon.ico" type="image/x-icon" />
@@ -33,14 +38,23 @@
 
   <div class="main-content">
 
+
+      <input id="avatar-input-file" type="file" name="avatar" >
+
+
+
     <form class="user-form shadow" name="user-form" action="user-form" method="post" id="user-form">
 
       <div class="header">
 
 
+
         <div class="avatar-holder">
           <img class="circle shadow avatar-img" id="avatar-user-form" src="<%=user ? user.avatar : 'img/avatar.png'%>" title="System" />
-          <input type="text" id="editing" value="<%=user ? user.id : -1%>" style="display:none">
+          <input type="text" id="editing" value="<%=user ? user.id : -1%>" style="display:none"/>
+          <label class="edit-image"> Editar </label>
+          <img src="img/checked.png" class="dots-glyph avatar-crop-ok">
+
         </div>
         <div class="header-name">
           <input type="text" class="simple-material-input search-input" value="<%=user ? user.name : ''%>" id="user-search" placeholder="Usuário" autocomplete="off"/>
@@ -70,7 +84,7 @@
 
             <div class="right-panel">
               <div class="oderner">
-                
+
                 <input type="text" id="access" class="input-val simple-material-input" placeholder="Código de Acesso" name="access" value="<%=user ? user.access : ''%>" onkeypress="return Num.isNumberKey(event);"  autocomplete="off"/>
                 <input type="text" id="id" class="input-val simple-material-input" placeholder="Identificação" name="id" value="<%=user ? user.id : ''%>"  onkeypress="return Num.isNumberKey(event);"  autocomplete="off" title="Código do Eccosys"/>
               </div>
@@ -86,45 +100,45 @@
 
 
 
-              <label class="pure-material-checkbox" >
-                <input type="checkbox" id="active" name="active" <%=user ? user.active ? 'checked' : '' : ''%>>
-                <span>Ativo</span>
-              </label>
+          <label class="pure-material-checkbox" >
+            <input type="checkbox" id="active" name="active" <%=user ? user.active ? 'checked' : '' : ''%>>
+            <span>Ativo</span>
+          </label>
 
 
-              <label class="pure-material-checkbox">
-                <input type="checkbox" id="full" name="full" <%=user ? user.full ? 'checked' : '' : ''%>>
-                <span>Administrador</span>
-              </label>
+          <label class="pure-material-checkbox">
+            <input type="checkbox" id="full" name="full" <%=user ? user.full ? 'checked' : '' : ''%>>
+            <span>Administrador</span>
+          </label>
 
-
-            </div>
-
-            <div class="settings-holder">
-              <div class="scroll">
-                <div class="settings">
-
-
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-          <div class="footer">
-            <label class="button shadow" id="save" >Salvar</label>
-            <%if (loggedUser && loggedUser.full){%>
-              <label class="button shadow" id="new">Novo</label>
-              <label class="button shadow" id="delete">Excluir</label>
-              <%}%>
-            </div>
-
-          </form>
 
         </div>
 
+        <div class="settings-holder">
+          <div class="scroll">
+            <div class="settings">
 
 
-      </body>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      </html>
+
+      <div class="footer">
+        <label class="button shadow" id="save" >Salvar</label>
+        <%if (loggedUser && loggedUser.full){%>
+          <label class="button shadow" id="new">Novo</label>
+          <label class="button shadow" id="delete">Excluir</label>
+          <%}%>
+        </div>
+
+      </form>
+
+    </div>
+
+
+
+  </body>
+
+  </html>

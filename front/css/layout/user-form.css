@@ -22,7 +22,9 @@ body {
   padding: 0px 15px;
 }
 
-
+#avatar{
+  display: none;
+}
 
 .fields{
   text-align: left;
@@ -79,6 +81,8 @@ body {
   width: 100px;
   height: fit-content;
   display: inline-block;
+  z-index: 99999;
+  position: relative;
 }
 
 .header{
@@ -184,4 +188,53 @@ body {
   margin-right: 135px;
   height: auto;
   width: 80%;
+}
+
+.avatar-img:hover{
+  cursor: pointer;
+}
+
+
+
+.edit-image {
+  cursor: pointer;
+  opacity: 0;
+  position: absolute;
+  color: white;
+  font-size: 14px;
+  text-shadow: 2px 2px 2px rgba(19, 17, 17, 0.77);
+  margin-top: -30px;
+  margin-left: -18px;
+  display: -webkit-inline-box;
+}
+
+.upload-image-form{
+  display: none;
+}
+
+
+.croppie-container{
+  background: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 1px 2px 2px 0 rgba(0, 0, 0, 0.34);
+}
+
+.thumb{
+  display: none;
+}
+
+.avatar-crop-ok{
+  width: 28px;
+  height: 28px;
+  display: none;
+  position: absolute;
+  z-index: 9999999999;
+  bottom: 0;
+  right: 0;
+  margin-bottom: -18px;
+  margin-right: 8px;
+}
+
+#avatar-input-file{
+  display: none;
 }

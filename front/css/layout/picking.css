@@ -27,6 +27,9 @@ table{
   font-size: 16px;
   color: gray;
 }
+.main-content{
+  height: 90%;
+}
 
 .pick-box {
   max-width: 340px;

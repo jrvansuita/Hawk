@@ -7,7 +7,7 @@ module.exports = class User extends DataAccess {
     this.title = Str.def(title);
     this.full = isFull ? true: false;
     this.access = Str.def(access);
-    this.avatar = Str.def(avatar);
+    this.avatar = Str.def(avatar, 'img/avatar.png');
     this.active = isActive ? true: false;
     this.token = Str.def(token);
     this.setts = {};
@@ -25,6 +25,13 @@ module.exports = class User extends DataAccess {
     }
 
     return {};
+  }
+
+
+  static updateAvatar(userId, link, callback) {
+     User.upsert({id: userId}, {avatar : link},(err, user)=>{
+       callback(user)
+     });
   }
 
 

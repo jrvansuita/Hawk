@@ -1,6 +1,7 @@
 const User = require('../bean/user.js');
 const Err = require('../error/error.js');
 const UsersProvider = require('../provider/UsersProvider.js');
+const ImgurSaver = require('../imgur/save-image.js');
 
 module.exports = class UserHandler {
 
@@ -46,6 +47,29 @@ module.exports = class UserHandler {
     User.findByKey(userId, (err, user)=>{
       user.remove();
       UsersProvider.remove(userId);
+    });
+  }
+
+  static changeImage(userId, base64Image){
+    ImgurSaver.upload(base64Image, (data)=>{
+
+
+      if (data.link){
+        console.log(data.link);
+
+        User.updateAvatar(userId, data.link, ()=>{
+            var user = UsersProvider.get(userId);
+
+            if (user){
+               user.avatar = data.link;
+
+               console.log('Salvou');
+               console.log(UsersProvider.get(userId).avatar);
+            }
+        });
+      }else{
+        console.log('Erro: ' + data.message);
+      }
     });
   }
 

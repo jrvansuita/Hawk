@@ -77,124 +77,184 @@ $(document).ready(() => {
 
   loadSectors();
   loadSetts();
+
+  $('.avatar-img, .edit-image').hover(()=>{
+    $('.avatar-img').css('opacity', '0.8');
+    $('.edit-image').css('opacity', '1');
+  },()=>{
+    $('.avatar-img').css('opacity', '1');
+    $('.edit-image').css('opacity', '0');
+  });
+
+  $('.avatar-img, .edit-image').click(()=>{
+    $('#avatar-input-file').trigger('click');
+  });
+
+  $('#avatar-input-file').change((event)=>{
+    var selectedFile = event.target.files[0];
+    var reader = new FileReader();
+
+    reader.onload = function(event) {
+      $('.avatar-img').attr('src', event.target.result);
+
+      showAvatarCropper();
+    };
+
+    reader.readAsDataURL(selectedFile);
+  });
+
 });
 
+function showAvatarCropper(){
+  $('.avatar-holder').width(300).height(300);
 
-function loadSectors(){
-  var options = {
-    data: ["Admnistração", "Atendimento", "Expedição", "Estoque"],
-    list: {
-      match: {
-        enabled: true
-      }
-    }
-  };
+  $('.avatar-crop-ok').click(()=>{
+    var resultParams = {
+      type: 'base64',
+      size: {width: 100, height: 100},
+      format: 'png'
+    };
 
-  $("#title").easyAutocomplete(options);
-}
-
-
-function clearForm(){
-  $('input').val('');
-  $('#title-label').text('');
-  $('input[type="checkbox"]').prop('checked', false);
-  $('#avatar-user-form').attr('src', 'img/avatar.png');
-}
-
-
-function checkform(){
-  var c = checkMaterialInput($('#title'));
-  c = checkMaterialInput($('#name')) & c;
-  c = checkMaterialInput($('#avatar')) & c;
-  c = checkMaterialInput($('#access')) & c;
-
-  if ($('#access').val()){
-    c = testUniqueAccess() & c;
-  }
-
-
-
-  return c;
-}
-
-
-function testUniqueAccess(){
-
-  var user = userSelector.findUserByAccess($('#access').val());
-
-  if (user && (user.id != $('#editing').val())){
-    $('#access').val('Cartão de acesso já utilizado');
-    onSimpleMaterialInputError($('#access'));
-    return false;
-  }else{
-    return true;
-  }
-}
-
-
-function loadSetts(){
-  if (loggedUser.full){
-    _get('/get-setts', {}, (all)=>{
-      $('.settings').empty();
-
-      var groups = buildSettsGroups(all, ['Geral', 'Picking', 'Packing', 'Estoque', 'Pendências']);
-
-      for (var i = 0; i < groups.length; i++) {
-        showGroup(groups[i]);
-      }
+    croppie.result(resultParams).then(function(base64Image) {
+      $('.avatar-img').attr('src', base64Image);
+      _post('/upload-user-avatar', {userId: $('#editing').val() , avatar: base64Image.split(',')[1]},()=>{
+        console.log('OKKKKK');
+      });
     });
-  }
-}
 
-function buildSettsGroups(groups, titles){
-  var result = [];
-  for (var i = 0; i < titles.length; i++) {
-    result.push(buildCurrentGroup(groups, i, titles));
-  }
-  return result;
-}
+    croppie.destroy();
+    $('.avatar-holder').width(100).height('auto');
+    $('.avatar-crop-ok').hide();
 
-function buildCurrentGroup(groups, index, titles){
-  return {arr : getGroupSetts(index, groups),
-    title: titles[index]};
-  }
+  }).show();
 
-
-  function getGroupSetts(groupNum, arr){
-    return arr.filter((i)=>{
-      return i.group == groupNum;
+  croppie = new Croppie(document.getElementById('avatar-user-form'), {
+    enableExif : true,
+    enableResizeboolean : true,
+    enableZoomboolean: true,
+    enforceBoundary: true,
+    viewport: { width: 150,
+      height: 150,
+      type: 'circle' }
     });
   }
 
 
-  function showGroup(group){
-    var $div = $('<div>').addClass('setts-group');
-    var $title = $('<span>').addClass('setts-group-title').text(group.title);
-    $div.append($title);
-
-    group.arr.forEach((each)=>{
-      if (each.type == 0){
-        $div.append(createCheckBox(each));
+  function loadSectors(){
+    var options = {
+      data: ["Admnistração", "Atendimento", "Expedição", "Estoque"],
+      list: {
+        match: {
+          enabled: true
+        }
       }
+    };
 
-    });
-
-    $('.settings').append($div);
+    $("#title").easyAutocomplete(options);
   }
 
 
-  function createCheckBox(settItem){
-    var div = $('<div>').addClass('setts-row');
-    var row = $('<label>').addClass('pure-material-checkbox').attr('title',settItem.id);
-    var input = $('<input>').attr('type', 'checkbox').attr('name', 'sett-' + settItem.id);
-    var title = $('<span>').text(settItem.name);
+  function clearForm(){
+    $('input').val('');
+    $('#title-label').text('');
+    $('input[type="checkbox"]').prop('checked', false);
+    $('#avatar-user-form').attr('src', 'img/avatar.png');
+  }
 
-    if (userSetts[settItem.id]){
-      input.attr('checked', 'checked');
+
+  function checkform(){
+    var c = checkMaterialInput($('#title'));
+    c = checkMaterialInput($('#name')) & c;
+    c = checkMaterialInput($('#avatar')) & c;
+    c = checkMaterialInput($('#access')) & c;
+
+    if ($('#access').val()){
+      c = testUniqueAccess() & c;
     }
 
-    row.append(input, title);
-    div.append(row);
 
-    return div;
+
+    return c;
   }
+
+
+  function testUniqueAccess(){
+
+    var user = userSelector.findUserByAccess($('#access').val());
+
+    if (user && (user.id != $('#editing').val())){
+      $('#access').val('Cartão de acesso já utilizado');
+      onSimpleMaterialInputError($('#access'));
+      return false;
+    }else{
+      return true;
+    }
+  }
+
+
+  function loadSetts(){
+    if (loggedUser.full){
+      _get('/get-setts', {}, (all)=>{
+        $('.settings').empty();
+
+        var groups = buildSettsGroups(all, ['Geral', 'Picking', 'Packing', 'Estoque', 'Pendências']);
+
+        for (var i = 0; i < groups.length; i++) {
+          showGroup(groups[i]);
+        }
+      });
+    }
+  }
+
+  function buildSettsGroups(groups, titles){
+    var result = [];
+    for (var i = 0; i < titles.length; i++) {
+      result.push(buildCurrentGroup(groups, i, titles));
+    }
+    return result;
+  }
+
+  function buildCurrentGroup(groups, index, titles){
+    return {arr : getGroupSetts(index, groups),
+      title: titles[index]};
+    }
+
+
+    function getGroupSetts(groupNum, arr){
+      return arr.filter((i)=>{
+        return i.group == groupNum;
+      });
+    }
+
+
+    function showGroup(group){
+      var $div = $('<div>').addClass('setts-group');
+      var $title = $('<span>').addClass('setts-group-title').text(group.title);
+      $div.append($title);
+
+      group.arr.forEach((each)=>{
+        if (each.type == 0){
+          $div.append(createCheckBox(each));
+        }
+
+      });
+
+      $('.settings').append($div);
+    }
+
+
+    function createCheckBox(settItem){
+      var div = $('<div>').addClass('setts-row');
+      var row = $('<label>').addClass('pure-material-checkbox').attr('title',settItem.id);
+      var input = $('<input>').attr('type', 'checkbox').attr('name', 'sett-' + settItem.id);
+      var title = $('<span>').text(settItem.name);
+
+      if (userSetts[settItem.id]){
+        input.attr('checked', 'checked');
+      }
+
+      row.append(input, title);
+      div.append(row);
+
+      return div;
+    }

@@ -80,17 +80,8 @@ module.exports= class SaleLoader {
         .setOnError(this.onError)
         .getSaleItems(this.sale.numeroPedido, (items) => {
 
-
-          try{
-            this.sale.transport = Util.twoNames(this.sale.transportador, Const.no_transport);
-            this.sale.items = items;
-          }catch(e){
-            console.log(items);
-            console.log(this.sale);
-            console.log(this.sale.numeroPedido);
-            Err.thrw('Era para dar o erro de 0 transport '+this.sale+ ' - ' + this.initialData + '\n' + new Error());
-          }
-
+          this.sale.transport = Util.twoNames(this.sale.transportador, Const.no_transport);
+          this.sale.items = items;
 
           this.sale.itemsQuantity = items.reduce(function(a, b) {
             return a + parseFloat(b.quantidade);
@@ -130,83 +121,83 @@ module.exports= class SaleLoader {
         this._callbackHit(onCallNext, onCallOuter);
       });
 
-};
+    };
 
-this.list.push(funcItemsWeight);
+    this.list.push(funcItemsWeight);
 
-return this;
-}
+    return this;
+  }
 
-loadNfe(onCallOuter){
-  var funcNfe = (onCallNext)=>{
+  loadNfe(onCallOuter){
+    var funcNfe = (onCallNext)=>{
 
-    if (this.sale.numeroNotaFiscal && !this.sale.nfe){
+      if (this.sale.numeroNotaFiscal && !this.sale.nfe){
+        new EccosysCalls()
+        .setOnError(this.onError)
+        .getNfe(this.sale.numeroNotaFiscal, (nfe)=>{
+          this.sale.nfe = nfe;
+          this._callbackHit(onCallNext, onCallOuter);
+        });
+      }else{
+        this._callbackHit(onCallNext, onCallOuter);
+      }
+    };
+
+    this.list.push(funcNfe);
+
+    return this;
+  }
+
+
+  loadProducts(onCallOuter){
+    var funcProducts = (onCallNext)=>{
+
       new EccosysCalls()
       .setOnError(this.onError)
-      .getNfe(this.sale.numeroNotaFiscal, (nfe)=>{
-        this.sale.nfe = nfe;
-        this._callbackHit(onCallNext, onCallOuter);
+      .getSkusFromSale(this.sale, (products)=>{
+        this._callbackHit(onCallNext, ()=>{
+          onCallOuter(products, this.sale);
+        });
+
+      });
+    };
+
+    this.list.push(funcProducts);
+
+    return this;
+  }
+
+  callFuncs(index){
+    if (index < this.list.length){
+      this.list[index](()=>{
+        index++;
+        this.callFuncs(index);
       });
     }else{
-      this._callbackHit(onCallNext, onCallOuter);
-    }
-  };
-
-  this.list.push(funcNfe);
-
-  return this;
-}
-
-
-loadProducts(onCallOuter){
-  var funcProducts = (onCallNext)=>{
-
-    new EccosysCalls()
-    .setOnError(this.onError)
-    .getSkusFromSale(this.sale, (products)=>{
-      this._callbackHit(onCallNext, ()=>{
-        onCallOuter(products, this.sale);
-      });
-
-    });
-  };
-
-  this.list.push(funcProducts);
-
-  return this;
-}
-
-callFuncs(index){
-  if (index < this.list.length){
-    this.list[index](()=>{
-      index++;
-      this.callFuncs(index);
-    });
-  }else{
-    if (typeof this.onFinished == 'function'){
-      this.onFinished(this.sale);
-      this.onFinished = null;
-    }
-  }
-}
-
-run(onFinished){
-  this.onFinished = onFinished;
-
-  if (typeof this.sale !== 'object'){
-    this.loadSale(this.sale, (sale)=>{
-      if (sale && this.list.length != 0){
-        this.callFuncs(0);
-      }else{
-        if (onFinished){
-          onFinished(sale);
-        }
+      if (typeof this.onFinished == 'function'){
+        this.onFinished(this.sale);
+        this.onFinished = null;
       }
-    });
-  }else{
-    this.callFuncs(0);
+    }
   }
-}
+
+  run(onFinished){
+    this.onFinished = onFinished;
+
+    if (typeof this.sale !== 'object'){
+      this.loadSale(this.sale, (sale)=>{
+        if (sale && this.list.length != 0){
+          this.callFuncs(0);
+        }else{
+          if (onFinished){
+            onFinished(sale);
+          }
+        }
+      });
+    }else{
+      this.callFuncs(0);
+    }
+  }
 
 
 

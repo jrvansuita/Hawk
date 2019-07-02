@@ -34,6 +34,7 @@ if (process.env.NODE_ENV){
 //  staticOptions = { maxAge: 86400000*1 }; // 1 days
 }
 
+
 app.use('/img', express.static('front/img', staticOptions));
 app.use('/front', express.static('front', staticOptions));
 app.use('/util', express.static('app/util', staticOptions));

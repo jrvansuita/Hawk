@@ -1,5 +1,6 @@
 const Response = require('../../util/response.js');
 
+
 module.exports = class Routes {
 
   constructor(app){
@@ -41,6 +42,7 @@ module.exports = class Routes {
       });
     });
   }
+
 
   _checkPermissionOrGoBack(req, res, settNum){
     var user = res.locals.loggedUser;
