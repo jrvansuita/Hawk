@@ -163,7 +163,7 @@ module.exports = {
 function onPackingRejected(params, user, result){
   var error = result.error[0].erro.split('\n')[0];
 
-  countPoints(params.saleNumber, (day)=>{
+  countPoints(params.saleNumber, user, (day)=>{
      HistoryStorer.packingRejected(user.id, params.saleNumber, params.oc, error);
   });
 
@@ -174,14 +174,14 @@ function onPackingDone(params, user){
   DoneLaws.remove(params.saleNumber);
   PackagesHandler.decPackStock(params.packageId);
 
-  countPoints(params.saleNumber, (day)=>{
+  countPoints(params.saleNumber, user, (day)=>{
     HistoryStorer.packing(user.id, sale, day);
   });
 
   prepareDoneList();
 }
 
-function countPoints(saleNumber, callback){
+function countPoints(saleNumber, user, callback){
   new SaleLoader(saleNumber)
   .loadClient()
   .loadItems()
