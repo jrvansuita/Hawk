@@ -66,10 +66,14 @@ var Num = {
   },
 
   extract(str){
-    return parseInt(str.match(/[0-9]+/g).join(''));
+    var fmt = str.match(/[0-9]+/g);
+    fmt = fmt ? fmt.join('') : 0;
+
+    return parseInt(fmt);
   },
 
   percent(num, trunc){
+
     return parseFloat(num).toFixed(trunc ? 0 : 2).toString() + '%';
   }
 
