@@ -35,6 +35,7 @@
   font-size: 0.8rem;
   font-weight: 400;
   color: #7b7575;
+  white-space: pre-line;
 }
 
 .team-title{

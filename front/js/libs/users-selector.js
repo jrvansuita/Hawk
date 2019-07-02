@@ -59,9 +59,7 @@ class UserSelector{
     this.selectorOptions = [];
 
     Object.keys(users).forEach((key, index)=>{
-      if (users[key].avatar){
-        this.selectorOptions[users[key].name + ' - ' + index] = users[key].avatar;
-      }
+      this.selectorOptions[users[key].name + ' - ' + index] = users[key].avatar;
     });
   }
 

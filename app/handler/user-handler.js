@@ -25,6 +25,13 @@ module.exports = class UserHandler {
       }
     });
 
+
+   //É um cadastro novo
+   if (!user.id){
+     delete user.id;
+     user.active = true;
+   }
+
     //Se o Usuario não tem permissão para alterar as próprias configurações
     //Todas as configs não serão setadas. Elimitar o atributo setts para não sobreescrever tudo
     if (Object.keys(user.setts).length == 0){
