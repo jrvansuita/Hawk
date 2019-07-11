@@ -238,3 +238,7 @@ body {
 #avatar-input-file{
   display: none;
 }
+
+.pure-material-checkbox{
+  margin-right: 10px;
+}

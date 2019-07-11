@@ -13,7 +13,7 @@ module.exports = class ProductDiagnostics{
 
   _analizeProducts(product, stocks,  callback){
     this.productsAnalyzed++;
-    var attrs = getProductAttrs(product);
+    var attrBundle = getProductBundle(product);
 
 
     // --- Cascata --- //
@@ -60,19 +60,19 @@ module.exports = class ProductDiagnostics{
       this._storeFix(product, Fix.enum().COST);
     }
 
-    if (isBrandMissing(attrs)){
+    if (isBrandMissing(attrBundle.names)){
       this._storeFix(product, Fix.enum().BRAND);
     }
 
-    if (isColorMissing(attrs)){
+    if (isColorMissing(attrBundle.names)){
       this._storeFix(product, Fix.enum().COLOR);
     }
 
-    if (isDepartmentMissing(attrs)){
+    if (isDepartmentMissing(attrBundle.names)){
       this._storeFix(product, Fix.enum().DEPARTMENT);
     }
 
-    if (isGenderMissing(attrs)){
+    if (isGenderMissing(attrBundle)){
       this._storeFix(product, Fix.enum().GENDER);
     }
 
@@ -184,9 +184,9 @@ module.exports = class ProductDiagnostics{
 
 
 
-  _resyncStoredSkus(brandName){
+  _resyncStoredSkus(brandName, type){
     var handler = (err, docs)=>{
-      
+
       var skus = [...new Set(docs.map(i=> i.sku))];
 
       this._checkRangeSku(skus, 0, ()=>{
@@ -195,7 +195,7 @@ module.exports = class ProductDiagnostics{
     };
 
     if (brandName){
-      Fix.findByBrand(brandName, handler);
+      Fix.findByBrand(brandName, type, handler);
     }else{
       Fix.findAll(handler);
     }
@@ -206,9 +206,9 @@ module.exports = class ProductDiagnostics{
     this._loadCurrentPage();
   }
 
-  refresh(byBrandName){
+  refresh(byBrandName, type){
     this.sendBroadcast = true;
-    this._resyncStoredSkus(byBrandName);
+    this._resyncStoredSkus(byBrandName, type);
   }
 
 
@@ -220,8 +220,13 @@ module.exports = class ProductDiagnostics{
 
 };
 
-function getProductAttrs(product){
-  return product._Atributos.map((i)=>{return i.descricao});
+function getProductAttrBundle(product){
+  var result = {
+    names: product._Atributos.map((i)=>{return i.descricao}),
+    values: product._Atributos.map((i)=>{return i.valor}),
+  }
+
+  return result;
 }
 
 function isWeightMissing(product){
@@ -271,8 +276,11 @@ function isDepartmentMissing(attrNames){
   return !attrNames.includes('Departamento');
 }
 
-function isGenderMissing(attrNames){
-  return !attrNames.includes('Genero') || !attrNames.includes('Gênero');
+function isGenderMissing(attrBundle){
+  var index = attrBundle.names.indexOf('Genero');
+  var val = attrBundle.values[index];
+
+  return index == -1 || !['Masculino', 'Feminino', 'Unisex'].includes(val);
 }
 
 function isPhotoMissing(product){

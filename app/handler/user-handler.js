@@ -15,7 +15,8 @@ module.exports = class UserHandler {
     params.access,
     params.full == 'on',
     params.active == 'on',
-    params.token ? params.token : actual.token ? actual.token : '');
+    params.token ? params.token : actual.token ? actual.token : '',
+    params.leader == 'on');
 
     //Gravando as configurações
     Object.keys(params).forEach((key)=>{

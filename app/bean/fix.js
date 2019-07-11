@@ -47,11 +47,17 @@ module.exports = class Fix extends DataAccess {
     Fix.find({sku : regexp}, callback);
   }
 
-  static findByBrand(brandName, callback){
-    Fix.find({ 'name': {
+  static findByBrand(brandName, type, callback){
+    var query = {'name': {
       "$regex": brandName,
       "$options": "i"
-    }}, callback);
+    }};
+
+    if (type > -1){
+      query.type = type;
+    }
+
+    Fix.find(query, callback);
   }
 
 

@@ -12,7 +12,7 @@
   min-height: 270px;
   margin-bottom: 20px;
   padding: 10px 15px;
-  display: inline-grid;
+  display: inline-block;
 }
 
 
@@ -76,9 +76,11 @@
 }
 
 .team-box > a > img {
-  display: -webkit-box;
+  display: block;
   max-width: 40px;
   max-height: 40px;
+  z-index: 1;
+  position: sticky;
 }
 
 
@@ -107,5 +109,20 @@
 }
 
 .group-box:last-child{
-  margin-bottom: 150px; 
+  margin-bottom: 150px;
+}
+
+.leader-badge{
+  width: 20px;
+  height: 20px;
+  z-index: 99999999 !important;
+  left: 0;
+  bottom: 0;
+  position: absolute !important;
+  margin-bottom: -5px;
+  margin-left: -5px;
+}
+
+.team-box > a{
+  position: relative;
 }

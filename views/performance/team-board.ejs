@@ -38,8 +38,8 @@
 
   {
     title: "Devolução",
-    subtitle: "Procurar, Encontrar e Separar",
-    stamps: ["Eficiência", "Velocidade", "Concentração", "Determinação"],
+    subtitle: "Conferir e Devolver",
+    stamps: ["Eficiência", "Concentração"],
     explaning: "Todas as devoluções precisam ser conferidas para serem aceitas. A conferência é feita junto a plataforma TroqueFácil. Lá possui a descrição do motivo da devolução de cada item da nota. Os responsáveis pela devolução deve conferir cada item se está de acordo com a política de troca e gerar nota fiscal dos produtos conferidos, e avaliar estado dos itens ao lançar estoque. A equipe precisa ser ágil e concentrada para que o processo seja feito de forma correta."
   },
 
@@ -92,23 +92,29 @@
           if (data[groupVar]){%>
             <p class="team-title">Equipe</p>
 
+
             <div class="team-box">
-              <%data[groupVar].forEach((user, index)=>{%>
+              <%data[groupVar].sort((a, b) => {return (a.leader === b.leader)? 0 : a.leader ? -1 : 1}).forEach((user, index)=>{%>
                 <a href="/profile/performance?userid=<%=user ? user.id : 0%>">
                   <img class="avatar-img circle shadow" src="<%=user ? user.avatar : ''%>"  data-userid="<%=user ? user.id : 0%>"/>
-                </a>
-                <%});%>
+                  <%if (user.leader){%>
+                    <img class="leader-badge" src="img/leader-badge.png" />
+                    <%}%>
+
+
+                  </a>
+                  <%});%>
+                </div>
+
+                <%}%>
+
               </div>
 
-              <%}%>
+
+              <%})%>
 
             </div>
 
 
-            <%})%>
-
-          </div>
-
-
-        </body>
-        </html>
+          </body>
+          </html>

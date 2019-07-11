@@ -39,7 +39,7 @@
                   <td rowspan="2" style="max-width: 38px;">
                     <label for="pending-checker-<%=sale.numeroPedido%>" class="label-for-avatar">
                       <input type="checkbox" id="pending-checker-<%=sale.numeroPedido%>" class="checkable-avatar" style="display:none"/>
-                      <img class="circle shadow avatar-img mini-avatar" src="<%=sale.pickUser.avatar%>" data-id="<%=sale.pickUser.id%>" data-src="<%=sale.pickUser.avatar%>" />
+                      <img class="circle shadow avatar-img mini-avatar" src="<%=sale.pickUser.avatar%>" data-id="<%=sale.pickUser.id%>" data-src="<%=sale.pickUser.avatar%>"  onerror="this.src='/img/avatar.png'"/>
                     </label>
                   </td>
                   <td><span class="pick-value green-title copiable"><%=sale.numeroPedido %></span>

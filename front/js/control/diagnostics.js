@@ -91,8 +91,8 @@ function buildIndRows(rows){
 
       drop.addItem('/img/restart.png', 'Atualizar Marca', function(){
         showLoading("Carregando produtos...");
-
-        _post('/run-product-diagnostics', {refresh:true, brand: brand}, ()=>{
+       var type = $('.ind-item.active').data('type');
+        _post('/run-product-diagnostics', {refresh:true, brand: brand, type: type}, ()=>{
           console.log('rodou');
         });
       });

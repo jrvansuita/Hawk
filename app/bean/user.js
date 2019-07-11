@@ -1,6 +1,6 @@
 module.exports = class User extends DataAccess {
 
-  constructor(id, name, title, avatar, access, isFull, isActive, token) {
+  constructor(id, name, title, avatar, access, isFull, isActive, token, isLeader) {
     super();
     this.id = Num.def(id, 0);
     this.name = Str.def(name, 'Desconhecido');
@@ -9,6 +9,7 @@ module.exports = class User extends DataAccess {
     this.access = Str.def(access);
     this.avatar = Str.def(avatar);
     this.active = isActive ? true: false;
+    this.leader = isLeader ? true: false;
     this.token = Str.def(token);
     this.setts = {};
   }

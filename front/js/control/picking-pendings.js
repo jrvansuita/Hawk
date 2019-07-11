@@ -186,7 +186,7 @@ function getLastBottomBarOption(pending){
         e.stopPropagation();
 
         new BlockedSelector().onSelect((reason)=>{
-          new BlockedPost(pending.number, reason).setUserId(pending.pickUser.id).isPending().call();
+          new BlockedPost(pending.number, reason).setUserId(pending.sale.pickUser.id).isPending().call();
         }).show();
       });
 
