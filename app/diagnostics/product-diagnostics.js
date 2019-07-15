@@ -13,7 +13,7 @@ module.exports = class ProductDiagnostics{
 
   _analizeProducts(product, stocks,  callback){
     this.productsAnalyzed++;
-    var attrBundle = getProductBundle(product);
+    var attrBundle = getProductAttrBundle(product);
 
 
     // --- Cascata --- //
