@@ -323,9 +323,9 @@ var Util = {
   },
 
   getGenderIcon(gender){
-    if (gender.toLowerCase().includes('fema')){
+    if (gender.toLowerCase().includes('femi')){
       return 'girl.png';
-    }if (gender.toLowerCase().includes('male')){
+    }if (gender.toLowerCase().includes('masc')){
       return 'boy.png';
     }else{
       return 'baby.png';

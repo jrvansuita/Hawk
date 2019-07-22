@@ -280,7 +280,7 @@ function isGenderMissing(attrBundle){
   var index = attrBundle.names.indexOf('Genero');
   var val = attrBundle.values[index];
 
-  return index == -1 || !['Masculino', 'Feminino', 'Unisex'].includes(val);
+  return index == -1 || !['Masculino', 'Feminino', 'Unissex', 'Unisex'].includes(val);
 }
 
 function isPhotoMissing(product){
