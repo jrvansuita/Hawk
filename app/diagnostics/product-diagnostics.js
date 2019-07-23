@@ -256,7 +256,7 @@ function isMagentoProblem(product){
 
 
 function isSalesMissing(product, stocks){
-  var isMoreThan10Days = Dat.daysDif(product.dtCriacao, new Date()) > 9;
+  var isMoreThan10Days = Dat.daysDif(product.dtCriacao, new Date()) > 25;
   return isMoreThan10Days && !hasSales(stocks);
 }
 
