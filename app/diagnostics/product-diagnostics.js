@@ -19,7 +19,9 @@ module.exports = class ProductDiagnostics{
     // --- Cascata --- //
     if (isPhotoMissing(product)){
       if (hasStock(product) || hasLocal(product)){
-        this._storeFix(product, Fix.enum().NO_PHOTO);
+        if (!hasSales(stocks)){
+          this._storeFix(product, Fix.enum().NO_PHOTO);
+        }
       }else{
         this._storeFix(product, Fix.enum().REGISTERING);
       }
@@ -256,8 +258,8 @@ function isMagentoProblem(product){
 
 
 function isSalesMissing(product, stocks){
-  var isMoreThan10Days = Dat.daysDif(product.dtCriacao, new Date()) > 25;
-  return isMoreThan10Days && !hasSales(stocks);
+  var isMoreThan25Days = Dat.daysDif(product.dtCriacao, new Date()) > 25;
+  return isMoreThan25Days && !hasSales(stocks);
 }
 
 function isColorMissing(attrNames){
