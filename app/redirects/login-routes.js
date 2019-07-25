@@ -10,7 +10,11 @@ module.exports = class LoginRoutes extends Routes{
       res.render('login');
     }, true);
 
- 
+    this._get('/wellcome', (req, res) => {
+      res.render('wellcome');
+    });
+
+
     this._post('/login', (req, res) => {
       var user;
 

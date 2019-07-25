@@ -78,33 +78,39 @@ $(document).ready(() => {
   loadSectors();
   loadSetts();
 
-  if ($('#editing').val() > 0){
-    $('.avatar-img, .edit-image').hover(()=>{
+
+  $('.avatar-img, .edit-image').hover(()=>{
+    if ($('#editing').val() > 0){
       $('.avatar-img').css('opacity', '0.8');
       $('.edit-image').css('opacity', '1');
-    },()=>{
+    }
+  },()=>{
+    if ($('#editing').val() > 0){
       $('.avatar-img').css('opacity', '1');
       $('.edit-image').css('opacity', '0');
-    });
+    }
+  });
 
-    $('.avatar-img, .edit-image').click(()=>{
+  $('.avatar-img, .edit-image').click(()=>{
+    if ($('#editing').val() > 0){
       $('#avatar-input-file').trigger('click');
-    });
+    }
+  });
 
-    $('#avatar-input-file').change((event)=>{
-      var selectedFile = event.target.files[0];
-      var reader = new FileReader();
+  $('#avatar-input-file').change((event)=>{
+    var selectedFile = event.target.files[0];
+    var reader = new FileReader();
 
-      reader.onload = function(event) {
-        $('.avatar-img').attr('src', event.target.result);
+    reader.onload = function(event) {
+      $('.avatar-img').attr('src', event.target.result);
 
-        showAvatarCropper();
-      };
+      showAvatarCropper();
+    };
 
-      reader.readAsDataURL(selectedFile);
-    });
+    reader.readAsDataURL(selectedFile);
+  });
 
-  }
+  
 
   loadMenuOpts();
 
@@ -161,6 +167,7 @@ function showAvatarCropper(){
 
   function clearForm(){
     $('input').val('');
+    $('#editing').attr('value', '');
     $('#title-label').text('');
     $('input[type="checkbox"]').prop('checked', false);
     $('#avatar-user-form').attr('src', 'img/avatar.png');
@@ -275,17 +282,17 @@ function showAvatarCropper(){
     }
 
 
-function loadMenuOpts(){
+    function loadMenuOpts(){
 
-  $('li.menu-item').each((i, each)=>{
-    var name = $(each).text().trim();
+      $('li.menu-item').each((i, each)=>{
+        var name = $(each).text().trim();
 
-    if (selectedUser.menus){
-      checked = selectedUser.menus.includes(name.toLowerCase());
+        if (selectedUser.menus){
+          checked = selectedUser.menus.includes(name.toLowerCase());
+        }
+
+
+        $('.menus-opts-inner').append(createCheckboxElement('menu-' + name.toLowerCase(), name, checked || selectedUser.full, selectedUser.full));
+      });
+
     }
-
-
-    $('.menus-opts-inner').append(createCheckboxElement('menu-' + name.toLowerCase(), name, checked || selectedUser.full, selectedUser.full));
-  });
-
-}

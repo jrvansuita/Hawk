@@ -72,7 +72,7 @@ app.get(['/'], (req, res)=>{
   if (req.session.lastpath && req.session.lastpath != '/'){
     res.redirect(req.session.lastpath);
   }else{
-    res.redirect('/picking');
+    res.redirect('/wellcome');
   }
 });
 

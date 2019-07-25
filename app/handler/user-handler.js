@@ -45,15 +45,15 @@ module.exports = class UserHandler {
     if (Object.keys(user.setts).length == 0){
       delete user.setts;
     }
+    
 
     user.upsert((err, doc)=>{
+      callback(doc.id);
 
+      user.id = doc.id;
+      //toObject removes unwanted attrs
+      UsersProvider.addUser(user.toObject());
     });
-
-    callback(user.id);
-
-    //toObject removes unwanted attrs
-    UsersProvider.addUser(user.toObject());
   }
 
 

@@ -407,7 +407,7 @@ function loadStockHistory(childSku){
   getStockRowsGrouped(childSku ,(groupped)=>{
     loadLayoutHistory(groupped);
 
-    if (loggedUser.full){
+    if (Sett.get(loggedUser, 16)){
       new StockChart('stock-chart', stockRowsHistoryMemory).load();
       $('.chart-label').css('display','block').fadeIn();
     }
