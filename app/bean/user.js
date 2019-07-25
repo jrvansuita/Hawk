@@ -12,6 +12,7 @@ module.exports = class User extends DataAccess {
     this.leader = isLeader ? true: false;
     this.token = Str.def(token);
     this.setts = {};
+    this.menus = [];
   }
 
   static getKey() {

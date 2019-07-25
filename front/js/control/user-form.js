@@ -106,6 +106,8 @@ $(document).ready(() => {
 
   }
 
+  loadMenuOpts();
+
 });
 
 function showAvatarCropper(){
@@ -145,7 +147,7 @@ function showAvatarCropper(){
 
   function loadSectors(){
     var options = {
-      data: ["Admnistração", "Atendimento", "Expedição", "Estoque"],
+      data: ["Admnistração", "Atendimento", "Conferência", "Reposição", "Pendência", "Devolução", "Picking", "Packing"],
       list: {
         match: {
           enabled: true
@@ -244,19 +246,46 @@ function showAvatarCropper(){
       $('.settings').append($div);
     }
 
+    function createCheckboxElement(id, name, checked, disabled){
+      var holder = $('<label>').addClass('pure-material-checkbox').attr('title', id);
+      var input = $('<input>').attr('type', 'checkbox').attr('name', id);
+      var title = $('<span>').text(name);
 
-    function createCheckBox(settItem){
-      var div = $('<div>').addClass('setts-row');
-      var row = $('<label>').addClass('pure-material-checkbox').attr('title',settItem.id);
-      var input = $('<input>').attr('type', 'checkbox').attr('name', 'sett-' + settItem.id);
-      var title = $('<span>').text(settItem.name);
-
-      if (userSetts[settItem.id]){
+      if (checked){
         input.attr('checked', 'checked');
       }
 
-      row.append(input, title);
-      div.append(row);
+      if (disabled){
+        input.attr('disabled', 'disabled');
+      }
+
+      holder.append(input, title);
+
+      return holder;
+    }
+
+
+    function createCheckBox(settItem){
+      var div = $('<div>').addClass('setts-row');
+      var check = createCheckboxElement('sett-' + settItem.id, settItem.name, userSetts[settItem.id]);
+
+      div.append(check);
 
       return div;
     }
+
+
+function loadMenuOpts(){
+
+  $('li.menu-item').each((i, each)=>{
+    var name = $(each).text().trim();
+
+    if (selectedUser.menus){
+      checked = selectedUser.menus.includes(name.toLowerCase());
+    }
+
+
+    $('.menus-opts-inner').append(createCheckboxElement('menu-' + name.toLowerCase(), name, checked || selectedUser.full, selectedUser.full));
+  });
+
+}

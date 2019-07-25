@@ -11,7 +11,7 @@ module.exports = class UserHandler {
     var user = new User(parseInt(params.id),
     params.name,
     params.sector,
-    params.avatar,
+    params.avatar || '/img/avatar.png',
     params.access,
     params.full == 'on',
     params.active == 'on',
@@ -26,19 +26,25 @@ module.exports = class UserHandler {
       }
     });
 
+    //Gravando as configurações
+    Object.keys(params).forEach((key)=>{
+      if (key.includes('menu')){
+        user.menus.push(key.split('-')[1]);
+      }
+    });
 
-   //É um cadastro novo
-   if (!user.id){
-     delete user.id;
-     user.active = true;
-   }
+
+    //É um cadastro novo
+    if (!user.id){
+      delete user.id;
+      user.active = true;
+    }
 
     //Se o Usuario não tem permissão para alterar as próprias configurações
     //Todas as configs não serão setadas. Elimitar o atributo setts para não sobreescrever tudo
     if (Object.keys(user.setts).length == 0){
       delete user.setts;
     }
-
 
     user.upsert((err, doc)=>{
 
@@ -66,14 +72,14 @@ module.exports = class UserHandler {
         console.log(data.link);
 
         User.updateAvatar(userId, data.link, ()=>{
-            var user = UsersProvider.get(userId);
+          var user = UsersProvider.get(userId);
 
-            if (user){
-               user.avatar = data.link;
+          if (user){
+            user.avatar = data.link;
 
-               console.log('Salvou');
-               console.log(UsersProvider.get(userId).avatar);
-            }
+            console.log('Salvou');
+            console.log(UsersProvider.get(userId).avatar);
+          }
         });
       }else{
         console.log('Erro: ' + data.message);

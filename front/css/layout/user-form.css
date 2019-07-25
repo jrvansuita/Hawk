@@ -150,6 +150,15 @@ body {
   display: block;
 }
 
+.menu-title{
+  font-size: 16px;
+  color: rgba(70, 71, 69, 0.87);
+  text-align: left;
+  padding-bottom: 15px;
+  font-weight: 600;
+  display: -webkit-box;
+}
+
 .setts-group-title{
   font-size: 16px;
   color: rgba(70, 71, 69, 0.87);
@@ -241,4 +250,9 @@ body {
 
 .pure-material-checkbox{
   margin-right: 10px;
+}
+
+.menus-opts-holder {
+    margin-top: 25px;
+    margin-bottom: 25px;
 }

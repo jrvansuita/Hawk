@@ -123,7 +123,7 @@ function getAvatar(item){
   var $avatarImg = $('<img>').addClass('circle shadow avatar-img')
   .attr('title', item.user.name)
   .attr('data-src',item.user.avatar)
-  .attr('src', item.user.id == 404 ? "img/system.png" : item.user.avatar)
+  .attr('src', item.user.id == 404 ? "img/system.png" : (item.user.avatar ? item.user.avatar : 'img/avatar.png'))
   .attr('data-userId', item.user.id);
 
 

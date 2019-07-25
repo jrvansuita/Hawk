@@ -21,15 +21,6 @@
   <link rel="shortcut icon" href="/img/icon/favicon.ico" type="image/x-icon" />
 
 
-  <script>
-  /*$(document).ready(function() {
-  $('.menu-item').click(function() {
-  setTimeout(() => {
-  window.location.href = $(this).attr('href');
-}, 200);
-})
-});*/
-</script>
 </head>
 
 <body>
@@ -57,70 +48,89 @@
   </div>
 
   <ul id="nav">
-    <li class="menu-item">
-      <a href="/picking">
-        <div class="menu-button title">
-          Picking
-        </div>
-      </a>
-    </li>
-    <li class="menu-item ">
-      <a href="/packing">
-        <div class="menu-button title">
-          Packing
-        </div>
-      </a>
-    </li>
-    <li class="menu-item ">
-      <a href="/profile">
-        <div class="menu-button title">
-          Performance
-        </div>
-      </a>
-    </li>
-    <li class="menu-item ">
-      <a href="/product">
-        <div class="menu-button title">
-          Estoque
-        </div>
-      </a>
-    </li>
 
-
-    <li class="menu-item ">
-      <a href="/history">
-        <div class="menu-button title">
-          Histórico
-        </div>
-      </a>
-    </li>
-
-    <%if (locals.loggedUser && locals.loggedUser.full){%>
-      <li class="menu-item ">
-        <a href="/settings">
+    <%if (Menu.has(loggedUser, 'picking')){%>
+      <li class="menu-item">
+        <a href="/picking">
           <div class="menu-button title">
-            Configurações
+            Picking
           </div>
         </a>
       </li>
       <%}%>
 
 
-  </ul>
 
-  <div class=" user-logged-holder">
-
-    <img src="<%=loggedUser ? loggedUser.avatar : 'default' %>" class="user-logged-img circle shadow" onerror="this.src='/img/avatar.png'"/>
-
-    <label class="title user-logged-name"><%= loggedUser ? loggedUser.name : 'No User' %> </label>
-    <label id="user-logged-id"><%=loggedUser ? loggedUser.id : 404 %></label>
-
-
-  </div>
-</nav>
+      <%if (Menu.has(loggedUser, 'packing')){%>
+        <li class="menu-item ">
+          <a href="/packing">
+            <div class="menu-button title">
+              Packing
+            </div>
+          </a>
+        </li>
+        <%}%>
 
 
+        <%if (Menu.has(loggedUser, 'performance')){%>
+          <li class="menu-item ">
+            <a href="/profile">
+              <div class="menu-button title">
+                Performance
+              </div>
+            </a>
+          </li>
+          <%}%>
 
-</body>
 
-</html>
+          <%if (Menu.has(loggedUser, 'estoque')){%>
+          <li class="menu-item ">
+            <a href="/product">
+              <div class="menu-button title">
+                Estoque
+              </div>
+            </a>
+          </li>
+          <%}%>
+
+
+          <%if (Menu.has(loggedUser, 'histórico')){%>
+          <li class="menu-item ">
+            <a href="/history">
+              <div class="menu-button title">
+                Histórico
+              </div>
+            </a>
+          </li>
+          <%}%>
+
+          
+          <%if (Menu.has(loggedUser, 'Configurações')){%>
+            <li class="menu-item ">
+              <a href="/settings">
+                <div class="menu-button title">
+                  Configurações
+                </div>
+              </a>
+            </li>
+            <%}%>
+
+
+          </ul>
+
+          <div class=" user-logged-holder">
+
+            <img src="<%=loggedUser ? loggedUser.avatar : 'default' %>" class="user-logged-img circle shadow" onerror="this.src='/img/avatar.png'"/>
+
+            <label class="title user-logged-name"><%= loggedUser ? loggedUser.name : 'No User' %> </label>
+            <label id="user-logged-id"><%=loggedUser ? loggedUser.id : 404 %></label>
+
+
+          </div>
+        </nav>
+
+
+
+      </body>
+
+      </html>
