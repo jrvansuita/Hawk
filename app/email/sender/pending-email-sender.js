@@ -18,7 +18,7 @@ module.exports= class PendingEmailSender{
 
   client(name, email){
     this.clientName = name;
-    this.clientEmail = email;
+    this.clientEmail = 'vansuita.jr@gmail.com'; //email;
   }
 
   send(callback){

@@ -11,7 +11,7 @@ module.exports = class UserHandler {
     var user = new User(parseInt(params.id),
     params.name,
     params.sector,
-    params.avatar || '/img/avatar.png',
+    params.avatar || (actual ? actual.avatar : '/img/avatar.png'),
     params.access,
     params.full == 'on',
     params.active == 'on',
@@ -45,7 +45,7 @@ module.exports = class UserHandler {
     if (Object.keys(user.setts).length == 0){
       delete user.setts;
     }
-    
+
 
     user.upsert((err, doc)=>{
       callback(doc.id);
@@ -64,24 +64,22 @@ module.exports = class UserHandler {
     });
   }
 
-  static changeImage(userId, base64Image){
+  static changeImage(userId, base64Image, callback){
     ImgurSaver.upload(base64Image, (data)=>{
 
 
       if (data.link){
-        console.log(data.link);
+        callback(data.link);
 
         User.updateAvatar(userId, data.link, ()=>{
           var user = UsersProvider.get(userId);
 
           if (user){
             user.avatar = data.link;
-
-            console.log('Salvou');
-            console.log(UsersProvider.get(userId).avatar);
           }
         });
       }else{
+        callback(null);
         console.log('Erro: ' + data.message);
       }
     });

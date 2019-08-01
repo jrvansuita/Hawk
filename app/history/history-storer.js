@@ -5,9 +5,10 @@ module.exports={
 
   email(userId, sale, err){
     var message = 'Pedido: ' + sale.numeroPedido + ' Ordem de Compra: ' + sale.numeroDaOrdemDeCompra;
-    message+= '\n Remetente: ' + sale.client.nome + ' - ' + sale.client.email;
+    message+= '\n Destinatário: ' + sale.client.nome + ' - ' + sale.client.email;
 
     if (err){
+      message+= '\n' + err.message;
       History.error(err, 'Email não Enviado', message);
     }else{
       History.info(userId, 'Email Enviado', message, 'Email');

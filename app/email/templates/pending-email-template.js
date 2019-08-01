@@ -3,11 +3,10 @@ module.exports= class PendingEmailTemplate {
 
 
   constructor(){
-    this.head = "<p>Olá ?Name?, tudo bem?<br><br>Devido a um erro de sistema, alguns dos itens do seu pedido acabaram faltando no estoque. Tentamos reposição desses produtos com o fornecedor, porém não foi possível :( Os itens pendentes estão relacionados abaixo:</p></br></br>";
-    this.url = '<p><br>Para que você receba o seu pedido dentro do prazo, estou lhe enviando opções de troca abaixo.<br><a href="?Url?" rel="noreferrer" target="_blank">https://www.boutiqueinfantil.com.br/</a><br><br>Assim que escolher os itens da troca peço que me envie os links dos produtos que eu irei trocar no seu pedido para você. Não se esqueça de especificar o tamanho.<br>Não haverá qualquer acréscimo a pagar sobre o seu pedido, caso haja uma PEQUENA diferença de preço entre os produtos. O ideal é só não ser mais barato que o valor já pago.</p>';
-    this.tail = "<p><br>Esperarei um tempinho pelo seu retorno, caso contrário eu irei escolher algo com muito carinho para substituir os itens faltantes.<br><br>Caso deseje trocá-lo, basta entrar em contato.<br>Dúvidas estamos a disposição!<br><br>Equipe Boutique Infantil.</p>";
+    this.head = "<p>Olá ?Name?, tudo bem?<br><br>Devido a um erro de sistema, não temos disponível alguns itens do seu pedido em estoque. Para que você receba seu pedido dentro do prazo, poderia escolher e nos encaminhar um novo item para trocar? Os itens estão relacionados abaixo:</p></br></br>";
+    this.url = '<p><a href="?Url?" rel="noreferrer" target="_blank">https://www.boutiqueinfantil.com.br/</a><br><br>Assim que escolher os itens da troca, peço que envie o nome ou o link dos produtos que estaremos efetuando sua troca. Não se esqueça de especificar o tamanho desejado.<br>Caso tenha diferença de ate R$5,00 a mais, será por nossa conta.</p>';
+    this.tail = "<p><br>Estaremos aguardando 48hrs por seu retorno, caso não tenhamos retorno, iremos escolher algo com muito carinho para substituir. <br><br>Caso deseje trocá-lo, basta entrar em contato.<br>Dúvidas estamos a disposição!<br><br>Equipe Boutique Infantil.</p>";
 
-    this.maxPrice = 0;
   }
 
   name(name){
@@ -36,10 +35,6 @@ module.exports= class PendingEmailTemplate {
         col(Num.int(parseFloat(i.quantidade))) +
         col(Num.money(i.precoLista)) +
         col(Num.money(parseFloat(i.precoLista) * parseFloat(i.quantidade))));
-
-        if (_self.maxPrice < i.precoLista){
-          _self.maxPrice = i.precoLista;
-        }
       }
     });
 
@@ -49,7 +44,7 @@ module.exports= class PendingEmailTemplate {
   build(){
     var result = this.head;
     result+= this.buildItems();
-    result+= this.url.replace('?Url?',getUrl(this.maxPrice));
+    result+= this.url.replace('?Url?',getUrl());
     result+= this.tail;
     return result;
   }
@@ -70,6 +65,6 @@ function head(text){
 }
 
 
-function getUrl(maxPrice){
-  return "https://www.boutiqueinfantil.com.br/products?price=0-" + parseFloat(maxPrice + 4).toFixed(2) + "?dir=desc&order=price&utm_source=email&utm_medium=troca-pendencia";
+function getUrl(){
+  return "https://www.boutiqueinfantil.com.br/products?dir=asc&order=price&utm_medium=troca-pendencia&utm_source=email";
 }
