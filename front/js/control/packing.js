@@ -466,10 +466,9 @@ var packingClicked = false;
 
 function packingClick(){
   if (!packingClicked){
-
-    packingClicked = true;
-
+    
     if (checkAllFields()){
+      packingClicked = true;
       postPackingDone();
     }
   }

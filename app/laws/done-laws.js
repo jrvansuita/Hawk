@@ -56,6 +56,10 @@ module.exports = {
 
   getList() {
     return global.staticDonePicking;
+  },
+
+  clear(){
+    global.staticDonePicking = [];
   }
 
 };

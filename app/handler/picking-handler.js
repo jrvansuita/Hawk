@@ -127,11 +127,19 @@ module.exports = {
     //Load Done List from Picking List
     DoneLaws.handle(PickingLaws.getFullList());
 
-    //Remove Done List from Picking List
-    PickingLaws.assert(DoneLaws.getSaleNumbers());
+    //If has no picking sale, set the done list to picking again
+    if (PickingLaws.getFullList().length == 0){
+      PickingLaws.set(DoneLaws.getList());
+      DoneLaws.clear();
+    }else{
 
-    //Remove In Progress Sales From Done List
-    DoneLaws.assert(InprogressLaws.getSaleNumbers());
+      //Remove Done List from Picking List
+      PickingLaws.assert(DoneLaws.getSaleNumbers());
+
+      //Remove In Progress Sales From Done List
+      DoneLaws.assert(InprogressLaws.getSaleNumbers());
+    }
+
   },
 
   restart(userId, doneSale, callback){
