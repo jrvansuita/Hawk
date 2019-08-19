@@ -68,7 +68,7 @@ module.exports = {
             UfLaws.put(sale.client.uf);
           })
           .loadItems(true)
-          .onFilter((sale)=>{ 
+          .onFilter((sale)=>{
             return !BlockHandler.checkAllBlocksAndCapture(sale);
           })
           .onEverySaleLoaded((sale)=>{
@@ -128,17 +128,17 @@ module.exports = {
     DoneLaws.handle(PickingLaws.getFullList());
 
     //If has no picking sale, set the done list to picking again
-    if (PickingLaws.getFullList().length == 0){
-      PickingLaws.set(DoneLaws.getList());
-      DoneLaws.clear();
-    }else{
+  //  if (PickingLaws.getFullList().length == 0){
+    //  PickingLaws.set(DoneLaws.getList());
+    //  DoneLaws.clear();
+  //  }else{
 
       //Remove Done List from Picking List
       PickingLaws.assert(DoneLaws.getSaleNumbers());
 
       //Remove In Progress Sales From Done List
       DoneLaws.assert(InprogressLaws.getSaleNumbers());
-    }
+  //  }
 
   },
 
