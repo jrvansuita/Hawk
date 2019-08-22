@@ -4,14 +4,12 @@
   display: flex;
   padding-top: 50px;
 }
-
 .left{
   flex: 0 1 50%;
   display: flex;
   height: 100%;
   padding: 15px;
 }
-
 
 .right{
   flex: 0 1 50%;
@@ -125,14 +123,11 @@
 .button{
   margin-right: 15px;
 }
-
-
 .packs-view{
-  min-width: 60%;
   margin: auto;
   margin-top: 5%;
+  min-width: 60%;
 }
-
 .packs-view td{
   padding: 5px;
 }
