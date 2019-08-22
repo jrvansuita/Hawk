@@ -11,13 +11,12 @@
 <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
 <script type="text/javascript" src="front/js/libs/autocomplete.js"></script>
 
-<head>
-
+<head>x
 </head>
 <body>
 
   <div class="main">
-
+    <div class="left">
 
     <form class="pack-form shadow" name="pack-form" action="packages" method="post" id="pack-form">
       <div class="header">
@@ -143,7 +142,37 @@
         </div>
 
       </div>
-    </div>
+      <div class="right">
+        <table class="packs-view shadow">
+          <tr class="packs-header dotted-line">
+            <td>Embalagem</td>
+            <td>Estoque</td>
+            <td>Mínimo</td>
+          </tr>
+          <%all.forEach((each)=>{
+            if(each.id){
+            %>
 
+
+
+            <tr class="<%=each.stockQtd < each.minStockQtd ? 'warn-stock' : ''%>">
+
+              <td><a href="/packages?_id=<%=each.id%>">
+                <%=each.name%>
+                </a></td>
+
+              <td><%=Num.points(each.stockQtd)%></td>
+              <td><%=Num.points(each.minStockQtd)%></td>
+            </tr>
+
+
+
+
+            <%
+          }});%>
+
+        </table>
+      </div>
+</div>
   </body>
   </html>
