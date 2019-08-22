@@ -3,6 +3,7 @@ const PendingLaws = require('../laws/pending-laws.js');
 const PendingHandler = require('../handler/pending-handler.js');
 const SaleItemSwapper = require('../swap/sale-item-swapper.js');
 const EccosysCalls = require('../eccosys/eccosys-calls.js');
+const BlockHandler = require('../handler/block-handler.js');
 
 module.exports = class PendingRoutes extends Routes{
 
@@ -62,6 +63,19 @@ module.exports = class PendingRoutes extends Routes{
         //}else{
         //          this._resp().error(res, 'Você não tem permissão para função');
         //      }
+      });
+
+
+
+      this._page('/pending-products', (req, res, body, locals) => {
+
+
+
+        PendingHandler.load(false, (list)=>{
+
+          res.render('pending/pending-products', {pendings: list, blockeds: BlockHandler.rules()});
+
+        });
       });
 
     }

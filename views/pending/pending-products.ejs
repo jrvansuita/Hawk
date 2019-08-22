@@ -1,0 +1,22 @@
+<html>
+  <%  include ../menus/main-menu %>
+
+  <head>
+
+  </head>
+
+<script>
+
+
+
+  window.pendings = <%- JSON.stringify(pendings)%>
+  window.blockeds = <%- JSON.stringify(blockeds)%>
+
+ 
+</script>
+
+  <body>
+    <%  include ../menus/pending-menu %>
+
+  </body>
+</html>
