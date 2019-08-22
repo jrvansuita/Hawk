@@ -20,7 +20,7 @@ class BlockedPost{
 
   onError(callback){
     this.errorListener = callback;
-    return this;
+    return this; 
   }
 
   call(){
@@ -30,15 +30,15 @@ class BlockedPost{
       data: {
         blockNumber: this.blockNumber,
         reasonTag : this.reason ? this.reason.tag : null,
-        userId :this.userId 
+        userId :this.userId
       },
       success: function(response) {
         window.location.reload();
+
       },
       error: function(jqXHR, textStatus, errorThrown) {
         console.log(textStatus);
         this.errorListener();
-        //onSimpleMaterialInputError( $('#blocked-rule-input'));
       }
     });
   }

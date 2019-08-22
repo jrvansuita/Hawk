@@ -94,10 +94,10 @@ module.exports = class PickingRoutes extends Routes{
       //var userId = req.body.userId ? req.body.userId : req.session.loggedUserID;
       //Sempre o responsavel vai ser o usuario logado.
       var userId = req.session.loggedUserID;
-      
+
       BlockHandler.toggle(req.body.blockNumber, userId, req.body.reasonTag, ()=>{
         PendingLaws.remove(req.body.blockNumber);
-        this._resp().redirect(res);
+        res.status(200).send("OK");
       });
     });
 

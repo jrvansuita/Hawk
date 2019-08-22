@@ -465,14 +465,14 @@ function restartPendingSale(pending){
 }
 
 function rebuildSpawItem(actualClass, nextClass , resultPending){
-  hidePedingItemModal();
-
   if (resultPending){
     updatePendingSales(resultPending);
     var $this = $('.'+actualClass+'.mini-item-modal');
 
     $this.removeClass(actualClass).addClass(nextClass);
   }
+
+  hidePedingItemModal();
 
   $this.delay(1000).fadeOut(400, function() {
     $this.remove();
@@ -510,6 +510,7 @@ function changeFontSize(els, direction){
 
 function showLoadingButton(el){
   el.prepend($('<img>').addClass('loading-circle').attr('src','/img/loader/circle.svg'));
+  el.off("click");
 }
 
 function updatePendingSales(pending){
@@ -517,7 +518,7 @@ function updatePendingSales(pending){
 }
 
 function isBlocked(pending){
-  return  pending.status == 0 && Dat.hoursDif(pending.updateDate, new Date()) <= 2;
+  return  false; //pending.status == 0 && Dat.hoursDif(pending.updateDate, new Date()) <= 2;
 }
 
 

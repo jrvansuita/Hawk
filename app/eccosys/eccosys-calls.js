@@ -230,4 +230,14 @@ module.exports = class EccosysCalls{
     });
   }
 
+
+  updateSaleItems(saleNumber, items, callback){
+    this.call.setPath('pedidos/items').setBody(items).put((res)=>{
+      if (callback){
+        callback(res);
+      }
+    });
+  }
+
+
 };
