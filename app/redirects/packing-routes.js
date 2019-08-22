@@ -89,9 +89,9 @@ module.exports = class PackingRoutes extends Routes{
         Pack.findOne({_id:req.query._id}, (err, pack)=>{
           res.render('packing/package-type', {pack: pack});
         });
-      });
+      }); 
 
-      this._post('/packages', (req, res) => {  
+      this._post('/packages', (req, res) => {
         PackagesHandler.storeFromScreen(req.body, (packId)=>{
           res.redirect("/packages?_id=" + packId);
         });
