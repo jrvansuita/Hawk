@@ -12,11 +12,23 @@
   window.pendings = <%- JSON.stringify(pendings)%>
   window.blockeds = <%- JSON.stringify(blockeds)%>
 
- 
+
 </script>
+
+
+<%
+
+
+var novo = pendings.map();
+
+%>
 
   <body>
     <%  include ../menus/pending-menu %>
+
+
+
+
 
   </body>
 </html>
