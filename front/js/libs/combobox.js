@@ -73,6 +73,7 @@ class ComboBox{
     this.selectorOptions = [];
 
     Object.keys(data).forEach((key)=>{
+      if (data[key].name)
       this.selectorOptions[data[key].name] = null;
     });
   }

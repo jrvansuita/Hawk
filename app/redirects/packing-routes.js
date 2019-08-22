@@ -88,13 +88,15 @@ module.exports = class PackingRoutes extends Routes{
 
 
       this._get('/packages', (req, res)=>{
-        if (req.query._id){ 
-          Pack.findOne({_id:req.query._id}, (err, pack)=>{
-            res.render('packing/package-type', {pack: pack});
-          });
-        }else{
-          res.render('packing/package-type', {pack: null});
-        }
+        Pack.findAll((err, all)=>{
+          if (req.query._id){
+            Pack.findOne({_id:req.query._id}, (err, pack)=>{
+              res.render('packing/package-type', {pack: pack, all: all});
+            });
+          }else{
+            res.render('packing/package-type', {pack: null,  all: all});
+          }
+        });
       });
 
 

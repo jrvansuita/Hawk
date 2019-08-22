@@ -6,8 +6,6 @@ var bodyParser = require('body-parser');
 
 var app = express();
 
-app.set('port', process.env.PORT || 3000);
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true,
@@ -95,7 +93,7 @@ routes.forEach((r)=>{
 });
 
 
-var server = app.listen(app.get('port'), function() {
+var server = app.listen('3000', function() {
   //('Node is running on port ', app.get('port'));
 });
 
