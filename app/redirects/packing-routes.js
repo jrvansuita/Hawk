@@ -91,7 +91,7 @@ module.exports = class PackingRoutes extends Routes{
         });
       });
 
-      this._post('/packages', (req, res) => {
+      this._post('/packages', (req, res) => {  
         PackagesHandler.storeFromScreen(req.body, (packId)=>{
           res.redirect("/packages?_id=" + packId);
         });
