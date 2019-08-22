@@ -136,18 +136,17 @@ module.exports = class SaleItemSwapper{
 
         if (this._checkSaleStatus() && this._checkAllreadyHasSwapSku()){
           if (this._swapTargetSku()){
-            new EccosysCalls().removeSaleItems(this.sale.numeroPedido, (res)=>{
-              new EccosysCalls().insertSaleItems(this.sale.numeroPedido, this.sale.items, (res)=>{
 
-                if (this.onResponse){
-                  this.onResponse(true);
-                }
+            new EccosysCalls().updateSaleItems(this.sale.numeroPedido, this.sale.items, (res)=>{
 
-                HistoryStorer.swapItems(this.sale.numeroPedido, this.targetSku, this.swapSku, this.quantity, this.userId);
-                this._updateSaleObs();
+              if (this.onResponse){
+                this.onResponse(true);
+              }
 
-                PendingHandler.updateItem(this.sale.numeroPedido, this.targetSku, this.changedItem, ()=>{});
-              });
+              HistoryStorer.swapItems(this.sale.numeroPedido, this.targetSku, this.swapSku, this.quantity, this.userId);
+              this._updateSaleObs();
+
+              PendingHandler.updateItem(this.sale.numeroPedido, this.targetSku, this.changedItem, ()=>{});
             });
           }
         }

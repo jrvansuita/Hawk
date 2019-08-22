@@ -37,7 +37,7 @@ module.exports = class PackingRoutes extends Routes{
 
 
 
-   /*** End Packing Screen ****/
+    /*** End Packing Screen ****/
 
 
     this._page('/packing/overview', (req, res) => {
@@ -85,11 +85,20 @@ module.exports = class PackingRoutes extends Routes{
         });
       });
 
+
+
       this._get('/packages', (req, res)=>{
-        Pack.findOne({_id:req.query._id}, (err, pack)=>{
-          res.render('packing/package-type', {pack: pack});
-        });
+        if (req.query._id){
+          Pack.findOne({_id:req.query._id}, (err, pack)=>{
+            res.render('packing/package-type', {pack: pack});
+          });
+        }else{
+          res.render('packing/package-type', {pack: null});
+        }
       });
+
+
+
 
       this._post('/packages', (req, res) => {
         PackagesHandler.storeFromScreen(req.body, (packId)=>{
