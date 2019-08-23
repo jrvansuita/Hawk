@@ -17,8 +17,9 @@ var fixEnum = {
   GENDER: 8, //Gênero faltando ou errado
   MAGENTO_PROBLEM: 11, //Ou nao vem no feed ou Sem stock no magento
 
-  NCM: 12 //Ncm inexistente ou incorreto
-
+  NCM: 12, //Ncm inexistente ou incorreto
+  ASSOCIATED: 13, //Produto pai com filhos associados
+  NOT_VISIBLE: 14 //Produto não está visivel na loja
 
 }
 

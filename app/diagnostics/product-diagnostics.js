@@ -42,7 +42,12 @@ module.exports = class ProductDiagnostics{
         }else{
           this._storeFix(product, Fix.enum().REGISTERING);
         }
-      }else{
+
+      }else if (!isAssociated(product)){
+        this._storeFix(product, Fix.enum().ASSOCIATED);
+      }else if(!isVisible(product)){
+        this._storeFix(product, Fix.enum().NOT_VISIBLE);
+      } else{
         this._storeFix(product, Fix.enum().SALE);
       }
     }
@@ -297,4 +302,12 @@ function hasSales(stocks){
 function isNcmProblem(product){
   var regexp = new RegExp("[0-9]{8}", "g");
   return !product.cf || !regexp.test(Num.extract(product.cf));
+}
+
+function isVisible(product){
+  return product.feedProduct ? product.feedProduct.visible : true;
+}
+
+function isAssociated(product){
+  return product.feedProduct ? product.feedProduct.associates && product.feedProduct.associates.includes(',') : true;
 }

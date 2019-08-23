@@ -41,10 +41,13 @@ module.exports = class JobProducts extends Controller{
               var season = FeedXml.val(item, "season");
               var age = FeedXml.val(item, "age");
 
+              var visible = FeedXml.val(item, "visible").includes('Busca');
+              var associates = FeedXml.val(item, "associates");
+
               var product = new Product(sku, name, brand, url,
                 image, price, category,
                 gender, color, quantity,
-                age, year, season);
+                age, year, season, visible, associates);
 
                 product.upsert();
 

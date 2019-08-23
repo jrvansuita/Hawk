@@ -281,6 +281,10 @@ var Util = {
       return 'Produtos inconsistentes no Magento';
       case 12:
       return 'Ncm incorreto ou não encontrado';
+      case 13:
+      return 'Produtos filhos não Associados';
+      case 14:
+      return 'Produtos não Visíveis';
 
       default:
       return 'Não encontrado';
@@ -316,6 +320,11 @@ var Util = {
       return 'not-visible';
       case 12:
       return 'paper-blocked';
+      case 13:
+      return 'unlink';
+      case 14:
+      return 'eye';
+
 
       default:
       return 'question-mark';
