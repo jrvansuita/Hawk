@@ -679,7 +679,6 @@ function loadLayoutHistory(rows){
 
   function decodeLetterSizeProduct(size){
     var sizes = ['RN', 'P', 'M', 'G', 'GG' , 'XXG'];
-    var nums = ['-7', '-6', '-5', '-4', '-3' , '-2'];
     var index = sizes.indexOf(size);
-    return Num.def(index > -1 ? index : size);
+    return Num.def(index > -1 ? (index - 100) : size);
   }

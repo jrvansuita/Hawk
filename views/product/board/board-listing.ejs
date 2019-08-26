@@ -1,5 +1,10 @@
 <%attrs.forEach((attr, index)=>{
-  var total = data[attr].length;%>
+  var arr = data[attr];
+
+
+  if (arr){
+      var total = arr.length;
+      %>
 
   <div class="shadow box">
     <div class="box-lines-holder">
@@ -23,4 +28,4 @@
     </div>
 
 
-    <%});%>
+    <%}});%>

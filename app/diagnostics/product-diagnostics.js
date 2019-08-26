@@ -34,7 +34,12 @@ module.exports = class ProductDiagnostics{
     else if (hasLocalNoStock(product, stocks)){
       this._storeFix(product, Fix.enum().HAS_LOCAL_NO_STOCK);
     }
-
+    else if (!isAssociated(product)){
+      this._storeFix(product, Fix.enum().ASSOCIATED);
+    }
+    else if(!isVisible(product)){
+      this._storeFix(product, Fix.enum().NOT_VISIBLE);
+    }
     else if (isSalesMissing(product, stocks)){
       if (isMagentoProblem(product)){
         if (hasStock(product)){
@@ -42,12 +47,8 @@ module.exports = class ProductDiagnostics{
         }else{
           this._storeFix(product, Fix.enum().REGISTERING);
         }
-
-      }else if (!isAssociated(product)){
-        this._storeFix(product, Fix.enum().ASSOCIATED);
-      }else if(!isVisible(product)){
-        this._storeFix(product, Fix.enum().NOT_VISIBLE);
-      } else{
+      }
+      else{
         this._storeFix(product, Fix.enum().SALE);
       }
     }
@@ -275,8 +276,11 @@ function isBrandMissing(attrNames){
   return !attrNames.includes('Marca') || !attrNames.includes('Fabricante');
 }
 
-function isCostPriceMissing(product){
-  return (parseFloat(product.precoCusto) == 0) || (parseFloat(product.precoCusto) > parseFloat(product.preco));
+function isCostPriceMistake(product){
+  var cost = parseFloat(product.precoCusto);
+  var price = parseFloat(product.preco);
+
+  return (cost == 0) || (price/cost < 1.2);
 }
 
 function isDepartmentMissing(attrNames){

@@ -3,7 +3,7 @@ const https = require('https');
 var exports = module.exports = {};
 
 const url = process.env.STORE_UTL;
-const path = "/media/feed/feed-apps.xml";
+const path = "/media/feed/feed-apps.xml?";
 
 
 exports.get = (onEnd) => {

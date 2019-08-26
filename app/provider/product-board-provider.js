@@ -37,7 +37,7 @@ module.exports = {
 
   load(callback){
     var result = {};
-    var attrs = ['brand', 'category', 'color', 'gender', 'year', 'age', 'season'];
+    var attrs = ['brand', 'category', 'color', 'gender', 'year', 'age', 'season', 'manufacturer'];
     var query = {quantity : {$gt: 0}};
 
 

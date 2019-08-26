@@ -268,7 +268,7 @@ var Util = {
       case 5:
       return 'Produtos sem Cor';
       case 6:
-      return 'Produtos sem Preço de Custo'
+      return 'Preço de Venda ou Custo Incorreto'
       case 7:
       return 'Produtos sem Departamento'
       case 8:
