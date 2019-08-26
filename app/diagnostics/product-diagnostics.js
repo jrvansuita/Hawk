@@ -64,7 +64,7 @@ module.exports = class ProductDiagnostics{
       this._storeFix(product, Fix.enum().NCM);
     }
 
-    if (isCostPriceMissing(product)){
+    if (isCostPriceMistake(product)){
       this._storeFix(product, Fix.enum().COST);
     }
 
