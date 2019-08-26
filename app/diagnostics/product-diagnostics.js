@@ -34,22 +34,28 @@ module.exports = class ProductDiagnostics{
     else if (hasLocalNoStock(product, stocks)){
       this._storeFix(product, Fix.enum().HAS_LOCAL_NO_STOCK);
     }
-    else if (!isAssociated(product)){
-      this._storeFix(product, Fix.enum().ASSOCIATED);
-    }
-    else if(!isVisible(product)){
-      this._storeFix(product, Fix.enum().NOT_VISIBLE);
-    }
-    else if (isSalesMissing(product, stocks)){
-      if (isMagentoProblem(product)){
-        if (hasStock(product)){
-          this._storeFix(product, Fix.enum().MAGENTO_PROBLEM);
-        }else{
-          this._storeFix(product, Fix.enum().REGISTERING);
+
+    else if (!hasSales(stocks)){
+
+
+      if (isMoreThanXDaysRegistered(product, 3)){
+
+        if (!isAssociated(product)){
+          this._storeFix(product, Fix.enum().ASSOCIATED);
         }
-      }
-      else{
-        this._storeFix(product, Fix.enum().SALE);
+        else if(!isVisible(product)){
+          this._storeFix(product, Fix.enum().NOT_VISIBLE);
+        }
+        else if (isMagentoProblem(product)){
+          if (hasStock(product)){
+            this._storeFix(product, Fix.enum().MAGENTO_PROBLEM);
+          }else{
+            this._storeFix(product, Fix.enum().REGISTERING);
+          }
+        }
+        else if (isMoreThanXDaysRegistered(product, 15)){
+          this._storeFix(product, Fix.enum().SALE);
+        }
       }
     }
 
@@ -263,10 +269,11 @@ function isMagentoProblem(product){
 }
 
 
-function isSalesMissing(product, stocks){
-  var isMoreThan25Days = Dat.daysDif(product.dtCriacao, new Date()) > 25;
-  return isMoreThan25Days && !hasSales(stocks);
+function isMoreThanXDaysRegistered(product, days){
+  return Dat.daysDif(product.dtCriacao, new Date()) > days;
 }
+
+
 
 function isColorMissing(attrNames){
   return !attrNames.includes('Cor');
