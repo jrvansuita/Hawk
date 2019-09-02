@@ -190,6 +190,7 @@ function createTags(product){
   var $gender = createClickableTag(product.gender, 'gender');
   var $color = createClickableTag(product.color, 'color');
   var $season = createClickableTag(product.season, 'season');
+  var $manufacturer = createClickableTag(product.manufacturer, 'manufacturer');
 
 
   var $age = [];
@@ -208,7 +209,7 @@ function createTags(product){
 
 
   var $tagsHolder = $('<div>').addClass('tags-holder');
-  $tagsHolder.append($brand, $cat, $gender, $color, $season, $age, $year, $divRight);
+  $tagsHolder.append($brand, $manufacturer, $cat, $gender, $color, $season, $age, $year, $divRight);
 
   return $tagsHolder;
 }
