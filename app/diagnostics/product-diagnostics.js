@@ -323,7 +323,7 @@ function isAssociated(product){
   if (product.feedProduct){
     var arr = product.feedProduct.associates;
 
-    return arr.includes(product.codigo) || product.codigo == product.feedProduct.sku;
+    return (arr && arr.includes(product.codigo)) || product.codigo == product.feedProduct.sku;
   }
 
   return true;
