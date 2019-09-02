@@ -320,5 +320,11 @@ function isVisible(product){
 }
 
 function isAssociated(product){
-  return product.feedProduct ? product.feedProduct.associates && product.feedProduct.associates.includes(',') : true;
+  if (product.feedProduct){
+    var arr = product.feedProduct.associates;
+
+    return arr.includes(product.codigo) || product.codigo == product.feedProduct.sku;
+  }
+
+  return true;
 }

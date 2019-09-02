@@ -512,12 +512,13 @@ tr.row-padding td{
 
 
 .block-scroll{
-  height: -webkit-fill-available;
   overflow: hidden;
+  position: relative;
+  display: block;
+  height: 235px;
 }
 
 .block-scroll:hover{
-  height: -webkit-fill-available;
   overflow-y: overlay;
 }
 
@@ -528,7 +529,7 @@ tr.row-padding td{
   width: fit-content;
   padding-left: 10px;
   padding-right: 10px;
-  height: 100%;
+  height: -webkit-fill-available;
 }
 
 .table-sale-blocked-holder{
