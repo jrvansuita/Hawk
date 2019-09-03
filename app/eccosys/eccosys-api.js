@@ -77,9 +77,16 @@ module.exports = class EccosysApi{
     ){
 
       global.eccoConnErrors++;
-      var msg = data.includes('<title>502') ? '502 Bad Gateway' : data;
-      
-      throw Err.thrw(Const.api_not_available.format(msg) + '\n' + this.method +': /' + this.path, this.user);
+
+      //Só vamos dar throw nas 5 primeiras requests.
+      //Se nao fica muito poluído o historico
+      if (global.eccoConnErrors <= 5){
+        var msg = data.includes('<title>502') ? '502 Bad Gateway' : data;
+
+        throw Err.thrw(Const.api_not_available.format(msg) + '\n' + this.method +': /' + this.path, this.user);
+      }else{
+        throw undefined;
+      }
     }else{
       if (global.eccoConnErrors > 0){
         global.eccoConnErrors--;

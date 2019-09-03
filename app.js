@@ -31,7 +31,7 @@ var staticOptions = {};
 
 if (process.env.NODE_ENV){
   //Desligado o cache nos staticos
-//  staticOptions = { maxAge: 86400000*1 }; // 1 days
+  //  staticOptions = { maxAge: 86400000*1 }; // 1 days
 }
 
 
@@ -110,5 +110,7 @@ global.io = require('socket.io')(server);
 const History = require('./app/bean/history.js');
 
 process.on('uncaughtException', function (err) {
-  History.error(err);
+  if(err){
+    History.error(err);
+  }
 });
