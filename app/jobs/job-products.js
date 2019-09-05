@@ -43,7 +43,7 @@ module.exports = class JobProducts extends Controller{
               var manufacturer = FeedXml.val(item, "manufacturer");
 
 
-              var visible = FeedXml.val(item, "visible").includes('Busca');
+              var visible = FeedXml.val(item, "visible").includes('true');
               var associates = FeedXml.val(item, "associates");
 
               var product = new Product(sku, name, brand, url,

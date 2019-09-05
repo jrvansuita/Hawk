@@ -40,13 +40,16 @@ module.exports = class ProductDiagnostics{
 
       if (isMoreThanXDaysRegistered(product, 3)){
 
-        if (!isAssociated(product)){
-          this._storeFix(product, Fix.enum().ASSOCIATED);
-        }
-        else if(!isVisible(product)){
-          this._storeFix(product, Fix.enum().NOT_VISIBLE);
-        }
-        else if (isMagentoProblem(product)){
+        if (hasStock(product)){
+
+          if (!isAssociated(product)){
+            this._storeFix(product, Fix.enum().ASSOCIATED);
+          }
+          else if(!isVisible(product)){
+            this._storeFix(product, Fix.enum().NOT_VISIBLE);
+          }
+
+        }else if (isMagentoProblem(product)){
           if (hasStock(product)){
             this._storeFix(product, Fix.enum().MAGENTO_PROBLEM);
           }else{
