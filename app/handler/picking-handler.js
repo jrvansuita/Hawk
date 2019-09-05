@@ -20,6 +20,7 @@ module.exports = {
 
   init(onFinished) {
     if (!loadingList && PickingLaws.isFullEmpty() && !BlockHandler.hasBlockSales()) {
+     loadingList = true;
 
       PendingLaws.load(true, ()=>{
         BlockHandler.load(()=>{
