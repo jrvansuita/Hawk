@@ -181,7 +181,7 @@ $(document).ready(() => {
     $('.table-sale-blocked-holder').click(function(e){
       var blockNumber = $(this).data('blocknumber');
 
-      var drop = new MaterialDropdown($(this), e, true);
+      var drop = new MaterialDropdown($(this), e, false);
       drop.addItem('/img/delete.png', 'Remover', function(){
         new BlockedPost(blockNumber).call();
       });

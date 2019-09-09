@@ -251,8 +251,8 @@ function isWeightMissing(product){
   return (parseFloat(product.pesoLiq) /* * parseFloat(product.pesoBruto))*/ == 0) && !isPhotoMissing(product);
 }
 
-function hasStock(product){
-  return product._Estoque.estoqueReal > 0;
+function hasStock(product, checkAvailability){
+  return product._Estoque.estoqueReal > 0 && (!checkAvailability || (product._Estoque.estoqueDisponivel > 0));
 }
 
 function hasLocal(product){
@@ -271,12 +271,9 @@ function isMagentoProblem(product){
   return (!product.feedProduct) || (product.feedProduct && product.feedProduct.quantity == 0);
 }
 
-
 function isMoreThanXDaysRegistered(product, days){
   return Dat.daysDif(product.dtCriacao, new Date()) > days;
 }
-
-
 
 function isColorMissing(attrNames){
   return !attrNames.includes('Cor');
@@ -319,7 +316,7 @@ function isNcmProblem(product){
 }
 
 function isVisible(product){
-  return product.feedProduct ? product.feedProduct.visible : true;
+  return product.feedProduct ? (product.feedProduct.visible && hasStock(product, true)) : true;
 }
 
 function isAssociated(product){

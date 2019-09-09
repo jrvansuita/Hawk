@@ -34,7 +34,7 @@ module.exports = {
   },
 
   reloadPickingList(userId, callback){
-    if (!loadingList){
+    if (!loadingList){ 
       PickingLaws.clear(userId);
       this.init(callback);
     }else{

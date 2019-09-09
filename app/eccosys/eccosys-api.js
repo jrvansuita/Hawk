@@ -60,9 +60,7 @@ module.exports = class EccosysApi{
       options.headers.signature = generateSignature();
       options.headers.apikey = APIKEY;
     }
-
-
-    //console.log(options);
+  //  console.log(options);
 
     return options;
   }
