@@ -59,23 +59,26 @@ class SaleShellItem{
 
 
 function sortByLocal(itemA, itemB) {
-  var localA = itemA.local.split('-');
-  var localB = itemB.local.split('-');
+  try{
+    var localA = itemA.local.split('-')[0];
+    var localB = itemB.local.split('-')[0];
 
-  var hallA = Str.extract(localA[0]);
-  var hallB = Str.extract(localB[0]);
-
-  var compareHall = hallA.localeCompare(hallB);
+    var hallA = Num.extract(localA.split('.')[0]);
+    var hallB = Num.extract(localB.split('.')[0]);
 
 
-  //Se o corredor é o mesmo, compara a coluna para desempatar...
-  if (compareHall == 0){
-    var colA = Num.extract(localA[0]);
-    var colB = Num.extract(localB[0]);
+    //Se o corredor é o mesmo, compara a coluna para desempatar...
+    if (hallA == hallB){
+      var colA = Num.extract(localA.split('.')[1]);
+      var colB = Num.extract(localB.split('.')[1]);
 
-    return colA - colB;
-  }else{
-    return compareHall;
+      return colA - colB;
+    }else{
+      return hallA - hallB;
+    }
+
+  }catch(e){
+    return -1;
   }
 
 

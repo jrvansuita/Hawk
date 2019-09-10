@@ -9,8 +9,8 @@
 
 
 
-  window.pendings = <%- JSON.stringify(pendings)%>
-  window.blockeds = <%- JSON.stringify(blockeds)%>
+  window.list = <%- JSON.stringify(list)%>
+
 
 
 </script>
@@ -19,12 +19,51 @@
 <%
 
 
-var novo = pendings.map();
+
 
 %>
 
   <body>
     <%  include ../menus/pending-menu %>
+
+
+    <div class="main">
+
+      <div class="blockeds">
+
+        <% list.forEach(function(each){ %>
+
+            <div class="box"  data-sku="<%=each.sku%>">
+
+              <div class="top">
+
+                <div class="img-holder">
+                  <img class="prod-img" src="/sku-image?sku=<%=each.sku%>"/>
+                </div>
+
+                <div class="prod-info">
+                   <span><%=each.sku%></span>
+                </div>
+              </div>
+
+              <div class="bottom">
+
+              </div>
+
+
+            </div>
+
+          <%});%>
+
+
+      </div>
+
+
+      <div class="pendings">
+
+      </div>
+
+    </div>
 
 
 

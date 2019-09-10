@@ -67,10 +67,14 @@ module.exports = {
   },
 
   load(callback){
-    BlockRule.findAll(function(err, all){
-      global.staticBlockRules = all;
-      callback();
-    });
+    if (global.staticBlockRules.length > 0){
+      callback(global.staticBlockRules);
+    }else{
+      BlockRule.findAll(function(err, all){
+        global.staticBlockRules = all;
+        callback(global.staticBlockRules);
+      });
+    }
   },
 
   get(blockNumber){

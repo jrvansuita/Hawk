@@ -4,6 +4,7 @@ const PendingHandler = require('../handler/pending-handler.js');
 const SaleItemSwapper = require('../swap/sale-item-swapper.js');
 const EccosysCalls = require('../eccosys/eccosys-calls.js');
 const BlockHandler = require('../handler/block-handler.js');
+const PendingProductProvider = require('../provider/pending-product-provider.js');
 
 module.exports = class PendingRoutes extends Routes{
 
@@ -68,13 +69,8 @@ module.exports = class PendingRoutes extends Routes{
 
 
       this._page('/pending-products', (req, res, body, locals) => {
-
-
-
-        PendingHandler.load(false, (list)=>{
-
-          res.render('pending/pending-products', {pendings: list, blockeds: BlockHandler.rules()});
-
+        new PendingProductProvider().load((list)=>{
+          res.render('pending/pending-products', {list: list});
         });
       });
 
