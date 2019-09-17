@@ -317,3 +317,21 @@ table{
 .disabled{
   opacity: 0.6 !important;
 }
+
+
+
+.mini-red-circle {
+    margin-left: 5px;
+    background-color: #bd48008a;
+    border-radius: 50%;
+    width: 10px;
+    padding: 3px;
+    font-size: 9px;
+    text-align: center;
+    color: white;
+    height: 10px;
+    z-index: 10;
+    position: inherit;
+    margin-bottom: -10px;
+    margin-right: 5px;
+}

@@ -1,15 +1,15 @@
 <html>
-  <%  include ../menus/main-menu %>
+<%  include ../menus/main-menu %>
 
-  <head>
-
-  </head>
+<head>
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/pending-product.css">
+</head>
 
 <script>
 
 
 
-  window.list = <%- JSON.stringify(list)%>
+window.list = <%- JSON.stringify(list)%>
 
 
 
@@ -23,43 +23,64 @@
 
 %>
 
-  <body>
-    <%  include ../menus/pending-menu %>
+<body>
+  <%  include ../menus/pending-menu %>
 
 
-    <div class="main">
+  <div class="main">
 
-      <div class="blockeds">
+    <div class="blockeds shadow">
 
-        <% list.forEach(function(each){ %>
+      <span class="label">Bloqueados</span>
 
-            <div class="box"  data-sku="<%=each.sku%>">
+      <% list.forEach(function(each){ %>
 
-              <div class="top">
+        <div class="box shadow"  data-sku="<%=each.sku%>">
+          <span class="mini-red-circle"><%=each.count%></span>
 
-                <div class="img-holder">
-                  <img class="prod-img" src="/sku-image?sku=<%=each.sku%>"/>
-                </div>
+          <div class="top">
 
-                <div class="prod-info">
-                   <span><%=each.sku%></span>
-                </div>
-              </div>
-
-              <div class="bottom">
-
-              </div>
-
-
+            <div class="img-holder">
+              <img class="prod-img" src="/sku-image?sku=<%=each.sku%>"/>
             </div>
 
-          <%});%>
+            <div class="prod-info">
+              <span class="sku copiable"><%=each.sku%></span>
+              <span class="brand"><%=each.brand%></span>
+
+              <span class="title-mini">Localização</span>
+              <span class="local"><%=each.local%></span>
+            </div>
+
+            <div class="avatar">
+              <img class="circle shadow avatar-img mini-avatar" src="<%=each.user.id == 404 ? 'img/system.png' : each.user.avatar %>" data-id="<%=each.user.id%>"  title="<%=each.user.name%>"  onerror="this.src='/img/avatar.png'">
+              <span class="user-name"><%=each.user.name%></span>
+
+              <div class="info-inner">
+                <span class="title-mini">Estoque</span>
+                <span class="local"><%=each.stock%></span>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="bottom">
+
+
+
+
+          </div>
+
+
+        </div>
+
+        <%});%>
 
 
       </div>
 
 
-      <div class="pendings">
+      <div class="pendings shadow">
 
       </div>
 
@@ -70,4 +91,4 @@
 
 
   </body>
-</html>
+  </html>

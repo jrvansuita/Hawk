@@ -2,30 +2,38 @@ const PendingHandler = require('../handler/pending-handler.js');
 const BlockHandler = require('../handler/block-handler.js');
 const EccosysCalls = require('../eccosys/eccosys-calls.js');
 
+var loadedResults = undefined;
+
 module.exports = class {
 
   constructor(){
-    this.result = [];
+
   }
 
   load(callback){
 
+    if (!loadedResults){
+      loadedResults = [];
 
-    PendingHandler.load(false, (pendings)=>{
-      BlockHandler.load((blockeds)=>{
-        this.blockeds = blockeds;
-        this.pendings = pendings;
+      PendingHandler.load(false, (pendings)=>{
+        BlockHandler.load((blockeds)=>{
+          this.blockeds = blockeds;
+          this.pendings = pendings;
 
-        this.prepareBlockeds(()=>{
+          this.prepareBlockeds(()=>{
 
 
-          callback(this.result);
+            callback(loadedResults);
+
+          });
+
 
         });
-
-
       });
-    });
+    }else{
+      callback(loadedResults);
+    }
+
   }
 
 
@@ -34,6 +42,8 @@ module.exports = class {
 
     new EccosysCalls().getSkus(skus, (products)=>{
       products.forEach((product, index)=>{
+
+
         var block = this.blockeds.find((i)=>{
           return i.number == product.codigo;
         });
@@ -43,7 +53,7 @@ module.exports = class {
         .setType('block')
         .setObs('Teste');
 
-        this.result.push(data);
+        loadedResults.push(data);
 
 
         if (index == products.length-1){
@@ -58,8 +68,13 @@ module.exports = class {
 
 class DataItem{
   constructor(product){
+    //Handle the products attirbutes
+    product._Atributos.forEach((attr)=>{
+      product[attr.descricao] = attr.valor;
+    });
+
     this.sku = product.codigo;
-    this.brand = product.marca;
+    this.brand = product.Marca;
     this.stock = product._Estoque.estoqueReal;
     this.local = product.localizacao;
   }

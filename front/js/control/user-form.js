@@ -168,6 +168,8 @@ function showAvatarCropper(){
   function clearForm(){
     $('input').val('');
     $('#editing').attr('value', '');
+    $('#editing').val('');
+    $('#token').val('');
     $('#title-label').text('');
     $('input[type="checkbox"]').prop('checked', false);
     $('#avatar-user-form').attr('src', 'img/avatar.png');

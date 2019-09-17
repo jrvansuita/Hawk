@@ -8,6 +8,12 @@ module.exports = class UserHandler {
   static storeFromScreen(params, callback) {
     var actual = UsersProvider.get(params.id);
 
+    var token = params.token;
+
+    if (!token){
+      token = actual && actual.token ? actual.token : ''
+    }
+
     var user = new User(parseInt(params.id),
     params.name,
     params.sector,
@@ -15,7 +21,7 @@ module.exports = class UserHandler {
     params.access,
     params.full == 'on',
     params.active == 'on',
-    params.token ? params.token : actual.token ? actual.token : '',
+    token,
     params.leader == 'on');
 
     //Gravando as configurações
@@ -33,19 +39,11 @@ module.exports = class UserHandler {
       }
     });
 
-
-    //É um cadastro novo
-    if (!user.id){
-      delete user.id;
-      user.active = true;
-    }
-
     //Se o Usuario não tem permissão para alterar as próprias configurações
     //Todas as configs não serão setadas. Elimitar o atributo setts para não sobreescrever tudo
     if (Object.keys(user.setts).length == 0){
       delete user.setts;
     }
-
 
     user.upsert((err, doc)=>{
       callback(doc.id);

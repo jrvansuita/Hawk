@@ -127,7 +127,9 @@ static aggregate(query, callback) {
   static upsert(query, data, callback) {
     delete data.__v;
     this.staticAccess().findOneAndUpdate(query, data, {
-      upsert: true
+      upsert: true,
+      new: true,
+      setDefaultsOnInsert: true
     }, (err, doc) => {
       if (callback)
       callback(err, doc);
@@ -201,6 +203,8 @@ static aggregate(query, callback) {
 
     this.classAccess().findOneAndUpdate(this.getPKQuery(), this, {
       upsert: true,
+      new: true,
+      setDefaultsOnInsert: true
     }, (err, doc) => {
       if (callback)
       callback(err, doc);
