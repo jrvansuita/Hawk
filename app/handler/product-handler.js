@@ -1,6 +1,7 @@
 const EccosysCalls = require('../eccosys/eccosys-calls.js');
 const Product = require('../bean/product.js');
 
+
 module.exports ={
 
   get(eanOrSku, father, callback){
@@ -31,9 +32,18 @@ module.exports ={
 
   getImage(sku, callback){
     if (sku){
-      Product.get(getFatherSku(sku), (product)=>{
-        callback(product);
-      });
+      sku = getFatherSku(sku);
+      var found = productsDataCache[sku];
+
+      if (found){
+        callback(found);
+      }else{
+        Product.get(sku, (product)=>{
+          putAndControlDataCache(sku, product);
+
+          callback(product);
+        });
+      }
     }else{
       callback();
     }
@@ -143,4 +153,26 @@ function handleCallback(callback, product, selected){
 
 function getFatherSku(sku){
   return sku ? sku.split('-')[0] : sku;
+}
+
+
+var productsDataCache = [];
+
+function putAndControlDataCache(sku, product){
+  if (product){
+    product = product.toObject();
+    delete product.__v;
+    delete product._id;
+
+    productsDataCache[sku] = product;
+
+    var arr = Object.keys(productsDataCache);
+    if (arr.length > 2000){
+      arr.slice(2000, arr.length-1).forEach((i)=>{
+        delete productsDataCache[i];
+      });
+    }
+  }else{
+    productsDataCache[sku] = null;
+  }
 }

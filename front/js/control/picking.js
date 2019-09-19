@@ -195,6 +195,7 @@ $(document).ready(() => {
     var sale = $(this).data('sale').split('-')[1];
 
     var drop = new MaterialDropdown($(this), e, true);
+    drop.setMenuPosAdjust(0, -90);
     drop.addItem('/img/print.png', 'Imprimir', ()=>{
       openPrintPickingSale(sale, $('#user-logged-id').text());
     });

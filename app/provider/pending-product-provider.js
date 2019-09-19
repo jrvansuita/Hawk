@@ -2,66 +2,143 @@ const PendingHandler = require('../handler/pending-handler.js');
 const BlockHandler = require('../handler/block-handler.js');
 const EccosysCalls = require('../eccosys/eccosys-calls.js');
 
-var loadedResults = undefined;
+var productsList = undefined;
 
 module.exports = class {
 
   constructor(){
+    this.results = [];
 
+    if (!productsList){
+      productsList = [];
+    }
   }
 
   load(callback){
+    PendingHandler.load(false, (pendings)=>{
+      BlockHandler.load((blockeds)=>{
+        this.blockeds = blockeds;
+        this.pendings = pendings;
 
-    if (!loadedResults){
-      loadedResults = [];
+        this.prepareBlockeds(()=>{
+          this.preparePendings(()=>{
 
-      PendingHandler.load(false, (pendings)=>{
-        BlockHandler.load((blockeds)=>{
-          this.blockeds = blockeds;
-          this.pendings = pendings;
-
-          this.prepareBlockeds(()=>{
-
-
-            callback(loadedResults);
+            callback(this.results);
 
           });
-
-
         });
-      });
-    }else{
-      callback(loadedResults);
-    }
 
+
+      });
+    });
   }
 
+
+  preparePendings(callback){
+
+    var handler = {};
+
+    this.pendings
+    .filter((pending)=>{
+      return pending.status.toString() == '0';
+    }).forEach((pending)=>{
+
+      pending.sale.items.forEach((item)=>{
+
+        if (!handler[item.codigo]){
+          handler[item.codigo] = [];
+        }
+
+        handler[item.codigo].push(pending.number);
+      });
+    });
+
+    var skus = Object.keys(handler);
+
+
+    this._getProducts(skus, (products)=>{
+      if (products.length == 0){
+        callback();
+      }else{
+        products.forEach((product, index)=>{
+
+          var data = new DataItem(product)
+          .setData(handler[product.codigo].length)
+          .setType('pending')
+          .setObs(handler[product.codigo].toString());
+
+          this.results.push(data);
+
+          if (index == products.length-1){
+            callback();
+          }
+        });
+      }
+    });
+
+
+  }
 
   prepareBlockeds(callback){
     var skus = this.blockeds.filter(i =>{return i.reasonTag.toString() == '994'}).map(i => {return i.number});
 
-    new EccosysCalls().getSkus(skus, (products)=>{
-      products.forEach((product, index)=>{
+    this._getProducts(skus, (products)=>{
+      if (products.length == 0){
+        callback();
+      }else{
+        products.forEach((product, index)=>{
+          var block = this.blockeds.find((i)=>{
+            return i.number == product.codigo;
+          });
+
+          var data = new DataItem(product)
+          .setData(block.blockings)
+          .setType('block')
+          .setIsFather(product._Skus && product._Skus.length);
 
 
-        var block = this.blockeds.find((i)=>{
-          return i.number == product.codigo;
+          this.results.push(data);
+
+
+          if (index == products.length-1){
+            callback();
+          }
         });
-
-        var data = new DataItem(product)
-        .setData(block.blockings, block.user)
-        .setType('block')
-        .setObs('Teste');
-
-        loadedResults.push(data);
-
-
-        if (index == products.length-1){
-          callback();
-        }
-      });
+      }
     });
 
+  }
+
+
+  _getProducts(skus, callback){
+    var result = [];
+
+    for (let index = skus.length - 1; index >= 0; index--) {
+      var sku = skus[index];
+      var product = productsList[sku];
+
+      if (product){
+        result.push(product);
+        skus.splice(index, 1);
+      }
+    }
+
+    if (skus.length > 0){
+      new EccosysCalls().getSkus(skus, (products)=>{
+        if (products){
+          products.forEach((product)=>{
+            productsList[product.codigo] = product;
+          });
+
+          result = products.concat(result);
+        }
+
+        callback(result);
+      }, true);
+
+    }else{
+      callback(result)
+    }
   }
 }
 
@@ -75,12 +152,18 @@ class DataItem{
 
     this.sku = product.codigo;
     this.brand = product.Marca;
-    this.stock = product._Estoque.estoqueReal;
+    this.stock = product._Estoque.estoqueDisponivel;
+    this.reserved = product._Estoque.estoqueReal - product._Estoque.estoqueDisponivel;
     this.local = product.localizacao;
+    this.isFather = false;
   }
 
-  setData(count, user){
-    this.user = user;
+  setIsFather(isFather){
+    this.isFather = isFather;
+    return this;
+  }
+
+  setData(count){
     this.count = count;
     return this;
   }

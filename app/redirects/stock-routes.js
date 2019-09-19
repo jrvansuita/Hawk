@@ -16,6 +16,7 @@ module.exports = class ProductRoutes extends Routes{
 
     this._get('/sku-image', (req, res) => {
       ProductHandler.getImage(req.query.sku, (product)=>{
+        res.set('Cache-Control', 'public, max-age=86400'); // 1day
         res.redirect(product && product.image ? product.image : req.query.def);
       });
     });

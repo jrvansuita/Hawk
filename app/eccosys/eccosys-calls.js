@@ -150,13 +150,17 @@ module.exports = class EccosysCalls{
     }
   }
 
-  getSkus(skus, callback) {
+  getSkus(skus, callback, nullOnNotFound) {
     this.call.setPath('produtos/' + skus.join(';'))
     .get((data)=>{
       var parsed = JSON.parse(data);
 
       if (typeof parsed == 'string'){
-        throw parsed;
+        if (nullOnNotFound){
+          callback(null);
+        }else{
+          throw parsed;
+        }
       }else{
         //Se o resultado é 1
         if (!Array.isArray(parsed)){

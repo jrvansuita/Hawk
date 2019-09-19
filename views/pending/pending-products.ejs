@@ -3,6 +3,14 @@
 
 <head>
   <link rel="stylesheet" type="text/css" href="/front/css/layout/pending-product.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-dropdown.css">
+
+
+  <script type="text/javascript" src="/front/js/control/pending-products.js"></script>
+  <script type="text/javascript" src="/front/js/control/blocked/blocked-post.js"></script>
+  <script type="text/javascript" src="/front/js/libs/image-preview.js"></script>
+  <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
+  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
 </head>
 
 <script>
@@ -29,66 +37,82 @@ window.list = <%- JSON.stringify(list)%>
 
   <div class="main">
 
-    <div class="blockeds shadow">
 
-      <span class="label">Bloqueados</span>
 
-      <% list.forEach(function(each){ %>
 
-        <div class="box shadow"  data-sku="<%=each.sku%>">
-          <span class="mini-red-circle"><%=each.count%></span>
 
-          <div class="top">
+    <div class="divider">
 
-            <div class="img-holder">
-              <img class="prod-img" src="/sku-image?sku=<%=each.sku%>"/>
-            </div>
 
-            <div class="prod-info">
-              <span class="sku copiable"><%=each.sku%></span>
-              <span class="brand"><%=each.brand%></span>
 
-              <span class="title-mini">Localização</span>
-              <span class="local"><%=each.local%></span>
-            </div>
 
-            <div class="avatar">
-              <img class="circle shadow avatar-img mini-avatar" src="<%=each.user.id == 404 ? 'img/system.png' : each.user.avatar %>" data-id="<%=each.user.id%>"  title="<%=each.user.name%>"  onerror="this.src='/img/avatar.png'">
-              <span class="user-name"><%=each.user.name%></span>
+      <div class="box-group shadow">
+        <%
+        var blockeds = list.filter((i)=>{
+          return i.type == 'block';
+        });
+        %>
 
-              <div class="info-inner">
-                <span class="title-mini">Estoque</span>
-                <span class="local"><%=each.stock%></span>
-              </div>
 
+        <div class="box-header">
+          <span class="label header-title">Bloqueados</span>
+          <span class="label header-count"><%=blockeds.length%></span>
+        </div>
+
+
+        <div class="grid-flow">
+          <% blockeds.forEach(function(each){ %>
+            <%- include('../pending/pending-product-box', {data: each});  %>
+            <%});%>
+          </div>
+        </div>
+
+
+
+
+      </div>
+
+
+
+
+
+
+      <div class="divider">
+
+
+
+
+        <div class="box-group shadow">
+          <%
+          var pendings = list.filter((i)=>{
+            return i.type == 'pending';
+          });
+          %>
+
+          <div class="box-header">
+            <span class="label header-title">Pendentes</span>
+            <span class="label header-count"><%=pendings.length%></span>
+          </div>
+
+
+          <div class="grid-flow">
+            <% pendings.forEach(function(each){ %>
+              <%- include('../pending/pending-product-box', {data: each});  %>
+              <%});%>
             </div>
           </div>
 
-          <div class="bottom">
 
-
-
-
-          </div>
 
 
         </div>
 
-        <%});%>
+
+
 
 
       </div>
 
 
-      <div class="pendings shadow">
-
-      </div>
-
-    </div>
-
-
-
-
-
-  </body>
-  </html>
+    </body>
+    </html>

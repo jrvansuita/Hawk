@@ -1,0 +1,60 @@
+<div class="box shadow"  data-sku="<%=data.sku%>">
+
+  <div class="img-holder">
+    <span class="mini-red-circle"><%=data.count%></span>
+    <img class="prod-img" data-sku="<%=data.sku%>" src="/sku-image?sku=<%=data.sku%>"  onerror="this.src='/img/product-placeholder.png'"/>
+  </div>
+
+
+  <div class="content-holder">
+
+    <div class="content-row">
+
+      <div class="left-column">
+        <span class="sku copiable"><%=data.sku%></span>
+        <span class="brand"><%=data.brand.trim()%></span>
+      </div>
+
+      <div>
+
+        <%
+        var arr = data.obs ? data.obs.split(',') : [];
+        var str = arr.length > 1 ? arr[0] + ' +' + (arr.length-1) : arr[0];
+        %>
+        <span class="sales" title="<%=data.obs ? data.obs.replace(',', ', ') : ''%>"><%=str%></span>
+      </div>
+
+      <div>
+
+        <div class="icon-dots" data-sku="<%=data.sku%>" data-type="<%=data.type%>" data-father="<%=data.isFather%>">
+          <img src="img/dots.png" class="dots-glyph" />
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="content-row">
+      <div class="left-column">
+        <span class="title-mini"><%=data.isFather ? '' : 'Localização'%></span>
+        <span class="local"><%=data.isFather ? 'Todas as Skus' :  data.local.trim() || 'Não definido'%></span>
+      </div>
+
+
+      <div>
+      </div>
+
+
+      <div>
+        <div class="info-inner">
+          <%if (!data.isFather){%>
+            <span class="title-mini">Estoque</span>
+            <span class="local"><%=data.stock%>/<%=data.reserved%></span>
+            <%}%>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
