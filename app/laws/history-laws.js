@@ -1,5 +1,5 @@
 const History = require('../bean/history.js');
-var UsersProvider = require('../provider/UsersProvider.js');
+var UsersProvider = require('../provider/user-provider.js');
 
 module.exports = {
 

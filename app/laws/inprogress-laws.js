@@ -1,4 +1,4 @@
-const UsersProvider = require('../provider/UsersProvider.js');
+const UsersProvider = require('../provider/user-provider.js');
 const Day = require('../bean/day.js');
 const HistoryStorer = require('../history/history-storer.js');
 const Err = require('../error/error.js');

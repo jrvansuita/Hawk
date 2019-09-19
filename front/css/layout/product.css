@@ -36,8 +36,11 @@
 
 
 .image-holder{
+  padding: 10px;
+  display: flex;
   text-align: center;
-  margin: 10px;
+  margin: auto;
+  width: fit-content;
 }
 
 .top-image-holder{
@@ -404,4 +407,13 @@ table{
 
 .md-dropdown{
   margin-left: -120px;
+}
+
+
+
+.diag-alert{
+  width: 45px;
+  height: 45px;
+  display: none;
+  cursor: pointer;
 }

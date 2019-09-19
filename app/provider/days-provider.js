@@ -1,7 +1,7 @@
 const Day = require('../bean/day.js');
-var UsersProvider = require('../provider/UsersProvider.js');
+var UsersProvider = require('../provider/user-provider.js');
 
-module.exports = class DaysChartProvider {
+module.exports = class  {
 
   constructor(type, callback) {
     this.data = {};
@@ -18,7 +18,6 @@ module.exports = class DaysChartProvider {
     this.groupBy = 'date';
     this.get(from, to, userId);
   }
-
 
   get(from, to, userId) {
     var _self = this;

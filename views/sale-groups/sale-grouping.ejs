@@ -1,5 +1,5 @@
 <script>
-window.groups = <%- JSON.stringify(groups || null) %>
+  window.groups = <%- JSON.stringify(groups || null) %>
 </script>
 
 
@@ -10,20 +10,27 @@ window.groups = <%- JSON.stringify(groups || null) %>
 
     <%if (groups.sales){%>
       <%- include('../sale-groups/group-item', {group: groups.sales, title : 'Totais' });  %>
-    <%}%>
+      <%}%>
 
-    <%if (groups.transps){%>
-      <%- include('../sale-groups/group-item', {group: groups.transps, title : 'Transportadoras' });  %>
-    <%}%>
+      <%if (groups.transps){%>
+        <%- include('../sale-groups/group-item', {group: groups.transps, title : 'Transportadoras' });  %>
+        <%}%>
 
-    <%if (groups.ufs){%>
-      <%- include('../sale-groups/group-item', {group: groups.ufs, title : 'Estados', showPapers:true});  %>
-    <%}%>
+        <%if (groups.ufs){%>
+          <%- include('../sale-groups/group-item', {group: groups.ufs, title : 'Estados', showPapers:true});  %>
+          <%}%>
 
-    <%if (groups.dates){%>
-      <%- include('../sale-groups/group-item', {group: Util.orderDatesObject(groups.dates), title : 'Datas', dates: true, showPapers:true});  %>
-    <%}%>
+          <%if (groups.dates){%>
+            <%- include('../sale-groups/group-item', {group: Util.orderDatesObject(groups.dates), title : 'Datas', dates: true, showPapers:true});  %>
+            <%}%>
 
 
-  </div>
-<%}%>
+            <div class="group-single-holder this-month shadow">
+              <label class="group-single-title">Este Mês</label>
+              <canvas id="packing-chart-month" height="120px"></canvas>
+            </div>
+
+          </div>
+
+
+          <%}%>

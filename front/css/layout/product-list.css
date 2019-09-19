@@ -253,3 +253,12 @@ img.dots-glyph {
 .md-dropdown{
   right: 140px;
 }
+
+
+.diag-alert{
+  width: 25px;
+  height: 25px;
+  margin-bottom: -5px;
+  display: none;
+  cursor: pointer;
+}

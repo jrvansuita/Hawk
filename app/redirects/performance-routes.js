@@ -1,5 +1,5 @@
 const Routes = require('../redirects/controller/routes.js');
-const UsersProvider = require('../provider/UsersProvider.js');
+const UsersProvider = require('../provider/user-provider.js');
 
 module.exports = class PerformanceRoutes extends Routes{
 

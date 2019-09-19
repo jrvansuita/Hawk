@@ -47,7 +47,7 @@ const Routes = require('./app/redirects/controller/routes.js');
 
 //Keep a user variable for session in all ejs
 //Redirect if no user is logged-in
-const UsersProvider = require('./app/provider/UsersProvider.js');
+const UsersProvider = require('./app/provider/user-provider.js');
 
 app.use(function(req, res, next) {
   res.locals.loggedUser = {};

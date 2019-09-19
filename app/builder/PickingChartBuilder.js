@@ -1,4 +1,4 @@
-var DaysChartProvider = require('../provider/DaysChartProvider.js');
+var Provider = require('../provider/days-provider.js');
 var Chart = require('../bean/chart.js');
 var Day = require('../bean/day.js');
 
@@ -107,5 +107,5 @@ function buildChart(from, to, title) {
     callNext();
   };
 
-  new DaysChartProvider('picking', callBuilder).get(from, to);
+  new Provider('picking', callBuilder).get(from, to);
 }

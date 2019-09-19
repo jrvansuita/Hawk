@@ -12,6 +12,16 @@ $(document).ready(()=>{
 
   $('.main-menu-dots').click(function(e){
     var drop = new MaterialDropdown($(this), e);
+    drop.addItem('/img/search.png', 'Pesquisar', function(){
+
+      if ($('#search').is(':visible')){
+        $('#search').hide();
+      }else{
+        $('#search').fadeIn();
+        $('#search').focus()
+      }
+    });
+
     drop.addItem('/img/restart.png', 'Atualizar Problemas', function(){
       showLoading();
 
@@ -19,6 +29,7 @@ $(document).ready(()=>{
         console.log('rodou');
       });
     });
+
     drop.show();
   });
 
@@ -41,6 +52,25 @@ $(document).ready(()=>{
     _get('/product-fixes', {type : $(this).data('type')}  , (all)=> {
       buildIndRows(all);
     });
+  });
+
+
+
+  const urlParams = new URLSearchParams(window.location.search);
+  var skuSelected = urlParams.get('sku');
+
+  if (skuSelected){
+    showSkuFixesDialog(skuSelected);
+  }
+
+  $('#search').on("keyup", function(e) {
+    if (e.which == 13){
+      showSkuFixesDialog($(this).val());
+    }
+  });
+
+  $('#search').focusin(()=>{
+    $('#search').select();
   });
 
 });
@@ -91,7 +121,7 @@ function buildIndRows(rows){
 
       drop.addItem('/img/restart.png', 'Atualizar Marca', function(){
         showLoading("Carregando produtos...");
-       var type = $('.ind-item.active').data('type');
+        var type = $('.ind-item.active').data('type');
         _post('/run-product-diagnostics', {refresh:true, brand: brand, type: type}, ()=>{
           console.log('rodou');
         });

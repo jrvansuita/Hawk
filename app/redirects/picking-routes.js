@@ -7,7 +7,7 @@ const PendingLaws = require('../laws/pending-laws.js');
 const DoneLaws = require('../laws/done-laws.js');
 const PickingHandler = require('../handler/picking-handler.js');
 const PickingSalePrint = require('../print/picking-sale-print.js');
-const UsersProvider = require('../provider/UsersProvider.js');
+const UsersProvider = require('../provider/user-provider.js');
 
 module.exports = class PickingRoutes extends Routes{
 

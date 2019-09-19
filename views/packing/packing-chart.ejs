@@ -5,7 +5,16 @@
 var isByDate = page.includes('by-date');
 var subtitlesArr = Util.getSubtitles(charts);
 
+
+
 %>
+
+<script>
+
+window.charts = <%- Util.circylarStringify(charts) %>
+
+</script>
+
 
 <head>
   <link rel="stylesheet" type="text/css" href="/front/css/layout/charts.css">

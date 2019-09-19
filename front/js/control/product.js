@@ -28,6 +28,19 @@ $(document).ready(() => {
       window.open('/product-print-locals?sku=' + lastSelected , '_blank');
     }
   });
+
+
+  _get('/product-fixes', {sku : product.codigo}  , (all)=> { 
+    console.log(all);
+    if (all.length > 0){
+      $('.diag-alert').fadeIn();
+      $('.diag-alert').click(()=>{
+          window.open('/diagnostics?sku=' + product.codigo, '_blank');
+      });
+    }
+  });
+
+
 });
 
 

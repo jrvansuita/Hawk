@@ -96,7 +96,6 @@ class StockChart {
       stockChartObject.destroy();
     }
 
-
     var ctx = document.getElementById(this.chartId).getContext('2d');
     stockChartObject = new Chart(ctx, {
       type: 'line',
@@ -149,6 +148,7 @@ class StockChart {
         },
         tooltips:{
           cornerRadius:3,
+          displayColors:false,
           backgroundColor: '#00796b'
         },
         elements: {

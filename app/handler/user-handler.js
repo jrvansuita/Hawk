@@ -1,6 +1,6 @@
 const User = require('../bean/user.js');
 const Err = require('../error/error.js');
-const UsersProvider = require('../provider/UsersProvider.js');
+const UsersProvider = require('../provider/user-provider.js');
 const ImgurSaver = require('../imgur/save-image.js');
 
 module.exports = class UserHandler {

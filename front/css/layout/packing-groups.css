@@ -1,18 +1,18 @@
 .all-groups-holder{
-  display: -webkit-inline-box;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: fit-content;
   position: relative;
+  grid-gap: 15px;
+  margin-top: 20px;
   max-width: 100%;
   text-align: -webkit-auto;
   padding-bottom: 150px;
 }
 
 .group-single-holder{
-  display: inline-table;
   padding: 20px 15px;
-  margin-top: 20px;
-  width: fit-content;
-  max-width: 500px;
-  margin-right: 20px;
+  width: auto;
   min-height: 155px;
 }
 

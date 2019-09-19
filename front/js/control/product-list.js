@@ -171,8 +171,19 @@ function createTitle(product) {
     );
   });
 
+  var diagIcon = $('<img>').addClass('diag-alert').attr('src','img/alert.png');
 
-  var div = $('<div>').addClass('title-holder').append(sku, name);
+  _get('/product-fixes', {sku : product.sku}  , (all)=> {
+    if (all.length > 0){
+      diagIcon.fadeIn();
+      diagIcon.click(()=>{
+          window.open('/diagnostics?sku=' + product.sku,'_blank');
+      });
+    }
+  });
+
+
+  var div = $('<div>').addClass('title-holder').append(sku, name, diagIcon);
 
   return div;
 }

@@ -1,5 +1,5 @@
 const Day = require('../bean/day.js');
-var UsersProvider = require('../provider/UsersProvider.js');
+var UsersProvider = require('../provider/user-provider.js');
 var RecordYear = require('../bean/record-year.js');
 const User = require('../bean/user.js');
 

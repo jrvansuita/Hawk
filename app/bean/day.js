@@ -80,4 +80,53 @@ module.exports = class Day extends DataAccess {
       callback(err, res);
     });
   }
+
+
+  static byDay(type, from, to, callback){
+    Day.aggregate([{
+      $match: {
+        type: type,
+        'date': {
+          $gte: from.dateBegin(),
+          $lte: to.dateEnd()
+        }
+      }
+    },
+    {
+      $group: {
+        _id: {
+          year: {
+            $year: "$date"
+          },
+          month: {
+            $month: "$date"
+          },
+          day: {
+            $dayOfMonth: "$date"
+          },
+        },
+        sum_count: {
+          $sum: "$count"
+        },
+        sum_total: {
+          $sum: "$total"
+        },
+        sum_points: {
+          $sum: "$points"
+        }
+      }
+    },
+    {
+    /* sort descending (latest subscriptions first) */
+    $sort: {
+      '_id.year': 1,
+      '_id.month': 1,
+      '_id.day': 1
+    }
+  }],
+    function(err, res) {
+      if (callback)
+      callback(err, res);
+    });
+  }
 };

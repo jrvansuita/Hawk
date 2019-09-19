@@ -1,7 +1,7 @@
 const Controller = require('../jobs/controller/controller.js');
 
 var EccosysCalls = require('../eccosys/eccosys-calls.js');
-var UsersProvider = require('../provider/UsersProvider.js');
+var UsersProvider = require('../provider/user-provider.js');
 var Sale = require('../bean/sale.js');
 var User = require('../bean/user.js');
 const History = require('../bean/history.js');

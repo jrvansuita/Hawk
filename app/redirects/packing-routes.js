@@ -3,6 +3,8 @@ const PackingHandler = require('../handler/packing-handler.js');
 const PackingProvider = require('../provider/packing-provider.js');
 const Pack = require('../bean/pack.js');
 const PackagesHandler = require('../handler/packages-handler.js');
+const PackingChartBuilder = require('../builder/packing-chart-builder.js');
+const PackingDaysProvider = require('../provider/packing-days-provider.js');
 
 module.exports = class PackingRoutes extends Routes{
 
@@ -36,12 +38,25 @@ module.exports = class PackingRoutes extends Routes{
     });
 
 
+    this._get('/packing-days', (req, res) => {
+      var from = Dat.query(req.query.from, Dat.firstDayOfMonth());
+      var to = Dat.query(req.query.to, Dat.lastDayOfMonth());
+
+      new PackingDaysProvider().get(from,  to, (data)=>{
+          res.status(200).send(data);
+      });
+    });
+
+
+
+
 
     /*** End Packing Screen ****/
 
 
     this._page('/packing/overview', (req, res) => {
-      require('../builder/InvoiceChartBuilder.js').buildOverview(res.locals.loggedUser.full, (charts)=> {
+      PackingChartBuilder.buildOverview(res.locals.loggedUser.full, (charts)=> {
+
         res.render('packing/packing-chart', {
           charts: charts,
           page: req.originalUrl,
@@ -54,7 +69,7 @@ module.exports = class PackingRoutes extends Routes{
       var from = Dat.query(req.query.from, Dat.firstDayOfMonth());
       var to = Dat.query(req.query.to, Dat.lastDayOfMonth());
 
-      require('../builder/InvoiceChartBuilder.js').buildByDate(from, to, res.locals.loggedUser.full, function(charts) {
+      PackingChartBuilder.buildByDate(from, to, res.locals.loggedUser.full, function(charts) {
         res.render('packing/packing-chart', {
           charts: charts,
           page: req.originalUrl,

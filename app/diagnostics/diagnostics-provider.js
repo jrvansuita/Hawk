@@ -16,7 +16,7 @@ module.exports = class DiagnosticsProvider{
 
 
       if (!grouped[skuFather]){
-      var isChild = item.sku.includes('-');
+        var isChild = item.sku.includes('-');
 
         grouped[skuFather] = {
           sku : skuFather,
@@ -46,7 +46,7 @@ module.exports = class DiagnosticsProvider{
     data.forEach((item)=>{
 
       if (!grouped[item.sku]){
-         grouped[item.sku] = {sku: item.sku, fixes: [item.type]};
+        grouped[item.sku] = {sku: item.sku, fixes: [item.type]};
       }else{
         grouped[item.sku].fixes.push(item.type);
       }
@@ -64,9 +64,20 @@ module.exports = class DiagnosticsProvider{
 
   }
 
+
+  findBySku(sku, callback){
+    Fix.findBySku(sku, (err, data)=>{
+      callback(data);
+    });
+  }
+
   sums(callback){
     Fix.sums((err, res)=>{
       callback(res);
     });
   }
+
+
+
+
 }

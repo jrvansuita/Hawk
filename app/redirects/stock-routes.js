@@ -83,9 +83,16 @@ module.exports = class ProductRoutes extends Routes{
     });
 
     this._get('/product-fixes', (req, res) => {
-      new DiagnosticsProvider().loadByType(req.query.type, (all)=>{
-        this._resp().sucess(res, all);
-      });
+      if (req.query.type){
+        new DiagnosticsProvider().loadByType(req.query.type, (all)=>{
+          this._resp().sucess(res, all);
+        });
+      }else{
+        new DiagnosticsProvider().findBySku(req.query.sku, (all)=>{
+          res.set('Cache-Control', 'public, max-age=86400'); // 1day
+          this._resp().sucess(res, all);
+        });
+      }
     });
 
     this._get('/fixes-dialog', (req, res) => {
@@ -93,6 +100,8 @@ module.exports = class ProductRoutes extends Routes{
         res.render('product/diag/diagnostics-dialog', {data : all, product: product});
       });
     });
+
+
 
 
 

@@ -2,7 +2,7 @@ const BlockLaws = require('../laws/block-laws.js');
 const PendingLaws = require('../laws/pending-laws.js');
 const HistoryStorer = require('../history/history-storer.js');
 const PickingLaws = require('../laws/picking-laws.js');
-const UsersProvider = require('../provider/UsersProvider.js');
+const UsersProvider = require('../provider/user-provider.js');
 const BlockRule = require('../bean/block-rule.js');
 
 module.exports = {

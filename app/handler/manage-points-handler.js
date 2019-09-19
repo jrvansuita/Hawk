@@ -1,6 +1,6 @@
 const History = require('../bean/history.js');
 const Day = require('../bean/day.js');
-const UsersProvider = require('../provider/UsersProvider.js');
+const UsersProvider = require('../provider/user-provider.js');
 
 module.exports={
 
