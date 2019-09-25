@@ -34,8 +34,14 @@ $(document).ready(() => {
 
   $('.upcoming-dots').click(function(e){
     var drop = new MaterialDropdown($(this), e);
-    drop.addItem('/img/redownload.png', 'Recarregar Picking', function(){
+    drop.addItem('/img/restart.png', 'Recarregar', function(){
       _post("/run-jobs", {ref: 'picking'}, (data) => {
+        window.location.reload();
+      });
+    });
+
+    drop.addItem('/img/back.png', 'Separar Novamente', function(){
+      _post("/run-jobs", {ref: 'picking', ignoreDone:true}, (data) => {
         window.location.reload();
       });
     });

@@ -7,10 +7,9 @@ $(document).ready(()=>{
       new PackingChart('packing-chart-month', data, loggedUser.full).load();
     });
 
-    /*_get('/packing-days', {from: Dat.firstDayOfYear().getTime(), to: Dat.today().getTime()}, (data)=>{
-      console.log(data);
-      new PackingChart('packing-chart-year', data).load();
-    });*/
+    _get('/packing-days', {from: Dat.firstDayOfYear().getTime(), to: Dat.today().getTime()}, (data)=>{
+      new PackingChart('packing-chart-year', data, loggedUser.full).load();
+    });
 
 
   }

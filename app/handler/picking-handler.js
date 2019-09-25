@@ -15,12 +15,13 @@ const AutoBlockPicking = require('../auto/auto-block-picking.js');
 var loadingList = false;
 var loadingId = 0;
 var openSalesCount = 0;
+var ignoreDone = false;
 
 module.exports = {
 
   init(onFinished) {
     if (!loadingList && PickingLaws.isFullEmpty() && !BlockHandler.hasBlockSales()) {
-     loadingList = true;
+      loadingList = true;
 
       PendingLaws.load(true, ()=>{
         BlockHandler.load(()=>{
@@ -33,8 +34,10 @@ module.exports = {
     }
   },
 
-  reloadPickingList(userId, callback){
-    if (!loadingList){ 
+  reloadPickingList(userId, ignore, callback){
+    if (!loadingList){
+      ignoreDone = ignore;
+
       PickingLaws.clear(userId);
       this.init(callback);
     }else{
@@ -125,22 +128,19 @@ module.exports = {
     //Remove Pendings from Picking List
     PickingLaws.assert(PendingLaws.getSaleNumbers());
 
-    //Load Done List from Picking List
-    DoneLaws.handle(PickingLaws.getFullList());
-
-    //If has no picking sale, set the done list to picking again
-  //  if (PickingLaws.getFullList().length == 0){
-    //  PickingLaws.set(DoneLaws.getList());
-    //  DoneLaws.clear();
-  //  }else{
+    if (ignoreDone){
+      DoneLaws.clear();
+      ignoreDone = false;
+    }else{
+      //Load Done List from Picking List
+      DoneLaws.handle(PickingLaws.getFullList());
 
       //Remove Done List from Picking List
       PickingLaws.assert(DoneLaws.getSaleNumbers());
 
       //Remove In Progress Sales From Done List
       DoneLaws.assert(InprogressLaws.getSaleNumbers());
-  //  }
-
+    }
   },
 
   restart(userId, doneSale, callback){

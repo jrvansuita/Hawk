@@ -5,7 +5,7 @@
 
 <link rel="stylesheet" type="text/css" href="/front/css/layout/packing-groups.css">
 
-<%if (groups){%>
+<%if (Object.keys(groups).length > 0){%>
   <div class="all-groups-holder">
 
     <%if (groups.sales){%>
@@ -28,6 +28,11 @@
             <div class="group-single-holder this-month shadow">
               <label class="group-single-title">Este Mês</label>
               <canvas id="packing-chart-month" height="120px"></canvas>
+            </div>
+
+            <div class="group-single-holder this-year shadow">
+              <label class="group-single-title">Este Ano</label>
+              <canvas id="packing-chart-year" height="120px"></canvas>
             </div>
 
           </div>

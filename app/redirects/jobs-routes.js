@@ -24,6 +24,6 @@ function runJobs(req, callback){
       callback();
     }
   }else if (req.body.ref.includes('picking')){
-    PickingHandler.reloadPickingList(req.session.loggedUserID, callback);
+    PickingHandler.reloadPickingList(req.session.loggedUserID, req.body.ignoreDone, callback);
   }
 }
