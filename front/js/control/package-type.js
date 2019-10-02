@@ -35,5 +35,5 @@ function checkform(){
   c = checkMaterialInput($('#height')) & c;
   c = checkMaterialInput($('#length')) & c;
 
-  return c;
+  return c;   
 }
