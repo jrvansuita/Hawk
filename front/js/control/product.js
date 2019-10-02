@@ -30,12 +30,12 @@ $(document).ready(() => {
   });
 
 
-  _get('/product-fixes', {sku : product.codigo}  , (all)=> { 
+  _get('/product-fixes', {sku : product.codigo}  , (all)=> {
     console.log(all);
     if (all.length > 0){
       $('.diag-alert').fadeIn();
       $('.diag-alert').click(()=>{
-          window.open('/diagnostics?sku=' + product.codigo, '_blank');
+        window.open('/diagnostics?sku=' + product.codigo, '_blank');
       });
     }
   });
@@ -311,7 +311,11 @@ function buildTextCol(val){
 }
 
 function buildImgCol(path, title, addClass){
-  return buildCol($('<img>').addClass('icon').attr('src',path).attr('title',title)).css('text-align', 'center');
+  var $img = $('<img>').addClass('icon').attr('src',path).attr('title',title);
+
+
+
+  return buildCol($img).css('text-align', 'center');
 }
 
 

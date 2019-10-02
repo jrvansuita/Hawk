@@ -10,7 +10,12 @@ module.exports = class JobsRoutes extends Routes{
         this._resp().sucess(res, result);
       });
     });
+
+
+
   }
+
+
 };
 
 function runJobs(req, callback){

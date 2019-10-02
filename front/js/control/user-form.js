@@ -3,8 +3,13 @@ var userSelector;
 
 $(document).ready(() => {
 
-  userSelector = new UserSelector($('#user-search'));
-  userSelector.load();
+  userSelector = new ComboBox($('#user-search'), '/profiles')
+  .setAutoShowOptions()
+  .setOnItemBuild((user, index)=>{
+    return {text : user.name, img : user.avatar};
+  })
+  .load();
+
 
   var name;
 
@@ -17,11 +22,7 @@ $(document).ready(() => {
     $('#user-search').val(name);
   });
 
-  userSelector.setOnSelect((name)=>{
-    console.log(name);
-
-    var user = userSelector.findUserByName(name);
-    console.log(user);
+  userSelector.setOnItemSelect((item, user)=>{
     window.location=
     '/user-form?userId='+ user.id;
   });
@@ -75,7 +76,12 @@ $(document).ready(() => {
     e.preventDefault();
   });
 
-  loadSectors();
+
+  new ComboBox($('#title'), ["Admnistração", "Atendimento", "Conferência", "Reposição", "Pendência", "Devolução", "Picking", "Packing"])
+  .setAutoShowOptions()
+  .load();
+
+
   loadSetts();
 
 
@@ -151,18 +157,6 @@ function showAvatarCropper(){
   }
 
 
-  function loadSectors(){
-    var options = {
-      data: ["Admnistração", "Atendimento", "Conferência", "Reposição", "Pendência", "Devolução", "Picking", "Packing"],
-      list: {
-        match: {
-          enabled: true
-        }
-      }
-    };
-
-    $("#title").easyAutocomplete(options);
-  }
 
 
   function clearForm(){
@@ -192,8 +186,12 @@ function showAvatarCropper(){
 
 
   function testUniqueAccess(){
+    var access = $('#access').val().trim();
 
-    var user = userSelector.findUserByAccess($('#access').val());
+    var user = userSelector.getData().find((each)=>{
+      var user = each.data;
+      return user.access && (user.access.trim() == access.trim())
+    });
 
     if (user && (user.id != $('#editing').val())){
       $('#access').val('Cartão de acesso já utilizado');

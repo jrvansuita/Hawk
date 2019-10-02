@@ -3,47 +3,51 @@ var userSelector;
 
 $(function() {
 
-  userSelector = new UserSelector($('#user'));
-  userSelector.load(()=>{
+  userSelector = new ComboBox($('#user'), '/profiles')
+  .setAutoShowOptions()
+  .setOnItemBuild((user, index)=>{
+    return {text : user.name, img : user.avatar};
+  })
+  .setOnItemSelect((item, user)=>{
+    $('#profile-img').attr('src', user.avatar);
+    $('#profile-name').text(user.name);
+  })
+  .load(()=>{
     onInit();
   });
 
-  userSelector.setOnSelect((name)=>{
-    var user = userSelector.findUserByName(name);
-    $('#profile-img').attr('src', user.avatar);
-    $('#profile-name').text(user.name);
-  });
+
 });
 
 function onInit(){
 
-    var typesList = {'Packing': null, 'Picking' : null};
+  new ComboBox($('#type'), ["Packing", "Picking"])
+  .setAutoShowOptions()
+  .load();
 
-    var ins = $('#type').autocomplete({
-      data: typesList
-    });
 
-    $('.store-button').click(()=>{
-      var c = checkField($('#user'));
-      c = checkField($('#obs')) & c;
-      c = checkField($('#val')) & c;
-      c = checkValIsInList($('#type'), typesList) & c;
 
-      if (c){
-        var user = userSelector.getSelectedUser();
+  $('.store-button').click(()=>{
+    var c = checkField($('#user'));
+    c = checkField($('#obs')) & c;
+    c = checkField($('#val')) & c;
+    c = checkField($('#type')) & c;
 
-        var data = {
-          userId : user.id,
-          points : $('#val').val(),
-          obs : $('#obs').val(),
-          type : $('#type').val()
-        };
+    if (c){
+      var user = userSelector.getSelectedObject();
 
-        _post('/points',{data:data}, (e)=>{
-          window.location.href='/history';
-        });
-      }
-    });
+      var data = {
+        userId : user.id,
+        points : $('#val').val(),
+        obs : $('#obs').val(),
+        type : $('#type').val()
+      };
+
+      _post('/points',{data:data}, (e)=>{
+        window.location.href='/history';
+      });
+    }
+  });
 }
 
 

@@ -27,6 +27,7 @@ app.use(cookieSession({
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
+
 var staticOptions = {};
 
 if (process.env.NODE_ENV){
@@ -77,6 +78,7 @@ app.get(['/'], (req, res)=>{
 });
 
 var routes = [];
+routes.push('general-routes.js');
 routes.push('login-routes.js');
 routes.push('jobs-routes.js');
 routes.push('packing-routes.js');
@@ -87,6 +89,7 @@ routes.push('history-routes.js');
 routes.push('stock-routes.js');
 routes.push('user-routes.js');
 routes.push('settings-routes.js');
+routes.push('mock-routes.js');
 
 // -- Run Routes -- //
 routes.forEach((r)=>{

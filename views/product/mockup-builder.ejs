@@ -1,0 +1,167 @@
+<html>
+<%  include ../menus/main-menu %>
+
+<head>
+  <script>
+  window.selected = <%- JSON.stringify(selected || null) %>
+  </script>
+
+
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/mockup.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/nano.min.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-checkbox.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
+
+
+  <script type="text/javascript" src="/front/js/control/mockup-builder.js"></script>
+  <script type="text/javascript" src="/front/js/libs/pickr.min.js"></script>
+  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+
+
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/combobox.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/jquery-ui.css">
+  <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
+  <script type="text/javascript" src="/front/js/libs/jquery-ui.min.js"></script>
+
+  <script type="text/javascript" src="front/js/libs/product-image-loader.js"></script>
+</head>
+
+<body>
+  <div class="main-content">
+    <div class="panels">
+      <div class="left-panel shadow">
+
+        <div class="settings-box">
+
+          <span class="sub-title">Preço</span>
+          <div class="material-input-holder">
+
+            <input type="text" id="font" maxlength="100"
+            autocomplete="off" value="<%= selected.fontName%>"
+            title="Selecione a fonte com base no Google Fonts" required/>
+
+            <span class="bar"></span>
+            <label>Fonte</label>
+          </div>
+
+
+          <a class="info-font" href="https://fonts.google.com" target="_blank"><img src="/img/info.png" /> <label>https://fonts.google.com</label></a>
+
+
+
+          <div class="inline-holder cross-line">
+            <label class="sub-label">Cor</label>
+            <input class="font-color" />
+            <label class="sub-label">Sombra</label>
+            <input class="font-shadow-color" />
+          </div>
+
+          <div class="material-input-holder msg-holder">
+
+            <input type="text" id="msg" maxlength="200"
+            autocomplete="off" value="<%= selected.msg%>"
+            title="Por Apenas, ou Por Somente" required/>
+
+            <span class="bar"></span>
+            <label>Mensagem</label>
+          </div>
+
+          <a class="info-font"><img src="/img/info.png" /> <label>Variáveis: {preco}, {preco-de}, {desconto}.</label></a>
+
+          <span class="sub-title">Desconto</span>
+
+
+
+          <div class="material-input-holder">
+
+            <input type="text" id="font-discount" maxlength="100"
+            autocomplete="off" value="<%= selected.fontNameDiscount%>"
+            title="Selecione a fonte com base no Google Fonts" required/>
+
+            <label class="pure-material-checkbox" >
+              <input type="checkbox" id="discount-active" name="discount-active" <%=selected.showDiscount ? 'checked' : ''%>/>
+              <span class="sub-label">Mostrar</span>
+            </label>
+
+            <span class="bar"></span>
+            <label>Fonte</label>
+          </div>
+
+          <div class="inline-holder ">
+            <label class="sub-label">Cor</label>
+            <input class="discount-font-color" />
+            <label class="sub-label">Sombra</label>
+            <input class="discount-font-shadow-color" />
+          </div>
+
+
+          <label class="middle-title">Fundo</label>
+
+          <div class="inline-holder cross-line">
+            <label class="sub-label">Cor</label>
+            <input class="discount-background-color" />
+
+
+            <label class="sub-label">Sombra</label>
+            <input class="discount-background-shadow-color" />
+
+          </div>
+
+          <span class="sub-title">Tamanho</span>
+
+
+          <div class="inline-holder">
+            <label class="sub-label">Largura</label>
+            <input id="width"  class="number-input simple-material-input" type="text" placeholder="0" onkeypress="return Num.isNumberKey(event);" maxlength="4" value="<%=selected.width%>">
+          </div>
+
+          <div class="inline-holder">
+            <label class="sub-label">Altura</label>
+            <input id="height" class="number-input simple-material-input" type="text" placeholder="0" onkeypress="return Num.isNumberKey(event);" maxlength="4"  value="<%=selected.height%>">
+          </div>
+
+
+
+          <span class="sub-title"><img class="img-edit" src="img/img-edit.png"/> Criativo</span>
+
+          <input id="mock-input-file" type="file" >
+
+
+          <div class="mock-art-holder cross-line">
+            <img class="mock-img-select" src="<%=selected.imgUrl%>"/>
+
+            <a class="info-font"><img src="/img/info.png" /> <label class="size-hint">1200x230px</label></a>
+          </div>
+
+
+
+          <div class="inline-holder">
+            <label class="button save-button shadow">Salvar</label>
+            <label class="button delete-button shadow">Excluir</label>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="main-panel shadow" >
+
+        <span class="sub-title">
+          <input id="search-sku"  class="simple-material-input" type="text" placeholder="Código do Produto"/>
+          Previsão
+        </span>
+
+
+        <img class="mock-preview" >
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

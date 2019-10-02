@@ -1,10 +1,13 @@
-
 var userSelector;
 
 $(document).ready(()=>{
 
-  userSelector = new UserSelector($('#user-search'));
-  userSelector.load(()=>{
+  userSelector = new ComboBox($('#user-search'), '/profiles')
+  .setAutoShowOptions()
+  .setOnItemBuild((user, index)=>{
+    return {text : user.name, img : user.avatar};
+  })
+  .load(()=>{
     onInit();
   });
 });
@@ -60,8 +63,8 @@ function getQuery(){
   query.message = $('#message-search').val();
   query.tag = $('#tag-search').val();
 
-  if (userSelector.hasSelectedUser()){
-    var user = userSelector.getSelectedUser();
+  var user = userSelector.getSelectedObject();
+  if (user){
     query.userId = user.id;
   }
 

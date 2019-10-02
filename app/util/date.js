@@ -2,6 +2,9 @@
 
 var Dat = {
 
+
+  
+
   format(date) {
     var formated = fmt(date);
     return formated.day + '/' + formated.month + '/' + formated.year.slice(2, 4);

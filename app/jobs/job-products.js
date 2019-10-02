@@ -31,6 +31,9 @@ module.exports = class JobProducts extends Controller{
               var url = FeedXml.val(item, "link");
               var image = FeedXml.val(item, "image");
               var price = FeedXml.val(item, "price");
+              var fromPrice = FeedXml.val(item, "fromPrice");
+
+              var discount = FeedXml.val(item, "discount");
 
               var category = FeedXml.val(item, "department");
               var gender = Str.capitalize(FeedXml.val(item, "gender")).trim();
@@ -47,8 +50,9 @@ module.exports = class JobProducts extends Controller{
               var associates = FeedXml.val(item, "associates");
 
               var product = new Product(sku, name, brand, url,
-                image, price, category,
-                gender, color, quantity,
+                image, 
+                price, fromPrice, discount,
+                category, gender, color, quantity,
                 age, year, season, manufacturer,
                 visible, associates);
 

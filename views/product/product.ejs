@@ -36,7 +36,7 @@
 
         <div class="top-image-holder">
           <%if (product.codigo){%>
-            <a href="<%=product.img ? product.img.url : ''%>" target="_blank">
+            <a href="<%=product.img ? product.img.url : '\john-travolta'%>" target="_blank">
               <label id="top-sku" class="top-label"><%=product.codigo%></label>
               <label id="top-product-name" class="top-label"><%=Str.short(Util.getProductName(product.nome), 42)%></label>
             </a>
@@ -84,7 +84,7 @@
                     <td>
                       <div class="attribute-holder">
                         <label class="attribute-name">Preço</label>
-                        <label class="attribute-value"><%=Num.money(product.img ? product.img.sellPrice: 0)%></label>
+                        <label class="attribute-value"><%=Num.money(product.img ? product.img.price: 0)%></label>
                       </div>
                     </td>
                     <%}%>
@@ -149,7 +149,7 @@
                         <td>
                           <div class="attribute-holder">
                             <label class="attribute-name">Makup</label>
-                            <label class="attribute-value"><%=product.img ? (Floa.def(product.img.sellPrice) / Floa.def(product.precoCusto)).toFixed(2) : 0%></label>
+                            <label class="attribute-value"><%=product.img ? (Floa.def(product.img.price) / Floa.def(product.precoCusto)).toFixed(2) : 0%></label>
                           </div>
                         </td>
                         <%}%>

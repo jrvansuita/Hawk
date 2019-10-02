@@ -1,19 +1,37 @@
 class ComboBox{
 
-  constructor(element, path, method){
+  constructor(element, pathOrArr, method){
     this.element = element;
-    this.path = path;
+    this.limit = 5;
+    this.minLength = 1;
+
+    if (pathOrArr instanceof Array){
+      this.objects = pathOrArr;
+    }else{
+      this.path = pathOrArr;
+    }
+
     this.method = method;
   }
 
-  setOnSelect(callback){
-    this.callback = callback;
+  setOnItemSelect(onItemSelect){
+    this.onItemSelect = onItemSelect;
     return this;
   }
 
-  select(el){
-    this.options.onAutocomplete(el.name);
+  setOnItemBuild(onBuildItem){
+    this.onBuildItem = onBuildItem;
+    return this;
   }
+
+  setAutoShowOptions(){
+    this.limit = 10;
+    this.minLength = 0;
+    return this;
+  }
+
+
+
 
   pressEnterToSelect(){
     this.element.focus();
@@ -28,78 +46,104 @@ class ComboBox{
     });
   }
 
-  setAutoShowOptions(yes){
-    this.autoShowOptions = yes;
-    return this;
+  getSelectedItem(){
+    return this.selectedItem;
   }
 
-  findItem(name){
-    for (var i = 0; i < this.data.length; i++) {
-      if (this.data[i].name == name){
-        return this.data[i];
-      }
-    }
+  getSelectedObject(){
+    return  this.selectedItem && this.selectedItem.data ? this.selectedItem.data : this.selectedItem;
   }
 
-  getOptions(){
-    return this.data;
-  }
 
-  load(callback){
+
+getData(){
+  return this.data;
+}
+
+load(callback){
+  if (this.path){
     $.ajax({
       url: this.path,
       type: this.method ? this.method : "get",
       success: (response) =>{
-        this.handle(response);
-        this.build();
-
-        if (callback){
-          callback();
-        }
+        this.objects = Object.values(response);
+        this.handleData(callback);
       },
       error: (error, message, errorThrown) =>{
         console.log(error);
       }
     });
+  }else{
+    this.handleData(callback);
   }
 
-  hasSelected(){
-    return this.element.val() ? true : false;
-  }
-
-  handle(data){
-    this.data = data;
-
-    this.selectorOptions = [];
-
-    Object.keys(data).forEach((key)=>{
-      if (data[key].name)
-      this.selectorOptions[data[key].name] = null;
-    });
-  }
-
-  build(){
-
-    var options = {
-      data: this.selectorOptions,
-      limit: 5,
-      onAutocomplete: (name)=>{
-        this.element.val(name);
-        this.callback(name, this.findItem(name));
-      }
-    };
+  return this;
+}
 
 
-    if (this.autoShowOptions){
-      options.minLength = 0;
-      options.limit = 10;
+handleData(callback){
+  this.data = [];
+
+  this.objects.forEach((each, index)=>{
+    var item = {id : index};
+
+    if (this.onBuildItem){
+      var struct = this.onBuildItem(each, index);
+      item.value = struct.text;
+      item.img = struct.img;
+      item.data = each;
+    }else{
+      item.value = each;
     }
 
-    this.options = options;
+    this.data.push(item);
+  });
 
-    this.element.autocomplete(options);
+  this.build();
+
+  if (callback){
+    callback();
+  }
+}
+
+build(){
+
+  var options = {
+    minLength: this.minLength,
+    source: (request, response)=> {
+      var results = $.ui.autocomplete.filter(this.data, request.term);
+      response(results.slice(0, this.limit));
+    },
+    select: (event, ui)=>{
+      this.selectedItem = ui.item;
+      if (this.onItemSelect){
+        this.onItemSelect(this.selectedItem, this.selectedItem.data)
+      }
+    }
+  };
+
+  this.instance = this.element.autocomplete(options);
+
+  this.element.autocomplete('instance')._renderItem = (ul, item)=>{
+    return buildItemLayout(item).appendTo(ul);
+  };
+
+  if (this.minLength == 0){
+    this.instance.focus(function () {
+      $(this).autocomplete("search", "");
+    });
+  }
+}
+
+}
+
+function buildItemLayout(item){
+  var img;
+
+  if (item.img){
+    img = $('<img>').addClass('.circle').attr('src', item.img);
   }
 
-
+  return $('<li>').append($('<div>').append(img, $('<span>').text(item.value)));
 
 }

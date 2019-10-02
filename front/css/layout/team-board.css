@@ -68,11 +68,13 @@
 
 .team-box {
   display: -webkit-box;
+  max-width: 100%;
 }
 
 .team-box > a {
-  display: -webkit-box;
+  display: inline-block;
   max-width: 30px;
+  margin-top: -3px;
 }
 
 .team-box > a > img {

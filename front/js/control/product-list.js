@@ -133,7 +133,16 @@ function createImgProduct(product){
   var img = $('<img>')
   .attr('src', product.image)
   .addClass('thumb')
-  .attr('onerror',"this.src='img/product-placeholder.png'");
+  .attr('onerror',"this.src='img/product-placeholder.png'")
+  .on('click', function(event){
+    console.log(event.metaKey);
+    if (event.metaKey){
+      window.open('/product-mockup?sku=' + product.sku, '_blank');
+    }else{
+      window.open(product.url, '_blank');
+    }
+  });
+
 
   var counter = $('<label>').addClass('counter-circle').append(productsListCount);
 
@@ -214,7 +223,7 @@ function createTags(product){
 
   var $year = createClickableTag(product.year, 'year');
 
-  var $price = createSingleTag(Num.money(product.sellPrice));
+  var $price = createSingleTag(Num.money(product.price));
   var $quantity = createSingleTag(Num.points(product.quantity));
   var $divRight = $('<div>').addClass('item-right-holder').append($quantity, $price);
 

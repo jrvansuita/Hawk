@@ -70,16 +70,18 @@ module.exports = class UsersProvider {
     for (var key in global.localUsers) {
       if (global.localUsers.hasOwnProperty(key)) {
         var user = global.localUsers[key];
-        if (!user.title){
-          user.title = 'none';
-        }
+        if (user.active){
+          if (!user.title){
+            user.title = 'none';
+          }
 
-        var group = Str.normalize(user.title).toLowerCase();
+          var group = Str.normalize(user.title).toLowerCase();
 
-        if (data[group]){
-          data[group].push(user);
-        }else{
-          data[group] = [user];
+          if (data[group]){
+            data[group].push(user);
+          }else{
+            data[group] = [user];
+          }
         }
       }
     }

@@ -55,7 +55,9 @@ function getShellSaleFromPool(saleNumber){
 global.shellsPrintPool = [];
 
 function createAndHandlePrintPool(){
-  var poolSize = 3;
+  var poolSize = Math.trunc((PickingLaws.getList().length * 0.2) / 100);
+
+  poolSize = poolSize < 3 ? 3 : poolSize;
 
   var nextSales = PickingLaws.getList().slice(0,poolSize);
 

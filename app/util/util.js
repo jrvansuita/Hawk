@@ -1,5 +1,10 @@
 var Util = {
 
+   id(){
+    return parseInt(new Date().getTime().toString().slice(-8));
+  },
+
+
   getSubtitles: function(charts) {
 
     var arrItem;

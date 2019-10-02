@@ -13,16 +13,38 @@ class ProductImageLoader{
     return this;
   }
 
-  put(){
+  setOnLoaded(onLoaded){
+    this.onLoaded = onLoaded;
+    return this;
+  }
 
+  withAnim(){
+    this.anim = true;
+    return this;
+  }
+
+  put(){
     var newImg = new Image();
     newImg.onload = ()=>{
-      this.imgElement.attr('src', newImg.src).hide().fadeIn();
+      if (this.onLoaded){
+        this.onLoaded();
+      }
+
+      this.imgElement.attr('src', newImg.src);
+
+      if (this.anim){
+        this.imgElement.hide().fadeIn();
+      }
     };
 
     newImg.onerror = ()=>{
       var placeholderPath = this.placeholderPath ? this.placeholderPath : 'img/product-placeholder.png';
-      this.imgElement.attr('src', placeholderPath).hide().fadeIn();
+
+      this.imgElement.attr('src', placeholderPath);
+
+      if (this.anim){
+        this.imgElement.hide().fadeIn();
+      }
     };
 
     newImg.src = this.srcPath;

@@ -26,6 +26,8 @@ input, span, label {
   cursor: pointer;
 }
 
+
+
 .button{
   margin: 5px 1px;
   text-align: center;
@@ -49,6 +51,14 @@ input, span, label {
   background-color: #4CAF50 !important;
   outline:0;
   font-weight: 800;
+}
+
+.delete-button{
+  background-color: #e45355 !important;
+}
+
+.delete-button:hover{
+  background-color: #ca5556 !important;
 }
 
 

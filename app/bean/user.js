@@ -2,7 +2,7 @@ module.exports = class User extends DataAccess {
 
   constructor(id, name, title, avatar, access, isFull, isActive, token, isLeader) {
     super();
-    this.id = Num.def(id, 0) || User.nextId();
+    this.id = Num.def(id, 0) || Util.id();
     this.name = Str.def(name, 'Desconhecido');
     this.title = Str.def(title);
     this.full = isFull ? true: false;
@@ -17,11 +17,6 @@ module.exports = class User extends DataAccess {
 
   static getKey() {
     return ['id'];
-  }
-
-
-  static nextId(){
-    return parseInt(new Date().getTime().toString().slice(-8));
   }
 
 

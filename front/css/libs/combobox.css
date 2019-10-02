@@ -1,0 +1,54 @@
+.ui-autocomplete{
+  width: fit-content;
+  overflow: hidden;
+  display: block;
+  opacity: 1;
+  position: absolute;
+  border: 0px !important;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12) !important;
+}
+
+
+.ui-autocomplete li {
+  clear: both;
+  color: rgba(0,0,0,0.87);
+  cursor: pointer;
+  min-height: fit-content;
+  width: 100%;
+  text-align: left;
+  text-transform: none;
+  display: flex;
+}
+
+.ui-menu-item > div{
+ display: flex;
+ width: 100%;
+ padding: 0px 8px !important;
+}
+
+.ui-menu-item  img {
+  width: 35px;
+  height: 35px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.ui-menu-item  span {
+  font-size: 14px;
+  color: #26a69a;
+  display: block;
+  line-height: 22px;
+  padding: 8px 12px;
+}
+
+
+.ui-state-active{
+	border: 1px solid transparent !important;
+	background: #e2e0e0 !important;
+}
+
+
+
+ul li {
+  list-style-type: none;
+}

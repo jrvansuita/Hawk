@@ -385,6 +385,7 @@ function showLastProduct(saleItem){
   $('.last-product-holder').show();
 
   new ProductImageLoader($('#last-product-img'))
+  .withAnim()
   .src('/sku-image?sku='+saleItem.codigo).put();
 
   $('#last-product-sku').text(saleItem.codigo);
@@ -466,7 +467,7 @@ var packingClicked = false;
 
 function packingClick(){
   if (!packingClicked){
-    
+
     if (checkAllFields()){
       packingClicked = true;
       postPackingDone();
