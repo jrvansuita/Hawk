@@ -3,7 +3,7 @@ $(document).ready(()=>{
 
     new ComboBox($('#pack-name'), '/package-types')
     .setAutoShowOptions(true)
-    .setOnSelect((name, item)=>{
+    .setOnItemSelect((name, item)=>{
       window.location='/packages?_id='+ item._id;
     }).load();
 

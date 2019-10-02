@@ -400,7 +400,10 @@ function loadPackagesTypes(){
 
   packingTypeCombo
   .setAutoShowOptions(true)
-  .setOnSelect((name, item)=>{
+  .setOnItemBuild((pack)=>{
+    return {text : pack.name};
+  })
+  .setOnItemSelect((name, item)=>{
 
     if (item.stockQtd < item.minStockQtd){
       $('.pack-alert').hide().fadeIn();
