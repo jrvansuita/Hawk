@@ -128,7 +128,7 @@ function createColorPicker(el, defColor){
     strings: {
       save: 'Salvar',
     },
-    default: defColor,
+    default: defColor,  
     swatches: [
       'rgba(244, 67, 54, 1)',
       'rgba(233, 30, 99, 0.95)',
