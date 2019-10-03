@@ -105,7 +105,6 @@ module.exports = class {
     //Circle for the discount
     this.context.beginPath();
     this.context.arc(this.canvas.width - rightMargin, topMargin, this.n(65), 0, 2 * Math.PI, false);
-    console.log(this.mockSett.discountBackground);
     this.context.fillStyle = this.mockSett.discountBackground == 'none' ? this._getDiscountBackgroundColor() : this.mockSett.discountBackground;
     this.context.shadowColor = this.mockSett.discountBackgroundShadow;
     this.context.shadowBlur = 10;
