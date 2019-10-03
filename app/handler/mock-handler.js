@@ -4,7 +4,6 @@ const Mock = require('../bean/mock.js');
 module.exports = class MockHandler {
 
   static storeFromScreen(params, callback) {
-    console.log(params.mockurl);
 
     var mock = new Mock(
       params.fontName,

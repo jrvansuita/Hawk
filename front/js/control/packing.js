@@ -403,7 +403,7 @@ function loadPackagesTypes(){
   .setOnItemBuild((pack)=>{
     return {text : pack.name};
   })
-  .setOnItemSelect((name, item)=>{
+  .setOnItemSelect((data, item)=>{
 
     if (item.stockQtd < item.minStockQtd){
       $('.pack-alert').hide().fadeIn();
@@ -589,24 +589,24 @@ function showMainInputTitle(title, icon, lineColor){
 
 
 function autoSelectPackingType(callback){
-  var options = packingTypeCombo.getOptions();
+  var options = packingTypeCombo.getData();
   if (options && (itemsChecked == sale.itemsQuantity)){
-    var packElement = null;
+    var selectedItem = null;
     var lastDif = 100000000;
 
     for(var i=0; i < options.length; i++){
-      var pack = options[i];
+      var pack = options[i].data;
 
       if (pack.maxWeight > sale.pesoLiquido){
         if ((pack.maxWeight - sale.pesoLiquido)  < lastDif){
           lastDif = pack.maxWeight - sale.pesoLiquido;
-          packElement = pack;
+          selectedItem = options[i];
         }
       }
     }
 
-    if (packElement){
-      packingTypeCombo.select(packElement);
+    if (selectedItem){
+      packingTypeCombo.select(selectedItem);
     }
   }
 }

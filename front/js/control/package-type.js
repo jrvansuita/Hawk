@@ -3,7 +3,10 @@ $(document).ready(()=>{
 
     new ComboBox($('#pack-name'), '/package-types')
     .setAutoShowOptions(true)
-    .setOnItemSelect((name, item)=>{
+    .setOnItemBuild((pack, index)=>{
+      return {text : pack.name};
+    })
+    .setOnItemSelect((data, item)=>{
       window.location='/packages?_id='+ item._id;
     }).load();
 
@@ -35,5 +38,5 @@ function checkform(){
   c = checkMaterialInput($('#height')) & c;
   c = checkMaterialInput($('#length')) & c;
 
-  return c;   
+  return c;
 }

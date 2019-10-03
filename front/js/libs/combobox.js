@@ -14,6 +14,15 @@ class ComboBox{
     this.method = method;
   }
 
+  select(item){
+    this.element.val(item.value);
+
+    this.selectedItem = item;
+    if (this.onItemSelect){
+      this.onItemSelect(this.selectedItem, this.selectedItem.data);
+    }
+  }
+
   setOnItemSelect(onItemSelect){
     this.onItemSelect = onItemSelect;
     return this;
@@ -30,12 +39,12 @@ class ComboBox{
     return this;
   }
 
-
-
-
+  /* Focus element and set Enter key to show options */
   pressEnterToSelect(){
     this.element.focus();
     this.element.select();
+
+    this.element.autocomplete('close');
 
     this.element.one("keyup", (e)=> {
       if (e.which == 13){
@@ -45,6 +54,7 @@ class ComboBox{
       }
     });
   }
+
 
   getSelectedItem(){
     return this.selectedItem;
@@ -115,10 +125,7 @@ build(){
       response(results.slice(0, this.limit));
     },
     select: (event, ui)=>{
-      this.selectedItem = ui.item;
-      if (this.onItemSelect){
-        this.onItemSelect(this.selectedItem, this.selectedItem.data)
-      }
+      this.select(ui.item);
     }
   };
 
