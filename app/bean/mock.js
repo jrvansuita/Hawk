@@ -1,7 +1,7 @@
 module.exports = class MockSetting extends DataAccess {
 
 
-  constructor(fontName, mockurl, msg, fontColor, fontShadowColor, showDiscount, fontNameDiscount, discountFontColor, discountShadowColor, discountBackground,discountBackgroundShadow,  width, height) {
+  constructor(fontName, mockurl, msg, fontColor, fontShadowColor, showDiscount, fontNameDiscount, discountFontColor, discountShadowColor, discountBackground, discountBackgroundShadow,  width, height) {
     super();
     this.id = 1;
     this.fontName = Str.def(fontName);

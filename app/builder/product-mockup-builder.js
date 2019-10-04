@@ -105,7 +105,7 @@ module.exports = class {
     //Circle for the discount
     this.context.beginPath();
     this.context.arc(this.canvas.width - rightMargin, topMargin, this.n(65), 0, 2 * Math.PI, false);
-    this.context.fillStyle = this.mockSett.discountBackground;
+    this.context.fillStyle = this.mockSett.discountBackground == 'none' ? this._getDiscountBackgroundColor() : this.mockSett.discountBackground;
     this.context.shadowColor = this.mockSett.discountBackgroundShadow;
     this.context.shadowBlur = 10;
     this.context.shadowOffsetX = 5;
@@ -132,7 +132,7 @@ module.exports = class {
 
     this.context.font = "bold " + this.n(20) + "pt " + this.mockSett.fontName;
     this.context.fillStyle = this.mockSett.fontColor;
-    var bottomPriceMargin = this.n(110);
+    bottomPriceMargin = this.n(110);
     this.context.fillText(this._getMsg(), leftPriceMargin + 5, this.canvas.height - bottomPriceMargin);
   }
 

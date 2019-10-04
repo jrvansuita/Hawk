@@ -78,14 +78,14 @@
             autocomplete="off" value="<%= selected.fontNameDiscount%>"
             title="Selecione a fonte com base no Google Fonts" required/>
 
-            <label class="pure-material-checkbox" >
-              <input type="checkbox" id="discount-active" name="discount-active" <%=selected.showDiscount ? 'checked' : ''%>/>
-              <span class="sub-label">Mostrar</span>
-            </label>
-
             <span class="bar"></span>
             <label>Fonte</label>
           </div>
+
+          <label class="pure-material-checkbox" >
+            <input type="checkbox" id="discount-active" <%=selected.showDiscount ? 'checked' : ''%>/>
+            <span class="sub-label">Mostrar</span>
+          </label>
 
           <div class="inline-holder ">
             <label class="sub-label">Cor</label>
@@ -96,6 +96,11 @@
 
 
           <label class="middle-title">Fundo</label>
+
+          <label class="pure-material-checkbox criative-color-holder" >
+            <input type="checkbox" id="keep-creative-color"  <%=selected.discountBackground == 'none' ? 'checked' : ''%>/>
+            <span class="sub-label">Cor do Criativo</span>
+          </label>
 
           <div class="inline-holder cross-line">
             <label class="sub-label">Cor</label>

@@ -5,6 +5,7 @@ var discountFontShadowColorPicker;
 var discountBackgroundColorPicker;
 var discountBackgroundShadowColorPicker;
 
+var disableColor = '#e4e4e4';
 
 $(document).ready(()=>{
   fontColorPicker = createColorPicker('font-color', selected.fontColor);
@@ -12,9 +13,7 @@ $(document).ready(()=>{
   discountFontColorPicker = createColorPicker('discount-font-color', selected.discountFontColor);
   discountFontShadowColorPicker = createColorPicker('discount-font-shadow-color', selected.discountShadowColor);
   discountBackgroundColorPicker = createColorPicker('discount-background-color', selected.discountBackground);
-  discountBackgroundShadowColorPicker = createColorPicker('discount-background-shadow-color', selected.discountBackground);
-
-
+  discountBackgroundShadowColorPicker = createColorPicker('discount-background-shadow-color', selected.discountBackgroundShadow);
 
   $('.save-button').click(saveClick);
 
@@ -36,6 +35,16 @@ $(document).ready(()=>{
 
   $('#width').change((event)=>{
     updateSizeHint();
+  });
+
+
+  $('#keep-creative-color').click(function (event){
+    if ($(this).is(":checked")){
+      discountBackgroundColorPicker.setColor(disableColor);
+      discountBackgroundColorPicker.disable();
+    }else{
+      discountBackgroundColorPicker.enable();
+    }
   });
 
   $('#mock-input-file').change((event)=>{
@@ -106,7 +115,7 @@ function saveMockupSettings() {
     showDiscount: $('#discount-active').is(":checked"),
     discountFontColor : discountFontColorPicker.getSelectedColor().toHEXA().toString(),
     discountShadowColor : discountFontShadowColorPicker.getSelectedColor().toHEXA().toString(),
-    discountBackground: discountBackgroundColorPicker.getSelectedColor().toHEXA().toString(),
+    discountBackground: $('#keep-creative-color').is(":checked") ? 'none' : discountBackgroundColorPicker.getSelectedColor().toHEXA().toString(),
     discountBackgroundShadow: discountBackgroundShadowColorPicker.getSelectedColor().toHEXA().toString(),
     width: Num.def($('#width').val()),
     height: Num.def($('#height').val()),
@@ -121,6 +130,8 @@ function saveMockupSettings() {
 }
 
 function createColorPicker(el, defColor){
+  console.log(defColor);
+
   // Simple example, see optional options for more configuration.
   return Pickr.create({
     el: '.' + el,
@@ -128,7 +139,8 @@ function createColorPicker(el, defColor){
     strings: {
       save: 'Salvar',
     },
-    default: defColor,  
+    disabled: defColor == 'none' ? true : false,
+    default: defColor == 'none' ? disableColor : defColor,
     swatches: [
       'rgba(244, 67, 54, 1)',
       'rgba(233, 30, 99, 0.95)',
