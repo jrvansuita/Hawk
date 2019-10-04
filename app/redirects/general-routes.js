@@ -9,6 +9,11 @@ module.exports = class UserRoutes extends Routes{
       res.render('easter/john-travolta');
     });
 
+    this._get('/teste', (req, res) => {
+      res.render('teste');
+    });
+
+
 
     this._post('/upload-img', (req, res) => {
       //base64Image

@@ -55,6 +55,7 @@ input, span, label {
 
 .delete-button{
   background-color: #e45355 !important;
+  outline: none;
 }
 
 .delete-button:hover{
