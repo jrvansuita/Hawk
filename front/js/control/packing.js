@@ -1,5 +1,7 @@
 $(document).ready(()=>{
 
+
+
   if (sale && !sale.error){
     $('#search-sale').select();
   }
@@ -35,7 +37,9 @@ $(document).ready(()=>{
     }
   });
 
-
+  $('#missing-items').click(()=>{
+    onMissingItemsClick();
+  });
 
   if (sale.items){
     initForPacking();
@@ -179,12 +183,11 @@ function onOneMoreProductChecked(saleItem){
   refreshSaleWeight(saleItem.liq, saleItem.bru);
   refreshProgressLine();
   refreshCountProductItens();
-  handleMissingItemsMsg();
+
+  handleMissingItemsMsg(itemsChecked == sale.itemsQuantity);
 }
 
 function onFinishedChekingProducts(){
-  handleMissingItemsMsg(true);
-
   showMainInputTitle('Confêrencia Finalizada', 'barcode-ok.png');
   autoSelectPackingType();
   $('#packing-done').fadeIn();
@@ -310,7 +313,6 @@ function showProductMsg(msg, icon){
 
 function showMessage(msg, isError, onAutoHide){
   var delay = 2000 + (msg ? (msg.length * 150) : 0);
-  console.log(delay);
 
   $('.product-msg')
   .text(msg)
@@ -638,19 +640,38 @@ var countdown = null;
 
 
 function handleMissingItemsMsg(clear){
-  clearTimeout(missingItemsId);
-  $('.missing-items-msg-holder').hide();
-  if (countdown){
-    countdown.remove();
-    countdown = null;
-  }
+  if (sale.pickUser && ($('.missing-items-msg-holder').length > 0)){
+    clearTimeout(missingItemsId);
+    $('.missing-items-msg-holder').hide();
+    if (countdown){
+      countdown.remove();
+      countdown = null;
+    }
 
-  if (!clear){
-    missingItemsId = setTimeout(()=>{
-      countdown = new Countdown($('.countdown-span'), 30);
-      countdown.show();
-      $('#items-missing-count').text(($('#products-out tr').length -1) + ' items faltando!');
-      $('.missing-items-msg-holder').css('display','flex').show();
-    }, 5000);
+    if (!clear){
+      missingItemsId = setTimeout(()=>{
+        countdown = new Countdown($('.countdown-span'), 30);
+        countdown.setOnTerminate(()=>{
+          onMissingItemsClick();
+        }).show();
+
+        var remaningItems = sale.itemsQuantity - itemsChecked;
+
+        $('#items-missing-count').text(remaningItems + ' item(s) faltando!');
+        $('.missing-items-msg-holder').css('display','flex').show();
+      }, 5000);
+    }
   }
+}
+
+
+function onMissingItemsClick(){
+  handleMissingItemsMsg(true);
+  $('.missing-items-msg-holder').remove();
+
+  _post('/balance-packing-to-picking',
+  {points : sale.itemsQuantity - itemsChecked,
+    picker :  sale.pickUser,
+    saleNumber: sale.numeroPedido
+  } , (data)=>{});
 }

@@ -78,11 +78,13 @@ input{
   width: auto;
   text-overflow: ellipsis;
   display: -webkit-box;
+  vertical-align: bottom;
 }
 
 .highlighted{
   font-size: 20px;
   font-weight: 600;
+  position: relative;
 }
 
 
@@ -99,6 +101,7 @@ input{
   color: rgb(116, 114, 116);
   display: -webkit-box;
   width: fit-content;
+  height: fit-content;
 }
 
 .field{
@@ -506,3 +509,5 @@ table{
 .countdown-holder svg circle {
   animation: countdown 30s linear infinite forwards !important;
 }
+
+.itens-count-display{margin-top: 6px;}

@@ -1,5 +1,6 @@
 const Routes = require('../redirects/controller/routes.js');
 const UsersProvider = require('../provider/user-provider.js');
+const MaganePoints = require('../handler/manage-points-handler.js');
 
 module.exports = class PerformanceRoutes extends Routes{
 
@@ -38,11 +39,15 @@ module.exports = class PerformanceRoutes extends Routes{
         });
       });
 
-
-
       this._post('/points', (req, res)=>{
-        const MaganePoints = require('../handler/manage-points-handler.js');
         MaganePoints.balance(res.locals.loggedUser, req.body.data, this._resp().redirect(res));
+      });
+
+
+      this._post('/balance-packing-to-picking', (req, res)=>{
+        console.log(req.body.picker, req.body.points, req.body.saleNumber);
+        
+        MaganePoints.packingRemovingPointsFromPicker(res.locals.loggedUser, req.body.picker, req.body.points, req.body.saleNumber, this._resp().redirect(res));
       });
     }
 

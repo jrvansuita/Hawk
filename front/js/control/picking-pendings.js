@@ -26,7 +26,7 @@ $(document).ready(() => {
 
 
 
-  if (isWideOpen()){
+  if (location.pathname.includes('pending')){
 
     $('.menu-dots').each((index, el)=>{
       $(el).click(function(e){
@@ -74,6 +74,7 @@ function showPendingItemModal(el){
   el.addClass('mini-item-modal dense-shadow');
   el.find('.closable').fadeIn(200);
 
+
   changeFontSize(el,2);
 
   el.parent().unbind('click').click(function(e){
@@ -89,6 +90,7 @@ function hidePedingItemModal(){
   el.find('.closable').remove();
   changeFontSize(el, -2);
   $( "#user-id" ).focus();
+  el.find('.menu-dots-pending').hide();
 }
 
 function buildPendingItemsViews(el, pending){
@@ -118,9 +120,76 @@ function buildPendingItemsViews(el, pending){
   var last = $('<tr>').addClass('closable');
 
   last.append($('<td>').attr('colspan','2').append(getFirstBottomBarOptions(pending)));
-  last.append($('<td>').addClass('middle-option-holder').attr('colspan','1').append(getMiddleBottomBarOptions(pending)));
-  last.append($('<td>').attr('colspan','1').append(getLastBottomBarOption(pending)));
+  last.append($('<td>').addClass('middle-option-holder').attr('colspan','1').append(getPendingLocal(pending)));
+  last.append($('<td>').attr('colspan','1').append(getBlockedLabel(pending)));
   table.append(last);
+
+  bindMenuOptions(el, pending);
+}
+
+function bindMenuOptions(el, pending){
+  var dots = el.find('.menu-dots-pending');
+
+  var drop = new MaterialDropdown(dots).setOnAnyOptionsClick(function(e){
+    e.stopPropagation();
+    $('.mini-item-modal').parent().remove();
+
+  });
+
+  if (location.pathname.includes('picking')){
+
+    //Permitir assumir pendências
+    if (Sett.get(loggedUser, 3)){
+      //Com status em aberto ou resolvido
+      if (Util.isIn([0,2], pending.status)){
+        drop.addItem('/img/back.png', 'Assumir', function(){
+          restartPendingSale(pending);
+        });
+
+        if (pending.status == 0){
+          drop.addItem('/img/lamp.png', 'Encontrado', function(){
+            //Restart Sale e remover pontos
+          });
+        }
+      }
+    }
+
+  }else{
+
+    if (pending.status == 0){
+      if (!isBlocked(pending)){
+        drop.addItem('/img/forward.png', 'Em Atendimento', function(){
+          innerSolvingPendingSale(pending, false);
+        });
+
+        if (Sett.get(loggedUser, 10)){
+          drop.addItem('/img/envelop.png', 'Enviar E-mail', function(){
+            innerSolvingPendingSale(pending, true);
+          });
+        }
+      }
+    }else if (pending.status == 1){
+      drop.addItem('/img/block.png', 'Bloquear', function(){
+        new BlockedSelector().onSelect((reason)=>{
+          new BlockedPost(pending.number, reason).setUserId(pending.sale.pickUser.id).isPending().call();
+        }).show();
+      });
+
+      drop.addItem('/img/forward.png', 'Resolvido', function(){
+        solvedPendingSale(pending);
+      });
+    }
+  }
+
+
+  if (drop.hasOptions()){
+    dots.show();
+    dots.unbind('click').click(function (e){
+      drop.show();
+    });
+  }else{
+    dots.hide();
+  }
 }
 
 
@@ -135,88 +204,64 @@ function getFirstBottomBarOptions(pending){
     div.append(getEmailImage());
   }
 
-  if (pending.status == 0){
-    if (typeof wideOpen == "undefined"){
-      var lamp = $('<img>').addClass('small-icon-button').attr('src', '/img/lamp.png').attr('title','Encontrei!').click(function(){
-        restartPendingSale(pending);
-      });
-      div.append(lamp);
-    }
-  }
-
   return div;
 }
 
-function getMiddleBottomBarOptions(pending){
-  var els = [];
-
-  els.push(getPendingLocal(pending));
 
 
-  if (pending.status==0 && isWideOpen()){
-    if (Sett.get(loggedUser, 10)){
-      els.push(getEmailSwitch());
-    }
+/*function getLastBottomBarOption(pending){
+var div = $('<div>');
 
-    return els;
-  }else{
-    return els;
-  }
+//Esta na tela de pendencia
+if ((pending.status < 2 && isWideOpen()) ||
+//Esta na tela de picking e tem a permissao
+(pending.status == 2 && !isWideOpen() && (Sett.get(loggedUser, 3))))
+{
+var solve = $('<label>').addClass('button shadow solve-pending').append(getPendingItemButtonLabel(pending)).click(function(){
+onPendingItemButtonClicked($(this), pending);
+});
+
+if(isBlocked(pending)){
+solve.addClass('blocked');
 }
 
-function getLastBottomBarOption(pending){
-  var div = $('<div>');
+if (pending.status == 1){
+var block = $('<img>').addClass('block-pending').attr('src','/img/block.png').attr('title','Bloquear').click((e) =>{
+hidePedingItemModal();
+e.stopPropagation();
 
-  //Esta na tela de pendencia
-  if ((pending.status < 2 && isWideOpen()) ||
-  //Esta na tela de picking e tem a permissao
-  (pending.status == 2 && !isWideOpen() && (Sett.get(loggedUser, 3))))
-  {
-    var solve = $('<label>').addClass('button shadow solve-pending').append(getPendingItemButtonLabel(pending)).click(function(){
-      onPendingItemButtonClicked($(this), pending);
-    });
+new BlockedSelector().onSelect((reason)=>{
+new BlockedPost(pending.number, reason).setUserId(pending.sale.pickUser.id).isPending().call();
+}).show();
+});
 
-    if(isBlocked(pending)){
-      solve.addClass('blocked');
-    }
+div.prepend(block);
+}
 
-    if (pending.status == 1){
-      var block = $('<img>').addClass('block-pending').attr('src','/img/block.png').attr('title','Bloquear').click((e) =>{
-        hidePedingItemModal();
-        e.stopPropagation();
+div.prepend(solve);
+}
 
-        new BlockedSelector().onSelect((reason)=>{
-          new BlockedPost(pending.number, reason).setUserId(pending.sale.pickUser.id).isPending().call();
-        }).show();
-      });
-
-      div.prepend(block);
-    }
-
-    div.prepend(solve);
-  }
-
-  return div;
+return div;
 }
 
 function getEmailSwitch(){
-  var input = $('<input>').attr('type', 'checkbox').addClass('switch-input').attr('id','send-email-switch').attr('checked','checked');
-  var title = $('<span>').addClass('pick-value').append('Email');
-  var label = $('<label>').attr('type', 'checkbox').addClass('switch-label').attr('for','send-email-switch').append(title, $('<span>').addClass('toggle--on'), $('<span>').addClass('toggle--off'));
+var input = $('<input>').attr('type', 'checkbox').addClass('switch-input').attr('id','send-email-switch').attr('checked','checked');
+var title = $('<span>').addClass('pick-value').append('Email');
+var label = $('<label>').attr('type', 'checkbox').addClass('switch-label').attr('for','send-email-switch').append(title, $('<span>').addClass('toggle--on'), $('<span>').addClass('toggle--off'));
 
-  var holder = $('<div>').append(input, label);
+var holder = $('<div>').append(input, label);
 
-  holder.click(function(e){
-    $('#send-email-switch').prop("checked", !$('#send-email-switch').prop('checked'));
-    e.stopPropagation();
-  });
+holder.click(function(e){
+$('#send-email-switch').prop("checked", !$('#send-email-switch').prop('checked'));
+e.stopPropagation();
+});
 
-  return holder;
+return holder;
 }
 
 function isWideOpen(){
-  return typeof wideOpen !== "undefined";
-}
+return typeof wideOpen !== "undefined";
+}*/
 
 function getEmailImage(){
   var img = $('<img>').addClass('icon').attr('src','/img/envelop.png');
@@ -225,29 +270,29 @@ function getEmailImage(){
   return span;
 }
 
-function onPendingItemButtonClicked(button, pending){
-  if (pending.status == 2){
-    restartPendingSale(pending);
-  }else if (isBlocked(pending)){
+/*function onPendingItemButtonClicked(button, pending){
+if (pending.status == 2){
+restartPendingSale(pending);
+}else if (isBlocked(pending)){
 
-  }else if (pending.status == 1){
-    solvedPendingSale(button,pending);
-  }else{
-    solvingPendingSale(button, pending);
-  }
+}else if (pending.status == 1){
+solvedPendingSale(button,pending);
+}else{
+solvingPendingSale(button, pending);
+}
 }
 
 function getPendingItemButtonLabel(pending){
-  if (pending.status == 2){
-    return "Assumir";
-  }else if (isBlocked(pending)){
-    return "Bloqueado";
-  }else if (pending.status == 1){
-    return "Resolver";
-  }else{
-    return 'Atender';
-  }
+if (pending.status == 2){
+return "Assumir";
+}else if (isBlocked(pending)){
+return "Bloqueado";
+}else if (pending.status == 1){
+return "Resolver";
+}else{
+return 'Atender';
 }
+}*/
 
 function addChangedLabel(el){
   el.prepend($('<label>').addClass('changed-label').text('Trocado'));
@@ -418,12 +463,11 @@ function loadPendingSaleItems(el, pending){
   }
 }
 
-function solvingPendingSale(button, pending){
-  showLoadingButton(button);
+/*function solvingPendingSale(pending){
   innerSolvingPendingSale(pending, $('#send-email-switch').prop('checked'), (resultPending)=>{
     rebuildSpawItem('not-solved', 'solving', resultPending);
   });
-}
+}*/
 
 
 function doallSolvingPendingSale(icon){
@@ -446,48 +490,29 @@ function doallSolvingPendingSale(icon){
 }
 
 
-function innerSolvingPendingSale(pending, sendEmail, callback){
+function innerSolvingPendingSale(pending, sendEmail){
   pending.sendEmail = sendEmail ? true: false;
-  execute("/pending-status", pending, function(r){
-    callback(r);
-  });
+  execute("/pending-status", pending);
 }
 
-function solvedPendingSale(button, pending){
-  showLoadingButton(button);
-  execute("/pending-status", pending,  function(resultPending){
-    rebuildSpawItem('solving','solved', resultPending);
-  });
+function solvedPendingSale(pending){
+  execute("/pending-status", pending);
 }
 
 function restartPendingSale(pending){
-  execute("/picking-pending-restart", pending);
-}
-
-function rebuildSpawItem(actualClass, nextClass , resultPending){
-  if (resultPending){
-    updatePendingSales(resultPending);
-    var $this = $('.'+actualClass+'.mini-item-modal');
-
-    $this.removeClass(actualClass).addClass(nextClass);
-  }
-
-  hidePedingItemModal();
-
-  $this.delay(1000).fadeOut(400, function() {
-    $this.remove();
-
-    setTimeout(function() {
-      window.location.reload();
-    }, 300);
+  execute("/picking-pending-restart", pending, ()=>{
+    window.location.reload();
   });
-
 }
 
 function execute(path, pending, onSucess){
   _post(path,  {
     pendingSale: pending
-  }, onSucess, (error)=>{
+  }, ()=>{
+    if (onSucess){
+      onSucess();
+    }
+  }, (error)=>{
     $('.error').text(error.responseText).fadeIn().delay(1000).fadeOut();
   });
 }
@@ -508,23 +533,28 @@ function changeFontSize(els, direction){
   els.css("padding-top",  parseInt(els.css("padding-top"))+(direction * 2));
 }
 
-function showLoadingButton(el){
-  el.prepend($('<img>').addClass('loading-circle').attr('src','/img/loader/circle.svg'));
-  el.off("click");
-}
+
 
 function updatePendingSales(pending){
   pendingSales = pendingSales.map(function(i) { return i.sale.numeroPedido == pending.sale.numeroPedido ? pending : i; });
 }
 
 function isBlocked(pending){
-  return  false; //pending.status == 0 && Dat.hoursDif(pending.updateDate, new Date()) <= 2;
+  return false;// pending.status == 0 && Dat.hoursDif(pending.updateDate, new Date()) <= 2;
 }
 
 
 function getPendingLocal(pending){
   if (pending.local){
     return $('<label>').addClass('local-label').text(pending.local);
+  }else{
+    return "";
+  }
+}
+
+function getBlockedLabel(pending){
+  if (isBlocked(pending)){
+    return $('<label>').addClass('local-label red').text('Bloqueado');
   }else{
     return "";
   }
@@ -554,5 +584,4 @@ function handlSwapProductSale(saleNumber, targerSku, swapSku, quantity, onSucess
       });
     }
   });
-
 }
