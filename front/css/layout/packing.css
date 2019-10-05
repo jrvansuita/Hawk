@@ -464,7 +464,7 @@ table{
   font-size: 13px;
   width: fit-content;
   max-width: 100px;
-} 
+}
 
 
 .charts-holder-box{width: 100%;margin: auto;}
@@ -475,4 +475,34 @@ table{
 
 .group-single-holder.this-year{
   grid-column: 1 / 4;
+}
+
+.missing-items-msg-holder{
+  margin-top: -5px;
+  margin-right: 15px;
+  display: none;
+}
+
+.missing-items-msg-holder .row{
+  display: grid;
+  margin: auto;
+  margin-right: 15px;
+  width: fit-content;
+}
+
+.missing-items-msg-holder label{
+  color: gray;
+  line-height: 10px;
+  margin-top: 7px;
+  margin-left: 5px;
+  margin-bottom: 6px;
+  font-weight: 900;
+}
+
+.missing-items-msg-holder .delete-button{color: white;padding: 10px 18px;cursor: pointer;margin: 0;margin-top: 4px;height: fit-content;}
+
+.countdown-span{width: 40px !important;height: 40px !important;margin-left: 10px;}
+
+.countdown-holder svg circle {
+  animation: countdown 30s linear infinite forwards !important;
 }

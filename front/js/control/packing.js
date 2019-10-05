@@ -179,9 +179,12 @@ function onOneMoreProductChecked(saleItem){
   refreshSaleWeight(saleItem.liq, saleItem.bru);
   refreshProgressLine();
   refreshCountProductItens();
+  handleMissingItemsMsg();
 }
 
 function onFinishedChekingProducts(){
+  handleMissingItemsMsg(true);
+
   showMainInputTitle('Confêrencia Finalizada', 'barcode-ok.png');
   autoSelectPackingType();
   $('#packing-done').fadeIn();
@@ -626,5 +629,28 @@ function onEditNcm(e) {
       showMainInputTitle('NCM Atualizado', 'checked.png');
       showMessage('');
     });
+  }
+}
+
+
+var missingItemsId = 0;
+var countdown = null;
+
+
+function handleMissingItemsMsg(clear){
+  clearTimeout(missingItemsId);
+  $('.missing-items-msg-holder').hide();
+  if (countdown){
+    countdown.remove();
+    countdown = null;
+  }
+
+  if (!clear){
+    missingItemsId = setTimeout(()=>{
+      countdown = new Countdown($('.countdown-span'), 30);
+      countdown.show();
+      $('#items-missing-count').text(($('#products-out tr').length -1) + ' items faltando!');
+      $('.missing-items-msg-holder').css('display','flex').show();
+    }, 5000);
   }
 }

@@ -9,6 +9,11 @@ module.exports = class UserRoutes extends Routes{
       res.render('easter/john-travolta');
     });
 
+    this._get('/teste', (req, res) => {
+      res.render('teste');
+    });
+
+
 
     this._get('/restart', (req, res) =>{
       process.exit(1);

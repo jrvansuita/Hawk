@@ -56,7 +56,7 @@ module.exports = class ProductDiagnostics{
             this._storeFix(product, Fix.enum().REGISTERING);
           }
         }
-        else if (isMoreThanXDaysRegistered(product, 15)){
+        else if (isMoreThanXDaysRegistered(product, 9)){
           this._storeFix(product, Fix.enum().SALE);
         }
       }

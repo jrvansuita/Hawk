@@ -22,6 +22,9 @@
   <script type="text/javascript" src="/front/js/libs/Chart.min.js"></script>
   <script type="text/javascript" src="/front/js/libs/packing-chart.js"></script>
 
+  <script type="text/javascript" src="/front/js/libs/count-down.js"></script>
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/count-down.css">
+
 </head>
 <body>
   <%  include ../menus/packing-menu %>
@@ -317,6 +320,16 @@
 
                     <div class="right-middle-line">
                       <div class="buttons-holder">
+
+                        <div class="missing-items-msg-holder">
+                          <div class="row">
+                            <label>Picking incompleto?</label>
+                            <label id="items-missing-count" class="field-title"></label>
+                          </div>
+                          <label class="delete-button shadow" id="missing-items" tabindex="-1">Sim</label>
+                          <div class="countdown-span"></div>
+                        </div>
+
                         <label class="button shadow" id="packing-done" tabindex="0">Faturar</label>
                         <label class="button shadow" id="print-nfe" tabindex="0">Imprimir NFe</label>
                         <label class="button shadow" id="print-transport-tag" tabindex="0">Imprimir Etiqueta</label>

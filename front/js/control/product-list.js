@@ -135,12 +135,7 @@ function createImgProduct(product){
   .addClass('thumb')
   .attr('onerror',"this.src='img/product-placeholder.png'")
   .on('click', function(event){
-    console.log(event.metaKey);
-    if (event.metaKey){
-      window.open('/product-mockup?sku=' + product.sku, '_blank');
-    }else{
-      window.open(product.url, '_blank');
-    }
+    window.open('/product-mockup?sku=' + product.sku, '_blank');
   });
 
 
@@ -186,7 +181,7 @@ function createTitle(product) {
     if (all.length > 0){
       diagIcon.fadeIn();
       diagIcon.click(()=>{
-          window.open('/diagnostics?sku=' + product.sku,'_blank');
+        window.open('/diagnostics?sku=' + product.sku,'_blank');
       });
     }
   });
