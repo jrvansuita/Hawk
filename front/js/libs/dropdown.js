@@ -9,8 +9,11 @@ class MaterialDropdown {
 
 
     if (bindMousePosition){
-      this.top = event.pageY -10
-      this.left = event.pageX -10;
+      //this.top = event.pageY -10
+      //this.left = event.pageX -10;
+
+      this.top = $(parent).offset().top;
+      this.left = $(parent).offset().left;
 
       $div.css('position', 'inherit');
     }else{
@@ -35,11 +38,18 @@ class MaterialDropdown {
     });
   }
 
-
+  hasOptions(){
+    return this._hasOptions;
+  }
 
   setMenuPosAdjust(addX, addY){
     this.top = this.top + addY;
     this.left = this.left + addX;
+    return this;
+  }
+
+  setOnAnyOptionsClick(callback){
+    this.onAnyOptionClick = callback;
     return this;
   }
 
@@ -48,28 +58,46 @@ class MaterialDropdown {
     var $icon = $('<img>').attr('src', icon);
     var $li = $('<li>').append($('<a>').attr('href',redirect ? redirect : '#').attr('target', blank ? '_blank' : '_self').append($icon, label));
 
-    if (onClick){
-      $li.click(onClick);
-    }
+    $li.click((e)=>{
+      if (onClick){
+        onClick(e);
+      }
+
+      if (this.onAnyOptionClick){
+        this.onAnyOptionClick(e);
+      }
+    });
 
     this.items.append($li);
+    this._hasOptions = true;
 
     return this;
   }
 
 
-  show(){
-    this.items.fadeIn(400);
+  show(callback){
+    if (this.hasOptions()){
+      this.items.fadeIn(400);
 
-    if (this.top + this.left > 0){
-      this.items.css('left', this.left).css('top', this.top);
+      if (this.top + this.left > 0){
+        this.items.css('left', this.left).css('top', this.top);
+      }
+
+
+      $('.md-dropdown li').click((e) =>{
+        this.remove();
+        e.stopPropagation();
+      });
+
+      if (callback){
+        this.callback(false);
+      }
+    }else{
+      if (callback){
+        this.callback(false);
+      }
     }
 
-
-    $('.md-dropdown li ').click((e) =>{
-      this.remove();
-      e.stopPropagation();
-    });
   }
 
   onMouseLeave(onMouseLeave){

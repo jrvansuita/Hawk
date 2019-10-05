@@ -52,7 +52,7 @@
               <td>
                 <div class="field">
                   <label class="field-title">Número do Pedido</label>
-                  <label class="info highlighted"><%=sale? sale.numeroPedido : ''%></label>
+                  <label class="info highlighted"><%=sale? sale.numeroPedido : ''%>  <span class="field-title itens-count-display"> <%=sale.itemsQuantity%> Itens</span></label>
                 </div>
               </td>
 
@@ -107,7 +107,7 @@
 
               <td>
                 <div class="field">
-                  <label class="field-title">Client</label>
+                  <label class="field-title">Cliente</label>
                   <label class="info"><%=sale && sale.client ? Str.short(sale.client.nome,20) : ''%></label>
                 </div>
               </td>

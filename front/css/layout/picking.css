@@ -662,3 +662,10 @@ tr.row-padding td{
   display: -webkit-box;
   margin-bottom: 8px;
 }
+
+
+.menu-dots-pending{
+  display: none;
+  float: right;
+  margin-top: 2px;
+}

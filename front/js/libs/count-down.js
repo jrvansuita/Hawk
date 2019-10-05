@@ -14,6 +14,11 @@ class Countdown{
 
   */
 
+  setOnTerminate(callback){
+    this.onTerminate = callback;
+    return this;
+  }
+
   render(){
 
     this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -47,6 +52,9 @@ class Countdown{
 
       if (this.secs == -1){
         this.remove();
+        if (this.onTerminate){
+          this.onTerminate();
+        }
       }else{
 
         this.number.text(this.secs);

@@ -66,81 +66,81 @@ class ComboBox{
 
 
 
-getData(){
-  return this.data;
-}
-
-load(callback){
-  if (this.path){
-    $.ajax({
-      url: this.path,
-      type: this.method ? this.method : "get",
-      success: (response) =>{
-        this.objects = Object.values(response);
-        this.handleData(callback);
-      },
-      error: (error, message, errorThrown) =>{
-        console.log(error);
-      }
-    });
-  }else{
-    this.handleData(callback);
+  getData(){
+    return this.data;
   }
 
-  return this;
-}
-
-
-handleData(callback){
-  this.data = [];
-
-  this.objects.forEach((each, index)=>{
-    var item = {id : index};
-
-    if (this.onBuildItem){
-      var struct = this.onBuildItem(each, index);
-      item.value = struct.text;
-      item.img = struct.img;
-      item.data = each;
+  load(callback){
+    if (this.path){
+      $.ajax({
+        url: this.path,
+        type: this.method ? this.method : "get",
+        success: (response) =>{
+          this.objects = Object.values(response);
+          this.handleData(callback);
+        },
+        error: (error, message, errorThrown) =>{
+          console.log(error);
+        }
+      });
     }else{
-      item.value = each;
+      this.handleData(callback);
     }
 
-    this.data.push(item);
-  });
-
-  this.build();
-
-  if (callback){
-    callback();
+    return this;
   }
-}
 
-build(){
 
-  var options = {
-    minLength: this.minLength,
-    source: (request, response)=> {
-      var results = $.ui.autocomplete.filter(this.data, request.term);
-      response(results.slice(0, this.limit));
-    },
-    select: (event, ui)=>{
-      this.select(ui.item);
-    }
-  };
+  handleData(callback){
+    this.data = [];
 
-  this.instance = this.element.autocomplete(options);
+    this.objects.forEach((each, index)=>{
+      var item = {id : index};
 
-  this.element.autocomplete('instance')._renderItem = (ul, item)=>{
-    return buildItemLayout(item).appendTo(ul);
-  };
+      if (this.onBuildItem){
+        var struct = this.onBuildItem(each, index);
+        item.value = struct.text;
+        item.img = struct.img;
+        item.data = each;
+      }else{
+        item.value = each;
+      }
 
-  if (this.minLength == 0){
-    this.instance.focus(function () {
-      $(this).autocomplete("search", "");
+      this.data.push(item);
     });
+
+    this.build();
+
+    if (callback){
+      callback();
+    }
   }
-}
+
+  build(){
+
+    var options = {
+      minLength: this.minLength,
+      source: (request, response)=> {
+        var results = $.ui.autocomplete.filter(this.data, request.term);
+        response(results.slice(0, this.limit));
+      },
+      select: (event, ui)=>{
+        this.select(ui.item);
+      }
+    };
+
+    this.instance = this.element.autocomplete(options);
+
+    this.element.autocomplete('instance')._renderItem = (ul, item)=>{
+      return buildItemLayout(item).appendTo(ul);
+    };
+
+    if (this.minLength == 0){
+      this.instance.focus(function () {
+        $(this).autocomplete("search", "");
+      });
+    }
+  }
 
 }
 
