@@ -10,6 +10,10 @@ module.exports = class UserRoutes extends Routes{
     });
 
 
+    this._get('/restart', (req, res) =>{
+      process.exit(1);
+    });
+
     this._post('/upload-img', (req, res) => {
       //base64Image
       ImgurSaver.upload(req.body.img, (data)=>{

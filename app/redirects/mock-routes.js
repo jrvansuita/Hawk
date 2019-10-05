@@ -9,7 +9,7 @@ module.exports = class UserRoutes extends Routes{
   attach(){
 
 
-    this._get('/mockup-builder', (req, res) => {
+    this._page('/mockup-builder', (req, res) => {
       Mock.get((err, mock)=>{
         res.render('product/mockup-builder.ejs', {selected: mock});
       });
@@ -22,7 +22,7 @@ module.exports = class UserRoutes extends Routes{
     });
 
 
-    this._page('/product-mockup', (req, res) => {
+    this._get('/product-mockup', (req, res) => {
       ProductHandler.getImage(req.query.sku, (product)=>{
         new ProductMockupBuilder()
         .setProduct(product)
