@@ -52,6 +52,9 @@ const UsersProvider = require('./app/provider/user-provider.js');
 
 app.use(function(req, res, next) {
   res.locals.loggedUser = {};
+  res.locals.query = req.query;
+  res.locals.url   = req.originalUrl;
+
 
   if (req.session.loggedUserID || Routes.checkIsPathNotLogged(req.path)) {
     if (req.session.loggedUserID != undefined){

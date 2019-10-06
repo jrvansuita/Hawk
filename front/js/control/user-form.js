@@ -188,10 +188,12 @@ function showAvatarCropper(){
   function testUniqueAccess(){
     var access = $('#access').val().trim();
 
-    var user = userSelector.getData().find((each)=>{
+    var option = userSelector.getData().find((each)=>{
       var user = each.data;
-      return user.access && (user.access.trim() == access.trim())
+      return user.access && (user.access.trim() == access.trim());
     });
+
+    var user = option.data;
 
     if (user && (user.id != $('#editing').val())){
       $('#access').val('Cartão de acesso já utilizado');

@@ -4,6 +4,7 @@ const History = require('../bean/history.js');
 module.exports={
 
   email(userId, sale, err){
+    console.log(userId);
     var message = 'Pedido: ' + sale.numeroPedido + ' Ordem de Compra: ' + sale.numeroDaOrdemDeCompra;
     message+= '\n Destinatário: ' + sale.client.nome + ' - ' + sale.client.email;
 
@@ -11,7 +12,7 @@ module.exports={
       message+= '\n' + err.message;
       History.error(err, 'Email não Enviado', message);
     }else{
-      History.info(userId, 'Email Enviado', message, 'Email');
+      History.notify(userId, 'Email Enviado', message, 'Email');
     }
   },
 
@@ -32,6 +33,7 @@ module.exports={
 
     History.notify(userId, 'Picking Bloqueado' , message, 'Bloqueio');
   },
+
 
   picking(userId, sale, day){
     onTry(()=>{
@@ -72,7 +74,7 @@ module.exports={
     });
   },
 
-  pending(userId, pending){
+  pending(userId, pending, day){
     onTry(()=>{
       var title = 'Pendência ';
       var status = '';
@@ -99,9 +101,17 @@ module.exports={
       }
 
       var message = 'Pedido ' + pending.sale.numeroPedido + ' foi ' + status;
-      message += '\nOrdem de Compra: ' + pending.sale.numeroDaOrdemDeCompra + ' Localização: ' + pending.local;
+      message += '\nLocalização: ' + pending.local;
       message+=emailStr;
 
+      if (day){
+
+        if (day.total < 0){
+          message += '\nAcerto automático de pontos: ' + pending.sale.pickUser.name + ' recebeu ' + day.total + ' Pontos de Picking\n Foram encontrados o(s) ' + parseInt(pending.sale.pendingsQuantity) + ' iten(s) colocados em pendência';
+        }else{
+          message += '\nItems Coletados: ' + day.total + " Pendências: " + parseInt(pending.sale.pendingsQuantity) + ' Pontos gerados: ' + day.points;
+        }
+      }
 
       History.notify(userId, title, message, 'Pendência');
     });

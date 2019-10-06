@@ -33,8 +33,10 @@ class SelectorDialog {
     var $span = $('<span>').append($icon, $label);
 
     var $li = $('<li>').append($span).click((e)=>{
-      this.selectListener(tag);
       this.modal.remove();
+      if(this.selectListener){
+        this.selectListener(tag);
+      }
     });
 
     this.items.append($li);

@@ -20,7 +20,12 @@ class BlockedPost{
 
   onError(callback){
     this.errorListener = callback;
-    return this; 
+    return this;
+  }
+
+  onSuccess(callback){
+    this.successListener = callback;
+    return this;
   }
 
   call(){
@@ -32,11 +37,14 @@ class BlockedPost{
         reasonTag : this.reason ? this.reason.tag : null,
         userId :this.userId
       },
-      success: function(response) {
-        window.location.reload();
-
+      success: (response) => {
+        if(this.successListener){
+          this.successListener();
+        }else{
+          window.location.reload();
+        }
       },
-      error: function(jqXHR, textStatus, errorThrown) {
+      error: (jqXHR, textStatus, errorThrown)=> {
         console.log(textStatus);
         this.errorListener();
       }

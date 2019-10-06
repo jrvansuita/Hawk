@@ -21,13 +21,17 @@ module.exports = class Day extends DataAccess {
     return new Day(userId, date, 'invoice', sale.totalProdutos, 1, points);
   }
 
-  static picking(userId, date, items, secs) {
+  static picking(userId, date, sale, itemsQuantity) {
+    var items = sale ? parseInt(sale.itemsQuantity) : itemsQuantity;
+    var secs = sale ? (new Date().getTime() - sale.begin.getTime()) / 1000 : 0;
+
     //Removido o calculo usando os secs porque os usuários estavam roubando.
     var points = items / 12.53;
     //var points = (items / (secs/items)) * 1.67;
 
     return new Day(userId, date, 'picking', items, secs, points);
   }
+
 
 
   static getKey() {
@@ -117,13 +121,13 @@ module.exports = class Day extends DataAccess {
       }
     },
     {
-    /* sort descending (latest subscriptions first) */
-    $sort: {
-      '_id.year': 1,
-      '_id.month': 1,
-      '_id.day': 1
-    }
-  }],
+      /* sort descending (latest subscriptions first) */
+      $sort: {
+        '_id.year': 1,
+        '_id.month': 1,
+        '_id.day': 1
+      }
+    }],
     function(err, res) {
       if (callback)
       callback(err, res);

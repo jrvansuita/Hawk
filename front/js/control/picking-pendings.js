@@ -32,14 +32,14 @@ $(document).ready(() => {
       $(el).click(function(e){
         var drop = new MaterialDropdown($(this), e);
 
-        if ($(el).hasClass('menu-red-top')){
+        /*if ($(el).hasClass('menu-red-top')){
           if (Sett.get(loggedUser, 10)){
             drop.addItem('/img/send-mass-email.png', 'Enviar Todos E-mails', function(){
               $('.menu-red-top>.dots-glyph').attr('src','/img/loader/circle.svg');
               doallSolvingPendingSale();
             });
           }
-        }
+        }*/
 
         drop.addItem('/img/print.png', 'Imprimir Listagem', function(){
           window.open(
@@ -138,17 +138,24 @@ function bindMenuOptions(el, pending){
 
   if (location.pathname.includes('picking')){
 
-    //Permitir assumir pendências
-    if (Sett.get(loggedUser, 3)){
-      //Com status em aberto ou resolvido
-      if (Util.isIn([0,2], pending.status)){
+    //Com status em aberto ou resolvido
+    if (Util.isIn([0,2], pending.status)){
+
+      //Permitir assumir pendências
+      if (Sett.get(loggedUser, 3)){
         drop.addItem('/img/back.png', 'Assumir', function(){
-          restartPendingSale(pending);
+          assumePendingSale(pending);
         });
 
         if (pending.status == 0){
           drop.addItem('/img/lamp.png', 'Encontrado', function(){
-            //Restart Sale e remover pontos
+            assumePendingSale(pending, true);
+          });
+        }
+      }else{
+        if (pending.status == 0){
+          drop.addItem('/img/restart.png', 'Reiniciar', function(){
+            restartPendingSale(pending);
           });
         }
       }
@@ -159,24 +166,33 @@ function bindMenuOptions(el, pending){
     if (pending.status == 0){
       if (!isBlocked(pending)){
         drop.addItem('/img/forward.png', 'Em Atendimento', function(){
-          innerSolvingPendingSale(pending, false);
+          pending.sendEmail = false;
+          updatePendingStatus(pending);
         });
 
         if (Sett.get(loggedUser, 10)){
           drop.addItem('/img/envelop.png', 'Enviar E-mail', function(){
-            innerSolvingPendingSale(pending, true);
+            pending.sendEmail = true;
+            updatePendingStatus(pending);
           });
         }
       }
     }else if (pending.status == 1){
       drop.addItem('/img/block.png', 'Bloquear', function(){
         new BlockedSelector().onSelect((reason)=>{
-          new BlockedPost(pending.number, reason).setUserId(pending.sale.pickUser.id).isPending().call();
+          new BlockedPost(pending.number, reason)
+          .setUserId(pending.sale.pickUser.id)
+          .onSuccess(()=>{
+            //No Page Reload
+          })
+          .isPending()
+          .call();
+
         }).show();
       });
 
       drop.addItem('/img/forward.png', 'Resolvido', function(){
-        solvedPendingSale(pending);
+        updatePendingStatus(pending);
       });
     }
   }
@@ -208,91 +224,12 @@ function getFirstBottomBarOptions(pending){
 }
 
 
-
-/*function getLastBottomBarOption(pending){
-var div = $('<div>');
-
-//Esta na tela de pendencia
-if ((pending.status < 2 && isWideOpen()) ||
-//Esta na tela de picking e tem a permissao
-(pending.status == 2 && !isWideOpen() && (Sett.get(loggedUser, 3))))
-{
-var solve = $('<label>').addClass('button shadow solve-pending').append(getPendingItemButtonLabel(pending)).click(function(){
-onPendingItemButtonClicked($(this), pending);
-});
-
-if(isBlocked(pending)){
-solve.addClass('blocked');
-}
-
-if (pending.status == 1){
-var block = $('<img>').addClass('block-pending').attr('src','/img/block.png').attr('title','Bloquear').click((e) =>{
-hidePedingItemModal();
-e.stopPropagation();
-
-new BlockedSelector().onSelect((reason)=>{
-new BlockedPost(pending.number, reason).setUserId(pending.sale.pickUser.id).isPending().call();
-}).show();
-});
-
-div.prepend(block);
-}
-
-div.prepend(solve);
-}
-
-return div;
-}
-
-function getEmailSwitch(){
-var input = $('<input>').attr('type', 'checkbox').addClass('switch-input').attr('id','send-email-switch').attr('checked','checked');
-var title = $('<span>').addClass('pick-value').append('Email');
-var label = $('<label>').attr('type', 'checkbox').addClass('switch-label').attr('for','send-email-switch').append(title, $('<span>').addClass('toggle--on'), $('<span>').addClass('toggle--off'));
-
-var holder = $('<div>').append(input, label);
-
-holder.click(function(e){
-$('#send-email-switch').prop("checked", !$('#send-email-switch').prop('checked'));
-e.stopPropagation();
-});
-
-return holder;
-}
-
-function isWideOpen(){
-return typeof wideOpen !== "undefined";
-}*/
-
 function getEmailImage(){
   var img = $('<img>').addClass('icon').attr('src','/img/envelop.png');
   var span = $('<span>').addClass('right').append(img);
   span.css('margin','10px 3px');
   return span;
 }
-
-/*function onPendingItemButtonClicked(button, pending){
-if (pending.status == 2){
-restartPendingSale(pending);
-}else if (isBlocked(pending)){
-
-}else if (pending.status == 1){
-solvedPendingSale(button,pending);
-}else{
-solvingPendingSale(button, pending);
-}
-}
-
-function getPendingItemButtonLabel(pending){
-if (pending.status == 2){
-return "Assumir";
-}else if (isBlocked(pending)){
-return "Bloqueado";
-}else if (pending.status == 1){
-return "Resolver";
-}else{
-return 'Atender';
-}
-}*/
 
 function addChangedLabel(el){
   el.prepend($('<label>').addClass('changed-label').text('Trocado'));
@@ -463,44 +400,25 @@ function loadPendingSaleItems(el, pending){
   }
 }
 
-/*function solvingPendingSale(pending){
-  innerSolvingPendingSale(pending, $('#send-email-switch').prop('checked'), (resultPending)=>{
-    rebuildSpawItem('not-solved', 'solving', resultPending);
+
+
+
+
+function updatePendingStatus(pending){
+  execute("/pending-status", pending, ()=>{
+    window.location.reload();
   });
-}*/
-
-
-function doallSolvingPendingSale(icon){
-  $('.pending-item.not-solved').each(function(index, item){
-    var pending =  getPendingSale($(item).data('sale').split('-')[1]);
-
-    if(!isBlocked(pending)){
-      innerSolvingPendingSale(pending, true, (res)=>{
-
-        $(item).fadeOut(400, function() {
-          $(item).remove();
-          if ($('.pending-item.not-solved').length == 0){
-            window.location.reload();
-          }
-        });
-
-      });
-    }
-  });
-}
-
-
-function innerSolvingPendingSale(pending, sendEmail){
-  pending.sendEmail = sendEmail ? true: false;
-  execute("/pending-status", pending);
-}
-
-function solvedPendingSale(pending){
-  execute("/pending-status", pending);
 }
 
 function restartPendingSale(pending){
-  execute("/picking-pending-restart", pending, ()=>{
+  execute("/pending-restart", pending, ()=>{
+    window.location.reload();
+  });
+}
+
+function assumePendingSale(pending, removePoints){
+  pending.removePoints = removePoints;
+  execute("/pending-assume", pending, ()=>{
     window.location.reload();
   });
 }
@@ -534,13 +452,8 @@ function changeFontSize(els, direction){
 }
 
 
-
-function updatePendingSales(pending){
-  pendingSales = pendingSales.map(function(i) { return i.sale.numeroPedido == pending.sale.numeroPedido ? pending : i; });
-}
-
 function isBlocked(pending){
-  return false;// pending.status == 0 && Dat.hoursDif(pending.updateDate, new Date()) <= 2;
+  return  pending.status == 0 && Dat.hoursDif(pending.updateDate, new Date()) <= 2;
 }
 
 

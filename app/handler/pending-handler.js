@@ -7,6 +7,7 @@ const PendingEmailSender = require('../email/sender/pending-email-sender.js');
 const HistoryStorer = require('../history/history-storer.js');
 const BlockHandler = require('../handler/block-handler.js');
 
+
 module.exports = {
 
   load(clear, callback){
@@ -35,11 +36,11 @@ module.exports = {
   },
 
   store(sale, local, user, callback){
-    PendingLaws.store(sale, local, user, ()=>{
+    PendingLaws.store(sale, local, user, (pending)=>{
       PickingLaws.remove(sale);
       InprogressLaws.remove(sale.numeroPedido);
       BlockHandler.pendingSkus(sale, user);
-
+      
       callback();
     });
   },
@@ -63,10 +64,8 @@ module.exports = {
   restart(pending, user, callback){
     if (!InprogressLaws.checkAndThrowUserInProgress(user.id)) {
       var number = pending.number;
-      pending.status = 3;
-      HistoryStorer.pending(user.id, pending);
 
-      PendingLaws.remove(number);
+      PendingLaws.remove(pending, user);
 
       new SaleLoader(number)
       .loadClient()
@@ -105,7 +104,7 @@ function sendEmail(sale, user, callback){
   pendingEmailSender.client(sale.client.nome, sale.client.email);
   pendingEmailSender.sale(sale);
   pendingEmailSender.send((err, sucessId)=>{
-    HistoryStorer.email(user, sale, err);
+    HistoryStorer.email(user.id, sale, err);
     callback(err, sucessId);
   });
 }

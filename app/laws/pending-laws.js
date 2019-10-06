@@ -1,5 +1,7 @@
 const Pending = require('../bean/pending.js');
 const HistoryStorer = require('../history/history-storer.js');
+const Day = require('../bean/day.js');
+
 
 global.staticPendingSales = [];
 
@@ -60,11 +62,13 @@ module.exports = {
   //---- Store Elements ----//
 
   store(sale, local, user, callback){
-    sale = removeUnpendingItems(sale);
+    sale = removeUnpendingItemsAndClearSale(sale);
 
     var pending = new Pending(sale.numeroPedido, sale, local);
 
-    HistoryStorer.pending(user.id, pending);
+    var day = this.handlePendingPoints(pending);
+
+    HistoryStorer.pending(user.id, pending, day);
 
     pending.upsert((doc, err)=>{
 
@@ -72,10 +76,27 @@ module.exports = {
       this.getList().push(pending);
       this.setOrder();
 
-      callback();
+      callback(pending, sale);
     });
   },
 
+  handlePendingPoints(pending){
+    var sale = pending.sale;
+    var user = pending.sale.pickUser;
+
+    //Contabilizar Pontos por ter feito o picking dos produtos que achou
+    if (!sale.doNotCount){
+      var items = parseInt(sale.itemsQuantity) - parseInt(sale.pendingsQuantity);
+
+      if (pending.removePoints){
+        items = -Math.abs(items);
+      }
+
+      var day = Day.picking(user.id, Dat.today(), null, items);
+      Day.sync(day, (err, doc) => {});
+      return day;
+    }
+  },
 
 
   //---- Update Elements ----//
@@ -92,11 +113,24 @@ module.exports = {
 
   //---- Remove Elements ----//
 
-  remove(saleNumber, callback){
+  removeSale(saleNumber, callback){
     Pending.removeAll(Pending.getKeyQuery(saleNumber), callback);
     global.staticPendingSales = global.staticPendingSales.filter((i)=>{
       return i.number != saleNumber;
     });
+  },
+
+  remove(pending, user){
+    this.removeSale(pending.number);
+
+    pending.status = 3;
+    var day = null;
+
+    if (pending.removePoints){
+       day = this.handlePendingPoints(pending);
+    }
+
+    HistoryStorer.pending(user.id, pending, day);
   },
 
 
@@ -124,10 +158,17 @@ function loadAllPendingSalesFromDB(callback){
   });
 }
 
-function removeUnpendingItems(sale){
+function removeUnpendingItemsAndClearSale(sale){
+  sale = Util.removeAttrs(sale, ['id', 'numeroPedido', 'situacao', 'items', 'pickUser', 'transport', 'data', 'doNotCount', 'itemsQuantity', 'numeroDaOrdemDeCompra']);
+
   sale.items = sale.items.filter(function (item){
     return item.pending !== undefined && item.pending.toString() == "true";
   });
+
+  sale.pendingsQuantity = sale.items.reduce(function(a, b) {
+    return a + parseFloat(b.quantidade);
+  }, 0);
+
 
   return sale;
 }

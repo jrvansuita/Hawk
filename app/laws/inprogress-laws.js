@@ -51,7 +51,6 @@ module.exports = {
     }
 
     sale.begin = begin;
-    sale.end = null;
     sale.doNotCount = doNotCount;
     sale.pickUser = User.suppress(UsersProvider.get(userId));
     this.object()[userId] = sale;
@@ -63,15 +62,13 @@ module.exports = {
 
   endPicking(userId, callback){
     var sale = this.getInProgressSale(userId);
-    sale.end = new Date();
-
-
+    
     if (!sale.doNotCount){
       checkEndTime(sale, userId);
     }
 
-    var day = Day.picking(userId, Dat.today(), getItemsQuantity(sale), getSecondsDiference(sale));
-    //console.log('[Fechou] picking ' + sale.pickUser.name  + ' - ' + sale.numeroPedido);
+    var day = Day.picking(userId, Dat.today(), sale);
+
     this.remove(sale.numeroPedido);
 
     HistoryStorer.picking(userId, sale, day);
@@ -97,7 +94,7 @@ module.exports = {
 
 
 function checkEndTime(sale, userId){
-  var secs = getSecondsDiference(sale);
+  var secs = (new Date().getTime() - sale.begin.getTime()) / 1000;
   secs = secs < 0 ? 0 : secs;
 
   //Calcula 3 segundos por item do pedido no mínimo
@@ -105,12 +102,4 @@ function checkEndTime(sale, userId){
   if ((secs < minSecs) && (process.env.NODE_ENV != undefined)){
     Err.thrw(Const.insufficient_picking_time.format(sale.numeroPedido, sale.itemsQuantity, minSecs, parseInt(secs)), userId);
   }
-}
-
-function getSecondsDiference(sale){
-  return (sale.end.getTime() - sale.begin.getTime()) / 1000;
-}
-
-function getItemsQuantity(sale){
-  return parseInt(sale.itemsQuantity);
 }

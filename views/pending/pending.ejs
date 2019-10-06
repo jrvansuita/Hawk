@@ -23,11 +23,13 @@
 
   <script>
   window.pendingSales = <%- JSON.stringify(pendingSales || null) %>
-  window.wideOpen = <%- wideOpen %>
   </script>
 
   <%
-  if (wideOpen){
+
+
+
+  if (locals.url.includes('pending')){
     var open = [];
     var solving = [];
     var solved = [];
@@ -48,7 +50,7 @@
 
 
   <div class="main-content no-scroll" style="padding-top:15px; display:flex">
-    <% if (wideOpen){%>
+    <% if (locals.url.includes('pending')){%>
       <% pendingSales = open;
          var label = 'Não Atendido';
          var topClass = 'red-top';

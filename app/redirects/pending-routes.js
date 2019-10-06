@@ -13,7 +13,6 @@ module.exports = class PendingRoutes extends Routes{
       if (this._checkPermissionOrGoBack(req, res, 2)){
         PendingHandler.load(false, (list)=>{
           res.render('pending/pending', {
-            wideOpen : true,
             pendingSales: list});
           });
         }
@@ -50,8 +49,12 @@ module.exports = class PendingRoutes extends Routes{
         PendingHandler.incStatus(body.pendingSale, locals.loggedUser, this._resp().redirect(res));
       });
 
-      this._post('/picking-pending-restart', (req, res, body, locals) => {
-        PendingHandler.restart(body.pendingSale, body.pendingSale.status == 2 ? locals.loggedUser : body.pendingSale.sale.pickUser, this._resp().redirect(res));
+      this._post('/pending-assume', (req, res, body, locals) => {
+        PendingHandler.restart(body.pendingSale, locals.loggedUser, this._resp().redirect(res));
+      });
+
+      this._post('/pending-restart', (req, res, body, locals) => {
+        PendingHandler.restart(body.pendingSale, body.pendingSale.sale.pickUser, this._resp().redirect(res));
       });
 
       this._post('/pending-swap-items', (req, res, body, locals) => {

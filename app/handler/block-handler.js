@@ -95,12 +95,13 @@ module.exports = {
     }
   },
 
+  //Bloquear automaticamente Skus da pendencia 
   pendingSkus(sale, user){
     var skus = sale.items.map((i)=>{
       return i.codigo;
     });
 
-    //Crio uma funcation para iterar automaticamente
+    //Crio uma function para iterar automaticamente
     blockSkusRun =  (skus, index, count, callback) => {
       var sku = skus[index];
 

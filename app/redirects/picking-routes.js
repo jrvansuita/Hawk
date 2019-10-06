@@ -96,7 +96,7 @@ module.exports = class PickingRoutes extends Routes{
       var userId = req.session.loggedUserID;
 
       BlockHandler.toggle(req.body.blockNumber, userId, req.body.reasonTag, ()=>{
-        PendingLaws.remove(req.body.blockNumber);
+        PendingLaws.removeSale(req.body.blockNumber);
         res.status(200).send("OK");
       });
     });
