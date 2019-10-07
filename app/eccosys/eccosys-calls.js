@@ -92,6 +92,10 @@ module.exports = class EccosysCalls{
     this.getSalesBySituation(0, callback);
   }
 
+  getWaitingPaymentSales(callback) {
+    this.getSalesBySituation(-1, callback);
+  }
+
   getSalesBySituation(situation, callback) {
     //Pronto para picking
     this.call.setPath('pedidos/situacao/' + situation)
