@@ -64,7 +64,7 @@ module.exports = class ProductRoutes extends Routes{
     });
 
     this._post('/check-product-diagnostic', (req, res) => {
-      new ProductDiagnostics().resync(req.body.sku, ()=>{
+      new ProductDiagnostics().resync(req.body.sku, req.body.forceFather, ()=>{
         new DiagnosticsProvider().loadBySku(req.body.sku, (all, product)=>{
           res.status(200).send({data : all, product: product});
         });

@@ -16,7 +16,7 @@
   "dependencies": {
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
-    "canvas": "github:automattic/node-canvas",
+    "canvas": "^2.6.0",
     "connect-timeout": "^1.9.0",
     "cookie-session": "^2.0.0-beta.3",
     "debug": "^4.1.1",

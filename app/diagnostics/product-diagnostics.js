@@ -35,9 +35,7 @@ module.exports = class ProductDiagnostics{
       this._storeFix(product, Fix.enum().HAS_LOCAL_NO_STOCK);
     }
 
-    else if (!hasSales(stocks)){
-
-
+    else if (!hasSales(stocks, 7)){
       if (isMoreThanXDaysRegistered(product, 3)){
 
         if (hasStock(product)){
@@ -200,6 +198,16 @@ module.exports = class ProductDiagnostics{
   }
 
 
+  _loadChildProducts(sku, callback){
+    sku = sku.split('-')[0];
+
+    new EccosysCalls()
+    .getProduct(sku, (product)=>{
+      var skus = product._Skus ? product._Skus.map((i)=>{return i.codigo}) : [];
+      callback(skus.length > 0 ? skus : [sku]);
+    });
+  }
+ 
 
   _resyncStoredSkus(brandName, type){
     var handler = (err, docs)=>{
@@ -229,10 +237,18 @@ module.exports = class ProductDiagnostics{
   }
 
 
-  resync(sku, callback){
-    this._checkSingleSku(sku, ()=>{
-      callback();
-    });
+  resync(sku, forceByFather, callback){
+    if (forceByFather){
+      this._loadChildProducts(sku, (skus)=>{
+        this._checkRangeSku(skus, 0, ()=>{
+          callback();
+        })
+      });
+    }else{
+      this._checkSingleSku(sku, ()=>{
+        callback();
+      });
+    }
   }
 
 };
@@ -305,8 +321,22 @@ function isPhotoMissing(product){
   return !product.feedProduct || !product.feedProduct.image;
 }
 
-function hasSales(stocks){
-  return stocks.some((i)=>{ return parseFloat(i.quantidade) < 0 && (parseInt(i.idOrigem) > 0); });
+function hasSales(stocks, daysOffSales){
+  var filter = (i)=>{ return parseFloat(i.quantidade) < 0 && (parseInt(i.idOrigem) > 0); };
+
+  if (daysOffSales){
+    var sales = stocks.filter(filter);
+
+    if (sales.length > 0){
+      var lastSale = sales[0];
+      return Dat.daysDif(lastSale.data, new Date()) <= daysOffSales;
+    }else{
+      return false;
+    }
+  }
+
+
+  return stocks.some(filter);
 }
 
 
@@ -316,14 +346,23 @@ function isNcmProblem(product){
 }
 
 function isVisible(product){
-  return product.feedProduct ? (product.feedProduct.visible && hasStock(product, true)) : true;
+  if (product.feedProduct){
+    if (product.feedProduct.visible == false){
+      if (hasStock(product, true)){
+        return false;
+      }
+    }
+  }
+
+  return true;
 }
 
 function isAssociated(product){
   if (product.feedProduct){
     var arr = product.feedProduct.associates;
-
-    return (arr && arr.includes(product.codigo)) || product.codigo == product.feedProduct.sku;
+    if (arr){
+      return arr.includes(product.codigo) || (product.codigo == product.feedProduct.sku)
+    }
   }
 
   return true;

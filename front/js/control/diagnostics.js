@@ -12,7 +12,7 @@ $(document).ready(()=>{
 
   $('.main-menu-dots').click(function(e){
     var drop = new MaterialDropdown($(this), e);
-    drop.addItem('/img/search.png', 'Pesquisar', function(){
+    drop.addItem('/img/search.png', 'Pesquisar Produto', function(){
 
       if ($('#search').is(':visible')){
         $('#search').hide();

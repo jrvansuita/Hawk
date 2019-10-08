@@ -25,90 +25,126 @@
 
   <div class="fixes-right">
 
-    <%data.forEach((item,index)=>{%>
+    <%if (data.length == 0){%>
+
       <div class="top-sku">
-        <label class="fixes-sku-list copiable"><%=item.sku%></label>
-
-        <%if (index == 0){%>
-          <div class="menu-dots">
-            <img src="img/dots.png" class="dots-glyph" />
-          </div>
-
-          <%}%>
+        <label class="fixes-sku-list no-problem">Nenhum Problema Encontrado</label>
+        <div class="no-problem-menu" data-sku="<%=product.sku%>">
+          <img src="img/dots.png" class="dots-glyph" />
         </div>
-
-
-        <div class="fixes-sku-badges">
-          <%item.fixes.forEach(type=>{%>
-
-            <div class="badge-item">
-              <img class="ind-icon" src="img/<%=Util.diagIcon(type)%>.png"/>
-              <label class="ind-title"><%=Util.diagTitle(type)%></label>
-
-              <img class="right f-icon fix" src="img/restart.png" data-sku="<%=item.sku%>" data-type="<%=type%>"/>
-            </div>
-
-            <%});%>
-          </div>
-
-
-
-          <%});%>
-        </div>
-
-        <script type="text/javascript">
-          $(document).ready(()=>{
-            $('.f-icon').click(function(e){
-              $(this).attr('src', 'img/loader/circle.svg');
-              var sku = $(this).data('sku');
-
-              _post('/check-product-diagnostic', {sku: sku},(data)=>{
-                var type = $(this).data('type');
-                var obj = data.data.find((item)=>{return item.sku == sku});
-
-                var fixed = !obj || !obj.fixes.includes(type);
-
-                if (fixed){
-                  $(this).attr('src', 'img/checked.png');
-                  $(this).unbind('click');
-                  $(this).removeClass('fix').addClass('fixed');
-                }else{
-                  $(this).attr('src', 'img/restart-error.png');
-                }
-
-                if ($('.f-icon.fix').length == 0){
-                  $('.sku-fixes-modal').delay(500).fadeOut(400, ()=>{
-                    $('.sku-fixes-modal').trigger('click');
-                    $(".row-item[data-sku='"+sku.split('-')[0]+"']").fadeOut(600);
-                  });
-                }
-              });
-
-              e.stopPropagation();
-            });
-
-
-            $('.fixes-sku-list.copiable').dblclick(function(e){
-              e.stopPropagation();
-              window.open('/product?sku=' + $(this).text(),'_blank');
-            });
-
-            $('.menu-dots').click(function(e){
-              var drop = new MaterialDropdown($(this), e, false, true);
-
-              drop.addItem('/img/restart-plus.png', 'Checar Todos', function(e){
-                 $('.f-icon').trigger('click');
-                 e.stopPropagation();
-              });
-
-              drop.show();
-
-              e.stopPropagation();
-            });
-          });
-
-        </script>
-
       </div>
 
-    </div>
+      <%}else{%>
+
+        <%data.forEach((item,index)=>{%>
+          <div class="top-sku">
+            <label class="fixes-sku-list copiable"><%=item.sku%></label>
+
+            <%if (index == 0){%>
+              <div class="menu-dots">
+                <img src="img/dots.png" class="dots-glyph" />
+              </div>
+
+              <%}%>
+            </div>
+
+
+            <div class="fixes-sku-badges">
+
+              <%item.fixes.forEach(type=>{%>
+
+                <div class="badge-item">
+                  <img class="ind-icon" src="img/<%=Util.diagIcon(type)%>.png"/>
+                  <label class="ind-title"><%=Util.diagTitle(type)%></label>
+
+                  <img class="right f-icon fix" src="img/restart.png" data-sku="<%=item.sku%>" data-type="<%=type%>"/>
+                </div>
+
+                <%});%>
+              </div>
+
+
+
+              <%});%>
+
+              <%}%>
+            </div>
+
+            <script type="text/javascript">
+              $(document).ready(()=>{
+
+
+
+
+
+                $('.f-icon').click(function(e){
+                  $(this).attr('src', 'img/loader/circle.svg');
+                  var sku = $(this).data('sku');
+
+                  _post('/check-product-diagnostic', {sku: sku},(data)=>{
+                    var type = $(this).data('type');
+                    var obj = data.data.find((item)=>{return item.sku == sku});
+
+                    var fixed = !obj || !obj.fixes.includes(type);
+
+                    if (fixed){
+                      $(this).attr('src', 'img/checked.png');
+                      $(this).unbind('click');
+                      $(this).removeClass('fix').addClass('fixed');
+                    }else{
+                      $(this).attr('src', 'img/restart-error.png');
+                    }
+
+                    if ($('.f-icon.fix').length == 0){
+                      $('.sku-fixes-modal').delay(500).fadeOut(400, ()=>{
+                        $('.sku-fixes-modal').trigger('click');
+                        $(".row-item[data-sku='"+sku.split('-')[0]+"']").fadeOut(600);
+                      });
+                    }
+                  });
+
+                  e.stopPropagation();
+                });
+
+
+                $('.fixes-sku-list.copiable').dblclick(function(e){
+                  e.stopPropagation();
+                  window.open('/product?sku=' + $(this).text(),'_blank');
+                });
+
+                $('.no-problem-menu').click(function(e){
+                  var sku = $(this).data('sku');
+                  var drop = new MaterialDropdown($(this), e, false, true);
+
+                  drop.addItem('/img/restart.png', 'Verificar Agora', function(e){
+                    $('.loading-circle').show();
+                    _post('/check-product-diagnostic', {sku: sku, forceFather : true},(data)=>{
+                      showSkuFixesDialog(sku);
+                      $('.loading-circle').hide();
+                    });
+                  });
+
+                  drop.show();
+
+                  e.stopPropagation();
+                });
+
+                $('.menu-dots').click(function(e){
+                  var drop = new MaterialDropdown($(this), e, false, true);
+
+                  drop.addItem('/img/restart-plus.png', 'Checar Todos', function(e){
+                    $('.f-icon').trigger('click');
+                    e.stopPropagation();
+                  });
+
+                  drop.show();
+
+                  e.stopPropagation();
+                });
+              });
+
+            </script>
+
+          </div>
+
+        </div>

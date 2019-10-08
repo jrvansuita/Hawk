@@ -1,0 +1,9 @@
+.holder{border: 2px solid black;}
+
+
+.item{
+  width: 100px;
+  height: 100px;
+  background: aquamarine;
+  padding: 3px;
+}
