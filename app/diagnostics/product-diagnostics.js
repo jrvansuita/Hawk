@@ -35,30 +35,29 @@ module.exports = class ProductDiagnostics{
       this._storeFix(product, Fix.enum().HAS_LOCAL_NO_STOCK);
     }
 
-    else if (!hasSales(stocks, 7)){
-      if (isMoreThanXDaysRegistered(product, 3)){
+    else if (isMoreThanXDaysRegistered(product, 3)){
+
+      if (!hasSales(stocks, 7)){
 
         if (hasStock(product)){
 
           if (!isAssociated(product)){
             this._storeFix(product, Fix.enum().ASSOCIATED);
-          }
-          else if(!isVisible(product)){
+          }else if(!isVisible(product)){
             this._storeFix(product, Fix.enum().NOT_VISIBLE);
-          }
-
-        }else if (isMagentoProblem(product)){
-          if (hasStock(product)){
+          }else if (isMagentoProblem(product)){
             this._storeFix(product, Fix.enum().MAGENTO_PROBLEM);
-          }else{
+          }else if (isMoreThanXDaysRegistered(product, 20) && !hasLockedStock(product)){
+            this._storeFix(product, Fix.enum().SALE);
+          }
+        }else{
+          if (!hasSales(stocks)){
             this._storeFix(product, Fix.enum().REGISTERING);
           }
         }
-        else if (isMoreThanXDaysRegistered(product, 9)){
-          this._storeFix(product, Fix.enum().SALE);
-        }
       }
     }
+
 
     // --- Cascata --- //
 
@@ -207,7 +206,7 @@ module.exports = class ProductDiagnostics{
       callback(skus.length > 0 ? skus : [sku]);
     });
   }
- 
+
 
   _resyncStoredSkus(brandName, type){
     var handler = (err, docs)=>{
@@ -268,7 +267,11 @@ function isWeightMissing(product){
 }
 
 function hasStock(product, checkAvailability){
-  return product._Estoque.estoqueReal > 0 && (!checkAvailability || (product._Estoque.estoqueDisponivel > 0));
+  return product._Estoque.estoqueReal > 0 && (!checkAvailability || (hasLockedStock(product)));
+}
+
+function hasLockedStock(product){
+  return product._Estoque.estoqueDisponivel > 0;
 }
 
 function hasLocal(product){
