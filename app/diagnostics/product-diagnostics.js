@@ -39,19 +39,21 @@ module.exports = class ProductDiagnostics{
 
       if (!hasSales(stocks, 7)){
 
-        if (hasStock(product)){
+        if (hasStock(product, true)){
 
           if (!isAssociated(product)){
             this._storeFix(product, Fix.enum().ASSOCIATED);
           }else if(!isVisible(product)){
             this._storeFix(product, Fix.enum().NOT_VISIBLE);
-          }else if (isMagentoProblem(product)){
-            this._storeFix(product, Fix.enum().MAGENTO_PROBLEM);
-          }else if (isMoreThanXDaysRegistered(product, 20) && !hasLockedStock(product)){
+          }else if (isMoreThanXDaysRegistered(product, 20)){
             this._storeFix(product, Fix.enum().SALE);
           }
-        }else{
-          if (!hasSales(stocks)){
+        }
+      }else{
+        if (!hasLockedStock(product)){
+          if (isMagentoProblem(product)){
+            this._storeFix(product, Fix.enum().MAGENTO_PROBLEM);
+          }else{
             this._storeFix(product, Fix.enum().REGISTERING);
           }
         }
@@ -250,6 +252,13 @@ module.exports = class ProductDiagnostics{
     }
   }
 
+  remove(sku){
+    //Remove all from this sku
+    Fix.removeSkuAll(sku, (err)=>{
+
+    });
+  }
+
 };
 
 function getProductAttrBundle(product){
@@ -267,11 +276,16 @@ function isWeightMissing(product){
 }
 
 function hasStock(product, checkAvailability){
-  return product._Estoque.estoqueReal > 0 && (!checkAvailability || (hasLockedStock(product)));
+  return product._Estoque.estoqueReal > 0 && (!checkAvailability || (hasAvailableStock(product)));
 }
 
-function hasLockedStock(product){
+function hasAvailableStock(product){
   return product._Estoque.estoqueDisponivel > 0;
+}
+
+
+function hasLockedStock(product){
+  return product._Estoque.estoqueDisponivel < product._Estoque.estoqueReal;
 }
 
 function hasLocal(product){

@@ -71,6 +71,16 @@ module.exports = class Fix extends DataAccess {
     return ['sku', 'type'];
   }
 
+  static removeSkuAll(sku) {
+    sku = sku.split('-')[0];
+
+    var regexp = new RegExp("^"+ sku);
+
+    this.staticAccess().deleteMany({sku : regexp}, (err) => {
+    });
+  }
+
+
 
   static sums(callback){
     Fix.aggregate([{

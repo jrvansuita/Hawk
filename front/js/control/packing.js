@@ -640,6 +640,8 @@ var countdown = null;
 
 
 function handleMissingItemsMsg(clear){
+  //sale.pickUser = loggedUser;
+
   if (sale.pickUser && ($('.missing-items-msg-holder').length > 0)){
     clearTimeout(missingItemsId);
     $('.missing-items-msg-holder').hide();
@@ -666,6 +668,8 @@ function handleMissingItemsMsg(clear){
 
 
 function onMissingItemsClick(){
+
+
   handleMissingItemsMsg(true);
   $('.missing-items-msg-holder').remove();
 

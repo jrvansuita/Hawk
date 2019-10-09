@@ -26,7 +26,7 @@ module.exports={
 
   packingRemovingPointsFromPicker(user, picker, points, saleNumber, callback){
     var type = 'picking';
-    points = -Math.abs(points);
+    points = -Math.abs(parseInt(points));
     var obs = 'Faltaram ' + Math.abs(points) + ' items no picking do pedido ' + saleNumber;
 
     History.info(user.id, 'Picking Incompleto', 'Acerto automático de pontos\n' + picker.name + ' recebeu '  + points + '  Pontos de ' + Str.capitalize(type) + '\n' + obs, 'Pontos');

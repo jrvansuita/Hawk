@@ -102,8 +102,10 @@ module.exports = class ProductRoutes extends Routes{
     });
 
 
-
-
+    this._post('/product-diagnostic-remove', (req, res) => {
+      new ProductDiagnostics().remove(req.body.sku);
+      res.status(200).send('Ok');
+    });
 
 
     this._post('/product-local', (req, res) => {

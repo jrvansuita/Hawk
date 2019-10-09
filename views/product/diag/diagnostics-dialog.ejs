@@ -41,7 +41,7 @@
             <label class="fixes-sku-list copiable"><%=item.sku%></label>
 
             <%if (index == 0){%>
-              <div class="menu-dots">
+              <div class="menu-dots" data-sku="<%=product.sku%>">
                 <img src="img/dots.png" class="dots-glyph" />
               </div>
 
@@ -130,11 +130,20 @@
                 });
 
                 $('.menu-dots').click(function(e){
+                  var sku = $(this).data('sku');
+
                   var drop = new MaterialDropdown($(this), e, false, true);
 
                   drop.addItem('/img/restart-plus.png', 'Checar Todos', function(e){
                     $('.f-icon').trigger('click');
                     e.stopPropagation();
+                  });
+
+                  drop.addItem('/img/delete.png', 'Remover', function(e){
+                    _post('/product-diagnostic-remove', {sku: sku},(data)=>{
+                      $('.sku-fixes-modal').trigger('click');
+                      $(".row-item[data-sku='"+sku.split('-')[0]+"']").fadeOut(600);
+                    });
                   });
 
                   drop.show();
