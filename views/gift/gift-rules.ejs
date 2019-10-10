@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<%  include ../menus/main-menu %>
+<head>
+
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/gift.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-checkbox.css">
+
+
+  <script type="text/javascript" src="/front/js/control/gift/gift.js"></script>
+  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+
+
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/combobox.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/jquery-ui.css">
+  <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
+
+
+
+  <script type="text/javascript" src="/front/js/libs/date-picker2.js"></script>
+
+
+</head>
+<body>
+
+
+  <div class="main-content">
+
+    <div class="top shadow">
+      <label class="sub-title">Regras</label>
+      <div class="rules-box-select">
+
+      </div>
+
+    </div>
+
+    <div class="content shadow">
+
+      <div class="row">
+        <div class="material-input-holder">
+          <input type="text" id="name" maxlength="50"
+          value="" autocomplete="off"
+          title="Nome da Regra" required/>
+
+          <span class="bar"></span>
+          <label>Nome da Regra</label>
+        </div>
+
+        <div class="material-input-holder expires-holder">
+          <input id="expires" maxlength="50"
+          value="" autocomplete="off"
+          title="Data de Expiração" required/>
+
+          <span class="bar"></span>
+          <label>Data de Expiração</label>
+        </div>
+
+        <label class="pure-material-checkbox">
+          <input type="checkbox" id="lock-size" name="lockSize" checked>
+          <span>Ativo</span>
+        </label>
+
+      </div>
+
+
+
+
+
+
+
+      <div class="row">
+
+        <div class="material-input-holder">
+          <input type="text" id="sku" maxlength="50"
+          value="" autocomplete="off"
+          title="Código do Produto" required/>
+
+          <span class="bar"></span>
+          <label>Sku</label>
+        </div>
+
+
+        <div class="sel-box skus-box">
+
+
+        </div>
+      </div>
+
+      <div class="row">
+
+        <div class="conditions-select">
+          <label class="sub-title">Condições</label>
+
+          <div class="material-input-holder">
+            <input type="text" id="attr" maxlength="50"
+            value="" autocomplete="off"
+            title="Nome do Atributo" required/>
+
+            <span class="bar"></span>
+            <label>Atributo</label>
+          </div>
+
+          <div class="material-input-holder">
+            <input type="text" id="comp" maxlength="50"
+            value="" autocomplete="off"
+            title="Comparador" required/>
+
+            <span class="bar"></span>
+            <label>Comparador</label>
+          </div>
+
+
+          <div class="material-input-holder">
+            <input type="text" id="value" maxlength="50"
+            value="" autocomplete="off"
+            title="Valor" required/>
+
+            <span class="bar"></span>
+            <label>Valor</label>
+          </div>
+
+
+
+        </div>
+
+
+
+        <div class="sel-box attrs-box">
+
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+</body>
+</html>

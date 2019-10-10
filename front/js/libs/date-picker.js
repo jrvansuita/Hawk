@@ -1,7 +1,11 @@
-function bindDateRangePickers(onRangeSelected) {
+function loadDatePickerFiles(callback){
   loadCssFile('/front/css/libs/material-date-picker.min.css');
   loadCssFile('/front/css/libs/date-picker.css');
-  loadJsFile('/front/js/libs/material-date-picker.min.js', function() {
+  loadJsFile('/front/js/libs/material-date-picker.min.js', callback);
+}
+
+function bindDateRangePickers(onRangeSelected) {
+  loadDatePickerFiles(function() {
 
     $('.datepicker').each(function() {
       var $inputTo = $('<input>').attr('id', 'select-date-to').addClass('select-date');
@@ -19,7 +23,6 @@ function bindDateRangePickers(onRangeSelected) {
       });
     });
   });
-
 }
 
 
@@ -38,7 +41,7 @@ function buildRangeDate(inputFrom, inputTo, onRangeSelected) {
 }
 
 function buildDatePicker(input, onChange, onSelect, onClose) {
-  input.datepicker({
+  return input.datepicker({
     modal: false,
     header: true,
     footer: true,

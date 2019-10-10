@@ -68,6 +68,6 @@
   margin-top: -47px !important;
 }
 
-.gj-picker.gj-picker-md.datepicker.gj-unselectable:last-child>[role=footer] {
+/*.gj-picker.gj-picker-md.datepicker.gj-unselectable:last-child>[role=footer] {
   visibility: hidden;
-}
+}*/

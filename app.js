@@ -93,6 +93,7 @@ routes.push('stock-routes.js');
 routes.push('user-routes.js');
 routes.push('settings-routes.js');
 routes.push('mock-routes.js');
+routes.push('gift-routes.js');
 
 // -- Run Routes -- //
 routes.forEach((r)=>{

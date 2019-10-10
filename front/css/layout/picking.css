@@ -39,7 +39,6 @@ table{
   max-height: 90%;
   padding: 15px;
   display: block;
-  overflow-y: auto;
 }
 
 #user-id{

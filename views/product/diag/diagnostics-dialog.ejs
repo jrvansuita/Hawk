@@ -1,11 +1,13 @@
 
+<%product = product ? product : {}%>
+
 <div class="fixes-main">
 
   <div class="fixes-left">
 
     <div class="top-image-holder">
       <a href="<%=product ? product.url : ''%>" target="_blank">
-        <label class="sku-name"><%=product ? Str.short(product.name, 42): ''%></label>
+        <label class="sku-name"><%=product && product.name ? Str.short(product.name, 42): ''%></label>
       </a>
       <%
 
@@ -29,7 +31,7 @@
 
       <div class="top-sku">
         <label class="fixes-sku-list no-problem">Nenhum Problema Encontrado</label>
-        <div class="no-problem-menu" data-sku="<%=product.sku%>">
+        <div class="no-problem-menu" data-sku="<%=product.sku || data[0].sku%>">
           <img src="img/dots.png" class="dots-glyph" />
         </div>
       </div>
@@ -41,7 +43,7 @@
             <label class="fixes-sku-list copiable"><%=item.sku%></label>
 
             <%if (index == 0){%>
-              <div class="menu-dots" data-sku="<%=product.sku%>">
+              <div class="menu-dots" data-sku="<%=product.sku || data[0].sku%>">
                 <img src="img/dots.png" class="dots-glyph" />
               </div>
 

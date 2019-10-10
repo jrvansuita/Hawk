@@ -193,7 +193,7 @@ function showAvatarCropper(){
       return user.access && (user.access.trim() == access.trim());
     });
 
-    var user = option.data;
+    var user = option ? option.data : null;
 
     if (user && (user.id != $('#editing').val())){
       $('#access').val('Cartão de acesso já utilizado');

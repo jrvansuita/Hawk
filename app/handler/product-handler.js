@@ -173,6 +173,6 @@ function putAndControlDataCache(sku, product){
       });
     }
   }else{
-    productsDataCache[sku] = null;
+    productsDataCache[sku] = {};
   }
 }

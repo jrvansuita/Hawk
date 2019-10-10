@@ -88,17 +88,17 @@ module.exports = class {
       }else{
         products.forEach((product, index)=>{
           var block = this.blockeds.find((i)=>{
-            return i.number == product.codigo;
+            return i.number.toLowerCase() == product.codigo.toLowerCase();
           });
 
-          var data = new DataItem(product)
-          .setData(block.blockings)
-          .setType('block')
-          .setIsFather(product._Skus && product._Skus.length);
+          if (block){
+            var data = new DataItem(product)
+            .setData(block.blockings)
+            .setType('block')
+            .setIsFather(product._Skus && product._Skus.length);
 
-
-          this.results.push(data);
-
+            this.results.push(data);
+          }
 
           if (index == products.length-1){
             callback();

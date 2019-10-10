@@ -1,0 +1,44 @@
+.main-content{width: fit-content;min-width: 50%;margin: auto;padding-top: 100px;padding-left: 3px;padding-right: 3px;}
+
+.top{
+  padding: 5px 25px;
+  margin-bottom: 25px;
+}
+.content{
+  padding: 35px 25px;
+}
+
+.sub-title {
+  color: gray;
+  font-size: 15px;
+  padding: 10px 5px;
+  display: block;
+  width: fit-content;
+}
+
+.rules-box-select{
+  width: 100%;
+  padding: 35px 15px;
+}
+
+.row{
+  width: 100%;
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.row > *{
+  margin-right: 25px;
+}
+
+.sel-box{
+  min-width: 50%;
+  min-height: 100px;
+  background-color: #f3efef;
+  border: 1px dashed #d6d6d6;
+  border-radius: 3px;
+}
+
+.conditions-select .material-input-holder{
+margin-top: 30px !important;
+}
