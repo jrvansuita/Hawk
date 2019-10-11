@@ -2,6 +2,10 @@
   display: none;
 }
 
+.gj-picker-md {
+  min-height: 326px;
+}
+
 .gj-picker-md [role=header] {
   background-color: #1c796b;
 }
@@ -58,16 +62,10 @@
   margin-top: -20px;
 }
 
-.gj-picker-md [role=footer] {
-  margin-bottom: 3px;
-  margin-right: 3px;
-}
-
-.gj-picker.gj-picker-md.datepicker.gj-unselectable:last-child {
+/*.gj-picker.gj-picker-md.datepicker.gj-unselectable:last-child {
   margin-left: -242px !important;
   margin-top: -47px !important;
 }
-
-/*.gj-picker.gj-picker-md.datepicker.gj-unselectable:last-child>[role=footer] {
+.gj-picker.gj-picker-md.datepicker.gj-unselectable:last-child>[role=footer] {
   visibility: hidden;
 }*/

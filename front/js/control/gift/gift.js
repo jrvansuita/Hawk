@@ -10,9 +10,4 @@ $(document).ready(()=>{
   })
   .load()
   .then(binder => expiresDatePicker = binder);
-
-
-
-
-
 });

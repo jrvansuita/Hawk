@@ -28,60 +28,82 @@ class FileLoader{
     return arr.map(i=>{return getPath(i);});
   }
 
-  bindJs(scripts) {
+  //Not Working When using depencencie-to-depencencie
+  //Using JQuery
+  /*_loadScript(filePath, callback){
+  $.getScript(filePath).then(function(script) {
+  if (callback){
+  callback(script);
+}
+});
+}*/
 
-    var load = function(scripts, callback) {
-      var progress = 0;
-      var _getScript = function() {
-        if (progress == scripts.length) { return callback(); }
-        $.getScript(scripts[progress], function() {
-          progress++;
-          _getScript();
-        });
-      };
+_loadScript(filePath, callback){
+  var script = document.createElement('script');
+  script.onload = function (script) {
+    if (callback){
+      callback(script);
+    }
+  };
+  script.src = filePath;
+  document.head.appendChild(script);
+}
 
-      _getScript();
+bindJs(scripts) {
+
+  var load = (scripts, callback) =>{
+    var progress = 0;
+    var _getScript = ()=> {
+      if (progress == scripts.length) { return callback(); }
+
+      this._loadScript(scripts[progress], ()=>{
+        progress++;
+        _getScript();
+      });
     };
 
+    _getScript();
+  };
 
-    return new Promise((resolve, reject)=>{
-      load(scripts, ()=>{
-        resolve();
-      });
+
+  return new Promise((resolve, reject)=>{
+    load(scripts, ()=>{
+      resolve();
     });
-  }
+  });
+}
 
-  css(name){
-    this.cssList.push(name);
-    return this;
-  }
+css(name){
+  this.cssList.push(name);
+  return this;
+}
 
-  js(name){
-    this.jsList.push(name);
-    return this;
-  }
+js(name){
+  this.jsList.push(name);
+  return this;
+}
 
-  load(){
-    return this.bindFiles();
-  }
+load(){
+  return this.bindFiles();
+}
 
-  bindFiles(){
-    this.cssList = this._buildPaths(this.cssList, 'css');
-    this.jsList = this._buildPaths(this.jsList, 'js');
+bindFiles(){
+  this.cssList = this._buildPaths(this.cssList, 'css');
+  this.jsList = this._buildPaths(this.jsList, 'js');
 
-    this.cssList.forEach((each)=>{
-      this.bindCss(each);
-    });
+  this.cssList.forEach((each)=>{
+    this.bindCss(each);
+  });
 
-    return this.bindJs(this.jsList);
-  }
+  return this.bindJs(this.jsList);
+}
 
-  bindCss(link){
-    $('<link>').appendTo('head').attr({
-      type: 'text/css',
-      rel: 'stylesheet',
-      href: link
-    });
-  }
+bindCss(link){
+  $('<link>').appendTo('head').attr({
+    type: 'text/css',
+    rel: 'stylesheet',
+    href: link
+  });
+}
 
 }
