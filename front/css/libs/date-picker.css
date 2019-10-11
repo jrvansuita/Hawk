@@ -1,5 +1,5 @@
-.gj-datepicker {
-  visibility: hidden;
+.gj-datepicker,  .gj-datepicker > input{
+  display: none;
 }
 
 .gj-picker-md [role=header] {
