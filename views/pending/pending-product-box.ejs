@@ -12,7 +12,7 @@
 
       <div class="left-column">
         <span class="sku copiable"><%=data.sku%></span>
-        <span class="brand"><%=data.brand.trim()%></span>
+        <span class="brand"><%=data.brand ? data.brand.trim() : 'Sem Marca'%></span>
       </div>
 
       <div>
