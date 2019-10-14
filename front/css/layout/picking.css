@@ -376,7 +376,9 @@ tr.row-padding td{
   display: block;
   width: 100%;
   overflow: hidden;
+  padding-top: 2px;
   max-height: 80%;
+  padding-right: 2px;
 }
 
 .scrollable-table:hover{

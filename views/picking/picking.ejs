@@ -99,6 +99,9 @@
               <label class="open-sales-label">+<%=openSalesCount%> Em aberto</label>
               <%}%>
 
+
+
+
               <%
               previewPickingSales.slice(0, 6).forEach(function(preview){
                 %>
@@ -127,7 +130,6 @@
                 <%
               });
               %>
-
             </div>
 
 
@@ -203,9 +205,11 @@
                       if (progress.length === 0){
                         %><span class="pick-hint">Nenhum picking em andamento </span>
                         <%
-                      }
+                      }%>
 
-                      progress.forEach((key) => {
+                      <div class="scrollable-table">
+
+                        <%progress.forEach((key) => {
                           var sale = inprogress[key];
                           %>
                           <div class="shadow label mini-item inprogress-item clickable-mini-item blue-left" data-sale="progress-<%=sale.numeroPedido %>">
@@ -233,7 +237,7 @@
                           <%
                         });
                         %>
-            
+                      </div>
                     </div>
 
 

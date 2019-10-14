@@ -453,7 +453,7 @@ function changeFontSize(els, direction){
 
 
 function isBlocked(pending){
-  return  pending.status == 0 && Dat.hoursDif(pending.updateDate, new Date()) <= 2;
+  return false; // pending.status == 0 && Dat.hoursDif(pending.updateDate, new Date()) <= 2;
 }
 
 

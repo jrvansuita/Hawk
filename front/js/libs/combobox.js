@@ -1,6 +1,10 @@
 class ComboBox{
 
   constructor(element, pathOrArr, method){
+    /*this.dependencies = new FileLoader().css('jquery-ui')
+    .css('combobox').js('jquery-ui.min');
+*/
+
     this.element = element;
     this.limit = 5;
     this.minLength = 1;
