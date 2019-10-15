@@ -22,6 +22,31 @@ $(document).ready(()=>{
       }
     }
   });
+
+  $('#value').on("keyup", function(e) {
+    if (e.which == 13){
+      if ($(this).val()){
+        addCondition($(this).val(), (cond)=>{
+          $('#sku').val('');
+          $('.skus-box').append(getToastItem(product.codigo));
+        });
+      }
+    }
+  });
+
+
+
+  new ComboBox($('#attr'), ["Valor do Pedido", "Desconto", "Forma de Pagamento"])
+  .setAutoShowOptions()
+  .load();
+
+
+  new ComboBox($('#comp'), ["Igual", "Maior", "Menor"])
+  .setAutoShowOptions()
+  .load();
+
+
+
 });
 
 function getSelectedSkus(){
@@ -71,4 +96,27 @@ function showSkuError(msg){
 
   $('#sku').val('');
   checkMaterialInput($('#sku'));
+}
+
+
+
+function addCondition(){
+  var c = checkMaterialInput($('#attr'));
+  c = checkMaterialInput($('#comp')) & c;
+  c = checkMaterialInput($('#value')) & c;
+
+  if (c){
+    var attr = getToastItem($('#attr').val());
+    var comp = getToastItem($('#comp').val());
+    var val = getToastItem($('#value').val());
+    var group = $('<div>').addClass('cond-group').append(attr, comp, val);
+
+
+    $('.attrs-box').append(group);
+
+    $('#attr').text('');
+    $('#comp').text('');
+    $('#value').text('');
+
+  }
 }

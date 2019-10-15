@@ -3,8 +3,6 @@ global.eccoConnErrors = 0;
 //Load enviroment variable into node process.env. See any *.env files on root dir.
 require('../abra-cadabra/inner/dotenv.js');
 
-//Save App dir
-global.__appDir = require('path').dirname(require.main.filename);
 
 //Load all Mongoose
 require('../mongoose/mongoose.js');

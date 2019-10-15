@@ -27,7 +27,7 @@ app.use(cookieSession({
 }));
 
 app.set('view engine', 'ejs');
-app.set('views', require.main.path + '/views');
+app.set('views', global.__appDir + '/views');
 app.listen().setTimeout(120000); // 2 minutos
 
 var staticOptions = {};
