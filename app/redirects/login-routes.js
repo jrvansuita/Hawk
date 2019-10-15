@@ -7,11 +7,11 @@ module.exports = class LoginRoutes extends Routes{
 
   attach(){
     this._get('/login', (req, res) => {
-      res.render('login');
+      res.render('login/login');
     }, true);
 
     this._get('/wellcome', (req, res) => {
-      res.render('wellcome');
+      res.render('login/wellcome');
     });
 
 

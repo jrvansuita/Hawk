@@ -1,16 +1,12 @@
 <html>
-<%  include menus/main-menu %>
+<%  include ../menus/main-menu %>
 
 <head>
   <link rel="stylesheet" type="text/css" href="/front/css/layout/history.css">
   <script type="text/javascript" src="/front/js/control/history.js"></script>
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
 
-
-    <link rel="stylesheet" type="text/css" href="/front/css/libs/combobox.css">
-    <link rel="stylesheet" type="text/css" href="/front/css/libs/jquery-ui.css">
-    <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
-    <script type="text/javascript" src="/front/js/libs/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
 </head>
 
 <body>
@@ -28,23 +24,23 @@
           <%
 
           if (Sett.get(locals.loggedUser,5)){%>
-             <label class="button delete-button shadow">Excluir Tudo</label>
-          <%}%>
-        </div>
-
-
-      </div>
-
-      <div class="main-panel shadow" >
-
-        <div class="histories-list">
+            <label class="button delete-button shadow">Excluir Tudo</label>
+            <%}%>
+          </div>
 
 
         </div>
+
+        <div class="main-panel shadow" >
+
+          <div class="histories-list">
+
+
+          </div>
+        </div>
       </div>
+
     </div>
 
-  </div>
-
-</body>
-</html>
+  </body>
+  </html>

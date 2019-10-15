@@ -401,9 +401,8 @@ var packingTypeCombo;
 function loadPackagesTypes(){
   var lastWeight = 0;
 
-  packingTypeCombo = new ComboBox($('#sale-package-type'), '/package-types');
 
-  packingTypeCombo
+  new ComboBox($('#sale-package-type'), '/package-types')
   .setAutoShowOptions(true)
   .setOnItemBuild((pack)=>{
     return {text : pack.name};
@@ -423,7 +422,7 @@ function loadPackagesTypes(){
     lastWeight = item.weight;
 
     checkAndLockSizePacking(item);
-  }).load();
+  }).load().then(binder => packingTypeCombo = binder);
 
 }
 

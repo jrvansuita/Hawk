@@ -1,9 +1,9 @@
 class ComboBox{
 
   constructor(element, pathOrArr, method){
-    /*this.dependencies = new FileLoader().css('jquery-ui')
+    this.dependencies = new FileLoader().css('jquery-ui')
     .css('combobox').js('jquery-ui.min');
-*/
+
 
     this.element = element;
     this.limit = 5;
@@ -74,7 +74,9 @@ class ComboBox{
     return this.data;
   }
 
-  load(callback){
+  async load(callback){
+    await this.dependencies.load();
+
     if (this.path){
       $.ajax({
         url: this.path,

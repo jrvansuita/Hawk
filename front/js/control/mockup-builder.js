@@ -17,14 +17,13 @@ $(document).ready(()=>{
 
   $('.save-button').click(saveClick);
 
-  setTimeout(()=>{
-    new ComboBox($('#font'), fontsArr)
-    .setAutoShowOptions().load();
+  new ComboBox($('#font'), fontsArr)
+  .setAutoShowOptions().load();
 
-    new ComboBox($('#font-discount'), fontsArr)
-    .setAutoShowOptions().load();
+  new ComboBox($('#font-discount'), fontsArr)
+  .setAutoShowOptions().load();
 
-  },500);
+  
 
   loadPreview();
   updateSizeHint();
@@ -130,7 +129,6 @@ function saveMockupSettings() {
 }
 
 function createColorPicker(el, defColor){
-  console.log(defColor);
 
   // Simple example, see optional options for more configuration.
   return Pickr.create({

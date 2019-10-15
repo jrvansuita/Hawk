@@ -1,7 +1,7 @@
 const UsersProvider = require('../provider/user-provider.js');
 const Day = require('../bean/day.js');
-const performanceChartBuilder = require('../builder/PerformanceChartBuilder.js');
-const IndicatorsBuilder = require('../builder/IndicatorsBuilder.js');
+const performanceChartBuilder = require('../builder/performance-chart-builder.js');
+const IndicatorsBuilder = require('../builder/indicator-builder.js');
 
 
 

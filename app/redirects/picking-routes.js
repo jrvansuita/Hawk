@@ -24,7 +24,7 @@ module.exports = class PickingRoutes extends Routes{
     });
 
     this._page('/picking/overview', (req, res) => {
-      require('../builder/PickingChartBuilder.js').buildOverview(res.locals.loggedUser.full, function(charts) {
+      require('../builder/picking-chart-builder.js').buildOverview(res.locals.loggedUser.full, function(charts) {
           res.render('picking/picking-chart', {
             charts: charts,
             page: req.originalUrl,
@@ -37,7 +37,7 @@ module.exports = class PickingRoutes extends Routes{
       var from = Dat.query(req.query.from, Dat.firstDayOfMonth());
       var to = Dat.query(req.query.to, Dat.lastDayOfMonth());
 
-      require('../builder/PickingChartBuilder.js').buildByDate(from, to, res.locals.loggedUser.full, function(charts) {
+      require('../builder/picking-chart-builder.js').buildByDate(from, to, res.locals.loggedUser.full, function(charts) {
         res.render('picking/picking-chart', {
           charts: charts,
           page: req.originalUrl,

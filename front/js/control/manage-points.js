@@ -3,7 +3,7 @@ var userSelector;
 
 $(function() {
 
-  userSelector = new ComboBox($('#user'), '/profiles')
+  new ComboBox($('#user'), '/profiles')
   .setAutoShowOptions()
   .setOnItemBuild((user, index)=>{
     return {text : user.name, img : user.avatar};
@@ -12,11 +12,11 @@ $(function() {
     $('#profile-img').attr('src', user.avatar);
     $('#profile-name').text(user.name);
   })
-  .load(()=>{
+  .load()
+  .then((binder) => {
+    userSelector = binder;
     onInit();
   });
-
-
 });
 
 function onInit(){

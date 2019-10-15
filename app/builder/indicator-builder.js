@@ -1,7 +1,7 @@
 const Day = require('../bean/day.js');
 const Indicators = require('../bean/ind.js');
 
-module.exports = class IndicatorsBuilder{
+module.exports = class {
 
   constructor(userId, isFull){
     this.userId = userId;

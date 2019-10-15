@@ -3,12 +3,16 @@ var userSelector;
 
 $(document).ready(() => {
 
-  userSelector = new ComboBox($('#user-search'), '/profiles')
+  new ComboBox($('#user-search'), '/profiles')
   .setAutoShowOptions()
   .setOnItemBuild((user, index)=>{
     return {text : user.name, img : user.avatar};
   })
-  .load();
+  .setOnItemSelect((item, user)=>{
+    window.location=
+    '/user-form?userId='+ user.id;
+  })
+  .load().then(binder => userSelector = binder);
 
 
   var name;
@@ -22,10 +26,6 @@ $(document).ready(() => {
     $('#user-search').val(name);
   });
 
-  userSelector.setOnItemSelect((item, user)=>{
-    window.location=
-    '/user-form?userId='+ user.id;
-  });
 
   $('#new').click(()=>{
     clearForm();

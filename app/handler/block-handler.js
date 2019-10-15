@@ -95,9 +95,11 @@ module.exports = {
     }
   },
 
-  //Bloquear automaticamente Skus da pendencia 
+  //Bloquear automaticamente Skus da pendencia
   pendingSkus(sale, user){
-    var skus = sale.items.map((i)=>{
+    var skus = sale.items
+    .filter((i) => {return i.pending})
+    .map((i)=>{
       return i.codigo;
     });
 

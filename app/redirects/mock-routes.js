@@ -11,7 +11,7 @@ module.exports = class UserRoutes extends Routes{
 
     this._page('/mockup-builder', (req, res) => {
       Mock.get((err, mock)=>{
-        res.render('product/mockup-builder.ejs', {selected: mock});
+        res.render('product/mockup/mockup-builder.ejs', {selected: mock});
       });
     });
 

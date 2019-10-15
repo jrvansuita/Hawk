@@ -138,9 +138,9 @@ var Util = {
 
   isIn(array, str){
     str = str.toString();
-    
+
     return array.some((s)=>{
-      return str.includes(s);
+      return str.toLowerCase() == s.toLowerCase();
     });
   },
 

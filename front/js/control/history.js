@@ -2,12 +2,14 @@ var userSelector;
 
 $(document).ready(()=>{
 
-  userSelector = new ComboBox($('#user-search'), '/profiles')
+  new ComboBox($('#user-search'), '/profiles')
   .setAutoShowOptions()
   .setOnItemBuild((user, index)=>{
     return {text : user.name, img : user.avatar};
   })
-  .load(()=>{
+  .load()
+  .then((binder) => {
+    userSelector = binder;
     onInit();
   });
 });

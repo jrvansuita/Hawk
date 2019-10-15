@@ -5,7 +5,7 @@ module.exports = class HistoryRoutes extends Routes{
 
   attach(){
     this._page('/history', (req, res) => {
-      res.render('history');
+      res.render('history/history');
     });
 
     this._get('/history-page',  (req, res) => {

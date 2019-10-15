@@ -1,7 +1,7 @@
 global.eccoConnErrors = 0;
 
 //Load enviroment variable into node process.env. See any *.env files on root dir.
-require('../init/dotenv.js');
+require('../abra-cadabra/inner/dotenv.js');
 
 //Save App dir
 global.__appDir = require('path').dirname(require.main.filename);
@@ -25,7 +25,7 @@ global.Const = require('../const/const.js');
 require('../provider/user-provider.js').loadAllUsers();
 
 //Build the prototypes
-require('../init/prototypes.js');
+require('../abra-cadabra/inner/prototypes.js');
 
 //Ajust $points
 //require('../init/assert-points.js');

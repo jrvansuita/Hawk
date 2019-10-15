@@ -45,10 +45,10 @@ module.exports = class ProductRoutes extends Routes{
 
     this._get('/product-print-locals', (req, res) => {
       if(req.query.product){
-        res.render('product/local-list', {product : req.query.product});
+        res.render('product/printing/local-list', {product : req.query.product});
       }else{
         ProductHandler.getBySku(req.query.sku, false, (result)=>{
-          res.render('product/local-list',{
+          res.render('product/printing/local-list',{
             product : result
           });
         });
@@ -59,7 +59,7 @@ module.exports = class ProductRoutes extends Routes{
 
     this._page('/diagnostics', (req, res) => {
       new DiagnosticsProvider().sums((data)=>{
-        res.render('product/diag/diagnostics', {sums : data});
+        res.render('product/diagnostics/diagnostics', {sums : data});
       });
     });
 
@@ -97,7 +97,7 @@ module.exports = class ProductRoutes extends Routes{
 
     this._get('/fixes-dialog', (req, res) => {
       new DiagnosticsProvider().loadBySku(req.query.sku, (all, product)=>{
-        res.render('product/diag/diagnostics-dialog', {data : all, product: product});
+        res.render('product/diagnostics/diagnostics-dialog', {data : all, product: product});
       });
     });
 
@@ -126,7 +126,7 @@ module.exports = class ProductRoutes extends Routes{
 
     this._get('/barcode', (req, res) => {
       ProductHandler.get(req.query.sku, false, (result)=>{
-        res.render('product/barcode',{
+        res.render('product/printing/barcode',{
           product : result
         });
       });
