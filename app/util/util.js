@@ -140,7 +140,7 @@ var Util = {
     str = str.toString();
 
     return array.some((s)=>{
-      return str.toLowerCase() == s.toLowerCase();
+      return s && str == s.toString();
     });
   },
 

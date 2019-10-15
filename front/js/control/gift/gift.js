@@ -111,6 +111,9 @@ function addCondition(){
     var val = getToastItem($('#value').val());
     var group = $('<div>').addClass('cond-group').append(attr, comp, val);
 
+    group.click(()=>{
+      group.remove();
+    })
 
     $('.attrs-box').append(group);
 
