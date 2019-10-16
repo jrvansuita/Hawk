@@ -3,7 +3,7 @@
 var Dat = {
 
 
-  
+
 
   format(date) {
     var formated = fmt(date);
@@ -15,9 +15,9 @@ var Dat = {
     return formated.day + '/' + formated.month + '/' + formated.year.slice(2, 4) + " " + formated.hour + ":" + formated.min;
   },
 
-  api(date) {
+  api(date, monthIndex) {
     var formated = fmt(date);
-    return formated.year + '-' + formated.month + '-' + formated.day;
+    return formated.year + '-' + (monthIndex ? --formated.month : formated.month) + '-' + formated.day;
   },
 
   id(date) {

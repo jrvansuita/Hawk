@@ -2,23 +2,36 @@ var expiresDatePicker = null;
 
 $(document).ready(()=>{
 
-  new DatePicker()
-  .holder('.expires-holder', true)
+
+  new ComboBox($('#gift-name'), '/gift-all')
+  .setAutoShowOptions(true)
+  .setOnItemBuild((item, index)=>{
+    return {text : item.name};
+  })
+  .setOnItemSelect((data, item)=>{
+    window.location='/gift-rules?id='+ item.id;
+  }).load();
+
+
+  expiresDatePicker = new DatePicker();
+
+  expiresDatePicker.holder('.expires-holder', true)
   .setOnChange((formatedDate, date)=>{
     $('#expires').val(formatedDate);
     $('#expires').data('date', date);
   })
-  .load()
-  .then(binder => expiresDatePicker = binder);
+  .load().then(()=>{
+    if (selectedGift){
+      expiresDatePicker.setSelected(selectedGift.expiresDate);
+      $('#expires').val(Dat.format(new Date(selectedGift.expiresDate)));
+    }
+  });
 
 
   $('#sku').on("keyup", function(e) {
     if (e.which == 13){
       if ($(this).val()){
-        addProduct($(this).val(), (product)=>{
-          $('#sku').val('');
-          $('.skus-box').append(getToastItem(product.codigo));
-        });
+        handleProduct($(this).val());
       }
     }
   });
@@ -26,27 +39,42 @@ $(document).ready(()=>{
   $('#value').on("keyup", function(e) {
     if (e.which == 13){
       if ($(this).val()){
-        addCondition($(this).val(), (cond)=>{
-          $('#sku').val('');
-          $('.skus-box').append(getToastItem(product.codigo));
-        });
+        handleCondition();
       }
     }
   });
 
 
-
-  new ComboBox($('#attr'), ["Valor do Pedido", "Desconto", "Forma de Pagamento"])
+  new ComboBox($('#attr'), ["totalVenda", "totalProdutos", "desconto", "observacaoInterna", "transportador"])
   .setAutoShowOptions()
   .load();
 
 
-  new ComboBox($('#comp'), ["Igual", "Maior", "Menor"])
+  new ComboBox($('#sign'), ["Igual", "Maior", "Menor", "Contém"])
   .setAutoShowOptions()
   .load();
 
 
+  $('.save').click(()=>{
+    saveGiftRule();
+  });
 
+  $('.delete-button').click(()=>{
+    deleteGiftRule();
+  });
+
+
+
+  if (selectedGift){
+    selectedGift.skus.forEach((sku)=>{
+      addProduct(sku);
+    });
+
+    selectedGift.rules.forEach((item)=>{
+      addCondition(item.attr, item.sign, item.val);
+    });
+
+  }
 });
 
 function getSelectedSkus(){
@@ -58,30 +86,35 @@ function getSelectedSkus(){
 }
 
 
-function addProduct(sku, callback){
+function handleProduct(sku){
   if (Util.notIn(getSelectedSkus(), sku)){
     _get('/product-child', {sku: sku}, (p)=>{
-      console.log(p);
       if (p.error){
         showSkuError('Produto não encontrado!');
       }else if(p._Estoque.estoqueDisponivel == 0){
         showSkuError('Produto sem estoque disponível!');
       }else{
-        callback(p);
+        $('#sku').val('');
+        addProduct(p.codigo);
       }
-
     });
   }else{
     showSkuError('Produto já adicionado!');
   }
 }
 
-function getToastItem(label){
-  var toast = $('<span>').addClass('toast-item').data('val', label).text(label);
+function addProduct(sku){
+  $('.skus-box').append(getToastItem(sku));
+}
 
-  toast.click(()=>{
-    toast.remove();
-  });
+function getToastItem(label, clazz){
+  var toast = $('<span>').addClass('toast-item').data('val', label).addClass(clazz).text(label);
+
+  if (!clazz){
+    toast.click(()=>{
+      toast.remove();
+    });
+  }
 
   return toast;
 }
@@ -99,27 +132,90 @@ function showSkuError(msg){
 }
 
 
+function showAttrsErros(msg){
+  $('.msg-box-cond').show();
+  $('.error-msg-cond').text(msg).delay(4000).queue(function(next){
+    $('.msg-box-cond').hide();
+    next();
+  });
+}
 
-function addCondition(){
+function handleCondition(){
   var c = checkMaterialInput($('#attr'));
-  c = checkMaterialInput($('#comp')) & c;
+  c = checkMaterialInput($('#sign')) & c;
   c = checkMaterialInput($('#value')) & c;
 
   if (c){
-    var attr = getToastItem($('#attr').val());
-    var comp = getToastItem($('#comp').val());
-    var val = getToastItem($('#value').val());
-    var group = $('<div>').addClass('cond-group').append(attr, comp, val);
+    addCondition($('#attr').val(), $('#sign').val(), $('#value').val())
 
-    group.click(()=>{
-      group.remove();
-    })
+    $('#attr').val('');
+    $('#sign').val('');
+    $('#value').val('');
 
-    $('.attrs-box').append(group);
+  }
+}
 
-    $('#attr').text('');
-    $('#comp').text('');
-    $('#value').text('');
 
+function addCondition(attr, sign, value){
+  var attr = getToastItem(attr, 'attr');
+  var sign = getToastItem(sign, 'sign');
+  var val = getToastItem(value, 'value');
+  var group = $('<div>').addClass('cond-group').append(attr, sign, val);
+
+  group.click(()=>{
+    group.remove();
+  })
+
+  $('.attrs-box').append(group);
+}
+
+function getSelectedAttrs(){
+  var arr = [];
+  $('.cond-group').each(function (){
+
+    arr.push({
+      attr: $(this).find('.attr').text(),
+      sign: $(this).find('.sign').text(),
+      val: $(this).find('.value').text()
+    });
+  });
+
+  return arr;
+}
+
+function saveGiftRule(){
+  var c = checkMaterialInput($('#gift-name'));
+  var c = checkMaterialInput($('#expires')) & c;
+
+  if ($('.attrs-box .cond-group').length == 0){
+    showAttrsErros('Nenhum condição foi selecionada!');
+    c = false;
+  }
+
+  if (getSelectedSkus().length == 0){
+    showSkuError('Nenhum produto foi selecionado!');
+    c = false;
+  }
+
+  if (c){
+    _post('/gift-rules', {
+      id: $('#id').val(),
+      name: $('#gift-name').val(),
+      expires: expiresDatePicker.getSelected().getTime(),
+      active: $('#active').is(":checked"),
+      skus: getSelectedSkus(),
+      rules: getSelectedAttrs(),
+    },(e)=>{
+      console.log(e);
+    });
+  }
+}
+
+
+function deleteGiftRule(){
+  if ($('#id').val().length > 0){
+    _post('/gift-delete', {id: $('#id').val()},()=>{
+        window.location='/gift-rules';
+      });
   }
 }

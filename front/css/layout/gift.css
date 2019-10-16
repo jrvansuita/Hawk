@@ -45,6 +45,7 @@
   min-height: 100px;
   display: block;
   max-width: 60%;
+  margin-bottom: 10px;
 }
 
 .sel-box{
@@ -118,4 +119,18 @@
 .cond-group:hover{
   background-color: #ff7676;
   cursor: pointer;
+}
+
+.buttons-holder{
+  display: block;
+  padding: 15px;
+}
+
+#gift-name{
+  font-size: 15px !important;
+  font-weight: 700;
+}
+
+#id{
+  display: none;
 }

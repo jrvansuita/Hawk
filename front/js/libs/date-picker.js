@@ -81,6 +81,15 @@ class DatePicker{
     return this;
   }
 
+
+  setSelected(date){
+    date = new Date(date);
+    this.getPickerBox().attr('selectedday', Dat.api(date, true));
+    if (this.input){
+      this.input.val(Dat.format(date));
+    }
+  }
+
   getSelected(){
     return this._convertDate(this.getPickerBox().attr('selectedday'));
   }

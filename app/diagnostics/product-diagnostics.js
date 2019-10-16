@@ -54,7 +54,9 @@ module.exports = class ProductDiagnostics{
           if (isMagentoProblem(product)){
             this._storeFix(product, Fix.enum().MAGENTO_PROBLEM);
           }else{
-            this._storeFix(product, Fix.enum().REGISTERING);
+            if (!hasSales(stocks)){
+              this._storeFix(product, Fix.enum().REGISTERING);
+            }
           }
         }
       }

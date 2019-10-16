@@ -12,14 +12,15 @@ module.exports = class GiftRule extends DataAccess {
     this.rules = [];
   }
 
-  addRule(name, attr, sign, value){
-    var rule = {name: name, attr: attr, sign: sign, value: value};
-    this.rules.push(rule);
+  addRules(rules){
+    this.rules = rules;
   }
 
-  addSku(sku){
-    this.skus.push(sku);
+  addSkus(skus){
+    this.skus = skus;
   }
+
+
 
   static getKey() {
     return ['id'];

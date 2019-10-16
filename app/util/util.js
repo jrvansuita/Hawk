@@ -140,7 +140,7 @@ var Util = {
     str = str.toString();
 
     return array.some((s)=>{
-      return s && str == s.toString();
+      return str.toString() == s.toString();
     });
   },
 

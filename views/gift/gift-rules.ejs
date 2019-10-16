@@ -17,22 +17,24 @@
 <body>
 
 
+    <script>
+
+    window.selectedGift = <%- JSON.stringify(gift || null) %>
+
+    </script>
+
+
   <div class="main-content">
 
-    <div class="top shadow">
-      <label class="sub-title">Regras</label>
-      <div class="rules-box-select">
-
-      </div>
-
-    </div>
 
     <div class="content shadow">
 
+      <input id="id" value="<%=gift? gift.id : ''%>">
+
       <div class="row">
         <div class="material-input-holder">
-          <input type="text" id="name" maxlength="50"
-          value="" autocomplete="off"
+          <input type="text" id="gift-name" maxlength="50"
+          value="<%= gift ? gift.name : ''%>" autocomplete="off"
           title="Nome da Regra" required/>
 
           <span class="bar"></span>
@@ -41,7 +43,7 @@
 
         <div class="material-input-holder expires-holder">
           <input id="expires" maxlength="50"
-          value="" autocomplete="off"
+          autocomplete="off"
           title="Data de Expiração" required/>
 
           <span class="bar"></span>
@@ -49,7 +51,7 @@
         </div>
 
         <label class="pure-material-checkbox">
-          <input type="checkbox" id="lock-size" name="lockSize" checked>
+          <input type="checkbox" id="active" name="lockSize"  <%=gift && gift.active ? 'checked' : ''%>>
           <span>Ativo</span>
         </label>
 
@@ -99,11 +101,11 @@
             title="Nome do Atributo" required/>
 
             <span class="bar"></span>
-            <label>Atributo</label>
+            <label>Atributo do Pedido</label>
           </div>
 
           <div class="material-input-holder">
-            <input type="text" id="comp" maxlength="50"
+            <input type="text" id="sign" maxlength="50"
             value="" autocomplete="off"
             title="Comparador" required/>
 
@@ -141,6 +143,11 @@
           </div>
 
         </div>
+      </div>
+
+      <div class="buttons-holder">
+        <label class="button save shadow">Salvar</label>
+        <label class="button delete-button shadow">Excluir</label>
       </div>
 
 
