@@ -73,5 +73,7 @@ function _build(hours) {
     });
   }
 
+  //console.log(rules);
+
   return rules;
 }

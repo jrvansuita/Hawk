@@ -1,4 +1,32 @@
 
+var ruleAttrsEnum = {
+  TOTAL_SALE: 'Valor do Pedido',
+  TOTAL_PRODUCTS: 'Valor dos Produtos',
+  PAYMENT_FORM: 'Forma de pagamento',
+  INNER_OBS: 'Observação Interna',
+  TRANSPORT: 'Transportadora'
+};
+
+var ruleConditionsEnum = {
+  EQUAL:{
+    label: 'Igual',
+    func: 'teste'
+  },
+  GREATER:{
+    label: 'Maior',
+    func: 'teste'
+  },
+  SMALLER:{
+    label: 'Menor',
+    func: 'teste'
+  },
+  CONTAINS:{
+    label: 'Contém',
+    func: 'teste'
+  }
+};
+
+
 module.exports = class GiftRule extends DataAccess {
 
 
@@ -27,5 +55,11 @@ module.exports = class GiftRule extends DataAccess {
   }
 
 
+  static attrs(){
+    return ruleAttrsEnum;
+  }
 
+  static conditions(){
+    return ruleConditionsEnum;
+  }
 };

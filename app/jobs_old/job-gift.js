@@ -1,4 +1,4 @@
-const Controller = require('../jobs/controller/controller.js');
+const Controller = require('../jobs_old/controller/controller.js');
 const History = require('../bean/history.js');
 const EccosysCalls = require('../eccosys/eccosys-calls.js');
 

@@ -37,6 +37,6 @@ jobs.push(['job-products.js', '8:30']);
 
 // -- Run Jobs schedules -- //
 jobs.forEach((r, index)=>{
-  var Clazz = require('../jobs/' + r[0]);
+  var Clazz = require('../jobs_old/' + r[0]);
   new Clazz().schedule(r[0],r[1]);
 });

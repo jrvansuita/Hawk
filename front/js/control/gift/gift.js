@@ -44,15 +44,8 @@ $(document).ready(()=>{
     }
   });
 
-
-  new ComboBox($('#attr'), ["totalVenda", "totalProdutos", "desconto", "observacaoInterna", "transportador"])
-  .setAutoShowOptions()
-  .load();
-
-
-  new ComboBox($('#sign'), ["Igual", "Maior", "Menor", "Contém"])
-  .setAutoShowOptions()
-  .load();
+  bindRulesAttrsComboBox();
+  bindRulesConditionsComboBox();
 
 
   $('.save').click(()=>{
@@ -104,11 +97,11 @@ function handleProduct(sku){
 }
 
 function addProduct(sku){
-  $('.skus-box').append(getToastItem(sku));
+  $('.skus-box').append(getToastItem(sku, sku));
 }
 
-function getToastItem(label, clazz){
-  var toast = $('<span>').addClass('toast-item').data('val', label).addClass(clazz).text(label);
+function getToastItem(label, data, clazz){
+  var toast = $('<span>').addClass('toast-item').data('val', data).addClass(clazz).text(label);
 
   if (!clazz){
     toast.click(()=>{
@@ -146,7 +139,10 @@ function handleCondition(){
   c = checkMaterialInput($('#value')) & c;
 
   if (c){
-    addCondition($('#attr').val(), $('#sign').val(), $('#value').val())
+    var attr = attrNameSelector.getSelectedItem().data.value;
+    var sign = conditionsSelector.getSelectedItem().data.value;
+
+    addCondition(attr, sign, $('#value').val());
 
     $('#attr').val('');
     $('#sign').val('');
@@ -157,14 +153,17 @@ function handleCondition(){
 
 
 function addCondition(attr, sign, value){
-  var attr = getToastItem(attr, 'attr');
-  var sign = getToastItem(sign, 'sign');
-  var val = getToastItem(value, 'value');
-  var group = $('<div>').addClass('cond-group').append(attr, sign, val);
+  var label = rulesAttrs[attr];
+  var signLabel = rulesConditions[sign].label;
+
+  var group = $('<div>').addClass('cond-group')
+  .append(getToastItem(label, attr, 'attr'))
+  .append(getToastItem(signLabel, sign, 'sign'))
+  .append(getToastItem(value, null, 'value'));
 
   group.click(()=>{
     group.remove();
-  })
+  });
 
   $('.attrs-box').append(group);
 }
@@ -174,8 +173,8 @@ function getSelectedAttrs(){
   $('.cond-group').each(function (){
 
     arr.push({
-      attr: $(this).find('.attr').text(),
-      sign: $(this).find('.sign').text(),
+      attr: $(this).find('.attr').data('val'),
+      sign: $(this).find('.sign').data('val'),
       val: $(this).find('.value').text()
     });
   });
@@ -185,7 +184,7 @@ function getSelectedAttrs(){
 
 function saveGiftRule(){
   var c = checkMaterialInput($('#gift-name'));
-  var c = checkMaterialInput($('#expires')) & c;
+  c = checkMaterialInput($('#expires')) & c;
 
   if ($('.attrs-box .cond-group').length == 0){
     showAttrsErros('Nenhum condição foi selecionada!');
@@ -196,6 +195,8 @@ function saveGiftRule(){
     showSkuError('Nenhum produto foi selecionado!');
     c = false;
   }
+
+
 
   if (c){
     _post('/gift-rules', {
@@ -215,7 +216,43 @@ function saveGiftRule(){
 function deleteGiftRule(){
   if ($('#id').val().length > 0){
     _post('/gift-delete', {id: $('#id').val()},()=>{
-        window.location='/gift-rules';
-      });
+      window.location='/gift-rules';
+    });
   }
 }
+
+var attrNameSelector = null;
+
+function bindRulesAttrsComboBox(){
+  var data = Object.keys(rulesAttrs)
+  .map(key=>{
+    return {label :rulesAttrs[key],
+      value : key};
+    });
+
+    new ComboBox($('#attr'), data)
+    .setAutoShowOptions(true)
+    .setOnItemBuild((item, index)=>{
+      return {text : item.label};
+    }).load().then(binder => {attrNameSelector = binder;});
+
+  }
+
+var conditionsSelector = null;
+
+  function bindRulesConditionsComboBox(){
+
+    var conditionsTypes = Object.keys(rulesConditions)
+    .map(key=>{
+      return {label :rulesConditions[key].label,
+        value : key};
+      });
+
+      new ComboBox($('#sign'), conditionsTypes)
+      .setOnItemBuild((item, index)=>{
+        return {text : item.label};
+      })
+      .setAutoShowOptions(true)
+      .load().then(binder => {conditionsSelector = binder;});
+
+    }

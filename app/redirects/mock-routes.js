@@ -1,8 +1,9 @@
 const Routes = require('../redirects/controller/routes.js');
-const MockHandler = require('../handler/mock-handler.js');
+const MockHandler = require('../mockup/mock-handler.js');
 const ProductHandler = require('../handler/product-handler.js');
-const ProductMockupBuilder = require('../builder/product-mockup-builder.js');
+const ProductMockupProvider = require('../mockup/product-mockup-provider.js');
 const Mock = require('../bean/mock.js');
+
 
 module.exports = class UserRoutes extends Routes{
 
@@ -23,19 +24,15 @@ module.exports = class UserRoutes extends Routes{
 
 
     this._get('/product-mockup', (req, res) => {
-      ProductHandler.getImage(req.query.sku, (product)=>{
-        new ProductMockupBuilder()
-        .setProduct(product)
-        .setOnFinishedListener((canva)=>{
-          var disposition = req.query.download ? 'attachment': 'inline';
 
-          res.setHeader('Content-Type', 'image/png;');
+      new ProductMockupProvider(req.query.sku).load().then(canvas =>{
+        var disposition = req.query.download ? 'attachment': 'inline';
 
-          res.setHeader('Content-Disposition', disposition + '; filename=mockup-' + req.query.sku + '.png');
+        res.setHeader('Content-Type', 'image/png;');
 
-          canva.pngStream().pipe(res);
-        })
-        .load();
+        res.setHeader('Content-Disposition', disposition + '; filename=mockup-' + req.query.sku + '.png');
+
+        canvas.pngStream().pipe(res);
       });
     });
 

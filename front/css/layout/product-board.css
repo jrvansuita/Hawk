@@ -12,8 +12,8 @@ html,body {
 .left{
   padding-left: 25px;
   padding-bottom: 25px;
-  min-width: fit-content;
-  flex: 0 1 auto;
+  min-width: 40%;
+  flex: 0 auto;
   overflow-y: auto;
   height: calc(100% - 145px);
   display: block;
@@ -21,7 +21,7 @@ html,body {
 }
 
 .right{
-  flex: 0 1 70%;
+  flex: 0 1 80%;
   display: -webkit-box;
   position: relative;
   margin-top: 100px;
@@ -55,6 +55,9 @@ html,body {
 }
 
 .line-title{
+  position: sticky;
+  top: 0;
+  z-index: 99;
   background-color: #e0dfdf;
   border-bottom: 1px solid #e2e0e0;
   border-top-left-radius: 4px;

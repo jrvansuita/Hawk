@@ -8,12 +8,20 @@ module.exports = class GiftRoutes extends Routes{
 
 
     this._page('/gift-rules', (req, res) => {
+      var render = (selected)=>{
+        res.render('gift/gift-rules', {gift: selected,
+          rulesAttrs: GiftRule.attrs(),
+          rulesConditions :GiftRule.conditions(),
+        });
+      };
+
+
       if (req.query.id){
         GiftRule.findOne({id:req.query.id}, (err, item)=>{
-          res.render('gift/gift-rules', {gift: item});
+          render(item);
         });
       }else{
-        res.render('gift/gift-rules', {gift: null});
+        render(null);
       }
     });
 

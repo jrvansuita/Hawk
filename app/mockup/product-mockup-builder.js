@@ -44,20 +44,53 @@ module.exports = class {
 
 
   _geProductImage(){
-    return   this.product ? this.product.image : './front/img/product-placeholder.png';
+    if (this.product){
+
+      if (this.product.online){
+        return this.product.online.image;
+      }else{
+        return this.product.image;
+      }
+    }else{
+      return './front/img/product-placeholder.png';
+    }
   }
 
 
   _getPrice(){
-    return this.product ? Num.money(this.product.price) : 'R$ 0,00';
+    if (this.product){
+      if (this.product.online){
+        return this.product.online.price;
+      }else{
+        return Num.money(this.product.price);
+      }
+    }else{
+      return 'R$ 0,00';
+    }
   }
 
   _getFromPrice(){
-    return this.product ? Num.money(this.product.fromPrice) : 'R$ 0,00';
+    if (this.product){
+      if (this.product.online){
+        return this.product.online.fromPrice;
+      }else{
+        return Num.money(this.product.fromPrice);
+      }
+    }else{
+      return 'R$ 0,00';
+    }
   }
 
   _getDiscount(){
-    return this.product ? Math.trunc(this.product.discount) + '%' : '0%';
+    if (this.product){
+      if (this.product.online){
+        return this.product.online.discount + '%';
+      }else{
+        return Math.trunc(this.product.discount) + '%';
+      }
+    }else{
+      return '0%';
+    }
   }
 
   _getMsg(){

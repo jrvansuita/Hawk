@@ -1,4 +1,4 @@
-const Controller = require('../jobs/controller/controller.js');
+const Controller = require('../jobs_old/controller/controller.js');
 
 const FeedXml = require('../feedxml/feed-xml.js');
 const Product = require('../bean/product.js');
@@ -50,7 +50,7 @@ module.exports = class JobProducts extends Controller{
               var associates = FeedXml.val(item, "associates");
 
               var product = new Product(sku, name, brand, url,
-                image, 
+                image,
                 price, fromPrice, discount,
                 category, gender, color, quantity,
                 age, year, season, manufacturer,

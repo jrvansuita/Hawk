@@ -41,7 +41,7 @@ module.exports ={
         Product.get(sku, (product)=>{
           putAndControlDataCache(sku, product);
 
-          callback(product);
+          callback(productsDataCache[sku]);
         });
       }
     }else{
