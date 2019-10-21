@@ -49,6 +49,7 @@ $(document).ready(()=>{
     $(this).addClass('active');
 
     $('.ind-rows-holder').empty();
+    $('.description').text(types[$(this).data('type')].description);
     _get('/product-fixes', {type : $(this).data('type')}  , (all)=> {
       buildIndRows(all);
     });

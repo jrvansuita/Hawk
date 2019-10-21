@@ -44,6 +44,7 @@ module.exports = class JobFeedXmlProducts extends Job{
                 var season = FeedXml.val(item, "season");
                 var age = FeedXml.val(item, "age");
                 var manufacturer = FeedXml.val(item, "manufacturer");
+                var weight = FeedXml.val(item, "child_weight") || FeedXml.val(item, "weight");
 
 
                 var visible = FeedXml.val(item, "visible").includes('true');
@@ -54,7 +55,7 @@ module.exports = class JobFeedXmlProducts extends Job{
                   price, fromPrice, discount,
                   category, gender, color, quantity,
                   age, year, season, manufacturer,
-                  visible, associates);
+                  visible, associates, weight);
 
                   product.upsert();
 

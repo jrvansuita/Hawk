@@ -347,3 +347,14 @@ a{
   margin-right: 15px;
   font-size: 13px;
 }
+
+.description-box{
+  max-width: 90%;
+  margin: auto;
+  padding-bottom: 7px;
+  padding-top: 7px;
+}
+.description{
+  font-size: 14px;
+  color: #737373;
+}

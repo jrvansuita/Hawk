@@ -1,7 +1,7 @@
-//require('./app/abra-cadabra/init.js');
+require('./app/abra-cadabra/first-step.js');
 
-//const JobProducts = require('./app/jobs/job-products.js');
-//new JobProducts().run();
+const JobProducts = require('./app/jobs_old/job-products.js');
+new JobProducts().run();
 
 
 /*const GiftRule = require('./bean/gift-rule.js');
@@ -14,6 +14,13 @@ giftRule.add('Desconto do Pedido', 'desconto', '<', 10);
 new (require('./app/jobs/job-gift.js'))().run();
 */
 
+
+
+//-------------------------
+
+
+
+/*
 require('./app/abra-cadabra/first-step.js');
 
 const Job = require('./app/bean/job.js');
@@ -35,3 +42,4 @@ var rule2 = {
 };
 
 new Job(2,'Limpeza','Limpeza de histórico','job-history-cleaner', true, rule2).upsert();
+*/

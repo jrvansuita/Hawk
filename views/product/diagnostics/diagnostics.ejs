@@ -20,6 +20,7 @@
 <body>
   <script>
   window.sums = <%- JSON.stringify(sums || null) %>
+  window.types = <%- JSON.stringify(types || null) %>
   </script>
 
   <%include ../../menus/stock-menu %>
@@ -42,7 +43,7 @@
       <label class="button shadow" id="sync">Analizar</label>
 
       <input type="text" id="search" class="simple-material-input" placeholder="Pesquisar Produtos" autocomplete="off">
-      
+
     </div>
 
 
@@ -55,8 +56,10 @@
         %>
         <div class="ind-item shadow" data-type="<%=item._id.type%>">
           <div class="ind-header">
-            <label class="ind-title"><%=Util.diagTitle(item._id.type)%></label>
-            <img class="ind-icon" src="img/<%=Util.diagIcon(item._id.type)%>.png"/>
+            <%var enumType =  types[item._id.type];%>
+
+            <label class="ind-title"><%=enumType ? enumType.name : 'Não encontrado'%></label>
+            <img class="ind-icon" src="img/<%=enumType ? enumType.icon : 'question-mark'%>.png"/>
           </div>
 
           <div class="ind-footer">
@@ -68,6 +71,10 @@
 
       });%>
 
+    </div>
+
+    <div class="description-box">
+      <span class="description"></span>
     </div>
 
     <%if (sums.length > 0){%>

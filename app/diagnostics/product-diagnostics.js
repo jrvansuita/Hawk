@@ -2,6 +2,8 @@ const EccosysCalls = require('../eccosys/eccosys-calls.js');
 const Fix = require('../bean/fix.js');
 const Product = require('../bean/product.js');
 
+const Enum = require('../diagnostics/diagnostics-enum.js');
+
 module.exports = class ProductDiagnostics{
   constructor(){
     this.page = 0;
@@ -20,19 +22,19 @@ module.exports = class ProductDiagnostics{
     if (isPhotoMissing(product)){
       if (hasStock(product) || hasLocal(product)){
         if (!hasSales(stocks)){
-          this._storeFix(product, Fix.enum().NO_PHOTO);
+          this._storeFix(product, 'NO_PHOTO');
         }
       }else{
-        this._storeFix(product, Fix.enum().REGISTERING);
+        this._storeFix(product, 'REGISTERING');
       }
     }
 
     else if (noLocalHasStock(product)){
-      this._storeFix(product, Fix.enum().NO_LOCAL_HAS_STOCK);
+      this._storeFix(product, 'NO_LOCAL_HAS_STOCK');
     }
 
     else if (hasLocalNoStock(product, stocks)){
-      this._storeFix(product, Fix.enum().HAS_LOCAL_NO_STOCK);
+      this._storeFix(product, 'HAS_LOCAL_NO_STOCK');
     }
 
     else if (isMoreThanXDaysRegistered(product, 3)){
@@ -42,20 +44,20 @@ module.exports = class ProductDiagnostics{
         if (hasStock(product, true)){
 
           if (!isAssociated(product)){
-            this._storeFix(product, Fix.enum().ASSOCIATED);
+            this._storeFix(product, 'ASSOCIATED');
           }else if(!isVisible(product)){
-            this._storeFix(product, Fix.enum().NOT_VISIBLE);
+            this._storeFix(product, 'NOT_VISIBLE');
           }else if (isMoreThanXDaysRegistered(product, 20)){
-            this._storeFix(product, Fix.enum().SALE);
+            this._storeFix(product, 'SALE');
           }
         }
       }else{
         if (!hasLockedStock(product)){
           if (isMagentoProblem(product)){
-            this._storeFix(product, Fix.enum().MAGENTO_PROBLEM);
+            this._storeFix(product, 'MAGENTO_PROBLEM');
           }else{
             if (!hasSales(stocks)){
-              this._storeFix(product, Fix.enum().REGISTERING);
+              this._storeFix(product, 'REGISTERING');
             }
           }
         }
@@ -66,32 +68,32 @@ module.exports = class ProductDiagnostics{
     // --- Cascata --- //
 
 
-    if (isWeightMissing(product)){
-      this._storeFix(product, Fix.enum().WEIGHT);
+    if (isWeightMissing(product, true)){
+      this._storeFix(product, 'WEIGHT');
     }
 
     if (isNcmProblem(product)){
-      this._storeFix(product, Fix.enum().NCM);
+      this._storeFix(product, 'NCM');
     }
 
     if (isCostPriceMistake(product)){
-      this._storeFix(product, Fix.enum().COST);
+      this._storeFix(product, 'COST');
     }
 
     if (isBrandMissing(attrBundle.names)){
-      this._storeFix(product, Fix.enum().BRAND);
+      this._storeFix(product, 'BRAND');
     }
 
     if (isColorMissing(attrBundle.names)){
-      this._storeFix(product, Fix.enum().COLOR);
+      this._storeFix(product, 'COLOR');
     }
 
     if (isDepartmentMissing(attrBundle.names)){
-      this._storeFix(product, Fix.enum().DEPARTMENT);
+      this._storeFix(product, 'DEPARTMENT');
     }
 
     if (isGenderMissing(attrBundle)){
-      this._storeFix(product, Fix.enum().GENDER);
+      this._storeFix(product, 'GENDER');
     }
 
     if (this.sendBroadcast){
@@ -272,10 +274,25 @@ function getProductAttrBundle(product){
   return result;
 }
 
-function isWeightMissing(product){
+function isWeightMissing(product, checkMagento){
   //Considerar somente o peso liquido
-  return (parseFloat(product.pesoLiq) /* * parseFloat(product.pesoBruto))*/ == 0) && !isPhotoMissing(product);
+  var isMissing = (parseFloat(product.pesoLiq) == 0) && !isPhotoMissing(product);
+
+  if (!isMissing && checkMagento){
+    if (product.feedProduct && product.feedProduct.associates && product.feedProduct.weight){
+      var index = product.feedProduct.associates.split(',').findIndex((e)=>{return e == product.codigo});
+      var weight = Floa.def(product.feedProduct.weight.split(',')[index], 0);
+
+      isMissing = weight == 0;
+    }
+  }
+
+
+  return isMissing;
 }
+
+
+
 
 function hasStock(product, checkAvailability){
   return product._Estoque.estoqueReal > 0 && (!checkAvailability || (hasAvailableStock(product)));

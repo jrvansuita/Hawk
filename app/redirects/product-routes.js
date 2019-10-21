@@ -3,6 +3,7 @@ const ProductLaws = require('../laws/product-laws.js');
 const ProductHandler = require('../handler/product-handler.js');
 const ProductDiagnostics = require('../diagnostics/product-diagnostics.js');
 const DiagnosticsProvider = require('../diagnostics/diagnostics-provider.js');
+const DiagnosticsEnum = require('../diagnostics/diagnostics-enum.js');
 const ProductBoard = require('../provider/product-board-provider.js');
 const ProductListProvider = require('../provider/product-list-provider.js');
 
@@ -59,7 +60,7 @@ module.exports = class ProductRoutes extends Routes{
 
     this._page('/diagnostics', (req, res) => {
       new DiagnosticsProvider().sums((data)=>{
-        res.render('product/diagnostics/diagnostics', {sums : data});
+        res.render('product/diagnostics/diagnostics', {sums : data, types: DiagnosticsEnum});
       });
     });
 
