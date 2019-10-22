@@ -3,12 +3,12 @@
 
 <head>
   <link rel="stylesheet" type="text/css" href="/front/css/layout/general.css">
-  <link rel="stylesheet" type="text/css" href="/front/css/layout/user-form.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/user-registering.css">
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-checkbox.css">
 
 
 
-  <script type="text/javascript" src="/front/js/control/user-form.js"></script>
+  <script type="text/javascript" src="/front/js/control/user-registering.js"></script>
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
 
   <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
@@ -37,14 +37,14 @@
 
 
 
-    <form class="user-form shadow" name="user-form" action="user-form" method="post" id="user-form">
+    <form class="user-registering shadow" name="user-registering" action="user-registering" method="post" id="user-registering">
 
       <div class="header">
 
 
 
         <div class="avatar-holder">
-          <img class="circle shadow avatar-img" id="avatar-user-form" src="<%=user ? user.avatar : 'img/avatar.png'%>" title="System" />
+          <img class="circle shadow avatar-img" id="avatar-user-registering" src="<%=user ? user.avatar : 'img/avatar.png'%>" title="System" />
           <input type="text" id="editing" value="<%=user ? user.id : -1%>" style="display:none"/>
           <label class="edit-image"> Editar </label>
           <img src="img/checked.png" class="dots-glyph avatar-crop-ok">

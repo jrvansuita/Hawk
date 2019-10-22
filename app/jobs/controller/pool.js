@@ -2,11 +2,34 @@ const Jobs = require('../../bean/job.js');
 const schedule = require('node-schedule');
 
 global.jobsPoll = [];
+var availableJobs = null;
 
 module.exports = {
 
   get(id){
     return global.jobsPoll.find(each=>{return each.id == id;});
+  },
+
+  getAvailableJobs(){
+    if (!availableJobs){
+      var extension = ".js";
+      var jobsFolder = require("path").join(__dirname, '..');
+      let dir = require('fs').readdirSync(jobsFolder);
+      var files = dir.filter( elm => elm.match(new RegExp(`.*\.(${extension})`, 'ig')));
+
+      var result = {};
+
+
+      files.forEach(e=>{
+        var instance = new (require(jobsFolder + '/' + e))();
+        result[e] = instance.getName();
+      });
+
+      console.log(result);
+      availableJobs = result;
+    }
+
+    return availableJobs;
   },
 
   fireJob(job){

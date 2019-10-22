@@ -7,7 +7,7 @@ $(document).ready(()=>{
       return {text : pack.name};
     })
     .setOnItemSelect((data, item)=>{
-      window.location='/packages?_id='+ item._id;
+      window.location='/packages-registering?_id='+ item._id;
     }).load();
 
 
@@ -24,7 +24,7 @@ $(document).ready(()=>{
       $('#delete').click(()=>{
         if ($('#editing-id').val().length > 0){
           _post('/packages-remove', {id: $('#editing-id').val()},()=>{
-              window.location='/packages';
+              window.location='/packages-registering';
             });
         }
       });

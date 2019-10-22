@@ -71,7 +71,7 @@ module.exports = class Routes {
     }
   }
 
-  //Verifica se o caminho é uma das páginas acessiveis sem login como Login/User-Form etc
+  //Verifica se o caminho é uma das páginas acessiveis sem login como Login/User-registering etc
   static checkIsPathNotLogged(path){
     return Util.isIn(global.pathNotLogged, path);
   }

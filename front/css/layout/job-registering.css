@@ -18,7 +18,7 @@
   padding: 15px;
 }
 
-.pack-form{
+.job-form{
   width: fit-content;
   margin: auto;
   margin-top: 5%;
@@ -108,6 +108,7 @@
 .row{
   display: block;
   text-align: left;
+  margin-right: 10px;
 }
 
 
@@ -123,34 +124,11 @@
 .button{
   margin-right: 15px;
 }
-.packs-view{
-  margin: auto;
-  margin-top: 5%;
-  min-width: 60%;
-}
-.packs-view td{
-  padding: 5px;
-}
 
-
-.packs-view td{
-  color: gray;
-  padding: 8px 15px;
-  font-size: 14px;
-}
-
-.packs-header td{
-  color: #231e1e;
-  padding: 10px 15px;
-  font-size: 15px;
-}
-
-
-.packs-view tr:nth-child(even) {
-  background-color: #ddd6d757;
-}
-
-
-.warn-stock{
-  background-color: #f3736a73;
+.sub-title{
+  margin-bottom: 25px;
+  margin-left: 15px;
+  display: inline-flex;
+  margin-top: 60px;
+  color: #585454;
 }

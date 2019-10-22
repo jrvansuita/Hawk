@@ -40,7 +40,7 @@ module.exports = {
       PickingLaws.remove(sale);
       InprogressLaws.remove(sale.numeroPedido);
       BlockHandler.pendingSkus(sale, user);
-      
+
       callback();
     });
   },
@@ -88,11 +88,13 @@ function sendEmailIfNeed(pending, user,  callback){
     if (sale.client){
       sendEmail(sale, user, callback);
 
-    }else{
+    }else if (sale.idContato){
       new EccosysCalls().getClient(sale.idContato, (client)=>{
         sale.client = client;
         sendEmail(sale, user, callback);
       });
+    }else{
+      pending.sendEmail = false;
     }
   }else{
     callback();

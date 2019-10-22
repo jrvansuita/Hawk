@@ -159,7 +159,7 @@ function loadAllPendingSalesFromDB(callback){
 }
 
 function removeUnpendingItemsAndClearSale(sale){
-  sale = Util.removeAttrs(sale, ['id', 'numeroPedido', 'situacao', 'items', 'pickUser', 'transport', 'data', 'doNotCount', 'itemsQuantity', 'numeroDaOrdemDeCompra']);
+  sale = Util.removeAttrs(sale, ['id', 'numeroPedido', 'situacao', 'items', 'pickUser', 'transport', 'data', 'doNotCount', 'idContato', 'itemsQuantity', 'numeroDaOrdemDeCompra']);
 
   sale.items = sale.items.filter(function (item){
     return item.pending !== undefined && item.pending.toString() == "true";

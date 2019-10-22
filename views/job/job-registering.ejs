@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt" dir="ltr">
+<%  include ../menus/main-menu %>
+<head>
+
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/job-registering.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-checkbox.css">
+
+  <script type="text/javascript" src="/front/js/control/job-registering.js"></script>
+  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+  <script type="text/javascript" src="/front/js/libs/jquery.maskedinput.min.js"></script>
+
+  <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
+</head>
+<body>
+  <script>
+  window.job = <%- JSON.stringify(job || null) %>
+  window.jobTypes = <%- JSON.stringify(jobTypes || null) %>
+</script>
+
+
+<div class="main">
+
+
+  <form class="job-form shadow" name="job-form" action="job-registering" method="post" id="job-form">
+    <div class="header">
+
+      <div class="icon-holder">
+        <img class="circle shadow" src="img/gear.png%>" />
+        <input type="text" id="editing-id" name="editingId" value="<%=job ? job.id : ''%>" style="display:none">
+      </div>
+      <div class="header-name">
+        <input type="text" class="simple-material-input search-input" value="<%=job ? job.description : ''%>" id="job-name" placeholder="Selecione a Tarefa" autocomplete="off"/>
+      </div>
+
+    </div>
+
+    <div class="main-form">
+
+      <div class="row">
+        <div class="material-input-holder">
+          <input type="text" id="description" name="description"  maxlength="200"
+          value="<%=job ? job.description : ''%>" autocomplete="off"
+          title="Nome da Tarefa" required/>
+
+          <span class="bar"></span>
+          <label>Nome da Tarefa</label>
+        </div>
+
+        <div class="material-input-holder">
+          <input type="text" id="tag" name="tag"  maxlength="10"
+          value="<%=job ? job.tag : ''%>" autocomplete="off"
+          title="Tag da Tarefa" required/>
+
+          <span class="bar"></span>
+          <label>Tag</label>
+        </div>
+
+        <div class="material-input-holder">
+          <input type="text" id="job-type" name="job-type"  maxlength="100"
+          value="<%=job ? job.type : ''%>" autocomplete="nope"
+          required/>
+
+          <span class="bar"></span>
+          <label>Algoritmo</label>
+        </div>
+
+        <label class="pure-material-checkbox">
+          <input type="checkbox" id="active" name="active" <%=job ? job.active ? 'checked' : '' : ''%>>
+          <span>Ativo</span>
+        </label>
+      </div>
+
+      <% function getHour(){
+        return job && job.rule ? (job.rule.hour.toString().padStart(2, "0") + ':' + job.rule.minute.toString().padStart(2, "0")) : '';
+      }%>
+
+      <div class="row">
+
+        <span class="sub-title">Agendamento</span>
+
+
+
+        <div class="material-input-holder">
+          <input type="text" id="time" name="time"  maxlength="5" value="<%=getHour()%>"
+          autocomplete="off"
+          required/>
+
+          <span class="bar"></span>
+          <label>Horário</label>
+        </div>
+
+
+        <% function dayChecked(index){
+          return job && job.rule.dayOfWeek.toString().includes(index.toString()) ? 'checked' : '';
+        }%>
+
+        <div class="days-box">
+          <label class="pure-material-checkbox">
+            <input type="checkbox" id="monday" name="monday" <%=dayChecked(1)%>>
+            <span>Segunda</span>
+          </label>
+
+          <label class="pure-material-checkbox">
+            <input type="checkbox" id="tuesday" name="tuesday" <%=dayChecked(2)%>>
+            <span>Terça</span>
+          </label>
+
+          <label class="pure-material-checkbox">
+            <input type="checkbox" id="wednesday" name="wednesday" <%=dayChecked(3)%>>
+            <span>Quarta</span>
+          </label>
+
+          <label class="pure-material-checkbox">
+            <input type="checkbox" id="thursday" name="thursday" <%=dayChecked(4)%>>
+            <span>Quinta</span>
+          </label>
+
+          <label class="pure-material-checkbox">
+            <input type="checkbox" id="friday" name="friday" <%=dayChecked(5)%>>
+            <span>Sexta</span>
+          </label>
+
+          <label class="pure-material-checkbox">
+            <input type="checkbox" id="saturday" name="saturday" <%=dayChecked(6)%>>
+            <span>Sábado</span>
+          </label>
+
+          <label class="pure-material-checkbox">
+            <input type="checkbox" id="sunday" name="sunday" <%=dayChecked(0)%>>
+            <span>Domingo</span>
+          </label>
+        </div>
+
+
+
+
+      </div>
+
+
+    </div>
+
+
+    <div class="footer">
+      <%if (loggedUser && loggedUser.full){%>
+        <label class="button shadow" id="save" >Salvar</label>
+        <label class="button shadow" id="new">Novo</label>
+        <label class="button shadow" id="delete">Excluir</label>
+        <%}%>
+      </div>
+
+    </div>
+
+
+
+  </body>
+  </html>

@@ -10,7 +10,7 @@ $(document).ready(() => {
   })
   .setOnItemSelect((item, user)=>{
     window.location=
-    '/user-form?userId='+ user.id;
+    '/user-registering?userId='+ user.id;
   })
   .load().then(binder => userSelector = binder);
 
@@ -33,7 +33,7 @@ $(document).ready(() => {
 
   $('#save').click(()=>{
     if (checkform()){
-      $('#user-form').submit();
+      $('#user-registering').submit();
     }
   });
 
@@ -45,7 +45,7 @@ $(document).ready(() => {
         data: {id: $('#id').val()},
         success: (response) =>{
           window.location=
-          '/user-form';
+          '/user-registering';
         },
         error: (error, message, errorThrown) =>{
           console.log(error);
@@ -145,7 +145,7 @@ function showAvatarCropper(){
 
   }).show();
 
-  croppie = new Croppie(document.getElementById('avatar-user-form'), {
+  croppie = new Croppie(document.getElementById('avatar-user-registering'), {
     enableExif : true,
     enableResizeboolean : true,
     enableZoomboolean: true,
@@ -166,7 +166,7 @@ function showAvatarCropper(){
     $('#token').val('');
     $('#title-label').text('');
     $('input[type="checkbox"]').prop('checked', false);
-    $('#avatar-user-form').attr('src', 'img/avatar.png');
+    $('#avatar-user-registering').attr('src', 'img/avatar.png');
   }
 
 

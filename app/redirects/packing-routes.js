@@ -102,14 +102,14 @@ module.exports = class PackingRoutes extends Routes{
 
 
 
-      this._get('/packages', (req, res)=>{
+      this._get('/packages-registering', (req, res)=>{
         Pack.findAll((err, all)=>{
           if (req.query._id){
             Pack.findOne({_id:req.query._id}, (err, pack)=>{
-              res.render('packing/package-type', {pack: pack, all: all});
+              res.render('packing/package-type-registering', {pack: pack, all: all});
             });
           }else{
-            res.render('packing/package-type', {pack: null,  all: all});
+            res.render('packing/package-type-registering', {pack: null,  all: all});
           }
         });
       });
@@ -117,9 +117,9 @@ module.exports = class PackingRoutes extends Routes{
 
 
 
-      this._post('/packages', (req, res) => {
+      this._post('/packages-registering', (req, res) => {
         PackagesHandler.storeFromScreen(req.body, (packId)=>{
-          res.redirect("/packages?_id=" + packId);
+          res.redirect("/packages-registering?_id=" + packId);
         });
       });
 
