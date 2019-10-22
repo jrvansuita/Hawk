@@ -98,7 +98,7 @@ module.exports = class ProductRoutes extends Routes{
 
     this._get('/fixes-dialog', (req, res) => {
       new DiagnosticsProvider().loadBySku(req.query.sku, (all, product)=>{
-        res.render('product/diagnostics/diagnostics-dialog', {data : all, product: product});
+        res.render('product/diagnostics/diagnostics-dialog', {data : all, product: product, types: DiagnosticsEnum});
       });
     });
 

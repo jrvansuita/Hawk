@@ -35,7 +35,7 @@ module.exports = {
 
   SALE: {
     name : 'Produtos sem Vendas',
-    description: 'Produtos com baixa performance ou nenhum venda.',
+    description: 'Produtos com baixa performance ou nenhuma venda.',
     icon: 'calc'
   },
 
