@@ -592,7 +592,7 @@ function showMainInputTitle(title, icon, lineColor){
 }
 
 
-function autoSelectPackingType(callback){
+function autoSelectPackingType(callback){  
   var options = packingTypeCombo.getData();
   if (options && (itemsChecked == sale.itemsQuantity)){
     var selectedItem = null;

@@ -1,4 +1,6 @@
-const EccosysCalls = require('../eccosys/eccosys-calls.js');
+
+const EccosysProvider = require('../eccosys_new/eccosys-provider.js');
+
 const PendingLaws = require('../laws/pending-laws.js');
 const InprogressLaws = require('../laws/inprogress-laws.js');
 const DoneLaws = require('../laws/done-laws.js');
@@ -46,11 +48,11 @@ module.exports = {
   },
 
   load(onFinished){
-    new EccosysCalls().setOnError((error)=>{
+    new EccosysProvider().setOnError((error)=>{
       loadingList = false;
       onFinished();
       throw error;
-    }).getPickingSales((sales) => {
+    }).pickingSales().go((sales) => {
       try{
         loadingList = true;
 
@@ -185,7 +187,7 @@ function loadOpenSales(){
   if (openSalesController < new Date().getTime()){
     //Add +30 min to now
     openSalesController = new Date().getTime() + 1.8e+6;
-    new EccosysCalls().getOpenSales((sales) => {
+    new EccosysProvider().openSales().go((sales) => {
       openSalesCount = sales.length;
     });
   }

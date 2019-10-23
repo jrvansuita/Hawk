@@ -23,7 +23,7 @@
 <div class="main">
 
 
-  <form class="job-form shadow" name="job-form" action="job-registering" method="post" id="job-form">
+  <form class="job-form shadow"  onsubmit="onDoSubmit();" name="jobform" action="job-registering" method="post" id="jobform">
     <div class="header">
 
       <div class="icon-holder">
@@ -58,8 +58,8 @@
         </div>
 
         <div class="material-input-holder">
-          <input type="text" id="job-type" name="job-type"  maxlength="100"
-          value="<%=job ? job.type : ''%>" autocomplete="nope"
+          <input type="text" id="job-type" name="jobType"  maxlength="100"
+            value="<%=job ? jobTypes[job.type] : ''%>" autocomplete="nope"
           required/>
 
           <span class="bar"></span>
@@ -93,7 +93,8 @@
 
 
         <% function dayChecked(index){
-          return job && job.rule.dayOfWeek.toString().includes(index.toString()) ? 'checked' : '';
+
+          return (job && job.rule) && job.rule.dayOfWeek.toString().includes(index.toString()) ? 'checked' : '';
         }%>
 
         <div class="days-box">

@@ -3,7 +3,7 @@ const Err = require('../error/error.js');
 const UsersProvider = require('../provider/user-provider.js');
 const ImgurSaver = require('../imgur/save-image.js');
 
-module.exports = class UserHandler {
+module.exports = class  {
 
   static storeFromScreen(params, callback) {
     var actual = UsersProvider.get(params.id);

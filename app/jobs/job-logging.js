@@ -3,12 +3,15 @@ const Job = require('../jobs/controller/job.js');
 module.exports = class JobTeste extends Job{
 
   getName(){
-    return 'Testando!!';
+    return 'Logar o Nome da Tarefa';
   }
 
   doWork(){
     return new Promise((resolve, reject)=>{
-      resolve('Fez o trabalho');
+
+      console.log('[Job] executou: ' + this.getInfo().description);
+
+      resolve('Done!');
     });
   }
 

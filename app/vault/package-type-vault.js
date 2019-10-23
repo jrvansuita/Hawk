@@ -1,7 +1,7 @@
 const Pack = require('../bean/pack.js');
 const Err = require('../error/error.js');
 
-module.exports = class PackagesHandler {
+module.exports = class  {
 
   static storeFromScreen(params, callback) {
     console.log(params.lockSize);

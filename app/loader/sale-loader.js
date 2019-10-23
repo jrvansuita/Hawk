@@ -1,4 +1,4 @@
-const EccosysCalls = require('../eccosys/eccosys-calls.js');
+const EccosysProvider = require('../eccosys_new/eccosys-provider.js');
 const History = require('../bean/history.js');
 
 
@@ -8,7 +8,6 @@ module.exports= class SaleLoader {
 
   constructor(data){
     this.initialData = data;
-
     this.sale = data;
     this.list = [];
   }
@@ -24,15 +23,26 @@ module.exports= class SaleLoader {
     //this.checkTerminate();
   }
 
+  getSkusFromSale(){
+    if(this.sale.items){
+      return this.sale.items.map((i)=>{
+        return i ? i.codigo : '';
+      });
+
+    }else{
+      return [];
+    }
+  }
+
   setOnError(onError){
     this.onError = onError;
     return this;
   }
 
   loadSale(saleNumber, onCallOuter){
-    new EccosysCalls()
+    new EccosysProvider()
     .setOnError(this.onError)
-    .getSale(saleNumber, (sale)=>{
+    .sale(saleNumber).go((sale)=>{
       this.sale = sale;
       onCallOuter(sale);
     });
@@ -43,9 +53,9 @@ module.exports= class SaleLoader {
     var funcClient = (onCallNext)=>{
 
       if (this.sale.idContato && !this.sale.client){
-        new EccosysCalls()
+        new EccosysProvider()
         .setOnError(this.onError)
-        .getClient(this.sale.idContato, (client)=>{
+        .client(this.sale.idContato).go((client)=>{
 
           if (Object.keys(client).length === 0){
             History.error(e, null, 'Erro ao carregar cliente ' + this.sale.idContato + ' do pedido ' + this.sale.numeroPedido);
@@ -76,9 +86,9 @@ module.exports= class SaleLoader {
     var funcItems = (onCallNext)=>{
 
       if((!this.sale.items) || (force)){
-        new EccosysCalls()
+        new EccosysProvider()
         .setOnError(this.onError)
-        .getSaleItems(this.sale.numeroPedido, (items) => {
+        .saleItems(this.sale.numeroPedido).go((items) => {
 
           this.sale.transport = Util.twoNames(this.sale.transportador, Const.no_transport);
           this.sale.items = items;
@@ -103,9 +113,9 @@ module.exports= class SaleLoader {
   loadItemsDeepAttrs(onCallOuter){
     var funcItemsWeight = (onCallNext)=>{
 
-      new EccosysCalls()
+      new EccosysProvider()
       .setOnError(this.onError)
-      .getSkusFromSale(this.sale, (products)=>{
+      .skus(this.getSkusFromSale()).go((products)=>{
         for (let item of this.sale.items) {
           for (let product of products) {
             if (item.codigo == product.codigo){
@@ -132,9 +142,9 @@ module.exports= class SaleLoader {
     var funcNfe = (onCallNext)=>{
 
       if (this.sale.numeroNotaFiscal && !this.sale.nfe){
-        new EccosysCalls()
+        new EccosysProvider()
         .setOnError(this.onError)
-        .getNfe(this.sale.numeroNotaFiscal, (nfe)=>{
+        .nfe(this.sale.numeroNotaFiscal).go((nfe)=>{
           this.sale.nfe = nfe;
           this._callbackHit(onCallNext, onCallOuter);
         });
@@ -152,9 +162,9 @@ module.exports= class SaleLoader {
   loadProducts(onCallOuter){
     var funcProducts = (onCallNext)=>{
 
-      new EccosysCalls()
+      new EccosysProvider()
       .setOnError(this.onError)
-      .getSkusFromSale(this.sale, (products)=>{
+      .skus(this.getSkusFromSale()).go((products)=>{
         this._callbackHit(onCallNext, ()=>{
           onCallOuter(products, this.sale);
         });

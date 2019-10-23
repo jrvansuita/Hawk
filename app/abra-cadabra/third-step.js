@@ -73,5 +73,5 @@ process.on('uncaughtException', function (err) {
 });
 
 
-//Ainda não está pronto
-//require('../jobs/controller/pool.js').initialize();
+
+require('../jobs/controller/pool.js').initialize();

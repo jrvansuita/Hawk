@@ -1,5 +1,6 @@
-$(document).ready(()=>{
+var jobTypeSelector = null;
 
+$(document).ready(()=>{
 
   new ComboBox($('#job-name'), '/jobs-all')
   .setAutoShowOptions(true)
@@ -11,10 +12,30 @@ $(document).ready(()=>{
   }).load();
 
 
-  new ComboBox($('#job-type'), jobTypes)
+  jobTypeSelector = new ComboBox($('#job-type'), jobTypes);
+  jobTypeSelector
   .setAutoShowOptions(true)
-  .load();
+  .load().then(()=>{
+    if (job){
+      jobTypeSelector.selectByFilter((each)=>{
+        return each.data.key == job.type;
+      });
+    }
+  });
 
+
+  $('#new').click(()=>{
+    $('input').val('');
+    $('input').prop("checked", false);
+  });
+
+  $('#delete').click(()=>{
+    if ($('#editing-id').val().length > 0){
+      _post('/job-remove', {id: $('#editing-id').val()},()=>{
+        window.location='/job-registering';
+      });
+    }
+  });
 
   $('#time').mask("99:99");
   $('#time').change(function() {
@@ -30,4 +51,30 @@ $(document).ready(()=>{
     }
   });
 
+  $('#save').click(()=>{
+    if (checkform()){
+      $('#jobform').submit();
+    }
+  });
 });
+
+
+
+function checkform(){
+  var c = checkMaterialInput($('#description'));
+  c = checkMaterialInput($('#tag')) & c;
+  c = checkMaterialInput($('#job-type')) & c;
+  c = checkMaterialInput($('#time')) & c;
+
+  return c;
+}
+
+
+
+
+function onDoSubmit(){
+  document.jobform.jobType.value = jobTypeSelector.getSelectedItem().data.key;
+  console.log(document.jobform.jobType.value );
+  console.log('passou');
+  return true;
+}

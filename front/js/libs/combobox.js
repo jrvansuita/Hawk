@@ -1,6 +1,6 @@
 class ComboBox{
 
-  constructor(element, pathOrArr, method){
+  constructor(element, data, method){
     this.dependencies = new FileLoader().css('jquery-ui')
     .css('combobox').js('jquery-ui.min');
 
@@ -9,154 +9,172 @@ class ComboBox{
     this.limit = 5;
     this.minLength = 1;
 
-    if (pathOrArr instanceof Array){
-      this.objects = pathOrArr;
+    if (data instanceof Array){
+      this.objects = data;
+    }else if (typeof data === "string"){
+      this.path = data;
     }else{
-      this.path = pathOrArr;
-    }
-
-    this.method = method;
-  }
-
-  select(item){
-    this.element.val(item.value);
-
-    this.selectedItem = item;
-    if (this.onItemSelect){
-      this.onItemSelect(this.selectedItem, this.selectedItem.data);
-    }
-  }
-
-  setOnItemSelect(onItemSelect){
-    this.onItemSelect = onItemSelect;
-    return this;
-  }
-
-  setOnItemBuild(onBuildItem){
-    this.onBuildItem = onBuildItem;
-    return this;
-  }
-
-  setAutoShowOptions(){
-    this.limit = 10;
-    this.minLength = 0;
-    return this;
-  }
-
-  /* Focus element and set Enter key to show options */
-  pressEnterToSelect(){
-    this.element.focus();
-    this.element.select();
-
-    this.element.autocomplete('close');
-
-    this.element.one("keyup", (e)=> {
-      if (e.which == 13){
-        this.element.val("");
-        this.element.focus();
-        $('li').attr('tabindex','0');
+      this.objects = Object.keys(data)
+      .map(key=>{
+        return {val :data[key],
+          key : key};
+        });
       }
-    });
-  }
 
+      this.method = method;
+    }
 
-  getSelectedItem(){
-    return this.selectedItem;
-  }
+    select(item){
+      this.element.val(item.label);
 
-  getSelectedObject(){
-    return  this.selectedItem && this.selectedItem.data ? this.selectedItem.data : this.selectedItem;
-  }
+      this.selectedItem = item;
+      if (this.onItemSelect){
+        this.onItemSelect(this.selectedItem, this.selectedItem.data);
+      }
+    }
 
+    selectByFilter(filter){
+      var options = this.getData();
+      var sel = options.find(filter);
 
+      if(sel){
+        this.select(sel);
+      }
+    }
 
-  getData(){
-    return this.data;
-  }
+    setOnItemSelect(onItemSelect){
+      this.onItemSelect = onItemSelect;
+      return this;
+    }
 
-  async load(callback){
-    await this.dependencies.load();
+    setOnItemBuild(onBuildItem){
+      this.onBuildItem = onBuildItem;
+      return this;
+    }
 
-    if (this.path){
-      $.ajax({
-        url: this.path,
-        type: this.method ? this.method : "get",
-        success: (response) =>{
-          this.objects = Object.values(response);
-          this.handleData(callback);
-        },
-        error: (error, message, errorThrown) =>{
-          console.log(error);
+    setAutoShowOptions(){
+      this.limit = 10;
+      this.minLength = 0;
+      return this;
+    }
+
+    /* Focus element and set Enter key to show options */
+    pressEnterToSelect(){
+      this.element.focus();
+      this.element.select();
+
+      this.element.autocomplete('close');
+
+      this.element.one("keyup", (e)=> {
+        if (e.which == 13){
+          this.element.val("");
+          this.element.focus();
+          $('li').attr('tabindex','0');
         }
       });
-    }else{
-      this.handleData(callback);
     }
 
-    return this;
-  }
+
+    getSelectedItem(){
+      return this.selectedItem;
+    }
+
+    getSelectedObject(){
+      return  this.selectedItem && this.selectedItem.data ? this.selectedItem.data : this.selectedItem;
+    }
 
 
-  handleData(callback){
-    this.data = [];
 
-    this.objects.forEach((each, index)=>{
-      var item = {id : index};
+    getData(){
+      return this.data;
+    }
 
-      if (this.onBuildItem){
-        var struct = this.onBuildItem(each, index);
-        item.value = struct.text;
-        item.img = struct.img;
-        item.data = each;
+    async load(callback){
+      await this.dependencies.load();
+
+      if (this.path){
+        $.ajax({
+          url: this.path,
+          type: this.method ? this.method : "get",
+          success: (response) =>{
+            this.objects = Object.values(response);
+            this.handleData(callback);
+          },
+          error: (error, message, errorThrown) =>{
+            console.log(error);
+          }
+        });
       }else{
-        item.value = each;
+        this.handleData(callback);
       }
 
-      this.data.push(item);
-    });
-
-    this.build();
-
-    if (callback){
-      callback();
+      return this;
     }
-  }
 
-  build(){
 
-    var options = {
-      minLength: this.minLength,
-      source: (request, response)=> {
-        var results = $.ui.autocomplete.filter(this.data, request.term);
-        response(results.slice(0, this.limit));
-      },
-      select: (event, ui)=>{
-        this.select(ui.item);
-      }
-    };
+    handleData(callback){
+      this.data = [];
 
-    this.instance = this.element.autocomplete(options);
+      this.objects.forEach((each, index)=>{
+        var item = {id : index};
 
-    this.element.autocomplete('instance')._renderItem = (ul, item)=>{
-      return buildItemLayout(item).appendTo(ul);
-    };
+        if (this.onBuildItem){
+          var struct = this.onBuildItem(each, index);
+          item.label = struct.text;
+          item.img = struct.img;
+          item.data = each;
+        }else if (typeof each === "string"){
+          item.label = each;
+        }else  if (typeof each.val === "string"){
+          item.label = each.val;
+          item.data = each;
+        }
 
-    if (this.minLength == 0){
-      this.instance.focus(function () {
-        $(this).autocomplete("search", "");
+        this.data.push(item);
       });
+
+      this.build();
+
+      if (callback){
+        callback();
+      }
     }
+
+    build(){
+
+      var options = {
+        minLength: this.minLength,
+        source: (request, response)=> {
+          var results = $.ui.autocomplete.filter(this.data, request.term);
+          response(results.slice(0, this.limit));
+        },
+        select: (event, ui)=>{
+          this.select(ui.item);
+        }
+      };
+
+      this.instance = this.element.autocomplete(options);
+
+      this.element.autocomplete('instance')._renderItem = (ul, item)=>{
+        return buildItemLayout(item).appendTo(ul);
+      };
+
+      if (this.minLength == 0){
+        this.instance.focus(function () {
+          $(this).autocomplete("search", "");
+        });
+      }
+    }
+
   }
 
-}
+  function buildItemLayout(item){
+    var img;
 
-function buildItemLayout(item){
-  var img;
+    if (item.img){
+      img = $('<img>').addClass('.circle').attr('src', item.img);
+    }
 
-  if (item.img){
-    img = $('<img>').addClass('.circle').attr('src', item.img);
+    return $('<li>').append($('<div>').append(img, $('<span>').text(item.label)));
+
   }
-
-  return $('<li>').append($('<div>').append(img, $('<span>').text(item.value)));
-
-}

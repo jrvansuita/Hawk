@@ -1,5 +1,5 @@
 const Routes = require('../redirects/controller/routes.js');
-const MockHandler = require('../mockup/mock-handler.js');
+const MockVault = require('../mockup/mockup-vault.js');
 const ProductHandler = require('../handler/product-handler.js');
 const ProductMockupProvider = require('../mockup/product-mockup-provider.js');
 const Mock = require('../bean/mock.js');
@@ -17,7 +17,7 @@ module.exports = class UserRoutes extends Routes{
     });
 
     this._post('/mockup-builder', (req, res) => {
-      MockHandler.storeFromScreen(req.body, (mock)=>{
+      MockVault.storeFromScreen(req.body, (mock)=>{
         res.status(200).send(mock);
       });
     });

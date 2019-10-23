@@ -1,6 +1,6 @@
 const Routes = require('../redirects/controller/routes.js');
 const UsersProvider = require('../provider/user-provider.js');
-const UsersHandler = require('../handler/user-handler.js');
+const UsersVault = require('../vault/user-vault.js');
 const Setts = require('../bean/setts.js');
 
 module.exports = class UserRoutes extends Routes{
@@ -31,20 +31,20 @@ module.exports = class UserRoutes extends Routes{
     });
 
     this._post('/user-registering', (req, res) => {
-      UsersHandler.storeFromScreen(req.body, (userId)=>{
+      UsersVault.storeFromScreen(req.body, (userId)=>{
         res.redirect("/user-registering?userId=" + userId);
       });
     }, true);
 
     this._post('/user-delete', (req, res) => {
-      UsersHandler.delete(req.body.id);
+      UsersVault.delete(req.body.id);
       res.status(200).send('Ok');
     }, true);
 
 
 
     this._post('/upload-user-avatar', (req, res) => {
-      UsersHandler.changeImage(req.body.userId, req.body.avatar, (url)=>{
+      UsersVault.changeImage(req.body.userId, req.body.avatar, (url)=>{
         //Nada
       });
 

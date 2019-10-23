@@ -2,7 +2,8 @@ const DoneLaws = require('../laws/done-laws.js');
 const InprogressLaws = require('../laws/inprogress-laws.js');
 const SaleLoader = require('../loader/sale-loader.js');
 const SaleShell = require('../print/sale-shell.js');
-const EccosysCalls = require('../eccosys/eccosys-calls.js');
+const EccosysProvider = require('../eccosys_new/eccosys-provider.js');
+const EccosysStorer = require('../eccosys_new/eccosys-storer.js');
 const PickingLaws = require('../laws/picking-laws.js');
 
 module.exports = class PickingSalePrint{
@@ -108,7 +109,7 @@ function loadSaleForPrint(sale, callback){
 
 //Marca no Eccosys que o pedido já foi impresso
 function markAsPrinted(saleNumber){
-  new EccosysCalls().getSale(saleNumber, (sale)=>{
+  new EccosysProvider().sale(saleNumber).go((sale)=>{
 
     if (!sale){
       throw 'Sale not defined ' + saleNumber;
@@ -123,7 +124,7 @@ function markAsPrinted(saleNumber){
         pickingRealizado: "A"
       };
 
-      new EccosysCalls().updateSale([body], ()=>{});
+      new EccosysStorer().sale([body], ()=>{});
     }
   });
 }

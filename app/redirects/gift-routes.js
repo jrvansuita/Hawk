@@ -1,5 +1,5 @@
 const Routes = require('../redirects/controller/routes.js');
-const GiftHandler = require('../handler/gift-handler.js');
+const GiftVault = require('../vault/gift-vault.js');
 const GiftRule = require('../bean/gift-rule.js');
 
 module.exports = class GiftRoutes extends Routes{
@@ -28,7 +28,7 @@ module.exports = class GiftRoutes extends Routes{
 
 
     this._post('/gift-rules', (req, res) => {
-      GiftHandler.storeFromScreen(req.body, (gift)=>{
+      GiftVault.storeFromScreen(req.body, (gift)=>{
         res.status(200).send(gift);
       });
     });
@@ -43,7 +43,7 @@ module.exports = class GiftRoutes extends Routes{
 
 
     this._post('/gift-delete', (req, res)=>{
-      GiftHandler.delete(req.body.id, ()=>{
+      GiftVault.delete(req.body.id, ()=>{
         res.status(200).send('Ok');
       });
     });

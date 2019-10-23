@@ -100,7 +100,6 @@
 .input-val{
   display: -webkit-inline-box;
   font-size: 15px;
-  /* margin-bottom: 15px; */
   max-width: 150px;
   margin: 10px 15px;
 }

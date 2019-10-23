@@ -1,4 +1,4 @@
-const EccosysCalls = require('../eccosys/eccosys-calls.js');
+
 const Product = require('../bean/product.js');
 const ProductHandler = require('../handler/product-handler.js');
 

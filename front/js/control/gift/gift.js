@@ -139,8 +139,8 @@ function handleCondition(){
   c = checkMaterialInput($('#value')) & c;
 
   if (c){
-    var attr = attrNameSelector.getSelectedItem().data.value;
-    var sign = conditionsSelector.getSelectedItem().data.value;
+    var attr = attrNameSelector.getSelectedItem().data.key;
+    var sign = conditionsSelector.getSelectedItem().data.key;
 
     addCondition(attr, sign, $('#value').val());
 
@@ -224,35 +224,24 @@ function deleteGiftRule(){
 var attrNameSelector = null;
 
 function bindRulesAttrsComboBox(){
-  var data = Object.keys(rulesAttrs)
-  .map(key=>{
-    return {label :rulesAttrs[key],
-      value : key};
-    });
+  new ComboBox($('#attr'), rulesAttrs)
+  .setAutoShowOptions(true)
+  .setOnItemSelect((data, item)=>{
+    console.log(data);
+  })
+  .load().then(binder => {attrNameSelector = binder;});
 
-    new ComboBox($('#attr'), data)
-    .setAutoShowOptions(true)
-    .setOnItemBuild((item, index)=>{
-      return {text : item.label};
-    }).load().then(binder => {attrNameSelector = binder;});
-
-  }
+}
 
 var conditionsSelector = null;
 
-  function bindRulesConditionsComboBox(){
+function bindRulesConditionsComboBox(){
 
-    var conditionsTypes = Object.keys(rulesConditions)
-    .map(key=>{
-      return {label :rulesConditions[key].label,
-        value : key};
-      });
+  new ComboBox($('#sign'), rulesConditions)
+  .setOnItemBuild((item, index)=>{
+    return {text : item.val.label};
+  })
+  .setAutoShowOptions(true)
+  .load().then(binder => {conditionsSelector = binder;});
 
-      new ComboBox($('#sign'), conditionsTypes)
-      .setOnItemBuild((item, index)=>{
-        return {text : item.label};
-      })
-      .setAutoShowOptions(true)
-      .load().then(binder => {conditionsSelector = binder;});
-
-    }
+}

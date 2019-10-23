@@ -2,6 +2,7 @@ const Routes = require('../redirects/controller/routes.js');
 const PickingHandler = require('../handler/picking-handler.js');
 const Job = require('../bean/job.js');
 const JobsPool = require('../jobs/controller/pool.js');
+const JobsVault = require('../vault/job-vault.js');
 
 module.exports = class JobsRoutes extends Routes{
 
@@ -33,12 +34,20 @@ module.exports = class JobsRoutes extends Routes{
     });
 
     this._post('/job-registering', (req, res) => {
-
+      JobsVault.storeFromScreen(req.body, (id)=>{
+        res.redirect("/job-registering?id=" + id);
+      });
     });
 
+
+    this._post('/job-remove', (req, res) => {
+      JobsVault.delete(req.body.id);
+      res.status(200).send('Ok');
+    });
+
+
+
   }
-
-
 };
 
 function runJobs(req, callback){

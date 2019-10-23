@@ -1,6 +1,6 @@
 const PendingHandler = require('../handler/pending-handler.js');
 const BlockHandler = require('../handler/block-handler.js');
-const EccosysCalls = require('../eccosys/eccosys-calls.js');
+const EccosysProvider = require('../eccosys_new/eccosys-provider.js');
 
 var productsList = undefined;
 
@@ -124,8 +124,8 @@ module.exports = class {
     }
 
     if (skus.length > 0){
-      new EccosysCalls().getSkus(skus, (products)=>{
-        if (products){
+      new EccosysProvider().skus(skus).go((products)=>{
+        if (products.length > 0){
           products.forEach((product)=>{
             productsList[product.codigo] = product;
           });
@@ -134,7 +134,7 @@ module.exports = class {
         }
 
         callback(result);
-      }, true);
+      });
 
     }else{
       callback(result)

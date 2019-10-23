@@ -1,6 +1,5 @@
 const Routes = require('../redirects/controller/routes.js');
 const UsersProvider = require('../provider/user-provider.js');
-const UsersHandler = require('../handler/user-handler.js');
 const Setts = require('../bean/setts.js');
 
 module.exports = class LoginRoutes extends Routes{

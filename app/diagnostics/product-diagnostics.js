@@ -1,4 +1,4 @@
-const EccosysCalls = require('../eccosys/eccosys-calls.js');
+const EccosysProvider = require('../eccosys_new/eccosys-provider.js');
 const Fix = require('../bean/fix.js');
 const Product = require('../bean/product.js');
 
@@ -6,8 +6,6 @@ const Enum = require('../diagnostics/diagnostics-enum.js');
 
 module.exports = class ProductDiagnostics{
   constructor(){
-    this.page = 0;
-    this.currentList = [];
     this.productsAnalyzed = 0;
     this.fixesFound = 0;
     this.startTime = new Date();
@@ -135,11 +133,12 @@ module.exports = class ProductDiagnostics{
     Fix.removeAll({sku: sku}, (err)=>{
 
       //Capture the eccosys product
-      new EccosysCalls()
-      .getProduct(sku, (product)=>{
+      new EccosysProvider()
+      .product(sku)
+      .go((product)=>{
 
         //Product doesnt exists anymore Or is inactive
-        if (product.error || product.situacao == "I"){
+        if (!product || product.situacao == "I"){
           callback();
         }else{
           //Capture feed product
@@ -147,11 +146,10 @@ module.exports = class ProductDiagnostics{
             product.feedProduct = feedProduct;
 
             //Capture stock history
-            new EccosysCalls()
-            .pageCount(15)
-            .page(0)
+            new EccosysProvider()
+            .limit(15)
             .order('DESC')
-            .getStockHistory(sku, (stocks)=>{
+            .stockHistory(sku).go((stocks)=>{
 
               //Analyze the product
               this._analizeProducts(product, stocks, ()=>{
@@ -165,49 +163,41 @@ module.exports = class ProductDiagnostics{
   }
 
 
-  _loadCurrentProducts(callback){
-    this.index++;
+  _loadCurrentProducts(list, callback){
+    var index = -1;
 
-    if (this.currentList.length > this.index){
-      var item = this.currentList[this.index];
-      var sku = item.codigo;
+    var next = ()=>{
+      var item = list[++index];
 
-      if (item.gtin != ''){
-        this._checkSingleSku(sku, ()=>{
-          this._loadCurrentProducts(callback);
-        });
+      if (item){
+        if (item.gtin != ''){
+          this._checkSingleSku(item.codigo, next);
+        }else{
+          next();
+        }
       }else{
-        this._loadCurrentProducts(callback);
+        callback();
       }
+    };
 
-    }else{
-      callback();
-    }
+    next();
   }
 
   _loadCurrentPage(){
-    new EccosysCalls()
+    new EccosysProvider()
     .active()
     .dates(new Date(new Date().setMonth(new Date().getMonth() - 6)), new Date(), 'data')
-    .page(this.page)
-    .getProducts((items)=>{
-      this.currentList = items;
-      this.index = -1;
-
-      this._loadCurrentProducts(()=>{
-        this._loadCurrentPage();
-      });
+    .products().pagging((items, next)=>{
+      this._loadCurrentProducts(items, next);
     });
-
-    this.page++;
   }
 
 
   _loadChildProducts(sku, callback){
     sku = sku.split('-')[0];
 
-    new EccosysCalls()
-    .getProduct(sku, (product)=>{
+    new EccosysProvider()
+    .product(sku).go((product)=>{
       var skus = product._Skus ? product._Skus.map((i)=>{return i.codigo}) : [];
       callback(skus.length > 0 ? skus : [sku]);
     });

@@ -2,7 +2,8 @@ const PendingLaws = require('../laws/pending-laws.js');
 const PickingLaws = require('../laws/picking-laws.js');
 const SaleLoader = require('../loader/sale-loader.js');
 const InprogressLaws = require('../laws/inprogress-laws.js');
-const EccosysCalls = require('../eccosys/eccosys-calls.js');
+const EccosysProvider = require('../eccosys_new/eccosys-provider.js');
+
 const PendingEmailSender = require('../email/sender/pending-email-sender.js');
 const HistoryStorer = require('../history/history-storer.js');
 const BlockHandler = require('../handler/block-handler.js');
@@ -89,7 +90,7 @@ function sendEmailIfNeed(pending, user,  callback){
       sendEmail(sale, user, callback);
 
     }else if (sale.idContato){
-      new EccosysCalls().getClient(sale.idContato, (client)=>{
+      new EccosysProvider().client(sale.idContato).go((client)=>{
         sale.client = client;
         sendEmail(sale, user, callback);
       });

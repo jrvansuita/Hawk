@@ -6,6 +6,10 @@ module.exports = class Query {
     prefix = p;
   }
 
+  hasParams(){
+    return Object.keys(this).length > 0;
+  }
+
   add(key, value) {
     this[key] = value;
   }

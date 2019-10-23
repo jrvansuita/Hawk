@@ -5,8 +5,10 @@ const BlockLaws = require('../laws/block-laws.js');
 const InprogressLaws = require('../laws/inprogress-laws.js');
 const PendingLaws = require('../laws/pending-laws.js');
 const Err = require('../error/error.js');
-const EccosysCalls = require('../eccosys/eccosys-calls.js');
-const PackagesHandler = require('../handler/packages-handler.js');
+const EccosysStorer = require('../eccosys_new/eccosys-storer.js');
+const EccosysProvider = require('../eccosys_new/eccosys-provider.js');
+
+const PackageTypeVault = require('../vault/package-type-vault.js');
 const Day = require('../bean/day.js');
 const HistoryStorer = require('../history/history-storer.js');
 
@@ -76,11 +78,11 @@ module.exports = {
   },
 
   loadDanfe(res, nfNumber){
-    new EccosysCalls().loadDanfe(res, nfNumber);
+    new EccosysProvider().danfe(res, nfNumber);
   },
 
   loadTransportTag(res, idNfe){
-    new EccosysCalls().loadTransportTag(res, idNfe);
+    new EccosysProvider().transportTag(res, idNfe);
   },
 
   updateNCM(sku, newNCM, user, callback) {
@@ -104,67 +106,56 @@ module.exports = {
   },
 
   updateSale(params, callback){
-    new EccosysCalls().updateSale(this.getSalePackingBody(params), (updateResult)=>{
-      if (callback){
-        var result = JSON.parse(updateResult).result;
-        callback(result.success.length > 0, result);
-      }
+    new EccosysStorer().sale(this.getSalePackingBody(params)).go((data)=>{
+      callback(data.result.success.length > 0, data.result);
     });
-  },
+},
 
-  sendNfe(user, params, callback){
+sendNfe(user, params, callback){
     if (Num.def(params.idNfe) > 0){
       //A nota já está criada e estamos reenviando ela.
-      new EccosysCalls().resendRejectedNF(user, params.idNfe, (nfResult)=>{
-        if (callback){
-          callback(nfResult);
-        }
+      new EccosysStorer().retryNfe(user, params.idNfe).go(nfResult=>{
+        callback(nfResult);
       });
     }else{
       //Está enviando a nota pela primeira vez
-      new EccosysCalls().packingPostNF(user, params.saleNumber, (nfResult)=>{
-        if (callback){
-          callback(nfResult);
+      new EccosysStorer().nfe(user, params.saleNumber).go(nfResult=>{
+        callback(nfResult);
+      });
+    }
+},
+
+
+done(params, user, callback){
+  this.updateSale(params, (sucess, updateResult)=>{
+
+    if (sucess){
+      this.sendNfe(user, params, (nfResult)=>{
+        //'Enviou o resultado via Broadcast'
+        global.io.sockets.emit(params.saleNumber, nfResult);
+        var sucess = !nfResult.error || !nfResult.error.length;
+
+        if (sucess){
+          onPackingDone(params, user);
+        }else{
+          onPackingRejected(params, user, nfResult);
         }
       });
     }
-  },
 
-
-  done(params, user, callback){
-
-
-    this.updateSale(params, (sucess, updateResult)=>{
-
-      if (sucess){
-        this.sendNfe(user, params, (nfResult)=>{
-          nfResult = JSON.parse(nfResult);
-          console.log(nfResult);
-          //'Enviou o resultado via Broadcast'
-          global.io.sockets.emit(params.saleNumber, nfResult);
-          var sucess = !nfResult.error || !nfResult.error.length;
-
-          if (sucess){
-            onPackingDone(params, user);
-          }else{
-            onPackingRejected(params, user, nfResult);
-          }
-        });
-      }
-
-      if (callback){
-        //Envia uma notificação com OK do envio da NF-e ou a critica de update de pedido
-        callback(sucess ? {code:200} : updateResult);
-      }
-    });
-  }
+    if (callback){
+      //Envia uma notificação com OK do envio da NF-e ou a critica de update de pedido
+      callback(sucess ? {code:200} : updateResult);
+    }
+  });
+}
 };
 
 function onPackingRejected(params, user, result){
   var error = result.error[0].erro.split('\n')[0];
 
   countPoints(params.saleNumber, user, (day, sale)=>{
-     HistoryStorer.packingRejected(user.id, params.saleNumber, params.oc, error);
+    HistoryStorer.packingRejected(user.id, params.saleNumber, params.oc, error);
   });
 
   DoneLaws.remove(params.saleNumber);
@@ -172,7 +163,7 @@ function onPackingRejected(params, user, result){
 
 function onPackingDone(params, user){
   DoneLaws.remove(params.saleNumber);
-  PackagesHandler.decPackStock(params.packageId);
+  PackageTypeVault.decPackStock(params.packageId);
 
   countPoints(params.saleNumber, user, (day, sale)=>{
     HistoryStorer.packing(user.id, sale, day);

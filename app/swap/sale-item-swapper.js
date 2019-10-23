@@ -1,5 +1,5 @@
 const SaleLoader = require('../loader/sale-loader.js');
-const EccosysCalls = require('../eccosys/eccosys-calls.js');
+const EccosysProvider = require('../eccosys_new/eccosys-provider.js');
 const HistoryStorer = require('../history/history-storer.js');
 const Err = require('../error/error.js');
 const PendingHandler = require('../handler/pending-handler.js');
@@ -99,7 +99,7 @@ module.exports = class SaleItemSwapper{
   }
 
   _loadProduct(sku, callback){
-    new EccosysCalls().getProduct(sku,(product)=>{
+    new EccosysProvider().product(sku).go((product)=>{
       callback(product);
     });
   }

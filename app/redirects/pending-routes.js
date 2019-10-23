@@ -2,7 +2,7 @@ const Routes = require('../redirects/controller/routes.js');
 const PendingLaws = require('../laws/pending-laws.js');
 const PendingHandler = require('../handler/pending-handler.js');
 const SaleItemSwapper = require('../swap/sale-item-swapper.js');
-const EccosysCalls = require('../eccosys/eccosys-calls.js');
+const EccosysProvider = require('../eccosys_new/eccosys-provider.js');
 const BlockHandler = require('../handler/block-handler.js');
 const PendingProductProvider = require('../provider/pending-product-provider.js');
 
@@ -30,7 +30,7 @@ module.exports = class PendingRoutes extends Routes{
         });
 
 
-        new EccosysCalls().getSkus(skus, (products)=>{
+        new EccosysProvider().skus(skus).go((products)=>{
           res.render('pending/print-list', {
             list: list,
             products : products,

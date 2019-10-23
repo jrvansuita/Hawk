@@ -18,6 +18,7 @@ module.exports = {
   none_sale_founded: "Nenhum pedido encontrado",
   none_sale_founded_asserted: "Nenhum pedido encontrado com essa pesquisa",
   no_transport: 'Retirada',
+  no_token_user: 'Usuário logado não possiu token para faturamento!',
 
   picking_update: 'Atualização de Picking',
   starting_picking_update: 'Iniciando atualização da lista de picking',

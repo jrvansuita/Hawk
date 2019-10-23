@@ -22,10 +22,9 @@ module.exports = {
 
       files.forEach(e=>{
         var instance = new (require(jobsFolder + '/' + e))();
-        result[e] = instance.getName();
+        result[e.replace('.js','')] = instance.getName();
       });
 
-      console.log(result);
       availableJobs = result;
     }
 
@@ -38,12 +37,20 @@ module.exports = {
   },
 
   attach(job){
-    this.fireJob(job);
+
     var scheduleObject = schedule.scheduleJob(buildRecurrenceRule(job), (fireDate) => {
       this.fireJob(job);
     });
 
     job.schedule = scheduleObject;
+
+    if (scheduleObject){
+      console.log('[Job] Attachou: ' + job.description);
+    }else{
+      console.log('[Job] Não Attachou: ' + job.description)
+    }
+
+    console.log(job.rule);
 
     global.jobsPoll.push(job);
   },

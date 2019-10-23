@@ -60,4 +60,8 @@ module.exports = class Job{
     console.log('[Job] onError: ' + this.getName());
   }
 
+  getInfo(){
+    return this.jobSettings;
+  }
+
 };

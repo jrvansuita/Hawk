@@ -6,12 +6,50 @@ const APIKEY = process.env.ECCOSYS_API;
 const SECRET = process.env.ECCOSYS_SECRET;
 
 const Err = require('../error/error.js');
+var Query = require('../util/query.js');
 
 
 module.exports = class EccosysApi{
 
-  constructor(path){
-    this.setPath(path);
+  constructor(){
+    this.query = new Query('$');
+    this.page_count = 100;
+  }
+
+  pageCount(pageCount){
+    this.page_count = pageCount;
+    return this;
+  }
+
+  page(page){
+    this.query.add('count', this.page_count);
+    this.query.add('offset', this.page_count * page);
+    return this;
+  }
+
+  limit(limit){
+    return this.pageCount(limit).page(0);
+  }
+
+  dates(from, to, considerDate){
+    if (considerDate){
+      this.query.add('dataConsiderada', considerDate);
+    }
+
+    this.query.addDate('fromDate', from);
+    this.query.addDate('toDate', to);
+
+    return this;
+  }
+
+  order(order){
+    this.query.add('order', order);
+    return this;
+  }
+
+  active(){
+    this.query.add('filter', 'situacao=A');
+    return this;
   }
 
   setMethod(method){
@@ -39,8 +77,33 @@ module.exports = class EccosysApi{
     return this;
   }
 
+  filter(func){
+    this.onFilter = func;
+    return this;
+  }
+
+  jsonFilter(multiple){
+    return this.filter((data)=>{
+      data = JSON.parse(data);
+      var def = multiple ? [] : undefined;
+      var result = multiple ? [].concat(data) : (data[0] || data);
+      return typeof data == 'string' ? def : result;
+    });
+  }
+
+  single(){
+    return this.jsonFilter(false);
+  }
+
+  multiple(){
+    return this.jsonFilter(true);
+  }
+
+
   options(){
-    var path = '/api/' + encodeURI(this.path);
+    var params = this.query.hasParams() ? this.query.build() : '';
+
+    var path = '/api/' + encodeURI(this.path) + params;
 
     var options = {
       host: HOST,
@@ -60,7 +123,8 @@ module.exports = class EccosysApi{
       options.headers.signature = generateSignature();
       options.headers.apikey = APIKEY;
     }
-    console.log(options);
+
+    
 
     return options;
   }
@@ -110,6 +174,11 @@ module.exports = class EccosysApi{
 
       res.on('end', function() {
         self.checkErrorStatus(responseBody);
+
+        if (self.onFilter){
+          responseBody = self.onFilter(responseBody);
+        }
+
         onResponse(responseBody, chucks);
       });
     });
@@ -128,31 +197,51 @@ module.exports = class EccosysApi{
     req.end();
   }
 
-  get(callback){
-    this.setMethod('GET').make(callback);
+  get(path){
+    return this.setMethod('GET').setPath(path);
   }
 
-
-  put(callback){
-    this.setMethod('PUT').make(callback);
+  put(path){
+    return this.setMethod('PUT').setPath(path);
   }
 
-  post(callback){
-    this.setMethod('post').make(callback);
+  post(path){
+    return this.setMethod('POST').setPath(path);
   }
 
-  delete(callback){
-    this.setMethod('DELETE').make(callback);
+  delete(path){
+    return this.setMethod('DELETE').setPath(path);
   }
 
-  download(res, docName){
-    this.setMethod('GET').make((responseBody, chunks)=>{
+  download(path, res, docName){
+    this.setMethod('GET').setPath(path).make((responseBody, chunks)=>{
       var file = new Buffer.concat(chunks);
 
       res.type('application/pdf');
       res.setHeader('Content-disposition', 'inline; filename="' + docName + '"');
       res.send(file);
     });
+  }
+
+  go(callback){
+    this.make(callback);
+  }
+
+
+  pagging(callback){
+    var page = 0;
+
+    var makePagging = ()=>{
+      this.page(page).go((data)=>{
+        page++;
+
+        if (callback){
+          callback(data, makePagging);
+        }
+      });
+    }
+
+    makePagging();
   }
 
 };

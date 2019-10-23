@@ -29,7 +29,7 @@ require('../abra-cadabra/inner/prototypes.js');
 //require('../init/assert-points.js');
 
 
-var jobs = [];
+/*var jobs = [];
 jobs.push(['job-products.js', '8:30']);
 //A contagem de pontos do packing agora é feita automaticamente
 //jobs.push(['job-sales.js', ['11','15','17']]);
@@ -39,4 +39,4 @@ jobs.push(['job-products.js', '8:30']);
 jobs.forEach((r, index)=>{
   var Clazz = require('../jobs_old/' + r[0]);
   new Clazz().schedule(r[0],r[1]);
-});
+});*/

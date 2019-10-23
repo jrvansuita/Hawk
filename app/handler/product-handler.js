@@ -1,4 +1,5 @@
-const EccosysCalls = require('../eccosys/eccosys-calls.js');
+const EccosysProvider = require('../eccosys_new/eccosys-provider.js');
+const EccosysStorer = require('../eccosys_new/eccosys-storer.js');
 const Product = require('../bean/product.js');
 
 
@@ -13,7 +14,7 @@ module.exports ={
   },
 
   getByEan(ean, callback){
-    new EccosysCalls().getProduct(ean, (eanProduct)=>{
+    new EccosysProvider().product(ean).go((eanProduct)=>{
       if (eanProduct.error){
         handleCallback(callback, eanProduct, ean);
       }else{
@@ -25,7 +26,7 @@ module.exports ={
   },
 
   getBySku(sku, father, callback){
-    new EccosysCalls().getProduct(father ? getFatherSku(sku) : sku , (product)=>{
+    new EccosysProvider().product(father ? getFatherSku(sku) : sku ).go((product)=>{
       handleCallback(callback, product, sku);
     });
   },
@@ -51,7 +52,7 @@ module.exports ={
 
   getStockHistory(sku, callback){
     if (sku){
-      new EccosysCalls().getStockHistory(sku, (rows)=>{
+      new EccosysProvider().stockHistory(sku).go((rows)=>{
         callback(rows);
       });
     }else{
@@ -78,7 +79,7 @@ module.exports ={
       };
 
 
-      new EccosysCalls().updateProduct(body, callback);
+      new EccosysStorer().product(body).go(callback);
     });
   },
 
@@ -93,7 +94,7 @@ module.exports ={
         obs : lines +  "\n" + user.name + " | Desktop | " + newNCM + " | " + Dat.format(new Date()) + '| NCM'
       };
 
-      new EccosysCalls().updateProduct(body, callback);
+      new EccosysStorer().product(body).go(callback);
     });
   },
 
@@ -113,7 +114,7 @@ module.exports ={
       };
 
 
-      new EccosysCalls().updateProductStock(product.codigo, body, callback);
+      new EccosysStorer().stock(product.codigo, body).go(callback);
     });
   },
 
@@ -132,7 +133,7 @@ module.exports ={
         obs : lines +  "\n" + user.name + " | Desktop | " + Floa.weight(weight) + " | " + Dat.format(new Date()) + '| Peso'
       };
 
-      new EccosysCalls().updateProduct(body, callback);
+      new EccosysStorer().product(body).go(callback);
     });
   },
 

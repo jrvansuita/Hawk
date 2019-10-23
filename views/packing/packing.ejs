@@ -5,7 +5,7 @@
 
   <link rel="stylesheet" type="text/css" href="/front/css/layout/packing.css">
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
-  
+
   <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
 
 
@@ -38,9 +38,15 @@
     <div class="info-holder shadow">
       <%if (!sale || !sale.id){%>
         <div class="main-msg-span">
-          <img class="mini-icon" src="<%=sale && sale.error ? 'img/error.png' : 'img/checked.png'%>" />
+
+          <% var error = sale && sale.error ? sale.error : '' %>
+
+          <% error = (!locals.loggedUser.token || locals.loggedUser.token.length < 100) ? 'Usuário sem token para faturamento definido!' : error; %>
+
+
+          <img class="mini-icon" src="<%=error ? 'img/error.png' : 'img/checked.png'%>" />
           <span class="main-msg">
-            <%=sale && sale.error ? sale.error : 'Inicie o faturamento de um novo pedido' %>
+            <%=error || 'Inicie o faturamento de um novo pedido'%>
           </span>
         </div>
 
@@ -211,141 +217,141 @@
 
                 <td>
 
-                  </td>
+                </td>
 
-                  <td></td>
+                <td></td>
 
-                </tr>
+              </tr>
 
-                <tr class="editable-infos-holder">
-                  <td>
-                    <div class="field">
-                      <label class="field-title">Altura</label>
-                      <input id="sale-height" type="text" placeholder="0" onkeypress="return Num.isNumberKey(event);" maxlength="6" class="editable-info"/>
-                    </div>
-                  </td>
+              <tr class="editable-infos-holder">
+                <td>
+                  <div class="field">
+                    <label class="field-title">Altura</label>
+                    <input id="sale-height" type="text" placeholder="0" onkeypress="return Num.isNumberKey(event);" maxlength="6" class="editable-info"/>
+                  </div>
+                </td>
 
-                  <td>
-                    <div class="field">
-                      <label class="field-title">Largura</label>
-                      <input id="sale-width" type="text" placeholder="0" onkeypress="return Num.isNumberKey(event);" maxlength="6" class="editable-info"/>
-                    </div>
-                  </td>
+                <td>
+                  <div class="field">
+                    <label class="field-title">Largura</label>
+                    <input id="sale-width" type="text" placeholder="0" onkeypress="return Num.isNumberKey(event);" maxlength="6" class="editable-info"/>
+                  </div>
+                </td>
 
-                  <td>
-                    <div class="field">
-                      <label class="field-title">Comprimento</label>
-                      <input id="sale-length" type="text" placeholder="0" onkeypress="return Num.isNumberKey(event);"  maxlength="6" class="editable-info" />
-                    </div>
-                  </td>
+                <td>
+                  <div class="field">
+                    <label class="field-title">Comprimento</label>
+                    <input id="sale-length" type="text" placeholder="0" onkeypress="return Num.isNumberKey(event);"  maxlength="6" class="editable-info" />
+                  </div>
+                </td>
 
-                  <td>
-                    <div class="field">
-                      <label class="field-title">Espécie</label>
-                      <input id="sale-esp" type="text" placeholder="FLYER" tabIndex="-1" value="FLYER" maxlength="20" class="editable-info" autocomplete="off"/>
-                    </div>
-                  </td>
+                <td>
+                  <div class="field">
+                    <label class="field-title">Espécie</label>
+                    <input id="sale-esp" type="text" placeholder="FLYER" tabIndex="-1" value="FLYER" maxlength="20" class="editable-info" autocomplete="off"/>
+                  </div>
+                </td>
 
-                  <td></td>
-                  <td></td>
-                </tr>
+                <td></td>
+                <td></td>
+              </tr>
 
 
 
-              </table>
+            </table>
 
-              <%}%>
+            <%}%>
+          </div>
+
+          <div class="search-holder shadow">
+
+            <div class="last-product-holder">
+              <div class="sku-header">
+                <span class="field-title">Último Conferido</span>
+                <span id="last-product-sku"></span>
+              </div>
+              <img id="last-product-img"/>
             </div>
 
-            <div class="search-holder shadow">
-
-              <div class="last-product-holder">
-                <div class="sku-header">
-                  <span class="field-title">Último Conferido</span>
-                  <span id="last-product-sku"></span>
-                </div>
-                <img id="last-product-img"/>
-              </div>
-
-              <div class="material-input-holder">
-                <input type="text" id="search-sale" value="<%=sale? sale.numeroPedido : ''%>" required>
-                <span class="bar"></span>
-                <label>Número do Pedido</label>
-              </div>
-
+            <div class="material-input-holder">
+              <input type="text" id="search-sale" value="<%=sale? sale.numeroPedido : ''%>" required>
+              <span class="bar"></span>
+              <label>Número do Pedido</label>
             </div>
 
           </div>
 
-
-          <%if (sale && sale.id){%>
-            <div class="sale-content">
-
-              <%if (sale && Util.isIn(['1','3'], sale.situacao)){%>
-
-                <div class="middle-line shadow">
-                  <div class="progress-line"> <div class="progress-line inner"> </div></div>
-
-                  <div class="middle-line-inner">
-
-                    <div class="left-middle-line">
+        </div>
 
 
+        <%if (sale && sale.id){%>
+          <div class="sale-content">
 
-                      <div class="product-ean-holder">
-                        <div class="product-ean-and-icon">
-                          <img class="circle shadow icon"  id="product-ean-icon" class="product-icon" src="/img/scan-barcode.png" />
-                          <input type="text" id="product-ean"  class="simple-material-input%>" placeholder="Código de Barras"/>
-                          <span id="itens-progress"></span>
-                        </div>
-                        <label class="product-msg"></label>
+            <%if (sale && Util.isIn(['1','3'], sale.situacao)){%>
+
+              <div class="middle-line shadow">
+                <div class="progress-line"> <div class="progress-line inner"> </div></div>
+
+                <div class="middle-line-inner">
+
+                  <div class="left-middle-line">
+
+
+
+                    <div class="product-ean-holder">
+                      <div class="product-ean-and-icon">
+                        <img class="circle shadow icon"  id="product-ean-icon" class="product-icon" src="/img/scan-barcode.png" />
+                        <input type="text" id="product-ean"  class="simple-material-input%>" placeholder="Código de Barras"/>
+                        <span id="itens-progress"></span>
                       </div>
-
+                      <label class="product-msg"></label>
                     </div>
-
-                    <div class="right-middle-line">
-                      <div class="buttons-holder">
-
-                        <div class="missing-items-msg-holder">
-                          <div class="row">
-                            <label>Picking incompleto?</label>
-                            <label id="items-missing-count" class="field-title"></label>
-                          </div>
-                          <label class="delete-button shadow" id="missing-items" tabindex="-1">Sim</label>
-                          <div class="countdown-span"></div>
-                        </div>
-
-                        <label class="button shadow" id="packing-done" tabindex="0">Faturar</label>
-                        <label class="button shadow" id="print-nfe" tabindex="0">Imprimir NFe</label>
-                        <label class="button shadow" id="print-transport-tag" tabindex="0">Imprimir Etiqueta</label>
-                      </div>
-                    </div>
-
 
                   </div>
 
+                  <div class="right-middle-line">
+                    <div class="buttons-holder">
+
+                      <div class="missing-items-msg-holder">
+                        <div class="row">
+                          <label>Picking incompleto?</label>
+                          <label id="items-missing-count" class="field-title"></label>
+                        </div>
+                        <label class="delete-button shadow" id="missing-items" tabindex="-1">Sim</label>
+                        <div class="countdown-span"></div>
+                      </div>
+
+                      <label class="button shadow" id="packing-done" tabindex="0">Faturar</label>
+                      <label class="button shadow" id="print-nfe" tabindex="0">Imprimir NFe</label>
+                      <label class="button shadow" id="print-transport-tag" tabindex="0">Imprimir Etiqueta</label>
+                    </div>
+                  </div>
+
+
                 </div>
 
-                <%}%>
-
-
-
-
-
-
-
-
-                <div class="products-in-holder products-table-holder shadow"></div>
-                <div class="products-out-holder  products-table-holder shadow"></div>
               </div>
-
 
               <%}%>
 
 
-              <%  include ../sale-groups/sale-grouping %>
 
+
+
+
+
+
+              <div class="products-in-holder products-table-holder shadow"></div>
+              <div class="products-out-holder  products-table-holder shadow"></div>
             </div>
 
-          </body>
-          </html>
+
+            <%}%>
+
+
+            <%  include ../sale-groups/sale-grouping %>
+
+          </div>
+
+        </body>
+        </html>

@@ -2,7 +2,7 @@ const Routes = require('../redirects/controller/routes.js');
 const PackingHandler = require('../handler/packing-handler.js');
 const PackingProvider = require('../provider/packing-provider.js');
 const Pack = require('../bean/pack.js');
-const PackagesHandler = require('../handler/packages-handler.js');
+const PackageTypeVault = require('../vault/package-type-vault.js');
 const PackingChartBuilder = require('../builder/packing-chart-builder.js');
 const PackingDaysProvider = require('../provider/packing-days-provider.js');
 
@@ -118,13 +118,13 @@ module.exports = class PackingRoutes extends Routes{
 
 
       this._post('/packages-registering', (req, res) => {
-        PackagesHandler.storeFromScreen(req.body, (packId)=>{
+        PackageTypeVault.storeFromScreen(req.body, (packId)=>{
           res.redirect("/packages-registering?_id=" + packId);
         });
       });
 
       this._post('/packages-remove', (req, res) => {
-        PackagesHandler.delete(req.body.id);
+        PackageTypeVault.delete(req.body.id);
         res.status(200).send('Ok');
       });
 

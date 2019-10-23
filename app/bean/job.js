@@ -10,7 +10,7 @@ module.exports = class Job extends DataAccess {
     this.type = Str.def(type);
     this.active = active ? true: false;
     this.lastExcecution = 0;
-    this.rule = rule;
+    this.rule = rule || {};
   }
 
 
