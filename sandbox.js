@@ -6,12 +6,12 @@ const EccosysProvider = require('./app/eccosys_new/eccosys-provider.js');
 
 
 new EccosysProvider()
-.active()
-.dates(new Date(new Date().setMonth(new Date().getMonth() - 6)), new Date(), 'data')
-.products().pagging((items, next)=>{
+.pickingSales().pagging().each((sales, next)=>{
   console.log('-------------');
-  items.forEach(e => {console.log(e.codigo);});
+  console.log(sales.length);
   setTimeout(next, 500);
+}).end(()=>{
+  console.log('terminou');
 });
 
 

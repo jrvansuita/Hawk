@@ -124,7 +124,7 @@ module.exports = class EccosysApi{
       options.headers.apikey = APIKEY;
     }
 
-    
+
 
     return options;
   }
@@ -228,20 +228,39 @@ module.exports = class EccosysApi{
   }
 
 
-  pagging(callback){
+  pagging(){
     var page = 0;
+
+    var callbackHandler = {
+      each: function(callback){
+        this.onEach = callback;
+        return this;
+      },
+
+      end: function(callback) {
+        this.onEnd = callback;
+      }
+    };
 
     var makePagging = ()=>{
       this.page(page).go((data)=>{
         page++;
 
-        if (callback){
-          callback(data, makePagging);
+        if (data.length > 0){
+          if (callbackHandler.onEach){
+            callbackHandler.onEach(data, makePagging);
+          }
+        }else{
+          if (callbackHandler.onEnd){
+            callbackHandler.onEnd();
+          }
         }
       });
-    }
+    };
 
     makePagging();
+
+    return callbackHandler;
   }
 
 };

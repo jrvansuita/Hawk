@@ -187,7 +187,7 @@ module.exports = class ProductDiagnostics{
     new EccosysProvider()
     .active()
     .dates(new Date(new Date().setMonth(new Date().getMonth() - 6)), new Date(), 'data')
-    .products().pagging((items, next)=>{
+    .products().pagging().each((items, next)=>{
       this._loadCurrentProducts(items, next);
     });
   }
@@ -198,7 +198,7 @@ module.exports = class ProductDiagnostics{
 
     new EccosysProvider()
     .product(sku).go((product)=>{
-      var skus = product._Skus ? product._Skus.map((i)=>{return i.codigo}) : [];
+      var skus = product._Skus ? product._Skus.map((i)=>{return i.codigo;}) : [];
       callback(skus.length > 0 ? skus : [sku]);
     });
   }
