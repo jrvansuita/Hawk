@@ -35,7 +35,7 @@
   <% if (!isPodium){ %>
      <img class="laurel"  src="/img/laurel.png" />
      <img class="ribbon <%= isRecord ? 'record-ribbon' : ''%>"  src="<%= isRecord ? '/img/record-ribbon.png' : '/img/red-ribbon.png'%>" />
-     <label class="label avatar-name <%= isRecord ? 'record-name' : ''%>"><%= winner ? winner.name ||  'Indefinido': 'Indefinido'%></label>
+     <label class="label avatar-name <%= isRecord ? 'record-name' : ''%>"  title="<%=winner.id%>"  ><%= winner ? winner.name ||  'Indefinido': 'Indefinido'%></label>
   <%}%>
 
 

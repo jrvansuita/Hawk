@@ -54,13 +54,14 @@ module.exports = {
       throw error;
     }).pickingSales().go((sales) => {
       try{
+
         loadingList = true;
 
         PickingLaws.set(sales);
 
         this.setOffSales();
 
-        PickingLaws.handleDevMode();
+        //PickingLaws.handleDevMode();
 
         if (!PickingLaws.isFullEmpty()){
 

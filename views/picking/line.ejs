@@ -32,6 +32,10 @@
   .highlight td{
     background-color: #77ff7c85;
   }
+
+  .red td{
+    background-color: #ff667ba1;
+  }
   </style>
 </head>
 <body>
@@ -53,8 +57,10 @@
       </tr>
 
       <%line.forEach((each)=>{
+
+        var repeated = line.filter(e => {return e.numeroPedido == each.numeroPedido}).length > 1;
         %>
-        <tr class="line-here">
+        <tr class="line-here <%=repeated ? 'red'  : ''%>">
           <td><%=each.numeroPedido%></td>
           <td><%=each.client ? each.client.nome : 'NONE'%></td>
           <td><%=Dat.format(new Date(each.data))%></td>
@@ -66,93 +72,99 @@
           <td></td>
           <td colspan="4">
             <table class="items">
-              <% if (each.items){
-                each.items.forEach((eachItem)=>{
+              <%
+              try{
+                if (each &&  each.items){
+                  each.items.forEach((eachItem)=>{
 
-                  var matchFullSku = 0;
-                  var matchSku = 0;
+                    var matchFullSku = 0;
+                    var matchSku = 0;
 
-                  line.forEach((sale)=>{
-                    if (sale.numeroPedido != each.numeroPedido){
-                      sale.items.forEach((item)=>{
-                        if (item.codigo == eachItem.codigo){
-                          matchFullSku++;
-                        }else if (item.codigo.split('-')[0] == eachItem.codigo.split('-')[0]){
-                          matchSku++;
-                        }
-                      });
-                    }
-                  });
+                    line.forEach((sale)=>{
+                      if (sale.numeroPedido != each.numeroPedido){
+                        sale.items.forEach((item)=>{
+                          if (item.codigo == eachItem.codigo){
+                            matchFullSku++;
+                          }else if (item.codigo.split('-')[0] == eachItem.codigo.split('-')[0]){
+                            matchSku++;
+                          }
+                        });
+                      }
+                    });
 
-                  %>
-                  <tr class="<%=matchFullSku || matchSku ? 'highlight' : ''%>">
-                    <td><%=matchFullSku%></td>
-                    <td><%=matchSku%></td>
-                    <td><%=eachItem.codigo%></td>
-                    <td><%=eachItem.descricao%></td>
-                  </tr>
-                  <%})}%>
-                </table>
-              </td>
-            </tr>
-            <%
-          });%>
-        </table>
+                    %>
+                    <tr class="<%=matchFullSku || matchSku ? 'highlight' : ''%>">
+                      <td><%=matchFullSku%></td>
+                      <td><%=matchSku%></td>
+                      <td><%=eachItem.codigo%></td>
+                      <td><%=eachItem.descricao%></td>
+                    </tr>
+                    <%})
+                  }
+                }catch(e){
 
-        <table >
-          <tr >
-            <td>Pedido</td>
-            <td>Bloqueio</td>
+                }%>
+              </table>
+            </td>
+          </tr>
+          <%
+        });  %>
+      </table>
+
+      <table >
+        <tr >
+          <td>Pedido</td>
+          <td>Bloqueio</td>
+        </tr>
+
+        <%blocks.forEach((each)=>{
+          %>
+          <tr class="line-here">
+            <td><%=each.numeroPedido%></td>
+            <td>'Bloqueado'</td>
           </tr>
 
-          <%blocks.forEach((each)=>{
-            %>
-            <tr class="line-here">
-              <td><%=each.numeroPedido%></td>
-              <td>'Bloqueado'</td>
-            </tr>
+          <tr>
+            <td colspan="2">
+              <table class="items">
+                <% if (each.items != undefined){
+                  each.items.forEach((eachItem)=>{%>
+                    <tr>
+                      <td><%=eachItem.codigo%></td>
+                      <td><%=eachItem.descricao%></td>
+                    </tr>
+                    <%})}%>
+                  </table>
+                </td>
+              </tr>
+              <%})%>
 
-            <tr>
-              <td colspan="2">
-                <table class="items">
-                  <% if (each.items){
-                    each.items.forEach((eachItem)=>{%>
-                      <tr>
-                        <td><%=eachItem.codigo%></td>
-                        <td><%=eachItem.descricao%></td>
-                      </tr>
-                      <%})}%>
-                    </table>
-                  </td>
+
+            </table>
+
+
+            <table>
+              <tr>
+                <td>Block Rule</td>
+                <td>Blockings</td>
+                <td>Data</td>
+                <td>User</td>
+
+              </tr>
+
+              <%Object.values(rules).forEach((each)=>{
+                %>
+                <tr class="line-here <%=each.blockings > 0 ? 'highlight' : ''%> ">
+                  <td><%=each.number%></td>
+                  <td><%=each.blockings%></td>
+                  <td><%=Dat.format(each.blockDate)%></td>
+                  <td><%=each.user.name%></td>
                 </tr>
                 <%})%>
 
 
               </table>
+            </div>
 
-
-              <table>
-                <tr>
-                  <td>Block Rule</td>
-                  <td>Blockings</td>
-                  <td>Data</td>
-                  <td>User</td>
-
-                </tr>
-
-                <%Object.values(rules).forEach((each)=>{
-                  %>
-                  <tr class="line-here <%=each.blockings > 0 ? 'highlight' : ''%> ">
-                    <td><%=each.number%></td>
-                    <td><%=each.blockings%></td>
-                    <td><%=Dat.format(each.blockDate)%></td>
-                    <td><%=each.user.name%></td>
-                  </tr>
-                  <%})%>
-
-
-                </table>
-              </div>
-
-            </body>
-            </html>
+          </body>
+          </html>
