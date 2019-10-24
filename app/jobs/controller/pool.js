@@ -47,7 +47,7 @@ module.exports = {
     if (scheduleObject){
       console.log('[Job] Attachou: ' + job.description);
     }else{
-      console.log('[Job] Não Attachou: ' + job.description)
+      console.log('[Job] Não Attachou: ' + job.description);
     }
 
     console.log(job.rule);

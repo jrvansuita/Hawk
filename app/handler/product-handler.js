@@ -15,7 +15,7 @@ module.exports ={
 
   getByEan(ean, callback){
     new EccosysProvider().product(ean).go((eanProduct)=>{
-      if (eanProduct.error){
+      if (!eanProduct){
         handleCallback(callback, eanProduct, ean);
       }else{
         this.getBySku(getFatherSku(eanProduct.codigo), true, (product)=>{
@@ -147,7 +147,9 @@ module.exports ={
 
 
 function handleCallback(callback, product, selected){
-  product.selected = selected;
+  if (product){
+    product.selected = selected;
+  }
   callback(product);
 }
 

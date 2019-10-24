@@ -7,10 +7,12 @@ module.exports = {
   load(eanOrSku, callback){
     if (eanOrSku){
       ProductHandler.get(eanOrSku, true, (product)=>{
-        if (product.error){
-          callback(product);
-        }else{
+        if (product){
           handleAttrs(product, callback);
+        }else{
+          callback({
+            selected: eanOrSku,
+            error: 'Nenhum produto com o(s) código(s) informado(s) foi encontrado.'});
         }
       });
     }else{
