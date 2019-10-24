@@ -19,7 +19,7 @@
       <span class="percent shadow <%=goalAchieved ? '' : 'red'%>" > <%=Num.percent(perncentGoal, true)%> </span>
     <%}%>
 
-    <img class="avatar-img circle shadow <%= isPodium ? 'podium-avatar' : ''%>" title="<%=winner ? winner.name : ''%>" src="<%=winner ? winner.avatar : ''%>"  data-userid="<%=winner ? winner.id : 0%>" onerror="this.src='/img/avatar.png'"/>
+    <img class="avatar-img circle shadow <%= isPodium ? 'podium-avatar' : ''%>" title="<%=winner ? winner.name || winner.id : ''%>" src="<%=winner ? winner.avatar : ''%>"  data-userid="<%=winner ? winner.id : 0%>" onerror="this.src='/img/avatar.png'"/>
 
   </a>
 
