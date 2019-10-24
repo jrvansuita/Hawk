@@ -22,7 +22,7 @@ module.exports = class EccosysStorer extends EccosysApi{
     return this.post('nfes/' + idNfe + '/autorizar').setBody({}).withUser(user).single();
   }
 
-  saleItems(saleNumber, items, callback){
+  saleItems(saleNumber, items){
     return this.put('pedidos/items').setBody(items);
   }
 

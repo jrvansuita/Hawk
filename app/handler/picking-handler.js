@@ -61,7 +61,7 @@ module.exports = {
 
         this.setOffSales();
 
-        //PickingLaws.handleDevMode();
+        PickingLaws.handleDevMode();
 
         if (!PickingLaws.isFullEmpty()){
 

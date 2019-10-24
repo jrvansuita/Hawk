@@ -160,7 +160,7 @@ module.exports = class EccosysApi{
 
 
 
-  make(onResponse){
+  make(onGetResponse, onGetBuffer){
     var self = this;
     var req = https.request(this.options(), function(res) {
 
@@ -179,7 +179,13 @@ module.exports = class EccosysApi{
           responseBody = self.onFilter(responseBody);
         }
 
-        onResponse(responseBody, chucks);
+        if (onGetResponse){
+          onGetResponse(responseBody);
+        }
+
+        if (onGetBuffer){
+          onGetBuffer(chucks);
+        }
       });
     });
 
@@ -214,7 +220,7 @@ module.exports = class EccosysApi{
   }
 
   download(path, res, docName){
-    this.setMethod('GET').setPath(path).make((responseBody, chunks)=>{
+    this.setMethod('GET').setPath(path).make(null, (chunks)=>{
       var file = new Buffer.concat(chunks);
 
       res.type('application/pdf');

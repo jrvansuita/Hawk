@@ -1,5 +1,6 @@
 const SaleLoader = require('../loader/sale-loader.js');
 const EccosysProvider = require('../eccosys_new/eccosys-provider.js');
+const EccosysStorer = require('../eccosys_new/eccosys-storer.js');
 const HistoryStorer = require('../history/history-storer.js');
 const Err = require('../error/error.js');
 const PendingHandler = require('../handler/pending-handler.js');
@@ -113,7 +114,7 @@ module.exports = class SaleItemSwapper{
       observacaoInterna: currentObs + '\n' + Const.swaped_items.format(this.quantity, this.targetSku, this.swapSku, this.sale.numeroPedido)
     };
 
-    new EccosysCalls().updateSale([body], ()=>{});
+    new EccosysStorer().sale([body]).go();
   }
 
   _onError(err){
@@ -137,7 +138,7 @@ module.exports = class SaleItemSwapper{
         if (this._checkSaleStatus() && this._checkAllreadyHasSwapSku()){
           if (this._swapTargetSku()){
 
-            new EccosysCalls().updateSaleItems(this.sale.numeroPedido, this.sale.items, (res)=>{
+            new EccosysStorer().saleItems(this.sale.numeroPedido, this.sale.items).go((res)=>{
 
               if (this.onResponse){
                 this.onResponse(true);

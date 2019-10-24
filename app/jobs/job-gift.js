@@ -13,11 +13,7 @@ module.exports = class JobGift extends Job{
 
 
 
-      new EccosysCalls().getWaitingPaymentSales((sales)=>{
-        sales.for
-
-      });
-
+      
       resolve('Done!');
     });
   }
