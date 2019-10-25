@@ -5,7 +5,6 @@ const HistoryStorer = require('../history/history-storer.js');
 const Err = require('../error/error.js');
 const PendingHandler = require('../handler/pending-handler.js');
 
-
 module.exports = class SaleItemSwapper{
   constructor(saleNumber, userId){
     this.saleNumber = saleNumber;
@@ -99,9 +98,16 @@ module.exports = class SaleItemSwapper{
     return item;
   }
 
+
+
+
   _loadProduct(sku, callback){
     new EccosysProvider().product(sku).go((product)=>{
-      callback(product);
+      if (product){
+        callback(product);
+      }else{
+        this._onError(new Err('Produto inexistente', this.userId));
+      }
     });
   }
 

@@ -521,7 +521,7 @@ tr.row-padding td{
   width: fit-content;
   padding-left: 10px;
   padding-right: 10px;
-  height: -webkit-fill-available;
+  height: fit-content;
 }
 
 .table-sale-blocked-holder{

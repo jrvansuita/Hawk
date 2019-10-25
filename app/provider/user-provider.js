@@ -4,48 +4,48 @@ const Err = require('../error/error.js');
 module.exports = class UsersProvider {
 
   static loadAllUsers() {
-    global.localUsers = {};
+    global._cachedUsers = {};
     User.findAll(function(err, users) {
       users.forEach(function(user, doc) {
-        global.localUsers[user.id] = user['_doc'];
+        global._cachedUsers[user.id] = user['_doc'];
       });
     });
   }
 
   static getAllUsers() {
-    if (!global.localUsers) {
+    if (!global._cachedUsers) {
       this.loadAllUsers();
     } else {
-      return global.localUsers;
+      return global._cachedUsers;
     }
   }
 
   static store(user) {
-    if (global.localUsers[user.id] === undefined) {
+    if (global._cachedUsers[user.id] === undefined) {
       user.upsert();
 
-      global.localUsers[user.id] = user;
+      global._cachedUsers[user.id] = user;
     }
   }
 
   static addUser(user){
-    global.localUsers[user.id] = user;
+    global._cachedUsers[user.id] = user;
   }
 
   static remove(userId){
-    delete global.localUsers[userId];
+    delete global._cachedUsers[userId];
   }
 
   static get(code) {
     if (code !== undefined){
-      if(global.localUsers[code]){
-        return global.localUsers[code];
+      if(global._cachedUsers[code]){
+        return global._cachedUsers[code];
       }else{
-        for (var key in global.localUsers) {
-          if (global.localUsers.hasOwnProperty(key)) {
+        for (var key in global._cachedUsers) {
+          if (global._cachedUsers.hasOwnProperty(key)) {
 
-            if (global.localUsers[key].access === code){
-              return global.localUsers[key];
+            if (global._cachedUsers[key].access === code){
+              return global._cachedUsers[key];
             }
           }
         }
@@ -67,9 +67,9 @@ module.exports = class UsersProvider {
   static getByGroup() {
     var data = {};
 
-    for (var key in global.localUsers) {
-      if (global.localUsers.hasOwnProperty(key)) {
-        var user = global.localUsers[key];
+    for (var key in global._cachedUsers) {
+      if (global._cachedUsers.hasOwnProperty(key)) {
+        var user = global._cachedUsers[key];
         if (user.active){
           if (!user.title){
             user.title = 'none';

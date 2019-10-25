@@ -11,12 +11,16 @@ module.exports = class{
   loadProduct(){
     return new Promise((resolve, reject)=>{
       ProductHandler.getImage(this.sku, (product)=>{
-        new ProductUrlProvider().from(product.url).then((onlineValues)=>{
-          product.online = onlineValues;
+        if (product){
+          new ProductUrlProvider().from(product.url).then((onlineValues)=>{
+            product.online = onlineValues;
+            resolve(product);
+          }).catch(e=>{
+            resolve(product);
+          });
+        }else{
           resolve(product);
-        }).catch(e=>{
-          resolve(product);
-        });
+        }
       });
     });
   }

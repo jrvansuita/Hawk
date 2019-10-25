@@ -7,10 +7,13 @@ module.exports = class  {
 
 
   static storeFromScreen(params, callback) {
+    console.log(params);
+
     var gift = new GiftRule(
       params.id,
       params.name,
       params.active.includes('true'),
+      params.checkStock.includes('true'),
       new Date(parseInt(params.expires))
     );
 

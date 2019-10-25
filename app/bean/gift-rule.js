@@ -30,12 +30,13 @@ var ruleConditionsEnum = {
 module.exports = class GiftRule extends DataAccess {
 
 
-  constructor(id, name, active, expiresDate) {
+  constructor(id, name, active, checkStock, expiresDate) {
     super();
     this.id = Num.def(id, 0) || Util.id();
     this.name = Str.def(name);
     this.active = active ? true: false;
-    this.expiresDate = Dat.def(expiresDate) ;
+    this.expiresDate = Dat.def(expiresDate);
+    this.checkStock = checkStock ? true : false;
     this.skus = [];
     this.rules = [];
   }
@@ -46,6 +47,13 @@ module.exports = class GiftRule extends DataAccess {
 
   addSkus(skus){
     this.skus = skus;
+  }
+
+  static findActives(callback){
+    GiftRule.find({
+      active : true,
+      expiresDate: {$gte : Dat.today().begin()}
+    }, callback);
   }
 
 

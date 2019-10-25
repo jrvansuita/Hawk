@@ -17,145 +17,178 @@
 <body>
 
 
-    <script>
+  <script>
 
-    window.selectedGift = <%- JSON.stringify(gift || null) %>
-    window.rulesAttrs = <%- JSON.stringify(rulesAttrs || null) %>
-    window.rulesConditions = <%- JSON.stringify(rulesConditions || null) %>
+  window.selectedGift = <%- JSON.stringify(gift || null) %>
+  window.rulesAttrs = <%- JSON.stringify(rulesAttrs || null) %>
+  window.rulesConditions = <%- JSON.stringify(rulesConditions || null) %>
 
-    </script>
+  </script>
 
 
   <div class="main-content">
 
+    <div class="show-all shadow">
+      <label class="sub-title">Regras</label>
 
-    <div class="content shadow">
+      <div class="all-rules">
 
-      <input id="id" value="<%=gift? gift.id : ''%>">
+        <%all.forEach((each)=>{%>
 
-      <div class="row">
-        <div class="material-input-holder">
-          <input type="text" id="gift-name" maxlength="50"
-          value="<%= gift ? gift.name : ''%>" autocomplete="off"
-          title="Nome da Regra" required/>
+          <div class="each-all shadow" data-id="<%=each.id%>">
+            <span><%=each.name%></span>
+            <img src="img/<%=each.active ? 'checked' : 'block'%>.png" />
 
-          <span class="bar"></span>
-          <label>Nome da Regra</label>
+            <label>Até <%=Dat.format(each.expiresDate)%></label>
+          </div>
+          <%});%>
+
+
         </div>
-
-        <div class="material-input-holder expires-holder">
-          <input id="expires" maxlength="50"
-          autocomplete="off"
-          title="Data de Expiração" required/>
-
-          <span class="bar"></span>
-          <label>Data de Expiração</label>
-        </div>
-
-        <label class="pure-material-checkbox">
-          <input type="checkbox" id="active" name="lockSize"  <%=gift && gift.active ? 'checked' : ''%>>
-          <span>Ativo</span>
-        </label>
-
       </div>
 
 
+      <div class="content shadow">
 
+        <input id="id" value="<%=gift? gift.id : ''%>">
 
-
-
-
-      <div class="row">
-
-        <div class="material-input-holder">
-          <input type="text" id="sku" maxlength="50"
-          value="" autocomplete="off"
-          title="Código do Produto" required/>
-
-          <span class="bar"></span>
-          <label>Sku</label>
-        </div>
-
-
-
-        <div class="box-holder">
-
-          <div class="msg-box msg-box-sku">
-            <img src="img/error.png" class="icon-error">
-            <span class="error-msg-sku"></span>
-          </div>
-
-          <div class="sel-box skus-box">
-
-
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-
-        <div class="conditions-select">
-          <label class="sub-title">Condições</label>
-
+        <div class="row">
           <div class="material-input-holder">
-            <input type="text" id="attr" maxlength="50"
-            value="" autocomplete="off"
-            title="Nome do Atributo" required/>
+            <input type="text" id="gift-name" maxlength="50"
+            value="<%= gift ? gift.name : ''%>" autocomplete="off"
+            title="Nome da Regra" required/>
 
             <span class="bar"></span>
-            <label>Atributo do Pedido</label>
+            <label>Nome da Regra</label>
           </div>
 
-          <div class="material-input-holder">
-            <input type="text" id="sign" maxlength="50"
-            value="" autocomplete="off"
-            title="Comparador" required/>
+          <div class="material-input-holder expires-holder">
+            <input id="expires" maxlength="50"
+            autocomplete="off"
+            title="Data de Expiração" required/>
 
             <span class="bar"></span>
-            <label>Comparador</label>
+            <label>Data de Expiração</label>
           </div>
 
 
-          <div class="material-input-holder">
-            <input type="text" id="value" maxlength="50"
-            value="" autocomplete="off"
-            title="Valor" required/>
+          <div class="check-options">
 
-            <span class="bar"></span>
-            <label>Valor</label>
+            <label class="pure-material-checkbox">
+              <input type="checkbox" id="active"   <%=gift && gift.active ? 'checked' : ''%>>
+              <span>Ativo</span>
+            </label>
+
+
+            <label class="pure-material-checkbox">
+              <input type="checkbox" id="checkstock" <%=gift && gift.checkStock ? 'checked' : ''%>>
+              <span>Verificar Estoque dos Produtos</span>
+            </label>
           </div>
-
 
 
         </div>
 
 
 
-        <div class="box-holder">
 
-          <div class="msg-box msg-box-cond">
-            <img src="img/error.png" class="icon-error">
-            <span class="error-msg-cond"></span>
+
+
+
+        <div class="row">
+
+          <div class="material-input-holder">
+            <input type="text" id="sku" maxlength="50"
+            value="" autocomplete="off"
+            title="Código do Produto" required/>
+
+            <span class="bar"></span>
+            <label>Sku</label>
           </div>
 
 
-          <div class="sel-box attrs-box">
+
+          <div class="box-holder">
+
+            <div class="msg-box msg-box-sku">
+              <img src="img/error.png" class="icon-error">
+              <span class="error-msg-sku"></span>
+            </div>
+
+            <div class="sel-box skus-box">
+
+
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+
+          <div class="conditions-select">
+            <label class="sub-title">Condições</label>
+
+            <div class="material-input-holder">
+              <input type="text" id="attr" maxlength="50"
+              value="" autocomplete="off"
+              title="Nome do Atributo" required/>
+
+              <span class="bar"></span>
+              <label>Atributo do Pedido</label>
+            </div>
+
+            <div class="material-input-holder">
+              <input type="text" id="sign" maxlength="50"
+              value="" autocomplete="off"
+              title="Comparador" required/>
+
+              <span class="bar"></span>
+              <label>Comparador</label>
+            </div>
+
+
+            <div class="material-input-holder">
+              <input type="text" id="value" maxlength="50"
+              value="" autocomplete="off"
+              title="Valor" required/>
+
+              <span class="bar"></span>
+              <label>Valor</label>
+            </div>
+
 
 
           </div>
+
+
+
+          <div class="box-holder">
+
+            <div class="msg-box msg-box-cond">
+              <img src="img/error.png" class="icon-error">
+              <span class="error-msg-cond"></span>
+            </div>
+
+
+            <div class="sel-box attrs-box">
+
+
+            </div>
+
+          </div>
+        </div>
+
+        <div class="buttons-holder">
+
+          <label class="button save shadow">Salvar</label>
+          <label class="button new-button shadow">Novo</label>
+          <label class="button delete-button shadow">Excluir</label>
 
         </div>
-      </div>
 
-      <div class="buttons-holder">
-        <label class="button save shadow">Salvar</label>
-        <label class="button delete-button shadow">Excluir</label>
-      </div>
 
+      </div>
 
     </div>
 
-  </div>
-
-</body>
-</html>
+  </body>
+  </html>

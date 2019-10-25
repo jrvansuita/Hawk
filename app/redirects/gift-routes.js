@@ -9,9 +9,12 @@ module.exports = class GiftRoutes extends Routes{
 
     this._page('/gift-rules', (req, res) => {
       var render = (selected)=>{
-        res.render('gift/gift-rules', {gift: selected,
-          rulesAttrs: GiftRule.attrs(),
-          rulesConditions :GiftRule.conditions(),
+        GiftRule.findAll((err, all)=>{
+          res.render('gift/gift-rules', {gift: selected,
+            rulesAttrs: GiftRule.attrs(),
+            rulesConditions :GiftRule.conditions(),
+            all: all
+          });
         });
       };
 

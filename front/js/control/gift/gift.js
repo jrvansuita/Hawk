@@ -57,6 +57,18 @@ $(document).ready(()=>{
   });
 
 
+  $('.new-button').click(()=>{
+    $('input').val('');
+    $('input').prop("checked", false);
+    $('.skus-box').empty();
+    $('.attrs-box').empty();
+  });
+
+
+  $('.each-all').click(function() {
+    window.location='/gift-rules?id=' + $(this).data('id');
+  });
+
 
   if (selectedGift){
     selectedGift.skus.forEach((sku)=>{
@@ -82,7 +94,7 @@ function getSelectedSkus(){
 function handleProduct(sku){
   if (Util.notIn(getSelectedSkus(), sku)){
     _get('/product-child', {sku: sku}, (p)=>{
-      if (p.error){
+      if (!p){
         showSkuError('Produto não encontrado!');
       }else if(p._Estoque.estoqueDisponivel == 0){
         showSkuError('Produto sem estoque disponível!');
@@ -204,10 +216,11 @@ function saveGiftRule(){
       name: $('#gift-name').val(),
       expires: expiresDatePicker.getSelected().getTime(),
       active: $('#active').is(":checked"),
+      checkStock : $('#checkstock').is(":checked"),
       skus: getSelectedSkus(),
       rules: getSelectedAttrs(),
-    },(e)=>{
-      console.log(e);
+    },(doc)=>{
+      window.location='/gift-rules?id=' + doc.id;
     });
   }
 }

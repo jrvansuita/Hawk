@@ -14,6 +14,7 @@ module.exports = class EccosysApi{
   constructor(){
     this.query = new Query('$');
     this.page_count = 100;
+    this.parsedJsonResult = true;
   }
 
   pageCount(pageCount){
@@ -84,7 +85,6 @@ module.exports = class EccosysApi{
 
   jsonFilter(multiple){
     return this.filter((data)=>{
-      data = JSON.parse(data);
       var def = multiple ? [] : undefined;
       var result = multiple ? [].concat(data) : (data[0] || data);
       return typeof data == 'string' ? def : result;
@@ -124,7 +124,7 @@ module.exports = class EccosysApi{
       options.headers.apikey = APIKEY;
     }
 
-
+    console.log(path);
 
     return options;
   }
@@ -174,6 +174,10 @@ module.exports = class EccosysApi{
 
       res.on('end', function() {
         self.checkErrorStatus(responseBody);
+
+        if (self.parsedJsonResult){
+          responseBody = JSON.parse(responseBody);
+        }
 
         if (self.onFilter){
           responseBody = self.onFilter(responseBody);

@@ -111,7 +111,7 @@ function runAggregate(_type, callback) {
 
 function loadUsers(data) {
   data.forEach((item) => {
-    var u = global.localUsers[item._id.userId];
+    var u = global._cachedUsers[item._id.userId];
 
     item.user = u ? User.suppress(u) : {id: item._id.userId} ;
   });

@@ -91,8 +91,8 @@ module.exports = class Day extends DataAccess {
       $match: {
         type: type,
         'date': {
-          $gte: from.dateBegin(),
-          $lte: to.dateEnd()
+          $gte: from.begin(),
+          $lte: to.end()
         }
       }
     },

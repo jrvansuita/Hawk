@@ -1,10 +1,10 @@
-Date.prototype.dateBegin = function() {
+Date.prototype.begin = function() {
   var d = new Date(this);
   d.setUTCHours(0, 0, 0, 0);
   return d;
 };
 
-Date.prototype.dateEnd = function() {
+Date.prototype.end = function() {
   var d = new Date(this);
   d.setUTCHours(23, 59, 59, 59);
   return d;

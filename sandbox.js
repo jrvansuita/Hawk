@@ -1,34 +1,9 @@
 require('./app/abra-cadabra/first-step.js');
 
-const EccosysProvider = require('./app/eccosys_new/eccosys-provider.js');
 
 
+new (require('./app/jobs/job-gift.js'))().doWork();
 
-
-new EccosysProvider()
-.pickingSales().pagging().each((sales, next)=>{
-  console.log('-------------');
-  console.log(sales.length);
-  setTimeout(next, 500);
-}).end(()=>{
-  console.log('terminou');
-});
-
-
-
-//const JobProducts = require('./app/jobs_old/job-products.js');
-//new JobProducts().run();
-
-
-/*const GiftRule = require('./bean/gift-rule.js');
-
-var giftRule = new GiftRule(1, 'Brinde Dia das Crianças', '0016az');
-
-giftRule.add('Valor do Pedido', 'totalVenda', '>', 500);
-giftRule.add('Desconto do Pedido', 'desconto', '<', 10);
-
-new (require('./app/jobs/job-gift.js'))().run();
-*/
 
 
 

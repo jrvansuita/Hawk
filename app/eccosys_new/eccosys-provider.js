@@ -18,11 +18,11 @@ module.exports = class EccosysProvider extends EccosysApi{
     return this.salesBySituation(3);
   }
 
-  openSales(callback) {
+  openSales() {
     return this.salesBySituation(0);
   }
 
-  waitingPaymentSales(callback) {
+  waitingPaymentSales() {
     return this.salesBySituation(-1);
   }
 

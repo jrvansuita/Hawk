@@ -43,6 +43,14 @@ module.exports= class SaleLoader {
     new EccosysProvider()
     .setOnError(this.onError)
     .sale(saleNumber).go((sale)=>{
+
+
+      //Provisório
+      if(!sale){
+        throw Err.thrw('Pedido não carregou: ' + saleNumber);
+      }
+      //Provisório
+
       this.sale = sale;
       onCallOuter(sale);
     });
