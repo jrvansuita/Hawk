@@ -76,7 +76,7 @@ module.exports = class EccosysApi{
 
       global.eccoConnErrors++;
 
-      //Só vamos dar throw nas 5 primeiras requests.
+      //Só vamos dar throw nas primeiras requests.
       //Se nao fica muito poluído o historico
       if (global.eccoConnErrors <= 2){
         var msg = data.includes('<title>502') ? '502 Bad Gateway' : data;

@@ -1,30 +1,4 @@
 
-var ruleAttrsEnum = {
-  TOTAL_SALE: 'Valor do Pedido',
-  TOTAL_PRODUCTS: 'Valor dos Produtos',
-  PAYMENT_FORM: 'Forma de pagamento',
-  INNER_OBS: 'Observação Interna',
-  TRANSPORT: 'Transportadora'
-};
-
-var ruleConditionsEnum = {
-  EQUAL:{
-    label: 'Igual',
-    func: 'teste'
-  },
-  GREATER:{
-    label: 'Maior',
-    func: 'teste'
-  },
-  SMALLER:{
-    label: 'Menor',
-    func: 'teste'
-  },
-  CONTAINS:{
-    label: 'Contém',
-    func: 'teste'
-  }
-};
 
 
 module.exports = class GiftRule extends DataAccess {
@@ -69,5 +43,63 @@ module.exports = class GiftRule extends DataAccess {
 
   static conditions(){
     return ruleConditionsEnum;
+  }
+};
+
+
+
+
+
+var ruleAttrsEnum = {
+  TOTAL_SALE: {
+    label: 'Valor do Pedido',
+    key: 'totalVenda'
+  },
+
+  TOTAL_PRODUCTS: {
+    label: 'Valor dos Produtos',
+    key: 'totalProdutos'
+  },
+
+  PAYMENT_FORM: {
+    label: 'Forma de Pagamento',
+    key: 'observacaoInterna'
+  },
+
+  INNER_OBS: {
+    label: 'Observação Interna',
+    key: 'observacaoInterna'
+  },
+
+  TRANSPORT: {
+    label: 'Transportadora',
+    key: 'transportador'
+  }
+};
+
+var ruleConditionsEnum = {
+  EQUAL:{
+    label: 'Igual',
+    match: (a, b) => {
+      return a && b && (a.toString() == b.toString());
+    }
+  },
+  GREATER:{
+    label: 'Maior',
+    match: (a, b) => {
+      return Floa.def(a) > Floa.def(b);
+    }
+  },
+  SMALLER:{
+    label: 'Menor',
+    match: (a, b) => {
+      return Floa.def(a) < Floa.def(b);
+    }
+  },
+  CONTAINS:{
+    label: 'Contém',
+    match: (a, b) => {
+      return a && b && (a.toString().includes(b.toString()));
+    }
   }
 };

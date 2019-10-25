@@ -25,10 +25,10 @@ class ComboBox{
     }
 
     select(item){
-      this.element.val(item.label);
+      this.element.val(item ? item.label : '');
 
       this.selectedItem = item;
-      if (this.onItemSelect){
+      if (this.onItemSelect && item){
         this.onItemSelect(this.selectedItem, this.selectedItem.data);
       }
     }

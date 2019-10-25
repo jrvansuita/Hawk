@@ -12,10 +12,10 @@ module.exports = class JobGift extends Job{
 
   findRulesAndConsistencies(callback){
     GiftRule.findActives((err, all)=>{
-      this.rules = all;
+      this.giftRulesList = all;
       this.stocks = {};
 
-      this.rules.forEach((each)=>{
+      this.giftRulesList.forEach((each)=>{
         if (each.checkStock){
           each.skus.forEach((sku)=>{
             this.stocks[sku] = 0;
@@ -39,15 +39,33 @@ module.exports = class JobGift extends Job{
     });
   }
 
-  checkMathing(rule, sale){
-    rule.rules.forEach((eachRule) => {
-      console.log(eachRule);
-    });
+
+  checkMatching(rule, sale){
+    for (var i = 0; i < rule.rules.length; i++) {
+      var eachRule = rule.rules[i];
+
+      //O que foi definido na regra
+      var attrItem = GiftRule.attrs()[eachRule.attr];
+      var conditionItem = GiftRule.conditions()[eachRule.sign];
+      var ruleValue = eachRule.val;
+
+      //O que tem no pedido
+      var attrSaleName = attrItem ? attrItem.key :  eachRule.attr;
+      var saleValue = sale[attrSaleName];
+
+      console.log('[' + eachRule.attr + ',' + attrSaleName+ '] ' + eachRule.sign + ' ' + ruleValue);
+
+      if (!conditionItem.match(saleValue, ruleValue)){
+        return false;
+      }
+    }
+
+    return true;
   }
 
   process(){
     new EccosysProvider()
-    .pageCount(1)
+    .pageCount(2)
     .dates(Dat.yesterday().begin(), Dat.yesterday().end())
     .waitingPaymentSales()
     .pagging()
@@ -56,8 +74,9 @@ module.exports = class JobGift extends Job{
       console.log('Carregou: ' + sales.length + ' pedidos');
 
       sales.forEach((sale) => {
-        this.rules.forEach((rule) => {
-          if (this.checkMathing(rule, sales)){
+        console.log('Vai avaliar o pedido: ' + sale.numeroPedido);
+        this.giftRulesList.forEach((giftRule) => {
+          if (this.checkMatching(giftRule, sale)){
             console.log('adicinou');
           }
         });
@@ -74,7 +93,7 @@ module.exports = class JobGift extends Job{
     return new Promise((resolve, reject)=>{
 
       this.findRulesAndConsistencies(()=>{
-        //console.log(this.rules);
+        //console.log(this.giftRulesList);
         //console.log(this.stocks);
 
         this.process();

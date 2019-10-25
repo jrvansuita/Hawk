@@ -2,6 +2,9 @@ var expiresDatePicker = null;
 
 $(document).ready(()=>{
 
+  $('#attr').focusin(() => {
+    attrNameSelector.select(null);
+  });
 
   new ComboBox($('#gift-name'), '/gift-all')
   .setAutoShowOptions(true)
@@ -151,7 +154,9 @@ function handleCondition(){
   c = checkMaterialInput($('#value')) & c;
 
   if (c){
-    var attr = attrNameSelector.getSelectedItem().data.key;
+    var selectedAttrItem = attrNameSelector.getSelectedItem();
+
+    var attr = selectedAttrItem ? selectedAttrItem.data.key : $('#attr').val();
     var sign = conditionsSelector.getSelectedItem().data.key;
 
     addCondition(attr, sign, $('#value').val());
@@ -165,7 +170,7 @@ function handleCondition(){
 
 
 function addCondition(attr, sign, value){
-  var label = rulesAttrs[attr];
+  var label = rulesAttrs[attr] ? rulesAttrs[attr].label : attr;
   var signLabel = rulesConditions[sign].label;
 
   var group = $('<div>').addClass('cond-group')
@@ -238,6 +243,9 @@ var attrNameSelector = null;
 
 function bindRulesAttrsComboBox(){
   new ComboBox($('#attr'), rulesAttrs)
+  .setOnItemBuild((item, index)=>{
+    return {text : item.val.label};
+  })
   .setAutoShowOptions(true)
   .setOnItemSelect((data, item)=>{
     console.log(data);
