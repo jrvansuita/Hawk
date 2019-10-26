@@ -13,7 +13,6 @@ var Str = {
     return result + ((result.length !== val.length) ? '...' : '');
   },
 
-
   first_word: function(val) {
     var names = val ? val.split(' ') : "";
     return names.length > 0 ? names[0] : 'Desconhecido';

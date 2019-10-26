@@ -1,4 +1,4 @@
-.main-content{width: fit-content;min-width: 50%;margin: auto;padding-top: 80px;padding-left: 3px;padding-right: 3px;}
+.main-content{width: fit-content;min-width: 50%;margin: auto;padding-top: 80px;padding-left: 3px;padding-right: 3px;overflow-y: auto;}
 
 .show-all{
   width: auto;
