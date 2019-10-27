@@ -3,7 +3,9 @@ var expiresDatePicker = null;
 $(document).ready(()=>{
 
   $('#attr').focusin(() => {
-    attrNameSelector.select(null);
+    if ($('#attr').val().length > 0){
+      attrNameSelector.select(null);
+    }
   });
 
   new ComboBox($('#gift-name'), '/gift-all')
@@ -48,8 +50,6 @@ $(document).ready(()=>{
   });
 
   bindRulesAttrsComboBox();
-  bindRulesConditionsComboBox();
-
 
   $('.save').click(()=>{
     saveGiftRule();
@@ -248,7 +248,8 @@ function bindRulesAttrsComboBox(){
   })
   .setAutoShowOptions(true)
   .setOnItemSelect((data, item)=>{
-    console.log(data);
+    bindValuesComboBox(item.val.options);
+    bindRulesConditionsComboBox(item.val.options);
   })
   .load().then(binder => {attrNameSelector = binder;});
 
@@ -256,13 +257,40 @@ function bindRulesAttrsComboBox(){
 
 var conditionsSelector = null;
 
-function bindRulesConditionsComboBox(){
+function bindRulesConditionsComboBox(options){
+  var filtered = Object.assign({}, rulesConditions);
 
-  new ComboBox($('#sign'), rulesConditions)
+  Object.entries(rulesConditions).forEach(([key, value]) => {
+    if (value.accepts){
+      if (!value.accepts.includes(options)){
+        delete filtered[key];
+      }
+    }else if (options != undefined && value.accepts == undefined){
+      delete filtered[key];
+    }
+  });
+
+
+  new ComboBox($('#sign'), filtered)
   .setOnItemBuild((item, index)=>{
     return {text : item.val.label};
   })
   .setAutoShowOptions(true)
   .load().then(binder => {conditionsSelector = binder;});
+}
 
+
+
+function bindValuesComboBox(options){
+  $('#value').removeAttr('onkeypress');
+
+  if (options == 'float'){
+    $('#value').attr('onkeypress',"return Floa.isFloatKey(event);");
+  }else if (options == 'integer'){
+    $('#value').attr('onkeypress',"return Num.isNumberKey(event);");
+  }else if (Array.isArray(options)){
+    new ComboBox($('#value'), options)
+    .setAutoShowOptions(true)
+    .load();
+  }
 }
