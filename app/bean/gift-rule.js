@@ -155,5 +155,12 @@ var ruleConditionsEnum = {
     match: (a, b) => {
       return a && b && (a.toLowerCase().toString().includes(b.toLowerCase().toString()));
     }
+  },
+
+  NOT_CONTAINS:{
+    label: 'Não Contém',
+    match: (a, b) => {
+      return !this.CONTAINS.match(a, b);
+    }
   }
 };
