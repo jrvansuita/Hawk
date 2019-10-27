@@ -106,7 +106,7 @@ module.exports = {
   },
 
   updateSale(params, callback){
-    new EccosysStorer().sale(this.getSalePackingBody(params)).go((data)=>{
+    new EccosysStorer().sale().update(this.getSalePackingBody(params)).go((data)=>{
       callback(data.result.success.length > 0, data.result);
     });
 },

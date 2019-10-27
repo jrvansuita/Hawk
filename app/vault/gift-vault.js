@@ -29,9 +29,9 @@ module.exports = class  {
 
 
 
-    static delete(id){
+    static delete(id, callback){
       GiftRule.findOne({id:id}, (err, item)=>{
-        item.remove();
+        item.remove(callback);
       });
     }
 

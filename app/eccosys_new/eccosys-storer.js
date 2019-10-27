@@ -10,20 +10,36 @@ module.exports = class EccosysStorer extends EccosysApi{
     return this.post('estoques/' + sku).setBody(body).single();
   }
 
-  sale(body) {
-    return this.put('pedidos').setBody(body).single();
-  }
-
   nfe(user, saleNumber){
     return this.post('nfes/' + saleNumber).setBody({}).withUser(user).single();
   }
 
-  retryNfe(user, idNfe, ){
+  retryNfe(user, idNfe){
     return this.post('nfes/' + idNfe + '/autorizar').setBody({}).withUser(user).single();
   }
 
-  saleItems(saleNumber, items){
-    return this.put('pedidos/items').setBody(items);
+  sale(saleNumber){
+    return {
+      update:(body) => {
+        return this.put('pedidos').setBody(body).single();
+      },
+
+      items:() => {
+        return {
+          update:(body) => {
+            return this.put('pedidos/items').setBody(body);
+          },
+
+          insert:(body) => {
+            return this.post('pedidos/' + saleNumber + '/items').setBody(body);
+          },
+
+          delete:(body) => {
+            return this.delete('pedidos/' + saleNumber + '/items');
+          },
+        }
+      }
+    };
   }
 
 };

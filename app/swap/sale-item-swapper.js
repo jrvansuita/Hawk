@@ -120,7 +120,7 @@ module.exports = class SaleItemSwapper{
       observacaoInterna: currentObs + '\n' + Const.swaped_items.format(this.quantity, this.targetSku, this.swapSku, this.sale.numeroPedido)
     };
 
-    new EccosysStorer().sale([body]).go();
+    new EccosysStorer().sale().update([body]).go();
   }
 
   _onError(err){
@@ -144,7 +144,7 @@ module.exports = class SaleItemSwapper{
         if (this._checkSaleStatus() && this._checkAllreadyHasSwapSku()){
           if (this._swapTargetSku()){
 
-            new EccosysStorer().saleItems(this.sale.numeroPedido, this.sale.items).go((res)=>{
+            new EccosysStorer().sale().items().update(this.sale.items).go((res)=>{
 
               if (this.onResponse){
                 this.onResponse(true);

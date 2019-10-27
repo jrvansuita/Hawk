@@ -1,5 +1,6 @@
 const Job = require('../jobs/controller/job.js');
 const EccosysProvider = require('../eccosys_new/eccosys-provider.js');
+const EccosysStorer = require('../eccosys_new/eccosys-storer.js');
 const GiftRule = require('../bean/gift-rule.js');
 const SaleLoader = require('../loader/sale-loader.js');
 
@@ -8,6 +9,47 @@ module.exports = class JobGift extends Job{
 
   getName(){
     return 'Inclusão de Brinde no Pedido';
+  }
+
+  getAvaliableSkus(rule){
+    rule.skus.forEach((each) => {
+      var stock = this.stocks[each];
+      if (stock){
+        if (stock > 0){
+          this.stocks[each]--;
+          return each;
+        }
+      }else{
+        return each;
+      }
+    });
+  }
+
+  getGiftItem(rule){
+    var sku = this.getAvaliableSkus(rule);
+    if (sku){
+      return [{
+        quantidade: 1,
+        valor: 0,
+        //"descricao": "Conjunto Infantil Summer Branco - Pugg-4",
+        //"base_comissao": "15.90",
+        //"alq_comissao": "0.00",
+        //"vlr_comissao": "0.00",
+        "precoLista": "15.9000000000",
+        "descontoItem": "0.00",
+        //"codigoCupom": null,
+        //"unidadeCupom": null,
+        //"ipptCupom": null,
+        //"itemCanceladoCupom": null,
+        //"numItemCupom": null,
+        itemBonificacao: "S",
+        //"valorComImpostos": "0.0000000000",
+        //"valorFrete": "0.00",
+        "observacao": "gift",
+        //"gtin": "7891000640043",
+        codigo: sku
+      }];
+    }
   }
 
   findRulesAndConsistencies(callback){
@@ -41,9 +83,9 @@ module.exports = class JobGift extends Job{
 
 
   checkMatching(rule, sale){
+    console.log('---- Rule: '+rule.name+' ----');
     for (var i = 0; i < rule.rules.length; i++) {
       var eachRule = rule.rules[i];
-
       //O que foi definido na regra
       var attrItem = GiftRule.attrs()[eachRule.attr];
       var conditionItem = GiftRule.conditions()[eachRule.sign];
@@ -53,7 +95,7 @@ module.exports = class JobGift extends Job{
       var attrSaleName = attrItem ? attrItem.key :  eachRule.attr;
       var saleValue = sale[attrSaleName];
 
-      console.log('---- Analizing ----');
+
       console.log('[' + eachRule.attr + ',' + attrSaleName+ ']');
       console.log(eachRule.sign);
       console.log(ruleValue);
@@ -61,15 +103,14 @@ module.exports = class JobGift extends Job{
 
       var matched = conditionItem.match(saleValue, ruleValue);
 
-
-
-
       if (!matched){
         console.log('Not Matched!');
-        //return false;
+        return false;
       }else{
         console.log('Matched!');
       }
+
+      console.log('------------------');
     }
 
     return true;
@@ -83,7 +124,19 @@ module.exports = class JobGift extends Job{
       console.log('---- Pedido: ' + sale.numeroPedido + ' -----');
       this.giftRulesList.forEach((giftRule) => {
         if (this.checkMatching(giftRule, sale)){
-          console.log('adicinou');
+
+          var giftItem = this.getGiftItem(giftRule);
+
+          if (giftItem){
+            new EccosysStorer()
+            .sale(sale.numeroPedido)
+            .items()
+            .insert(giftItem)
+            .go((data) => {
+              console.log(data);
+              console.log('Inseriu o gift');
+            });
+          }
         }
       });
 
@@ -110,7 +163,7 @@ module.exports = class JobGift extends Job{
 
   process(){
     new EccosysProvider()
-    .pageCount(1)
+    .pageCount(100)
     .dates(Dat.yesterday().begin(), Dat.yesterday().end())
     .waitingPaymentSales()
     .pagging()

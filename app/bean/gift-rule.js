@@ -48,8 +48,6 @@ module.exports = class GiftRule extends DataAccess {
 
 
 
-
-
 var ruleAttrsEnum = {
   TOTAL_SALE: {
     label: 'Valor do Pedido',

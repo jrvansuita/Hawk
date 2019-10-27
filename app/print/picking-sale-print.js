@@ -124,7 +124,7 @@ function markAsPrinted(saleNumber){
         pickingRealizado: "A"
       };
 
-      new EccosysStorer().sale([body], ()=>{});
+      new EccosysStorer().sale().update([body]).go();
     }
   });
 }
