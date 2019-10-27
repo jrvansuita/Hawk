@@ -111,14 +111,14 @@ var ruleAttrsEnum = {
 
   TRANSPORT: {
     label: 'Transportadora',
-    key: 'transportador',
-    options: ['Jadlog', 'Dba', 'Transfolha', 'Azul', 'Rede Sul', 'Coreios']
+    key: 'transport',
+    options: ['Jadlog', 'DBA', 'Transfolha', 'Azul', 'Rede Sul', 'Coreios']
   },
 
   FIRST_SALE: {
-    label: 'É Primeira Compra',
+    label: 'Primeira Compra',
     key: 'primeiraCompra',
-    options: ['Sim', 'Não']
+    options: ['0', '1']
   }
 };
 
@@ -142,7 +142,7 @@ var ruleConditionsEnum = {
     match: (a, b) => {
       return Floa.def(a) < Floa.def(b);
     },
-    accepts:['integer', 'float'] 
+    accepts:['integer', 'float']
   },
 
   IS:{
@@ -155,7 +155,7 @@ var ruleConditionsEnum = {
   CONTAINS:{
     label: 'Contém',
     match: (a, b) => {
-      return a && b && (a.toString().includes(b.toString()));
+      return a && b && (a.toLowerCase().toString().includes(b.toLowerCase().toString()));
     }
   }
 };
