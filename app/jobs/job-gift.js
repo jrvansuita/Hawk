@@ -41,7 +41,6 @@ module.exports = class JobGift extends Job{
 
 
   checkMatching(rule, sale){
-    console.log(sale);
     for (var i = 0; i < rule.rules.length; i++) {
       var eachRule = rule.rules[i];
 
@@ -79,7 +78,7 @@ module.exports = class JobGift extends Job{
   loadSaleAndProcess(s, callback){
     new SaleLoader(s)
     //.loadClient()
-    //.loadItems()
+    .loadItems()
     .run((sale)=>{
       console.log('---- Pedido: ' + sale.numeroPedido + ' -----');
       this.giftRulesList.forEach((giftRule) => {

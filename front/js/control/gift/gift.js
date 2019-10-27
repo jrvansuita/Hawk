@@ -265,8 +265,11 @@ function bindRulesConditionsComboBox(options){
       if (!value.accepts.includes(options)){
         delete filtered[key];
       }
-    }else if (options != undefined && value.accepts == undefined){
-      delete filtered[key];
+    }
+    else if (options != undefined && value.accepts == undefined){
+      if (!Array.isArray(options)){
+        delete filtered[key];
+      }
     }
   });
 
