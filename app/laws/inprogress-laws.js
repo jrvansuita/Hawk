@@ -44,6 +44,11 @@ module.exports = {
   },
 
   startPicking(sale, userId, doNotCount){
+    if (checkSaleIsInprogress(sale)){
+      var msg = Const.picking_already_started.format(sale.numeroPedido);
+      Err.thrw(msg, userId);
+    }
+
     var begin = new Date();
 
     if (!doNotCount){
@@ -53,16 +58,13 @@ module.exports = {
     sale.begin = begin;
     sale.doNotCount = doNotCount;
     sale.pickUser = User.suppress(UsersProvider.get(userId));
+
     this.object()[userId] = sale;
-
-    //HistoryStorer.picking(userId, sale, null);
-
-    //console.log('[Abriu] picking ' + sale.pickUser.name  + ' - ' + sale.numeroPedido);
   },
 
   endPicking(userId, callback){
     var sale = this.getInProgressSale(userId);
-    
+
     if (!sale.doNotCount){
       checkEndTime(sale, userId);
     }
@@ -91,6 +93,12 @@ module.exports = {
   }
 
 };
+
+function checkSaleIsInprogress(sale){
+  return Object.values(global.inprogressPicking).some((each) => {
+    return each.numeroPedido == sale.numeroPedido;
+  });
+}
 
 
 function checkEndTime(sale, userId){

@@ -62,7 +62,9 @@ module.exports = class JobFeedXmlProducts extends Job{
                 }
               });
 
-              resolve();
+              setTimeout(() => {
+                resolve();
+              },5000)
             }
           });
 

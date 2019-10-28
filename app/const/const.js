@@ -17,6 +17,7 @@ module.exports = {
   picking_by_date: 'Picking por período',
   none_sale_founded: "Nenhum pedido encontrado",
   none_sale_founded_asserted: "Nenhum pedido encontrado com essa pesquisa",
+  picking_already_started: "O Pedido {0} já está em picking!",
   no_transport: 'Retirada',
   no_token_user: 'Usuário logado não possiu token para faturamento!',
 

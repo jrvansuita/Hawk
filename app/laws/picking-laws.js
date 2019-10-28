@@ -38,6 +38,7 @@ module.exports = {
     return global.staticPickingList.findIndex(sale => sale.numeroPedido == saleNumber);
   },
 
+  //Can't use .filter, Can't create another object
   remove(inputSale){
     global.staticPickingList.splice(this.getSaleIndex(inputSale.numeroPedido),1);
   },

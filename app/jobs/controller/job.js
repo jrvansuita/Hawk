@@ -13,6 +13,16 @@ module.exports = class Job{
     throw new Error('You have to name your job!');
   }
 
+  setOnTerminate(callback){
+    this.onTerminateListener = callback;
+    return this;
+  }
+
+  setOnError(callback){
+    this.onErrorListener = callback;
+    return this;
+  }
+
 
   /**
   * Implementation optional
@@ -28,12 +38,13 @@ module.exports = class Job{
     this.onStart();
 
     this.doWork()
-    .then(()=>{
-      this.onTerminate();
+    .then((data)=>{
+      this.onTerminate(data);
     }).catch(e =>{
       this.onError(e);
     });
 
+    return this;
   }
 
   /**
@@ -49,8 +60,12 @@ module.exports = class Job{
   /**
   * Implementation optional
   */
-  onTerminate() {
+  onTerminate(data) {
     console.log('[Job] onTerminate: ' + this.getName());
+
+    if (this.onTerminateListener){
+      this.onTerminateListener(data);
+    }
   }
 
   /**
@@ -58,6 +73,11 @@ module.exports = class Job{
   */
   onError(e) {
     console.log('[Job] onError: ' + this.getName());
+
+
+    if (this.onErrorListener){
+      this.onErrorListener(e);
+    }
   }
 
   getInfo(){

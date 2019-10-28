@@ -142,10 +142,11 @@ module.exports = class ProductRoutes extends Routes{
     });
 
     this._post('/product-board-reset', (req, res) => {
-      const JobProducts = require('../jobs/job-products.js');
-      new JobProducts().run(()=>{
+      const JobProducts = require('../jobs/job-feed-xml-product.js');
+      new JobProducts()
+      .doWork().then(() => {
         ProductBoard.reset();
-      });
+      })
 
       this._resp().sucess(res);
     });

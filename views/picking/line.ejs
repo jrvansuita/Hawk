@@ -56,9 +56,16 @@
         <td>Transportadora</td>
       </tr>
 
-      <%line.forEach((each)=>{
+      <%
+      var repeatedSales = {};
+
+      line.forEach((each)=>{
 
         var repeated = line.filter(e => {return e.numeroPedido == each.numeroPedido}).length > 1;
+
+        if (repeated){
+          repeatedSales[each.numeroPedido] = true;
+        }
         %>
         <tr class="line-here <%=repeated ? 'red'  : ''%>">
           <td><%=each.numeroPedido%></td>
@@ -162,6 +169,19 @@
                 </tr>
                 <%})%>
 
+
+              </table>
+
+
+              <table>
+                <tr>
+                  <td>Variable</td>
+                  <td>Value</td>
+                </tr>
+                <tr>
+                  <td>Pedidos Repetidos</td>
+                  <td><%=Object.keys(repeatedSales)%></td>
+                </tr>
 
               </table>
             </div>
