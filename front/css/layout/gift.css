@@ -70,7 +70,8 @@
   font-size: 15px;
   padding: 0px 5px;
   display: block;
-  width: fit-content;
+  position: relative;
+  width: 100%;
 }
 
 .rules-box-select{
@@ -199,4 +200,24 @@
 
 .pure-material-checkbox{
   transform: scale(0.9);
+}
+
+.add{
+  display: inline;
+  right: 0;
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  padding: 3px;
+}
+
+.add:hover {
+  background-color: #f3f3f3;
+  transform: scale(1.1);
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.sku-input-holder{
+  margin-top: 35px !important;
 }

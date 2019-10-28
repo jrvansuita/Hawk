@@ -24,6 +24,7 @@ class ComboBox{
       this.method = method;
     }
 
+
     select(item){
       this.element.val(item ? item.label : '');
 
@@ -164,6 +165,11 @@ class ComboBox{
           $(this).autocomplete("search", "");
         });
       }
+    }
+
+
+    remove(){
+      this.element.autocomplete({source: []});
     }
 
   }

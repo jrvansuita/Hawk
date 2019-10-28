@@ -346,3 +346,23 @@ table{
     margin-bottom: -10px;
     margin-right: 5px;
 }
+
+
+
+.barberpole-color-background{
+  animation: barberpole 10s linear infinite;
+  background-image: repeating-linear-gradient(     -45deg,     #7500e052,     #7500e052 1rem,     #efefef40 1rem,     #efefef40 2rem     );
+  background-size: 200% 200%;
+}
+
+.barberpole-gray-background{
+  animation: barberpole 10s linear infinite;
+  background-image: repeating-linear-gradient(     -45deg,     transparent,     transparent 1rem,     #cccccc33 1rem,     #cccccc33 2rem     );
+  background-size: 200% 200%;
+}
+
+  @keyframes barberpole {
+    100% {
+      background-position: 100% 100%;
+    }
+  }

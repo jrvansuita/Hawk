@@ -511,3 +511,11 @@ table{
 }
 
 .itens-count-display{margin-top: 6px;}
+
+
+.mini-item-icon{
+  width: 34px;
+  height: 34px;
+  margin: auto;
+  display: block;
+}

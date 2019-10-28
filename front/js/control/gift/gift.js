@@ -4,7 +4,7 @@ $(document).ready(()=>{
 
   $('#attr').focusin(() => {
     if ($('#attr').val().length > 0){
-      attrNameSelector.select(null);
+      clearSelectors();
     }
   });
 
@@ -36,17 +36,25 @@ $(document).ready(()=>{
   $('#sku').on("keyup", function(e) {
     if (e.which == 13){
       if ($(this).val()){
-        handleProduct($(this).val());
+        $('.add-product').trigger('click');
       }
     }
+  });
+
+  $('.add-product').click(()=>{
+    handleProduct($('#sku').val());
   });
 
   $('#value').on("keyup", function(e) {
     if (e.which == 13){
       if ($(this).val()){
-        handleCondition();
+        $('.add-cond').trigger('click');
       }
     }
+  });
+
+  $('.add-cond').click(()=>{
+    handleCondition();
   });
 
   bindRulesAttrsComboBox();
@@ -99,7 +107,7 @@ function handleProduct(sku){
     _get('/product-child', {sku: sku}, (p)=>{
       if (!p){
         showSkuError('Produto não encontrado!');
-      }else if(p._Estoque.estoqueDisponivel == 0){
+      }else if ((p._Estoque.estoqueDisponivel == 0) && $('#checkstock').is(":checked")){
         showSkuError('Produto sem estoque disponível!');
       }else{
         $('#sku').val('');
@@ -155,16 +163,15 @@ function handleCondition(){
 
   if (c){
     var selectedAttrItem = attrNameSelector.getSelectedItem();
+    var selectedConditionItem = conditionsSelector.getSelectedItem();
+    var selectedValueItem = valuesSelector.getSelectedItem();
 
     var attr = selectedAttrItem ? selectedAttrItem.data.key : $('#attr').val();
-    var sign = conditionsSelector.getSelectedItem().data.key;
+    var sign = selectedConditionItem.data.key;
+    var value = selectedValueItem && selectedValueItem.data ? selectedValueItem.data.key : $('#value').val();
 
-    addCondition(attr, sign, $('#value').val());
-
-    $('#attr').val('');
-    $('#sign').val('');
-    $('#value').val('');
-
+    addCondition(attr, sign, value);
+    clearSelectors();
   }
 }
 
@@ -172,11 +179,19 @@ function handleCondition(){
 function addCondition(attr, sign, value){
   var label = rulesAttrs[attr] ? rulesAttrs[attr].label : attr;
   var signLabel = rulesConditions[sign].label;
+  var valueLabel = value;
+
+  if (rulesAttrs[attr] && rulesAttrs[attr].options){
+    var options = rulesAttrs[attr].options;
+    if (options.constructor === Object){
+      valueLabel = rulesAttrs[attr].options[value];
+    }
+  }
 
   var group = $('<div>').addClass('cond-group')
   .append(getToastItem(label, attr, 'attr'))
   .append(getToastItem(signLabel, sign, 'sign'))
-  .append(getToastItem(value, null, 'value'));
+  .append(getToastItem(valueLabel, value, 'value'));
 
   group.click(()=>{
     group.remove();
@@ -192,7 +207,7 @@ function getSelectedAttrs(){
     arr.push({
       attr: $(this).find('.attr').data('val'),
       sign: $(this).find('.sign').data('val'),
-      val: $(this).find('.value').text()
+      val: $(this).find('.value').data('val')
     });
   });
 
@@ -266,12 +281,14 @@ function bindRulesConditionsComboBox(options){
         delete filtered[key];
       }
     }
-    else if (options != undefined && value.accepts == undefined){
-      if (!Array.isArray(options)){
+    else if (typeof options == 'string'){
+      if (options != undefined && value.accepts == undefined){
         delete filtered[key];
       }
     }
+
   });
+
 
 
   new ComboBox($('#sign'), filtered)
@@ -283,6 +300,8 @@ function bindRulesConditionsComboBox(options){
 }
 
 
+var valuesSelector = null;
+
 
 function bindValuesComboBox(options){
   $('#value').removeAttr('onkeypress');
@@ -291,9 +310,30 @@ function bindValuesComboBox(options){
     $('#value').attr('onkeypress',"return Floa.isFloatKey(event);");
   }else if (options == 'integer'){
     $('#value').attr('onkeypress',"return Num.isNumberKey(event);");
-  }else if (Array.isArray(options)){
+  }else if (options != undefined){
     new ComboBox($('#value'), options)
     .setAutoShowOptions(true)
-    .load();
+    .load().then(binder => {valuesSelector = binder;});
   }
+}
+
+
+function clearSelectors(){
+  if (attrNameSelector){
+    attrNameSelector.select(null);
+  }
+
+  if (conditionsSelector){
+    conditionsSelector.select(null);
+    conditionsSelector.remove();
+  }
+
+  if (valuesSelector){
+    valuesSelector.select(null);
+    valuesSelector.remove();
+  }
+
+  $('#attr').val('');
+  $('#sign').val('');
+  $('#value').val('');
 }

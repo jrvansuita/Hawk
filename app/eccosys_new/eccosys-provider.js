@@ -30,6 +30,10 @@ module.exports = class EccosysProvider extends EccosysApi{
     return this.get('pedidos/situacao/' + situation).multiple();
   }
 
+  sales() {
+    return this.get('pedidos').multiple();
+  }
+
   nfe(numero) {
     return this.get('notasfiscais/' + numero).single();
   }

@@ -254,15 +254,27 @@ function buildProductLine(saleItem, data){
     saleItem.checkedQtd = saleItem.quantidade;
   }
 
+  var $giftIcon = null;
+  if (saleItem.itemBonificacao == 'S'){
+    $giftIcon = createProductVal($('<img>').addClass('mini-item-icon').attr('src','img/gift.png'));
+  }
+
   cols.push(createProductVal(fmtQtd(saleItem, data.table == 'in'), true).addClass('qtd'));
 
   cols.push(createProductVal(Floa.weight(saleItem.liq), true).addClass('long-desc'));
-  cols.push(createProductVal(Floa.weight(saleItem.bru), true).addClass('long-desc'));
+  cols.push($giftIcon ? $giftIcon : createProductVal(Floa.weight(saleItem.bru), true).addClass('long-desc'));
+
+
+
 
   var tr = $('<tr>').append(cols)
   .attr('id', data.table + '-' + saleItem.id);
 
   addHoverProductImage(desc, saleItem.codigo);
+
+  if (saleItem.itemBonificacao == 'S'){
+    tr.addClass('barberpole-gray-background');
+  }
 
   return tr;
 }
@@ -592,7 +604,7 @@ function showMainInputTitle(title, icon, lineColor){
 }
 
 
-function autoSelectPackingType(callback){  
+function autoSelectPackingType(callback){
   var options = packingTypeCombo.getData();
   if (options && (itemsChecked == sale.itemsQuantity)){
     var selectedItem = null;

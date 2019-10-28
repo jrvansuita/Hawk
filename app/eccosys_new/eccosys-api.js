@@ -124,7 +124,7 @@ module.exports = class EccosysApi{
       options.headers.apikey = APIKEY;
     }
 
-    //console.log(options);
+    console.log(path);
 
     return options;
   }

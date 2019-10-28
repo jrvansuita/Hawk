@@ -134,7 +134,6 @@ module.exports = class JobGift extends Job{
 
 
   checkMatching(rule, sale){
-    console.log('---- Rule: '+rule.name+' ----');
     for (var i = 0; i < rule.rules.length; i++) {
       var eachRule = rule.rules[i];
       //O que foi definido na regra
@@ -198,7 +197,7 @@ module.exports = class JobGift extends Job{
       if (currentSale && this.whileHasRulesToWorkWith()){
         this.loadEachSale(currentSale, eachSaleProcess);
       }else{
-          onTerminate();
+        onTerminate();
       }
     };
 
@@ -210,21 +209,16 @@ module.exports = class JobGift extends Job{
 
   process(resolve){
     new EccosysProvider()
-    .pageCount(100)
+    .pageCount(2)
     .dates(Dat.yesterday().begin(), Dat.yesterday().end())
-    .waitingPaymentSales()
+    .sales()
     .pagging()
     .each((sales, next)=>{
-      console.log('-----------');
-      console.log('Carregou: ' + sales.length + ' pedidos');
-      if (sales.length > 0){
+      console.log('----- ' + sales.length + ' Pedidos ------');
+      if ((sales.length > 0) && this.whileHasRulesToWorkWith()){
         this.loadSalesPage(sales, next);
       }else{
-        if (this.whileHasRulesToWorkWith()){
-          next();
-        }else{
-          this.endProcess();
-        }
+        this.endProcess();
       }
     }).end(()=>{
       this.endProcess();
@@ -232,24 +226,26 @@ module.exports = class JobGift extends Job{
   }
 
   doWork(){
-    this.promise = new Promise((resolve, reject)=>{
+    return new Promise((resolve, reject)=>{
+      this.resolve = resolve;
+      this.reject = reject;
 
       this.findRulesAndConsistencies(()=>{
         //console.log(this.giftRulesList);
         //console.log(this.stocks);
         if (this.whileHasRulesToWorkWith()){
           this.process();
+        }else{
+          this.endProcess();
         }
       });
     });
-
-    return this.promise;
   }
 
 
   endProcess(){
     console.log('Terminou');
-    this.promise.resolve('Done!');
+    this.resolve('Done!');
   }
 
 };

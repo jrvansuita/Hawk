@@ -38,17 +38,29 @@ module.exports = class GiftRule extends DataAccess {
 
 
   static attrs(){
-    return ruleAttrsEnum;
+    return attributes;
   }
 
   static conditions(){
-    return ruleConditionsEnum;
+    return conditions;
   }
 };
 
 
 
-var ruleAttrsEnum = {
+var attributes = {
+
+  SITUATION: {
+    label: 'Situação do Pedido',
+    key: 'situacao',
+    options: {
+      '-1': 'Aguardando Pagamento',
+      '0': 'Em aberto',
+      '3': 'Pronto para picking',
+      '4': 'Pagamento em análise'
+    }
+  },
+
   TOTAL_SALE: {
     label: 'Valor do Pedido',
     key: 'totalVenda',
@@ -99,7 +111,7 @@ var ruleAttrsEnum = {
   PAYMENT_FORM: {
     label: 'Forma de Pagamento',
     key: 'paymentType',
-    options: ['Boleto','Creditcard']
+    options: {'boleto' : 'Boleto', 'creditcard': 'Cartão de Crédito'}
   },
 
   INNER_OBS: {
@@ -116,11 +128,11 @@ var ruleAttrsEnum = {
   FIRST_SALE: {
     label: 'Primeira Compra',
     key: 'primeiraCompra',
-    options: ['0', '1']
+    options: {'1' : 'Sim', '0': 'Não'}
   }
 };
 
-var ruleConditionsEnum = {
+var conditions = {
   EQUAL:{
     label: 'Igual',
     match: (a, b) => {
@@ -150,6 +162,13 @@ var ruleConditionsEnum = {
     }
   },
 
+  NOT_IS:{
+    label: 'Não É',
+    match: function(a, b) {
+      return !conditions.IS.match(a, b);
+    }
+  },
+
   CONTAINS:{
     label: 'Contém',
     match: (a, b) => {
@@ -159,8 +178,8 @@ var ruleConditionsEnum = {
 
   NOT_CONTAINS:{
     label: 'Não Contém',
-    match: (a, b) => {
-      return !this.CONTAINS.match(a, b);
+    match: function (a, b) {
+      return !conditions.CONTAINS.match(a, b);
     }
   }
 };

@@ -7,7 +7,6 @@ module.exports = class  {
 
 
   static storeFromScreen(params, callback) {
-    console.log(params);
 
     var gift = new GiftRule(
       params.id,
