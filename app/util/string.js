@@ -8,11 +8,14 @@ var Str = {
     return !str ? (!def ? '' :def) : str;
   },
 
+  between(str, left, right) {
+    return str.split(left).pop().split(right)[0];
+  },
+
   short: function(val, max) {
     var result = val.slice(0, max);
     return result + ((result.length !== val.length) ? '...' : '');
   },
-
 
   first_word: function(val) {
     var names = val ? val.split(' ') : "";

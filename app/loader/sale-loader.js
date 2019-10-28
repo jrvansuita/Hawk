@@ -23,6 +23,15 @@ module.exports= class SaleLoader {
     //this.checkTerminate();
   }
 
+  _loadFinalAttrsOnSale(){
+    if (!this.innerAttrsLoaded && this.sale){
+      this.innerAttrsLoaded = true;
+      this.sale.transport = Util.twoNames(this.sale.transportador, Const.no_transport);
+      this.sale.deliveryTime = Num.def(Str.between(this.sale.observacaoInterna, '- ', ' dias uteis'));
+      this.sale.paymentType = Str.between(this.sale.observacaoInterna, 'pagg_', ' ');
+    }
+  }
+
   getSkusFromSale(){
     if(this.sale.items){
       return this.sale.items.map((i)=>{
@@ -43,7 +52,6 @@ module.exports= class SaleLoader {
     new EccosysProvider()
     .setOnError(this.onError)
     .sale(saleNumber).go((sale)=>{
-
 
       //Provisório
       if(!sale){
@@ -97,14 +105,10 @@ module.exports= class SaleLoader {
         new EccosysProvider()
         .setOnError(this.onError)
         .saleItems(this.sale.numeroPedido).go((items) => {
-
-          this.sale.transport = Util.twoNames(this.sale.transportador, Const.no_transport);
           this.sale.items = items;
-
           this.sale.itemsQuantity = items.reduce(function(a, b) {
             return a + parseFloat(b.quantidade);
           }, 0);
-
 
           this._callbackHit(onCallNext, onCallOuter);
         });
@@ -193,6 +197,7 @@ module.exports= class SaleLoader {
       });
     }else{
       if (typeof this.onFinished == 'function'){
+        this._loadFinalAttrsOnSale();
         this.onFinished(this.sale);
         this.onFinished = null;
       }
@@ -204,13 +209,7 @@ module.exports= class SaleLoader {
 
     if (typeof this.sale !== 'object'){
       this.loadSale(this.sale, (sale)=>{
-        if (sale && this.list.length != 0){
           this.callFuncs(0);
-        }else{
-          if (onFinished){
-            onFinished(sale);
-          }
-        }
       });
     }else{
       this.callFuncs(0);

@@ -34,8 +34,8 @@ module.exports = class  {
     var query = {
       'type': this.type,
       'date': {
-        $gte: from.dateBegin(),
-        $lte: to.dateEnd()
+        $gte: from.begin(),
+        $lte: to.end()
       }
     };
 

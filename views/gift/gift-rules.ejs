@@ -92,18 +92,19 @@
 
 
 
-
-
-
         <div class="row">
 
-          <div class="material-input-holder">
-            <input type="text" id="sku" maxlength="50"
-            value="" autocomplete="off"
-            title="Código do Produto" required/>
+          <div class="product-select">
+            <label class="sub-title">Produtos <img class="add add-product" src="img/forward.png"></label>
 
-            <span class="bar"></span>
-            <label>Sku</label>
+            <div class="material-input-holder sku-input-holder">
+              <input type="text" id="sku" maxlength="50"
+              value="" autocomplete="off"
+              title="Código do Produto" required/>
+
+              <span class="bar"></span>
+              <label>Código</label>
+            </div>
           </div>
 
 
@@ -125,7 +126,7 @@
         <div class="row">
 
           <div class="conditions-select">
-            <label class="sub-title">Condições</label>
+            <label class="sub-title">Condições <img class="add add-cond" src="img/forward.png"></label>
 
             <div class="material-input-holder">
               <input type="text" id="attr" maxlength="50"
@@ -148,7 +149,7 @@
 
             <div class="material-input-holder">
               <input type="text" id="value" maxlength="50"
-              value="" autocomplete="off"
+              autocomplete="off"
               title="Valor" required/>
 
               <span class="bar"></span>

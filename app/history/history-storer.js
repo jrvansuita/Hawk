@@ -121,6 +121,12 @@ module.exports={
     onTry(()=>{
       History.notify(userId, 'Troca de Produto' , Const.swaped_items.format(quantity, targetSku, swapSku, saleNumber), 'Pendência');
     });
+  },
+
+  gift(saleNumber, skus, giftRuleName){
+    onTry(()=>{
+      History.job('Regra de Brinde' , Const.gift_msg.format(giftRuleName, skus, saleNumber), 'Brinde');
+    });
   }
 
 };

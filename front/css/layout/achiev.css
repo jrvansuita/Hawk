@@ -366,16 +366,11 @@ span.percent {
 
 .current-month{
   border-top: 4px solid #3476d2;
-  background-image: repeating-linear-gradient(     -45deg,     transparent,     transparent 1rem,     #cccccc33 1rem,     #cccccc33 2rem     );
-  background-size: 200% 200%;
-  animation: barberpole 10s linear infinite;
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, .20), 0 2px 3px -10px rgba(0, 0, 0, .25), 0 2px 7px 0 rgba(0, 0, 0, .23);
   border-radius: 8px;
-
   -webkit-box-shadow: 4px 7px 8px -5px rgba(135,127,135,1);
   -moz-box-shadow: 4px 7px 8px -5px rgba(135,127,135,1);
   box-shadow: 4px 7px 8px -5px rgba(135,127,135,1);
-
 }
 
 
@@ -394,12 +389,6 @@ span.percent {
 }
 
 
-
-  @keyframes barberpole {
-    100% {
-      background-position: 100% 100%;
-    }
-  }
 
 
 .current-timer > img{
