@@ -14,7 +14,12 @@ module.exports = class EccosysApi{
   constructor(){
     this.query = new Query('$');
     this.page_count = 100;
-    this.parsedJsonResult = true;
+    this.jsonResult(true);
+  }
+
+  jsonResult(val){
+    this.parsedJsonResult = val;
+    return this;
   }
 
   pageCount(pageCount){
@@ -224,7 +229,7 @@ module.exports = class EccosysApi{
   }
 
   download(path, res, docName){
-    this.setMethod('GET').setPath(path).make(null, (chunks)=>{
+    this.setMethod('GET').jsonResult(false).setPath(path).make(null, (chunks)=>{
       var file = new Buffer.concat(chunks);
 
       res.type('application/pdf');
