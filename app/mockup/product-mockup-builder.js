@@ -197,17 +197,25 @@ module.exports = class {
       this.padding = this.n(this.productImage.width < minSize ? 450 : 190);
       this.paddingTop = this.n(this.productImage.width < minSize ? 150 : 10);
     }
+
+    var dif = this.canvas.height - this.canvas.width;
+
+    if (dif > 100){
+      this.paddingTop = this.n(dif/2.5);
+    }
   }
 
   renderingImages() {
     this.definePaddings();
 
-    this.context.drawImage(this.productImage, this.padding/2, this.paddingTop, this.canvas.width - this.padding, this.canvas.height - this.padding);
+    this.context.drawImage(this.productImage, this.padding/2, this.paddingTop, this.canvas.width - this.padding, this.canvas.width - this.padding);
     this.context.drawImage(this.mockupImage, 0, this.canvas.height - this.mockupImage.height, this.canvas.width, this.mockupImage.height);
+
+    console.log('');
   }
 
   initCanvas(){
-    this.canvas = createCanvas(this.mockSett.width, this.mockSett.width);
+    this.canvas = createCanvas(this.mockSett.width, this.mockSett.height);
     this.context = this.canvas.getContext('2d');
   }
 
