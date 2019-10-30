@@ -180,15 +180,16 @@ module.exports = class EccosysApi{
       res.on('end', function() {
         self.checkErrorStatus(responseBody);
 
-        if (self.parsedJsonResult){
-          responseBody = JSON.parse(responseBody);
-        }
-
-        if (self.onFilter){
-          responseBody = self.onFilter(responseBody);
-        }
-
         if (onGetResponse){
+
+          if (self.parsedJsonResult){
+            responseBody = JSON.parse(responseBody);
+          }
+
+          if (self.onFilter){
+            responseBody = self.onFilter(responseBody);
+          }
+
           onGetResponse(responseBody);
         }
 
