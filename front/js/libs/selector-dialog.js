@@ -28,9 +28,14 @@ class SelectorDialog {
   }
 
   addItem(icon, label, tag){
-    var $icon = $('<img>').attr('src', icon);
-    var $label = $('<label>').text(label);
-    var $span = $('<span>').append($icon, $label);
+    var el = [];
+
+    if (icon){
+      el.push($('<img>').attr('src', icon));
+    }
+
+    el.push($('<label>').text(label));
+    var $span = $('<span>').append(el);
 
     var $li = $('<li>').append($span).click((e)=>{
       this.modal.remove();

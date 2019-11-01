@@ -23,7 +23,6 @@ $(document).ready(()=>{
   new ComboBox($('#font-discount'), fontsArr)
   .setAutoShowOptions().load();
 
-  
 
   loadPreview();
   updateSizeHint();
@@ -70,6 +69,21 @@ $(document).ready(()=>{
     }
   });
 
+  $('.each-all').click(function() {
+    window.location='/mockup-builder?_id=' + $(this).data('id');
+  });
+
+  $('.add-new').click(() => {
+    selected = {};
+    selected._id = '';
+    $('.settings-box').find('input').val('');
+    $('.settings-box').find('input').prop("checked", false);
+
+      $('.mock-preview').css({ opacity: 0 });
+      $('.mock-img-select').css({ opacity: 0 })
+  });
+
+
 });
 
 
@@ -84,6 +98,7 @@ function checkFields(){
   var c = checkMaterialInput($('#font'));
   c = checkMaterialInput($('#width')) & c;
   c = checkMaterialInput($('#height')) & c;
+  c = checkMaterialInput($('#name')) & c;
 
   return c;
 }
@@ -94,23 +109,27 @@ var preventCache = 0;
 function loadPreview(){
   preventCache++;
   var skuQuery = $('#search-sku').val() ? '&sku=' + $('#search-sku').val() : '';
+  var mockIdQuery = '&mockId=' + selected._id;
 
   $('.mock-preview').animate({ opacity: 0 });
   new ProductImageLoader($('.mock-preview'))
   .setOnLoaded(()=>{
     $('.mock-preview').animate({ opacity: 1 });
   })
-  .src('/product-mockup?_v' + preventCache + skuQuery).put();
+  .src('/product-mockup?_v' + preventCache + skuQuery + mockIdQuery).put();
 }
 
 function saveMockupSettings() {
   var data = {
+    _id: selected._id,
+    name: $('#name').val(),
     fontName: $('#font').val(),
     fontNameDiscount: $('#font-discount').val(),
     mockurl: selected.imgUrl,
     msg: $('#msg').val(),
     fontColor : fontColorPicker.getSelectedColor().toHEXA().toString(),
     fontShadowColor : fontShadowColorPicker.getSelectedColor().toHEXA().toString(),
+    priceBottomMargin: $('#price-bottom-margin').val() || 0,
     showDiscount: $('#discount-active').is(":checked"),
     discountFontColor : discountFontColorPicker.getSelectedColor().toHEXA().toString(),
     discountShadowColor : discountFontShadowColorPicker.getSelectedColor().toHEXA().toString(),
@@ -120,9 +139,8 @@ function saveMockupSettings() {
     height: Num.def($('#height').val()),
   };
 
-  _post('mockup-builder', data , (resultMock)=>{
-    selected = resultMock;
-    loadPreview();
+  _post('mockup-builder', data , (mockId)=>{
+    window.location= 'mockup-builder?_id=' + mockId;
   },(error, message)=>{
     console.log(error);
   });
@@ -173,5 +191,5 @@ function createColorPicker(el, defColor){
 var fontsArr = ["Varela Round", "Verdana", "Roboto", "Lato", "Fira Sans", "Mansalva", "Turret Road"];
 
 function updateSizeHint(){
-  $('.size-hint').text('Imagem: ' + Num.def($('#width').val()) + 'x230px');
+  $('.size-hint').text('Imagem: ' + Num.def($('#width').val()) + 'x20%');
 }

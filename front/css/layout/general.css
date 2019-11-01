@@ -332,19 +332,19 @@ table{
 
 
 .mini-red-circle {
-    margin-left: 5px;
-    background-color: #bd48008a;
-    border-radius: 50%;
-    width: 10px;
-    padding: 3px;
-    font-size: 9px;
-    text-align: center;
-    color: white;
-    height: 10px;
-    z-index: 10;
-    position: inherit;
-    margin-bottom: -10px;
-    margin-right: 5px;
+  margin-left: 5px;
+  background-color: #bd48008a;
+  border-radius: 50%;
+  width: 10px;
+  padding: 3px;
+  font-size: 9px;
+  text-align: center;
+  color: white;
+  height: 10px;
+  z-index: 10;
+  position: inherit;
+  margin-bottom: -10px;
+  margin-right: 5px;
 }
 
 
@@ -361,8 +361,24 @@ table{
   background-size: 200% 200%;
 }
 
-  @keyframes barberpole {
-    100% {
-      background-position: 100% 100%;
-    }
+@keyframes barberpole {
+  100% {
+    background-position: 100% 100%;
   }
+}
+
+
+
+
+.mini-icon-button:hover {
+  background-color: #f3f3f3;
+  transform: scale(1.1);
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.mini-icon-button {
+  width: 24px;
+  height: 24px;
+  padding: 3px;
+}

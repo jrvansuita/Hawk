@@ -4,8 +4,8 @@ const Mock = require('../bean/mock.js');
 
 module.exports = class {
 
-  constructor(){
-
+  constructor(id){
+   this.mockId = id;
   }
 
   setProduct(product){
@@ -36,7 +36,7 @@ module.exports = class {
   loadSettings(callback){
     this.mockSett = {};
 
-    Mock.get((err, mock)=>{
+    Mock.findOne({_id: this.mockId},(err, mock)=>{
       this.mockSett = mock;
       callback();
     });
@@ -160,12 +160,12 @@ module.exports = class {
     /* Placing the product Price */
     this.context.font = "bold " + this.n(50) + "pt " + this.mockSett.fontName;
     this.context.fillStyle = this.mockSett.fontColor;
-    var bottomPriceMargin = this.n(45);
+    var bottomPriceMargin = this.n(45 + (this.mockSett.priceBottomMargin || 0));
     this.context.fillText(this._getPrice(), leftPriceMargin, this.canvas.height - bottomPriceMargin);
 
     this.context.font = "bold " + this.n(20) + "pt " + this.mockSett.fontName;
     this.context.fillStyle = this.mockSett.fontColor;
-    bottomPriceMargin = this.n(110);
+    bottomPriceMargin = this.n(110 + (this.mockSett.priceBottomMargin || 0));
     this.context.fillText(this._getMsg(), leftPriceMargin + 5, this.canvas.height - bottomPriceMargin);
   }
 

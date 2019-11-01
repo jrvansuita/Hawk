@@ -1,14 +1,15 @@
 module.exports = class MockSetting extends DataAccess {
 
 
-  constructor(fontName, mockurl, msg, fontColor, fontShadowColor, showDiscount, fontNameDiscount, discountFontColor, discountShadowColor, discountBackground, discountBackgroundShadow,  width, height) {
+  constructor(name, fontName, mockurl, msg, fontColor, fontShadowColor, priceBottomMargin, showDiscount, fontNameDiscount, discountFontColor, discountShadowColor, discountBackground, discountBackgroundShadow,  width, height) {
     super();
-    this.id = 1;
+    this.name = Str.def(name);
     this.fontName = Str.def(fontName);
     this.msg = Str.def(msg);
     this.imgUrl = Str.def(mockurl);
     this.fontColor = Str.def(fontColor);
     this.fontShadowColor = Str.def(fontShadowColor);
+    this.priceBottomMargin = Num.def(priceBottomMargin);
 
     this.showDiscount = showDiscount ? true: false;
     this.fontNameDiscount = Str.def(fontNameDiscount);
@@ -17,20 +18,14 @@ module.exports = class MockSetting extends DataAccess {
     this.discountBackground = Str.def(discountBackground);
     this.discountBackgroundShadow = Str.def(discountBackgroundShadow);
 
+
     this.width = Num.def(width);
     this.height = Num.def(height);
   }
 
   static getKey() {
-    return ['id'];
+    return ['_id'];
   }
-
-
-  static get(callback){
-    MockSetting.findOne({id : 1}, callback);
-  }
-
-
 
 
 };

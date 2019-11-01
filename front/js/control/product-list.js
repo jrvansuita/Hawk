@@ -1,9 +1,9 @@
 var page = 0;
 var loading = false;
 var productsListCount = 0;
+var selectedSkus = {};
 
 function loadFromMemory(){
-  console.log(memoryQuery);
   if (memoryQuery.value){
     $('#search-input').val(memoryQuery.value);
   }
@@ -67,6 +67,31 @@ $(document).ready(()=>{
 
       Util.copySeleted(val);
     });
+
+
+    drop.addItem('/img/mockup.png', 'Gerar Mockups', function(){
+      new MockupSelector().onSelect((id)=>{
+
+
+        window.open('/build-multiple-mockups?skus=' + Object.keys(selectedSkus) + '&mockId=' + id, '_blank');
+
+
+        /*_get('/build-multiple-mockups',{
+          mockId: id,
+          skus: Object.keys(selectedSkus)
+        },(data) => {
+          console.log(data);
+
+          var file = new Blob([data], {
+            type: 'application/zip'
+          });
+
+          window.location = URL.createObjectURL(file);
+        });*/
+
+      }).show();
+    });
+
     drop.show();
   });
 });
@@ -97,9 +122,9 @@ function loadList(){
     loading = false;
     showMessageTotals(result.info);
 
-    result.data.forEach((each)=>{
+    result.data.forEach((each, index)=>{
       productsListCount++;
-      addProductLayout(each);
+      addProductLayout(each, index);
     });
 
     bindCopiable();
@@ -117,8 +142,8 @@ function showMessageTotals(info){
 }
 
 
-function addProductLayout(product){
-  var img = createImgProduct(product);
+function addProductLayout(product, index){
+  var img = createImgProduct(product, index);
   var main = createMainProduct(product);
 
   var $holder = $('<div>').addClass('item-holder').append(img, main);
@@ -127,16 +152,20 @@ function addProductLayout(product){
 }
 
 
-function createImgProduct(product){
-  var imgHolder = $('<div>').addClass('item-img-holder');
+function createImgProduct(product, index){
+
+
+  var checkBoxId = 'check-' + index;
+
+  var checked = $('<input>', {
+    type: 'checkbox',
+  }).attr('id', checkBoxId).css('display', 'none');
+
 
   var img = $('<img>')
   .attr('src', product.image)
   .addClass('thumb')
   .attr('onerror',"this.src='img/product-placeholder.png'")
-  .on('click', function(event){
-    window.open('/product-mockup?sku=' + product.sku, '_blank');
-  });
 
 
   var counter = $('<label>').addClass('counter-circle').append(productsListCount);
@@ -147,7 +176,35 @@ function createImgProduct(product){
     });
   });
 
-  return imgHolder.append(counter, img);
+  var imgHolder = $('<div>').addClass('item-img-holder');
+  imgHolder.append(counter, img)
+
+
+  var label = $('<label>')
+  .addClass('check-label')
+  .attr('for', checkBoxId)
+  .append(imgHolder);
+
+
+  return $('<div>').append(checked, label)
+  .click({
+    index: index,
+    sku: product.sku
+  }, function(event) {
+    toggleChecked(event.data.index, event.data.sku);
+    return false;
+  });
+}
+
+function toggleChecked(index, sku, check) {
+  var checkBox = $('#check-' + index);
+  checkBox.prop('checked', check === undefined ? !checkBox.is(':checked') : check);
+
+  if (selectedSkus[sku]){
+    delete selectedSkus[sku];
+  }else{
+    selectedSkus[sku] = true;
+  }
 }
 
 
