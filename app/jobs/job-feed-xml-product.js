@@ -39,6 +39,7 @@ module.exports = class JobFeedXmlProducts extends Job{
                 var gender = Str.capitalize(FeedXml.val(item, "gender")).trim();
                 var color = Str.capitalize(FeedXml.val(item, "color")).trim();
                 var quantity = FeedXml.val(item, "quantity");
+                var stocks = FeedXml.val(item, "stocks");
 
                 var year = FeedXml.val(item, "collection");
                 var season = FeedXml.val(item, "season");
@@ -53,7 +54,8 @@ module.exports = class JobFeedXmlProducts extends Job{
                 var product = new Product(sku, name, brand, url,
                   image,
                   price, fromPrice, discount,
-                  category, gender, color, quantity,
+                  category, gender, color,
+                  quantity, stocks,
                   age, year, season, manufacturer,
                   visible, associates, weight);
 
