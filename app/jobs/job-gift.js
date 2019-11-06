@@ -7,11 +7,11 @@ const HistoryStorer = require('../history/history-storer.js');
 
 module.exports = class JobGift extends Job{
 
-  constructor(){
-    super();
+  onInitialize(){
     this.preparedItems = {};
     this.stocks = {};
     this.giftRulesList = [];
+    this.itemObsTag = "gift";
   }
 
   getName(){
@@ -60,7 +60,7 @@ module.exports = class JobGift extends Job{
         itemBonificacao: "S",
         valorComImpostos: "0.00",
         valorFrete: "0.00",
-        observacao: "gift",
+        observacao: this.itemObsTag,
         gtin: product.gtin,
         idProduto: product.id,
         codigo: product.codigo
@@ -122,7 +122,7 @@ module.exports = class JobGift extends Job{
         .go((data) => {
           if(data.result.success.length){
             HistoryStorer.gift(sale.numeroPedido, giftItem[0].codigo, rule.name);
-            console.log('Adicinou um brinde');
+            console.log('Adicinou um brinde ao pedido ' + sale.numeroPedido);
           }
           callback();
         });
@@ -130,6 +130,12 @@ module.exports = class JobGift extends Job{
         callback();
       }
     });
+  }
+
+  checkSaleHasAnyGiftItem(sale){
+    return sale.items.some((item) => {
+      return item.observacao.includes(this.itemObsTag);
+    })
   }
 
 
@@ -158,7 +164,7 @@ module.exports = class JobGift extends Job{
     return true;
   }
 
-  checkMatchinAny(sale, callback){
+  checkMatchingAny(sale, callback){
     var allRules = Object.assign([], this.giftRulesList);
 
     var checkNext = () => {
@@ -166,7 +172,7 @@ module.exports = class JobGift extends Job{
       allRules.splice(-1,1);
 
       if (rule){
-        if (this.checkMatching(rule, sale)){
+        if (this.checkMatching(rule, sale) && !this.checkSaleHasAnyGiftItem(sale)){
           this.putGiftItemOnSale(sale, rule, checkNext);
         }else{
           checkNext();
@@ -185,7 +191,7 @@ module.exports = class JobGift extends Job{
     .loadItems()
     .run((sale)=>{
       console.log('---- Pedido: ' + sale.numeroPedido + ' -----');
-      this.checkMatchinAny(sale, callback);
+      this.checkMatchingAny(sale, callback);
     });
   }
 
@@ -209,9 +215,16 @@ module.exports = class JobGift extends Job{
 
   process(resolve){
     new EccosysProvider()
-    .pageCount(2)
-    .dates(Dat.yesterday().begin(), Dat.yesterday().end())
-    .sales()
+    .pageCount(100)
+    //.dates(Dat.yesterday().begin(), Dat.yesterday().end())
+    //.sales()
+
+    //Todas as regras de brinde serão aplicadas para os pedidos
+    //Do dia que estão em Aberto
+    //Pedidos que já tem brinde, não serão analizados
+    .openSales()
+
+
     .pagging()
     .each((sales, next)=>{
       console.log('----- ' + sales.length + ' Pedidos ------');

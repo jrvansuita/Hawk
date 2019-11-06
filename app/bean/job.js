@@ -10,12 +10,18 @@ module.exports = class Job extends DataAccess {
     this.type = Str.def(type);
     this.active = active ? true: false;
     this.lastExcecution = 0;
+    this.running = false;
     this.rule = rule || {};
   }
 
 
   static getKey() {
     return ['id'];
+  }
+
+
+  static refreshLastExecuted(job) {
+    Job.upsert({id: job.id}, {lastExcecution: new Date()});
   }
 
 };

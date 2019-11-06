@@ -7,10 +7,23 @@ module.exports = class Job{
   }
 
   /**
+  * Implementation optional
+  */
+  onInitialize(){
+
+  }
+
+
+  /**
   * Implementation required
   */
   getName() {
     throw new Error('You have to name your job!');
+  }
+
+  setOnStart(callback){
+    this.onStartListener = callback;
+    return this;
   }
 
   setOnTerminate(callback){
@@ -31,11 +44,16 @@ module.exports = class Job{
     console.log('[Job] onStart: ' + this.getName());
 
     History.job(this.getName(), this.jobSettings.description, this.jobSettings.tag);
+
+    if (this.onStartListener){
+      this.onStartListener();
+    }
   }
 
 
-  start(){
+  run(){
     this.onStart();
+    this.onInitialize();
 
     this.doWork()
     .then((data)=>{

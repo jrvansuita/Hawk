@@ -1,5 +1,7 @@
 const Job = require('../bean/job.js');
 const Err = require('../error/error.js');
+const JobsPool = require('../jobs/controller/pool.js');
+
 
 module.exports = class  {
 
@@ -14,6 +16,10 @@ module.exports = class  {
       buildRules(params));
 
       job.upsert((err, doc)=>{
+
+        JobsPool.deattach(doc.id);
+        JobsPool.attach(doc);
+
         callback(doc ? doc.id : 0);
       });
     }

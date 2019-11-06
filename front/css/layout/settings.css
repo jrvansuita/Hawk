@@ -7,6 +7,7 @@
 
 .content{
   min-height: 400px;
+  display: flex;
 }
 
 .header{
@@ -19,9 +20,11 @@
 }
 
 
-.user-registering-link{
+.forms{
+  width: fit-content;
   color: rgb(72, 66, 147);
   padding: 10px 15px;
+  margin-left: 15px;
 }
 
 .link{
@@ -32,6 +35,8 @@
   text-decoration: none;
   display: block;
   cursor: pointer;
+  color: #3c3c3c;
+  font-weight: 700;
 }
 
 .group-title{
@@ -48,4 +53,24 @@
   display: inline;
   text-align: center;
   vertical-align: middle;
+}
+
+.job-active{
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+}
+
+.job-item td{
+  padding: 4px 0px;
+}
+
+.job-name{
+  font-size: 15px;
+  margin-right: 10px;
+}
+
+.job-last{
+  font-size: 13px;
+  margin-right: 5px;
 }

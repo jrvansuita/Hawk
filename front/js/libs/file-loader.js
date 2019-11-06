@@ -32,7 +32,6 @@ class FileLoader{
   }
 
   bindJs(scripts) {
-
     var load = (scripts, callback) =>{
       var progress = 0;
       var _getScript = ()=> {
@@ -50,7 +49,7 @@ class FileLoader{
 
     return new Promise((resolve, reject)=>{
       load(scripts, ()=>{
-        resolve();
+        setTimeout(resolve, 30);
       });
     });
   }

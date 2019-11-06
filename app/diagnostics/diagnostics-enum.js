@@ -9,7 +9,7 @@ module.exports = {
   REGISTERING: {
     name : 'Produtos aguardando entrada',
     description: 'Produtos ainda em fase de cadastro ou aguardando o recebimento e entrada de estoque.',
-    icon: 'registring'
+    icon: 'registering'
   },
 
 

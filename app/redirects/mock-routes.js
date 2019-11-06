@@ -37,10 +37,10 @@ module.exports = class UserRoutes extends Routes{
 
     this._get('/build-multiple-mockups', (req, res) => {
       req.query.skus = typeof req.query.skus == 'string' ? req.query.skus.split(',') : req.query.skus;
-      
+
       new ProductMockupProvider(req.query.mockId, req.query.skus).load().then((zipFilePath) => {
 
-        res.setHeader('Content-disposition', 'attachment; filename=teste.zip');
+        res.setHeader('Content-disposition', 'attachment; filename=mockups.zip');
         res.setHeader('Content-type', 'application/zip');
 
         var filestream = fs.createReadStream(zipFilePath);
@@ -49,7 +49,6 @@ module.exports = class UserRoutes extends Routes{
     });
 
     this._get('/product-mockup', (req, res) => {
-
       new ProductMockupProvider(req.query.mockId, req.query.sku).load().then(canvas =>{
         var disposition = req.query.download ? 'attachment': 'inline';
 

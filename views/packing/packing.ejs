@@ -95,7 +95,7 @@
 
               <td>
                 <div class="status-holder">
-                  <img class="circle shadow icon" src="/img/<%=sale ?  'transport/' + sale.transport.toLowerCase() : 'question-mark'%>.png" />
+                  <img class="circle shadow icon" src="/img/<%=sale ?  'transport/' + sale.transport.toLowerCase() : 'question-mark'%>.png" onerror="this.src='/img/transport/default.png'" />
 
                   <div class="field skrink">
                     <label class="field-title">Transportadora</label>

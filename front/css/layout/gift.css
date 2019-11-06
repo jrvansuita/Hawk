@@ -213,3 +213,15 @@
 .sku-input-holder{
   margin-top: 35px !important;
 }
+
+.info{
+    vertical-align: middle;
+    font-size: 12px;
+    max-width: 80%;
+    display: block;
+    color: #8c8c8c;
+}
+
+.info .mini-icon-button{
+  margin-bottom: -8px;
+}

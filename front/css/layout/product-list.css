@@ -297,5 +297,5 @@ img.dots-glyph {
 
 :checked+label img {
   transform: scale(0.9);
-  box-shadow: 1px 1px 2px #02544a;
+  /* box-shadow: 1px 1px 2px #02544a; */
 }

@@ -58,7 +58,7 @@ module.exports = class{
   }
 
   _zipFiles(files, callback){
-    var zipPath = this.folder +  Util.id() + '.zip';
+    var zipPath = this.folder + 'mockups.zip';
     var output = fs.createWriteStream(zipPath);
     var archive = archiver('zip', {
       gzip: true,
@@ -108,10 +108,10 @@ module.exports = class{
   }
 
   load(){
-    if (typeof this.skus == 'string'){
-      return this.loadProductImage(this.skus)
-    }else{
+    if (Array.isArray(this.skus)){
       return this.loadMultipleProductImages(this.skus)
+    }else{
+      return this.loadProductImage(this.skus)
     }
   }
 

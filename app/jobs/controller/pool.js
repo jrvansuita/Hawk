@@ -32,25 +32,37 @@ module.exports = {
   },
 
   fireJob(job){
-    var CurrentJob = require('../../jobs/' + job.type + '.js');
-    new CurrentJob(job).start();
+    if (job){
+      var CurrentJob = require('../../jobs/' + job.type + '.js');
+      new CurrentJob(job).setOnStart(() => {
+        job.lastExcecution = new Date();
+        job.running = true;
+        Jobs.refreshLastExecuted(job);
+      }).setOnTerminate(() => {
+        job.running = false;
+      }).setOnError(() => {
+        job.running = false;
+      }).run();
+    }
   },
 
   attach(job){
+    if (job.active){
+      var fireFunction = (fireDate) => {
+        console.log('Chamado o Job: ' + job.description + ' em ' + fireDate);
+        this.fireJob(this.get(job.id));
+      };
 
-    var scheduleObject = schedule.scheduleJob(buildRecurrenceRule(job), (fireDate) => {
-      this.fireJob(job);
-    });
+      var scheduleObject = schedule.scheduleJob(buildRecurrenceRule(job), fireFunction);
 
-    job.schedule = scheduleObject;
+      job.schedule = scheduleObject;
 
-    if (scheduleObject){
-      console.log('[Job] Attachou: ' + job.description);
-    }else{
-      console.log('[Job] Não Attachou: ' + job.description);
+      if (scheduleObject){
+        console.log('[Job] Atachou: ' + job.description);
+      }else{
+        console.log('[Job] Não Atachou: ' + job.description);
+      }
     }
-
-    console.log(job.rule);
 
     global.jobsPoll.push(job);
   },
@@ -59,7 +71,12 @@ module.exports = {
     var job = this.get(id);
 
     if (job && job.schedule){
+      console.log('Desatachou: ' + job.description);
       job.schedule.cancel();
+
+      global.jobsPoll.splice(global.jobsPoll.findIndex((job) => {
+        return job.id == id;
+      }),1);
     }
   },
 

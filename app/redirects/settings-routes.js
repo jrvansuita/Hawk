@@ -8,7 +8,8 @@ module.exports = class SettingsRoutes extends Routes{
 
 
     this._get('/settings', (req, res) => {
-      res.render('settings/settings');
+      res.render('settings/settings', {jobs: global.jobsPoll});
+      
     });
 
     this._get('/get-setts', (req, res) => {
