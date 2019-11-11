@@ -51,7 +51,7 @@ module.exports = class ProductDiagnostics{
         }
       }else{
         if (!hasLockedStock(product)){
-          if (isMagentoProblem(product)){
+          if (hasStock(product) && isMagentoProblem(product)){
             this._storeFix(product, 'MAGENTO_PROBLEM');
           }else{
             if (!hasSales(stocks)){

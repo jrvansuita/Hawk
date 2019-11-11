@@ -98,6 +98,8 @@
                       $(this).attr('src', 'img/restart-error.png');
                     }
 
+                    $('.menu-dots .dots-glyph').attr('src', 'img/dots.png');
+
                     if ($('.f-icon.fix').length == 0){
                       $('.sku-fixes-modal').delay(500).fadeOut(400, ()=>{
                         $('.sku-fixes-modal').trigger('click');
@@ -121,6 +123,8 @@
 
                   drop.addItem('/img/restart.png', 'Verificar Agora', function(e){
                     $('.loading-circle').show();
+                    $('.no-problem-menu .dots-glyph').attr('src', 'img/loader/circle.svg');
+
                     _post('/check-product-diagnostic', {sku: sku, forceFather : true},(data)=>{
                       showSkuFixesDialog(sku);
                       $('.loading-circle').hide();
