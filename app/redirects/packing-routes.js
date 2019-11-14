@@ -5,6 +5,8 @@ const Pack = require('../bean/pack.js');
 const PackageTypeVault = require('../vault/package-type-vault.js');
 const PackingChartBuilder = require('../builder/packing-chart-builder.js');
 const PackingDaysProvider = require('../provider/packing-days-provider.js');
+const TransportLaws = require('../laws/transport-laws.js');
+const ShippingOrderProvider = require('../provider/shipping-order-provider.js');
 
 module.exports = class PackingRoutes extends Routes{
 
@@ -12,12 +14,24 @@ module.exports = class PackingRoutes extends Routes{
 
     this._page('/packing', (req, res) => {
       if (Sett.get(res.locals.loggedUser,8)){
-        PackingHandler.findSale(req.query.sale, req.session.loggedUserID, (sale)=>{
+
+        var result = (sale) => {
           res.render('packing/packing.ejs', {
             sale : sale,
             groups: !sale.id ? PackingProvider.get() : {}
           });
-        });
+        };
+
+
+        if (Num.isEan(req.query.sale)){
+          PackingHandler.findSaleFromEan(req.query.sale, (sale) => {
+            result(sale);
+          })
+        }else{
+          PackingHandler.findSale(req.query.sale, req.session.loggedUserID, (sale)=>{
+            result(sale);
+          });
+        }
       }else{
         res.redirect("/packing/overview");
       }
@@ -43,7 +57,7 @@ module.exports = class PackingRoutes extends Routes{
       var to = Dat.query(req.query.to, Dat.lastDayOfMonth());
 
       new PackingDaysProvider().get(from,  to, (data)=>{
-          res.status(200).send(data);
+        res.status(200).send(data);
       });
     });
 
@@ -130,6 +144,18 @@ module.exports = class PackingRoutes extends Routes{
 
 
       /*--------*/
+
+
+      this._page('/packing/shipping-order', (req, res) => {
+        res.render("packing/shipping-order/shipping-order", {transportList: TransportLaws.getObject()});
+      });
+
+      this._get('/shipping-order-page', (req, res) => {
+        req.session.shippingListQuery = req.query.query;
+        ShippingOrderProvider.load(req.query.query, req.query.page, (data)=>{
+          this._resp().sucess(res, data);
+        });
+      });
 
 
 

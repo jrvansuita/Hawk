@@ -26,7 +26,7 @@ module.exports= class SaleLoader {
   _loadFinalAttrsOnSale(){
     if (!this.innerAttrsLoaded && this.sale){
       this.innerAttrsLoaded = true;
-      this.sale.transport = Util.twoNames(this.sale.transportador, Const.no_transport);
+      this.sale.transport = Util.transportName(this.sale.transportador);
       this.sale.deliveryTime = Num.def(Str.between(this.sale.observacaoInterna, '- ', ' dias uteis'));
       this.sale.paymentType = Str.between(this.sale.observacaoInterna, 'pagg_', ' ');
     }

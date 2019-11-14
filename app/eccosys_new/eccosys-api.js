@@ -11,9 +11,10 @@ var Query = require('../util/query.js');
 
 module.exports = class EccosysApi{
 
-  constructor(){
-    this.query = new Query('$');
+  constructor(log){
+    this.query = new Query();
     this.page_count = 100;
+    this.log = log ? true : false;
     this.jsonResult(true);
   }
 
@@ -28,8 +29,8 @@ module.exports = class EccosysApi{
   }
 
   page(page){
-    this.query.add('count', this.page_count);
-    this.query.add('offset', this.page_count * page);
+    this.query.add('$count', this.page_count);
+    this.query.add('$offset', this.page_count * page);
     return this;
   }
 
@@ -42,20 +43,23 @@ module.exports = class EccosysApi{
       this.query.add('dataConsiderada', considerDate);
     }
 
-    this.query.addDate('fromDate', from);
-    this.query.addDate('toDate', to);
+    this.query.addDate('$fromDate', from);
+    this.query.addDate('$toDate', to);
 
+    return this;
+  }
+
+  param(name, val){
+    this.query.add(name, val);
     return this;
   }
 
   order(order){
-    this.query.add('order', order);
-    return this;
+    return this.param('$order', order);
   }
 
   active(){
-    this.query.add('filter', 'situacao=A');
-    return this;
+    return this.param('$filter', 'situacao=A');
   }
 
   setMethod(method){
@@ -129,7 +133,10 @@ module.exports = class EccosysApi{
       options.headers.apikey = APIKEY;
     }
 
-    //console.log(path);
+    if (this.log){
+      console.log(path);
+      console.log(options);
+    }
 
     return options;
   }

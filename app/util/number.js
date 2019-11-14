@@ -1,7 +1,15 @@
 var Num = {
 
   money: function(val, trunc) {
-    return 'R$ ' + parseFloat(val).toFixed(trunc ? 0 : 2).toString().replace('.', ',');
+    //Old
+    //return 'R$ ' + parseFloat(val).toFixed(trunc ? 0 : 2).toString().replace('.', ',');
+
+
+
+
+    //New
+    var digits = trunc ? 0 : 2;
+    return 'R$ ' + parseFloat(val).toLocaleString('pt-BR', {maximumFractionDigits:digits, minimumFractionDigits:digits});
   },
 
   reduceFloat: function(number) {
@@ -39,7 +47,7 @@ var Num = {
 
   def(num, def) {
     return parseInt(num) || (def === undefined ? 0 : def);
-    
+
     //return ((num !== undefined) && (typeof(parseInt(num)) === 'number')) ? this.int(num) : (def === undefined ? 0 : def);
   },
 
@@ -61,7 +69,7 @@ var Num = {
   },
 
 
-   isNumberKey(e){
+  isNumberKey(e){
     e = e || window.event;
     var charCode = e.which ? e.which : e.keyCode;
     return /^-?[0-9]*$/.test(String.fromCharCode(charCode));

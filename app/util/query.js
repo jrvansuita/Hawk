@@ -2,8 +2,7 @@ var prefix = '';
 
 module.exports = class Query {
 
-  constructor(p) {
-    prefix = p;
+  constructor() {
   }
 
   hasParams(){
@@ -24,7 +23,7 @@ module.exports = class Query {
     var query = this;
 
     Object.keys(this).forEach(function(key, index) {
-      quering += prefix + key + '=' + query[key] + '&';
+      quering +=  key + '=' + query[key] + '&';
     });
 
     return quering;

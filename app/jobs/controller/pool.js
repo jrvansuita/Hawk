@@ -62,6 +62,14 @@ module.exports = {
       }else{
         console.log('[Job] Não Atachou: ' + job.description);
       }
+
+
+
+      /*if (job.description.includes('Brinde')){
+        fireFunction();
+      }*/
+
+
     }
 
     global.jobsPoll.push(job);

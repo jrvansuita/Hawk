@@ -14,6 +14,18 @@ const HistoryStorer = require('../history/history-storer.js');
 
 module.exports = {
 
+  findSaleFromEan(ean, callback){
+
+    var sale = DoneLaws.getList().find((each) => {
+      return each.items && each.items.some((item) => {
+        return item.gtin == ean;
+      })
+    });
+
+    callback(sale || {});
+  },
+
+
   findSale(saleNumber, userId,  callback){
     if (this._checkSaleNumber(saleNumber, callback)){
 
@@ -51,12 +63,6 @@ module.exports = {
   },
 
   loadSale(saleNumber, callback){
-    if (saleNumber == '0'){
-      console.log('loadSale');
-      console.log(new Error().stack);
-    }
-
-
     var fromDone = DoneLaws.get(saleNumber);
 
     if (fromDone && fromDone.packingReady){
@@ -109,9 +115,9 @@ module.exports = {
     new EccosysStorer().sale().update(this.getSalePackingBody(params)).go((data)=>{
       callback(data.result.success.length > 0, data.result);
     });
-},
+  },
 
-sendNfe(user, params, callback){
+  sendNfe(user, params, callback){
     if (Num.def(params.idNfe) > 0){
       //A nota já está criada e estamos reenviando ela.
       new EccosysStorer().retryNfe(user, params.idNfe).go(nfResult=>{
@@ -123,32 +129,32 @@ sendNfe(user, params, callback){
         callback(nfResult);
       });
     }
-},
+  },
 
 
-done(params, user, callback){
-  this.updateSale(params, (sucess, updateResult)=>{
+  done(params, user, callback){
+    this.updateSale(params, (sucess, updateResult)=>{
 
-    if (sucess){
-      this.sendNfe(user, params, (nfResult)=>{
-        //'Enviou o resultado via Broadcast'
-        global.io.sockets.emit(params.saleNumber, nfResult);
-        var sucess = !nfResult.error || !nfResult.error.length;
+      if (sucess){
+        this.sendNfe(user, params, (nfResult)=>{
+          //'Enviou o resultado via Broadcast'
+          global.io.sockets.emit(params.saleNumber, nfResult);
+          var sucess = !nfResult.error || !nfResult.error.length;
 
-        if (sucess){
-          onPackingDone(params, user);
-        }else{
-          onPackingRejected(params, user, nfResult);
-        }
-      });
-    }
+          if (sucess){
+            onPackingDone(params, user);
+          }else{
+            onPackingRejected(params, user, nfResult);
+          }
+        });
+      }
 
-    if (callback){
-      //Envia uma notificação com OK do envio da NF-e ou a critica de update de pedido
-      callback(sucess ? {code:200} : updateResult);
-    }
-  });
-}
+      if (callback){
+        //Envia uma notificação com OK do envio da NF-e ou a critica de update de pedido
+        callback(sucess ? {code:200} : updateResult);
+      }
+    });
+  }
 };
 
 function onPackingRejected(params, user, result){

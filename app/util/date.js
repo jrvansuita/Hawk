@@ -53,6 +53,8 @@ var Dat = {
   },
 
   rollDay(date, n) {
+    date = !date ? new Date() : date;
+
     date.setDate(date.getDate() + n);
     return date;
   },

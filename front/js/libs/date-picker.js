@@ -99,8 +99,12 @@ class DatePicker{
   }
 
   _convertDate(str){
-    var val = str.split('-');
-    return new Date(Date.UTC(val[0], val[1], val[2]));
+    if (str){
+      var val = str.split('-');
+      return new Date(Date.UTC(val[0], val[1], val[2]));
+    }else{
+      return undefined;
+    }
   }
 
   async load(){
@@ -130,6 +134,7 @@ class DatePicker{
         }
       }
     });
+
 
     return this.picker;
   }

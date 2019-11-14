@@ -1,0 +1,146 @@
+.main{
+  padding-top: 95px;
+  padding-bottom: 80px;
+  margin-left: 25px;
+  margin-right: 25px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+
+
+.top{
+  flex: 10%;
+  padding: 0px 5px;
+}
+
+.content-scroll{
+  margin-top: 15px;
+  flex: 90%;
+  overflow-y: auto;
+  max-height: -webkit-fill-available;
+  width: 100%;
+  padding: 3px;
+  margin-left: -3px;
+}
+
+.content{
+  margin-bottom: 30px;
+}
+
+
+.search-box {
+  padding-top: 10px;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 5px;
+  width: 100%;
+  position: relative;
+}
+
+.selectors{
+  display: inline-flex;
+}
+
+#search-button{
+  right: 0;
+  display: inline-table;
+  position: absolute;
+  margin-right: 15px;
+}
+
+.material-input-holder{
+  width: fit-content;
+  margin-left: 15px;
+  margin-top: 5px;
+}
+
+.material-input-holder>input:focus~label, .material-input-holder>input:valid~label {
+  top: -5px !important;
+}
+
+.material-input-holder>input{
+  padding-bottom: 0px !important;
+  padding-top: 18px !important;
+  font-size: 15px !important;
+}
+
+
+.icon-open{
+  float: left;
+  margin-left: 8px;
+  margin-top: 13px;
+  vertical-align: middle;
+  width: 23px;
+  height: 23px;
+  min-width: 23px;
+  cursor: pointer;
+}
+
+.number{
+  font-size: 14px !important;
+  font-weight: bold !important;
+  padding-left: 20px !important;
+}
+
+#header{
+  display: none;
+  position: sticky;
+}
+
+#header td{
+  background: #dcdcdc;
+  padding: 12px 15px !important;
+  border-bottom: 0px !important;
+  color: #484545 !important;
+  font-size: 15px;
+}
+
+.line-item td{
+  padding: 5px 8px;
+  font-size: 13px;
+}
+
+.menu-dots{
+  margin-top: 8px;
+  float: right;
+  margin-right: 10px;
+}
+
+.loading{
+  float: right;
+  position: absolute;
+  right: 120px;
+  margin-top: 15px;
+  font-size: 14px;
+  color: gray;
+}
+
+.transp-col div{
+  display: flex;
+}
+
+.transp-col img{
+  width: 28px;
+  height: 28px;
+  margin-right: 10px;
+}
+
+.transp-col span{
+  display: inline-block;
+  margin-top: 6px;
+}
+
+
+.open-item td:first-child{
+  border-left: solid 3px #ddea00;
+}
+
+.colected-item td:first-child {
+  border-left: solid 3px #6ada9c;
+}
+
+.content tr:nth-child(even) {
+  background-color: #ddd6d757;
+}

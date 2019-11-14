@@ -5,6 +5,10 @@ var Util = {
   },
 
 
+  transportName: (name, def)=>{
+    return Util.twoNames(name, def ? def : Const.no_transport);
+  },
+
   getSubtitles: function(charts) {
 
     var arrItem;
