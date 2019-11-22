@@ -1,14 +1,15 @@
 const EccosysProvider = require('../eccosys_new/eccosys-provider.js');
 
+
+var lastLoadedArr = [];
+
 module.exports = {
 
-
-
-  load(query, page, callback){
-    var provider = new EccosysProvider(true);
+  list(query, page, callback){
+    var provider = new EccosysProvider();
 
     provider
-    .shippingOrder()
+    .shippingOrderList()
     .pageCount(20)
     .page(page)
 
@@ -23,7 +24,27 @@ module.exports = {
     }
 
 
-    provider.go(callback);
+    provider.go((data) => {
+      lastLoadedArr = data;
+      callback(data);
+    });
+  },
+
+
+  get(idOc, callback){
+    var foundOc = lastLoadedArr.find((each) => {
+      return each.id == idOc;
+    });
+
+    if (foundOc){
+      callback(foundOc);
+    }else{
+      new EccosysProvider()
+      .shippingOrder(idOc)
+      .go((result) => {
+        callback(result);
+      });
+    }
   },
 
 

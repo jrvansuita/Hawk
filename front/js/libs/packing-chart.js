@@ -4,6 +4,7 @@ class PackingChart {
     this.chartId  = chartId;
     this.data = data;
     this.isFull = isFull;
+    console.log(data);
   }
 
 
@@ -18,11 +19,13 @@ class PackingChart {
     this.labels = [];
     this.values = [];
     this.counts = [];
+    this.tkms = [];
 
     this.data.forEach((each)=>{
       this.labels.push(each._id.day);
       this.values.push(each.sum_total);
       this.counts.push(each.sum_count);
+      this.tkms.push(each.sum_total/each.sum_count);
     });
   }
 
@@ -49,11 +52,13 @@ class PackingChart {
     this.labels = [];
     this.values = [];
     this.counts = [];
+    this.tkms = [];
 
     Object.values(handler).forEach((each)=>{
       this.labels.push(Dat.monthDesc(each.label-1));
       this.values.push(each.value);
       this.counts.push(each.count);
+      this.tkms.push(each.value/each.count);
     });
   }
 
@@ -62,11 +67,11 @@ class PackingChart {
 
     if (this.isFull){
       this.datasets.push({
-        label: 'Valor',
-        data: this.values,
         backgroundColor: '#03c1844a',
         borderColor: '#03c184',
-        pointRadius: 3
+        pointRadius: 3,
+        label: 'Valor',
+        data: this.values,
       });
     }
 
@@ -78,6 +83,13 @@ class PackingChart {
       data: this.counts
     });
 
+    this.datasets.push({
+      backgroundColor: '#3e55ff4a',
+      borderColor: '#3e55ff',
+      pointRadius: 3,
+      label: 'Ticket',
+      data: this.tkms
+    });
   }
 
 
@@ -177,7 +189,7 @@ class PackingChart {
           }],
           yAxes: [{
             ticks: {
-              min: 200,
+              min: 1,
               display: false,
               callback: function(value, index, values) {
                 return Num.format(value, false);

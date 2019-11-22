@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title><%=Util.transportName(shippingOrder.transportador) + ' | Coleta ' + shippingOrder.numeroColeta%> </title>
+
+  <link rel="icon" href="/img/icon/favicon.ico" type="image/x-icon" />
+  <link rel="shortcut icon" href="/img/icon/favicon.ico" type="image/x-icon" />
+
+
+  <style>
+  .big{
+    font-weight: 800;
+    font-size: 22px;
+  }
+
+  .bold{
+    font-weight: 800;
+    font-size: 18px;
+  }
+
+  td, span{
+    font-size:15px;
+    font-weight: 500;
+    font-family: sans-serif;
+  }
+
+  .top{
+    padding-bottom: 17px;
+    border-bottom: 1px solid #989898;
+  }
+
+  .holder{
+    padding: 10px 0px;
+    width: 100%;
+  }
+
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  td{
+    padding: 12px 5px;
+  }
+
+  table{
+    width: 100%;
+    max-width: 100%;
+    background-color: transparent;
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+  .transp{
+    padding: 5px 15px;
+  }
+
+  .vol-inc{
+    border: 2px solid black;
+    padding: 4px 6px;
+  }
+
+  .bkg-row td{
+    font-size: 17px;
+    font-weight: bold;
+    background-color: #e2e2e2;
+  }
+  </style>
+
+</head>
+
+<body>
+
+
+
+  <div class="top">
+    <p>
+      <span class="big"><%=shippingOrder.numeroColeta%></span>
+      <span class="transp"><%=shippingOrder.transportador%></span>
+      <span  style="float:right"><%=Dat.format(new Date(shippingOrder.data))%></span>
+    </p>
+    <span>Minuta de Despacho</span>
+    <span style="float:right" class="bold"><%=shippingOrder._NotasFiscais.length + ' Volumes'%></span>
+  </div>
+
+  <div class="holder">
+
+
+    <table>
+      <tr class="bkg-row">
+        <td>Nota Fiscal</td>
+        <td>Cliente</td>
+        <td>Valor</td>
+        <td>Volumes</td>
+        <td>Destino</td>
+      </tr>
+
+      <%
+
+      var val = 0;
+
+      shippingOrder._NotasFiscais.forEach((each)=>{
+
+        val += parseFloat(each.totalFaturado);
+
+        %>
+
+        <tr>
+          <td>
+            <span class="bold"><%=each.numero%></span>
+          </td>
+
+          <td>
+            <span><%=each.contato%></span>
+          </td>
+          <td>
+            <span><%=Num.money(each.totalFaturado)%></span>
+          </td>
+          <td>
+            <span class="<%=each.volumes > 1 ? 'vol-inc' : ''%>"><%= each.volumes || 1 %></span>
+          </td>
+          <td>
+            <span><%=each.uf%></span>
+          </td>
+        </tr>
+
+        <%});%>
+
+
+        <tr class="bkg-row">
+          <td></td>
+          <td></td>
+          <td><%=Num.money(val)%></td>
+          <td><%=shippingOrder._NotasFiscais.length%></td>
+          <td></td>
+        </tr>
+
+      </table>
+
+    </div>
+
+  </body>
+  </html>

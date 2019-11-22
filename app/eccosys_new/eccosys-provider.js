@@ -38,8 +38,12 @@ module.exports = class EccosysProvider extends EccosysApi{
     return this.get('notasfiscais/' + numero).single();
   }
 
-  shippingOrder() {
+  shippingOrderList() {
     return this.get('ordem-de-coleta').multiple();
+  }
+
+  shippingOrder(id) {
+    return this.get('ordem-de-coleta/' + id).single();
   }
 
   products() {

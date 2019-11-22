@@ -42,4 +42,18 @@ module.exports = class EccosysStorer extends EccosysApi{
     };
   }
 
+
+  shippingOrder() {
+    return {
+      update:(id, body) => {
+        return  this.put('ordem-de-coleta/' + id).setBody(body).single();
+      },
+
+      insert: (body) => {
+        return this.post('ordem-de-coleta').setBody(body);
+      }
+    };
+  }
+
+
 };

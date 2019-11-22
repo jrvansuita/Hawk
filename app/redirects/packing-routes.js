@@ -146,14 +146,31 @@ module.exports = class PackingRoutes extends Routes{
       /*--------*/
 
 
-      this._page('/packing/shipping-order', (req, res) => {
-        res.render("packing/shipping-order/shipping-order", {transportList: TransportLaws.getObject()});
+      this._page('/packing/shipping-order-list', (req, res) => {
+        res.locals.shippingListQuery = req.session.shippingListQuery;
+        res.render("packing/shipping-order/shipping-order-list", {transportList: TransportLaws.getObject()});
       });
 
-      this._get('/shipping-order-page', (req, res) => {
+      this._get('/shipping-order-list-page', (req, res) => {
         req.session.shippingListQuery = req.query.query;
-        ShippingOrderProvider.load(req.query.query, req.query.page, (data)=>{
+        ShippingOrderProvider.list(req.query.query, req.query.page, (data)=>{
           this._resp().sucess(res, data);
+        });
+      });
+
+      this._get('/packing/shipping-order', (req, res) => {
+        if (req.query.id){
+          ShippingOrderProvider.get(req.query.id, (data) => {
+            res.render("packing/shipping-order/shipping-order",  {shippingOrder: data});
+          });
+        }else{
+          res.render("packing/shipping-order/shipping-order",  {shippingOrder: null});
+        }
+      });
+
+      this._get('/shipping-order-print', (req, res) => {
+        ShippingOrderProvider.get(req.query.id, (data) => {
+          res.render("packing/shipping-order/shipping-order-print", {shippingOrder: data});
         });
       });
 
