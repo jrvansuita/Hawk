@@ -137,6 +137,44 @@ module.exports ={
     });
   },
 
+
+  active(sku, active, user, callback){
+
+    this.getBySku(sku, false, (product)=>{
+
+      var lines = product.obs;
+
+      var body = {
+        codigo: product.codigo,
+        situacao: active ? 'A' : 'I',
+        obs : lines +  "\n" + user.name + " | Desktop | " + active ? 'Ativo' : 'Inativo' + " | " + Dat.format(new Date()) + '| Situação'
+      };
+
+      new EccosysStorer().product(body).go(callback);
+    });
+  },
+
+
+  activeSkuGroup(sku, active, user, callback){
+    this.getBySku(sku, true, (product)=>{
+      var skus = [product.codigo];
+      skus = skus.concat(product._Skus.map((s)=>{return s.codigo}));
+
+      var change = () => {
+        if (skus.length > 0){
+          this.active(skus[0], active, user, ()=>{
+            skus.splice(0,1);
+            change();
+          });
+        }else{
+          callback();
+        }
+      };
+
+      change();
+    });
+  },
+
   searchAutoComplete(typing, callback){
     Product.likeThis(typing, 150, (err, products)=>{
       callback(products);

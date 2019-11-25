@@ -25,7 +25,7 @@ function _post(path, data, onSucess, onError){
   $.ajax({
     url: path,
     type: "post",
-    data: data,
+    data: data,    
     success: function(response) {
       if (onSucess){
         onSucess(response);

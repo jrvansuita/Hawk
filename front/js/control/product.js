@@ -41,6 +41,29 @@ $(document).ready(() => {
   });
 
 
+  $('.main-menu-dots').click(function (e){
+    var drop = new MaterialDropdown($(this), e);
+
+    if (isUnlocked()){
+      var active = product.situacao == 'A';
+
+      drop.addItem('/img/' + (active ? 'block' : 'checked') + '.png', active ? 'Inativar' : 'Ativar' , function(){
+        showLoadingStatus();
+        _post('/product-active', {
+          sku: product.codigo,
+          active: !active,
+          user: currentUser,
+          group: true
+        },(data)=>{
+          window.location.reload();
+        });
+      });
+    }
+
+    drop.show();
+  });
+
+
 });
 
 
@@ -171,23 +194,31 @@ function buildChildSku(product, child){
   $options.click(function(e){
     var drop = new MaterialDropdown($(this), e, false);
     drop.addItem('/img/barcode.png', 'Imprimir Etiqueta', function(){
-
       window.open('/barcode?sku=' + child.codigo, '_blank');
+    });
 
-      /*new InputDialog('Impressão de Etiqueta de Produto', 'Quantidade')
-      .onPositiveButton('Imprimir', ()=>{
 
-    })
-    .onNegativeButton('Cancelar')
-    .show();*/
+    if (isUnlocked()){
+      var active = child.situacao == 'A';
 
+      drop.addItem('/img/' + (active ? 'block' : 'checked') + '.png', active ? 'Inativar' : 'Ativar' , function(){
+        showLoadingStatus();
+        _post('/product-active', {
+          sku: child.codigo,
+          active: !active,
+          user: currentUser
+        },(data)=>{
+          window.location.reload();
+        });
+      });
+    }
+
+
+    drop.show();
 
   });
-  drop.show();
 
-});
-
-$('#child-skus-holder').append($tr);
+  $('#child-skus-holder').append($tr);
 }
 
 
@@ -311,11 +342,11 @@ function buildTextCol(val){
 }
 
 function buildImgCol(path, title, addClass){
-  var $img = $('<img>').addClass('icon').attr('src',path).attr('title',title);
+  var $img = $('<img>').addClass('dots-glyph').attr('src',path).attr('title',title);
 
 
 
-  return buildCol($img).css('text-align', 'center');
+  return buildCol($img).css('text-align', 'left');
 }
 
 
@@ -566,16 +597,22 @@ function loadLayoutHistory(rows){
     var stock = child._Estoque;
     var hasLocal = child.localizacao.length > 0;
 
-    if (!hasLocal || (stock.estoqueDisponivel < 0) || parseFloat(child.pesoLiq) == 0){
-      //Red
-      $(el).css('background-color', '#ff000026');
-      return;
-    }
 
-    if (stock.estoqueReal < 1){
-      //Yellow
-      $(el).css('background-color', '#ffe20026');
-      return;
+    if (child.situacao == 'I'){
+      $(el).css('background-color', '#a0000063');
+    }else{
+
+      if (!hasLocal || (stock.estoqueDisponivel < 0) || parseFloat(child.pesoLiq) == 0){
+        //Red
+        $(el).css('background-color', '#ff000026');
+        return;
+      }
+
+      if (stock.estoqueReal < 1){
+        //Yellow
+        $(el).css('background-color', '#ffe20026');
+        return;
+      }
     }
   }
 

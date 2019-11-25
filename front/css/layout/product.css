@@ -100,6 +100,7 @@
 .search-holder{
   padding: 20px 35px;
   max-width: 90%;
+  position: relative;
 }
 
 
@@ -168,7 +169,7 @@
 }
 
 #child-skus-holder{
-  width: 101%;
+  width: 100.1%;
   height: auto;
 }
 
@@ -416,4 +417,11 @@ table{
   height: 45px;
   display: none;
   cursor: pointer;
+}
+
+.main-menu-dots{
+  width: fit-content;
+  position: absolute;
+  top: 20px;
+  right: -24px;
 }

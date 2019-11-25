@@ -292,7 +292,7 @@ table{
 }
 
 .dots-glyph:hover {
-  background-color: #f3f3f3;
+  background-color: #dcdcdc73;
   transform: scale(1.2);
   cursor: pointer !important;
   border-radius: 50%;
