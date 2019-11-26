@@ -652,7 +652,7 @@ function loadLayoutHistory(rows){
     $('#lock-icon').hide().attr('src','/img/lock-loupe.png').fadeIn();
     $('#lock-user-id').select().focus();
 
-    $('#lock-user-id').one("focusout",()=>{
+    $('#lock-user-id').one("focusout",()=>{  
       if (!isUnlocked()){
         initialLockState();
       }
