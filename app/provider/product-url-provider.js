@@ -15,12 +15,16 @@ module.exports = class{
       const $ = cheerio.load(data);
 
       if ($('.content-404').length == 0){
-        resolve({
+
+        var result = {
           image : $('#image').attr('src'),
           price: $('.special-price>.price').first().text().trim(),
           fromPrice: $('.old-price>.price').first().text().trim(),
           discount: $('.product-promotion-flag').text()
-        });
+        };
+
+
+        resolve(result.image ? result : null);
       }else{
         reject('Página do produto deu erro 404');
       }

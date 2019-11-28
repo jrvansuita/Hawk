@@ -49,7 +49,7 @@ class FileLoader{
 
     return new Promise((resolve, reject)=>{
       load(scripts, ()=>{
-        setTimeout(resolve, 30);
+        setTimeout(resolve, 50);
       });
     });
   }

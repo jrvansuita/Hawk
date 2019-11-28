@@ -1,6 +1,9 @@
+$(document).ready(() => {
+  new FileLoader().css('material-dropdown').load();
+});
+
 class MaterialDropdown {
   constructor(parent, event, bindMousePosition, fixed) {
-    this.dependencies = new FileLoader().css('material-dropdown')
 
     this.remove();
 
@@ -77,8 +80,7 @@ class MaterialDropdown {
   }
 
 
-  async show(callback){
-    await this.dependencies.load();
+  show(callback){
 
     if (this.hasOptions()){
       this.items.fadeIn(400);
