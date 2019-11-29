@@ -68,7 +68,7 @@
         }
         %>
         <tr class="line-here <%=repeated ? 'red'  : ''%>">
-          <td><%=each.numeroPedido%></td>
+          <td><%=each.numeroPedido + ' - ' + each.paymentType%></td>
           <td><%=each.client ? each.client.nome : 'NONE'%></td>
           <td><%=Dat.format(new Date(each.data))%></td>
           <td><%=each.client ? each.client.uf : 'NONE'%></td>

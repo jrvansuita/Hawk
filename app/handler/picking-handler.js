@@ -131,6 +131,10 @@ module.exports = {
     //Remove Pendings from Picking List
     PickingLaws.assert(PendingLaws.getSaleNumbers());
 
+    PickingLaws.filter((each) => {
+      return !each.observacaoInterna.includes('mundipagg_boleto');
+    });
+
     if (ignoreDone){
       DoneLaws.clear();
       ignoreDone = false;
