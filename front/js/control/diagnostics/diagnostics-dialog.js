@@ -93,8 +93,7 @@ $(document).ready(()=>{
       _post('/product-active', {
         sku: sku,
         active: false,
-        user: loggedUser,
-        group: true
+        user: loggedUser
       },(data)=>{
 
       });

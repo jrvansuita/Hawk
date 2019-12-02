@@ -2,20 +2,41 @@ const SaleLoader = require('../loader/sale-loader.js');
 
 module.exports= class SalesArrLoader {
 
-  constructor(saleList){
-    this.saleList = saleList;
-
-    this.initialLength = saleList.length;
-    this.staticIndex = 0;
-
-    this.createPool();
+  constructor(){
+    this.loading = false;
   }
 
-    setOnError(onError){
-      this.onError = onError;
-      return this;
+  setSaleList(saleList){
+    if (saleList){
+      this.saleList = saleList;
+      this.initialLength = saleList.length;
+      this.staticIndex = 0;
+
+      this.createPool();
     }
 
+    return this;
+  }
+
+  setOnError(onError){
+    this.onError = onError;
+    return this;
+  }
+
+  cancel(){
+    this.canceled = true;
+    this.loading = false;
+    this.saleList = [];
+    return this;
+  }
+
+  isLoading(){
+    return this.loading;
+  }
+
+  isPreparing(){
+    return !this.loading && (this.saleList == undefined);
+  }
 
   createPool(){
     this.pool = [];
@@ -84,50 +105,61 @@ module.exports= class SalesArrLoader {
   _load(onFinished){
     var sale = this.getSale(this.getCurrentPoolSale());
 
-    var saleLoader = new SaleLoader(sale)
-    .setOnError(this.onError);
+    if (sale && !this.canceled){
 
-    if (this.loadClient){
-      saleLoader.loadClient(this.loadClient);
-    }
+      var saleLoader = new SaleLoader(sale)
+      .setOnError(() => {
+        this.cancel();
 
-    if (this.loadItems){
-      saleLoader.loadItems(this.loadItems);
-    }
-
-    saleLoader.run((sale)=>{
-
-      this.saleList[this.getSaleIndex(sale)] = sale;
-
-      if (this._filter(sale) && this.onEverySaleLoaded){
-        this.onEverySaleLoaded(sale);
-      }
-
-      var poolLength = this.pool.length;
-
-      this.poolIndex++;
-      this.staticIndex++;
-      console.log(sale.numeroPedido + ' - ' + sale.data + ' | ' + this.staticIndex + '/' + (this.initialLength));
-
-      if (this.poolIndex < poolLength) {
-        this._load(onFinished);
-
-        //Pelo menos 10 pedidos já foram tratados e podem estar aparecendo
-        if (this.staticIndex == 3) {
-          onFinished();
+        if (this.onError){
+          this.onError();
         }
-      }
-      //No Sales to pick | Or finished loading sales
-      else if (poolLength == this.poolIndex){
-        onFinished();
+      });
 
-        if (this.staticIndex > 0){
-          if (this.onLastSaleLoaded){
-            this.onLastSaleLoaded();
+      if (this.loadClient){
+        saleLoader.loadClient(this.loadClient);
+      }
+
+      if (this.loadItems){
+        saleLoader.loadItems(this.loadItems);
+      }
+
+      saleLoader.run((sale)=>{
+
+        this.saleList[this.getSaleIndex(sale)] = sale;
+
+        this._attachRunningChecker();
+
+        if (this._filter(sale) && this.onEverySaleLoaded){
+          this.onEverySaleLoaded(sale);
+        }
+
+        var poolLength = this.pool.length;
+
+        this.poolIndex++;
+        this.staticIndex++;
+        console.log(sale.numeroPedido + ' - ' + sale.data + ' | ' + this.staticIndex + '/' + (this.initialLength));
+
+        if (this.poolIndex < poolLength) {
+          this._load(onFinished);
+
+          //Pelo menos 10 pedidos já foram tratados e podem estar aparecendo
+          if (this.staticIndex == 3) {
+            onFinished();
           }
         }
-      }
-    });
+        //No Sales to pick | Or finished loading sales
+        else if (poolLength == this.poolIndex){
+          onFinished();
+
+          if (this.staticIndex > 0){
+            if (this.onLastSaleLoaded){
+              this.onLastSaleLoaded();
+            }
+          }
+        }
+      });
+    }
   }
 
   run(onFinished){
@@ -135,6 +167,13 @@ module.exports= class SalesArrLoader {
   }
 
 
+  _attachRunningChecker(){
+    this.loading = true;
 
+    clearTimeout(this.loadingId);
+    this.loadingId = setTimeout(function(){
+      this.loading = false;
+    }, 10000);
+  }
 
 };

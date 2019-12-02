@@ -111,8 +111,14 @@
 
               <td>
                 <div class="field">
-                  <label class="field-title">Cliente</label>
-                  <label class="info"><%=sale && sale.client ? Str.short(sale.client.nome,20) : ''%></label>
+                  <div class="client-title-holder">
+                    <label class="field-title">Cliente</label>
+                    <%if (sale && (sale.primeiraCompra == '1')){%>
+                    <img class="mini-alert first-sale-icon <%= !sale.nfe ? 'blink_me' : ''%>" src="img/one.png" title="Primeira Compra">
+                    <%}%>
+                  </div>
+
+                  <label class="info  <%=(sale && (sale.primeiraCompra == '1')) ? 'first-sale-client-name' : ''%>"><%=sale && sale.client ? Str.short(sale.client.nome,20) : ''%></label>
                 </div>
               </td>
 

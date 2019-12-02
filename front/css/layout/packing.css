@@ -519,3 +519,49 @@ table{
   margin: auto;
   display: block;
 }
+
+.client-title-holder{
+  position: relative;
+}
+
+.first-sale-icon{
+  position: absolute;
+  right: 0;
+  display: block;
+  top: -5px;
+  width: 23px;
+  height: 23px;
+  cursor: inherit;
+}
+
+.blink_me {
+  animation: blinker 3s linear infinite;
+}
+
+@keyframes blinker {
+  0% { opacity: 1.0; }
+
+  30% { opacity: 1; }
+  35% { opacity: 0.3; }
+  40% { opacity: 1.0; }
+  45% { opacity: 0.3; }
+  50% { opacity: 1.0; }
+
+
+  70% { opacity: 1.0; transform: scale(1) }
+  75% { opacity: 1.0; transform: scale(1.2) }
+  80% { opacity: 1.0; transform: scale(1) }
+
+
+  85% { opacity: 1.0; transform: scale(1) }
+  90% { opacity: 1.0; transform: scale(1.2) }
+  95% { opacity: 1.0; transform: scale(1) }
+}
+
+.first-sale-client-name{
+  text-decoration: underline;
+  font-size: 17px;
+  font-weight: 900;
+  text-underline-position: under;
+  color: #08796e;
+}

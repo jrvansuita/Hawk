@@ -14,16 +14,16 @@ const TransportLaws = require('../laws/transport-laws.js');
 const UfLaws = require('../laws/uf-laws.js');
 const AutoBlockPicking = require('../auto/auto-block-picking.js');
 
-var loadingList = false;
-var loadingId = 0;
+var salesArrLoader = null;
+
 var openSalesCount = 0;
 var ignoreDone = false;
 
 module.exports = {
 
   init(onFinished) {
-    if (!loadingList && PickingLaws.isFullEmpty() && !BlockHandler.hasBlockSales()) {
-      loadingList = true;
+    if (!this.isBusy() && PickingLaws.isFullEmpty() && !BlockHandler.hasBlockSales()) {
+      salesArrLoader = new SalesArrLoader();
 
       PendingLaws.load(true, ()=>{
         BlockHandler.load(()=>{
@@ -37,25 +37,25 @@ module.exports = {
   },
 
   reloadPickingList(userId, ignore, callback){
-    if (!loadingList){
-      ignoreDone = ignore;
-
-      PickingLaws.clear(userId);
-      this.init(callback);
-    }else{
-      callback();
+    if (salesArrLoader){
+      salesArrLoader.cancel();
     }
+
+    ignoreDone = ignore;
+    PickingLaws.clear(userId);
+    this.init(callback);
+  },
+
+  isBusy(){
+    return salesArrLoader && (salesArrLoader.isPreparing() || salesArrLoader.isLoading());
   },
 
   load(onFinished){
     new EccosysProvider().setOnError((error)=>{
-      loadingList = false;
       onFinished();
       throw error;
     }).pickingSales().go((sales) => {
       try{
-
-        loadingList = true;
 
         PickingLaws.set(sales);
 
@@ -65,9 +65,9 @@ module.exports = {
 
         if (!PickingLaws.isFullEmpty()){
 
-          new SalesArrLoader(PickingLaws.getFullList())
+          salesArrLoader
+          .setSaleList(PickingLaws.getFullList())
           .setOnError((error)=>{
-            loadingList = false;
             throw error;
           })
           .loadClient((sale)=>{
@@ -79,21 +79,15 @@ module.exports = {
             return !BlockHandler.checkAllBlocksAndCapture(sale);
           })
           .onEverySaleLoaded((sale)=>{
-            attachRunningChecker();
             TransportLaws.put(sale.transport);
             new AutoBlockPicking([sale]).run();
-          })
-          .onLastSaleLoaded(()=>{
-            loadingList = false;
           })
           .run(onFinished);
 
         }else{
-          loadingList = false;
           onFinished();
         }
       }catch(e){
-        loadingList = false;
         History.error(e);
         onFinished();
       }
@@ -130,14 +124,6 @@ module.exports = {
   setOffSales(){
     //Remove Pendings from Picking List
     PickingLaws.assert(PendingLaws.getSaleNumbers());
-
-
-
-   ///// REMOVER ESSA LINHA
-    //PickingLaws.filter((each) => {
-  //    return !each.observacaoInterna.includes('mundipagg_boleto');
-  //  });
-    /////// REMOVER ESSA LINHA
 
     if (ignoreDone){
       DoneLaws.clear();
@@ -181,14 +167,6 @@ module.exports = {
   }
 
 };
-
-
-function attachRunningChecker(){
-  clearTimeout(loadingId);
-  loadingId = setTimeout(function(){
-    loadingList = false;
-  }, 10000);
-}
 
 var openSalesController = 0;
 

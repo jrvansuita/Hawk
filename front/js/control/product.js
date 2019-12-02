@@ -52,8 +52,7 @@ $(document).ready(() => {
         _post('/product-active', {
           sku: product.codigo,
           active: !active,
-          user: currentUser,
-          group: true
+          user: currentUser
         },(data)=>{
           window.location.reload();
         });
@@ -652,7 +651,7 @@ function loadLayoutHistory(rows){
     $('#lock-icon').hide().attr('src','/img/lock-loupe.png').fadeIn();
     $('#lock-user-id').select().focus();
 
-    $('#lock-user-id').one("focusout",()=>{  
+    $('#lock-user-id').one("focusout",()=>{
       if (!isUnlocked()){
         initialLockState();
       }
