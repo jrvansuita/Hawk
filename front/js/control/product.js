@@ -345,7 +345,7 @@ function buildImgCol(path, title, addClass){
 
 
 
-  return buildCol($img).css('text-align', 'left');
+  return buildCol($img).css('text-align', 'center');
 }
 
 

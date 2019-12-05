@@ -2,8 +2,8 @@ const DoneLaws = require('../laws/done-laws.js');
 const InprogressLaws = require('../laws/inprogress-laws.js');
 const SaleLoader = require('../loader/sale-loader.js');
 const SaleShell = require('../print/sale-shell.js');
-const EccosysProvider = require('../eccosys_new/eccosys-provider.js');
-const EccosysStorer = require('../eccosys_new/eccosys-storer.js');
+const EccosysProvider = require('../eccosys/eccosys-provider.js');
+const EccosysStorer = require('../eccosys/eccosys-storer.js');
 const PickingLaws = require('../laws/picking-laws.js');
 
 module.exports = class PickingSalePrint{

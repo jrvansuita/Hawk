@@ -11,9 +11,8 @@ module.exports = class JobFeedXmlProducts extends Job{
 
   doWork(){
     return new Promise((resolve, reject)=>{
-      //Delete History before 2 months
       var min = new Date();
-      min.setMonth(c.getMonth() -2);
+      min.setMonth(min.getMonth() -3);
 
       History.remove({'date':{'$lt': min}});
     });

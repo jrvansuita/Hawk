@@ -1,4 +1,4 @@
-const EccosysProvider = require('../eccosys_new/eccosys-provider.js');
+const EccosysProvider = require('../eccosys/eccosys-provider.js');
 const History = require('../bean/history.js');
 
 
@@ -55,7 +55,7 @@ module.exports= class SaleLoader {
 
       //Provisório
       if(!sale){
-        throw Err.thrw('Pedido não carregou: ' + saleNumber);
+        throw Err.thrw('Pedido não carregou: ' + saleNumber + '\n' + new Error().stack);
       }
       //Provisório
 

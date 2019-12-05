@@ -2,34 +2,47 @@ require('./app/abra-cadabra/first-step.js');
 
 
 
-new (require('./app/jobs/job-gift.js'))().doWork();
+var pool = require('./app/jobs/controller/pool.js');
+pool.initialize((jobs) => {
+  var job = jobs.find((e) => {
+    return e.tag == 'Mundipagg';
+  })
+
+  pool.fireJob(job);
+});
+
+
+//var JobMundiApi = require('./app/jobs/job-mundipagg-checker.js');
+//var job = new JobMundiApi();
+//job.doWork();
 
 
 
-//-------------------------
 
 
 
-/*
-require('./app/abra-cadabra/first-step.js');
+//const MagentoApi = require('./app/magento/magento-api.js');
 
-const Job = require('./app/bean/job.js');
-
-var rule = {
-dayOfWeek : [0, 1,2,3,4,5],
-hour: 19,
-minute: 45
-};
-
-//new Job(1,'xml','Atualização de produtos para o feed xml','job-feed-xml-product', true, rule).upsert();
-
-
-var rule2 = {
-dayOfWeek : 0,
-recurs: true,
-hour: 20,
-minute: 06
-};
-
-new Job(2,'Limpeza','Limpeza de histórico','job-history-cleaner', true, rule2).upsert();
+/*new MagentoApi().instance((api) => {
+  console.log(api.sessionId);
+  console.log('conected');
+});
 */
+
+
+  /*magento.salesOrder.cancel({
+    orderIncrementId: '120809479'
+  }, (d) => {
+    console.log(d);
+  });*/
+
+
+
+  /*magento.salesOrder.addComment({
+    orderIncrementId: '120809479',
+    status:           'canceled',
+    comment:          'Teste',
+    notify:           true
+  }, (d) => {
+    console.log(d);
+  });*/

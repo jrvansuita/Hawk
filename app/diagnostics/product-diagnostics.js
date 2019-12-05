@@ -1,4 +1,4 @@
-const EccosysProvider = require('../eccosys_new/eccosys-provider.js');
+const EccosysProvider = require('../eccosys/eccosys-provider.js');
 const Fix = require('../bean/fix.js');
 const Product = require('../bean/product.js');
 

@@ -34,6 +34,8 @@ module.exports = {
   sale_not_found: 'O pedido {0} não foi encontrado ou não existe.',
 
   api_not_available : "API Eccosys indisponível no momento. Erro: {0}",
+  sale_was_confirmed_mundi : 'Foi realizada a confirmação de pagamento do boleto do pedido {0} pela Mundipagg' + '\n' + 'Ordem de Compra: {1} Data do Pedido: {2} Data de Vencimento: {3} Data do Pagamento: {4}',
+  sale_was_unconfirmed_mundi : 'Foi realizado o cancelamento do pedido {0} pela Mundipagg. O boleto não foi compensado até o vencimento' + '\n' + 'Ordem de Compra: {1} Data do Pedido: {2} Data de Vencimento: {3}',
 
 
   from_to: 'De {0} Até {1}',

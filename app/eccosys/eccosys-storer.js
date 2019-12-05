@@ -1,4 +1,4 @@
-var EccosysApi = require('../eccosys_new/eccosys-api.js');
+var EccosysApi = require('../eccosys/eccosys-api.js');
 
 module.exports = class EccosysStorer extends EccosysApi{
 

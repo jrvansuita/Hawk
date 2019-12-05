@@ -66,42 +66,46 @@ module.exports = {
 
 
       /*if (job.description.includes('Brinde')){
-        fireFunction();
-      }*/
+      fireFunction();
+    }*/
 
 
-    }
-
-    global.jobsPoll.push(job);
-  },
-
-  deattach(id){
-    var job = this.get(id);
-
-    if (job && job.schedule){
-      console.log('Desatachou: ' + job.description);
-      job.schedule.cancel();
-
-      global.jobsPoll.splice(global.jobsPoll.findIndex((job) => {
-        return job.id == id;
-      }),1);
-    }
-  },
-
-  initialize(){
-    Jobs.findAll((error, jobs)=>{
-      jobs.forEach((each)=>{
-        this.attach(each.toObject());
-      });
-    });
   }
+
+  global.jobsPoll.push(job);
+},
+
+deattach(id){
+  var job = this.get(id);
+
+  if (job && job.schedule){
+    console.log('Desatachou: ' + job.description);
+    job.schedule.cancel();
+
+    global.jobsPoll.splice(global.jobsPoll.findIndex((job) => {
+      return job.id == id;
+    }),1);
+  }
+},
+
+initialize(callback){
+  Jobs.findAll((error, jobs)=>{
+    jobs.forEach((each)=>{
+      this.attach(each.toObject());
+    });
+
+    if (callback){
+      callback(global.jobsPoll);
+    }
+  });
+}
 
 };
 
 function buildRecurrenceRule(job){
   var rule = new schedule.RecurrenceRule();
 
-  if (job.rule.dayOfWeek){
+  if (job.rule.dayOfWeek.length){
     rule.dayOfWeek = job.rule.dayOfWeek;
   }
 

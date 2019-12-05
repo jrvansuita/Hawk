@@ -1,5 +1,5 @@
 
-const EccosysProvider = require('../eccosys_new/eccosys-provider.js');
+const EccosysProvider = require('../eccosys/eccosys-provider.js');
 
 const PendingLaws = require('../laws/pending-laws.js');
 const InprogressLaws = require('../laws/inprogress-laws.js');

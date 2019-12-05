@@ -56,7 +56,7 @@ module.exports = class PackingRoutes extends Routes{
       var from = Dat.query(req.query.from, Dat.firstDayOfMonth());
       var to = Dat.query(req.query.to, Dat.lastDayOfMonth());
 
-      new PackingDaysProvider().get(from,  to, (data)=>{
+      new PackingDaysProvider().get(from, to, (data)=>{
         res.status(200).send(data);
       });
     });

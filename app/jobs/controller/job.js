@@ -43,7 +43,9 @@ module.exports = class Job{
   onStart() {
     console.log('[Job] onStart: ' + this.getName());
 
-    History.job(this.getName(), this.jobSettings.description, this.jobSettings.tag);
+    if (this.getInfo()){
+      History.job(this.getName(), this.getInfo().description, this.getInfo().tag);
+    }
 
     if (this.onStartListener){
       this.onStartListener();

@@ -128,6 +128,7 @@ class PackingChart {
             ctx.textAlign = 'center';
             ctx.textBaseline = 'bottom';
 
+
             this.data.datasets.forEach(function (dataset, i) {
               var meta = chartInstance.controller.getDatasetMeta(i);
               meta.data.forEach(function (bar, index) {

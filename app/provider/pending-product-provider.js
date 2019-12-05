@@ -1,6 +1,6 @@
 const PendingHandler = require('../handler/pending-handler.js');
 const BlockHandler = require('../handler/block-handler.js');
-const EccosysProvider = require('../eccosys_new/eccosys-provider.js');
+const EccosysProvider = require('../eccosys/eccosys-provider.js');
 
 var productsList = undefined;
 

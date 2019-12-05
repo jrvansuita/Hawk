@@ -2,7 +2,7 @@ const Routes = require('../redirects/controller/routes.js');
 const PendingLaws = require('../laws/pending-laws.js');
 const PendingHandler = require('../handler/pending-handler.js');
 const SaleItemSwapper = require('../swap/sale-item-swapper.js');
-const EccosysProvider = require('../eccosys_new/eccosys-provider.js');
+const EccosysProvider = require('../eccosys/eccosys-provider.js');
 const BlockHandler = require('../handler/block-handler.js');
 const PendingProductProvider = require('../provider/pending-product-provider.js');
 

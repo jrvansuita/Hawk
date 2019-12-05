@@ -1,4 +1,4 @@
-const EccosysProvider = require('../eccosys_new/eccosys-provider.js');
+const EccosysProvider = require('../eccosys/eccosys-provider.js');
 
 
 var lastLoadedArr = [];

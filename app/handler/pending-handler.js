@@ -2,7 +2,7 @@ const PendingLaws = require('../laws/pending-laws.js');
 const PickingLaws = require('../laws/picking-laws.js');
 const SaleLoader = require('../loader/sale-loader.js');
 const InprogressLaws = require('../laws/inprogress-laws.js');
-const EccosysProvider = require('../eccosys_new/eccosys-provider.js');
+const EccosysProvider = require('../eccosys/eccosys-provider.js');
 
 const PendingEmailSender = require('../email/sender/pending-email-sender.js');
 const HistoryStorer = require('../history/history-storer.js');
