@@ -49,13 +49,20 @@ module.exports= class SaleLoader {
   }
 
   loadSale(saleNumber, onCallOuter){
+
+    var stack = new Error().stack;
+
+    if (saleNumber.length > 6){
+      throw Err.thrw('Achei N: ' + saleNumber + '\n' + stack);
+    }
+    
     new EccosysProvider()
     .setOnError(this.onError)
     .sale(saleNumber).go((sale)=>{
 
       //Provisório
       if(!sale){
-        throw Err.thrw('Pedido não carregou: ' + saleNumber + '\n' + new Error().stack);
+        throw Err.thrw('Pedido não carregou: ' + saleNumber + '\n' + stack);
       }
       //Provisório
 
@@ -209,7 +216,7 @@ module.exports= class SaleLoader {
 
     if (typeof this.sale !== 'object'){
       this.loadSale(this.sale, (sale)=>{
-          this.callFuncs(0);
+        this.callFuncs(0);
       });
     }else{
       this.callFuncs(0);

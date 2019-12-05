@@ -15,7 +15,7 @@ module.exports = class JobMundipaggChecker extends Job{
   }
 
   getName(){
-    return 'Sincronização de Pagamentos Mundipagg';
+    return 'Sincronização de Pagamentos';
   }
 
   doWork(){

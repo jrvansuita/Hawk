@@ -44,7 +44,7 @@ module.exports = class Job{
     console.log('[Job] onStart: ' + this.getName());
 
     if (this.getInfo()){
-      History.job(this.getName(), this.getInfo().description, this.getInfo().tag);
+      History.job(this.getName(), 'Tarefa Iniciada - ' + this.getInfo().description, this.getInfo().tag);
     }
 
     if (this.onStartListener){
@@ -83,6 +83,10 @@ module.exports = class Job{
   onTerminate(data) {
     console.log('[Job] onTerminate: ' + this.getName());
 
+    if (this.getInfo()){
+      History.job(this.getName(), 'Tarefa Finalizada - ' + this.getInfo().description, this.getInfo().tag);
+    }
+
     if (this.onTerminateListener){
       this.onTerminateListener(data);
     }
@@ -94,6 +98,10 @@ module.exports = class Job{
   onError(e) {
     console.log('[Job] onError: ' + this.getName());
 
+
+    if (this.getInfo()){
+      History.job(this.getName(), 'Tarefa Falhou - ' + this.getInfo().description, this.getInfo().tag);
+    }
 
     if (this.onErrorListener){
       this.onErrorListener(e);
