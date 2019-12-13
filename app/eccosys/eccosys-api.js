@@ -1,12 +1,8 @@
 const https = require('https');
-var MD5 = require('../util/md5.js');
-
-const HOST = process.env.ECCOSYS_HOST;
-const APIKEY = process.env.ECCOSYS_API;
-const SECRET = process.env.ECCOSYS_SECRET;
-
+const MD5 = require('../util/md5.js');
 const Err = require('../error/error.js');
-var Query = require('../util/query.js');
+const Query = require('../util/query.js');
+const EccosysApiDownEmailSender = require('../email/sender/eccosys-api-down-email-sender.js');
 
 
 module.exports = class EccosysApi{
@@ -112,15 +108,15 @@ module.exports = class EccosysApi{
   options(){
     var params = this.query.hasParams() ? this.query.build() : '';
 
-    var path = '/api/' + encodeURI(this.path) + params;
+    var path = '/api/' + encodeURI(this.path + params);
 
     var options = {
-      host: HOST,
+      host: Params.eccosysUrl(),
       port: 443,
       timeout: 60000, // 1 minutos
       path: path,
       method: this.method,
-      url: 'https://' + HOST + path,
+      url: 'https://' + Params.eccosysUrl() + path,
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
       }
@@ -130,13 +126,15 @@ module.exports = class EccosysApi{
       options.headers['x-access-token'] = this.user.token;
     }else{
       options.headers.signature = generateSignature();
-      options.headers.apikey = APIKEY;
+      options.headers.apikey = Params.eccosysApi();
     }
 
     if (this.log){
       console.log(path);
       console.log(options);
     }
+
+    this.optionsData = options;
 
     return options;
   }
@@ -152,12 +150,15 @@ module.exports = class EccosysApi{
 
       global.eccoConnErrors++;
 
-      //Só vamos dar throw nas 5 primeiras requests.
+      //Só vamos dar throw nas 2 primeiras requests.
       //Se nao fica muito poluído o historico
       if (global.eccoConnErrors <= 2){
         var msg = data.includes('<title>502') ? '502 Bad Gateway' : data;
+        msg = Const.api_not_available.format(msg) + '\n' + this.method +': /' + this.path;
 
-        throw Err.thrw(Const.api_not_available.format(msg) + '\n' + this.method +': /' + this.path, this.user);
+        onEmailReportEccosysAPIDown(this.optionsData, msg);
+
+        throw Err.thrw(msg, this.user);
       }else{
         throw undefined;
       }
@@ -294,8 +295,21 @@ var signature;
 
 function generateSignature() {
   if (!signature) {
-    signature = MD5.get(SECRET + ":" + Dat.signatureDate(new Date()));
+    signature = MD5.get(Params.eccosysSecret() + ":" + Dat.signatureDate(new Date()));
   }
 
   return signature;
+}
+
+function onEmailReportEccosysAPIDown(options, error){
+  if (global.eccoConnErrors == 1){
+    if (Params.eccosysApiReportEmails().length > 0){
+       new EccosysApiDownEmailSender()
+       .request(options)
+       .response(error)
+       .send(() => {
+         
+       });
+    }
+  }
 }

@@ -631,6 +631,7 @@ tr.row-padding td{
 .upcoming-box{
   min-height:auto;
   max-width: 260px;
+  position: relative;
 }
 
 .rfid-card{
@@ -668,4 +669,14 @@ tr.row-padding td{
   display: none;
   float: right;
   margin-top: 2px;
+}
+
+.picking-loading {
+  height: 3px;
+  width: 100%;
+  border-radius: 4px;
+  position: absolute;
+  margin-left: -15px;
+  margin-top: -15px;
+  border-bottom: 1px solid #f3f3f3;
 }

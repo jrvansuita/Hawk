@@ -171,7 +171,7 @@ module.exports= class SalesArrLoader {
     this.loading = true;
 
     clearTimeout(this.loadingId);
-    this.loadingId = setTimeout(function(){
+    this.loadingId = setTimeout(()=>{
       this.loading = false;
     }, 10000);
   }

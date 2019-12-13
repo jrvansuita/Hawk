@@ -2,7 +2,6 @@
 <%  include ../menus/main-menu %>
 
 <head>
-  <link rel="stylesheet" type="text/css" href="/front/css/layout/general.css">
   <link rel="stylesheet" type="text/css" href="/front/css/layout/user-registering.css">
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-checkbox.css">
 
@@ -24,7 +23,9 @@
 
 <body>
 
-  <script>
+    <%  include ../menus/user-menu %>
+
+  <script class="hidable-script">
   window.selectedUser = <%- JSON.stringify(user) %>
   window.userSetts = <%- JSON.stringify(user ? user.setts ? user.setts : {} : {}) %>
   </script>

@@ -1,37 +1,23 @@
 const https = require('https');
-
-const HOST = process.env.MUNDI_HOST;
-const SECRET = process.env.MUNDI_SECRET;
-
-
 const Err = require('../error/error.js');
 var Query = require('../util/query.js');
 
 
 module.exports = class MundiApi{
 
-
-  constructor(){
-
-  }
-
-
   options(){
     var options = {
-      host: HOST,
+      host: Params.mundipaggUrl(),
       timeout: 60000, // 1 minutos
       method: 'GET',
-      url: 'https://' + HOST + this.path,
+      url: 'https://' + Params.mundipaggUrl() + this.path,
       path: '/Sale/' + this.path,
       headers: {
-        'MerchantKey': SECRET,
+        'MerchantKey': Params.mundipaggSecret(),
         'Content-Type': 'application/json; charset=utf-8',
         'Accept' : 'application/json'
       }
     };
-
-
-    //console.log(options);
 
     return options;
   }

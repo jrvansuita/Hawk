@@ -1,8 +1,0 @@
-<div class="avatar-holder">
-  <%if (item.imgName !== 'none') {%>
-    <a href="/profile?userid=<%=item.tag%>">
-     <img class="avatar-img circle shadow" src="<%=item.imgName%>" data-src="<%=item.imgName%>" onerror="this.src='/img/avatar.png'" data-userid="<%=item.tag%>"/>
-   </a>
-  <%}%>
-  <span class="label shadow avatar-name"><%=item.label%></span>
-</div>

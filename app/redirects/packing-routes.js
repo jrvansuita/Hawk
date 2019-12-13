@@ -22,15 +22,18 @@ module.exports = class PackingRoutes extends Routes{
           });
         };
 
-
-        if (Num.isEan(req.query.sale)){
-          PackingHandler.findSaleFromEan(req.query.sale, (sale) => {
-            result(sale);
-          })
+        if (req.query.sale){
+          if (Num.isEan(req.query.sale)){
+            PackingHandler.findSaleFromEan(req.query.sale, (sale) => {
+              result(sale);
+            })
+          }else{
+            PackingHandler.findSale(req.query.sale, req.session.loggedUserID, (sale)=>{
+              result(sale);
+            });
+          }
         }else{
-          PackingHandler.findSale(req.query.sale, req.session.loggedUserID, (sale)=>{
-            result(sale);
-          });
+          result({});
         }
       }else{
         res.redirect("/packing/overview");
@@ -53,6 +56,8 @@ module.exports = class PackingRoutes extends Routes{
 
 
     this._get('/packing-days', (req, res) => {
+      console.log(req.query.from);
+      console.log(req.query.to);
       var from = Dat.query(req.query.from, Dat.firstDayOfMonth());
       var to = Dat.query(req.query.to, Dat.lastDayOfMonth());
 
@@ -159,8 +164,8 @@ module.exports = class PackingRoutes extends Routes{
       });
 
       this._get('/packing/shipping-order', (req, res) => {
-        if (req.query.id){
-          ShippingOrderProvider.get(req.query.id, (data) => {
+        if (req.query.number){
+          ShippingOrderProvider.get(req.query.number, (data) => {
             res.render("packing/shipping-order/shipping-order",  {shippingOrder: data});
           });
         }else{
@@ -169,7 +174,7 @@ module.exports = class PackingRoutes extends Routes{
       });
 
       this._get('/shipping-order-print', (req, res) => {
-        ShippingOrderProvider.get(req.query.id, (data) => {
+        ShippingOrderProvider.get(req.query.number, (data) => {
           res.render("packing/shipping-order/shipping-order-print", {shippingOrder: data});
         });
       });

@@ -1,13 +1,12 @@
 const Email = require('../email.js');
 const PendingEmailTemplate = require('../templates/pending-email-template.js');
 
-
 module.exports= class PendingEmailSender{
 
   constructor(){
     this.sender = new Email();
-    this.defaultEmail = process.env.EMAIL;
-    this.defaultReplyEmail = process.env.REPLY_EMAIL;
+    this.defaultEmail = Params.email();
+    this.defaultReplyEmail = Params.replayEmail();
     this.defaultName = "Boutique Infantil";
     this.template = new PendingEmailTemplate();
   }

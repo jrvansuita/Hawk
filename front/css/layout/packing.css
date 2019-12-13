@@ -168,7 +168,8 @@ input{
   font-weight: 600 !important;
   font-size: 15px !important;
   min-width: 340px;
-  margin-top: 18px;
+  margin-top: 8px !important;
+  display: flex;
 }
 
 .material-input-holder>input{

@@ -41,7 +41,7 @@
               <label id="top-product-name" class="top-label"><%=Str.short(Util.getProductName(product.nome), 42)%></label>
             </a>
             <%var brand = product.Marca ? product.Marca : ''%>
-            <a href="<%=process.env.STORE_UTL + '/' + brand.replace(' ', '-').toLowerCase(); %>" target="_blank">
+            <a href="<%=Params.storeUrl() + '/' + brand.replace(' ', '-').toLowerCase(); %>" target="_blank">
               <label id="top-brand" class="top-label sub"><%=brand%></label>
             </a>
             <%}%>

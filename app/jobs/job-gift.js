@@ -244,8 +244,6 @@ module.exports = class JobGift extends Job{
       this.reject = reject;
 
       this.findRulesAndConsistencies(()=>{
-        //console.log(this.giftRulesList);
-        //console.log(this.stocks);
         if (this.whileHasRulesToWorkWith()){
           this.process();
         }else{

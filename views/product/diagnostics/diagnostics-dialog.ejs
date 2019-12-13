@@ -6,8 +6,6 @@
 <body>
 
 
-
-
   <%product = product ? product : {}%>
 
   <div class="fixes-main">
@@ -22,7 +20,7 @@
 
 
         var brand = product ? product.brand || '' : ''%>
-        <a href="<%=process.env.STORE_UTL + '/' + brand.trim().replace(' ', '-').toLowerCase(); %>" target="_blank">
+        <a href="<%=Params.storeUrl() + '/' + brand.trim().replace(' ', '-').toLowerCase(); %>" target="_blank">
           <label class="sku-brand"><%=brand%></label>
         </a>
 

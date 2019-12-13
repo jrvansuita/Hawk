@@ -2,15 +2,11 @@ const https = require('https');
 
 var exports = module.exports = {};
 
-const url = process.env.STORE_UTL;
-const path = "/media/feed/feed-apps.xml?";
-
-
 exports.get = (onEnd) => {
 
   var xmlStr = '';
 
-  var req = https.request(url + path, function(res) {
+  var req = https.request(Params.storeFeedUrl(), function(res) {
     res.on('data', function(chunk) {
       xmlStr += chunk;
     });

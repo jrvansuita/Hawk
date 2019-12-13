@@ -89,7 +89,7 @@ function buildChart(from, to, title) {
     Object.keys(data).forEach(function(key, index) {
       var dataItem = data[key];
 
-      var item = chart.addItem(Str.first_word(dataItem.label, 10), dataItem.img, dataItem.tag);
+      var item = chart.addItem(dataItem.user);
 
       item.addBar('Itens', dataItem.total, 0.8, '03c184', true);
 

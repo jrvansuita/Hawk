@@ -14,7 +14,7 @@ module.exports = class JobFeedXmlProducts extends Job{
       var min = new Date();
       min.setMonth(min.getMonth() -3);
 
-      History.remove({'date':{'$lt': min}});
+      History.removeAll({'date':{'$lt': min}}, resolve);
     });
   }
 

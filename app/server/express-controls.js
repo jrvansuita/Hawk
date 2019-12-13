@@ -1,4 +1,3 @@
-//Business Rules
 
 var app = global.app;
 const Routes = require('../redirects/controller/routes.js');
@@ -71,7 +70,3 @@ process.on('uncaughtException', function (err) {
     History.error(err);
   }
 });
-
-
-
-require('../jobs/controller/pool.js').initialize();

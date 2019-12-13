@@ -286,7 +286,7 @@ function showAvatarCropper(){
 
     function loadMenuOpts(){
 
-      $('li.menu-item').each((i, each)=>{
+      $('#main-menu .menu-item').each((i, each)=>{
         var name = $(each).text().trim();
 
         if (selectedUser.menus){

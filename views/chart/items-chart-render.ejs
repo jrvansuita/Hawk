@@ -3,7 +3,9 @@
     chart.getItems().forEach(function(item) {%>
       <div class="chart-bar-holder">
         <div class="chart-bar-group">
-          <%-  include avatar-chart-render %>
+          <%- include('../user/avatar', {user: item.user, showName: true});  %>
+
+
           <%-  include bars-chart-render %>
         </div>
       </div>

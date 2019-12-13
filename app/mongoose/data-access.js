@@ -1,5 +1,6 @@
 module.exports = class DataAccess {
 
+
   toObject(){
     delete this.__v;
     delete this._id;
@@ -147,6 +148,17 @@ static aggregate(query, callback) {
     });
   }
 
+  static updateOrSet(query, data, callback) {
+    this.staticAccess().findOneAndUpdate(query, data, {
+      upsert: true,
+      runValidators: false,
+      strict: false
+    }, (err, doc) => {
+      if (callback)
+      callback(err, doc);
+    });
+  }
+
   static create(data, callback){
     this.staticAccess().create(data, function (err, obj) {
       if (callback){
@@ -212,7 +224,7 @@ static aggregate(query, callback) {
   }
 
   update(callback) {
-    this.classAccess().update(this.getPKQuery(),
+    this.classAccess().updateOne(this.getPKQuery(),
     this, {
       multi: false
     }, (err, doc) => {

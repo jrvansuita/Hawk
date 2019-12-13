@@ -27,7 +27,7 @@ module.exports = class EccosysProvider extends EccosysApi{
   }
 
   salesBySituation(situation) {
-    return this.get('pedidos/situacao/' + situation).multiple();
+    return this.param('$orderBy', 'data,ASC').get('pedidos/situacao/' + situation).multiple();
   }
 
   sales() {
@@ -42,8 +42,8 @@ module.exports = class EccosysProvider extends EccosysApi{
     return this.get('ordem-de-coleta').multiple();
   }
 
-  shippingOrder(id) {
-    return this.get('ordem-de-coleta/' + id).single();
+  shippingOrder(number) {
+    return this.get('ordem-de-coleta/numero=' + number).single();
   }
 
   products() {

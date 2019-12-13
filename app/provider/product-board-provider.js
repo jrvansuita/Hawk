@@ -13,7 +13,6 @@ module.exports = {
   reset(){
     loadedResults = undefined;
     this.run(()=>{
-      console.log('Emitiu');
       global.io.sockets.emit('product-board-reset', {});
     });
   },

@@ -30,6 +30,16 @@ module.exports = class UserRoutes extends Routes{
       res.render('performance/team-board',{data:  UsersProvider.getByGroup()});
     });
 
+    this._page('/users-listing', (req, res) => {
+      res.render('user/users-listing', {users:  UsersProvider.getAllUsers()});
+    });
+
+    this._post('/user-active', (req, res) => {
+      UsersVault.active(req.body.userId, req.body.active, () => {
+          res.status(200).send('OK');
+      });
+    });
+
     this._post('/user-registering', (req, res) => {
       UsersVault.storeFromScreen(req.body, (userId)=>{
         res.redirect("/user-registering?userId=" + userId);
@@ -37,8 +47,10 @@ module.exports = class UserRoutes extends Routes{
     }, true);
 
     this._post('/user-delete', (req, res) => {
-      UsersVault.delete(req.body.id);
-      res.status(200).send('Ok');
+      UsersVault.delete(req.body.id, () => {
+        res.status(200).send('Ok');
+      });
+
     }, true);
 
 

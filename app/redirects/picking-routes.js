@@ -15,9 +15,9 @@ module.exports = class PickingRoutes extends Routes{
     this._page('/picking/records', (req, res) => {
       var builder = new (require('../builder/picking-records-builder.js'))();
       builder.init(res.locals.loggedUser.full, (data) => {
-          res.render('picking/picking-records', {
-            data: data
-          });
+        res.render('picking/picking-records', {
+          data: data
+        });
       });
 
       builder.build();
@@ -25,9 +25,9 @@ module.exports = class PickingRoutes extends Routes{
 
     this._page('/picking/overview', (req, res) => {
       require('../builder/picking-chart-builder.js').buildOverview(res.locals.loggedUser.full, function(charts) {
-          res.render('picking/picking-chart', {
-            charts: charts,
-            page: req.originalUrl,
+        res.render('picking/picking-chart', {
+          charts: charts,
+          page: req.originalUrl,
         });
       });
     });
@@ -45,6 +45,13 @@ module.exports = class PickingRoutes extends Routes{
         });
       });
     });
+
+    this._post('/picking-reload', (req, res) => {
+      PickingHandler.reloadPickingList(req.session.loggedUserID, req.body.ignoreDone, (result) => {
+        this._resp().sucess(res, result);
+      });
+    });
+
 
     this._page('/picking', (req, res) => {
       TransportLaws.select(req.query.transp);
@@ -73,7 +80,8 @@ module.exports = class PickingRoutes extends Routes{
             blockedRules: BlockHandler.rules(),
             blockedSalesCount: BlockHandler.getBlockedSalesCount(),
 
-            openSalesCount: PickingHandler.getOpenSalesCount()
+            openSalesCount: PickingHandler.getOpenSalesCount(),
+            isBusy: PickingHandler.isBusy()
           });
         }
       });
@@ -121,12 +129,12 @@ module.exports = class PickingRoutes extends Routes{
       const BlockLaws = require('../laws/block-laws.js');
 
       res.render('picking/line', {line : PickingLaws.getFullList(),
-                                  blocks: BlockLaws.list(),
-                                rules: BlockLaws.rules()});
-    });
+        blocks: BlockLaws.list(),
+        rules: BlockLaws.rules()});
+      });
 
 
 
 
-  }
-};
+    }
+  };

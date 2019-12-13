@@ -1,29 +1,32 @@
 $(document).ready(()=>{
 
-  /*$('.job').click(function() {
-  var ref = $(this).data('ref');
-
-  _post("/run-jobs", {ref: ref}, (data) => {
-  $(this).find('.job-status').attr('src','img/wait.png');
-});
-});
-*/
 
 
-$('.job-item-menu').click(function(e) {
-  var id = $(this).data('id');
-  var tag = $(this).data('tag');
+  $('.job-item-menu').click(function(e) {
+    var id = $(this).data('id');
+    var tag = $(this).data('tag');
+    var active = $(this).data('active');
 
-  var drop = new MaterialDropdown($(this), e);
-  drop.addItem('/img/gear.png', 'Editar', function(){
-    window.location = '/job-registering?id=' +id;
+    var drop = new MaterialDropdown($(this), e);
+
+    if (active){
+      drop.addItem('/img/play.png', 'Executar', function(){
+        _post('  /job-run-force', {id: id});
+      });
+    }
+
+    drop.addItem('/img/gear.png', 'Editar', function(){
+      window.location = '/job-registering?id=' +id;
+    });
+
+    drop.addItem('/img/registering.png', 'Log', function(){
+      window.location = '/history?tag=' + tag;
+    });
+
+
+
+
+    drop.show();
   });
-
-  drop.addItem('/img/registering.png', 'Log', function(){
-    window.location = '/history?tag=' + tag;
-  });
-
-  drop.show();
-});
 
 });

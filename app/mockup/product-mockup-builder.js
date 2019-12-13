@@ -210,8 +210,6 @@ module.exports = class {
 
     this.context.drawImage(this.productImage, this.padding/2, this.paddingTop, this.canvas.width - this.padding, this.canvas.width - this.padding);
     this.context.drawImage(this.mockupImage, 0, this.canvas.height - this.mockupImage.height, this.canvas.width, this.mockupImage.height);
-
-    console.log('');
   }
 
   initCanvas(){

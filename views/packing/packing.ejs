@@ -27,7 +27,7 @@
 <body>
   <%  include ../menus/packing-menu %>
 
-  <script>
+  <script class="hidable-script">
   window.sale = <%- JSON.stringify(sale || null) %>
 </script>
 
@@ -114,250 +114,250 @@
                   <div class="client-title-holder">
                     <label class="field-title">Cliente</label>
                     <%if (sale && (sale.primeiraCompra == '1')){%>
-                    <img class="mini-alert first-sale-icon <%= !sale.nfe ? 'blink_me' : ''%>" src="img/one.png" title="Primeira Compra">
-                    <%}%>
+                      <img class="mini-alert first-sale-icon <%= !sale.nfe ? 'blink_me' : ''%>" src="img/one.png" title="Primeira Compra">
+                      <%}%>
+                    </div>
+
+                    <label class="info  <%=(sale && (sale.primeiraCompra == '1')) ? 'first-sale-client-name' : ''%>"><%=sale && sale.client ? Str.short(sale.client.nome,20) : ''%></label>
                   </div>
+                </td>
 
-                  <label class="info  <%=(sale && (sale.primeiraCompra == '1')) ? 'first-sale-client-name' : ''%>"><%=sale && sale.client ? Str.short(sale.client.nome,20) : ''%></label>
-                </div>
-              </td>
-
-              <td>
-                <div class="field">
-                  <label class="field-title">Estado</label>
-                  <label class="info"><%=sale && sale.client ? sale.client.uf : ''%></label>
-                </div>
-              </td>
-
-              <td>
-                <div class="field">
-                  <label class="field-title">Cidade</label>
-                  <label class="info"style="font-size: 12px; max-width:100px"><%=sale && sale.client ? Str.short(sale.client.cidade,20) : ''%></label>
-                </div>
-              </td>
-
-              <td>
-                <div class="field">
-                  <label class="field-title">Endereço</label>
-                  <%
-                  var address = '';
-
-                  if(sale && sale.client){
-                    address = Str.short(sale.client.endereco, 20) + ', ' + sale.client.enderecoNro +
-                    '\n' + sale.client.bairro + ' ' + sale.client.cep;
-                  }
-
-                  %>
-                  <label class="info" style="font-size: 12px;"><%=address%></label>
-                </div>
-              </td>
-
-              <td>
-                <div class="status-holder">
-                  <img class="circle shadow icon" src="/img/<%=sale  ? Util.getSaleStatusIcon(sale.pickingRealizado): 'alert'%>.png" />
-
-                  <div class="field skrink">
-                    <label class="field-title">Status</label>
-                    <label class="info"><%=sale ? Util.getSaleStatusName(sale.pickingRealizado) : ''%></label>
+                <td>
+                  <div class="field">
+                    <label class="field-title">Estado</label>
+                    <label class="info"><%=sale && sale.client ? sale.client.uf : ''%></label>
                   </div>
-                </div>
-              </td>
+                </td>
 
+                <td>
+                  <div class="field">
+                    <label class="field-title">Cidade</label>
+                    <label class="info"style="font-size: 12px; max-width:100px"><%=sale && sale.client ? Str.short(sale.client.cidade,20) : ''%></label>
+                  </div>
+                </td>
 
-              <td>
-                <%
-                if (sale.pickUser != undefined){%>
+                <td>
+                  <div class="field">
+                    <label class="field-title">Endereço</label>
+                    <%
+                    var address = '';
+
+                    if(sale && sale.client){
+                      address = Str.short(sale.client.endereco, 20) + ', ' + sale.client.enderecoNro +
+                      '\n' + sale.client.bairro + ' ' + sale.client.cep;
+                    }
+
+                    %>
+                    <label class="info" style="font-size: 12px;"><%=address%></label>
+                  </div>
+                </td>
+
+                <td>
                   <div class="status-holder">
-                    <img class="circle shadow icon" src="<%=sale.pickUser.id == 404 ? 'img/system.png' : sale.pickUser.avatar %>" title="<%=sale.pickUser.name%>" />
+                    <img class="circle shadow icon" src="/img/<%=sale  ? Util.getSaleStatusIcon(sale.pickingRealizado): 'alert'%>.png" />
 
                     <div class="field skrink">
-                      <label class="field-title">Usuário Picking</label>
-                      <label class="info"><%=sale.pickUser.name%></label>
+                      <label class="field-title">Status</label>
+                      <label class="info"><%=sale ? Util.getSaleStatusName(sale.pickingRealizado) : ''%></label>
                     </div>
                   </div>
-                  <%}%>
                 </td>
-              </tr>
 
 
-              <tr class="editable-infos-holder line-here">
                 <td>
-                  <div class="field packing-select-holder">
-                    <div class="pack-holder">
-                      <label class="field-title">Embalagem</label>
-                      <img class="mini-alert pack-alert" src="img/alert.png" title="Pouca Embalagem em Estoque">
+                  <%
+                  if (sale.pickUser != undefined){%>
+                    <div class="status-holder">
+                      <img class="circle shadow icon" src="<%=sale.pickUser.id == 404 ? 'img/system.png' : sale.pickUser.avatar %>" title="<%=sale.pickUser.name%>" />
+
+                      <div class="field skrink">
+                        <label class="field-title">Usuário Picking</label>
+                        <label class="info"><%=sale.pickUser.name%></label>
+                      </div>
                     </div>
+                    <%}%>
+                  </td>
+                </tr>
 
-                    <input id="sale-package-type" type="text" placeholder="Selecionar" maxlength="20" class="editable-info" autocomplete="off"/>
 
-                  </div>
-                </td>
+                <tr class="editable-infos-holder line-here">
+                  <td>
+                    <div class="field packing-select-holder">
+                      <div class="pack-holder">
+                        <label class="field-title">Embalagem</label>
+                        <img class="mini-alert pack-alert" src="img/alert.png" title="Pouca Embalagem em Estoque">
+                      </div>
 
-                <td>
-                  <div class="field">
-                    <div class="pack-holder">
-                      <label class="field-title">Peso Líquido</label>
-                      <img class="mini-alert weight-alert" src="img/alert.png" title="O Peso está incorreto">
+                      <input id="sale-package-type" type="text" placeholder="Selecionar" maxlength="20" class="editable-info" autocomplete="off"/>
+
                     </div>
+                  </td>
 
-                    <input id="sale-liq" type="text" placeholder="0" onkeypress="return Floa.isFloatKey(event);" maxlength="6" class="editable-info"/>
-                  </div>
-                </td>
+                  <td>
+                    <div class="field">
+                      <div class="pack-holder">
+                        <label class="field-title">Peso Líquido</label>
+                        <img class="mini-alert weight-alert" src="img/alert.png" title="O Peso está incorreto">
+                      </div>
 
-                <td>
-                  <div class="field">
-                    <label class="field-title">Peso Bruto</label>
-                    <input id="sale-bru" type="text" placeholder="0" onkeypress="return Floa.isFloatKey(event);" maxlength="6" class="editable-info" tabindex="-1"/>
-                  </div>
-                </td>
+                      <input id="sale-liq" type="text" placeholder="0" onkeypress="return Floa.isFloatKey(event);" maxlength="6" class="editable-info"/>
+                    </div>
+                  </td>
 
-                <td>
-                  <div class="field">
-                    <label class="field-title">Volumes</label>
-                    <input id="sale-vols" type="text" placeholder="1" value="1" tabIndex="-1" onkeypress="return Num.isNumberKey(event);" maxlength="1" class="editable-info" autocomplete="off"/>
-                  </div>
-                </td>
+                  <td>
+                    <div class="field">
+                      <label class="field-title">Peso Bruto</label>
+                      <input id="sale-bru" type="text" placeholder="0" onkeypress="return Floa.isFloatKey(event);" maxlength="6" class="editable-info" tabindex="-1"/>
+                    </div>
+                  </td>
 
-
-
-
-                <td>
-
-                </td>
-
-                <td></td>
-
-              </tr>
-
-              <tr class="editable-infos-holder">
-                <td>
-                  <div class="field">
-                    <label class="field-title">Altura</label>
-                    <input id="sale-height" type="text" placeholder="0" onkeypress="return Num.isNumberKey(event);" maxlength="6" class="editable-info"/>
-                  </div>
-                </td>
-
-                <td>
-                  <div class="field">
-                    <label class="field-title">Largura</label>
-                    <input id="sale-width" type="text" placeholder="0" onkeypress="return Num.isNumberKey(event);" maxlength="6" class="editable-info"/>
-                  </div>
-                </td>
-
-                <td>
-                  <div class="field">
-                    <label class="field-title">Comprimento</label>
-                    <input id="sale-length" type="text" placeholder="0" onkeypress="return Num.isNumberKey(event);"  maxlength="6" class="editable-info" />
-                  </div>
-                </td>
-
-                <td>
-                  <div class="field">
-                    <label class="field-title">Espécie</label>
-                    <input id="sale-esp" type="text" placeholder="FLYER" tabIndex="-1" value="FLYER" maxlength="20" class="editable-info" autocomplete="off"/>
-                  </div>
-                </td>
-
-                <td></td>
-                <td></td>
-              </tr>
+                  <td>
+                    <div class="field">
+                      <label class="field-title">Volumes</label>
+                      <input id="sale-vols" type="text" placeholder="1" value="1" tabIndex="-1" onkeypress="return Num.isNumberKey(event);" maxlength="1" class="editable-info" autocomplete="off"/>
+                    </div>
+                  </td>
 
 
 
-            </table>
 
-            <%}%>
-          </div>
+                  <td>
 
-          <div class="search-holder shadow">
+                  </td>
 
-            <div class="last-product-holder">
-              <div class="sku-header">
-                <span class="field-title">Último Conferido</span>
-                <span id="last-product-sku"></span>
+                  <td></td>
+
+                </tr>
+
+                <tr class="editable-infos-holder">
+                  <td>
+                    <div class="field">
+                      <label class="field-title">Altura</label>
+                      <input id="sale-height" type="text" placeholder="0" onkeypress="return Num.isNumberKey(event);" maxlength="6" class="editable-info"/>
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="field">
+                      <label class="field-title">Largura</label>
+                      <input id="sale-width" type="text" placeholder="0" onkeypress="return Num.isNumberKey(event);" maxlength="6" class="editable-info"/>
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="field">
+                      <label class="field-title">Comprimento</label>
+                      <input id="sale-length" type="text" placeholder="0" onkeypress="return Num.isNumberKey(event);"  maxlength="6" class="editable-info" />
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="field">
+                      <label class="field-title">Espécie</label>
+                      <input id="sale-esp" type="text" placeholder="FLYER" tabIndex="-1" value="FLYER" maxlength="20" class="editable-info" autocomplete="off"/>
+                    </div>
+                  </td>
+
+                  <td></td>
+                  <td></td>
+                </tr>
+
+
+
+              </table>
+
+              <%}%>
+            </div>
+
+            <div class="search-holder shadow">
+
+              <div class="last-product-holder">
+                <div class="sku-header">
+                  <span class="field-title">Último Conferido</span>
+                  <span id="last-product-sku"></span>
+                </div>
+                <img id="last-product-img"/>
               </div>
-              <img id="last-product-img"/>
-            </div>
 
-            <div class="material-input-holder">
-              <input type="text" id="search-sale" value="<%=sale? sale.numeroPedido : ''%>" required>
-              <span class="bar"></span>
-              <label>Número do Pedido</label>
+              <div class="material-input-holder">
+                <input type="text" id="search-sale" value="<%=sale? sale.numeroPedido : ''%>" required>
+                <span class="bar"></span>
+                <label>Número do Pedido</label>
+              </div>
+
             </div>
 
           </div>
 
-        </div>
 
+          <%if (sale && sale.id){%>
+            <div class="sale-content">
 
-        <%if (sale && sale.id){%>
-          <div class="sale-content">
+              <%if (sale && Util.isIn(['1','3'], sale.situacao)){%>
 
-            <%if (sale && Util.isIn(['1','3'], sale.situacao)){%>
+                <div class="middle-line shadow">
+                  <div class="progress-line"> <div class="progress-line inner"> </div></div>
 
-              <div class="middle-line shadow">
-                <div class="progress-line"> <div class="progress-line inner"> </div></div>
+                  <div class="middle-line-inner">
 
-                <div class="middle-line-inner">
-
-                  <div class="left-middle-line">
+                    <div class="left-middle-line">
 
 
 
-                    <div class="product-ean-holder">
-                      <div class="product-ean-and-icon">
-                        <img class="circle shadow icon"  id="product-ean-icon" class="product-icon" src="/img/scan-barcode.png" />
-                        <input type="text" id="product-ean"  class="simple-material-input%>" placeholder="Código de Barras"/>
-                        <span id="itens-progress"></span>
-                      </div>
-                      <label class="product-msg"></label>
-                    </div>
-
-                  </div>
-
-                  <div class="right-middle-line">
-                    <div class="buttons-holder">
-
-                      <div class="missing-items-msg-holder">
-                        <div class="row">
-                          <label>Picking incompleto?</label>
-                          <label id="items-missing-count" class="field-title"></label>
+                      <div class="product-ean-holder">
+                        <div class="product-ean-and-icon">
+                          <img class="circle shadow icon"  id="product-ean-icon" class="product-icon" src="/img/scan-barcode.png" />
+                          <input type="text" id="product-ean"  class="simple-material-input%>" placeholder="Código de Barras"/>
+                          <span id="itens-progress"></span>
                         </div>
-                        <label class="delete-button shadow" id="missing-items" tabindex="-1">Sim</label>
-                        <div class="countdown-span"></div>
+                        <label class="product-msg"></label>
                       </div>
 
-                      <label class="button shadow" id="packing-done" tabindex="0">Faturar</label>
-                      <label class="button shadow" id="print-nfe" tabindex="0">Imprimir NFe</label>
-                      <label class="button shadow" id="print-transport-tag" tabindex="0">Imprimir Etiqueta</label>
                     </div>
-                  </div>
 
+                    <div class="right-middle-line">
+                      <div class="buttons-holder">
+
+                        <div class="missing-items-msg-holder">
+                          <div class="row">
+                            <label>Picking incompleto?</label>
+                            <label id="items-missing-count" class="field-title"></label>
+                          </div>
+                          <label class="delete-button shadow" id="missing-items" tabindex="-1">Sim</label>
+                          <div class="countdown-span"></div>
+                        </div>
+
+                        <label class="button shadow" id="packing-done" tabindex="0">Faturar</label>
+                        <label class="button shadow" id="print-nfe" tabindex="0">Imprimir NFe</label>
+                        <label class="button shadow" id="print-transport-tag" tabindex="0">Imprimir Etiqueta</label>
+                      </div>
+                    </div>
+
+
+                  </div>
 
                 </div>
 
+                <%}%>
+
+
+
+
+
+
+
+
+                <div class="products-in-holder products-table-holder shadow"></div>
+                <div class="products-out-holder  products-table-holder shadow"></div>
               </div>
+
 
               <%}%>
 
 
+              <%  include ../sale-groups/sale-grouping %>
 
-
-
-
-
-
-              <div class="products-in-holder products-table-holder shadow"></div>
-              <div class="products-out-holder  products-table-holder shadow"></div>
             </div>
 
-
-            <%}%>
-
-
-            <%  include ../sale-groups/sale-grouping %>
-
-          </div>
-
-        </body>
-        </html>
+          </body>
+          </html>

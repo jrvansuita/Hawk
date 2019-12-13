@@ -96,11 +96,13 @@ module.exports = class Job{
   * Implementation optional
   */
   onError(e) {
-    console.log('[Job] onError: ' + this.getName());
+    var msg  = ( e ? '\n' + e.toString(): '');
+
+    console.log('[Job] onError: ' + this.getName() + msg);
 
 
     if (this.getInfo()){
-      History.job(this.getName(), 'Tarefa Falhou - ' + this.getInfo().description, this.getInfo().tag);
+      History.job(this.getName(), 'Tarefa Falhou - ' + this.getInfo().description + msg, this.getInfo().tag);
     }
 
     if (this.onErrorListener){

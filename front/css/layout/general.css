@@ -28,6 +28,12 @@ input, span, label {
 }
 
 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 
 .button{
   margin: 5px 1px;
@@ -349,6 +355,11 @@ table{
 }
 
 
+.barberpole-mini-green-background{
+  animation: barberpole 10s linear infinite;
+  background-image: repeating-linear-gradient(     -45deg,     #4ac6a9bf,     #4ac6a9bf 0.7rem,     #ffffff 0.7rem,     #ffffff 1.3rem     );
+  background-size: 200% 200%;
+}
 
 .barberpole-color-background{
   animation: barberpole 10s linear infinite;
@@ -382,4 +393,24 @@ table{
   width: 24px;
   height: 24px;
   padding: 3px;
+}
+
+.avatar-group{
+  width: fit-content;
+  margin: auto;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  position: relative;
+}
+
+
+.avatar-badge{
+  width: 20px;
+  height: 20px;
+  z-index: 999999999 !important;
+  position: absolute !important;
+  left: 0;
+  margin-top: -17px;
+  -webkit-filter: drop-shadow(1px 1px 1px #222222a8);
+  filter: drop-shadow(1px 1px 1px #222222a8);
 }

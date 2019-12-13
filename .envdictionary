@@ -2,7 +2,6 @@ STORE_UTL=https://www.store.com.br
 ECCOSYS_HOST=example.eccosys.com.br
 ECCOSYS_API=?
 ECCOSYS_SECRET=?
-SESSION_SECRET=ANY-KEY-WORD
 MLAB_MONGO_CONN=mongodb://app:app@ds243059.mlab.com:port/appdb
 REPLY_EMAIL=example@company.com.br
 EMAIL=example@company.com.br

@@ -17,9 +17,10 @@ class DatePicker{
     this.holderEl = $(holder);
 
     if (this.holderEl){
-      this.input = $('<input>').css('display','none');
+      this.input = $('<input>')
+      .css('display','none');
 
-      this.holderEl.before(this.input);
+      this.holderEl.append(this.input);
 
       if (bindOnClick){
         this.holderEl.click(()=>{
@@ -110,6 +111,9 @@ class DatePicker{
   async load(){
     await this.dependencies.load();
 
+
+console.log(this.input);
+
     this.picker = this.input.datepicker({
       modal: false,
       header: true,
@@ -134,6 +138,8 @@ class DatePicker{
         }
       }
     });
+
+
 
 
     return this.picker;

@@ -22,7 +22,7 @@ module.exports = class User extends DataAccess {
 
   static suppress(user){
     if (user){
-      return Util.removeAttrs(user, ['name', 'id', 'avatar','full', 'access']);
+      return Util.removeAttrs(user, ['name', 'id', 'avatar','full', 'access', 'leader']);
     }
 
     return {};

@@ -4,7 +4,6 @@ const Err = require('../error/error.js');
 module.exports = class  {
 
   static storeFromScreen(params, callback) {
-    console.log(params.lockSize);
 
     var pack = new Pack(//parseInt(params.editing),
     params.name,

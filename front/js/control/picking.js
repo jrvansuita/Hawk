@@ -37,7 +37,7 @@ $(document).ready(() => {
     drop.addItem('/img/restart.png', 'Recarregar', function(){
       $('.upcoming-dots img').attr('src', 'img/loader/circle.svg');
 
-      _post("/run-jobs", {ref: 'picking'}, (data) => {
+      _post("/picking-reload", {ref: 'picking'}, (data) => {
         window.location.reload();
       });
     });
@@ -45,7 +45,7 @@ $(document).ready(() => {
     drop.addItem('/img/back.png', 'Separar Novamente', function(){
       $('.upcoming-dots img').attr('src', 'img/loader/circle.svg');
 
-      _post("/run-jobs", {ref: 'picking', ignoreDone:true}, (data) => {
+      _post("/picking-reload", {ref: 'picking', ignoreDone:true}, (data) => {
         window.location.reload();
       });
     });

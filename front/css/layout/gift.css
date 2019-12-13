@@ -225,3 +225,8 @@
 .info .mini-icon-button{
   margin-bottom: -8px;
 }
+
+
+.material-input-holder>label{
+  margin-top: -5px !important;
+}

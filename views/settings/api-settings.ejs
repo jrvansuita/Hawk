@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<%  include ../menus/main-menu %>
+
+<head>
+
+
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/main-settings.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-checkbox.css">
+  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+  <script type="text/javascript" src="/front/js/control/main-settings.js"></script>
+
+
+</head>
+
+
+<body>
+
+
+  <table class="main-table">
+    <tr>
+      <td>
+        <div class="box shadow">
+          <span class="box-title">
+            <img src="img/website.png">
+            <label>Ecommerce</label>
+          </span>
+
+          <div class="box-content">
+            <div class="material-input-holder">
+              <input type="text" id="store-url" maxlength="50"
+              autocomplete="off" required/>
+              <span class="bar"></span>
+              <label>Endereço da Loja</label>
+            </div>
+
+            <div class="material-input-holder">
+              <input type="text" id="store-feed-url" maxlength="250"
+              autocomplete="off" required/>
+              <span class="bar"></span>
+              <label>Caminho Feed XML</label>
+            </div>
+
+
+            <div class="material-input-holder">
+              <input type="text" id="email" maxlength="200"
+              autocomplete="off" required/>
+              <span class="bar"></span>
+              <label>E-mail</label>
+            </div>
+
+            <div class="material-input-holder">
+              <input type="text" id="email-pass" maxlength="50"
+              autocomplete="off" required/>
+              <span class="bar"></span>
+              <label>Senha</label>
+            </div>
+
+            <div class="material-input-holder">
+              <input type="text" id="email-reply" maxlength="200"
+              autocomplete="off" required/>
+              <span class="bar"></span>
+              <label>E-mail Resposta</label>
+            </div>
+
+          </div>
+        </div>
+      </td>
+
+      <td>
+        <div class="box shadow">
+          <span class="box-title">
+            <img src="img/magento.png">
+            <label>Magento</label>
+          </span>
+
+          <div class="box-content">
+            <div class="material-input-holder">
+              <input type="text" id="magento-url" maxlength="150"
+              autocomplete="off" required/>
+              <span class="bar"></span>
+              <label>Endereço do Admin</label>
+            </div>
+
+
+            <div class="material-input-holder">
+              <input type="text" id="xmlrpc-path" maxlength="40"
+              autocomplete="off" required/>
+              <span class="bar"></span>
+              <label>Caminho XMLRPC</label>
+            </div>
+
+            <div class="material-input-holder">
+              <input type="text" id="magento-login" maxlength="50"
+              autocomplete="off" required/>
+              <span class="bar"></span>
+              <label>Login</label>
+            </div>
+
+            <div class="material-input-holder">
+              <input type="text" id="magento-pass" maxlength="50"
+              autocomplete="off" required/>
+              <span class="bar"></span>
+              <label>Senha</label>
+            </div>
+
+          </div>
+        </div>
+      </td>
+
+      <td>
+        <div class="box shadow">
+          <span class="box-title">
+            <img src="img/eccosys.png">
+            <label>Eccosys</label>
+          </span>
+
+          <div class="box-content">
+            <div class="material-input-holder">
+              <input type="text" id="eccosys-url" maxlength="200"
+              autocomplete="off" required/>
+              <span class="bar"></span>
+              <label>Endereço</label>
+            </div>
+
+
+            <div class="material-input-holder">
+              <input type="text" id="eccosys-api" maxlength="200"
+              autocomplete="off" required/>
+              <span class="bar"></span>
+              <label>Chave de API</label>
+            </div>
+
+            <div class="material-input-holder">
+              <input type="text" id="eccosys-secret" maxlength="200"
+              autocomplete="off" required/>
+              <span class="bar"></span>
+              <label>Segredo</label>
+            </div>
+
+            <div class="material-input-holder">
+              <input type="text" id="eccosys-api-down-email" maxlength="250"
+              autocomplete="off" required/>
+              <span class="bar"></span>
+              <label>Email de Reporte de API</label>
+            </div>
+
+          </div>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <div class="box shadow">
+          <span class="box-title">
+            <img src="img/mundipagg.png">
+            <label>Mundipagg</label>
+          </span>
+
+          <div class="box-content">
+            <div class="material-input-holder">
+              <input type="text" id="mundipagg-url" maxlength="200"
+              autocomplete="off" required/>
+              <span class="bar"></span>
+              <label>Endereço</label>
+            </div>
+
+
+            <div class="material-input-holder">
+              <input type="text" id="mundipagg-secret" maxlength="200"
+              autocomplete="off" required/>
+              <span class="bar"></span>
+              <label>Segredo</label>
+            </div>
+
+
+          </div>
+        </div>
+      </td>
+
+      <td>
+        <div class="box shadow">
+          <span class="box-title">
+            <img src="img/imgur.png">
+            <label>Imgur</label>
+          </span>
+
+          <div class="box-content">
+            <div class="material-input-holder">
+              <input type="text" id="imgur-id" maxlength="50"
+              autocomplete="off" required/>
+              <span class="bar"></span>
+              <label>Identificação</label>
+            </div>
+
+
+            <div class="material-input-holder">
+              <input type="text" id="imgur-email" maxlength="100"
+              autocomplete="off" required/>
+              <span class="bar"></span>
+              <label>E-mail</label>
+            </div>
+
+            <div class="material-input-holder">
+              <input type="text" id="imgur-pass" maxlength="100"
+              autocomplete="off" required/>
+              <span class="bar"></span>
+              <label>Senha</label>
+            </div>
+
+          </div>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+
+</body>
+</html>

@@ -22,7 +22,11 @@ module.exports = {
       })
     });
 
-    callback(sale || {});
+    if(sale){
+      this.loadSale(sale, callback);
+    }else{
+      callback({});
+    }
   },
 
 
@@ -34,7 +38,13 @@ module.exports = {
       if (throwa && throwa.error){
         callback(throwa);
       }else{
-        this.loadSale(saleNumber, callback);
+        var fromDone = DoneLaws.get(saleNumber);
+
+        if (fromDone && fromDone.packingReady){
+          callback(fromDone);
+        }else{
+          this.loadSale(saleNumber, callback);
+        }
       }
     }
   },
@@ -62,25 +72,26 @@ module.exports = {
     }
   },
 
-  loadSale(saleNumber, callback){
-    var fromDone = DoneLaws.get(saleNumber);
 
-    if (fromDone && fromDone.packingReady){
-      callback(fromDone);
-    }else{
-      new SaleLoader(saleNumber)
-      .loadClient()
-      .loadItems()
-      .loadNfe()
-      .loadItemsDeepAttrs()
-      .run((loadedSale)=>{
-        if (!loadedSale){
-          loadedSale = {error : Const.sale_not_found.format(saleNumber), numeroPedido: saleNumber};
-        }
-
-        callback(loadedSale);
-      });
+  loadSale(sale, callback){
+    var onError = () => {
+      var saleNumber = typeof sale == 'string'? sale : sale.numeroPedido;
+      callback({error : Const.sale_not_found.format(saleNumber), numeroPedido: saleNumber});
     }
+
+    new SaleLoader(sale)
+    .loadClient()
+    .loadItems()
+    .loadNfe()
+    .loadItemsDeepAttrs()
+    .setOnError(onError)
+    .run((loadedSale)=>{
+      if (!loadedSale){
+        onError();
+      }else{
+        callback(loadedSale);
+      }
+    });
   },
 
   loadDanfe(res, nfNumber){

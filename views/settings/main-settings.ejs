@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<%  include ../menus/main-menu %>
+
+<head>
+
+
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/main-settings.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-checkbox.css">
+  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+  <script type="text/javascript" src="/front/js/control/main-settings.js"></script>
+</head>
+
+
+<body>
+
+
+
+  <table class="main-table">
+    <tr>
+      <td>
+        <div class="box shadow">
+          <span class="box-title">
+            <label>Pendências</label>
+          </span>
+
+          <div class="box-content">
+            <label class="pure-material-checkbox">
+              <input type="checkbox" id="auto-block-pending">
+              <span>Bloquear pendências recém adicionadas</span>
+            </label>
+
+            <div class="material-input-holder">
+              <input type="number" id="time-block-pending" maxlength="6"
+              onkeypress="return Num.isNumberKey(event);"  autocomplete="off" required/>
+              <span class="bar"></span>
+              <label>Tempo de Bloqueio (ms)</label>
+            </div>
+
+
+          </div>
+        </div>
+      </td>
+
+
+      <td>
+        <div class="box shadow">
+          <span class="box-title">
+            <label>Produto</label>
+          </span>
+
+          <div class="box-content">
+            <label class="pure-material-checkbox">
+              <input type="checkbox" id="update-product-weight-magento">
+              <span>Sincronizar Peso do produto com o Magento</span>
+            </label>
+
+
+
+          </div>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+
+</body>
+</html>

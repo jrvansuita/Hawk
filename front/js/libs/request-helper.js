@@ -2,7 +2,10 @@
 function _get(path, data, onSucess, onError){
   $.ajax({
     url: path,
-    type: "get",
+    type: "GET",
+    headers: {
+      "Content-Type": "application/json"
+    },
     data: data,
     success: function(response) {
       if (onSucess){
@@ -24,8 +27,11 @@ function _get(path, data, onSucess, onError){
 function _post(path, data, onSucess, onError){
   $.ajax({
     url: path,
-    type: "post",
-    data: data,    
+    type: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    data: JSON.stringify(data ? data : {}),
     success: function(response) {
       if (onSucess){
         onSucess(response);

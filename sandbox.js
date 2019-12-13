@@ -1,48 +1,35 @@
-require('./app/abra-cadabra/first-step.js');
 
 
 
-var pool = require('./app/jobs/controller/pool.js');
-pool.initialize((jobs) => {
-  var job = jobs.find((e) => {
-    return e.tag == 'Mundipagg';
-  })
 
-  pool.fireJob(job);
+const Initilizer = require('./app/abra-cadabra/initializer.js');
+new Initilizer(__dirname, true).begin(() => {
+
+
+  const MagentoCalls = require('./app/magento/magento-calls.js');
+
+
+  /*new MagentoCalls().updateProductWeight('CB606ro-P', 0.1460).then((result) => {
+    console.log(result);
+  })*/
+
+
+
+new MagentoCalls().salesOrderUpdate({
+    orderIncrementId: '120838374',
+    status:           'pending_payment',
+    comment:          'teste',
+    notify:           false
+  }).then((r) => {
+    console.log(r);
+  });
+
+ /*new MagentoCalls().product('PG012br-1').then((product) => {
+   console.log(product);
+ })*/
+
+
+
+
+
 });
-
-
-//var JobMundiApi = require('./app/jobs/job-mundipagg-checker.js');
-//var job = new JobMundiApi();
-//job.doWork();
-
-
-
-
-
-
-//const MagentoApi = require('./app/magento/magento-api.js');
-
-/*new MagentoApi().instance((api) => {
-  console.log(api.sessionId);
-  console.log('conected');
-});
-*/
-
-
-  /*magento.salesOrder.cancel({
-    orderIncrementId: '120809479'
-  }, (d) => {
-    console.log(d);
-  });*/
-
-
-
-  /*magento.salesOrder.addComment({
-    orderIncrementId: '120809479',
-    status:           'canceled',
-    comment:          'Teste',
-    notify:           true
-  }, (d) => {
-    console.log(d);
-  });*/

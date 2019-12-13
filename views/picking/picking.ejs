@@ -77,263 +77,267 @@
         </div>
 
         <div class="pick-box shadow upcoming-box">
+          <% if(isBusy){%>
+            <div class="picking-loading barberpole-mini-green-background"></div>
+            <%}%>
+
+            <div class="pick-header">
 
 
 
-          <div class="pick-header">
-            <span class="label header-title"> Próximos Pedidos</span>
-            <span class="label header-count">
-              <%=previewSalesCount == totalSalesCount ? previewSalesCount : previewSalesCount + '/' + totalSalesCount%>
+              <span class="label header-title"><%=isBusy ? 'Carregando Pedidos' : 'Próximos Pedidos'%> </span>
+              <span class="label header-count">
+                <%=previewSalesCount == totalSalesCount ? previewSalesCount : previewSalesCount + '/' + totalSalesCount%>
 
-              <%if (locals.loggedUser && locals.loggedUser.full){%>
-                <div class="upcoming-dots">
-                  <img src="img/dots.png" class="dots-glyph"/>
-                </div>
+                <%if (locals.loggedUser && locals.loggedUser.full){%>
+                  <div class="upcoming-dots">
+                    <img src="img/dots.png" class="dots-glyph"/>
+                  </div>
+                  <%}%>
+
+                </span>
+              </div>
+
+              <%if (openSalesCount){%>
+                <label class="open-sales-label">+<%=openSalesCount%> Em aberto</label>
                 <%}%>
 
-              </span>
-            </div>
-
-            <%if (openSalesCount){%>
-              <label class="open-sales-label">+<%=openSalesCount%> Em aberto</label>
-              <%}%>
 
 
-
-
-              <%
-              previewPickingSales.slice(0, 6).forEach(function(preview){
-                %>
-
-                <div class="shadow label mini-item">
-
-                  <table width="100%">
-                    <tr>
-                      <td rowspan="2" >
-                        <img class="circle shadow box-img" data-transp="<%=preview.transport%>" src="/img/transport/<%=preview.transport ? preview.transport.toLowerCase(): ''%>.png" onerror="this.src='/img/wait.png'" />
-                      </td>
-
-                      <td><span class="pick-value green-title"><%=preview.numeroPedido %></span></td>
-                      <td><span class="pick-value"><%=preview.client ? preview.client.uf : ''%></span></td>
-                      <td><span class="pick-value" style="float:right"><%= Dat.format(new Date(preview.data))%></span></td>
-                    </tr>
-                    <tr>
-                      <td><span class="pick-value"><%=preview.transport?preview.transport:'Carregando...'%></span></td>
-
-                      <td><span class="pick-value" title="<%=preview.client ? preview.client.cidade : ''%>" ><%=Util.ellipsis(preview.client ? preview.client.cidade : '', 10)%></span></td>
-                      <td><span class="pick-value" style="float:right"><%=Util.twoNames(preview.client ? preview.client.nome: '') %></span></td>
-                    </tr>
-                  </table>
-                </div>
 
                 <%
-              });
-              %>
-            </div>
+                previewPickingSales.slice(0, 6).forEach(function(preview){
+                  %>
+
+                  <div class="shadow label mini-item">
+
+                    <table width="100%">
+                      <tr>
+                        <td rowspan="2" >
+                          <img class="circle shadow box-img" data-transp="<%=preview.transport%>" src="/img/transport/<%=preview.transport ? preview.transport.toLowerCase(): ''%>.png" onerror="this.src='/img/wait.png'" />
+                        </td>
+
+                        <td><span class="pick-value green-title"><%=preview.numeroPedido %></span></td>
+                        <td><span class="pick-value"><%=preview.client ? preview.client.uf : ''%></span></td>
+                        <td><span class="pick-value" style="float:right"><%= Dat.format(new Date(preview.data))%></span></td>
+                      </tr>
+                      <tr>
+                        <td><span class="pick-value"><%=preview.transport?preview.transport:'Carregando...'%></span></td>
+
+                        <td><span class="pick-value" title="<%=preview.client ? preview.client.cidade : ''%>" ><%=Util.ellipsis(preview.client ? preview.client.cidade : '', 10)%></span></td>
+                        <td><span class="pick-value" style="float:right"><%=Util.twoNames(preview.client ? preview.client.nome: '') %></span></td>
+                      </tr>
+                    </table>
+                  </div>
+
+                  <%
+                });
+                %>
+              </div>
 
 
-            <div class="pick-box shadow red-top blocked-box">
-              <div class="blocked-header">
-                <div class="pick-header">
-                  <span class="label header-title">Bloqueados</span>
-                  <span class="label header-count">
-                    <%=blockedSalesCount%>
-                    <%if (locals.loggedUser && locals.loggedUser.full){%>
-                      <div class="blocked-dots">
-                        <img src="img/dots.png" class="dots-glyph"/>
-                      </div>
+              <div class="pick-box shadow red-top blocked-box">
+                <div class="blocked-header">
+                  <div class="pick-header">
+                    <span class="label header-title">Bloqueados</span>
+                    <span class="label header-count">
+                      <%=blockedSalesCount%>
+                      <%if (locals.loggedUser && locals.loggedUser.full){%>
+                        <div class="blocked-dots">
+                          <img src="img/dots.png" class="dots-glyph"/>
+                        </div>
+                        <%}%>
+                      </span>
+                    </div>
+
+                    <%if (Sett.get(locals.loggedUser, 11)){%>
+                      <input type="text" id="blocked-rule-input" class="simple-material-input" placeholder="Número" style="width:100%"/>
                       <%}%>
-                    </span>
-                  </div>
+                    </div>
+                    <div class="block-scroll">
+                      <div class="blocked-rules-holder">
+                        <%  blockedRules.forEach((blocked) => {%>
 
-                  <%if (Sett.get(locals.loggedUser, 11)){%>
-                    <input type="text" id="blocked-rule-input" class="simple-material-input" placeholder="Número" style="width:100%"/>
-                    <%}%>
-                  </div>
-                  <div class="block-scroll">
-                    <div class="blocked-rules-holder">
-                      <%  blockedRules.forEach((blocked) => {%>
-
-                        <%var blockingClass = (blocked.blockings > 0 ? 'blocking' : 'not-blocking') %>
-                        <table class="table-sale-blocked-holder <%=blockingClass%> shadow"  data-blocknumber="<%=blocked.number%>">
-                          <tr>
-                            <td>
-                              <%var userName = (blocked.user.name ? blocked.user.name.split(" ")[0] : 'Desconhecido') %>
-
-                              <img class="circle shadow avatar-img super-mini-avatar <%=blockingClass%>" data-id="<%=blocked.user.id%>" src="<%=blocked.user.id == 404 ? 'img/system.png' : blocked.user.avatar %>" title="<%=userName%>" onerror="this.src='/img/avatar.png'" />
-                              <%if (blocked.reasonTag){%>
-                                <img class="circle shadow blocked-reason" data-reason="<%=blocked.reasonTag%>" />
-                                <%}%>
-                              </td>
+                          <%var blockingClass = (blocked.blockings > 0 ? 'blocking' : 'not-blocking') %>
+                          <table class="table-sale-blocked-holder <%=blockingClass%> shadow"  data-blocknumber="<%=blocked.number%>">
+                            <tr>
                               <td>
-                                <label class="blocked-sale-label copiable" data-reason="<%=blocked.reasonTag%>"><%=blocked.number%></label>
+                                <%var userName = (blocked.user.name ? blocked.user.name.split(" ")[0] : 'Desconhecido') %>
 
-                                <%
-                                var blockDate = new Date(blocked.blockDate);
-                                var dif = Dat.daysDif(blockDate, new Date());
-                                var days = dif > 1 ? dif + ' Dias' : dif == 1 ? 'Ontem' : 'Hoje' ;%>
-                                <label class="blocked-sale-label">
-                                  <%=days%>
-                                  <span class="pick-value mini-red-circle " style="float:right;margin-right:5px"><%=blocked.blockings %></span>
-                                </label>
-                              </td>
-                            </tr>
-                          </table>
-                          <%});%>
-
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-
-
-                  <div class="col" style="display:inline-block">
-
-                    <div class="pick-box shadow blue-top">
-                      <div class="pick-header">
-                        <span class="label header-title"> Em Andamento</span>
-                        <span class="label header-count inprogress-count"> <%=Object.keys(inprogress).length%></span>
-                      </div>
-
-
-                      <%
-
-                      var progress = Object.keys(inprogress);
-
-                      if (progress.length === 0){
-                        %><span class="pick-hint">Nenhum picking em andamento </span>
-                        <%
-                      }%>
-
-                      <div class="scrollable-table">
-
-                        <%progress.forEach((key) => {
-                          var sale = inprogress[key];
-                          %>
-                          <div class="shadow label mini-item inprogress-item clickable-mini-item blue-left" data-sale="progress-<%=sale.numeroPedido %>">
-                            <table width="100%">
-                              <tr>
-                                <td rowspan="2">
-                                  <img class="circle shadow avatar-img mini-avatar" data-id="<%=sale.pickUser.id%>" src="<%=sale.pickUser.avatar%>"  onerror="this.src='/img/avatar.png'"/>
+                                <img class="circle shadow avatar-img super-mini-avatar <%=blockingClass%>" data-id="<%=blocked.user.id%>" src="<%=blocked.user.id == 404 ? 'img/system.png' : blocked.user.avatar %>" title="<%=userName%>" onerror="this.src='/img/avatar.png'" />
+                                <%if (blocked.reasonTag){%>
+                                  <img class="circle shadow blocked-reason" data-reason="<%=blocked.reasonTag%>" />
+                                  <%}%>
                                 </td>
-                                <td><span class="pick-value green-title"><%=sale.numeroPedido %></span></td>
-                                <td><span class="pick-value"><%=sale.itemsQuantity %> Itens</span></td>
                                 <td>
-                                  <div class="print-progress print-sale-holder" title="Reimprimir" tabIndex="-1" onclick="openPrintPickingSale('<%=sale.numeroPedido%>','<%=sale.pickUser.id%>')">
-                                    <img class="print-sale" title="<%=sale.doNotCount ? 'Pedido já foi impresso!' : 'Imprimir' %>" src="<%=sale.doNotCount ? '/img/printed.png' : '/img/print.png' %>" />
-                                  </div>
+                                  <label class="blocked-sale-label copiable" data-reason="<%=blocked.reasonTag%>"><%=blocked.number%></label>
+
+                                  <%
+                                  var blockDate = new Date(blocked.blockDate);
+                                  var dif = Dat.daysDif(blockDate, new Date());
+                                  var days = dif > 1 ? dif + ' Dias' : dif == 1 ? 'Ontem' : 'Hoje' ;%>
+                                  <label class="blocked-sale-label">
+                                    <%=days%>
+                                    <span class="pick-value mini-red-circle " style="float:right;margin-right:5px"><%=blocked.blockings %></span>
+                                  </label>
                                 </td>
                               </tr>
-                              <tr>
-                                <td><span class="pick-value"><%=sale.pickUser.name ? sale.pickUser.name.split(" ")[0] : 'Desconhecido'%></span></td>
-                                <td><span class="pick-value"><%=sale.transport %></span></td>
-                                <td><span class="pick-value inprogress-begin" style="float:right" diftime="<%=new Date().getTime() - sale.begin.getTime()%>"></span></td>
-                              </tr>
                             </table>
+                            <%});%>
 
                           </div>
-                          <%
-                        });
-                        %>
+                        </div>
                       </div>
+
                     </div>
 
 
-                  </div>
+                    <div class="col" style="display:inline-block">
+
+                      <div class="pick-box shadow blue-top">
+                        <div class="pick-header">
+                          <span class="label header-title"> Em Andamento</span>
+                          <span class="label header-count inprogress-count"> <%=Object.keys(inprogress).length%></span>
+                        </div>
 
 
-                  <div class="col opened-sale-box">
+                        <%
 
-                    <div class="pick-box shadow orange-top open-sale-holder">
-                      <div class="pick-header">
+                        var progress = Object.keys(inprogress);
 
-                        <span class="label header-title">Pedido</span>
-                        <span class="label header-count green-title sale-number"></span>
+                        if (progress.length === 0){
+                          %><span class="pick-hint">Nenhum picking em andamento </span>
+                          <%
+                        }%>
 
-                      </div>
+                        <div class="scrollable-table">
 
-                      <div class="items-holder">
-                        <table id="opened-sale" width="100%">
-                          <tr>
-                            <td colspan="4">
+                          <%progress.forEach((key) => {
+                            var sale = inprogress[key];
+                            %>
+                            <div class="shadow label mini-item inprogress-item clickable-mini-item blue-left" data-sale="progress-<%=sale.numeroPedido %>">
                               <table width="100%">
-                                <tr class="dotted-line">
-                                  <td><span class="pick-value" id="sale-transport"><span></td>
-                                    <td><span class="pick-value" id="sale-date"> </span></td>
-                                    <td><span class="pick-value" id="sale-itens"> </span></td>
-                                    <td><span class="pick-value right" id="sale-value">  </span></td>
-                                  </tr>
-                                </table>
-                              </tr>
+                                <tr>
+                                  <td rowspan="2">
+                                    <img class="circle shadow avatar-img mini-avatar" data-id="<%=sale.pickUser.id%>" src="<%=sale.pickUser.avatar%>"  onerror="this.src='/img/avatar.png'"/>
+                                  </td>
+                                  <td><span class="pick-value green-title"><%=sale.numeroPedido %></span></td>
+                                  <td><span class="pick-value"><%=sale.itemsQuantity %> Itens</span></td>
+                                  <td>
+                                    <div class="print-progress print-sale-holder" title="Reimprimir" tabIndex="-1" onclick="openPrintPickingSale('<%=sale.numeroPedido%>','<%=sale.pickUser.id%>')">
+                                      <img class="print-sale" title="<%=sale.doNotCount ? 'Pedido já foi impresso!' : 'Imprimir' %>" src="<%=sale.doNotCount ? '/img/printed.png' : '/img/print.png' %>" />
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td><span class="pick-value"><%=sale.pickUser.name ? sale.pickUser.name.split(" ")[0] : 'Desconhecido'%></span></td>
+                                  <td><span class="pick-value"><%=sale.transport %></span></td>
+                                  <td><span class="pick-value inprogress-begin" style="float:right" diftime="<%=new Date().getTime() - sale.begin.getTime()%>"></span></td>
+                                </tr>
+                              </table>
 
-                              <tr class="dotted-line pending-button-holder">
-                                <td><input type="text" id="pending-local" class="simple-material-input" placeholder="Localização"/></td>
-                                <td></td>
-                                <td colspan="2"><label class="button pending-button shadow">Pendência</label></td>
-                              </tr>
-
-                              <tr class="dotted-line">
-                                <td><span class="pick-value">Produto</span></td>
-                                <td><span class="pick-value">Quant.</span></td>
-                                <td><span class="pick-value">Preço</span></td>
-                                <td><span class="pick-value">Pend.</span></td>
-                              </tr>
-
-                            </table>
-                          </div>
-
+                            </div>
+                            <%
+                          });
+                          %>
                         </div>
                       </div>
 
 
+                    </div>
 
 
+                    <div class="col opened-sale-box">
 
-                      <% include ../pending/picking-pendings %>
+                      <div class="pick-box shadow orange-top open-sale-holder">
+                        <div class="pick-header">
 
+                          <span class="label header-title">Pedido</span>
+                          <span class="label header-count green-title sale-number"></span>
 
+                        </div>
 
-                      <div class="col" style="display:block">
-                        <div class="pick-box shadow green-top">
-                          <div class="pick-header">
-                            <span class="label header-title">Separado</span>
-                            <span class="label header-count green-title"><%=donePickings.length%></span>
+                        <div class="items-holder">
+                          <table id="opened-sale" width="100%">
+                            <tr>
+                              <td colspan="4">
+                                <table width="100%">
+                                  <tr class="dotted-line">
+                                    <td><span class="pick-value" id="sale-transport"><span></td>
+                                      <td><span class="pick-value" id="sale-date"> </span></td>
+                                      <td><span class="pick-value" id="sale-itens"> </span></td>
+                                      <td><span class="pick-value right" id="sale-value">  </span></td>
+                                    </tr>
+                                  </table>
+                                </tr>
+
+                                <tr class="dotted-line pending-button-holder">
+                                  <td><input type="text" id="pending-local" class="simple-material-input" placeholder="Localização"/></td>
+                                  <td></td>
+                                  <td colspan="2"><label class="button pending-button shadow">Pendência</label></td>
+                                </tr>
+
+                                <tr class="dotted-line">
+                                  <td><span class="pick-value">Produto</span></td>
+                                  <td><span class="pick-value">Quant.</span></td>
+                                  <td><span class="pick-value">Preço</span></td>
+                                  <td><span class="pick-value">Pend.</span></td>
+                                </tr>
+
+                              </table>
+                            </div>
+
                           </div>
+                        </div>
 
-                          <%if (donePickings.length === 0){
-                            %><span class="pick-hint">Nenhum picking pronto</span>
-                            <%
-                          }else {%>
 
-                            <table width="100%" class="scrollable-table">
 
-                              <tr class="dotted-line">
-                                <td><span class="pick-value">Pedido</span></td>
-                                <td><span class="pick-value">Transp.</span></td>
-                                <td><span class="pick-value">Data</span></td>
-                                <td><span class="pick-value" style="float:right">Em aberto</span></td>
-                              </tr>
 
+
+                        <% include ../pending/picking-pendings %>
+
+
+
+                        <div class="col" style="display:block">
+                          <div class="pick-box shadow green-top">
+                            <div class="pick-header">
+                              <span class="label header-title">Separado</span>
+                              <span class="label header-count green-title"><%=donePickings.length%></span>
+                            </div>
+
+                            <%if (donePickings.length === 0){
+                              %><span class="pick-hint">Nenhum picking pronto</span>
                               <%
-                              donePickings.forEach(function(sale, index){
-                                %>
-                                <tr class="clickable-mini-item done-sale-item"  data-saleid="done-<%=sale.id%>" data-sale="done-<%=sale.numeroPedido%>">
-                                  <td><span class="pick-value green-title"><%=sale.numeroPedido %></span></td>
-                                  <td><span class="pick-value"><%=Util.twoNames(sale.transportador, 'Retirada')%> </span></td>
-                                  <td><span class="pick-value" ><%= Dat.format(new Date(sale.data))%></span></td>
-                                  <td><span class="pick-value" style="float:right"><%=Dat.daysDif(new Date(sale.data), new Date()) + ' Dias'%></span></td>
+                            }else {%>
+
+                              <table width="100%" class="scrollable-table">
+
+                                <tr class="dotted-line">
+                                  <td><span class="pick-value">Pedido</span></td>
+                                  <td><span class="pick-value">Transp.</span></td>
+                                  <td><span class="pick-value">Data</span></td>
+                                  <td><span class="pick-value" style="float:right">Em aberto</span></td>
                                 </tr>
 
                                 <%
-                              });
-                              %>
-                            </table>
-                            <%}%>
+                                donePickings.forEach(function(sale, index){
+                                  %>
+                                  <tr class="clickable-mini-item done-sale-item"  data-saleid="done-<%=sale.id%>" data-sale="done-<%=sale.numeroPedido%>">
+                                    <td><span class="pick-value green-title"><%=sale.numeroPedido %></span></td>
+                                    <td><span class="pick-value"><%=Util.twoNames(sale.transportador, 'Retirada')%> </span></td>
+                                    <td><span class="pick-value" ><%= Dat.format(new Date(sale.data))%></span></td>
+                                    <td><span class="pick-value" style="float:right"><%=Dat.daysDif(new Date(sale.data), new Date()) + ' Dias'%></span></td>
+                                  </tr>
+
+                                  <%
+                                });
+                                %>
+                              </table>
+                              <%}%>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </body>
+                    </body>
 
-                  </html>
+                    </html>

@@ -9,8 +9,8 @@ module.exports = {
     var provider = new EccosysProvider();
 
     provider
+    .pageCount(50)
     .shippingOrderList()
-    .pageCount(20)
     .page(page)
 
     provider.param('situacao', query.situation ? query.situation : '0,1,2')
@@ -31,16 +31,16 @@ module.exports = {
   },
 
 
-  get(idOc, callback){
+  get(number, callback){
     var foundOc = lastLoadedArr.find((each) => {
-      return each.id == idOc;
+      return each.numeroColeta == number;
     });
 
     if (foundOc){
       callback(foundOc);
     }else{
-      new EccosysProvider()
-      .shippingOrder(idOc)
+      new EccosysProvider(true)
+      .shippingOrder(number)
       .go((result) => {
         callback(result);
       });

@@ -26,8 +26,11 @@ function rawModel(object) {
   var newSchema = {};
 
   Object.keys(object).forEach((key) => {
-    if (object[key] != undefined)
-      newSchema[key] = object[key].constructor;
+    if (object[key] != undefined){
+      if (typeof object[key] !== "function"){
+        newSchema[key] = object[key].constructor;
+      }
+    }
   });
 
   return newSchema;

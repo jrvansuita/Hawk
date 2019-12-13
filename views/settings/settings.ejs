@@ -12,38 +12,44 @@
 </head>
 
 <body>
-  <div class="main-content">
+
+<div class="main-content">
 
 
-    <div class="content">
+  <div class="content">
+
+    <div class="forms shadow">
+      <label class="group-title">Configurações</label>
+      <a class="link" href="/main-settings%>">Gerais</a>
+      <a class="link" href="/api-settings%>">Integrações</a>
+    </div>
 
 
+    <div class="forms shadow">
+      <label class="group-title">Cadastros</label>
 
-      <div class="forms shadow">
-        <label class="group-title">Cadastros</label>
+      <a class="link" href="/user-registering?userId=<%=loggedUser ? loggedUser.id: ''%>">Cadastro de Usuário</a>
+      <a class="link" href="/packages-registering">Cadastro de Embalagens</a>
+      <a class="link" href="/mockup-builder">Cadastro de Mockup</a>
+      <a class="link" href="/gift-rules">Cadastro de Regras de Brindes</a>
+      <a class="link" href="/job-registering">Cadastro de Tarefas</a>
+    </div>
 
-        <a class="link" href="/user-registering?userId=<%=loggedUser ? loggedUser.id: ''%>">Cadastro de Usuário</a>
-        <a class="link" href="/packages-registering">Cadastro de Embalagens</a>
-        <a class="link" href="/mockup-builder">Cadastro de Mockup</a>
-        <a class="link" href="/gift-rules">Cadastro de Regras de Brindes</a>
-        <a class="link" href="/job-registering">Cadastro de Tarefas</a>
-      </div>
+    <div class="forms shadow">
+      <label class="group-title">Tarefas</label>
 
-      <div class="forms shadow">
-        <label class="group-title">Tarefas</label>
-
-        <table>
-          <%jobs.forEach((job)=>{%>
-            <tr class="job-item">
-              <td><img class="job-active" src="img/<%=job.active ? (job.running ? 'checked-running' : 'checked') : 'block'%>.png" alt=""></td>
-              <td><span class="job-name"><%=job.description%></span></td>
-              <td><span class="job-last"><%=Dat.formatwTime(new Date(job.lastExcecution) || new Date())%></span></td>
-              <td> <span class="job-item-menu" data-id="<%=job.id%>" data-tag="<%=job.tag%>"> <img  src="img/dots.png" class="dots-glyph"  /></span></td>
-            </div>
-            <%});%>
-          </table>
-        </div>
+      <table>
+        <%jobs.forEach((job)=>{%>
+          <tr class="job-item">
+            <td><img class="job-active" src="img/<%=job.active ? (job.running ? 'checked-running' : 'checked') : 'block'%>.png"></td>
+            <td><span class="job-name"><%=job.description%></span></td>
+            <td><span class="job-last"><%=Dat.formatwTime(new Date(job.lastExcecution) || new Date())%></span></td>
+            <td> <span class="job-item-menu" data-id="<%=job.id%>" data-tag="<%=job.tag%>" data-active="<%=job.active%>"> <img src="img/dots.png" class="dots-glyph"  /></span></td>
+          </div>
+          <%});%>
+        </table>
       </div>
     </div>
-  </body>
-  </html>
+  </div>
+</body>
+</html>

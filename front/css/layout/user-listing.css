@@ -1,0 +1,39 @@
+.main-content{
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.users-table{
+  width: fit-content;
+  margin: auto;
+  margin-bottom: 200px;
+}
+
+
+.users-table tr:nth-child(even) {
+  background-color: #ddd6d757;
+}
+
+.users-table td{
+  padding: 5px 15px;
+  cursor: pointer;
+}
+
+.users-table td{
+  padding: 5px 15px;
+}
+
+
+
+.inactive-row td:first-child {
+  border-left: 6px solid #EDB2B2;
+
+}
+
+.active-row td:first-child {
+  border-left: 6px solid #64dc9f;
+}
+
+.icon-dots{
+  margin-right: 20px;
+}

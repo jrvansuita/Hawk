@@ -69,9 +69,7 @@ module.exports= class AutoBlockPicking {
   }
 
   run(){
-    //if (process.env.NODE_ENV){
-      this.onSale(this.sales, 0);
-    //}
+    this.onSale(this.sales, 0);
   }
 
 };

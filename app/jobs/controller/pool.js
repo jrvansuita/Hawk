@@ -10,7 +10,11 @@ module.exports = {
     return global.jobsPoll.find(each=>{return each.id == id;});
   },
 
-  getAvailableJobs(){
+  runForce(id){
+    this.fireJob(this.get(id));
+  },
+
+  getAvailableScripts(){
     if (!availableJobs){
       var extension = ".js";
       var jobsFolder = require("path").join(__dirname, '..');
@@ -62,43 +66,37 @@ module.exports = {
       }else{
         console.log('[Job] Não Atachou: ' + job.description);
       }
-
-
-
-      /*if (job.description.includes('Brinde')){
-      fireFunction();
-    }*/
-
-
-  }
-
-  global.jobsPoll.push(job);
-},
-
-deattach(id){
-  var job = this.get(id);
-
-  if (job && job.schedule){
-    console.log('Desatachou: ' + job.description);
-    job.schedule.cancel();
-
-    global.jobsPoll.splice(global.jobsPoll.findIndex((job) => {
-      return job.id == id;
-    }),1);
-  }
-},
-
-initialize(callback){
-  Jobs.findAll((error, jobs)=>{
-    jobs.forEach((each)=>{
-      this.attach(each.toObject());
-    });
-
-    if (callback){
-      callback(global.jobsPoll);
     }
-  });
-}
+
+    global.jobsPoll.push(job);
+  },
+
+  deattach(id){
+    var job = this.get(id);
+
+    if (job){
+      if (job.schedule){
+        console.log('Desatachou: ' + job.description);
+        job.schedule.cancel();
+      }
+
+      global.jobsPoll.splice(global.jobsPoll.findIndex((job) => {
+        return job.id == id;
+      }),1);
+    }
+  },
+
+  initialize(callback){
+    Jobs.findAll((error, jobs)=>{
+      jobs.forEach((each)=>{
+        this.attach(each.toObject());
+      });
+
+      if (callback){
+        callback(global.jobsPoll);
+      }
+    });
+  }
 
 };
 

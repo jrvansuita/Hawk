@@ -13,7 +13,13 @@ module.exports = class UserRoutes extends Routes{
       res.render('teste');
     });
 
-
+  /*  this._get('/param22', (req, res) =>{
+      //res.send(require('../param/get.js'));
+      //res.send({teste: true});
+      //res.download(Params);
+      this._resp().sucess(res, Params);
+    });
+*/
 
     this._get('/restart', (req, res) =>{
       process.exit(1);

@@ -55,12 +55,27 @@ module.exports = class  {
   }
 
 
-  static delete(userId){
+  static delete(userId, callback){
     User.findByKey(userId, (err, user)=>{
       user.remove();
       UsersProvider.remove(userId);
+      callback();
     });
   }
+
+  static active(userId, active, callback){
+    User.upsert({id: userId}, {active : active},(err, user)=>{
+      var user = UsersProvider.get(userId);
+
+      if (user){
+        user.active = active;
+      }
+
+      callback(user);
+    });
+
+  }
+
 
   static changeImage(userId, base64Image, callback){
     ImgurSaver.upload(base64Image, (data)=>{
@@ -77,8 +92,8 @@ module.exports = class  {
           }
         });
       }else{
+        //Err.thrw('ImgurSaver: ' +  data.message, userId);
         callback(null);
-        console.log('Erro: ' + data.message);
       }
     });
   }

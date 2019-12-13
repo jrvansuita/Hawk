@@ -1,6 +1,7 @@
 const History = require('../bean/history.js');
 const nodemailer = require('nodemailer');
 
+
 module.exports = class Email{
 
   constructor(){
@@ -12,8 +13,8 @@ module.exports = class Email{
       port: 465,
       secure: true, // true for 465, false for other ports
       auth: {
-        user: process.env.EMAIL, // generated ethereal user
-        pass: process.env.EMAIL_PASS // generated ethereal password
+        user: Params.email(), // generated ethereal user
+        pass: Params.emailPass() // generated ethereal password
       }
     });
   }

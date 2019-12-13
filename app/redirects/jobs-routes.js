@@ -1,5 +1,4 @@
 const Routes = require('../redirects/controller/routes.js');
-const PickingHandler = require('../handler/picking-handler.js');
 const Job = require('../bean/job.js');
 const JobsPool = require('../jobs/controller/pool.js');
 const JobsVault = require('../vault/job-vault.js');
@@ -7,10 +6,9 @@ const JobsVault = require('../vault/job-vault.js');
 module.exports = class JobsRoutes extends Routes{
 
   attach(){
-    this._post('/run-jobs', (req, res) => {
-      runJobs(req, (result)=>{
-        this._resp().sucess(res, result);
-      });
+
+    this._post('/job-run-force', (req, res)=>{
+      JobsPool.runForce(req.body.id);
     });
 
     this._get('/jobs-all', (req, res)=>{
@@ -21,7 +19,7 @@ module.exports = class JobsRoutes extends Routes{
 
     this._get('/job-registering', (req, res) => {
       var onResult = (job)=>{
-          res.render('job/job-registering', {job: job, jobTypes: JobsPool.getAvailableJobs()});
+          res.render('job/job-registering', {job: job, jobTypes: JobsPool.getAvailableScripts()});
       }
 
       if (req.query.id){
@@ -49,9 +47,3 @@ module.exports = class JobsRoutes extends Routes{
 
   }
 };
-
-function runJobs(req, callback){
-  if (req.body.ref.includes('picking')){
-    PickingHandler.reloadPickingList(req.session.loggedUserID, req.body.ignoreDone, callback);
-  }
-}

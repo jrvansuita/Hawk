@@ -1,0 +1,28 @@
+
+const Params = require('../bean/params.js');
+
+global._mainParams = null;
+
+module.exports = {
+
+  init(callback){
+    Params.findAll(function(err, docs) {
+      global._mainParams = docs[0].toObject();
+      global.Params = require('../param/get.js');
+      callback();
+    });
+  },
+
+  put(name, val){
+    if (global._mainParams){
+      global._mainParams[name] = val;
+    }
+
+
+    new Params().put(name, val).save();
+
+  }
+
+
+
+};

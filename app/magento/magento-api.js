@@ -5,29 +5,66 @@ module.exports = class MagentoApi extends MagentoAPI{
 
   constructor(){
     super({
-      host: process.env.MAGENTO_HOST,
+      host: Params.magentoUrl(),
       port: 443,
-      path: process.env.MAGENTO_PATH,
-      login: process.env.MAGENTO_LOGIN,
-      pass: process.env.MAGENTO_PASS,
+      path: Params.magentoXmlPath(),
+      login: Params.magentoLogin(),
+      pass: Params.magentoPass(),
       secure: true
-    })
+    });
   }
-
 
   instance(callback){
     if (!this.sessionId){
-      this.login((err, sessId) => {
-        if (err) {
-          throw err;
-        }
-
-        callback(this);
+      return new Promise((resolve, reject) => {
+        this.login((err, sessId) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(this);
+        });
       });
     }else{
-      callback(this);
+      return this;
     }
   }
+
+
+  
+
+  /*async product(sku){
+    let handler = await this._instance();
+
+    return new Promise((resolve, reject) => {
+      handler.catalogProduct.info({
+        id: sku,
+      }, (err, product) => {
+        resolve(product);
+      });
+    });
+  }
+
+
+  getProduct(sku, callback){
+    this.catalogProduct.info({
+      id: sku,
+    }, (err, product) => {
+      if (callback)
+      callback(product);
+    });
+  }
+
+  updateProductWeight(sku, weight, callback){
+    this.catalogProduct.update({
+      id:         sku,
+      data:       {weight: weight}
+    }, (err, doc) => {
+      if (callback)
+      callback(doc);
+    });
+  }*/
+
+
 
 
 };

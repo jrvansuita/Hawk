@@ -82,10 +82,7 @@ module.exports = class  {
 
   putGroupInfo(item){
     if (this.groupBy === 'userId'){
-      var user = UsersProvider.getDefault(item.userId);
-      item.label = user.name;
-      item.img = user.avatar;
-      item.tag = user.id;
+      item.user = UsersProvider.getDefault(item.userId, true);
     }else if (this.groupBy === 'date'){
       item.label = Dat.format(item.date).split('/')[0];
     }

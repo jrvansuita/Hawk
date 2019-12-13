@@ -49,25 +49,15 @@ module.exports= class SaleLoader {
   }
 
   loadSale(saleNumber, onCallOuter){
-
-    var stack = new Error().stack;
-
-    if (saleNumber.length > 6){
-      throw Err.thrw('Achei N: ' + saleNumber + '\n' + stack);
-    }
-    
     new EccosysProvider()
     .setOnError(this.onError)
     .sale(saleNumber).go((sale)=>{
-
-      //Provisório
       if(!sale){
-        throw Err.thrw('Pedido não carregou: ' + saleNumber + '\n' + stack);
+        this.onError('O pedido ' + saleNumber + ' não existe!');
+      }else{
+        this.sale = sale;
+        onCallOuter(sale);
       }
-      //Provisório
-
-      this.sale = sale;
-      onCallOuter(sale);
     });
   }
 

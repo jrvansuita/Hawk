@@ -1,8 +1,7 @@
 
 
 .main-content{
-  padding: 30px;
-
+  padding: 0px 30px;
 }
 
 .content{
@@ -25,6 +24,7 @@
   color: rgb(72, 66, 147);
   padding: 10px 15px;
   margin-left: 15px;
+  min-width: 300px;
 }
 
 .link{

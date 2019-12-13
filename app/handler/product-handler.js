@@ -1,7 +1,7 @@
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
 const EccosysStorer = require('../eccosys/eccosys-storer.js');
 const Product = require('../bean/product.js');
-
+const MagentoCalls = require('../magento/magento-calls.js');
 
 module.exports ={
 
@@ -134,13 +134,17 @@ module.exports ={
       };
 
       new EccosysStorer().product(body).go(callback);
+
+      if(Params.updateProductWeightMagento()){
+        new MagentoCalls().updateProductWeight(product.codigo, weight);
+      }
     });
   },
-    
+
   active(sku, active, user, callback){
     this.getBySku(sku, true, (product)=>{
-      var skus = [product.codigo];
-      if (product._Skus.length > 0){
+      var skus = [product ? product.codigo : sku];
+      if (product && product._Skus && product._Skus.length > 0){
         skus = skus.concat(product._Skus.map((s)=>{return s.codigo}));
       }
 
@@ -157,6 +161,7 @@ module.exports ={
 
         new EccosysStorer().product(body).go(callback);
       });
+
     });
   },
 

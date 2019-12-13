@@ -3,12 +3,14 @@ const Err = require('../error/error.js');
 
 module.exports = class UsersProvider {
 
-  static loadAllUsers() {
+  static loadAllUsers(callback) {
     global._cachedUsers = {};
     User.findAll(function(err, users) {
       users.forEach(function(user, doc) {
         global._cachedUsers[user.id] = user['_doc'];
       });
+
+      callback();
     });
   }
 
@@ -57,8 +59,13 @@ module.exports = class UsersProvider {
 
 
 
-  static getDefault(userId) {
+  static getDefault(userId, suppress) {
     var user = this.get(userId);
+
+    if (user && suppress){
+      user =  User.suppress(user);
+    }
+
     return user == undefined ? new User(404, 'Desconhecido') : user;
   }
 

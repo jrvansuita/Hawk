@@ -53,24 +53,22 @@
 .material-input-holder{
   width: fit-content;
   margin-left: 15px;
-  margin-top: 5px;
-}
-
-.material-input-holder>input:focus~label, .material-input-holder>input:valid~label {
-  top: -5px !important;
+  margin-top: 0px;
 }
 
 .material-input-holder>input{
-  padding-bottom: 0px !important;
-  padding-top: 18px !important;
   font-size: 15px !important;
+  padding: 25px 10px 5px 5px !important;
 }
 
+.material-input-holder>input:focus~label, .material-input-holder>input:valid~label {
+    top: -10px !important;
+}
 
 .icon-open{
   float: left;
   margin-left: 8px;
-  margin-top: 13px;
+  margin-top: 23px;
   vertical-align: middle;
   width: 23px;
   height: 23px;

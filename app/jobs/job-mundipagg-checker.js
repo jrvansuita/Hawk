@@ -3,7 +3,7 @@ const EccosysProvider = require('../eccosys/eccosys-provider.js');
 const EccosysStorer = require('../eccosys/eccosys-storer.js');
 const MundiApi = require('../mundipagg/mundi-api.js');
 const History = require('../bean/history.js');
-const MagentoApi = require('../magento/magento-api.js');
+const MagentoCalls = require('../magento/magento-calls.js');
 
 
 const TAG_ID = 'MH';
@@ -11,7 +11,7 @@ const TAG_ID = 'MH';
 module.exports = class JobMundipaggChecker extends Job{
 
   onInitialize(){
-    this.magentoApi = new MagentoApi();
+    this.magentoCalls = new MagentoCalls();
   }
 
   getName(){
@@ -20,22 +20,16 @@ module.exports = class JobMundipaggChecker extends Job{
 
   doWork(){
     return new Promise((resolve, reject)=>{
-
-      this.waitingPaymentSales(() => {
-        this.cancelledSales(() => {
-          resolve('Done!');
-        });
-      });
-
+      this.waitingPaymentSales(resolve, reject);
     });
   }
 
-  cancelledSales(onTerminate){
-    onTerminate();
-  }
 
-  waitingPaymentSales(onTerminate){
+  waitingPaymentSales(onTerminate, onError){
     new EccosysProvider()
+    .setOnError(onError)
+    .pageCount(1000)
+    .dates(Dat.firstDayOfLastMonth(), Dat.rollDay(new Date(), -2), 'data')
     .waitingPaymentSales()
     .pagging()
     .each((salesPage, nextPage)=>{
@@ -61,39 +55,14 @@ module.exports = class JobMundipaggChecker extends Job{
   }
 
   saleChecked(sale){
-    var isBoleto = sale.observacaoInterna.includes('mundipagg_boleto');
-    var daysDif = Dat.daysDif(new Date(sale.data), new Date()) >= 2
-
-    return isBoleto && daysDif;
+    return Dat.daysDif(new Date(sale.data), new Date()) >= 2;
   }
 
   handleSale(sale, nextSale){
     if (this.saleChecked(sale)){
       new MundiApi().sale(sale.numeroDaOrdemDeCompra).go((data) => {
-
-        data = this.getPaymentData(data);
-
-        if (data){
-          var expirationDate = new Date(data.ExpirationDate);
-          var payDate = data.PaymentDate ? new Date(data.PaymentDate) : undefined;
-
-          //console.log('Expiração: ' + Dat.format(expirationDate) + ' Hoje: ' + Dat.format(new Date()) + ' Dif: ' + Dat.daysDif(expirationDate, new Date()));
-          //console.log(data.BoletoTransactionStatus);
-
-          if (data.BoletoTransactionStatus.includes('Paid')){
-            console.log('OC: ' + sale.numeroDaOrdemDeCompra + ' Aprovado');
-            this.saleWasPay(sale, payDate, expirationDate, nextSale);
-          }else{
-            if (Dat.daysDif(expirationDate, new Date()) > 1){
-              console.log('OC: ' + sale.numeroDaOrdemDeCompra + ' Cancelado');
-              this.saleHasOverdue(sale, payDate, expirationDate, nextSale);
-            }else{
-              console.log('OC: ' + sale.numeroDaOrdemDeCompra + ' Não vencido');
-              nextSale();
-            }
-          }
-        }else{
-          nextSale();
+        if (!this.handleBoleto(sale, data, nextSale)){
+          this.handleCreditCard(sale, data, nextSale);
         }
       });
     }else{
@@ -101,8 +70,55 @@ module.exports = class JobMundipaggChecker extends Job{
     }
   }
 
+  handleCreditCard(sale, mundiData, nextSale){
+    var data = this.getCreditCardPaymentData(mundiData);
 
-  getPaymentData(data){
+    if (data){
+      var payDate = data.CapturedDate ? new Date(data.CapturedDate) : undefined;
+      var method = '[CreditCard] - ' + data.AcquirerMessage;
+
+      if (data.CreditCardTransactionStatus.includes('Captured')){
+        this.saleWasPay(sale, payDate, payDate, method, nextSale);
+      }else {
+        if (data.CreditCardTransactionStatus.includes('NotAuthorized')){
+          this.saleHasOverdue(sale, payDate, new Date(), method, nextSale);
+        }else{
+          this.logThis(sale, null);
+          nextSale();
+        }
+      }
+    }else{
+      nextSale();
+    }
+  }
+
+  handleBoleto(sale, mundiData, nextSale){
+    var data = this.getBoletoPaymentData(mundiData);
+
+    if (data){
+      var expirationDate = new Date(data.ExpirationDate);
+      var payDate = data.PaymentDate ? new Date(data.PaymentDate) : undefined;
+      var method = '[Boleto]';
+
+      if (data.BoletoTransactionStatus.includes('Paid')){
+        this.saleWasPay(sale, payDate, expirationDate, method, nextSale);
+      }else{
+        if (Dat.daysDif(expirationDate, new Date()) > 1){
+          this.saleHasOverdue(sale, payDate, expirationDate, method, nextSale);
+        }else{
+          this.logThis(sale, null);
+          nextSale();
+        }
+      }
+
+      return true;
+    }
+
+    return false;
+  }
+
+
+  getBoletoPaymentData(data){
     if (data.SaleDataCollection.length){
       //Busca os resgistros de boleto validos
       data = data.SaleDataCollection.find((e) => {
@@ -119,17 +135,40 @@ module.exports = class JobMundipaggChecker extends Job{
   }
 
 
-  saleWasPay(sale, paymentDate, expirationDate, callback){
+  getCreditCardPaymentData(data){
+    if (data.SaleDataCollection.length){
+      var payRows = [];
+      //Busca os resgistros de boleto validos
+      data.SaleDataCollection.forEach((each) => {
+        if (each.CreditCardTransactionDataCollection != undefined){
+          payRows = payRows.concat(each.CreditCardTransactionDataCollection);
+        }
+      });
+
+      if (payRows.length){
+        data = payRows.find((each) => {
+          return each.CreditCardTransactionStatus.includes('Captured');
+        });
+        return data || payRows[0];
+      }
+    }
+
+    return undefined;
+  }
+
+
+  saleWasPay(sale, paymentDate, expirationDate, method, callback){
     //Não pode colocar para em aberto, se não o status volta do magento para o eccosys
-    this.updateSale(sale, 0 /* Em Aberto */, paymentDate, expirationDate, Const.sale_was_confirmed_mundi, callback)
+    this.updateSale(sale, 0 /* Em Aberto */, paymentDate, expirationDate, Const.sale_was_confirmed_mundi, method, callback)
   }
 
-  saleHasOverdue(sale, paymentDate, expirationDate, callback){
-    this.updateSale(sale, 2 /* Cancelado */,  paymentDate, expirationDate, Const.sale_was_unconfirmed_mundi, callback)
+  saleHasOverdue(sale, paymentDate, expirationDate, method, callback){
+    this.updateSale(sale, 2 /* Cancelado */,  paymentDate, expirationDate, Const.sale_was_unconfirmed_mundi, method, callback)
   }
 
-  updateSale(sale, status, paymentDate, expirationDate, obsFormat, callback){
-    var msg = obsFormat.format(sale.numeroPedido, sale.numeroDaOrdemDeCompra, Dat.format(new Date(sale.data)), Dat.format(expirationDate), paymentDate ? Dat.format(paymentDate) : '');
+  updateSale(sale, status, paymentDate, expirationDate, obsFormat, method, callback){
+    var msg = obsFormat.format(sale.numeroPedido, method, sale.numeroDaOrdemDeCompra, Dat.format(new Date(sale.data)), Dat.format(expirationDate), paymentDate ? Dat.format(paymentDate) : '');
+    this.logThis(sale, status);
 
     this.updateEccoSale(sale, status, paymentDate, msg, () => {
       this.updateMagentoSale(sale, status, msg, callback);
@@ -152,16 +191,16 @@ module.exports = class JobMundipaggChecker extends Job{
   }
 
   updateMagentoSale(sale, status, msg, callback){
-    this.magentoApi.instance((handler) => {
-      handler.salesOrder.addComment({
-        orderIncrementId: sale.numeroDaOrdemDeCompra,
-        status:           status  == 0 ? 'processing' : 'canceled',
-        comment:          '[Hawk]: ' + msg,
-        notify:           true
-      }, (result) => {
-        callback();
-      });
-    })
+    this.magentoCalls.salesOrderUpdate({
+      orderIncrementId: sale.numeroDaOrdemDeCompra,
+      status:           status  == 0 ? 'processing' : 'canceled',
+      comment:          '[Hawk]: ' + msg,
+      notify:           true
+    }).then(callback);
+  }
+
+  logThis(sale, status){
+    console.log('OC: ' + sale.numeroDaOrdemDeCompra + ' Data: ' + Dat.format(new Date(sale.data)) + (status != null ? (status == 0 ?' Aprovado' : ' Cancelado') : ' Não vencido'));
   }
 
 };

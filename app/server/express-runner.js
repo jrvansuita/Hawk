@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({
 // register the session with it's secret ID
 app.use(cookieSession({
   name: 'hawk-session',
-  secret: process.env.SESSION_SECRET || 'secret',
+  secret: 'HAWK-SES',
 
   // Cookie Options
   maxAge: 30 /*30 dias*/ * (24 * 60 * 60 * 1000) // 24 hours
@@ -41,7 +41,7 @@ if (process.env.NODE_ENV){
 app.use('/img', express.static('front/img', staticOptions));
 app.use('/front', express.static('front', staticOptions));
 app.use('/util', express.static('app/util', staticOptions));
-
+app.use('/param', express.static('app/param/get.js', staticOptions));
 
 
 var server = app.listen(app.get('port'), function() {

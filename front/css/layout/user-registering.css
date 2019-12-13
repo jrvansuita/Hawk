@@ -1,10 +1,4 @@
-body {
-  background-color: #009587;
-  bottom: 0;
-  padding: 0px;
-  margin: 0px;
-  height: 100%;
-}
+body {bottom: 0;padding: 0px;margin: 0px;height: 100%;margin-top: 30px;}
 
 .user-registering{
   width: 80%;
@@ -12,7 +6,6 @@ body {
   text-align: center;
   margin: auto;
   padding: 10px 15px;
-  /* height: 70%; */
 }
 
 .main-form{

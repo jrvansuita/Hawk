@@ -174,12 +174,12 @@ function addItemLayout(item, index){
 
 
   var dots = $('<div>').addClass('menu-dots').append($('<img>').attr('src','../img/dots.png').addClass('dots-glyph'));
-  dots.data('id', item.id).click(getDropDow());
+  dots.data('number', item.numeroColeta).click(getDropDow());
 
   tds.push($('<td>').append(dots));
 
   var line = $('<tr>').addClass('line-item').append(tds).click(() => {
-      window.open('/packing/shipping-order?id=' + item.id ,'_blank');
+      window.open('/packing/shipping-order?number=' + item.numeroColeta ,'_blank');
   });
 
   applyBackgroundColor(item.situacao, line);
@@ -219,12 +219,12 @@ function applyBackgroundColor(situation, el){
 
 function getDropDow(){
   return function (e){
-    var id = $(this).data('id');
+    var number = $(this).data('number');
     e.stopPropagation();
 
     var drop = new MaterialDropdown($(this), e, true);
     drop.addItem('../img/print.png', 'Imprimir', function(){
-      window.open('/shipping-order-print?id=' + id ,'_blank');
+      window.open('/shipping-order-print?number=' + number ,'_blank');
     }).addItem('../img/delete.png', 'Excluir', function(){
 
     }).addItem('../img/transport/default.png', 'Coletado', function(){

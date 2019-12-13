@@ -23,11 +23,11 @@
 
 .material-input-holder>label {
   color: #999;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: normal;
   position: absolute;
   pointer-events: none;
-  left: 5px;
+  margin-top: 18px;
   width: fit-content;
   top: 10px;
   text-align: left;
@@ -40,7 +40,7 @@
 /* active state */
 
 .material-input-holder>input:focus~label, .material-input-holder>input:valid~label {
-  top: -20px;
+  top: -15px;
   font-size: 11px;
   color: #259587;
 }
