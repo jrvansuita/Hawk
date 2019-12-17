@@ -1,7 +1,9 @@
 
+
+
 <div class="avatar-group">
-  <a href="/profile/performance?userid=<%=user ? user.id : 0%>">
-    <img class="avatar-img circle shadow <%= locals.addClass ? locals.addClass : ''%>" src="<%=user ? user.avatar : ''%>"  data-userid="<%=user ? user.id : 0%>" title="<%=user ? user.name || user.id : ''%>" onerror="this.src='/img/avatar.png'"/>
+  <a href="/profile?userid=<%=user ? user.id : 0%>">
+    <img class="avatar-img circle shadow <%= locals.imgClass ? locals.imgClass : ''%>" src="<%=user ? user.avatar : ''%>"  data-userid="<%=user ? user.id : 0%>" title="<%=user ? user.name || user.id : ''%>" onerror="this.src='/img/avatar.png'"/>
 
 
     <%
@@ -10,7 +12,7 @@
     <%}%>
 
       <%if (locals.showName){%>
-        <span class="label shadow avatar-name"><%=user ? Str.first_word(user.name) : 'Desconhecido'%></span>
+        <span class="label shadow avatar-name <%= locals.nameClass ? locals.nameClass : ''%>"><%=user ? Str.first_word(user.name) : 'Desconhecido'%></span>
         <%}%>
       </a>
   </div>

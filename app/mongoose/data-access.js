@@ -8,9 +8,7 @@ module.exports = class DataAccess {
 
     return this;
   }
-  /*raw() {
-  console.log(Schema.Raw(this));
-}*/
+
 
 // -- Abstract -- //
 

@@ -219,7 +219,7 @@
                               <table width="100%">
                                 <tr>
                                   <td rowspan="2">
-                                    <img class="circle shadow avatar-img mini-avatar" data-id="<%=sale.pickUser.id%>" src="<%=sale.pickUser.avatar%>"  onerror="this.src='/img/avatar.png'"/>
+                                    <%- include('../user/avatar', {user: sale.pickUser, imgClass: 'mini-avatar'});  %>
                                   </td>
                                   <td><span class="pick-value green-title"><%=sale.numeroPedido %></span></td>
                                   <td><span class="pick-value"><%=sale.itemsQuantity %> Itens</span></td>

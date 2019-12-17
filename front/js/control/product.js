@@ -202,6 +202,7 @@ function buildChildSku(product, child){
 
       drop.addItem('/img/' + (active ? 'block' : 'checked') + '.png', active ? 'Inativar' : 'Ativar' , function(){
         showLoadingStatus();
+        console.log(active)
         _post('/product-active', {
           sku: child.codigo,
           active: !active,
@@ -437,7 +438,6 @@ var stockRowsHistoryMemory = {};
 function getStockRowsGrouped(childSku, callback){
   if (!stockRowsHistoryMemory[childSku]){
     _get('/product-stock-history', {sku:childSku},(rows)=>{
-      console.log(rows);
       stockRowsHistoryMemory[childSku] = groupStockRows(rows);
       callback(stockRowsHistoryMemory[childSku]);
     });

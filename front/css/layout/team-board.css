@@ -114,7 +114,12 @@
   margin-bottom: 150px;
 }
 
-
-.team-box > a{
+.avatar-group{
+  margin: inherit;
+  transform: scale(0.8);
+  display: inline-block;
+  margin-right: -15px;
+}
+.mini-avatar{
   position: relative;
 }

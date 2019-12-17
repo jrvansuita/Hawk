@@ -65,6 +65,7 @@ module.exports = {
   restart(pending, user, callback){
     if (!InprogressLaws.checkAndThrowUserInProgress(user.id)) {
       var number = pending.number;
+      var originalUserId = pending.sale.pickUser.id;
 
       PendingLaws.remove(pending, user);
 
@@ -72,7 +73,7 @@ module.exports = {
       .loadClient()
       .reloadItems()
       .run(function(sale){
-        InprogressLaws.startPicking(sale, user.id, true);
+        InprogressLaws.startPicking(sale, user.id, true, originalUserId);
         callback();
       });
     }

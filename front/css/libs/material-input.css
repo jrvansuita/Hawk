@@ -1,6 +1,7 @@
 .material-input-holder {
   position: relative;
   margin-bottom: 8px;
+  text-align: left;
 }
 
 .material-input-holder>input {

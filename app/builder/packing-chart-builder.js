@@ -89,6 +89,8 @@ function buildChart(from, to, title) {
     Object.keys(data).forEach(function(key, index) {
       var dataItem = data[key];
 
+
+
       var item = chart.addItem(dataItem.user);
 
 

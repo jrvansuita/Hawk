@@ -56,8 +56,6 @@ module.exports = class PackingRoutes extends Routes{
 
 
     this._get('/packing-days', (req, res) => {
-      console.log(req.query.from);
-      console.log(req.query.to);
       var from = Dat.query(req.query.from, Dat.firstDayOfMonth());
       var to = Dat.query(req.query.to, Dat.lastDayOfMonth());
 

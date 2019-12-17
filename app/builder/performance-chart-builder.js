@@ -35,7 +35,7 @@ function buildChart(type, title, from, to, userId, callback) {
     Object.keys(data).forEach(function(key, index) {
       var dataItem = data[key];
 
-      var item = chart.addItem(dataItem.label, 'none');
+      var item = chart.addItem(null, dataItem.label, 'none');
 
       if (type == 'picking'){
         item.addBar('Itens',dataItem.total, 0.8, '03c184', true);

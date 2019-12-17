@@ -43,7 +43,7 @@ module.exports = {
     });
   },
 
-  startPicking(sale, userId, doNotCount){
+  startPicking(sale, userId, doNotCount, originalUserId){
     if (checkSaleIsInprogress(sale)){
       var msg = Const.picking_already_started.format(sale.numeroPedido);
       Err.thrw(msg, userId);
@@ -58,6 +58,12 @@ module.exports = {
     sale.begin = begin;
     sale.doNotCount = doNotCount;
     sale.pickUser = User.suppress(UsersProvider.get(userId));
+
+    if (originalUserId){
+      console.log('aqui');
+      console.log(UsersProvider.get(originalUserId));
+      sale.originalUserId = originalUserId;
+    }
 
     this.object()[userId] = sale;
   },
@@ -74,6 +80,12 @@ module.exports = {
     this.remove(sale.numeroPedido);
 
     HistoryStorer.picking(userId, sale, day);
+
+    if (sale.originalUserId){
+      console.log('aqui2');
+      console.log(UsersProvider.get(sale.originalUserId));
+      sale.pickUser = User.suppress(UsersProvider.get(sale.originalUserId));
+    }
 
     if(sale.doNotCount || (process.env.NODE_ENV === undefined)){
       callback(sale);

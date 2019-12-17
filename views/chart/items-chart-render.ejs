@@ -3,7 +3,12 @@
     chart.getItems().forEach(function(item) {%>
       <div class="chart-bar-holder">
         <div class="chart-bar-group">
+
+          <%if (item.user){ %>
           <%- include('../user/avatar', {user: item.user, showName: true});  %>
+          <%}else {%>
+              <span class="label shadow label-bar"><%=item.label%></span>
+          <%}%>
 
 
           <%-  include bars-chart-render %>

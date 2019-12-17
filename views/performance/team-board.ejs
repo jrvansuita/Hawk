@@ -95,14 +95,10 @@
 
             <div class="team-box">
               <%data[groupVar].sort((a, b) => {return (a.leader === b.leader)? 0 : a.leader ? -1 : 1}).forEach((user, index)=>{%>
-                <a href="/profile/performance?userid=<%=user ? user.id : 0%>">
-                  <img class="avatar-img circle shadow" src="<%=user ? user.avatar : ''%>"  data-userid="<%=user ? user.id : 0%>"/>
-                  <%if (user.leader){%>
-                    <img class="leader-badge" src="img/leader-badge.png" />
-                    <%}%>
 
+                <%- include('../user/avatar', {user: user, imgClass: 'mini-avatar'});  %>
 
-                  </a>
+                
                   <%});%>
                 </div>
 
