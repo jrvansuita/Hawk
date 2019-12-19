@@ -2,6 +2,7 @@ var page = 0;
 var loading = false;
 var productsListCount = 0;
 var selectedSkus = {};
+var showAll = false;
 
 function loadFromMemory(){
   if (memoryQuery.value){
@@ -42,6 +43,7 @@ $(document).ready(()=>{
 
   $('#search-button').click(()=>{
     page = 0;
+    showAll = false;
     productsListCount = 0;
     $('.content').empty();
     loadList();
@@ -77,23 +79,23 @@ $(document).ready(()=>{
 
 
         /*_get('/build-multiple-mockups',{
-          mockId: id,
-          skus: Object.keys(selectedSkus)
-        },(data) => {
-          console.log(data);
+        mockId: id,
+        skus: Object.keys(selectedSkus)
+      },(data) => {
+      console.log(data);
 
-          var file = new Blob([data], {
-            type: 'application/zip'
-          });
-
-          window.location = URL.createObjectURL(file);
-        });*/
-
-      }).show();
+      var file = new Blob([data], {
+      type: 'application/zip'
     });
 
-    drop.show();
-  });
+    window.location = URL.createObjectURL(file);
+  });*/
+
+}).show();
+});
+
+drop.show();
+});
 });
 
 function bindScrollLoad(){
@@ -109,26 +111,29 @@ function bindScrollLoad(){
 
 
 function loadList(){
-  page++;
-  loading = true;
+  if (!showAll){
+    page++;
+    loading = true;
 
-  _get('/product-list-page',{page : page,
-    query: {
-      value: $('#search-input').val(),
-      attrs: getAttrsTags(),
-      noQuantity: $('#show-no-quantity').is(":checked")
-    }
-  },(result)=>{
-    loading = false;
-    showMessageTotals(result.info);
+    _get('/product-list-page',{page : page,
+      query: {
+        value: $('#search-input').val(),
+        attrs: getAttrsTags(),
+        noQuantity: $('#show-no-quantity').is(":checked")
+      }
+    },(result)=>{
+      showAll = result.data.length == 0;
+      loading = false;
+      showMessageTotals(result.info);
 
-    result.data.forEach((each, index)=>{
-      productsListCount++;
-      addProductLayout(each, index);
+      result.data.forEach((each, index)=>{
+        productsListCount++;
+        addProductLayout(each, index);
+      });
+
+      bindCopiable();
     });
-
-    bindCopiable();
-  });
+  }
 }
 
 function showMessageTotals(info){

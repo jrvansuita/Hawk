@@ -16,7 +16,11 @@ module.exports = {
     provider.param('situacao', query.situation ? query.situation : '0,1,2')
 
     if (query.transport){
-      provider.param('transportadora', encodeURIComponent(query.transport))
+      provider.param('q_transportadora', encodeURIComponent(query.transport))
+    }
+
+    if (query.user){
+      provider.param('usuario', encodeURIComponent(query.user))
     }
 
     if (query.begin && query.end){

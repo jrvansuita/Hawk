@@ -47,6 +47,7 @@ routes.push('packing-routes.js');
 routes.push('picking-routes.js');
 routes.push('pending-routes.js');
 routes.push('performance-routes.js');
+routes.push('shipping-order-routes.js');
 routes.push('history-routes.js');
 routes.push('product-routes.js');
 routes.push('user-routes.js');

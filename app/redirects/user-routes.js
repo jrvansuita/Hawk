@@ -57,10 +57,10 @@ module.exports = class UserRoutes extends Routes{
 
     this._post('/upload-user-avatar', (req, res) => {
       UsersVault.changeImage(req.body.userId, req.body.avatar, (url)=>{
-        //Nada
+        res.status(200).send(url);
       });
 
-      res.status(200).send('OK');
+
     });
 
 

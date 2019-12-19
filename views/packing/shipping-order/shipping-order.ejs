@@ -6,6 +6,9 @@
 
   <link rel="stylesheet" type="text/css" href="/front/css/layout/shipping-order.css">
   <script type="text/javascript" src="/front/js/control/shipping-order/shipping-order.js"></script>
+  <script type="text/javascript" src="/util/local.js"></script>
+  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+
 
 
 </head>
@@ -17,7 +20,7 @@
 
   %>
 
-  <script>
+  <script class="hidable-script">
   window.shippingOrder = <%- JSON.stringify(shippingOrder || null) %>
   </script>
 
@@ -26,12 +29,19 @@
   <div class="main-content">
 
     <div class="header-holder shadow">
-      <table>
+      <table >
         <tr>
           <td>
             <div class="field shipping-order-col">
               <label class="field-title">Ordem de Coleta</label>
-              <label class="info highlighted"><%=shippingOrder ? shippingOrder.numeroColeta : ''%>  <span class="field-title itens-count-display"> <%=shippingOrder._NotasFiscais.length%> Volumes</span></label>
+              <label class="info highlighted"><%=shippingOrder ? shippingOrder.numeroColeta : ''%>  <span class="field-title itens-count-display"> </span></label>
+            </div>
+          </td>
+
+          <td>
+            <div class="field">
+              <label class="field-title">Estados</label>
+              <label class="ufs-list"></label>
             </div>
           </td>
 
@@ -42,6 +52,29 @@
             </div>
           </td>
 
+          <td>
+            <div class="status-holder">
+              <div class="field skrink">
+                <label class="field-title">Usuário</label>
+                <label class="info"><%=shippingOrder ? shippingOrder.usuario_criacao || (loggedUser ? loggedUser.name : '---') : ''%></label>
+              </div>
+            </div>
+          </td>
+
+          <td>
+            <div class="status-holder">
+              <%
+              var statusIcon = shippingOrder.situacao == 0 ? 'checked' : (shippingOrder.situacao == 1 ? 'transport/default' : 'question-mark');
+
+              %>
+              <img class="circle shadow icon" src="/img/<%=statusIcon%>.png" onerror="this.src='/img/transport/question-mark.png'" />
+
+              <div class="field skrink">
+                <label class="field-title">Situação</label>
+                <label class="info"><%=shippingOrder ? situationsArr[parseInt(shippingOrder.situacao)] : ''%></label>
+              </div>
+            </div>
+          </td>
 
           <td>
             <div class="status-holder">
@@ -57,18 +90,17 @@
           <td>
             <div class="status-holder">
               <div class="field skrink">
-                <label class="field-title">Situação</label>
-                <label class="info"><%=shippingOrder ? situationsArr[parseInt(shippingOrder.situacao)] : ''%></label>
+                <label class="field-title">Peso</label>
+                <label class="info wei-val"></label>
               </div>
             </div>
           </td>
 
-
           <td>
             <div class="status-holder">
               <div class="field skrink">
-                <label class="field-title">Usuário</label>
-                <label class="info"><%=shippingOrder ? shippingOrder.usuario_criacao || (loggedUser ? loggedUser.name : '---') : ''%></label>
+                <label class="field-title">Valor</label>
+                <label class="info total-val"></label>
               </div>
             </div>
           </td>
@@ -86,45 +118,47 @@
 
 
 
+    <%if (shippingOrder.situacao == 0){%>
+      <div class="middle-line shadow">
+        <div class="progress-line"> <div class="progress-line inner"> </div></div>
 
-    <div class="middle-line shadow">
-      <div class="progress-line"> <div class="progress-line inner"> </div></div>
+        <div class="middle-line-inner">
 
-      <div class="middle-line-inner">
-
-        <div class="left-middle-line">
+          <div class="left-middle-line">
 
 
 
-          <div class="nf-input-holder">
-            <div class="nf-input-and-icon">
-              <img class="circle shadow icon"  id="nf-icon" class="nf-icon" src="/img/scan-barcode.png" />
-              <input type="text" id="nf"  class="simple-material-input%>" placeholder="Código de Barras"/>
-              <span id="progress"></span>
+            <div class="nf-input-holder">
+              <div class="nf-input-and-icon">
+                <img class="circle shadow icon"  id="nf-icon" class="nf-icon" src="/img/scan-barcode.png" />
+                <input type="text" id="nf"  class="simple-material-input%>" placeholder="Nota Fiscal"/>
+                <span id="progress"></span>
+              </div>
+              <label class="nf-msg"></label>
             </div>
-            <label class="nf-msg"></label>
+
           </div>
 
-        </div>
+          <div class="right-middle-line">
+            <div class="buttons-holder">
 
-        <div class="right-middle-line">
-          <div class="buttons-holder">
-
-            <label class="button shadow" id="save" tabindex="0">Salvar</label>
+              <label class="button shadow" id="save" tabindex="0">Salvar</label>
+            </div>
           </div>
-        </div>
 
+
+        </div>
 
       </div>
 
+      <%}%>
+
+
+
+      <div class="nfs-in-holder nfs-table-holder shadow"></div>
+      <div class="nfs-out-holder nfs-table-holder shadow"></div>
+
     </div>
 
-
-
-    <div class="nfs-in-holder nfs-table-holder shadow"></div>
-    <div class="nfs-out-holder nfs-table-holder shadow"></div>
-
-  </div>
-
-</body>
-</html>
+  </body>
+  </html>

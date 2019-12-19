@@ -10,14 +10,13 @@
   overflow-x: hidden;
   margin: auto;
   text-align: left;
+  position: relative;
 }
 
 .header-holder{
   width: 100%;
   display: flex;
   text-align: center;
-  padding-top: 10px;
-  padding-bottom: 10px;
 }
 
 
@@ -51,6 +50,7 @@
 .field{
   margin-bottom: 8px;
   margin-top: 8px;
+  margin-left: 8px;
   vertical-align: middle;
   display: inline-block;
 }
@@ -82,8 +82,7 @@ table{
 
 .shipping-order-col{
   float: left;
-  margin-left: 30px;
-
+  margin-left: 15px;
 }
 
 
@@ -210,4 +209,52 @@ table{
   height: fit-content;
   margin-top: 15px;
   padding-top: 2px;
+}
+
+
+.icon-open-list{
+  float: right;
+  margin-bottom: -14px;
+  margin-top: -5px;
+  vertical-align: middle;
+  width: 23px;
+  height: 23px;
+  cursor: pointer;
+}
+
+.nfs-out-holder{
+  margin-bottom: 150px;
+  position: relative;
+}
+
+
+.bold{
+  font-weight: 800;
+  font-size: 18px !important;
+  padding: 0px 5px;
+}
+
+#nfs-in td{
+  padding: 8px 12px;
+  font-size: 15px;
+}
+
+#nfs-in tr:nth-child(even) {
+  background-color: #ddd6d757;
+}
+
+.ufs-list{
+  display: block;
+  font-size: 14px;
+  font-weight: 900;
+  color: #171717;
+}
+
+.memory-line td:first-child{
+  border-left: 3px solid #009586ba;
+}
+
+.mini-icon{
+  width: 28px;
+  height: 28px;
 }

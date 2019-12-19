@@ -60,8 +60,6 @@ module.exports = {
     sale.pickUser = User.suppress(UsersProvider.get(userId));
 
     if (originalUserId){
-      console.log('aqui');
-      console.log(UsersProvider.get(originalUserId));
       sale.originalUserId = originalUserId;
     }
 
@@ -82,8 +80,6 @@ module.exports = {
     HistoryStorer.picking(userId, sale, day);
 
     if (sale.originalUserId){
-      console.log('aqui2');
-      console.log(UsersProvider.get(sale.originalUserId));
       sale.pickUser = User.suppress(UsersProvider.get(sale.originalUserId));
     }
 

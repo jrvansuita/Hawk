@@ -111,9 +111,6 @@ class DatePicker{
   async load(){
     await this.dependencies.load();
 
-
-console.log(this.input);
-
     this.picker = this.input.datepicker({
       modal: false,
       header: true,

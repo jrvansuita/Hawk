@@ -17,7 +17,7 @@ module.exports = class  {
     var user = new User(parseInt(params.id),
     params.name,
     params.sector,
-    params.avatar || (actual ? actual.avatar : '/img/avatar.png'),
+    (actual ? actual.avatar : '/img/avatar.png'),
     params.access,
     params.full == 'on',
     params.active == 'on',

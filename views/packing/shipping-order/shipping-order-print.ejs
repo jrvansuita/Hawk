@@ -7,6 +7,10 @@
   <link rel="icon" href="/img/icon/favicon.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="/img/icon/favicon.ico" type="image/x-icon" />
 
+  <script class="hidable-script">
+  window.shippingOrder = <%- JSON.stringify(shippingOrder || null) %>
+  </script>
+
 
   <style>
   .big{
@@ -71,7 +75,12 @@
 
 <body>
 
+  <%
 
+   shippingOrder._NotasFiscais
+
+  var volTotal = shippingOrder._NotasFiscais.reduce((prev, e)=>{return parseInt(e.qtdVolumes) + prev},0);
+  %>
 
   <div class="top">
     <p>
@@ -79,18 +88,23 @@
       <span class="transp"><%=shippingOrder.transportador%></span>
       <span  style="float:right"><%=Dat.format(new Date(shippingOrder.data))%></span>
     </p>
-    <span>Minuta de Despacho</span>
-    <span style="float:right" class="bold"><%=shippingOrder._NotasFiscais.length + ' Volumes'%></span>
+    <span>Minuta de Despacho [Usuário: <%=shippingOrder.usuario_criacao%>]</span>
+    <span style="float:right" class="bold"><%=volTotal + ' Volumes'%></span>
   </div>
 
   <div class="holder">
 
 
+
     <table>
       <tr class="bkg-row">
         <td>Nota Fiscal</td>
+        <td>Pedido</td>
+        <td>Ordem de Compra</td>
+        <td>Data</td>
         <td>Cliente</td>
         <td>Valor</td>
+        <td>Peso</td>
         <td>Volumes</td>
         <td>Destino</td>
       </tr>
@@ -98,27 +112,25 @@
       <%
 
       var val = 0;
+      var wei = 0;
 
-      shippingOrder._NotasFiscais.forEach((each)=>{
+      shippingOrder._NotasFiscais.sort((a, b) => a.contato.localeCompare(b.contato)).forEach((each)=>{
 
         val += parseFloat(each.totalFaturado);
+        wei += parseFloat(each.pesoTransportadora);
 
         %>
 
         <tr>
-          <td>
-            <span class="bold"><%=each.numero%></span>
-          </td>
+          <td><span class="bold"><%=each.numero%></span></td>
+          <td><span class=""><%=each.numeroPedido%></span></td>
+          <td><span class=""><%=each.numeroDaOrdemDeCompra%></span></td>
+          <td><span class=""><%=Dat.format(new Date(each.dataEmissao))%></span></td>
 
-          <td>
-            <span><%=each.contato%></span>
-          </td>
-          <td>
-            <span><%=Num.money(each.totalFaturado)%></span>
-          </td>
-          <td>
-            <span class="<%=each.volumes > 1 ? 'vol-inc' : ''%>"><%= each.volumes || 1 %></span>
-          </td>
+          <td><span><%=each.contato%></span></td>
+          <td><span><%=Num.money(each.totalFaturado)%></span></td>
+          <td><span><%=Floa.weight(each.pesoTransportadora)%></span></td>
+          <td><span class="<%=each.qtdVolumes > 1 ? 'vol-inc' : ''%>"><%= each.qtdVolumes || 1 %></span></td>
           <td>
             <span><%=each.uf%></span>
           </td>
@@ -130,8 +142,13 @@
         <tr class="bkg-row">
           <td></td>
           <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td><%=Floa.weight(wei)%></td>
           <td><%=Num.money(val)%></td>
-          <td><%=shippingOrder._NotasFiscais.length%></td>
+          <td><%=volTotal%></td>
           <td></td>
         </tr>
 

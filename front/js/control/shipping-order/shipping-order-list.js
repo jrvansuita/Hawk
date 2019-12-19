@@ -1,11 +1,11 @@
 var situationPicker;
-var transportPicker;
 
 var dateBeginPicker = null;
 var dateEndPicker = null;
 
 var page = -1;
 var loading = false;
+var showAll = false;
 
 var situationsArr = {0: 'Em Aberto', 1:'Coletado', 2 : 'Enviado'};
 
@@ -17,8 +17,7 @@ function initialize(){
 
 $(document).ready(() => {
   situationPicker = new ComboBox($('#situation'), situationsArr);
-  situationPicker
-  .setAutoShowOptions()
+  situationPicker.setAutoShowOptions()
   .load(() => {
     if (memoryQuery.situation){
       situationPicker.selectByFilter((a) => {
@@ -28,8 +27,7 @@ $(document).ready(() => {
   });
 
 
-  transportPicker = new ComboBox($('#transport'), transportList);
-  transportPicker
+  new ComboBox($('#transport'), transportList)
   .setAutoShowOptions()
   .setOnItemBuild((data, index)=>{
     return {text : data.val, img : '../img/transport/' + data.val.toLocaleLowerCase() + '.png' };
@@ -37,6 +35,19 @@ $(document).ready(() => {
   .load(() => {
     if (memoryQuery.transport){
       $('#transport').val(memoryQuery.transport);
+    }
+  });
+
+
+  new ComboBox($('#user'), '/profiles')
+  .setAutoShowOptions()
+  .setOnItemBuild((user, index)=>{
+    return {text : user.name, img : user.avatar};
+  })
+  .load()
+  .then((binder) => {
+    if (memoryQuery.user){
+      $('#user').val(memoryQuery.user);
     }
   });
 
@@ -80,9 +91,17 @@ $(document).ready(() => {
     initialize()
   });
 
+  $('#transport').on("keyup", function(e) {
+    if (e.which == 13){
+      $('#search-button').trigger('click');
+    }
+  });
+
+
 
   $('#search-button').click(()=>{
     page = -1;
+    showAll = false;
     $('.content').find("tr:gt(0)").empty();
     loadList();
   });
@@ -105,39 +124,43 @@ function bindScrollLoad(){
 
 
 function loadList(){
-  page++;
-  loading = true;
+  if (!showAll){
+    page++;
+    loading = true;
 
-  $('.loading').show();
-  $('#header').hide();
+    $('.loading').show();
+    $('#header').hide();
 
-  var s = $('#situation').val() ? situationPicker.getSelectedItem() : ''
-  var begin = dateBeginPicker.getSelected();
-  var end = dateEndPicker.getSelected();
+    var s = $('#situation').val() ? situationPicker.getSelectedItem() : ''
+    var begin = dateBeginPicker.getSelected();
+    var end = dateEndPicker.getSelected();
 
-  var query = {
-    page : page,
-    query: {
-      transport: $('#transport').val(),
-      situation: s ? s.id : undefined,
-      begin: begin ? begin.getTime() : undefined,
-      end: end ? end.getTime() : undefined
-    }
-  };
+    var query = {
+      page : page,
+      query: {
+        transport: $('#transport').val(),
+        situation: s ? s.id : undefined,
+        user: $('#user').val(),
+        begin: begin ? begin.getTime() : undefined,
+        end: end ? end.getTime() : undefined
+      }
+    };
 
 
-  _get('/shipping-order-list-page', query ,(result)=>{
-    loading = false;
-    $('.loading').hide();
+    _get('/shipping-order-list-page', query ,(result)=>{
+      loading = false;
+      $('.loading').hide();
+      showAll = result.length == 0;
 
-    console.log(result);
+      console.log(result);
 
-    result.forEach((each, index)=>{
-      addItemLayout(each, index);
+      result.forEach((each, index)=>{
+        addItemLayout(each, index);
+      });
+
+      $('#header').show();
     });
-
-    $('#header').show();
-  });
+  }
 }
 
 
@@ -146,12 +169,13 @@ function loadList(){
 function addItemLayout(item, index){
   var tds = [];
 
-  var nfsCount = item._NotasFiscais.length;
+  var volCount = 0;
   var valCount = 0;
   var ufs = {};
 
   item._NotasFiscais.forEach((each) => {
     valCount += parseFloat(each.totalFaturado);
+    volCount += parseFloat(each.qtdVolumes);
     ufs[each.uf] = '';
   });
 
@@ -166,7 +190,7 @@ function addItemLayout(item, index){
   tds.push($('<td>').addClass('transp-col').append(transpHolder.append(transpIcon, transpName)));
   tds.push($('<td>').append(item.usuario_criacao));
   tds.push($('<td>').append($('<span>').append(Num.money(valCount)).attr('title', valCount)));
-  tds.push($('<td>').append(nfsCount));
+  tds.push($('<td>').append(volCount));
   tds.push($('<td>').append(Object.keys(ufs).sort().join(', ')));
   tds.push($('<td>').append(getSituationName(item.situacao)));
 
@@ -179,7 +203,7 @@ function addItemLayout(item, index){
   tds.push($('<td>').append(dots));
 
   var line = $('<tr>').addClass('line-item').append(tds).click(() => {
-      window.open('/packing/shipping-order?number=' + item.numeroColeta ,'_blank');
+    window.open('/packing/shipping-order?number=' + item.numeroColeta ,'_blank');
   });
 
   applyBackgroundColor(item.situacao, line);

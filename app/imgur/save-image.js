@@ -7,6 +7,7 @@ module.exports = {
 
     imgur.uploadBase64(base64Image)
     .then(function (json) {
+      console.log(json.data);
       callback(json.data);
     })
     .catch(function (err) {

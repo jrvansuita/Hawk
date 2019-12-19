@@ -6,7 +6,7 @@ const PackageTypeVault = require('../vault/package-type-vault.js');
 const PackingChartBuilder = require('../builder/packing-chart-builder.js');
 const PackingDaysProvider = require('../provider/packing-days-provider.js');
 const TransportLaws = require('../laws/transport-laws.js');
-const ShippingOrderProvider = require('../provider/shipping-order-provider.js');
+
 
 module.exports = class PackingRoutes extends Routes{
 
@@ -146,36 +146,6 @@ module.exports = class PackingRoutes extends Routes{
       });
 
 
-      /*--------*/
-
-
-      this._page('/packing/shipping-order-list', (req, res) => {
-        res.locals.shippingListQuery = req.session.shippingListQuery;
-        res.render("packing/shipping-order/shipping-order-list", {transportList: TransportLaws.getObject()});
-      });
-
-      this._get('/shipping-order-list-page', (req, res) => {
-        req.session.shippingListQuery = req.query.query;
-        ShippingOrderProvider.list(req.query.query, req.query.page, (data)=>{
-          this._resp().sucess(res, data);
-        });
-      });
-
-      this._get('/packing/shipping-order', (req, res) => {
-        if (req.query.number){
-          ShippingOrderProvider.get(req.query.number, (data) => {
-            res.render("packing/shipping-order/shipping-order",  {shippingOrder: data});
-          });
-        }else{
-          res.render("packing/shipping-order/shipping-order",  {shippingOrder: null});
-        }
-      });
-
-      this._get('/shipping-order-print', (req, res) => {
-        ShippingOrderProvider.get(req.query.number, (data) => {
-          res.render("packing/shipping-order/shipping-order-print", {shippingOrder: data});
-        });
-      });
 
 
 
