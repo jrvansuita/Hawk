@@ -137,9 +137,11 @@ class DatePicker{
     });
 
 
-
-
     return this.picker;
+  }
+
+  hide(){
+    this.picker.datepicker('close');
   }
 
 

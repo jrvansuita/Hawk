@@ -24,6 +24,7 @@
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-select.css">
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-switch.css">
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-checkbox.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/line-selector.css">
 
 </head>
 
@@ -52,29 +53,66 @@
 
     <div class="main-pick">
       <div class="col dotted" style="display:block">
-        <div class="find-next-holder shadow">
-
-
-          <img  class="rfid-card" src="img/rfid-listening.gif" title="Passe o cartão">
 
 
 
-          <input type="text" id="user-id" class="simple-material-input" placeholder="Código de Acesso" />
-
-          <p class="error msg-input">Erro</p>
-          <p class="sucess msg-input">Sucesso</p>
-
-          <div class="picking-selectors-holder">
 
 
-            <label class="button shadow <%= selectedTransps  && !selectedTransps.includes('all')  ? 'sel-option' : '' %>"  id="select-transp">Transportes</label>
-
-            <label class="button shadow <%= selectedUfs  && !selectedUfs.includes('all')  ? 'sel-option' : '' %>" id="select-uf">Estados</label>
 
 
+        <div class="filters-holder">
+
+          <div class="filters-top">
+            <div class="filters-card-top shadow">
+               <div class="line-selector" id="select-transp">
+                 <label>Transportes</label>
+                 <img src="img/open-right.png"/>
+
+                 <span><%=Util.printList(selectedTransps, 'all', 'Todos', 1)%></span>
+               </div>
+
+               <div class="line-br"></div>
+            </div>
+            <img  class="rfid-card" src="img/rfid-listening.gif" title="Passe o cartão">
+            <input type="text" id="user-id" class="simple-material-input" placeholder="Código de Acesso" />
           </div>
 
+
+          <div class="filters-main filters-card-main shadow">
+
+            <div class="line-selector" id="select-uf">
+              <label>Estados</label>
+              <img src="img/open-right.png"/>
+              <span><%=Util.printList(selectedUfs, 'all', 'Todos', 5)%></span>
+            </div>
+
+            <div class="line-selector">
+              <label>Mais Filtros</label>
+              <img src="img/open-right.png"/>
+              <span>Todos</span>
+            </div>
+
+            <div class="line-selector">
+              <label>Ordenação</label>
+              <img src="img/open-right.png"/>
+              <span>Padrão</span>
+            </div>
+
+          </div>
         </div>
+
+
+        <p class="error msg-input">Erro</p>
+        <p class="sucess msg-input">Sucesso</p>
+
+
+
+
+
+
+
+
+
 
         <div class="pick-box shadow upcoming-box">
           <% if(isBusy){%>
@@ -166,7 +204,7 @@
 
                                 <img class="circle shadow avatar-img super-mini-avatar <%=blockingClass%>" data-id="<%=blocked.user.id%>" src="<%=blocked.user.id == 404 ? 'img/system.png' : blocked.user.avatar %>" title="<%=userName%>" onerror="this.src='/img/avatar.png'" />
                                 <%if (blocked.reasonTag){%>
-                                  <img class="circle shadow blocked-reason" data-reason="<%=blocked.reasonTag%>" />
+                                  <img class="blocked-reason" data-reason="<%=blocked.reasonTag%>" />
                                   <%}%>
                                 </td>
                                 <td>

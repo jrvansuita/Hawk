@@ -91,12 +91,11 @@ $(document).ready(() => {
     initialize()
   });
 
-  $('#transport').on("keyup", function(e) {
+  $('#transport, #user, #situation').on("keyup", function(e) {
     if (e.which == 13){
       $('#search-button').trigger('click');
     }
   });
-
 
 
   $('#search-button').click(()=>{
@@ -105,6 +104,17 @@ $(document).ready(() => {
     $('.content').find("tr:gt(0)").empty();
     loadList();
   });
+
+
+  $('#date-end').focusin(()=> {
+      dateBeginPicker.picker.datepicker('close');
+  });
+
+
+  $('#date-begin').focusin(()=> {
+      dateEndPicker.picker.datepicker('close');
+  });
+
 
 });
 
@@ -141,8 +151,8 @@ function loadList(){
         transport: $('#transport').val(),
         situation: s ? s.id : undefined,
         user: $('#user').val(),
-        begin: begin ? begin.getTime() : undefined,
-        end: end ? end.getTime() : undefined
+        begin: begin && $('#date-begin').val() ? begin.getTime() : undefined,
+        end: end && $('#date-end').val() ? end.getTime() : undefined
       }
     };
 

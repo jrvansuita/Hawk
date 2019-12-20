@@ -21,8 +21,8 @@ module.exports = class ShippingOrderRoutes extends Routes{
     });
 
     this._get('/packing/shipping-order', (req, res) => {
-      if (req.query.number){
-        ShippingOrderProvider.get(req.query.number, (data) => {
+      if (req.query.number || req.query.id){
+        ShippingOrderProvider.get(req.query, (data) => {
           res.render("packing/shipping-order/shipping-order",  {shippingOrder: data});
         });
       }else{
@@ -31,9 +31,14 @@ module.exports = class ShippingOrderRoutes extends Routes{
     });
 
     this._get('/shipping-order-print', (req, res) => {
-      ShippingOrderProvider.get(req.query.number, (data) => {
+      ShippingOrderProvider.get(req.query, (data) => {
         res.render("packing/shipping-order/shipping-order-print", {shippingOrder: data});
       });
+    });
+
+
+    this._get('/shipping-order-save', (req, res) => {
+
     });
 
 

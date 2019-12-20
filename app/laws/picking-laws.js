@@ -99,7 +99,7 @@ function getAssertedList(){
 
 
 function checkIsInDevMode(){
-  var maxSalesOnDevMove = process.env.MAX_SALES_ON_DEV || 12;
+  var maxSalesOnDevMove = Params.devMaxSalesOnPicking() || 12;
   //If this Env Var is not defined, it's on development mode
   //Not necessary to load all sales for tests porpouse
   if (!process.env.NODE_ENV){

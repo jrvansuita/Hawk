@@ -42,8 +42,8 @@ module.exports = class EccosysProvider extends EccosysApi{
     return this.param('$order', 'DESC').get('ordem-de-coleta').multiple();
   }
 
-  shippingOrder(number) {
-    return this.get('ordem-de-coleta/numero=' + number).single();
+  shippingOrder(data) {
+    return this.get('ordem-de-coleta/' + (data.id ? data.id : 'numero=' + data.number)).single();
   }
 
   products() {

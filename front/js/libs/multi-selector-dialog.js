@@ -10,14 +10,13 @@ class MultiSelectorDialog{
 
 
     this.dialog.onNegativeButton('Cancelar');
-    
+
     if (canEdit){
       this.dialog.onPositiveButton('Selecionar',(data)=>{
         window.location.href = window.location.origin + window.location.pathname + '?'+paramName+'=' + data.join('|');
       });
     }
   }
-
 
 
   _createOptions(){

@@ -8,6 +8,7 @@
   <script type="text/javascript" src="/front/js/control/shipping-order/shipping-order.js"></script>
   <script type="text/javascript" src="/util/local.js"></script>
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+  <script type="text/javascript" src="/front/js/libs/beep.js"></script>
 
 
 
@@ -131,7 +132,7 @@
             <div class="nf-input-holder">
               <div class="nf-input-and-icon">
                 <img class="circle shadow icon"  id="nf-icon" class="nf-icon" src="/img/scan-barcode.png" />
-                <input type="text" id="nf"  class="simple-material-input%>" placeholder="Nota Fiscal"/>
+                <input type="text" id="nf"  class="simple-material-input%>" placeholder="Nota Fiscal"   onkeypress="return Num.isNumberKey(event);" required/>
                 <span id="progress"></span>
               </div>
               <label class="nf-msg"></label>
@@ -156,7 +157,6 @@
 
 
       <div class="nfs-in-holder nfs-table-holder shadow"></div>
-      <div class="nfs-out-holder nfs-table-holder shadow"></div>
 
     </div>
 

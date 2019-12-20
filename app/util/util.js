@@ -1,6 +1,6 @@
 var Util = {
 
-   id(){
+  id(){
     return parseInt(new Date().getTime().toString().slice(-8));
   },
 
@@ -320,55 +320,76 @@ var Util = {
     circylarStringify(object){
       var cache = [];
       var str = JSON.stringify(object,
-          // custom replacer fxn - gets around "TypeError: Converting circular structure to JSON"
-          function(key, value) {
-              if (typeof value === 'object' && value !== null) {
-                  if (cache.indexOf(value) !== -1) {
-                      // Circular reference found, discard key
-                      return;
-                  }
-                  // Store value in our collection
-                  cache.push(value);
-              }
-              return value;
-          }, 4);
-      cache = null; // enable garbage collection
-      return str;
-    }
+        // custom replacer fxn - gets around "TypeError: Converting circular structure to JSON"
+        function(key, value) {
+          if (typeof value === 'object' && value !== null) {
+            if (cache.indexOf(value) !== -1) {
+              // Circular reference found, discard key
+              return;
+            }
+            // Store value in our collection
+            cache.push(value);
+          }
+          return value;
+        }, 4);
+        cache = null; // enable garbage collection
+        return str;
+      },
+
+
+      printList(arr, allVal, allDef, showCount){
+        var result = allDef || allVal;
+        showCount = showCount || 1;
+
+        if (arr){
+          if (!arr.includes(allVal)){
+
+            if (typeof arr == 'string'){
+              arr = arr.split(',');
+            }
+
+            var dif = arr.length - showCount
+
+            result = arr.slice(0, showCount).join(', ') + (dif > 0 ? ' +' + dif : '');
+          }
+        }
+
+        return result;
+      }
 
 
 
-  };
+    };
 
 
 
 
 
-  var Colors = {
-    vermelho: 'f33a26',
-    azul: '4984f9',
-    azulmarinho: '072586',
-    amarelo: 'fde300',
-    verde: '2ed268',
-    rosa: 'ff89ee',
-    pink: 'ce50a1',
-    salmao: 'f99a84',
-    offwhite: 'fbf7f5',
-    branco: 'ffffff',
-    cinza: '979798',
-    laranja: 'e69939',
-    preto: '4a4646',
-    roxo: 'aa6bc7',
-    bordo: '964242',
-    royal: '4a49a7',
-    marrom: '8c6751',
-    bege: 'e0cebc',
-    lilas: 'a79bd8',
-    jeans: '8699b3',
-    dourado: 'deb647',
-    vinho: '904366'
-  };
+    var Colors = {
+      vermelho: 'f33a26',
+      azul: '4984f9',
+      azulmarinho: '072586',
+      amarelo: 'fde300',
+      verde: '2ed268',
+      rosa: 'ff89ee',
+      pink: 'ce50a1',
+      salmao: 'f99a84',
+      offwhite: 'fbf7f5',
+      branco: 'ffffff',
+      cinza: '979798',
+      laranja: 'e69939',
+      preto: '4a4646',
+      roxo: 'aa6bc7',
+      bordo: '964242',
+      royal: '4a49a7',
+      marrom: '8c6751',
+      bege: 'e0cebc',
+      lilas: 'a79bd8',
+      jeans: '8699b3',
+      dourado: 'deb647',
+      vinho: '904366'
+    };
 
 
-  if (typeof module != 'undefined')
-  module.exports = Util;
+    if (typeof module != 'undefined')
+    module.exports = Util;

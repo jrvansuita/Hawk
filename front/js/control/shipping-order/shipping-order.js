@@ -1,20 +1,49 @@
 var MEM_TAG;
+var memoryList;
 
 
 $(document).ready(()=>{
   MEM_TAG = 'shipping-order-' + shippingOrder.numeroColeta;
+  memoryList = Local.get(MEM_TAG) || [];
 
   onInit();
 
   $('#nf').on("keyup", function(e) {
-    if (e.which == 13){
-      addNfToOc($(this).val());
+    if ((e.which == 13) && ($(this).val().length > 5)){
+      handleNfeInclusion($(this).val().trim());
     }
   });
+
+  $('.icon-open-list').click(function(e){
+    var tableId = $(this).data('table');
+
+    if (!$(this).hasClass('closed')){
+      $(this).addClass('closed').attr('src','/img/open-down.png').hide().fadeIn();
+      $('#' + tableId + ' > tbody > tr').not(':first').hide();
+
+      var title = $('<span>').addClass('title-closed ' + tableId).text($(this).data('title')).click(()=>{
+        $(this).click();
+      });
+
+      $('#' + tableId).parent().append(title);
+    }else{
+      $('.title-closed.' + tableId).remove();
+      $(this).removeClass('closed').attr('src','/img/open-up.png').hide().fadeIn();
+      $('#' + tableId + ' > tbody  > tr').not(':first').show();
+    }
+
+    e.stopPropagation();
+    e.preventDefault();
+  });
+
+  $('#save').click(() => {
+    saveShippingOrder();
+  });
+
 });
 
 function onInit(){
-  createNfsTable('nfs-in-holder', 'nfs-in', {title: 'Lista de Notas Da Ordem de Coleta'});
+  createNfsTable('nfs-in-holder', 'nfs-in', {title: 'Lista de Notas da Ordem de Coleta'});
   loadNfsInTableFromDataBase();
   loadNfsInTableFromMemory();
 }
@@ -52,10 +81,8 @@ function loadNfsInTableFromDataBase(){
 }
 
 function loadNfsInTableFromMemory(){
-  var memory = Local.get(MEM_TAG);
-
-  if (memory && (memory.length > 0)){
-    addLines(memory);
+  if (memoryList && (memoryList.length > 0)){
+    addLines(memoryList);
   }
 }
 
@@ -81,14 +108,14 @@ function buildLine(each){
 
   cols.push(createIcon('checked'));
   cols.push(createColVal(each.numero, false, true));
-  cols.push(createColVal(each.numeroPedido));
-  cols.push(createColVal(each.numeroDaOrdemDeCompra));
+  cols.push(each.numeroPedido ?  createColVal(each.numeroPedido) : createIcon('h-dots'));
+  cols.push(each.numeroDaOrdemDeCompra ? createColVal(each.numeroDaOrdemDeCompra) : createIcon('h-dots'));
   cols.push(createColVal(Dat.format(new Date(each.dataEmissao))));
   cols.push(createColVal(each.contato));
   cols.push(createColVal(Num.money(each.totalFaturado)));
   cols.push(createColVal(Floa.weight(each.pesoTransportadora)));
   cols.push(createColVal(each.qtdVolumes, true));
-  cols.push(createColVal(each.uf, true));
+  cols.push(createColVal(each.uf));
 
   return cols;
 }
@@ -132,42 +159,97 @@ function refreshHeader(nfs){
 }
 
 
-function addNfToOc(nfNumber){
-  $('#nf').val('');
+function handleNfeInclusion(nfNumber){
+  if (Num.isInt(nfNumber)){
+    $('#nf').val('');
 
-  _get('/nfe', {number: nfNumber}, (nfe) => {
-    handleNfeAndAddToOc(nfe);
-  });
+    _get('/nfe', {number: nfNumber}, (nfe) => {
+      if (onCheckNfeParameters(nfNumber, nfe)){
+        onInsertNewNfeOnShippingOrder(nfe);
+      }
+    });
+  }
 }
 
-function handleNfeAndAddToOc(nfe){
-  if (nfe){
-    var memory = Local.get(MEM_TAG) || [];
+function onCheckNfeParameters(query, nfe){
+  var sound = '';
+  var msg = '';
+  console.log(nfe);
 
-    var foundIndex = memory.findIndex((e) => {
-      return e.numero == nfe.numero;
-    });
+  if (!nfe){
+    sound = beepError;
+    msg = 'NF ' + query + ' não encontrada!';
+    $('#nf').val(query).select();
+  }else if ($("[data-nfe='" + nfe.numero + "']").length != 0){
+    sound = beepError;
+    msg = 'NF já incluida nessa ordem de coleta!';
+  }else if (nfe.situacao != '7'){
+    sound = beepNoisy;
+    msg = 'NF ['+ nfe.numero +'] não está autorizada na Receita Federal';
+  }else if (nfe.transportador != shippingOrder.transportador){
+    sound = beepThreeSign;
+    msg = 'NF de Transportadora['+Util.transportName(nfe.transportador, '--')+'] inválida para essa Ordem de Coleta[' + Util.transportName(shippingOrder.transportador, '--') + ']';
+  }else if(nfe.idOrdemColeta != 0){
+    sound = beepError;
+    msg = 'NF já foi incluida em uma Ordem de Coleta anteriormente.<a style="color: #5f5fda"  target="_blank" href="shipping-order?id=' + nfe.idOrdemColeta + '">Ver Mais.</a>';
+  }
 
-    var found = memory[foundIndex];
-    memory.splice(foundIndex, 1);
+  if (msg){
+    showMsg(msg, 'alert', true);
 
-    var vols = found ? found.vols : 1;
+    if (sound){
+      sound();
+    }
+  }
 
-    var object = {
+  return !msg;
+}
+
+function onInsertNewNfeOnShippingOrder(nfe){
+  var object = {
       numero: nfe.numero,
       totalFaturado: nfe.totalFaturado,
       dataEmissao: nfe.dataEmissao,
       pesoTransportadora: nfe.pesoBruto,
       memory: true,
-      vols: vols,
-      qtdVolumes:  nfe.qtdVolumes > 1 ? vols + '/' + nfe.qtdVolumes : 1,
+      qtdVolumes:  nfe.qtdVolumes,
       contato: nfe.contato,
       uf: nfe.uf
     };
 
-    memory.push(object);
-    Local.put(MEM_TAG, memory);
-    $("[data-nfe='" + nfe.numero + "']").remove();
+    memoryList.push(object);
+    Local.put(MEM_TAG, memoryList);
     addLines([object]);
-  }
+    showMsg(null, 'checked', false);
+    beepSucess();
+}
+
+function showMsg(msg, icon, isError){
+  $('#nf-icon').attr('src','/img/'+ icon +'.png').hide().show();
+  showMessage(msg, isError, ()=>{
+    $('#nf-icon').attr('src','/img/scan-barcode.png').show();
+  });
+}
+
+function showMessage(msg, isError, onAutoHide){
+  var delay = 2000 + (msg ? (msg.length * 150) : 0);
+
+  $('.nf-msg')
+  .html(msg)
+  .css('color', isError ? 'red' : 'green')
+  .clearQueue()
+  .fadeIn()
+  .delay(delay)
+  .queue(function(next){
+    if (onAutoHide != false) onAutoHide();
+
+    if (onAutoHide != false){
+      $(this).hide().clearQueue();
+    }
+    next();
+  });
+}
+
+function saveShippingOrder(){
+  _post('/shipping-order-save', )
 }

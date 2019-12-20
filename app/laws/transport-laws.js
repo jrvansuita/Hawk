@@ -13,7 +13,7 @@ module.exports = {
 
         var transps = [selected];
 
-        if (transps.includes("|")){
+        if (selected.includes("|")){
           transps = selected.split('|');
         }
 
@@ -27,7 +27,7 @@ module.exports = {
     return global.selectedTransps;
   },
 
-  assert(saleList){ 
+  assert(saleList){
     if (global.selectedTransps && (global.selectedTransps.length > 0)){
       if (saleList.length > 0) {
         saleList = saleList.filter(sale =>{

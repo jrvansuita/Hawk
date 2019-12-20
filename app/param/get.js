@@ -99,6 +99,10 @@ var Params = {
 
   updateProductWeightMagento(){
     return this.get('update-product-weight-magento');
+  },
+
+  devMaxSalesOnPicking(){
+    return this.get('dev-max-sales-picking');
   }
 }
 

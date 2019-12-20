@@ -16,7 +16,9 @@
 .header-holder{
   width: 100%;
   display: flex;
+  margin-top: 5px;
   text-align: center;
+  margin-bottom: 5px;
 }
 
 
@@ -104,7 +106,7 @@ table{
 
 
 .left-middle-line{
-  width: 40%;
+  width: 80%;
   float: left;
   height: fit-content;
   padding-bottom: 4px;
@@ -113,7 +115,7 @@ table{
 
 
 .right-middle-line{
-  width: 60%;
+  width: 20%;
   float: right;
   height: fit-content;
   position: relative;
@@ -165,9 +167,9 @@ table{
   width: fit-content;
   height: fit-content;
   font-size: 13px;
-  /* padding-bottom: 8px; */
-  /* padding-top: 8px; */
+  padding-top: 4px;
   float: left;
+  min-width: 100%;
 }
 
 .nf-icon{
@@ -248,6 +250,7 @@ table{
   font-size: 14px;
   font-weight: 900;
   color: #171717;
+  text-align: left;
 }
 
 .memory-line td:first-child{
@@ -257,4 +260,31 @@ table{
 .mini-icon{
   width: 28px;
   height: 28px;
+}
+
+
+.title-closed{
+  vertical-align: middle;
+  position: absolute;
+  background: #ffffff;
+  width: 90%;
+  padding: 0px 6px;
+  margin: 10px;
+  font-size: 15px;
+  cursor: pointer;
+  color: #777777;
+  margin-top: -25px;
+  margin-right: 40px;
+  height: auto;
+  z-index: 222;
+  display: inline-block;
+}
+
+
+.button {
+    position: relative;
+    padding: 10px 25px;
+    font-size: 14px;
+    margin-right: 12px;
+    float: right;
 }

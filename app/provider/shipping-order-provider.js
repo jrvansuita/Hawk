@@ -6,7 +6,7 @@ var lastLoadedArr = [];
 module.exports = {
 
   list(query, page, callback){
-    var provider = new EccosysProvider();
+    var provider = new EccosysProvider(true);
 
     provider
     .pageCount(50)
@@ -35,21 +35,22 @@ module.exports = {
   },
 
 
-  get(number, callback){
+  get(query, callback){
     var foundOc = lastLoadedArr.find((each) => {
-      return each.numeroColeta == number;
+      return query.id ? (each.id == query.id) : (each.numeroColeta == query.number);
     });
 
     if (foundOc){
       callback(foundOc);
     }else{
       new EccosysProvider(true)
-      .shippingOrder(number)
+      .shippingOrder(query)
       .go((result) => {
         callback(result);
       });
     }
-  },
+  }
+
 
 
 };
