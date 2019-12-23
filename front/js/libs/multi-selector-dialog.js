@@ -18,13 +18,28 @@ class MultiSelectorDialog{
     }
   }
 
+  setAddAllOption(add){
+    this.addAllOption = add;
+    return this;
+  }
+
+  setVerticalDispay(isVertical){
+    this.dialog.setVerticalDispay(isVertical);
+    return this;
+  }
 
   _createOptions(){
     var arr = Object.keys(this.list);
-    this.dialog.addItem('Todos', 'all', this.selecteds == "" || this.selecteds.includes('all') , this.checkToggleAll);
+
+    var isArray = this.list instanceof Array;
+
+
+    if (this.addAllOption){
+      this.dialog.addItem('Todos', 'all', this.selecteds == "" || this.selecteds.includes('all') , this.checkToggleAll);
+    }
 
     for (var i = 0; i < arr.length; i++) {
-      this.dialog.addItem(arr[i],arr[i], this.selecteds.includes(arr[i]), this.checkToggleAll);
+      this.dialog.addItem(isArray ? arr[i] : this.list[arr[i]], arr[i], this.selecteds.includes(arr[i]), this.checkToggleAll);
     }
   }
 

@@ -54,9 +54,9 @@ module.exports = class PickingRoutes extends Routes{
 
 
     this._page('/picking', (req, res) => {
+      PickingHandler.setMoreOptionsFilter(req.query.moreOptions);
       TransportLaws.select(req.query.transp);
       UfLaws.select(req.query.uf);
-
 
       PickingHandler.init(() => {
 
@@ -74,6 +74,9 @@ module.exports = class PickingRoutes extends Routes{
 
             ufList: UfLaws.getObject(),
             selectedUfs: UfLaws.getSelecteds(),
+
+            moreOptions: PickingHandler.getMoreOptionsFilters(),
+            selectedOptions: PickingHandler.getMoreOptionsSelectedFilters(),
 
             pendingSales: PendingLaws.getList(),
             donePickings: DoneLaws.getList(),

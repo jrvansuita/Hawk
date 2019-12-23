@@ -17,6 +17,12 @@ class BaseSelectorDialog {
     this.holder.append(this.buttons);
   }
 
+
+  setVerticalDispay(isVertical){
+    this.items.addClass('ms-vertical-choices');
+    return this;
+  }
+
   onNegativeButton(label, callback){
     var button = $('<label>').addClass('ms-button material-ripple').text(label).click(()=>{
       this.modal.remove();

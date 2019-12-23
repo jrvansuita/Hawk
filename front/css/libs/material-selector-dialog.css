@@ -51,6 +51,7 @@
 
 .ms-title{
   padding-left: 10px;
+  margin-bottom: 15px;
   font-size: 14px;
   font-weight: 600;
   color: #025f54;
@@ -100,12 +101,15 @@
 .ms-choices  label {
   cursor: pointer;
   margin: 8px;
-  margin-top: 20px;
+  margin-top: 10px;
   padding-right: 10px;
   color: #696666;
   font-weight: 600;
 }
 
+.ms-vertical-choices{
+  display: grid;
+}
 
 .ms-buttons-holder{
   margin-top: 5px;

@@ -19,6 +19,13 @@ $(document).ready(() => {
     .show();
   });
 
+  $('#more-options').click(function(){
+    new MultiSelectorDialog('Selecione outras opções', moreOptions, 'moreOptions', selectedOptions, userSetts[9] != undefined)
+    .setAddAllOption(false)
+    .setVerticalDispay(true)
+    .show();
+  });
+
 
 
   $(".blocked-sale-label[data-reason='994']").dblclick(function(){

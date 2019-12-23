@@ -35,6 +35,7 @@
 
   window.ufList = <%- JSON.stringify(ufList || null) %>
   window.transportList = <%- JSON.stringify(transportList || null) %>
+  window.moreOptions = <%- JSON.stringify(moreOptions || null) %>
 
   window.inprogress = <%- JSON.stringify(inprogress || null) %>
   window.pendingSales = <%- JSON.stringify(pendingSales || null) %>
@@ -43,6 +44,8 @@
 
   window.selectedTransps = "<%- selectedTransps || undefined %>";
   window.selectedUfs = "<%- selectedUfs || undefined %>";
+  window.selectedOptions = "<%- selectedOptions || undefined %>";
+
 
   window.userSetts = <%- JSON.stringify(locals.loggedUser ? locals.loggedUser.setts ? locals.loggedUser.setts : {} : {}) %>
   </script>
@@ -50,16 +53,8 @@
   <%  include ../menus/picking-menu %>
   <div class="main-content no-scroll">
 
-
     <div class="main-pick">
       <div class="col dotted" style="display:block">
-
-
-
-
-
-
-
         <div class="filters-holder">
 
           <div class="filters-top">
@@ -86,7 +81,7 @@
               <span><%=Util.printList(selectedUfs, 'all', 'Todos', 5)%></span>
             </div>
 
-            <div class="line-selector">
+            <div class="line-selector" id="more-options">
               <label>Mais Filtros</label>
               <img src="img/open-right.png"/>
               <span>Todos</span>

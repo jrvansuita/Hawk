@@ -342,6 +342,10 @@ var Util = {
         showCount = showCount || 1;
 
         if (arr){
+          if (typeof arr == 'string'){
+            arr = arr.split(',');
+          }
+          
           if (!arr.includes(allVal)){
 
             if (typeof arr == 'string'){

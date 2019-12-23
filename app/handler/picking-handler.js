@@ -167,7 +167,20 @@ module.exports = {
 
   getOpenSalesCount(){
     return openSalesCount;
-  }
+  },
+
+  getMoreOptionsFilters(){
+    return PickingLaws.getFiltersObject();
+  },
+
+  getMoreOptionsSelectedFilters(){
+    return PickingLaws.getSelectedFilters();
+  },
+
+  setMoreOptionsFilter(optionsSelected){
+    PickingLaws.setFilters(optionsSelected);
+  },
+
 
 };
 
