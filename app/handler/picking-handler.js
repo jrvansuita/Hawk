@@ -57,9 +57,7 @@ module.exports = {
     }).pickingSales().go((sales) => {
       try{
 
-        /*PickingLaws.set(sales.sort((a,b) => {
-          return new Date(b.data)  - new Date(a.data);
-        }));*/
+        PickingLaws.set(sales);
 
 
         this.setOffSales();

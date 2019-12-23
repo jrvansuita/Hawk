@@ -3,6 +3,7 @@ class MultiSelectorDialog{
   constructor(title, list, paramName, selecteds, canEdit){
     this.list = list;
     this.selecteds = selecteds;
+    this.setAddAllOption(true);
 
 
     this.dialog = new BaseSelectorDialog(title, canEdit);
