@@ -1,5 +1,12 @@
+
+var cardTooltip;
+
+
 $(document).ready(() => {
   $( "#user-id" ).focus();
+
+  cardTooltip = new Tooltip('#card-tooltip', 'Vamos trabalhar?');
+  cardTooltip.autoHide(10000).returnDefault(true).load();
 
   $(".print-progress").click(function(e) {
     //do something
@@ -7,25 +14,21 @@ $(document).ready(() => {
     $( "#user-id" ).focus();
   });
 
-
-
   $('#select-uf').click(function(){
-    new MultiSelectorDialog('Selecione os Estados', ufList, 'uf', selectedUfs, userSetts[9] != undefined)
+    new MultiSelectorDialog('Selecione os Estados', ufList, 'uf', selectedUfs, userSetts[9] != undefined, true)
     .show();
   });
 
   $('#select-transp').click(function(){
-    new MultiSelectorDialog('Selecione as Transportadoras', transportList, 'transp', selectedTransps, userSetts[9] != undefined)
+    new MultiSelectorDialog('Selecione as Transportadoras', transportList, 'transp', selectedTransps, userSetts[9] != undefined, true)
     .show();
   });
 
   $('#more-options').click(function(){
-    new MultiSelectorDialog('Selecione outras opções', moreOptions, 'moreOptions', selectedOptions, userSetts[9] != undefined)
-    .setAddAllOption(false)
+    new MultiSelectorDialog('Selecione outras opções', filters, 'filters', selectedFilters, userSetts[9] != undefined)
     .setVerticalDispay(true)
     .show();
   });
-
 
 
   $(".blocked-sale-label[data-reason='994']").dblclick(function(){
@@ -135,7 +138,8 @@ $(document).ready(() => {
 
         var onSucess = function(response){
           if (typeof response == "string" && response.includes("end-picking")) {
-            $('.sucess').text("Picking encerrado com sucesso.").fadeIn().delay(1000).fadeOut();
+            cardTooltip.hideDelay(2000).showSuccess("Picking encerrado com sucesso.");
+
             var sale = response.split("-");
             sale = sale[sale.length - 1];
             $('div[data-sale="progress-' + sale + '"]').css('background-color', '#13bb7070').delay(1000).fadeOut();
@@ -144,7 +148,7 @@ $(document).ready(() => {
             //$('#user-id').trigger(jQuery.Event( 'keyup', { which: 13 } ));
             $('#user-id').val('');
           } else {
-            $('.sucess').text("Aguardando impressão do pedido").fadeIn();
+            cardTooltip.hideDelay(2000).showSuccess("Aguardando impressão do pedido");
             setTimeout(function() {
               openPrintPickingSale(response);
               window.location.reload();
@@ -156,7 +160,8 @@ $(document).ready(() => {
           var l = error.responseText.length * 20;
           var showDelay = 1000 + l;
 
-          $('.error').text(error.responseText).clearQueue().fadeIn().delay(showDelay).fadeOut();
+          cardTooltip.showError(error.responseText);
+
           $('#user-id').select();
         };
 
@@ -188,7 +193,7 @@ $(document).ready(() => {
       },
       null,
       (error)=>{
-        $('.error').text(error.responseText).fadeIn().delay(1000).fadeOut();
+        cardTooltip.showError(error.responseText);
       });
 
     }
@@ -246,7 +251,7 @@ function doneSaleRestart(saleNumber){
   _post("/picking-done-restart", {
     sale: saleNumber
   },null, (error)=>{
-    $('.error').text(error.responseText).fadeIn().delay(1000).fadeOut();
+    cardTooltip.showError(error.responseText);
   });
 }
 

@@ -128,22 +128,7 @@ input[type=number]::-webkit-outer-spin-button {
   margin-right: 8px;
 }
 
-.msg-input{
-  font-size: 12px;
-  padding: 5px 4px;
-  display: none;
-  text-align: center;
-  max-width: 1005;
-  padding-bottom: 15px;
-}
 
-.error {
-  color: #e53935 !important;
-}
-
-.sucess {
-  color: #2da961;
-}
 
 .avatar-name {
   padding: 2px 5px;
@@ -341,7 +326,7 @@ table{
 
 .mini-red-circle {
   margin-left: 5px;
-  background-color: #bd48008a;
+  background-color: #f55d0085;
   border-radius: 50%;
   width: 10px;
   padding: 3px;
@@ -408,7 +393,7 @@ table{
 .avatar-badge{
   width: 20px;
   height: 20px;
-  z-index: 999999999 !important;
+  z-index: 999 !important;
   position: absolute !important;
   left: 0;
   margin-top: -17px;

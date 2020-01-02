@@ -57,6 +57,10 @@ module.exports = {
     }).pickingSales().go((sales) => {
       try{
 
+        sales = sales.sort((a,b) => {
+          return new Date(b.data)  - new Date(a.data);
+        });
+
         PickingLaws.set(sales);
 
 
@@ -165,20 +169,7 @@ module.exports = {
 
   getOpenSalesCount(){
     return openSalesCount;
-  },
-
-  getMoreOptionsFilters(){
-    return PickingLaws.getFiltersObject();
-  },
-
-  getMoreOptionsSelectedFilters(){
-    return PickingLaws.getSelectedFilters();
-  },
-
-  setMoreOptionsFilter(optionsSelected){
-    PickingLaws.setFilters(optionsSelected);
-  },
-
+  }
 
 };
 

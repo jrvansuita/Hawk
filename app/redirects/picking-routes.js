@@ -2,6 +2,8 @@ const Routes = require('../redirects/controller/routes.js');
 const BlockHandler = require('../handler/block-handler.js');
 const TransportLaws = require('../laws/transport-laws.js');
 const UfLaws = require('../laws/uf-laws.js');
+const PickingFilterLaws = require('../laws/picking-filter-laws.js');
+
 const InprogressLaws = require('../laws/inprogress-laws.js');
 const PendingLaws = require('../laws/pending-laws.js');
 const DoneLaws = require('../laws/done-laws.js');
@@ -54,13 +56,14 @@ module.exports = class PickingRoutes extends Routes{
 
 
     this._page('/picking', (req, res) => {
-      PickingHandler.setMoreOptionsFilter(req.query.moreOptions);
+      PickingFilterLaws.select(req.query.filters);
       TransportLaws.select(req.query.transp);
       UfLaws.select(req.query.uf);
 
       PickingHandler.init(() => {
 
         var pickingSales = PickingHandler.getPickingSales();
+
 
         if (!res.headersSent){
           res.render('picking/picking', {
@@ -75,8 +78,8 @@ module.exports = class PickingRoutes extends Routes{
             ufList: UfLaws.getObject(),
             selectedUfs: UfLaws.getSelecteds(),
 
-            moreOptions: PickingHandler.getMoreOptionsFilters(),
-            selectedOptions: PickingHandler.getMoreOptionsSelectedFilters(),
+            filters: PickingFilterLaws.getObject(),
+            selectedFilters: PickingFilterLaws.getSelecteds(),
 
             pendingSales: PendingLaws.getList(),
             donePickings: DoneLaws.getList(),
@@ -133,11 +136,17 @@ module.exports = class PickingRoutes extends Routes{
 
       res.render('picking/line', {line : PickingLaws.getFullList(),
         blocks: BlockLaws.list(),
-        rules: BlockLaws.rules()});
+        rules: BlockLaws.rules(),
+
+        selectedTransps: TransportLaws.getSelecteds(),
+        selectedUfs: UfLaws.getSelecteds(),
+        selectedFilters: PickingFilterLaws.getSelecteds(),
+
       });
+    });
 
 
 
 
-    }
-  };
+  }
+};

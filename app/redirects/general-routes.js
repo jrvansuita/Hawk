@@ -26,6 +26,7 @@ module.exports = class UserRoutes extends Routes{
     });
 
     this._post('/upload-img', (req, res) => {
+      console.log('chegou');
       //base64Image
       ImgurSaver.upload(req.body.img, (data)=>{
         if (data.link){

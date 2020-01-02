@@ -1,11 +1,12 @@
 const TransportLaws = require('../laws/transport-laws.js');
 const UfLaws = require('../laws/uf-laws.js');
+const PickingFilterLaws = require('../laws/picking-filter-laws.js');
+
 const History = require('../bean/history.js');
 const Err = require('../error/error.js');
 
 //Nexts sales to pick
 global.staticPickingList = [];
-global.selectedMoreOptions = undefined;
 
 module.exports = {
 
@@ -84,19 +85,9 @@ module.exports = {
     //Limpa a lista de pedidos bloqueados
     global.staticBlockedSales = [];
     History.job(Const.picking_update, Const.starting_picking_update, 'Eccosys', userId);
-  },
-
-  getFiltersObject(){
-    return getFiltersObject();
-  },
-
-  getSelectedFilters(){
-    return global.selectedMoreOptions || getDefaultFiltersObject();
-  },
-
-  setFilters(options){
-    global.selectedMoreOptions = options;
   }
+
+
 };
 
 
@@ -105,15 +96,8 @@ function getAssertedList(){
   var list = global.staticPickingList;
   list = TransportLaws.assert(list);
   list = UfLaws.assert(list);
+  list = PickingFilterLaws.assert(list);
 
-  var filter = getFilterValues();
-  if (filter){
-
-    if (filter.firstPurchase){
-
-    }
-
-  }
 
   return list;
 }
@@ -127,29 +111,5 @@ function checkIsInDevMode(){
     if (global.staticPickingList.length > maxSalesOnDevMove){
       global.staticPickingList.splice(maxSalesOnDevMove);
     }
-  }
-}
-
-function getFiltersObject(){
-  return {
-    firstPurchase : 'Primeira Compra',
-    creditCard: 'Cartão de Crédito',
-    boleto : 'Boleto'
-  }
-}
-
-function getDefaultFiltersObject(){
-  return "creditCard|boleto";
-}
-
-function getFilterValues(){
-  if (global.selectedMoreOptions){
-    var result = global.selectedMoreOptions;
-
-    Object.keys(result).map((key) => {
-      result[key] = options.includes(key)
-    });
-
-    return result;
   }
 }

@@ -134,7 +134,7 @@ function showAvatarCropper(){
 
     croppie.result(resultParams).then(function(base64Image) {
       $('.avatar-img').attr('src', base64Image);
-      _post('/upload-user-avatar', {userId: $('#editing').val() , avatar: base64Image.split(',')[1]},(url)=>{
+      _postImg('/upload-user-avatar', {userId: $('#editing').val() , avatar: base64Image.split(',')[1]},(url)=>{
         selectedUser.avatar = url;
         $('#avatar-input-file').val(url);
       });

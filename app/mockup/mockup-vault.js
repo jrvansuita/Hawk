@@ -13,7 +13,7 @@ module.exports = class MockHandler {
       params.fontColor,
       params.fontShadowColor,
       params.priceBottomMargin,
-      params.showDiscount.includes('true'),
+      params.showDiscount,
       params.fontNameDiscount,
       params.discountFontColor,
       params.discountShadowColor,

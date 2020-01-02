@@ -52,7 +52,7 @@ $(document).ready(()=>{
     $('.img-edit').attr('src', 'img/loader/circle.svg');
     reader.onload = function(event) {
 
-      _post('/upload-img', {img: event.target.result.split(',')[1]},(data)=>{
+      _postImg('/upload-img', {img: event.target.result.split(',')[1]},(data)=>{
         selected.imgUrl = data.link;
         $('.mock-img-select').attr('src', event.target.result);
         $('.img-edit').attr('src', 'img/img-edit.png');
@@ -138,6 +138,8 @@ function saveMockupSettings() {
     width: Num.def($('#width').val()),
     height: Num.def($('#height').val()),
   };
+
+  console.log(data);
 
   _post('mockup-builder', data , (mockId)=>{
     window.location= 'mockup-builder?_id=' + mockId;

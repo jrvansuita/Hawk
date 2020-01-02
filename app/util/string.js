@@ -9,7 +9,7 @@ var Str = {
   },
 
   between(str, left, right) {
-    return str.split(left).pop().split(right)[0];
+    return str.replace(/\n/g,' ').split(left).pop().split(right)[0];
   },
 
   short: function(val, max) {

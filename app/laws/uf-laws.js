@@ -10,14 +10,7 @@ module.exports = {
       if (selected.includes('all')){
         global.selectedUfs = undefined;
       }else{
-
-        var ufs = [selected];
-
-        if (selected.includes("|")){
-          ufs = selected.split('|');
-        }
-
-        global.selectedUfs = ufs;
+        global.selectedUfs = selected.includes("|") ? selected.split('|') : [selected];
       }
     }
   },

@@ -9,12 +9,13 @@ var app = global.app;
 
 app.set('port', process.env.PORT || 3000);
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({
   extended: true,
   limit: '5mb',
   parameterLimit: 1000000
 }));
+
 
 
 // register the session with it's secret ID

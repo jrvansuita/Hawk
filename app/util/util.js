@@ -345,7 +345,7 @@ var Util = {
           if (typeof arr == 'string'){
             arr = arr.split(',');
           }
-          
+
           if (!arr.includes(allVal)){
 
             if (typeof arr == 'string'){

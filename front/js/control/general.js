@@ -6,7 +6,11 @@ $(document).ready(() => {
     $(this).unbind("error").attr("src", "/img/avatar.png");
   });
 
- $('.hidable-script').remove();
+
+  setTimeout(() => {
+    $('.hidable-script').remove();
+  }, 100);
+
 
 });
 

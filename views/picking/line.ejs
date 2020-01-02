@@ -36,6 +36,12 @@
   .red td{
     background-color: #ff667ba1;
   }
+
+  .filters{
+    margin: 50px;
+    padding: 10px;
+    background-color: #d0d3ea;
+  }
   </style>
 </head>
 <body>
@@ -43,7 +49,24 @@
   window.line = <%- JSON.stringify(line || null) %>
   window.blocks = <%- JSON.stringify(blocks || null) %>
   window.rules = <%- JSON.stringify(rules || null) %>
-  </script>
+
+
+  window.selectedTransps = "<%- selectedTransps || undefined %>";
+  window.selectedUfs = "<%- selectedUfs || undefined %>";
+  window.selectedFilters = "<%- selectedFilters || undefined %>";
+</script>
+
+
+  <div class="filters">
+    <p>Filtros</p>
+
+    <p><%=selectedTransps%></p>
+
+    <p><%=selectedUfs%></p>
+
+    <p><%=selectedFilters%></p>
+
+  </div>
 
   <div class="main">
 

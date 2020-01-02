@@ -1,9 +1,9 @@
 class MultiSelectorDialog{
 
-  constructor(title, list, paramName, selecteds, canEdit){
+  constructor(title, list, paramName, selecteds, canEdit, addAllOption){
     this.list = list;
     this.selecteds = selecteds;
-    this.setAddAllOption(true);
+    this.addAllOption = addAllOption;
 
 
     this.dialog = new BaseSelectorDialog(title, canEdit);
@@ -18,12 +18,7 @@ class MultiSelectorDialog{
       });
     }
   }
-
-  setAddAllOption(add){
-    this.addAllOption = add;
-    return this;
-  }
-
+  
   setVerticalDispay(isVertical){
     this.dialog.setVerticalDispay(isVertical);
     return this;

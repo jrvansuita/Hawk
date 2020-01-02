@@ -437,7 +437,8 @@ tr.row-padding td{
 }
 
 .mini-red-circle{
-  width: 10px;
+  width: fit-content;
+  border-radius: 15px;
   padding: 3px;
   font-size: 9px;
   text-align: center;

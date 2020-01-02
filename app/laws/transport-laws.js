@@ -10,15 +10,7 @@ module.exports = {
       if (selected.includes('all')){
         global.selectedTransps = undefined;
       }else{
-
-        var transps = [selected];
-
-        if (selected.includes("|")){
-          transps = selected.split('|');
-        }
-
-
-        global.selectedTransps = transps;
+        global.selectedTransps = selected.includes("|") ?  selected.split('|') : [selected];
       }
     }
   },

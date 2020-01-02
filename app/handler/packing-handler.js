@@ -7,7 +7,6 @@ const PendingLaws = require('../laws/pending-laws.js');
 const Err = require('../error/error.js');
 const EccosysStorer = require('../eccosys/eccosys-storer.js');
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
-
 const PackageTypeVault = require('../vault/package-type-vault.js');
 const Day = require('../bean/day.js');
 const HistoryStorer = require('../history/history-storer.js');
