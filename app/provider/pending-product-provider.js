@@ -8,6 +8,7 @@ module.exports = class {
 
   constructor(){
     this.results = [];
+    this.isFirstLoad = productsList == undefined;
 
     if (!productsList){
       productsList = [];
@@ -17,15 +18,29 @@ module.exports = class {
   load(callback){
     PendingHandler.load(false, (pendings)=>{
       BlockHandler.load((blockeds)=>{
+
+        console.log('------Carregou as pendencias e bloqueiod---------');
+
         this.blockeds = blockeds;
         this.pendings = pendings;
 
         this.prepareBlockeds(()=>{
-          this.preparePendings(()=>{
 
+          console.log('------Bloqueios---------');
+
+          if(this.isFirstLoad){
             this.sorting();
             callback(this.results);
+          }
 
+          this.preparePendings(()=>{
+
+            console.log('------Pendencias---------');
+
+            if (!this.isFirstLoad){
+              this.sorting();
+              callback(this.results);
+            }
           });
         });
 
@@ -129,7 +144,7 @@ module.exports = class {
   _getProducts(skus, callback){
     var result = [];
 
-    if (productsList.length > 0){
+    if (productsList){
       for (let index = skus.length - 1; index >= 0; index--) {
         var sku = skus[index];
         var product = productsList[sku];
@@ -170,6 +185,8 @@ function loadExtraProducts(skus, callback){
   var execute = (index)=>{
     if (pages.length > index){
       new EccosysProvider().skus(pages[index]).go((products)=>{
+        console.log('Carregou a página: ' + index);
+
         loadedProducts = loadedProducts.concat(products);
 
         if (products.length > 0){
