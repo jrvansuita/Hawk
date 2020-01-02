@@ -5,14 +5,78 @@ var cardTooltip;
 $(document).ready(() => {
   $( "#user-id" ).focus();
 
-  cardTooltip = new Tooltip('#card-tooltip', 'Vamos trabalhar?');
-  cardTooltip.autoHide(10000).returnDefault(true).load();
+  $('.rfid-card').click(()=>{
+    startListeningRFID();
+  });
+
+  $( "#user-id" ).focusin(()=>{
+    startListeningRFID();
+  }).focusout(()=>{
+    stopListeningRFID();
+  });
 
   $(".print-progress").click(function(e) {
     //do something
     e.stopPropagation();
     $( "#user-id" ).focus();
   });
+
+  $('#user-id').on("keyup", function(e) {
+    var key = e.which;
+    if (key == 13){
+      var code = $('#user-id').val().trim();
+
+      if (code.length >= 9 && isNum(code)) {
+
+        var onSucess = function(response){
+          if (typeof response == "string" && response.includes("end-picking")) {
+            var sale = response.split("-");
+            sale = sale[sale.length - 1];
+            $('div[data-sale="progress-' + sale + '"]').css('background-color', '#13bb7070').delay(1000).fadeOut();
+            $(".inprogress-count").text(parseInt($(".inprogress-count").text()) - 1);
+            $('#user-id').val('');
+
+            cardTooltip.hideDelay(2000).showSuccess("Picking encerrado com sucesso.");
+          } else {
+            setTimeout(function() {
+              openPrintPickingSale(response);
+              window.location.reload();
+            }, 1000);
+
+            cardTooltip.hideDelay(2000).showSuccess("Aguardando impressão do pedido");
+          }
+        };
+
+        var onError = function(error){
+          var l = error.responseText.length * 20;
+          var showDelay = 1000 + l;
+
+          cardTooltip.showError(error.responseText);
+
+          $('#user-id').select();
+        };
+
+        _get("/picking-sale",{
+          userid: code
+        },
+        onSucess,
+        onError);
+      }
+    }
+  });
+
+  $('.inprogress-item').click(function(){
+    var saleNumber = $(this).data('sale').split('-')[1];
+    var sale = getInProgressSale(saleNumber);
+    loadSale(sale);
+    $( "#user-id" ).focus();
+  });
+
+
+  //cardTooltip = new Tooltip('#card-tooltip', 'Vamos trabalhar?');
+  //cardTooltip.autoHide(10000).returnDefault(true).load();
+
+
 
   $('#select-uf').click(function(){
     new MultiSelectorDialog('Selecione os Estados', ufList, 'uf', selectedUfs, userSetts[9] != undefined, true)
@@ -38,9 +102,7 @@ $(document).ready(() => {
     );
   });
 
-  $('.rfid-card').click(()=>{
-    startListeningRFID();
-  });
+
 
   $('.upcoming-dots').click(function(e){
     var drop = new MaterialDropdown($(this), e);
@@ -78,12 +140,6 @@ $(document).ready(() => {
     });
 
     drop.show();
-  });
-
-  $( "#user-id" ).focusin(()=>{
-    startListeningRFID();
-  }).focusout(()=>{
-    stopListeningRFID();
   });
 
   window.setInterval(function() {
@@ -127,60 +183,6 @@ $(document).ready(() => {
     reason = new BlockedSelector().get(reason);
     $(this).attr('src',reason.icon ? reason.icon : 'img/question-mark.png')
     .attr('title',reason.label ? reason.label: 'Indefinido');
-  });
-
-  $('#user-id').on("keyup", function(e) {
-    var key = e.which;
-    if (key == 13){
-      var code = $('#user-id').val().trim();
-
-      if (code.length >= 9 && isNum(code)) {
-
-        var onSucess = function(response){
-          if (typeof response == "string" && response.includes("end-picking")) {
-            cardTooltip.hideDelay(2000).showSuccess("Picking encerrado com sucesso.");
-
-            var sale = response.split("-");
-            sale = sale[sale.length - 1];
-            $('div[data-sale="progress-' + sale + '"]').css('background-color', '#13bb7070').delay(1000).fadeOut();
-            $(".inprogress-count").text(parseInt($(".inprogress-count").text()) - 1);
-            //Inicia um novo picking
-            //$('#user-id').trigger(jQuery.Event( 'keyup', { which: 13 } ));
-            $('#user-id').val('');
-          } else {
-            cardTooltip.hideDelay(2000).showSuccess("Aguardando impressão do pedido");
-            setTimeout(function() {
-              openPrintPickingSale(response);
-              window.location.reload();
-            }, 1000);
-          }
-        };
-
-        var onError = function(error){
-          var l = error.responseText.length * 20;
-          var showDelay = 1000 + l;
-
-          cardTooltip.showError(error.responseText);
-
-          $('#user-id').select();
-        };
-
-        _get("/picking-sale",{
-          userid: code,
-          uf: selectedUfs,
-          transp: selectedTransps
-        },
-        onSucess,
-        onError);
-      }
-    }
-  });
-
-  $('.inprogress-item').click(function(){
-    var saleNumber = $(this).data('sale').split('-')[1];
-    var sale = getInProgressSale(saleNumber);
-    loadSale(sale);
-    $( "#user-id" ).focus();
   });
 
 

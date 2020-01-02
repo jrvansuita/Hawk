@@ -23,6 +23,7 @@ module.exports = class {
         this.prepareBlockeds(()=>{
           this.preparePendings(()=>{
 
+            this.sorting();
             callback(this.results);
 
           });
@@ -30,6 +31,21 @@ module.exports = class {
 
 
       });
+    });
+  }
+
+  sorting(){
+    this.results.sort((a, b)=>{
+      if (a.count < b.count){
+        return 1;
+      }
+
+      if (a.count > b.count) {
+        return -1;
+      }
+
+      return (b.stock + b.reserved) - (a.stock + a.reserved);
+
     });
   }
 
@@ -113,34 +129,67 @@ module.exports = class {
   _getProducts(skus, callback){
     var result = [];
 
-    for (let index = skus.length - 1; index >= 0; index--) {
-      var sku = skus[index];
-      var product = productsList[sku];
+    if (productsList.length > 0){
+      for (let index = skus.length - 1; index >= 0; index--) {
+        var sku = skus[index];
+        var product = productsList[sku];
 
-      if (product){
-        result.push(product);
-        skus.splice(index, 1);
+        if (product){
+          result.push(product);
+          skus.splice(index, 1);
+        }
       }
     }
 
     if (skus.length > 0){
-      new EccosysProvider().skus(skus).go((products)=>{
+      loadExtraProducts(skus, (products) => {
+        result = products.concat(result);
+
+        callback(result);
+      });
+    }else{
+      callback(result);
+    }
+  }
+}
+
+
+
+
+
+function loadExtraProducts(skus, callback){
+
+  var eachPage = 20;
+  var pages = [];
+  while(skus.length) {
+    pages.push(skus.splice(0,eachPage));
+  }
+
+  var loadedProducts = [];
+
+  var execute = (index)=>{
+    if (pages.length > index){
+      new EccosysProvider().skus(pages[index]).go((products)=>{
+        loadedProducts = loadedProducts.concat(products);
+
         if (products.length > 0){
           products.forEach((product)=>{
             productsList[product.codigo] = product;
           });
-
-          result = products.concat(result);
         }
 
-        callback(result);
+        execute(++index);
       });
-
     }else{
-      callback(result)
+      callback(loadedProducts);
     }
-  }
+  };
+
+  execute(0);
 }
+
+
+
 
 
 class DataItem{

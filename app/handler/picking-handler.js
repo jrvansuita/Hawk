@@ -58,7 +58,7 @@ module.exports = {
       try{
 
         sales = sales.sort((a,b) => {
-          return new Date(b.data)  - new Date(a.data);
+          return new Date(b.data) - new Date(a.data);
         });
 
         PickingLaws.set(sales);

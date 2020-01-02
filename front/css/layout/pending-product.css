@@ -42,9 +42,7 @@
 
 
 .content-row > div{
-  flex: 0 1 25%;
-  flex-wrap: wrap;
-  align-items: flex-start;
+  flex: auto;
 }
 
 
@@ -52,7 +50,7 @@
 
 
 .left-column{
-  flex: 0 1 50% !important;
+  flex: 0 1 60% !important;
 }
 
 .label{
@@ -132,6 +130,7 @@
   color: #928f8f;
   font-weight: 600;
   padding-left: 1px;
+  /* min-width: 100px; */
 }
 
 .info-inner{
@@ -196,15 +195,15 @@
 }
 
 .grid-flow {
-    padding: 5px;
-    max-height: calc(100% - 35px);
-    overflow-y: auto;
-    display: grid;
-    grid-template-columns: repeat( auto-fill, minmax(340px, 1fr) );
-    grid-gap: 10px;
-    max-width: 100%;
-    margin-bottom: 5px;
-    width: fit-content;
+  padding: 5px;
+  max-height: calc(100% - 35px);
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat( auto-fill, minmax(340px, 1fr) );
+  grid-gap: 10px;
+  max-width: 100%;
+  margin-bottom: 5px;
+  width: fit-content;
 }
 
 
@@ -215,4 +214,35 @@
   margin-right: -28px;
   margin-top: 2px;
   color: #848484;
+}
+
+
+.extra-count{
+  border-left: 3px solid #ff7a7a;
+  background-color: #ff000024;
+}
+
+.extra-count .prod-img{
+  border: 2px solid #f9baba;
+}
+
+
+.extra-reserved{
+  border-left: 3px solid #ff8d00;
+  background-color: #ff8d003b;
+}
+
+.extra-reserved .prod-img{
+  border: 2px solid #ff8d0073;
+}
+
+
+.extra-stock{
+  border-left: 3px solid #637dff;
+  background-color: #002bff24;
+}
+
+
+.extra-stock .prod-img{
+  border: 2px solid #004eff38;
 }

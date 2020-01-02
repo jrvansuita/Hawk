@@ -1,4 +1,22 @@
-<div class="box shadow"  data-sku="<%=data.sku%>">
+<%
+
+var clazz = '';
+
+if (data.count > 1){
+   clazz = 'extra-count';
+}else if (data.reserved > 5){
+  clazz = 'extra-reserved';
+}else if (data.stock > 20){
+  clazz = 'extra-stock';
+}
+
+%>
+
+
+
+
+
+<div class="box shadow <%=clazz%>"  data-sku="<%=data.sku%>">
 
   <div class="img-holder">
     <span class="mini-red-circle"><%=data.count%></span>
@@ -38,10 +56,6 @@
       <div class="left-column">
         <span class="title-mini"><%=data.isFather ? '' : 'Localização'%></span>
         <span class="local"><%=data.isFather ? 'Todas as Skus' :  data.local.trim() || 'Não definido'%></span>
-      </div>
-
-
-      <div>
       </div>
 
 

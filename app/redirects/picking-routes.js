@@ -94,9 +94,6 @@ module.exports = class PickingRoutes extends Routes{
     });
 
     this._get('/picking-sale', (req, res) => {
-      TransportLaws.select(req.query.transp);
-      UfLaws.select(req.query.uf);
-
       PickingHandler.handle(req.query.userid,  this._resp().redirect(res));
     });
 
