@@ -17,9 +17,13 @@ class BaseSelectorDialog {
     this.holder.append(this.buttons);
   }
 
-
   setVerticalDispay(isVertical){
     this.items.addClass('ms-vertical-choices');
+    return this;
+  }
+
+  isRadioButton(isRadio){
+    this.isRadio = isRadio;
     return this;
   }
 
@@ -61,6 +65,8 @@ class BaseSelectorDialog {
   }
 
   addItem(label, tag, checked, onCheck){
+    var isRadio = this.isRadio;
+
     var $checkbox = $('<label>').addClass('pure-material-checkbox').attr('title',label);
     var input = $('<input>').attr('type', 'checkbox').attr('name', tag);
     var title = $('<span>').text(label);
@@ -77,6 +83,10 @@ class BaseSelectorDialog {
       input.change(function() {
         if (onCheck){
           onCheck(this, this.checked);
+        }
+
+        if (isRadio){
+          $('.ms-choices input').not(this).removeAttr('checked');
         }
       });
     }else{

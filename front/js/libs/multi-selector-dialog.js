@@ -1,13 +1,16 @@
 class MultiSelectorDialog{
 
-  constructor(title, list, paramName, selecteds, canEdit, addAllOption){
+  constructor(title, list, paramName, selecteds, canEdit, addAllOption, isRadio){
     this.list = list;
     this.selecteds = selecteds;
     this.addAllOption = addAllOption;
 
 
+
     this.dialog = new BaseSelectorDialog(title, canEdit);
+    this.dialog.isRadioButton(isRadio);
     this._createOptions();
+
 
 
     this.dialog.onNegativeButton('Cancelar');
@@ -18,7 +21,8 @@ class MultiSelectorDialog{
       });
     }
   }
-  
+
+
   setVerticalDispay(isVertical){
     this.dialog.setVerticalDispay(isVertical);
     return this;
@@ -43,10 +47,10 @@ class MultiSelectorDialog{
 
     if ($(el).attr('name') == 'all'){
       if (checked){
-        $('input:not([name="all"])').removeAttr('checked');
+        $('.ms-choices input:not([name="all"])').removeAttr('checked');
       }
     }else{
-      $('input[name="all"]').removeAttr('checked');
+      $('.ms-choices input[name="all"]').removeAttr('checked');
     }
 
   }

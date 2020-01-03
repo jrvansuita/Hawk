@@ -1,7 +1,6 @@
 const TransportLaws = require('../laws/transport-laws.js');
 const UfLaws = require('../laws/uf-laws.js');
 const PickingFilterLaws = require('../laws/picking-filter-laws.js');
-
 const History = require('../bean/history.js');
 const Err = require('../error/error.js');
 

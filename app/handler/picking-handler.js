@@ -1,6 +1,4 @@
-
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
-
 const PendingLaws = require('../laws/pending-laws.js');
 const InprogressLaws = require('../laws/inprogress-laws.js');
 const DoneLaws = require('../laws/done-laws.js');
@@ -56,13 +54,7 @@ module.exports = {
       throw error;
     }).pickingSales().go((sales) => {
       try{
-
-        sales = sales.sort((a,b) => {
-          return new Date(b.data) - new Date(a.data);
-        });
-
         PickingLaws.set(sales);
-
 
         this.setOffSales();
 

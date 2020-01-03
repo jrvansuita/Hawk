@@ -94,6 +94,12 @@ $(document).ready(() => {
     .show();
   });
 
+  $('#sort-options').click(function(){
+    new MultiSelectorDialog('Selecione a Ordenação', sorterList, 'sort', sortSelected, userSetts[9] != undefined, false, true)
+    .setVerticalDispay(true)
+    .show();
+  });
+
 
   $(".blocked-sale-label[data-reason='994']").dblclick(function(){
     window.open(

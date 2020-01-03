@@ -3,6 +3,7 @@ const BlockHandler = require('../handler/block-handler.js');
 const TransportLaws = require('../laws/transport-laws.js');
 const UfLaws = require('../laws/uf-laws.js');
 const PickingFilterLaws = require('../laws/picking-filter-laws.js');
+const PickingSorterLaws = require('../laws/picking-sorter-laws.js');
 
 const InprogressLaws = require('../laws/inprogress-laws.js');
 const PendingLaws = require('../laws/pending-laws.js');
@@ -56,6 +57,7 @@ module.exports = class PickingRoutes extends Routes{
 
 
     this._page('/picking', (req, res) => {
+      PickingSorterLaws.select(req.query.sort);
       PickingFilterLaws.select(req.query.filters);
       TransportLaws.select(req.query.transp);
       UfLaws.select(req.query.uf);
@@ -80,6 +82,9 @@ module.exports = class PickingRoutes extends Routes{
 
             filters: PickingFilterLaws.getObject(),
             selectedFilters: PickingFilterLaws.getSelecteds(),
+
+            sorterList: PickingSorterLaws.getObject(),
+            sortSelected: PickingSorterLaws.getSelected(),
 
             pendingSales: PendingLaws.getList(),
             donePickings: DoneLaws.getList(),

@@ -39,6 +39,7 @@
   window.ufList = <%- JSON.stringify(ufList || null) %>
   window.transportList = <%- JSON.stringify(transportList || null) %>
   window.filters = <%- JSON.stringify(filters || null) %>
+  window.sorterList = <%- JSON.stringify(sorterList || null) %>
 
   window.inprogress = <%- JSON.stringify(inprogress || null) %>
   window.pendingSales = <%- JSON.stringify(pendingSales || null) %>
@@ -48,6 +49,7 @@
   window.selectedTransps = "<%- selectedTransps || undefined %>";
   window.selectedUfs = "<%- selectedUfs || undefined %>";
   window.selectedFilters = "<%- selectedFilters || undefined %>";
+  window.sortSelected = <%- JSON.stringify(sortSelected || null) %>
 
 
   window.userSetts = <%- JSON.stringify(locals.loggedUser ? locals.loggedUser.setts ? locals.loggedUser.setts : {} : {}) %>
@@ -95,10 +97,10 @@
                 <span><%=selectedFilters.length%></span>
               </div>
 
-              <div class="line-selector">
+              <div class="line-selector" id="sort-options">
                 <label>Ordenação</label>
                 <img src="img/open-right.png"/>
-                <span>Padrão</span>
+                <span><%=sorterList[sortSelected]%></span>
               </div>
               <%}%>
 
