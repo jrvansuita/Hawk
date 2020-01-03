@@ -73,8 +73,8 @@ $(document).ready(() => {
   });
 
 
-  //cardTooltip = new Tooltip('#card-tooltip', 'Vamos trabalhar?');
-  //cardTooltip.autoHide(10000).returnDefault(true).load();
+  cardTooltip = new Tooltip('#card-tooltip', 'Vamos trabalhar?');
+  cardTooltip.autoHide(10000).returnDefault(true).load();
 
 
 
