@@ -148,20 +148,23 @@ module.exports ={
         skus = skus.concat(product._Skus.map((s)=>{return s.codigo}));
       }
 
-      new EccosysProvider().skus(skus).go((products)=>{
-        var body = [];
+      this.activeSingle(skus, active, user, callback)
+    });    
+  },
 
-        products.forEach((each) => {
-          body.push({
-            codigo: each.codigo,
-            situacao: active ? 'A' : 'I',
-            obs : each.obs +  "\n" + user.name + " | Desktop | " + (active ? 'Ativo' : 'Inativo') + " | " + Dat.format(new Date()) + '| Situação'
-          });
+  activeSingle(sku, active, user, callback){
+    new EccosysProvider().skus(sku).go((products)=>{
+      var body = [];
+
+      products.forEach((each) => {
+        body.push({
+          codigo: each.codigo,
+          situacao: active ? 'A' : 'I',
+          obs : each.obs +  "\n" + user.name + " | Desktop | " + (active ? 'Ativo' : 'Inativo') + " | " + Dat.format(new Date()) + '| Situação'
         });
-
-        new EccosysStorer().product(body).go(callback);
       });
 
+      new EccosysStorer().product(body).go(callback);
     });
   },
 

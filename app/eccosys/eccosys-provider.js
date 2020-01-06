@@ -56,7 +56,7 @@ module.exports = class EccosysProvider extends EccosysApi{
   }
 
   skus(skus) {
-    return this.get('produtos/' + skus.join(';')).multiple();
+    return this.get('produtos/' + (Array.isArray(skus) ?  skus.join(';') : skus)).multiple();
   }
 
   stockHistory(sku) {

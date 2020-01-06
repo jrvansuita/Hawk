@@ -58,7 +58,11 @@ module.exports = class ProductRoutes extends Routes{
 
 
     this._post('/product-active', (req, res) => {
-      ProductHandler.active(req.body.sku, req.body.active,  req.body.user, this._resp().redirect(res));
+      if (req.body.forceSingle){
+        ProductHandler.activeSingle(req.body.sku, req.body.active,  req.body.user, this._resp().redirect(res));
+      }else{
+        ProductHandler.active(req.body.sku, req.body.active,  req.body.user, this._resp().redirect(res));
+      }
     });
 
 
