@@ -17,7 +17,7 @@ module.exports = {
     return global.selectedOrder;
   },
 
-  getOrder(){
+  getOrder(){ 
     return getFiltersObject()[global.selectedOrder];
   },
 
