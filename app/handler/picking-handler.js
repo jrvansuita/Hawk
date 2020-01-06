@@ -54,10 +54,6 @@ module.exports = {
       throw error;
     }).pickingSales().go((sales) => {
       try{
-<<<<<<< HEAD
-
-=======
->>>>>>> 806d65b06629d773d8c0c2547d5577b16e16788c
         PickingLaws.set(sales);
 
         this.setOffSales();
