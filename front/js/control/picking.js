@@ -43,7 +43,7 @@ $(document).ready(() => {
               window.location.reload();
             }, 1000);
 
-            cardTooltip.hideDelay(2000).showSuccess("Aguardando impressão do pedido");
+            cardTooltip.hideDelay(2000).showInfo("Aguardando impressão do pedido");
           }
         };
 

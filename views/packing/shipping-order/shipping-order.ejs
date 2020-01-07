@@ -18,11 +18,13 @@
 
   <%
   var situationsArr = {0: 'Em Aberto', 1:'Coletado', 2 : 'Enviado'};
+  var icon = {'null': 'plus', 0:  'checked', 1: 'transport/default'};
 
   %>
 
   <script class="hidable-script">
-  window.shippingOrder = <%- JSON.stringify(shippingOrder || null) %>
+  <%var shippingOrder = shippingOrder || {} %>
+  window.shippingOrder = <%- JSON.stringify(shippingOrder) %>
   </script>
 
 
@@ -35,21 +37,21 @@
           <td>
             <div class="field shipping-order-col">
               <label class="field-title">Ordem de Coleta</label>
-              <label class="info highlighted"><%=shippingOrder ? shippingOrder.numeroColeta : ''%>  <span class="field-title itens-count-display"> </span></label>
+              <label class="info highlighted"><%=shippingOrder.numeroColeta ? '#' + shippingOrder.numeroColeta : '#0000'%>  <span class="field-title itens-count-display"> </span></label>
             </div>
           </td>
 
           <td>
             <div class="field">
               <label class="field-title">Estados</label>
-              <label class="ufs-list"></label>
+              <label class="ufs-list">Nenhum</label>
             </div>
           </td>
 
           <td>
             <div class="field">
               <label class="field-title">Data</label>
-              <label class="info"><%=shippingOrder ? Dat.format(new Date(shippingOrder.data)) : Dat.format(new Date())%></label>
+              <label class="info"><%=shippingOrder.data ? Dat.format(new Date(shippingOrder.data)) : Dat.format(new Date())%></label>
             </div>
           </td>
 
@@ -57,7 +59,7 @@
             <div class="status-holder">
               <div class="field skrink">
                 <label class="field-title">Usuário</label>
-                <label class="info"><%=shippingOrder ? shippingOrder.usuario_criacao || (loggedUser ? loggedUser.name : '---') : ''%></label>
+                <label class="info"><%=shippingOrder.usuario_criacao || (loggedUser ? loggedUser.name : '---')%></label>
               </div>
             </div>
           </td>
@@ -65,14 +67,14 @@
           <td>
             <div class="status-holder">
               <%
-              var statusIcon = shippingOrder.situacao == 0 ? 'checked' : (shippingOrder.situacao == 1 ? 'transport/default' : 'question-mark');
+              var statusIcon = icon[(shippingOrder.situacao || 'null')] || 'question-mark';
 
               %>
               <img class="circle shadow icon" src="/img/<%=statusIcon%>.png" onerror="this.src='/img/transport/question-mark.png'" />
 
               <div class="field skrink">
                 <label class="field-title">Situação</label>
-                <label class="info"><%=shippingOrder ? situationsArr[parseInt(shippingOrder.situacao)] : ''%></label>
+                <label class="info"><%=(shippingOrder.situacao == undefined) ?  'Iniciando' : situationsArr[parseInt(shippingOrder.situacao)] %></label>
               </div>
             </div>
           </td>
@@ -83,7 +85,7 @@
 
               <div class="field skrink">
                 <label class="field-title">Transportadora</label>
-                <label class="info"><%=shippingOrder ? Util.transportName(shippingOrder.transportador) : ''%></label>
+                <label class="info"><%=shippingOrder ? Util.transportName(shippingOrder.transportador, 'Não definida') : ''%></label>
               </div>
             </div>
           </td>
@@ -92,7 +94,7 @@
             <div class="status-holder">
               <div class="field skrink">
                 <label class="field-title">Peso</label>
-                <label class="info wei-val"></label>
+                <label class="info wei-val">0,000 kg</label>
               </div>
             </div>
           </td>
@@ -101,7 +103,7 @@
             <div class="status-holder">
               <div class="field skrink">
                 <label class="field-title">Valor</label>
-                <label class="info total-val"></label>
+                <label class="info total-val">R$ 0,00</label>
               </div>
             </div>
           </td>
@@ -119,7 +121,7 @@
 
 
 
-    <%if (shippingOrder.situacao == 0){%>
+    <%if (shippingOrder.situacao == 0 || shippingOrder.situacao == undefined ){%>
       <div class="middle-line shadow">
         <div class="progress-line"> <div class="progress-line inner"> </div></div>
 
@@ -142,7 +144,6 @@
 
           <div class="right-middle-line">
             <div class="buttons-holder">
-
               <label class="button shadow" id="save" tabindex="0">Salvar</label>
             </div>
           </div>

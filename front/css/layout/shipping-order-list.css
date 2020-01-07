@@ -43,11 +43,15 @@
   display: inline-flex;
 }
 
-#search-button{
+.button-holders{
   right: 0;
   display: inline-table;
   position: absolute;
   margin-right: 15px;
+}
+
+.new{
+  background-color: #009586 !important;
 }
 
 .material-input-holder{
@@ -119,8 +123,8 @@
 .loading{
   float: right;
   position: absolute;
-  right: 120px;
-  margin-top: 15px;
+  right: 25px;
+  margin-top: 40px;
   font-size: 14px;
   color: gray;
 }

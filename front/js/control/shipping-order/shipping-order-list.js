@@ -26,6 +26,10 @@ $(document).ready(() => {
     }
   });
 
+  $('#start-new').click(() => {
+    window.open('/packing/shipping-order');
+  });
+
 
   new ComboBox($('#transport'), transportList)
   .setAutoShowOptions()

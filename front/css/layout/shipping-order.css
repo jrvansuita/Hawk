@@ -288,3 +288,11 @@ table{
     margin-right: 12px;
     float: right;
 }
+
+
+.nfe-remove{
+  width: 22px;
+  height: 22px;
+  float: right;
+  margin-right: 5px;
+}
