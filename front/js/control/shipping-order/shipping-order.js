@@ -1,10 +1,12 @@
 var MEM_TAG;
 var memoryList;
+var nfeHighlight;
 
 
 
 $(document).ready(()=>{
 
+  nfeHighlight = Util.getUrlParam('nfe');
 
   MEM_TAG = 'shipping-order-' + (shippingOrder.numeroColeta || 'new');
   memoryList = Local.get(MEM_TAG) || [];
@@ -86,10 +88,14 @@ function loadNfsInTableFromDataBase(){
 function loadNfsInTableFromMemory(){
   if (memoryList && (memoryList.length > 0)){
     addLines(memoryList);
+
+    onShippingOrderIsInMemory(memoryList[0]);
   }
 }
 
 function addLines(nfes){
+  var highlightedLine;
+
   nfes.forEach(each => {
     var tr = $('<tr>').append(buildLine(each)).attr('data-nfe', each.numero);
 
@@ -97,10 +103,18 @@ function addLines(nfes){
       tr.addClass('memory-line');
     }
 
-    tr.fadeIn();
-
-    $('#nfs-in tr:first').after(tr);
+    if (each.numero == nfeHighlight){
+      tr.addClass('hightlight-line');
+      highlightedLine = tr;
+    }else{
+      $('#nfs-in tr:first').after(tr);
+      tr.fadeIn();
+    }
   });
+
+  if (highlightedLine){
+    $('#nfs-in tr:first').after(highlightedLine);
+  }
 
   refreshHeader(nfes);
 }
@@ -135,7 +149,7 @@ function buildLine(each){
 }
 
 function createColVal(val, center, bold){
-  var td = $('<td>').addClass('product-val').append($('<span>').append(val));
+  var td = $('<td>').addClass('row-val').append($('<span>').append(val));
 
   if (center){
     td.css('text-align','center');
@@ -208,7 +222,7 @@ function onCheckNfeParameters(query, nfe){
     msg = 'NF de Transportadora['+Util.transportName(nfe.transportador, '--')+'] inválida para essa Ordem de Coleta[' + Util.transportName(shippingOrder.transportador, '--') + ']';
   }else if(nfe.idOrdemColeta != 0){
     sound = beepError;
-    msg = 'NF já foi incluida em uma Ordem de Coleta anteriormente.<a style="color: #5f5fda"  target="_blank" href="shipping-order?id=' + nfe.idOrdemColeta + '">Ver Mais.</a>';
+    msg = 'NF já foi incluida em uma Ordem de Coleta anteriormente.<a style="color: #5f5fda"  target="_blank" href="shipping-order?id=' + nfe.idOrdemColeta + '&nfe='+nfe.numero+'">Ver Mais.</a>';
   }
 
   if (msg){
@@ -231,7 +245,8 @@ function onInsertNewNfeOnShippingOrder(nfe){
     memory: true,
     qtdVolumes:  nfe.qtdVolumes,
     contato: nfe.contato,
-    uf: nfe.uf
+    uf: nfe.uf,
+    transportador: nfe.transportador
   };
 
   addOnMemory(object);
@@ -291,13 +306,24 @@ function saveShippingOrder(){
   _post('/shipping-order-save', )
 }
 
+function onShippingOrderIsInMemory(nfe){
+  if (!shippingOrder.numeroColeta){
+    $('.transport-holder .icon').attr('src', '/img/transport/' + Util.transportName(nfe.transportador, 'none') + '.png');
+    $('.transport-holder .info').text(nfe.transportador);
+  }
+}
+
+
 function createNewShippingOrder(firstNfe){
-  shippingOrder.transportador = firstNfe.transportador;
+  onShippingOrderIsInMemory(firstNfe);
+
+  //shippingOrder.transportador = firstNfe.transportador;
+  //shippingOrder.transportador = 'ON TIME';
   shippingOrder._NotasFiscais = [firstNfe.numero];
 
   console.log(shippingOrder);
-  
-  _post('/shipping-order-new', {data: shippingOrder}, (data) => {
+
+  _post('/shipping-order-new', {data: {...shippingOrder, transportador: 'ON TIME'}}, (data) => {
     console.log(data);
   });
 }

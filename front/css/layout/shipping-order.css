@@ -79,7 +79,10 @@
 
 table{
   width: 100%;
+
 }
+
+
 
 
 .shipping-order-col{
@@ -236,6 +239,10 @@ table{
   padding: 0px 5px;
 }
 
+#nfs-in{
+  margin-bottom: 200px;
+}
+
 #nfs-in td{
   padding: 8px 12px;
   font-size: 15px;
@@ -282,11 +289,11 @@ table{
 
 
 .button {
-    position: relative;
-    padding: 10px 25px;
-    font-size: 14px;
-    margin-right: 12px;
-    float: right;
+  position: relative;
+  padding: 10px 25px;
+  font-size: 14px;
+  margin-right: 12px;
+  float: right;
 }
 
 
@@ -295,4 +302,9 @@ table{
   height: 22px;
   float: right;
   margin-right: 5px;
+}
+
+
+.hightlight-line{
+  border-left: 4px solid #8181f9;
 }
