@@ -164,7 +164,7 @@ function handleCondition(){
   if (c){
     var selectedAttrItem = attrNameSelector.getSelectedItem();
     var selectedConditionItem = conditionsSelector.getSelectedItem();
-    var selectedValueItem = valuesSelector.getSelectedItem();
+    var selectedValueItem = valuesSelector ? valuesSelector.getSelectedItem() : null;
 
     var attr = selectedAttrItem ? selectedAttrItem.data.key : $('#attr').val();
     var sign = selectedConditionItem.data.key;
