@@ -206,7 +206,8 @@ function buildChildSku(product, child){
         _post('/product-active', {
           sku: child.codigo,
           active: !active,
-          user: currentUser
+          user: currentUser,
+          forceSingle: true
         },(data)=>{
           window.location.reload();
         });
@@ -598,7 +599,7 @@ function loadLayoutHistory(rows){
 
 
     if (child.situacao == 'I'){
-      $(el).css('background-color', '#a0000063');
+      $(el).css('background-color', '#94949463');
     }else{
 
       if (!hasLocal || (stock.estoqueDisponivel < 0) || parseFloat(child.pesoLiq) == 0){
@@ -609,7 +610,7 @@ function loadLayoutHistory(rows){
 
       if (stock.estoqueReal < 1){
         //Yellow
-        $(el).css('background-color', '#ffe20026');
+        $(el).css('background-color', '#ffe20038');
         return;
       }
     }

@@ -13,6 +13,7 @@
 }
 
 
+
 .left-panel{
   margin-top: 5px;
   margin-left: 15px;
@@ -174,6 +175,10 @@
 }
 
 
+.tr-child, .footer{
+  background-color: #dedede14;
+}
+
 
 .tr-child{
   height: fit-content
@@ -216,9 +221,6 @@
 }
 
 
-.tr-child:hover{
-  background-color: #f3f3f3;
-}
 
 
 .footer td{
@@ -231,9 +233,17 @@
   cursor: default !important;
 }
 
-tr.selected td{
-  background-color: #e4e4e4;
+tr.selected td:first-child{
+  border-left: 8px solid #9393ff;
 }
+
+.selected{
+  background-color: white;
+  -webkit-box-shadow: 0.5px 0.5px 3px 3px #9393ff36;
+  -moz-box-shadow: 0.5px 0.5px 3px 3px #9393ff36;
+  box-shadow: 0.5px 0.5px 3px 3px #9393ff36;
+}
+
 
 
 

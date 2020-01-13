@@ -191,7 +191,7 @@
                       </div>
                       <div class="block-scroll">
                         <div class="blocked-rules-holder">
-                          <%  blockedRules.forEach((blocked) => {%>
+                          <%  blockedRules.sort((a,b) => {return b.blockings - a.blockings}).forEach((blocked) => {%>
 
                             <%var blockingClass = (blocked.blockings > 0 ? 'blocking' : 'not-blocking') %>
                             <table class="table-sale-blocked-holder <%=blockingClass%> shadow"  data-blocknumber="<%=blocked.number%>">

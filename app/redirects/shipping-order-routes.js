@@ -1,6 +1,7 @@
 const Routes = require('../redirects/controller/routes.js');
 const ShippingOrderProvider = require('../provider/shipping-order-provider.js');
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
+const EccosysStorer = require('../eccosys/eccosys-storer.js');
 const TransportLaws = require('../laws/transport-laws.js');
 
 module.exports = class ShippingOrderRoutes extends Routes{
@@ -34,6 +35,14 @@ module.exports = class ShippingOrderRoutes extends Routes{
       ShippingOrderProvider.get(req.query, (data) => {
         res.render("packing/shipping-order/shipping-order-print", {shippingOrder: data});
       });
+    });
+
+
+
+    this._post('/shipping-order-new', (req, res) => {
+       new EccosysStorer().shippingOrder().insert(req.body.data).go((data) => {
+         this._resp().sucess(res, data);
+       })
     });
 
 

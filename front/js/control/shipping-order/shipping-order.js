@@ -1,9 +1,14 @@
 var MEM_TAG;
 var memoryList;
+var nfeHighlight;
+
 
 
 $(document).ready(()=>{
-  MEM_TAG = 'shipping-order-' + shippingOrder.numeroColeta;
+
+  nfeHighlight = Util.getUrlParam('nfe');
+
+  MEM_TAG = 'shipping-order-' + (shippingOrder.numeroColeta || 'new');
   memoryList = Local.get(MEM_TAG) || [];
 
   onInit();
@@ -83,10 +88,14 @@ function loadNfsInTableFromDataBase(){
 function loadNfsInTableFromMemory(){
   if (memoryList && (memoryList.length > 0)){
     addLines(memoryList);
+
+    onShippingOrderIsInMemory(memoryList[0]);
   }
 }
 
 function addLines(nfes){
+  var highlightedLine;
+
   nfes.forEach(each => {
     var tr = $('<tr>').append(buildLine(each)).attr('data-nfe', each.numero);
 
@@ -94,17 +103,24 @@ function addLines(nfes){
       tr.addClass('memory-line');
     }
 
-    tr.fadeIn();
-
-    $('#nfs-in tr:first').after(tr);
+    if (each.numero == nfeHighlight){
+      tr.addClass('hightlight-line');
+      highlightedLine = tr;
+    }else{
+      $('#nfs-in tr:first').after(tr);
+      tr.fadeIn();
+    }
   });
+
+  if (highlightedLine){
+    $('#nfs-in tr:first').after(highlightedLine);
+  }
 
   refreshHeader(nfes);
 }
 
 function buildLine(each){
   var cols = [];
-
 
   cols.push(createIcon('checked'));
   cols.push(createColVal(each.numero, false, true));
@@ -115,13 +131,25 @@ function buildLine(each){
   cols.push(createColVal(Num.money(each.totalFaturado)));
   cols.push(createColVal(Floa.weight(each.pesoTransportadora)));
   cols.push(createColVal(each.qtdVolumes, true));
-  cols.push(createColVal(each.uf));
+
+  var lastCol = createColVal(each.uf);
+
+  if (each.memory){
+    lastCol.append($('<img>').attr('src','/img/delete.png').addClass('dots-glyph nfe-remove').click(() => {
+      $("tr[data-nfe='" + each.numero + "']").fadeOut(300, function(){
+        $(this).remove();
+      });
+      removeFromMemory(each.numero);
+    }));
+  }
+
+  cols.push(lastCol);
 
   return cols;
 }
 
 function createColVal(val, center, bold){
-  var td = $('<td>').addClass('product-val').append($('<span>').append(val));
+  var td = $('<td>').addClass('row-val').append($('<span>').append(val));
 
   if (center){
     td.css('text-align','center');
@@ -155,7 +183,10 @@ function refreshHeader(nfs){
   $('.total-val').text(Num.money(val));
   $('.itens-count-display').text(vols + ' Volumes');
   $('.wei-val').text(Floa.weight(wei) + ' Kg');
-  $('.ufs-list').text(Object.keys(ufs).sort().join(', '))
+
+  var ufsStr = Object.keys(ufs).sort().join(', ');
+
+  $('.ufs-list').text(ufsStr || 'Nenhum')
 }
 
 
@@ -186,12 +217,12 @@ function onCheckNfeParameters(query, nfe){
   }else if (nfe.situacao != '7'){
     sound = beepNoisy;
     msg = 'NF ['+ nfe.numero +'] não está autorizada na Receita Federal';
-  }else if (nfe.transportador != shippingOrder.transportador){
+  }else if ((shippingOrder.transportador != undefined) && (nfe.transportador != shippingOrder.transportador)){
     sound = beepThreeSign;
     msg = 'NF de Transportadora['+Util.transportName(nfe.transportador, '--')+'] inválida para essa Ordem de Coleta[' + Util.transportName(shippingOrder.transportador, '--') + ']';
   }else if(nfe.idOrdemColeta != 0){
     sound = beepError;
-    msg = 'NF já foi incluida em uma Ordem de Coleta anteriormente.<a style="color: #5f5fda"  target="_blank" href="shipping-order?id=' + nfe.idOrdemColeta + '">Ver Mais.</a>';
+    msg = 'NF já foi incluida em uma Ordem de Coleta anteriormente.<a style="color: #5f5fda"  target="_blank" href="shipping-order?id=' + nfe.idOrdemColeta + '&nfe='+nfe.numero+'">Ver Mais.</a>';
   }
 
   if (msg){
@@ -207,21 +238,42 @@ function onCheckNfeParameters(query, nfe){
 
 function onInsertNewNfeOnShippingOrder(nfe){
   var object = {
-      numero: nfe.numero,
-      totalFaturado: nfe.totalFaturado,
-      dataEmissao: nfe.dataEmissao,
-      pesoTransportadora: nfe.pesoBruto,
-      memory: true,
-      qtdVolumes:  nfe.qtdVolumes,
-      contato: nfe.contato,
-      uf: nfe.uf
-    };
+    numero: nfe.numero,
+    totalFaturado: nfe.totalFaturado,
+    dataEmissao: nfe.dataEmissao,
+    pesoTransportadora: nfe.pesoBruto,
+    memory: true,
+    qtdVolumes:  nfe.qtdVolumes,
+    contato: nfe.contato,
+    uf: nfe.uf,
+    transportador: nfe.transportador
+  };
 
-    memoryList.push(object);
-    Local.put(MEM_TAG, memoryList);
-    addLines([object]);
-    showMsg(null, 'checked', false);
-    beepSucess();
+  addOnMemory(object);
+  addLines([object]);
+  showMsg(null, 'checked', false);
+  beepSucess();
+
+  if (!shippingOrder.numeroColeta){
+    createNewShippingOrder(nfe);
+  }
+}
+
+function saveMemory(){
+  Local.put(MEM_TAG, memoryList);
+}
+
+function addOnMemory(nfe){
+  memoryList.push(nfe);
+  saveMemory();
+}
+
+function removeFromMemory(nfeNumber){
+  memoryList = memoryList.filter((e) => {
+    return e.numero != nfeNumber;
+  });
+
+  saveMemory();
 }
 
 function showMsg(msg, icon, isError){
@@ -252,4 +304,26 @@ function showMessage(msg, isError, onAutoHide){
 
 function saveShippingOrder(){
   _post('/shipping-order-save', )
+}
+
+function onShippingOrderIsInMemory(nfe){
+  if (!shippingOrder.numeroColeta){
+    $('.transport-holder .icon').attr('src', '/img/transport/' + Util.transportName(nfe.transportador, 'none') + '.png');
+    $('.transport-holder .info').text(nfe.transportador);
+  }
+}
+
+
+function createNewShippingOrder(firstNfe){
+  onShippingOrderIsInMemory(firstNfe);
+
+  //shippingOrder.transportador = firstNfe.transportador;
+  //shippingOrder.transportador = 'ON TIME';
+  shippingOrder._NotasFiscais = [firstNfe.numero];
+
+  console.log(shippingOrder);
+
+  _post('/shipping-order-new', {data: {...shippingOrder, transportador: 'ON TIME'}}, (data) => {
+    console.log(data);
+  });
 }

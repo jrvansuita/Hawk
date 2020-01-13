@@ -19,14 +19,11 @@ module.exports = class {
     PendingHandler.load(false, (pendings)=>{
       BlockHandler.load((blockeds)=>{
 
-        console.log('------Carregou as pendencias e bloqueiod---------');
 
         this.blockeds = blockeds;
         this.pendings = pendings;
 
         this.prepareBlockeds(()=>{
-
-          console.log('------Bloqueios---------');
 
           if(this.isFirstLoad){
             this.sorting();
@@ -34,8 +31,6 @@ module.exports = class {
           }
 
           this.preparePendings(()=>{
-
-            console.log('------Pendencias---------');
 
             if (!this.isFirstLoad){
               this.sorting();
@@ -185,7 +180,7 @@ function loadExtraProducts(skus, callback){
   var execute = (index)=>{
     if (pages.length > index){
       new EccosysProvider().skus(pages[index]).go((products)=>{
-        console.log('Carregou a página: ' + index);
+
 
         loadedProducts = loadedProducts.concat(products);
 

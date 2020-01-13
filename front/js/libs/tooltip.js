@@ -92,6 +92,13 @@ class Tooltip{
     this.show();
   }
 
+
+  showInfo(msg){
+    this.setTheme('blue').setContent(msg);
+    this.show();
+  }
+
+
   async load(){
     await this.dependencies.load();
     this.instance = tippy(document.querySelector(this.querySelector));
