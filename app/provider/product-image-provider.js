@@ -1,42 +1,22 @@
 const ProductHandler = require('../handler/product-handler.js');
-const ProductUrlProvider = require('../provider/product-url-provider.js');
-const ProductMockupBuilder = require('../mockup/product-mockup-builder.js');
+const ProductImageBuilder = require('../builder/product-image-builder.js');
 const File = require('../file/file.js');
 const Zip = require('../file/zip.js');
 
 module.exports = class{
-  constructor(mockId, skus){
-    this.mockId = mockId;
+  constructor(skus){
     this.skus = skus;
-    this.folder = './front/_mockups/';
+    this.folder = './front/product_images/';
   }
 
-
-  loadProduct(sku){
-    return new Promise((resolve, reject)=>{
-      ProductHandler.getImage(sku, (product)=>{
-        if (product){
-          new ProductUrlProvider().from(product.url).then((onlineValues)=>{
-            product.online = onlineValues;
-            resolve(product);
-          }).catch(e=>{
-            resolve(product);
-          });
-        }else{
-          resolve(product);
-        }
-      });
-    });
-  }
 
   loadProductImage(sku){
     return new Promise((resolve, reject)=>{
-      this.loadProduct(sku)
-      .then((product)=>{
-        new ProductMockupBuilder(this.mockId)
+      ProductHandler.getImage(sku, (product)=>{
+        new ProductImageBuilder()
         .setProduct(product)
-        .setOnFinishedListener((canva)=>{
-          resolve(canva);
+        .setOnFinishedListener((canvas) => {
+          resolve(canvas)
         })
         .load();
       });
@@ -53,7 +33,7 @@ module.exports = class{
 
   _zipFiles(files, callback){
     new Zip()
-    .setName('mockups')
+    .setName('imagens')
     .setPath(this.folder)
     .setFiles(files)
     .setOnError(callback)

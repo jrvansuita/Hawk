@@ -78,24 +78,17 @@ $(document).ready(()=>{
         window.open('/build-multiple-mockups?skus=' + Object.keys(selectedSkus) + '&mockId=' + id, '_blank');
 
 
-        /*_get('/build-multiple-mockups',{
-        mockId: id,
-        skus: Object.keys(selectedSkus)
-      },(data) => {
-      console.log(data);
-
-      var file = new Blob([data], {
-      type: 'application/zip'
+      }).show();
     });
 
-    window.location = URL.createObjectURL(file);
-  });*/
 
-}).show();
-});
+    drop.addItem('/img/photo.png', 'Baixar Imagens', function(){
+      window.open('/product-multiple-imgs?skus=' + Object.keys(selectedSkus), '_blank');
+    });
 
-drop.show();
-});
+
+    drop.show();
+  });
 });
 
 function bindScrollLoad(){

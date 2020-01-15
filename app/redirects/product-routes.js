@@ -6,6 +6,7 @@ const DiagnosticsProvider = require('../diagnostics/diagnostics-provider.js');
 const DiagnosticsEnum = require('../diagnostics/diagnostics-enum.js');
 const ProductBoard = require('../provider/product-board-provider.js');
 const ProductListProvider = require('../provider/product-list-provider.js');
+const ProductImageProvider = require('../provider/product-image-provider.js');
 
 module.exports = class ProductRoutes extends Routes{
 
@@ -175,6 +176,24 @@ module.exports = class ProductRoutes extends Routes{
         this._resp().sucess(res, {data, info});
       });
     });
+
+
+    this._get('/product-multiple-imgs', (req, res) => {
+      let fs = require('fs')
+
+      req.query.skus = typeof req.query.skus == 'string' ? req.query.skus.split(',') : req.query.skus;
+
+      new ProductImageProvider(req.query.skus).load().then((zipFilePath) => {
+
+        res.setHeader('Content-disposition', 'attachment; filename=imagens.zip');
+        res.setHeader('Content-type', 'application/zip');
+
+        var filestream = fs.createReadStream(zipFilePath);
+        filestream.pipe(res);
+      });
+    });
+
+
 
 
 
