@@ -163,6 +163,7 @@
   float: right;
   margin-top: -40px;
   right: 0;
+  min-width: 70px;
 }
 
 .item-right-holder > span{

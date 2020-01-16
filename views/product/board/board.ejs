@@ -2,7 +2,7 @@
 <%include ../../menus/main-menu %>
 <head>
   <link rel="stylesheet" type="text/css" href="/front/css/layout/product-board.css">
-  
+
 
   <script type="text/javascript" src="/front/js/control/product-board.js"></script>
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
@@ -153,8 +153,8 @@
           </div>
 
           <%
-          var attrs = ['brand', 'manufacturer', 'category'];
-          var titles = ['Todas as Marcas', 'Todos os Fabricantes', 'Todas as Categorias'];
+          var attrs = ['sizes', 'brand', 'manufacturer', 'category'];
+          var titles = ['Todos os Tamanhos', 'Todas as Marcas', 'Todos os Fabricantes', 'Todas as Categorias'];
           %>
 
           <%- include('../board/board-listing', {attrs: attrs, titles : titles });  %>

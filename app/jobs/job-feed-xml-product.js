@@ -32,6 +32,7 @@ module.exports = class JobFeedXmlProducts extends Job{
                 var image = FeedXml.val(item, "image");
                 var price = FeedXml.val(item, "price");
                 var fromPrice = FeedXml.val(item, "fromPrice");
+                var cost = FeedXml.val(item, "cost");
 
                 var discount = FeedXml.val(item, "discount");
 
@@ -50,17 +51,18 @@ module.exports = class JobFeedXmlProducts extends Job{
 
                 var visible = FeedXml.val(item, "visible").includes('true');
                 var associates = FeedXml.val(item, "associates");
+                var sizes = FeedXml.val(item, "sizes");
 
                 var product = new Product(sku, name, brand, url,
                   image,
-                  price, fromPrice, discount,
+                  price, fromPrice, cost, discount,
                   category, gender, color,
                   quantity, stocks,
                   age, year, season, manufacturer,
-                  visible, associates, weight);
+                  visible, associates, weight,
+                  sizes);
 
                   product.upsert();
-
                 }
               });
 
