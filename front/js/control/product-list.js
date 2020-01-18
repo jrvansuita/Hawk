@@ -4,9 +4,6 @@ var productsListCount = 0;
 var selectedSkus = {};
 var showAll = false;
 
-var totalSell = 0;
-var totalCost = 0;
-
 function loadFromMemory(){
   if (memoryQuery.value){
     $('#search-input').val(memoryQuery.value);
@@ -104,8 +101,6 @@ function bindScrollLoad(){
 
 function emptyList(){
   page = 0;
-  totalSell = 0;
-  totalCost = 0;
   showAll = false;
   productsListCount = 0;
   $('.content').empty();
@@ -148,7 +143,7 @@ function showMessageTotals(info){
 
 
   if (loggedUser.full){
-    msg += ' ' + Num.format(totalCost, false, true) + '/' + Num.format(totalSell, false, true);
+    msg += ' ' + Num.format(info.sum_cost, false, true) + '/' + Num.format(info.sum_sell, false, true);
   }
 
   $('#totals').text(msg);
@@ -289,15 +284,12 @@ function createTags(product){
   var $year = createClickableTag(product.year, 'year');
 
   var $price = createSingleTag(Num.money(product.price));
-  var $quantity = createSingleTag(Num.points(product.quantity));
+  var $quantity = createSingleTag(Num.points(product.quantity)).addClass('quantity-label');
 
 
   var rightCols = [];
 
   if (loggedUser.full){
-    totalCost += product.quantity * product.cost;
-    totalSell += product.quantity * product.price;
-
     $totalCost = createSingleTag(Num.format(product.quantity * product.cost));
     $totalSell = createSingleTag(Num.format(product.quantity * product.price));
     $cost = createSingleTag(Num.money(product.cost));

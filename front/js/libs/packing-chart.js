@@ -1,10 +1,10 @@
 class PackingChart {
 
-  constructor(chartId, data, isFull){
+  constructor(chartId, data, isFull, monthView){
     this.chartId  = chartId;
     this.data = data;
+    this.isMonthView = monthView;
     this.isFull = isFull;
-    console.log(data);
   }
 
 
@@ -94,8 +94,7 @@ class PackingChart {
 
 
   buildDataset(){
-
-    if (this.data.length > 30){
+    if (this.data.length > 30 || this.isMonthView){
       this.processMonths();
     }else{
       this.processDays();

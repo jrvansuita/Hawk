@@ -8,7 +8,7 @@ $(document).ready(()=>{
     });
 
     _get('/packing-days', {from: Dat.firstDayOfYear().getTime(), to: Dat.today().getTime()}, (data)=>{
-      new PackingChart('packing-chart-year', data, loggedUser.full).load();
+      new PackingChart('packing-chart-year', data, loggedUser.full, true).load();
     });
 
 

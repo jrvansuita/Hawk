@@ -1,6 +1,6 @@
 module.exports = class Product extends DataAccess {
 
-  constructor(sku, name, brand, url, image, price, fromPrice, cost, discount, category, gender, color, quantity, stocks, age, year, season, manufacturer, visble, associates, weight, sizes) {
+  constructor(sku, name, brand, url, image, price, fromPrice, cost, discount, category, gender, color, quantity, age, year, season, manufacturer, visble, associates, weight) {
     super();
     this.sku = Str.def(sku);
     this.name = Str.def(name);
@@ -17,7 +17,7 @@ module.exports = class Product extends DataAccess {
     this.gender = Str.def(gender);
     this.color = Str.def(color);
     this.quantity = Num.def(quantity);
-    this.stocks = Str.def(stocks);
+
 
     this.age = Str.def(age);
     this.year = Str.def(year);
@@ -27,7 +27,7 @@ module.exports = class Product extends DataAccess {
 
     this.visible = visble ? true : false;
     this.associates = Str.def(associates);
-    this.sizes = Str.def(sizes);
+    
   }
 
   static getKey() {
@@ -101,7 +101,16 @@ static paging(query, page, callback){
             },
             sum_quantity: {
               $sum: "$quantity"
+            },
+
+            sum_cost: {
+              $sum: { $multiply: [ "$quantity", "$cost" ] }
+            },
+
+            sum_sell: {
+              $sum: { $multiply: [ "$quantity", "$price" ] }
             }
+
            } },
         ],
       },
