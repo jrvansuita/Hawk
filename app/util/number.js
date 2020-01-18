@@ -12,7 +12,7 @@ var Num = {
     return 'R$ ' + parseFloat(val).toLocaleString('pt-BR', {maximumFractionDigits:digits, minimumFractionDigits:digits});
   },
 
-  reduceFloat: function(number) {
+  reduceFloat: function(number, trunc) {
     var SI_PREFIXES = ["", "k", "M", "G", "T", "P", "E"];
 
     // what tier? (determines SI prefix)
@@ -29,15 +29,15 @@ var Num = {
     var scaled = number / scale;
 
     // format number and add prefix as suffix
-    return scaled.toFixed(1) + prefix;
+    return scaled.toFixed(trunc ? 0 : 1) + prefix;
 
   },
 
-  format(n, keepInt) {
+  format(n, keepInt, trunc) {
     if ((this.def(n) < 1000) || (keepInt && this.isInt(n))) {
       return this.points(n);
     } else {
-      return this.reduceFloat(n);
+      return this.reduceFloat(n, trunc);
     }
   },
 

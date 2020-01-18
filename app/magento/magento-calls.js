@@ -39,12 +39,22 @@ module.exports = class MagentoCalls{
     });
   }
 
-  async salesOrderUpdate(data){
+  async updateProductStock(sku, stock){
     return this.onInstance((api, resolve, reject) => {
-      api.salesOrder.addComment(data, this.onResult(resolve, reject));
-    });
-  }
+      api.catalogInventoryStockItem.update({
+        product: sku,
+        data: {qty: stock,
+          is_in_stock : stock > 0 }
+        },this.onResult(resolve, reject));
+      });
+    }
+
+    async salesOrderUpdate(data){
+      return this.onInstance((api, resolve, reject) => {
+        api.salesOrder.addComment(data, this.onResult(resolve, reject));
+      });
+    }
 
 
 
-};
+  };

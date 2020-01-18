@@ -101,6 +101,10 @@ var Params = {
     return this.get('update-product-weight-magento');
   },
 
+  updateProductStockMagento(){
+    return this.get('update-product-stock-magento');
+  },
+
   devMaxSalesOnPicking(){
     return this.get('dev-max-sales-picking');
   }

@@ -4,6 +4,9 @@ var productsListCount = 0;
 var selectedSkus = {};
 var showAll = false;
 
+var totalSell = 0;
+var totalCost = 0;
+
 function loadFromMemory(){
   if (memoryQuery.value){
     $('#search-input').val(memoryQuery.value);
@@ -42,10 +45,7 @@ $(document).ready(()=>{
   });
 
   $('#search-button').click(()=>{
-    page = 0;
-    showAll = false;
-    productsListCount = 0;
-    $('.content').empty();
+    emptyList();
     loadList();
   });
 
@@ -102,6 +102,15 @@ function bindScrollLoad(){
   });
 }
 
+function emptyList(){
+  page = 0;
+  totalSell = 0;
+  totalCost = 0;
+  showAll = false;
+  productsListCount = 0;
+  $('.content').empty();
+}
+
 
 function loadList(){
   if (!showAll){
@@ -117,12 +126,13 @@ function loadList(){
     },(result)=>{
       showAll = result.data.length == 0;
       loading = false;
-      showMessageTotals(result.info);
 
       result.data.forEach((each, index)=>{
         productsListCount++;
         addProductLayout(each, index);
       });
+
+      showMessageTotals(result.info);
 
       bindCopiable();
     });
@@ -134,6 +144,11 @@ function showMessageTotals(info){
 
   if(info){
     msg = Num.points(info.sum_quantity) + ' items e ' + Num.points(info.count) + ' skus';
+  }
+
+
+  if (loggedUser.full){
+    msg += ' ' + Num.format(totalCost, false, true) + '/' + Num.format(totalSell, false, true);
   }
 
   $('#totals').text(msg);
@@ -275,11 +290,26 @@ function createTags(product){
 
   var $price = createSingleTag(Num.money(product.price));
   var $quantity = createSingleTag(Num.points(product.quantity));
-  var $divRight = $('<div>').addClass('item-right-holder').append($quantity, $price);
 
+
+  var rightCols = [];
+
+  if (loggedUser.full){
+    totalCost += product.quantity * product.cost;
+    totalSell += product.quantity * product.price;
+
+    $totalCost = createSingleTag(Num.format(product.quantity * product.cost));
+    $totalSell = createSingleTag(Num.format(product.quantity * product.price));
+    $cost = createSingleTag(Num.money(product.cost));
+
+    rightCols.push($('<div>').addClass('item-right-holder').append($totalSell, $totalCost));
+    rightCols.push($('<div>').addClass('item-right-holder').append($price, $cost));
+  }
+
+  rightCols.push($('<div>').addClass('item-right-holder').append($quantity));
 
   var $tagsHolder = $('<div>').addClass('tags-holder');
-  $tagsHolder.append($brand, $manufacturer, $cat, $gender, $color, $season, $age, $year, $divRight);
+  $tagsHolder.append($brand, $manufacturer, $cat, $gender, $color, $season, $age, $year, ...rightCols);
 
   return $tagsHolder;
 }

@@ -1,6 +1,6 @@
 module.exports = class Product extends DataAccess {
 
-  constructor(sku, name, brand, url, image, price, fromPrice, discount, category, gender, color, quantity, stocks, age, year, season, manufacturer, visble, associates, weight) {
+  constructor(sku, name, brand, url, image, price, fromPrice, cost, discount, category, gender, color, quantity, stocks, age, year, season, manufacturer, visble, associates, weight, sizes) {
     super();
     this.sku = Str.def(sku);
     this.name = Str.def(name);
@@ -9,6 +9,7 @@ module.exports = class Product extends DataAccess {
 
     this.price =  Floa.def(price);
     this.fromPrice = Floa.def(fromPrice);
+    this.cost = Floa.def(cost);
     this.discount = Floa.def(discount);
 
     this.brand = Str.def(brand);
@@ -16,7 +17,7 @@ module.exports = class Product extends DataAccess {
     this.gender = Str.def(gender);
     this.color = Str.def(color);
     this.quantity = Num.def(quantity);
-    this.stocks = Str.def(stocks);  
+    this.stocks = Str.def(stocks);
 
     this.age = Str.def(age);
     this.year = Str.def(year);
@@ -26,6 +27,7 @@ module.exports = class Product extends DataAccess {
 
     this.visible = visble ? true : false;
     this.associates = Str.def(associates);
+    this.sizes = Str.def(sizes);
   }
 
   static getKey() {

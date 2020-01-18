@@ -101,6 +101,7 @@ module.exports ={
   updateStock(sku, stock, user,  callback) {
     stock = parseInt(stock);
 
+
     this.getBySku(sku, false, (product)=>{
 
       var body = {
@@ -115,6 +116,13 @@ module.exports ={
 
 
       new EccosysStorer().stock(product.codigo, body).go(callback);
+
+      var sum = product._Estoque.estoqueDisponivel + stock;
+
+      if(Params.updateProductStockMagento()){
+        new MagentoCalls().updateProductStock(product.codigo, sum);
+      }
+
     });
   },
 
@@ -149,7 +157,7 @@ module.exports ={
       }
 
       this.activeSingle(skus, active, user, callback)
-    });    
+    });
   },
 
   activeSingle(sku, active, user, callback){
