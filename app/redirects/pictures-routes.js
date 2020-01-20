@@ -17,9 +17,6 @@ module.exports = class PicturesRoutes extends Routes{
       });
     });
 
-    this._get('/teste', (req, res) => {
-      res.render('teste');
-    });
 
 
     this._get('/sku-pictures-page', (req, res) => {

@@ -27,7 +27,7 @@ module.exports = class Product extends DataAccess {
 
     this.visible = visble ? true : false;
     this.associates = Str.def(associates);
-    
+
   }
 
   static getKey() {
@@ -41,7 +41,7 @@ module.exports = class Product extends DataAccess {
 
     return {
       $or: [
-        //{ 'sku': new RegExp(keyValue, "i") },
+        
 
         { 'sku': {
           "$regex": value,

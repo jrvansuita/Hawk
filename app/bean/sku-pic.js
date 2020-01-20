@@ -21,10 +21,13 @@ module.exports = class SkuPic extends DataAccess {
 
 
   static getPage(page, sku, callback) {
-     SkuPic.paginate({ 'sku': {
+     SkuPic.paginate(
+
+       { 'sku': {
        "$regex": sku,
        "$options": "i"
      }},  page, '-date', (err, doc)=>{
+       console.log(doc);
        callback(doc)
      });
   }

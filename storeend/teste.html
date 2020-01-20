@@ -1,7 +1,7 @@
 <style>
   .scu-grid{
-    width: 80%;
-    columns: 5 200px;
+    width: 70%;
+    columns: 3 150px;
     column-gap: 1rem;
   }
 
@@ -16,17 +16,15 @@
   .scu-grid .item > img{
     position: relative;
     width: 100%;
+    border-radius: 2px;
   }
 </style>
+<h2>Fotos Compartilhadas pelos Clientes</h2>
 <div class="scu-grid"></div>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
-  $(document).ready(() => {
-    $.get("https://hawkhomolog.herokuapp.com/sku-pictures-page?sku=CB.V007am&page=1", function( data ) {
+    $.get("https://hawkhomolog.herokuapp.com/sku-pictures-page?sku="+$('.product-specs__sku').text()+"&page=1", function( data ) {
       data.forEach((each)=>{
-
         $('.scu-grid').append($('<div>').addClass('item').append($('<img>').attr('src', each.url)));
         });
       });
-    });
   </script>
