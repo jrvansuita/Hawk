@@ -22,8 +22,9 @@
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
   $(document).ready(() => {
-    $.get("http://localhost:3000/sku-pictures-page?sku=CB.V007am&page=1", function( data ) {
+    $.get("https://hawkhomolog.herokuapp.com/sku-pictures-page?sku=CB.V007am&page=1", function( data ) {
       data.forEach((each)=>{
+
         $('.scu-grid').append($('<div>').addClass('item').append($('<img>').attr('src', each.url)));
         });
       });

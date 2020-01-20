@@ -32,7 +32,7 @@ module.exports = class PicturesRoutes extends Routes{
         res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         res.send(all);
       });
-    });
+    }, true);
 
 
 
