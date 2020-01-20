@@ -54,6 +54,7 @@ routes.push('user-routes.js');
 routes.push('settings-routes.js');
 routes.push('mock-routes.js');
 routes.push('gift-routes.js');
+routes.push('pictures-routes.js');
 
 // -- Run Routes -- //
 routes.forEach((r)=>{
