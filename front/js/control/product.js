@@ -471,7 +471,7 @@ function groupStockRows(rows){
 
   rows.forEach((i)=>{
     var user = i.obs.split('-');
-    var id = Dat.id(new Date(i.data)) + (i.es == 'S' ? i.es : '') + (user.length > 1 ? user[1] : '') + (i.obs.includes('Desktop') ? '1' :'0');
+    var id = Dat.id(new Date(i.data)) + (i.es == 'S' ? i.es : '') + (user.length > 1 ? user[1].trim() : '') + (i.obs.includes('Desktop') ? '1' :'0');
 
     if (groupArr[id]){
       groupArr[id].quantidade += parseInt(i.quantidade);
@@ -481,7 +481,7 @@ function groupStockRows(rows){
     }
   });
 
-  return Object.values(groupArr);
+  return Object.values(groupArr).sort((a, b)=>{return new Date(a.data) - new Date(b.data)});
 }
 
 function loadLayoutHistory(rows){
@@ -496,6 +496,8 @@ function loadLayoutHistory(rows){
       obs = 'Estoque Inicial';
     }else if (i.obs.includes('Lanç') || i.obs.includes('manual')){
       obs = 'Lançamento';
+    }else if (i.es == 'E' && i.tipoEntrada == 'N' && i.idOrigem != ''){
+      obs = 'Nf Devolução';
     }else{
       obs = i.obs.split('-')[0];
     }
