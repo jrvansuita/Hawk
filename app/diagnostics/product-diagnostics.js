@@ -23,7 +23,9 @@ module.exports = class ProductDiagnostics{
           this._storeFix(product, 'NO_PHOTO');
         }
       }else{
-        this._storeFix(product, 'REGISTERING');
+        if (!hasSales(stocks)){
+          this._storeFix(product, 'REGISTERING');
+        }
       }
     }
 
