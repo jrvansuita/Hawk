@@ -70,7 +70,7 @@ module.exports = class UsersProvider {
 
       result = (hour > parseInt(range[0]) && hour < parseInt(range[1]));
       result = result && !((now.getDay() === 6) || (now.getDay() === 0))
-
+ 
       if (!result){
         result = time < Params.accessTimeRenew();
       }
