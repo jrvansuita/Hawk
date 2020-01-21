@@ -386,7 +386,7 @@ function isVisible(product){
 function isAssociated(product){
   if (product.feedProduct){
     var arr = product.feedProduct.associates;
-    if (arr){
+    if (arr || product.codigo.includes('-')){
       return arr.includes(product.codigo) || (product.codigo == product.feedProduct.sku)
     }
   }

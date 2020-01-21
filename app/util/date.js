@@ -59,6 +59,15 @@ var Dat = {
     return date;
   },
 
+
+
+  rollHour(date, n) {
+    date = !date ? new Date() : date;
+    
+    date.setHours(date.getHours() + n);
+    return date;
+  },
+
   print(from, to) {
     if (Math.ceil((to.getTime() - from.getTime()) / (1000 * 3600 * 24)) > 1) {
       return Const.from_to.format(this.format(from), this.format(to));

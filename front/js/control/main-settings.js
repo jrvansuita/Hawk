@@ -26,6 +26,11 @@ $(document).ready(() => {
     });
   }
 
+  $('#access-time-renew').prop("disabled", true);
+  $('.renew-time').click(() => {
+    $('#access-time-renew').val('Acesso Renovado para +3 Horas');
+    putParam('access-time-renew', Dat.rollHour(new Date(), 3).getTime());
+  });
 });
 
 function loadTextVal(el){

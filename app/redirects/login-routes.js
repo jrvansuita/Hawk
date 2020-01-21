@@ -22,6 +22,9 @@ module.exports = class LoginRoutes extends Routes{
       }else{
         UsersProvider.checkUserExists(req.body.userAccess);
         user = UsersProvider.get(req.body.userAccess);
+
+        UsersProvider.checkCanLogin(user, true);
+
         req.session.loggedUserID = user.id;
       }
 

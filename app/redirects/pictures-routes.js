@@ -20,7 +20,6 @@ module.exports = class PicturesRoutes extends Routes{
 
 
     this._get('/sku-pictures-page', (req, res) => {
-
       var page = parseInt(req.query.page) || 1;
       var sku = req.query.sku;
 

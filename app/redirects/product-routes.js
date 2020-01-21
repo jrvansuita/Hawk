@@ -119,19 +119,20 @@ module.exports = class ProductRoutes extends Routes{
 
 
     this._post('/product-local', (req, res) => {
-      ProductHandler.updateLocal(req.body.sku, req.body.local, req.body.user, this._resp().redirect(res));
-    });
+      ProductHandler.updateLocal(req.body.sku, req.body.local, req.body.user, req.query.device, this._resp().redirect(res));
+    }, true);
 
     this._post('/product-ncm', (req, res) => {
       ProductHandler.updateNCM(req.body.sku, req.body.ncm, res.locals.loggedUser, this._resp().redirect(res));
     });
 
     this._post('/product-stock', (req, res) => {
-      ProductHandler.updateStock(req.body.sku, req.body.stock, req.body.user, this._resp().redirect(res));
-    });
+      ProductHandler.updateStock(req.body.sku, req.body.stock, req.body.user, req.query.device, this._resp().redirect(res));
+    }, true);
 
     this._post('/product-weight', (req, res) => {
-      ProductHandler.updateWeight(req.body.sku, req.body.weight, req.body.user, this._resp().redirect(res));
+
+      ProductHandler.updateWeight(req.body.sku, req.body.weight, req.body.user,  this._resp().redirect(res));
     });
 
     this._get('/barcode', (req, res) => {
@@ -194,7 +195,7 @@ module.exports = class ProductRoutes extends Routes{
     });
 
 
-  
+
 
 
 

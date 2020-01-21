@@ -60,7 +60,9 @@ module.exports ={
     }
   },
 
-  updateLocal(sku, newLocal, user,  callback) {
+  updateLocal(sku, newLocal, user, device, callback) {
+    device = device || 'Desktop';
+
     this.getBySku(sku, false, (product)=>{
 
       newLocal = newLocal.toUpperCase();
@@ -75,7 +77,7 @@ module.exports ={
       var body = {
         codigo: product.codigo,
         localizacao: newLocal,
-        obs : lines +  "\n" + user.name + " | Desktop | " + newLocal + " | " + Dat.format(new Date()) + '| Localização'
+        obs : lines +  "\n" + user.name + " | "+device+" | " + newLocal + " | " + Dat.format(new Date()) + '| Localização'
       };
 
 
@@ -98,9 +100,9 @@ module.exports ={
     });
   },
 
-  updateStock(sku, stock, user,  callback) {
+  updateStock(sku, stock, user, device, callback) {
+    device = device || 'Desktop';
     stock = parseInt(stock);
-
 
     this.getBySku(sku, false, (product)=>{
 
@@ -108,7 +110,7 @@ module.exports ={
         codigo: product.codigo,
         quantidade: Math.abs(stock),
         es: stock < 0 ? 'S' : 'E',
-        obs : " Desktop - " +  user.name,
+        obs : device + " - " +  user.name,
         //Manter o mesmo preço
         custoLancamento : product.precoCusto,
         preco: product.preco
@@ -127,6 +129,7 @@ module.exports ={
   },
 
   updateWeight(sku, weight, user, callback){
+
 
     weight = Floa.floa(weight);
 

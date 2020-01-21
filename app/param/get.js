@@ -107,7 +107,21 @@ var Params = {
 
   devMaxSalesOnPicking(){
     return this.get('dev-max-sales-picking');
+  },
+
+  androidAppId(){
+    return this.get('android-id');
+  },
+
+  accessTimeRenew(){
+    return this.get('access-time-renew');
+  },
+
+  workTimeRange(){
+
+    return this.get('work-time-range').split('-');
   }
+
 }
 
 

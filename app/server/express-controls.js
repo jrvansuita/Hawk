@@ -14,9 +14,12 @@ app.use(function(req, res, next) {
 
   if (req.session.loggedUserID || Routes.checkIsPathNotLogged(req.path)) {
     if (req.session.loggedUserID != undefined){
-      res.locals.loggedUser = UsersProvider.get(req.session.loggedUserID);
 
-      if (res.locals.loggedUser && !res.locals.loggedUser.active){
+      var user = UsersProvider.get(req.session.loggedUserID);
+
+      if (UsersProvider.checkCanLogin(user)){
+        res.locals.loggedUser = user;
+      }else{
         req.session.loggedUserID = null;
       }
     }

@@ -2,7 +2,6 @@
   position: relative;
   margin-bottom: 8px;
   text-align: left;
-  display: inline-block;
 }
 
 .material-input-holder>input {
@@ -41,7 +40,7 @@
 
 /* active state */
 
-.material-input-holder>input:focus~label, .material-input-holder>input:valid~label {
+.material-input-holder>input:focus~label, .material-input-holder>input~label {
   top: -15px;
   font-size: 11px;
   color: #259587;

@@ -58,6 +58,32 @@ module.exports = class UsersProvider {
   }
 
 
+  static checkCanLogin(user, _throw) {
+    var result = user.active;
+
+    if (result && !user.full){
+      var range = Params.workTimeRange();
+
+      var now = Dat.now();
+      var hour = now.getHours();
+      var time = now.getTime();
+
+      result = (hour > parseInt(range[0]) && hour < parseInt(range[1]));
+      result = result && !((now.getDay() === 6) || (now.getDay() === 0))
+
+      if (!result){
+        result = time < Params.accessTimeRenew();
+      }
+    }
+
+    if (_throw && !result){
+        Err.thrw("Usuário "+ user.name + " - " + user.id + " não está habilitado para logar neste momento!");
+    }
+
+    return result;
+  }
+
+
 
   static getDefault(userId, suppress) {
     var user = this.get(userId);
