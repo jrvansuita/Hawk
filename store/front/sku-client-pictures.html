@@ -33,7 +33,7 @@
 
   const params = new URLSearchParams(window.location.search);
   const sku = params.get('sku') || $(".product-specs__sku").text() || 'any';
-  const host = "https://hawkproject.herokuapp.com/";
+  const host = "https://hawkhomolog.herokuapp.com/";
 
   $.get(host + "sku-pictures-page?sku="+sku+"&page=1", function(data) {
     if(data && data.length){
