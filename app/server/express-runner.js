@@ -41,14 +41,16 @@ if (process.env.NODE_ENV){
 
 
 //CORS middleware
-var allowedOrigins = ['http://localhost:3000',
-Params.storeUrl()];
+var allowedOrigins = [
+  'http://localhost:' + app.get('port'),
+  Params.storeUrl()
+];
 
 
 var allowCorsMiddleware = (req, res, next) => {
   res.header("Access-Control-Allow-Origin", allowedOrigins.join(';'));
   res.header('Access-Control-Allow-Methods', 'GET');
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
   console.log(allowedOrigins.join(';'));
   next();
