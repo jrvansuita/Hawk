@@ -93,10 +93,10 @@ static like(keyValue, limit, callback){
 
 
 //Find any elements that match the query provided
-static paginate(query, page, sort, callback) {
+static paginate(query, page, sort, rowsPerPage, callback) {
   page--;//Convert to index;
 
-  var rowsPerPage = 30;
+  rowsPerPage = rowsPerPage || 30;
 
   this.staticAccess()
   .find(query)

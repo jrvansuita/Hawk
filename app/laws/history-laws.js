@@ -5,7 +5,7 @@ module.exports = {
 
 
   getPage(page, query, callback){
-    History.paginate(buildQuery(query), page, '-date', (err, result)=>{
+    History.paginate(buildQuery(query), page, '-date', 30, (err, result)=>{
       callback(loadUsers(result));
     });
   },
