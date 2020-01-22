@@ -31,19 +31,29 @@ module.exports = class SkuPic extends DataAccess {
 
 
   static getPage(page, sku, callback) {
+    var limit = 20;
+
     SkuPic.paginate(
       { 'sku': {
         "$regex": sku,
         "$options": "i"
-      }
-    },
-    page,
-    '-date',
-    9,
-    (err, doc)=>{
-      callback(doc)
-    });
-  }
+      },
+      approved: true
+    }, page, '-date', limit, (err, result)=>{
+      var dif = limit - result.length;
+
+      if (dif <= 0){
+        callback(result);
+      }else{
+        SkuPic.getLasts({approved: true}, dif, (err, docs) => {
+          callback(result.concat(docs.sort(function() {
+            return .5 - Math.random();
+          })
+        ));
+      });
+    }
+  });
+}
 
 
 };

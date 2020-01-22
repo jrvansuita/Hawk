@@ -114,6 +114,17 @@ static getLast(callback) {
   }).limit(1).exec(callback);
 }
 
+
+//Retrive the last stored element
+static getLasts(query, limit, callback) {
+  this.staticAccess().find(query).sort({
+    field: 'asc',
+    _id: -1
+  }).limit(limit).exec(callback);
+}
+
+
+
 static aggregate(query, callback) {
   this.staticAccess().aggregate(query,
     function(err, res) {
