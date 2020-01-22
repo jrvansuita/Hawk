@@ -14,6 +14,7 @@
   }
 
   .scu-grid .item > img{
+    cursor: pointer;
     position: relative;
     width: 100%;
     border-radius: 2px;
@@ -33,12 +34,14 @@
   const params = new URLSearchParams(window.location.search);
   const sku = params.get('sku') || $(".product-specs__sku").text() || 'any';
   const host = "https://hawkproject.herokuapp.com/";
-  
+
   $.get(host + "sku-pictures-page?sku="+sku+"&page=1", function(data) {
     if(data && data.length){
       $('.scu-grid').before($('<h2>').append('Fotos Compartilhadas pelos Clientes'));
         data.forEach((each)=>{
-          $('.scu-grid').append($('<div>').addClass('item').append($('<img>').attr('src', each.url)));
+          var item = $('<div>').addClass('item').append($('<img>').attr('src', each.img));
+            item.click(() => {window.open(each.url, '_blank')});
+            $('.scu-grid').append(item);
           });
         }
       });

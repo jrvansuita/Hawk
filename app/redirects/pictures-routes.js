@@ -10,14 +10,9 @@ module.exports = class PicturesRoutes extends Routes{
       res.render('product/pictures/sku-pictures');
     });
 
-
     this._post('/sku-picture-from-insta', (req, res) => {
-      new SkuPictureLoader(req.body.sku).fromInsta(req.body.instaPost).load().then(() => {
-        console.log('veio');
-      });
+      new SkuPictureLoader(req.body.sku).fromInsta(req.body.instaPost).load().then(this._resp().redirect(res));
     });
-
-
 
     this._get('/sku-pictures-page', (req, res) => {
       var page = parseInt(req.query.page) || 1;

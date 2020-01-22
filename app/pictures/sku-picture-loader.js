@@ -16,21 +16,17 @@ module.exports = class SkuPictureLoader{
   load(){
     return new Promise((resolve, reject) => {
       new InstaData().post(this.instaPostId).load().then((post) => {
+        var row = SkuPic.insta(this.sku, post.url, post.img.src);
 
-
-        var row = new SkuPic(this.sku, post.img.src);
-
-
-
-      SkuPic.create(row, (err, doc)=>{
-        
+        SkuPic.create(row, (err, doc)=>{
+          if (err){
+            reject(err);
+          }else{
+            resolve(doc);
+          }
+        });
       });
-
-
-
-
     });
-  });
-}
+  }
 
 }

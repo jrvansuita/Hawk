@@ -10,8 +10,12 @@ module.exports= class InstaData{
   }
 
   post(postId){
-    this.url += 'p/' + postId + '?__a=1';
+    this.url += 'p/' + postId;
     return this;
+  }
+
+  _getPostUrl(){
+    return this.url + '?__a=1';
   }
 
   parse(data){
@@ -20,6 +24,7 @@ module.exports= class InstaData{
      var post = {};
      post.img = data.graphql.shortcode_media.display_resources[0];
      post.user = data.graphql.shortcode_media.owner.username;
+     post.url = this.url;
 
 
      resolve(post);
@@ -36,7 +41,7 @@ get(url){
 }
 
 async load(url){
-  const data = await this.get(this.url);
+  const data = await this.get(this._getPostUrl());
   const parsed = await this.parse(data);
   return parsed;
 }
