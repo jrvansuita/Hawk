@@ -2,6 +2,7 @@
   .scu-holder{
     width: 60%;
     padding-top: 5px;
+    margin-bottom: 15px;
   }
 
   .scu-grid{
@@ -54,7 +55,7 @@
     transform: translate(-50%, -25%);
     font-size: 13px;
     font-weight:bold;
-    padding: 4px 10px;
+    padding: 5px 10px;
     text-decoration:none;
     text-shadow:0px 1px 0px #ffffff;
   }
@@ -71,20 +72,49 @@
   const host = "https://hawkhomolog.herokuapp.com/";
   //const host = "http://localhost:3000/";
 
-  $.get(host + "get-sku-pictures-page?sku="+sku+"&page=1", function(data) {
-    if(data && data.length){
-      $('.scu-grid').before($('<h2>').append('Fotos Compartilhadas pelos Clientes'));
-        data.forEach((each)=>{
-          var item = $('<div>').addClass('item').append($('<img>').attr('src', each.img));
-            if (each.url){
-              item.click(() => {window.open(each.url, '_blank')});
-            }
-            $('.scu-grid').append(item);
-          });
 
-          var loadHolder = $("<div>").addClass("scu-load-more").append($('<button>').text('Carregar Mais'));
+  class ProductShareWidget{
+    constructor(sku){
+      this.page = 0;
+      this.sku = sku;
+    }
 
-            $('.scu-holder').append(loadHolder);
+    getUrl(){
+      return host + "get-sku-pictures-page?sku=" + this.sku + "&page=" + this.page;
+    }
+
+    loadNext(){
+      this.page++;
+
+      $.get(this.getUrl(), (data) => {
+        if(data && data.length){
+          if(this.page == 1)
+          this.onFirstPageLoad();
+
+          data.forEach((each)=>{
+            var item = $('<div>').addClass('item').append($('<img>').attr('src', each.img));
+              if (each.url){
+                item.click(() => {window.open(each.url, '_blank')});
+              }
+              $('.scu-grid').append(item);
+              item.hide().fadeIn(200);
+            });
           }
         });
+      }
+
+      onFirstPageLoad(){
+        $('.scu-grid').before($('<h2>').append('Fotos Compartilhadas pelos Clientes'));
+          var button = $('<button>').text('Carregar Mais');
+          var loadHolder = $("<div>").addClass("scu-load-more").append(button);
+            $('.scu-holder').append(loadHolder);
+
+            button.click(() => {
+              this.loadNext();
+            })
+          }
+
+        };
+
+        new ProductShareWidget(sku).loadNext();
       </script>
