@@ -2,6 +2,7 @@ const Routes = require('../redirects/controller/routes.js');
 const SkuPictureLoader = require('../pictures/sku-picture-loader.js');
 const SkuPic = require('../bean/sku-pic.js');
 
+var cacheSkuPictures = {};
 
 module.exports = class PicturesRoutes extends Routes{
 
@@ -18,9 +19,17 @@ module.exports = class PicturesRoutes extends Routes{
       var page = parseInt(req.query.page) || 1;
       var sku = req.query.sku;
 
-      SkuPic.getPage(page, sku, (all)=>{
-        res.send(all);
-      });
+      var cached = cacheSkuPictures[sku + page];
+
+      if (cached){
+        res.send(cached);
+      }else{
+        SkuPic.getPage(page, sku, (all)=>{
+          cacheSkuPictures[sku + page] = all;
+          res.send(all);
+        });
+      }
+      
     }, true, true);
 
 
