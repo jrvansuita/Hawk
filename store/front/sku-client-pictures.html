@@ -26,7 +26,10 @@
   $ = jQuery;
 
   const params = new URLSearchParams(window.location.search);
-  const sku = params.get('sku') || 'none';
+  const sku = params.get('sku') || $(".product-specs__sku").text();
+
+  console.log($(".product-specs__sku").text());
+  console.log(params);
 
 
   $.get("https://hawkhomolog.herokuapp.com/sku-pictures-page?sku="+sku+"&page=1", function(data) {
