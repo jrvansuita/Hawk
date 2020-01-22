@@ -20,9 +20,16 @@
   }
 </style>
 <div class="scu-grid"></div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
   $ = jQuery;
-  $.get("https://hawkhomolog.herokuapp.com/sku-pictures-page?sku="+$('.product-specs__sku').text()+"&page=1", function(data) {
+
+  const params = new URLSearchParams(window.location.search);
+  const sku = params.get('sku') || 'none';
+
+
+  $.get("https://hawkhomolog.herokuapp.com/sku-pictures-page?sku="+sku+"&page=1", function(data) {
     if(data && data.length){
       $('.scu-grid').before($('<h2>').append('Fotos Compartilhadas pelos Clientes'));
         data.forEach((each)=>{
