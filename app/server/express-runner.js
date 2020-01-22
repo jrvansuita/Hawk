@@ -34,27 +34,32 @@ app.listen().setTimeout(120000); // 2 minutos
 
 var staticOptions = {};
 
-if (process.env.NODE_ENV){
-  //Desligado o cache nos staticos
-  //  staticOptions = { maxAge: 86400000*1 }; // 1 days
-}
 
 
 //CORS middleware
+
 var allowedOrigins = [
-  'http://localhost:' + app.get('port'),
   Params.storeUrl()
 ];
 
+if (process.env.NODE_ENV){
+  //Desligado o cache nos staticos
+  //  staticOptions = { maxAge: 86400000*1 }; // 1 days
+}else{
+  allowedOrigins.push('http://localhost:' + app.get('port'));
+}
 
 var allowCorsMiddleware = (req, res, next) => {
   if(allowedOrigins.indexOf(req.headers.origin) > -1){
-    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+    console.log('incluiu');
   }
   res.header('Access-Control-Allow-Methods', 'GET');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
-  console.log(allowedOrigins.join(';'));
+
+  console.log(allowedOrigins);
+
   next();
 };
 
