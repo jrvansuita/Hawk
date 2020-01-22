@@ -34,6 +34,7 @@
   const params = new URLSearchParams(window.location.search);
   const sku = params.get('sku') || $(".product-specs__sku").text() || 'any';
   const host = "https://hawkhomolog.herokuapp.com/";
+  //const host = "http://localhost:3000/";
 
   $.get(host + "get-sku-pictures-page?sku="+sku+"&page=1", function(data) {
     if(data && data.length){
