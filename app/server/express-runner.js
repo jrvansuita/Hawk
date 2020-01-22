@@ -40,18 +40,15 @@ if (process.env.NODE_ENV){
 }
 
 
-app.all('/', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
+//CORS middleware
+var allowCorsMiddleware = (req, res, next) => {
+  res.header("Access-Control-Allow-Origin", Params.storeUrl());
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   next();
- });
+};
 
-
- app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
-});
+app.get('/', allowCorsMiddleware);
+app.use(allowCorsMiddleware);
 
 
 app.use('/img', express.static('front/img', staticOptions));
@@ -63,12 +60,12 @@ app.use('/param', express.static('app/param/get.js', staticOptions));
 app.use('/store', express.static('store/front', staticOptions));
 
 
-//CORS middleware
+
 /*app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', Params.storeUrl());
-  res.header('Access-Control-Allow-Methods', 'GET');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
+res.header('Access-Control-Allow-Origin', Params.storeUrl());
+res.header('Access-Control-Allow-Methods', 'GET');
+res.header('Access-Control-Allow-Headers', 'Content-Type');
+next();
 });*/
 
 
