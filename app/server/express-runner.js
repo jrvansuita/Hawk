@@ -40,6 +40,14 @@ if (process.env.NODE_ENV){
 }
 
 
+app.all('/', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+ });
+
+
+ 
 app.use('/img', express.static('front/img', staticOptions));
 app.use('/front', express.static('front', staticOptions));
 app.use('/util', express.static('app/util', staticOptions));
@@ -49,13 +57,6 @@ app.use('/param', express.static('app/param/get.js', staticOptions));
 app.use('/store', express.static('store/front', staticOptions));
 
 
-app.all('/', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
- });
-
- 
 //CORS middleware
 /*app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', Params.storeUrl());
