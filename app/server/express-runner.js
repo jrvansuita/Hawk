@@ -49,6 +49,20 @@ app.use('/param', express.static('app/param/get.js', staticOptions));
 app.use('/store', express.static('store/front', staticOptions));
 
 
+//CORS middleware
+var allowCrossDomain = function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', Params.storeUrl();
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+
+  next();
+}
+
+app.use(allowCrossDomain);
+
+
+
+
 var server = app.listen(app.get('port'), function() {
   //('Node is running on port ', app.get('port'));
 });
