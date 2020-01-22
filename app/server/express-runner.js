@@ -51,7 +51,7 @@ app.use('/store', express.static('store/front', staticOptions));
 
 //CORS middleware
 var allowCrossDomain = function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', Params.storeUrl();
+  res.header('Access-Control-Allow-Origin', Params.storeUrl());
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
 
