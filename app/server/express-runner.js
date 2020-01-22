@@ -28,6 +28,7 @@ app.use(cookieSession({
 }));
 
 app.set('view engine', 'ejs');
+//Hawk Views
 app.set('views', global.__appDir + '/views');
 app.listen().setTimeout(120000); // 2 minutos
 
@@ -43,6 +44,9 @@ app.use('/img', express.static('front/img', staticOptions));
 app.use('/front', express.static('front', staticOptions));
 app.use('/util', express.static('app/util', staticOptions));
 app.use('/param', express.static('app/param/get.js', staticOptions));
+
+//Store external Views
+app.use('/store', express.static('store/front', staticOptions));
 
 
 var server = app.listen(app.get('port'), function() {
