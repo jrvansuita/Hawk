@@ -33,7 +33,7 @@
   const params = new URLSearchParams(window.location.search);
   const sku = params.get('sku') || $(".product-specs__sku").text() || 'any';
 
-  $.get("https://hawkhomolog.herokuapp.com/sku-pictures-page?sku="+sku+"&page=1", function(data) {
+  $.get("http://localhost:3000/sku-pictures-page?sku="+sku+"&page=1", function(data) {
     if(data && data.length){
       $('.scu-grid').before($('<h2>').append('Fotos Compartilhadas pelos Clientes'));
         data.forEach((each)=>{

@@ -27,7 +27,6 @@ module.exports = class SkuPic extends DataAccess {
        "$regex": sku,
        "$options": "i"
      }},  page, '-date', 9, (err, doc)=>{
-       console.log(doc);
        callback(doc)
      });
   }

@@ -24,8 +24,8 @@ module.exports = class PicturesRoutes extends Routes{
       var sku = req.query.sku;
 
       SkuPic.getPage(page, sku, (all)=>{
-        //res.setHeader("Access-Control-Allow-Origin", "*");
-        //res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         res.send(all);
       });
     }, true);

@@ -49,6 +49,8 @@ var allowCorsMiddleware = (req, res, next) => {
   res.header("Access-Control-Allow-Origin", allowedOrigins.join(';'));
   res.header('Access-Control-Allow-Methods', 'GET');
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+  console.log(allowedOrigins.join(';'));
   next();
 };
 
@@ -62,15 +64,6 @@ app.use('/param', express.static('app/param/get.js', staticOptions));
 
 //Store external Views
 app.use('/store', express.static('store/front', staticOptions));
-
-
-
-/*app.use((req, res, next) => {
-res.header('Access-Control-Allow-Origin', Params.storeUrl());
-res.header('Access-Control-Allow-Methods', 'GET');
-res.header('Access-Control-Allow-Headers', 'Content-Type');
-next();
-});*/
 
 
 
