@@ -15,7 +15,7 @@ module.exports = class PicturesRoutes extends Routes{
       new SkuPictureLoader(req.body.sku).fromInsta(req.body.instaPost).load().then(this._resp().redirect(res));
     });
 
-    this._get('/sku-pictures-page', (req, res) => {
+    this._get('/get-sku-pictures-page', (req, res) => {
       var page = parseInt(req.query.page) || 1;
       var sku = req.query.sku;
 
@@ -29,7 +29,7 @@ module.exports = class PicturesRoutes extends Routes{
           res.send(all);
         });
       }
-      
+
     }, true, true);
 
 

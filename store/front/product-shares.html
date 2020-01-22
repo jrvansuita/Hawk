@@ -35,12 +35,14 @@
   const sku = params.get('sku') || $(".product-specs__sku").text() || 'any';
   const host = "https://hawkhomolog.herokuapp.com/";
 
-  $.get(host + "sku-pictures-page?sku="+sku+"&page=1", function(data) {
+  $.get(host + "get-sku-pictures-page?sku="+sku+"&page=1", function(data) {
     if(data && data.length){
       $('.scu-grid').before($('<h2>').append('Fotos Compartilhadas pelos Clientes'));
         data.forEach((each)=>{
           var item = $('<div>').addClass('item').append($('<img>').attr('src', each.img));
-            item.click(() => {window.open(each.url, '_blank')});
+            if (each.url){
+              item.click(() => {window.open(each.url, '_blank')});
+            }
             $('.scu-grid').append(item);
           });
         }
