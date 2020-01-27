@@ -19,18 +19,61 @@
     <div class="panels">
       <div class="left-panel shadow">
 
+        <label class="sub-title left">Fotos dos Clientes</label>
+
         <div class="material-input-holder">
           <input type="text" id="insta-post" autocomplete="off" required/>
           <span class="bar"></span>
-          <label>Instagram Post</label>
+          <label>Link do Instagram</label>
         </div>
-
+        <div class="separator dotted-top">
+          <label>ou</label>
+        </div>
 
         <div class="material-input-holder">
-          <input type="text" id="sku" autocomplete="off" required/>
+          <input type="text" id="face-post" autocomplete="off" required/>
           <span class="bar"></span>
-          <label>Sku</label>
+          <label>Link do Facebook</label>
         </div>
+
+        <div class="product-select">
+          <label class="sub-title">Produtos</label>
+          <img class="add add-product mini-icon-button" src="img/forward.png">
+
+          <div class="material-input-holder sku-input-holder">
+            <input type="text" id="sku" maxlength="50"
+            value="" autocomplete="off"
+            title="Código do Produto" required/>
+
+            <span class="bar"></span>
+            <label>SKU</label>
+          </div>
+        </div>
+
+        <div class="box-holder">
+
+          <div class="msg-box msg-box-sku">
+            <img src="img/error.png" class="icon-error">
+            <span class="error-msg-sku"></span>
+          </div>
+
+          <div class="sel-box skus-box">
+
+
+          </div>
+        </div>
+
+
+
+
+
+        <div class="inline-holder">
+          <label class="button save shadow">Salvar</label>
+        </div>
+
+
+
+
       </div>
 
       <div class="main-panel shadow" >

@@ -141,10 +141,10 @@ var Util = {
   },
 
   isIn(array, str){
-    str = str.toString();
+    str = str.toString().toLowerCase();
 
     return array.some((s)=>{
-      return str.toString() == s.toString();
+      return str == s.toString().toLowerCase();
     });
   },
 
