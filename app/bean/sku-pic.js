@@ -29,6 +29,9 @@ module.exports = class SkuPic extends DataAccess {
     });
   }
 
+  static getToBeApprovedPage(page, callback) {
+    SkuPic.paginate({approved: false}, page, 'date', 20, callback);
+  }
 
   static getPageQuery(sku, not){
     var result = {approved: true};

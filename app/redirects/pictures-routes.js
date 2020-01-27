@@ -8,8 +8,16 @@ module.exports = class PicturesRoutes extends Routes{
 
   attach(){
     this._get('/sku-pictures', (req, res) => {
-      res.render('product/pictures/sku-pictures');
+      res.render('product/pictures/sku-pictures', {param1: "teste"});
     });
+
+
+    this._get('/get-sku-pictures-page-approve', (req, res) => {
+      var page = parseInt(req.query.page) || 1;
+
+      SkuPic.getToBeApprovedPage(page, this._resp().redirect(res));
+    });
+
 
     this._post('/sku-picture-from-insta', (req, res) => {
       new SkuPictureLoader(req.body.skus).fromInsta(req.body.instaPost).load().then(this._resp().redirect(res));
