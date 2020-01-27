@@ -3,9 +3,11 @@
 <head>
   <link rel="stylesheet" type="text/css" href="/front/css/layout/sku-pictures.css">
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-dropdown.css">
 
   <script type="text/javascript" src="/front/js/control/sku-pictures.js"></script>
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+  <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
 </head>
 <body>
 
@@ -73,6 +75,34 @@
 
       <div class="main-panel shadow">
 
+
+        <div class="main-top">
+          <label class="sub-title left">Fotos a Aprovar</label>
+
+          <div class="to-be-approved-holder">
+
+          </div>
+
+        </div>
+
+        <div class="main-bottom">
+          <label class="sub-title">Fotos aprovadas</label>
+          <div class="">
+            <div class="material-input-holder sku-input-holder">
+              <input type="text"  maxlength="50"
+              value="" autocomplete="off"
+              title="Código do Produto" required/>
+
+              <span class="bar"></span>
+              <label>SKU</label>
+            </div>
+          </div>
+
+          <div class="approved-images-holder">
+
+          </div>
+
+        </div>
 
 
       </div>

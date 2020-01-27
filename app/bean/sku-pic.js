@@ -25,6 +25,7 @@ module.exports = class SkuPic extends DataAccess {
 
   static approved(_id, approved, callback) {
     SkuPic.upsert({_id: _id}, {approved : approved},(err, doc)=>{
+      console.log(err);
       callback(doc)
     });
   }

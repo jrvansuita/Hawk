@@ -32,11 +32,12 @@
   margin-right: 15px;
   flex: 0 80%;
   padding: 10px 0px;
-  display: flex;
+  display: block;
   height: 100%;
   overflow-y: auto;
   flex-wrap: wrap;
   align-items: flex-start;
+  padding-left: 20px;
 }
 
 .material-input-holder{
@@ -45,12 +46,11 @@
 
 .sub-title{
   position: relative;
-  margin-top: 10px;
   font-size: 15px;
   color: gray;
-  margin-bottom: 18px;
+  margin-bottom: 10px;
   display: inline-block;
-  width: 100%;
+  width: fit-content;
 }
 
 .button{
@@ -72,7 +72,7 @@
 }
 .separator{
   text-align: center;
-  margin: 20px 0 10px 0;
+  margin: 25px 0 0 0;
 }
 
 .separator label{
@@ -95,6 +95,7 @@
   position: absolute;
   padding: 3px;
   bottom: 15px;
+  z-index: 999;
 }
 .sel-box {
   width: 100%;
@@ -137,4 +138,80 @@
 }
 .product-select{
   position: relative;
+}
+
+.main-bottom{
+  flex: 1;
+  width: 100%;
+  height: max-content;
+  margin-top: 40px;
+}
+
+.main-top{
+  width: 100%;
+}
+
+
+.approve-item{
+  display: inline-flex;
+  flex: auto;
+  padding: 5px 5px 15px 5px;
+  position: relative;
+  border: 1px solid whitesmoke;
+  max-width: 290px;
+  max-height: 145px;
+}
+
+.approve-item > img{
+  width: 124px;
+  height: 124px;
+  max-width: 124px;
+  max-height: 124px;
+  border: 2px solid #dfdddf;
+  border-radius: 10px;
+}
+.approve-item > label{
+  display: block;
+  text-align: center;
+  color: gray;
+  font-size: 12px;
+  position: absolute;
+  bottom: 0;
+  left: 20px;
+}
+
+.to-be-approved-holder{
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 10px;
+}
+
+.preview-image{
+  background: black;
+  z-index: 1;
+  top: 0;
+  right: 0;
+}
+
+.checked-img{
+  height: 48px;
+  width: 48px!important;
+  position: absolute;
+  left: 0;
+  -webkit-filter: drop-shadow(1px 1px 1px #222222a8);
+  filter: drop-shadow(1px 1px 1px #222222a8);
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  top: 40px;
+  border: none!important;
+}
+
+.menu-dots{
+  height: fit-content;
+}
+
+.dots-glyph{
+  margin-right: 5px;
+  margin-left: 5px;
 }
