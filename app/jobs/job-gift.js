@@ -4,6 +4,7 @@ const EccosysStorer = require('../eccosys/eccosys-storer.js');
 const GiftRule = require('../bean/gift-rule.js');
 const SaleLoader = require('../loader/sale-loader.js');
 const HistoryStorer = require('../history/history-storer.js');
+const EmailBuilder = require('../email/builder/email-builder.js');
 
 module.exports = class JobGift extends Job{
 
@@ -122,7 +123,7 @@ module.exports = class JobGift extends Job{
         .go((data) => {
           if(data.result.success.length){
             HistoryStorer.gift(sale.numeroPedido, giftItem[0].codigo, rule.name);
-            console.log('Adicinou um brinde ao pedido ' + sale.numeroPedido);
+            this.checkAndSendEmail(rule, sale, giftItem[0]);
           }
           callback();
         });
@@ -132,12 +133,27 @@ module.exports = class JobGift extends Job{
     });
   }
 
+  checkAndSendEmail(rule, sale, product){
+    product.img = Params.skuImageUrl(product.codigo);
+
+    if (rule.sendEmail){
+      new EmailBuilder()
+      .template('GIFT')
+      .to(sale.client.email)
+      .reply(Params.replayEmail())
+      .setData({
+        pedido: sale,
+        cliente: sale.client,
+        produto: product
+      }).send();
+    }
+  }
+
   checkSaleHasAnyGiftItem(sale){
     return sale.items.some((item) => {
       return item.observacao.includes(this.itemObsTag);
     })
   }
-
 
   checkMatching(rule, sale){
     for (var i = 0; i < rule.rules.length; i++) {
@@ -187,7 +203,7 @@ module.exports = class JobGift extends Job{
 
   loadEachSale(s, callback){
     new SaleLoader(s)
-    //.loadClient()
+    .loadClient()
     .loadItems()
     .run((sale)=>{
       console.log('---- Pedido: ' + sale.numeroPedido + ' -----');

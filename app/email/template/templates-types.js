@@ -10,4 +10,10 @@ module.exports = {
     icon: 'api-error'
   },
 
+  GIFT: {
+    name : 'Brinde',
+    icon: 'gift'
+  },
+
+
 };

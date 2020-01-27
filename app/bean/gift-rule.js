@@ -4,13 +4,14 @@
 module.exports = class GiftRule extends DataAccess {
 
 
-  constructor(id, name, active, checkStock, expiresDate) {
+  constructor(id, name, active, checkStock, expiresDate, sendEmail) {
     super();
     this.id = Num.def(id, 0) || Util.id();
     this.name = Str.def(name);
     this.active = active ? true: false;
     this.expiresDate = Dat.def(expiresDate);
     this.checkStock = checkStock ? true : false;
+    this.sendEmail = sendEmail ? true : false;
     this.skus = [];
     this.rules = [];
   }

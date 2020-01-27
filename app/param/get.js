@@ -14,6 +14,10 @@ var Params = {
     return this.bundle()[name];
   },
 
+  skuImageUrl(sku){
+    return this.productionUrl() + '/sku-image?sku=' + sku;
+  },
+
 
   productionUrl(){
     return this.get('prodution-url');

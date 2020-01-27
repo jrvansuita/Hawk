@@ -35,14 +35,14 @@
 
             if (each.type != selected.type){
               delete typesEnum[each.type];
-            }  
+            }
             %>
 
 
 
             <div class="each-template-line <%=selected._id == each._id ? 'active' : ''%> " data-id="<%=each._id%>">
               <%if (each.type){%>
-                <div class="using-template-circle"></div>
+                <div class="active-circle"></div>
                 <%}%>
                 <span><%=each.name%></span>
                 <div class="icon-dots" data-id="<%=each._id%>">
