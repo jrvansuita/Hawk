@@ -1,7 +1,7 @@
-const Err = require('../error/error.js');
+
 const Mock = require('../bean/mock.js');
 
-module.exports = class MockHandler {
+module.exports = class MockVault {
 
   static storeFromScreen(params, callback) {
 

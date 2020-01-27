@@ -14,6 +14,12 @@ var Floa = {
     }
   },
 
+  isFloat(n){
+   return /^\-?[0-9]+(e[0-9]+)?(\.[0-9]+)?$/.test(n);
+  },
+
+
+
   floa: function(val) {
     return parseFloat(val.toString().replace(",", "."));
   },
@@ -29,10 +35,10 @@ var Floa = {
   },
 
   isFloatKey(e){
-   e = e || window.event;
-   var charCode = e.which ? e.which : e.keyCode;
-   return /^-?[0-9,]*$/.test(String.fromCharCode(charCode));
- }
+    e = e || window.event;
+    var charCode = e.which ? e.which : e.keyCode;
+    return /^-?[0-9,]*$/.test(String.fromCharCode(charCode));
+  }
 
 
 };

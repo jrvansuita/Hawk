@@ -2,9 +2,11 @@ const Routes = require('../redirects/controller/routes.js');
 const UsersProvider = require('../provider/user-provider.js');
 const Setts = require('../bean/setts.js');
 
+
 module.exports = class LoginRoutes extends Routes{
 
   attach(){
+
     this._get('/login', (req, res) => {
       res.render('login/login');
     }, true);
@@ -12,7 +14,6 @@ module.exports = class LoginRoutes extends Routes{
     this._get('/wellcome', (req, res) => {
       res.render('login/wellcome');
     });
-
 
     this._post('/login', (req, res) => {
       var user;

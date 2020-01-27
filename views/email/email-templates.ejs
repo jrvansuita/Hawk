@@ -1,0 +1,121 @@
+
+<%var typesEnum = Util.clone(types);%>
+
+<html>
+<%  include ../menus/main-menu %>
+<head>
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/email-templates.css">
+
+  <script type="text/javascript" src="/front/js/control/email-templates.js"></script>
+  <script type="text/javascript" src="/front/js/libs/template-editor.js"></script>
+  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+  <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
+  <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
+  <script type="text/javascript" src="/front/js/libs/tooltip.js"></script>
+</head>
+<body>
+
+
+
+
+  <div class="main-content">
+    <div class="panels">
+      <div class="left-panel shadow">
+
+        <label class="sub-title left">Templates <img src="img/plus-gray.png" class="add-new mini-icon-button"> </label>
+
+
+        <div class="templates-holder">
+
+          <%
+          all.sort((a,b) => {
+            return b.type.localeCompare(a.type);
+          }).forEach((each)=>{
+
+            if (each.type != selected.type){
+              delete typesEnum[each.type];
+            }  
+            %>
+
+
+
+            <div class="each-template-line <%=selected._id == each._id ? 'active' : ''%> " data-id="<%=each._id%>">
+              <%if (each.type){%>
+                <div class="using-template-circle"></div>
+                <%}%>
+                <span><%=each.name%></span>
+                <div class="icon-dots" data-id="<%=each._id%>">
+                  <img src="img/dots.png" class="dots-glyph" />
+                </div>
+              </div>
+              <%});%>
+
+
+            </div>
+
+
+          </div>
+
+          <div class="main-panel shadow">
+
+
+            <div class="template-top">
+
+              <div class="row">
+
+                <div class="material-input-holder name-holder">
+                  <input type="text" id="template-name" value="<%=selected.name%>" autocomplete="off" required/>
+                  <span class="bar"></span>
+                  <label>Nome do Template</label>
+                </div>
+
+                <div class="material-input-holder type-holder">
+                  <input type="text" id="template-type" value="<%=(selected.type ? types[selected.type].name : '') %>" autocomplete="off" required/>
+                  <span class="bar"></span>
+                  <label>Usado em</label>
+                </div>
+
+                <label class="button save shadow">Salvar</label>
+              </div>
+
+
+              <div class="row">
+                <div class="material-input-holder">
+                  <input type="text" id="subject"  value="<%=selected.subject%>" autocomplete="off" required/>
+                  <span class="bar"></span>
+                  <label>Assunto</label>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="template-bottom">
+
+              <div id="editor">
+
+              </div>
+
+
+            </div>
+
+
+
+
+
+
+          </div>
+
+        </div>
+      </div>
+
+
+      <script class="hidable-script">
+
+        window.selected = <%- JSON.stringify(selected || {}) %>
+        window.types = <%- JSON.stringify(typesEnum || {}) %>
+      </script>
+
+
+    </body>
+    </html>

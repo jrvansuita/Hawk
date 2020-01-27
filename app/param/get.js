@@ -14,9 +14,16 @@ var Params = {
     return this.bundle()[name];
   },
 
+
+  productionUrl(){
+    return this.get('prodution-url');
+  },
+
   storeUrl(){
     return this.get('store-url');
   },
+
+
 
   storeFeedUrl(){
     return this.get('store-feed-url');
@@ -38,6 +45,10 @@ var Params = {
     return this.get('eccosys-api-down-email');
   },
 
+
+  emailName(){
+    return this.get('email-name');
+  },
 
   replayEmail(){
     return this.get('email-reply');

@@ -31,15 +31,14 @@
 
     <div class="panels">
       <div class="show-all shadow">
-        <label class="sub-title left">Mockups <img src="img/plus.png" class="add-new mini-icon-button"> </label>
+        <label class="sub-title left">Mockups <img src="img/plus-gray.png" class="add-new mini-icon-button"> </label>
 
         <div class="all">
 
           <%all.forEach((each)=>{%>
 
-            <div class="each-all shadow" data-id="<%=each._id%>">
-              <span><%=each.name%></span>
-              <label><%=each.width + 'x' + each.height%></label>
+            <div class="each-all <%=selected._id == each._id ? 'active' : ''%> " data-id="<%=each._id%>">
+              <span><%=each.name%> <label><%=each.width + 'x' + each.height%></label></span>
             </div>
             <%});%>
 

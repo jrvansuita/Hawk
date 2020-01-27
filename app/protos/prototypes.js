@@ -28,6 +28,11 @@ String.prototype.format = String.prototype.f = function() {
 };
 
 
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
+
 // Object.prototype._getType = function() {
 //   var funcNameRegex = /function (.{1,})\(/;
 //   var results = (funcNameRegex).exec((this).constructor.toString());

@@ -22,8 +22,8 @@ module.exports = class UserRoutes extends Routes{
     });
 
     this._post('/mockup-builder', (req, res) => {
-      MockVault.storeFromScreen(req.body, (mockId)=>{
-        res.status(200).send(mockId);
+      MockVault.storeFromScreen(req.body, (id)=>{
+        res.status(200).send(id);
       });
     });
 

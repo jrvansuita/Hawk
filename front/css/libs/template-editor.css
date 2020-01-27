@@ -1,0 +1,42 @@
+.second-toolbar > a {
+  display: none !important;
+}
+
+
+.fr-view .fr-class-variable {
+  background-color: rgb(243, 243, 243);
+  padding: 2px 4px;
+  color: #403c3c;
+  font-family: monospace;
+  font-weight: 900;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+
+.fr-view .fr-rounded-borders td, .fr-view .fr-rounded-borders th{
+  border:none !important;
+}
+
+.fr-view .fr-rounded-borders tr:first-of-type td:first-of-type {
+
+  border-top-left-radius: 10px;
+}
+.fr-view .fr-rounded-borders tr:first-of-type td:last-of-type{
+  border-top-right-radius: 10px;
+}
+.fr-view .fr-rounded-borders tr:last-of-type td:first-of-type {
+  border-bottom-left-radius: 10px;
+}
+.fr-view .fr-rounded-borders tr:last-of-type td:last-of-type {
+  border-bottom-right-radius: 10px;
+}
+
+div.fr-wrapper>div>a {
+    /* display: none !important; */
+    /* position: fixed; */
+    /* z-index: -99999 !important; */
+    font-size: 0px !important;
+    padding: 0px !important;
+    height: 0px !important;
+}

@@ -3,8 +3,8 @@ const PickingLaws = require('../laws/picking-laws.js');
 const SaleLoader = require('../loader/sale-loader.js');
 const InprogressLaws = require('../laws/inprogress-laws.js');
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
+const EmailBuilder = require('../email/builder/email-builder.js');
 
-const PendingEmailSender = require('../email/sender/pending-email-sender.js');
 const HistoryStorer = require('../history/history-storer.js');
 const BlockHandler = require('../handler/block-handler.js');
 
@@ -78,7 +78,6 @@ module.exports = {
       });
     }
   }
-
 };
 
 
@@ -104,11 +103,34 @@ function sendEmailIfNeed(pending, user,  callback){
 }
 
 function sendEmail(sale, user, callback){
-  var pendingEmailSender = new PendingEmailSender();
+  var items = sale.items.filter((i) => {
+    i.img = Params.productionUrl() + "/sku-image?sku=" + i.codigo;
+    i.total = parseFloat(i.precoLista) * parseFloat(i.quantidade);
+    return i.pending == true;
+  });
+
+
+  new EmailBuilder()
+  .template('PENDING')
+  .to(sale.client.email)
+  .reply(Params.replayEmail())
+  .setData({
+    pedido: sale,
+    cliente: sale.client,
+    produtos: items
+  }).send((err, sucessId) => {
+    HistoryStorer.email(user.id, sale, err);
+    callback(err, sucessId);
+  });
+
+
+
+
+  /*var pendingEmailSender = new PendingEmailSender();
   pendingEmailSender.client(sale.client.nome, sale.client.email);
   pendingEmailSender.sale(sale);
   pendingEmailSender.send((err, sucessId)=>{
     HistoryStorer.email(user.id, sale, err);
     callback(err, sucessId);
-  });
+  });*/
 }

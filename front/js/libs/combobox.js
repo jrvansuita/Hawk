@@ -25,6 +25,11 @@ class ComboBox{
     }
 
 
+    setDisabledCaption(text){
+      this.disabledCaption = text;
+      return this;
+    }
+
     select(item){
       this.element.val(item ? item.label : '');
 
@@ -106,7 +111,12 @@ class ComboBox{
           }
         });
       }else{
-        this.handleData(callback);
+        if (this.objects.length){
+          this.handleData(callback);
+        }else{
+          $(this.element).val(this.disabledCaption);
+          $(this.element).prop('disabled', true);
+        }
       }
 
       return this;
