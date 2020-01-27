@@ -7,9 +7,11 @@
 .material-input-holder>input {
   background: #FFF;
   font-family: 'Roboto';
+  width: 100%;
+  min-width: 150px;
   margin: 0px auto 0;
   font-size: 13px;
-  padding: 25px 10px 10px 5px;
+  padding: 25px 10px 10px 0px;
   display: block;
   border: none;
   margin-bottom: 2px;
@@ -40,7 +42,7 @@
 
 /* active state */
 
-.material-input-holder>input:focus~label, .material-input-holder>input~label {
+.material-input-holder>input:focus~label, .material-input-holder>input:valid~label, .material-input-holder>input:disabled~label{
   top: -15px;
   font-size: 11px;
   color: #259587;

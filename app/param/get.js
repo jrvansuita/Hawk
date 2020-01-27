@@ -39,6 +39,10 @@ var Params = {
   },
 
 
+  emailName(){
+    return this.get('email-name');
+  },
+
   replayEmail(){
     return this.get('email-reply');
   },

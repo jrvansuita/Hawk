@@ -16,10 +16,12 @@
 }
 
 .box-title{
-  padding: 10px 8px;
+  padding: 10px 12px;
   margin-left: 3px;
   margin-top: 3px;
   display: block;
+  position: relative;
+  display: flex;
 }
 
 
@@ -28,12 +30,16 @@
   color: #656565;
   font-weight: bolder;
   vertical-align: super;
-  margin-top: 0px;
+  display: inline-block;
+  margin-top: 5px;
+  margin-left: 5px;
+  position: relative;
 }
 
 .box-title > img{
   width: 32px;
   height: 32px;
+  display: inline-block;
 }
 
 
@@ -45,8 +51,7 @@
 
 
 .material-input-holder>input{
-  width: -webkit-fill-available;
-
+  width: -webkit-fill-available !important;
 }
 
 .material-input-holder{

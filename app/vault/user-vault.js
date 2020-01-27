@@ -1,7 +1,7 @@
 const User = require('../bean/user.js');
 const Err = require('../error/error.js');
 const UsersProvider = require('../provider/user-provider.js');
-const ImgurSaver = require('../imgur/save-image.js');
+const ImageSaver = require('../image/image-saver.js');
 
 module.exports = class  {
 
@@ -78,25 +78,23 @@ module.exports = class  {
 
 
   static changeImage(userId, base64Image, callback){
-    ImgurSaver.upload(base64Image, (data)=>{
+    new ImageSaver()
+    .setBase64Image(base64Image)
+    .setOnSuccess((data) => {
+      callback(data.link);
 
 
-      if (data.link){
-        callback(data.link);
+      User.updateAvatar(userId, data.link, ()=>{
+        var user = UsersProvider.get(userId);
 
-        User.updateAvatar(userId, data.link, ()=>{
-          var user = UsersProvider.get(userId);
-
-          if (user){
-            user.avatar = data.link;
-          }
-        });
-      }else{
-        //Err.thrw('ImgurSaver: ' +  data.message, userId);
-        callback(null);
-      }
-    });
+        if (user){
+          user.avatar = data.link;
+        }
+      });
+    }).setOnError((data) => {
+      //Err.thrw('ImgurSaver: ' +  data.message, userId);
+      callback(null);
+    }).upload();
   }
-
 
 };

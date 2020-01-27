@@ -63,6 +63,10 @@ var Util = {
     }
   },
 
+  deepVal(deepPath, object){
+    return deepPath.split('.').reduce((p,c)=>p&&p[c]||null, object);
+  },
+
   isObject (value) {
     return value && typeof value === 'object' && value.constructor === Object;
   },

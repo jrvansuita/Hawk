@@ -2,6 +2,7 @@
 
 var cookieSession = require('cookie-session');
 var express = require('express');
+var fileUpload = require('express-fileupload');
 var bodyParser = require('body-parser');
 
 global.app = express();
@@ -9,12 +10,15 @@ var app = global.app;
 
 app.set('port', process.env.PORT || 3000);
 
+app.use(fileUpload()); 
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({
   extended: true,
   limit: '5mb',
   parameterLimit: 1000000
 }));
+
+
 
 
 

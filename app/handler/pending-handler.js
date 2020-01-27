@@ -78,7 +78,6 @@ module.exports = {
       });
     }
   }
-
 };
 
 
@@ -104,11 +103,21 @@ function sendEmailIfNeed(pending, user,  callback){
 }
 
 function sendEmail(sale, user, callback){
-  var pendingEmailSender = new PendingEmailSender();
+  new EmailBuilder()
+  .template('PENDING')
+  .setData({pedido: sale, cliente: sale.client})
+  .to(sale.client.email)
+  .send((err, sucessId) => {
+    HistoryStorer.email(user.id, sale, err);
+    callback(err, sucessId);
+  });
+
+
+  /*var pendingEmailSender = new PendingEmailSender();
   pendingEmailSender.client(sale.client.nome, sale.client.email);
   pendingEmailSender.sale(sale);
   pendingEmailSender.send((err, sucessId)=>{
     HistoryStorer.email(user.id, sale, err);
     callback(err, sucessId);
-  });
+  });*/
 }

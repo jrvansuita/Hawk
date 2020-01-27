@@ -2,8 +2,13 @@
 
 class Tooltip{
 
-  constructor(querySelector, initialText, createProps){
-    this.querySelector = querySelector;
+  constructor(data, initialText, createProps){
+    if (typeof data == 'string'){
+      this.querySelector = data;
+    }else{
+      this.element = [data];
+    }
+
     this.createProps = createProps;
 
     this.defProps = {
@@ -17,15 +22,21 @@ class Tooltip{
     .css('tooltip').js('popper.min').js('tippy-bundle.iife.min');
   }
 
+  setInstancesProps(props){
+    this.instances.forEach((each) => {
+      each.setProps(props);
+    });
+  }
+
   setDefaults(){
     this.currentHideDelay = this.defProps.autoHideDelay;
 
     if (this.defProps){
-      this.instance.setProps(this.defProps);
+      this.setInstancesProps(this.defProps);
     }
 
     if (this.createProps){
-      this.instance.setProps(this.createProps);
+      this.setInstancesProps(this.createProps);
     }
   }
 
@@ -68,13 +79,12 @@ class Tooltip{
   }
 
   setProps(data){
-    this.instance.setProps(data);
+    this.setInstancesProps(data)
     return this;
   }
 
   setContent(msg){
-    this.instance.setContent(msg);
-    return this;
+    return this.setProps({content : msg});
   }
 
   setTheme(theme){
@@ -101,19 +111,26 @@ class Tooltip{
 
   async load(){
     await this.dependencies.load();
-    this.instance = tippy(document.querySelector(this.querySelector));
+    this.instances = tippy(this.element ? this.element : document.querySelectorAll(this.querySelector));
+
+    if (!this.instances.length){
+      this.instances = [this.instances];
+    }
+
     this.setDefaults();
+
+    return this.instances;
   }
 
   show(){
     this.runAutoHideIfNeed = true;
 
-    this.instance.hide();
-    this.instance.show();
+    this.instances[0].hide();
+    this.instances[0].show();
   }
 
   hide(){
-    this.instance.hide();
+    this.instances[0].hide();
   }
 
 

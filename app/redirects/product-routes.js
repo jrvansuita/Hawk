@@ -11,7 +11,6 @@ const ProductImageProvider = require('../provider/product-image-provider.js');
 module.exports = class ProductRoutes extends Routes{
 
   attach(){
-
     this._get('/product-image', (req, res) => {
       ProductHandler.getImage(req.query.sku, this._resp().redirect(res));
     });
@@ -21,7 +20,7 @@ module.exports = class ProductRoutes extends Routes{
         res.set('Cache-Control', 'public, max-age=86400'); // 1day
         res.redirect(product && product.image ? product.image : req.query.def);
       });
-    });
+    }, true, true);
 
     this._get('/product-child', (req, res) => {
       ProductHandler.getBySku(req.query.sku, false, this._resp().redirect(res));
