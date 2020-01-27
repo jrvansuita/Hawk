@@ -2,8 +2,8 @@ const https = require('https');
 const MD5 = require('../util/md5.js');
 const Err = require('../error/error.js');
 const Query = require('../util/query.js');
-const EccosysApiDownEmailSender = require('../email/sender/eccosys-api-down-email-sender.js');
 
+const EmailBuilder = require('../email/builder/email-builder.js');
 
 module.exports = class EccosysApi{
 
@@ -304,12 +304,13 @@ function generateSignature() {
 function onEmailReportEccosysAPIDown(options, error){
   if (global.eccoConnErrors == 1){
     if (Params.eccosysApiReportEmails().length > 0){
-       new EccosysApiDownEmailSender()
-       .request(options)
-       .response(error)
-       .send(() => {
-         
-       });
+      new EmailBuilder()
+      .template('API_DOWN')
+      .to(Params.eccosysApiReportEmails())
+      .setData({
+        error: error,
+        options: '\n\n <p><pre>' + JSON.stringify(options, undefined, 2) + '</pre></p>'
+      }).send();
     }
   }
 }

@@ -7,16 +7,19 @@ module.exports = class EmailBuilder{
   constructor(){
     this.sender = new Email();
     this.defaultEmail = Params.email();
-    this.defaultReplyEmail = Params.replayEmail();
     this.defaultName = Params.emailName();
   }
 
   findAllVariables(value){
-    this.variables = [...new Set(value.match(/{.*?}/g).map((e) => {
-      return e.replace(/{|}/g, '');
-    }))];
+    var matches = value.match(/{.*?}/g);
 
-    this.findArraysAndHandleIt();
+    if (matches && matches.length){
+      this.variables = [...new Set(matches.map((e) => {
+        return e.replace(/{|}/g, '');
+      }))];
+
+      this.findArraysAndHandleIt();
+    }
   }
 
   findArraysAndHandleIt(){
@@ -42,6 +45,11 @@ module.exports = class EmailBuilder{
 
   to(email){
     this.to = email;
+    return this;
+  }
+
+  reply(email){
+    this.defaultReplyEmail = email || Params.replayEmail();
     return this;
   }
 
@@ -79,30 +87,32 @@ module.exports = class EmailBuilder{
   processVariables(str){
     this.findAllVariables(str);
 
-    str = this.proccessSingleValues(str, this.variables, this.data);
+    if (this.variables && this.variables.length){
+      str = this.proccessSingleValues(str, this.variables, this.data);
 
-    Object.keys(this.arrays).forEach((key) => {
-      if (this.data[key]){
-        var arrayVariables = this.arrays[key];
-        var findKey = "{" + key + "...}";
+      Object.keys(this.arrays).forEach((key) => {
+        if (this.data[key]){
+          var arrayVariables = this.arrays[key];
+          var findKey = "{" + key + "...}";
 
-        var matches = str.match(findKey + ".*?" + findKey, 'g');
+          var matches = str.match(findKey + ".*?" + findKey, 'g');
 
-        if (matches && matches.length){
-          var innerContent = matches[0];
-          var contentResultArr = [];
+          if (matches && matches.length){
+            var innerContent = matches[0];
+            var contentResultArr = [];
 
-          this.data[key].forEach((eachData) => {
-            var dataHolder = {};
-            dataHolder[key] = eachData;
-            contentResultArr.push(this.proccessSingleValues(innerContent, arrayVariables,  dataHolder));
-          });
+            this.data[key].forEach((eachData) => {
+              var dataHolder = {};
+              dataHolder[key] = eachData;
+              contentResultArr.push(this.proccessSingleValues(innerContent, arrayVariables,  dataHolder));
+            });
 
-          str = str.replace(innerContent, contentResultArr.join(''));
-          str = str.replaceAll(findKey, '');
+            str = str.replace(innerContent, contentResultArr.join(''));
+            str = str.replaceAll(findKey, '');
+          }
         }
-      }
-    });
+      });
+    }
 
     return str;
   }
@@ -110,6 +120,7 @@ module.exports = class EmailBuilder{
   htmlFormatting(data){
     const $ = cheerio.load(data);
 
+    //Atributir a src correta para a imagem
     $('img').each((i, el) => {
       var alt = $(el).attr('alt');
 
@@ -118,12 +129,15 @@ module.exports = class EmailBuilder{
       }
     });
 
+    //Remover selo Froala
+    $("p[data-f-id='pbf']").remove();
+
     return $.html();
   }
 
   prepare(){
-    //this.sender.to([this.to, this.defaultEmail]);
-    this.sender.to(["vansuita.jr@gmail.com"]);
+    this.sender.to([this.to, this.defaultEmail]);
+    //this.sender.to(["vansuita.jr@gmail.com"]);
     this.sender.from(this.defaultName, this.defaultEmail);
     this.sender.replyTo(this.defaultReplyEmail, this.defaultReplyEmail);
 
@@ -142,8 +156,11 @@ module.exports = class EmailBuilder{
       this.content = template.content;
 
       this.prepare()
-      console.log('enviou o email');
-      this.sender.send(callback);
+      this.sender.send((err, id) => {
+        if (callback){
+          callback(err, id);
+        }
+      });
     });
   }
 }
