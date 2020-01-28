@@ -302,7 +302,7 @@ function generateSignature() {
 }
 
 function onEmailReportEccosysAPIDown(options, error){
-  if (global.eccoConnErrors == 1){
+  if ((global.eccoConnErrors == 1) && !error.includes('502')){
     if (Params.eccosysApiReportEmails().length > 0){
       new EmailBuilder()
       .template('API_DOWN')
