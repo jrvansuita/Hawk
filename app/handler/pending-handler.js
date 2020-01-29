@@ -113,6 +113,7 @@ function sendEmail(sale, user, callback){
   new EmailBuilder()
   .template('PENDING')
   .to(sale.client.email)
+  .receiveCopy()
   .reply(Params.replayEmail())
   .setData({
     pedido: sale,
@@ -125,12 +126,4 @@ function sendEmail(sale, user, callback){
 
 
 
-
-  /*var pendingEmailSender = new PendingEmailSender();
-  pendingEmailSender.client(sale.client.nome, sale.client.email);
-  pendingEmailSender.sale(sale);
-  pendingEmailSender.send((err, sucessId)=>{
-    HistoryStorer.email(user.id, sale, err);
-    callback(err, sucessId);
-  });*/
 }

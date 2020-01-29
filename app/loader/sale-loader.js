@@ -92,6 +92,16 @@ module.exports= class SaleLoader {
     return this.loadItems(onCallOuter, true);
   }
 
+
+  prepareSaleItems(items){
+    return items.map((item) => {
+      item.img = Params.skuImageUrl(item.codigo);
+      item.valorTotal = parseFloat(item.precoLista) * parseFloat(item.quantidade);
+      return item;
+    });
+  }
+
+
   loadItems(onCallOuter, force){
 
     var self = this;
@@ -102,7 +112,7 @@ module.exports= class SaleLoader {
         new EccosysProvider()
         .setOnError(this.onError)
         .saleItems(this.sale.numeroPedido).go((items) => {
-          this.sale.items = items;
+          this.sale.items = this.prepareSaleItems(items);
           this.sale.itemsQuantity = items.reduce(function(a, b) {
             return a + parseFloat(b.quantidade);
           }, 0);

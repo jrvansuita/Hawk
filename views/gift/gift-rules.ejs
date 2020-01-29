@@ -12,6 +12,7 @@
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
 
   <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
+  <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
   <script type="text/javascript" src="/front/js/libs/date-picker.js"></script>
 </head>
 <body>
@@ -29,15 +30,21 @@
   <div class="main-content">
 
     <div class="show-all shadow">
-      <label class="sub-title">Regras</label>
+      <label class="sub-title" style="padding-left: 10px;">Regras</label>
 
       <div class="all-rules">
 
         <%all.forEach((each)=>{%>
 
-          <div class="each-all shadow" data-id="<%=each.id%>">
+          <div class="each-all" data-id="<%=each.id%>">
+
+            <div class="<%=each.active ? 'active-circle' : 'inactive-circle'%>"></div>
+
             <span><%=each.name%></span>
-            <img src="img/<%=each.active ? 'checked' : 'block'%>.png" />
+
+            <div class="icon-dots" data-id="<%=each.id%>">
+              <img src="img/dots.png" class="dots-glyph" />
+            </div>
 
             <label>Até <%=Dat.format(each.expiresDate)%></label>
           </div>
@@ -77,6 +84,11 @@
             <label class="pure-material-checkbox">
               <input type="checkbox" id="active"   <%=gift && gift.active ? 'checked' : ''%>>
               <span>Ativo</span>
+            </label>
+
+            <label class="pure-material-checkbox">
+              <input type="checkbox" id="send-email"   <%=gift && gift.sendEmail ? 'checked' : ''%>>
+              <span>Enviar Email de Notificação</span>
             </label>
 
 

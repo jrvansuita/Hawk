@@ -366,8 +366,6 @@ table{
 }
 
 
-
-
 .mini-icon-button:hover {
   background-color: #f3f3f3;
   transform: scale(1.1);
@@ -399,4 +397,25 @@ table{
   margin-top: -17px;
   -webkit-filter: drop-shadow(1px 1px 1px #222222a8);
   filter: drop-shadow(1px 1px 1px #222222a8);
+}
+
+
+.inactive-circle{
+  width: 6px;
+  height: 6px;
+  background: red;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 2px;
+  margin-bottom: 5px;
+}
+
+.active-circle{
+  width: 6px;
+  height: 6px;
+  background: #02d202;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 2px;
+  margin-bottom: 5px;
 }

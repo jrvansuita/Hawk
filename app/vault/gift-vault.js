@@ -3,9 +3,6 @@ const GiftRule = require('../bean/gift-rule.js');
 
 module.exports = class  {
 
-
-
-
   static storeFromScreen(params, callback) {
 
     var gift = new GiftRule(
@@ -13,7 +10,8 @@ module.exports = class  {
       params.name,
       params.active,
       params.checkStock,
-      new Date(parseInt(params.expires))
+      new Date(parseInt(params.expires)),
+      params.sendEmail
     );
 
     gift.addSkus(params.skus);
@@ -24,15 +22,12 @@ module.exports = class  {
     });
 
   }
-
-
-
-
-    static delete(id, callback){
-      GiftRule.findOne({id:id}, (err, item)=>{
-        item.remove(callback);
-      });
-    }
+  
+  static delete(id, callback){
+    GiftRule.findOne({id:id}, (err, item)=>{
+      item.remove(callback);
+    });
+  }
 
 
 

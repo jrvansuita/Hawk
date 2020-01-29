@@ -68,6 +68,11 @@ $(document).ready(()=>{
   });
 
 
+  $(".icon-dots").click(function (e){
+    openOptionsMenu(this, e);
+  });
+
+
   $('.new-button').click(()=>{
     $('input').val('');
     $('input').prop("checked", false);
@@ -92,6 +97,17 @@ $(document).ready(()=>{
 
   }
 });
+
+
+
+function openOptionsMenu(line, e){
+  var id = $(line).data('id');
+  e.stopPropagation();
+  new MaterialDropdown($(line))
+  .addItem('../img/delete.png', 'Excluir', function(){
+    deleteGiftRule(id);
+  }).setMenuPosAdjust(0, -90).show();
+}
 
 function getSelectedSkus(){
   return $('.skus-box .toast-item')
@@ -237,6 +253,7 @@ function saveGiftRule(){
       expires: expiresDatePicker.getSelected().getTime(),
       active: $('#active').is(":checked"),
       checkStock : $('#checkstock').is(":checked"),
+      sendEmail : $('#send-email').is(":checked"),
       skus: getSelectedSkus(),
       rules: getSelectedAttrs(),
     },(doc)=>{
@@ -246,9 +263,11 @@ function saveGiftRule(){
 }
 
 
-function deleteGiftRule(){
-  if ($('#id').val().length > 0){
-    _post('/gift-delete', {id: $('#id').val()},()=>{
+function deleteGiftRule(id){
+  id = id || $('#id').val();
+
+  if (id){
+    _post('/gift-delete', {id: id},()=>{
       window.location='/gift-rules';
     });
   }

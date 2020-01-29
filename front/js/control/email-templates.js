@@ -98,12 +98,12 @@ function save() {
 function openOptionsMenu(line, e){
   var id = $(line).data('id');
   e.stopPropagation();
-  new MaterialDropdown($(line), e, true)
+  new MaterialDropdown($(line))
   .addItem('../img/delete.png', 'Excluir', function(){
     if (checkCanDelete(id)){
       deleteTemplate(id);
     }
-  }).setMenuPosAdjust(0, -90).show();
+  }).show();
 }
 
 function checkCanDelete(id){

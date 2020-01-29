@@ -6,8 +6,8 @@ module.exports = class EmailBuilder{
 
   constructor(){
     this.sender = new Email();
-    this.defaultEmail = Params.email();
-    this.defaultName = Params.emailName();
+    this.senderEmail = Params.email();
+    this.senderName = Params.emailName();
   }
 
   findAllVariables(value){
@@ -48,8 +48,18 @@ module.exports = class EmailBuilder{
     return this;
   }
 
+  receiveCopy(){
+    this.wantMyCopy = true;
+    return this;
+  }
+
+  copy(email){
+    this.to = email;
+    return this;
+  }
+
   reply(email){
-    this.defaultReplyEmail = email || Params.replayEmail();
+    this.replyEmail = email || Params.replayEmail();
     return this;
   }
 
@@ -136,10 +146,14 @@ module.exports = class EmailBuilder{
   }
 
   prepare(){
-    this.sender.to([this.to, this.defaultEmail]);
-    //this.sender.to(["vansuita.jr@gmail.com"]);
-    this.sender.from(this.defaultName, this.defaultEmail);
-    this.sender.replyTo(this.defaultReplyEmail, this.defaultReplyEmail);
+    var destination = [this.to];
+    if (this.wantMyCopy){
+      destination.push(this.senderEmail);
+    }
+
+    this.sender.to(destination);
+    this.sender.from(this.senderName, this.senderEmail);
+    this.sender.replyTo(this.replyEmail, this.replyEmail);
 
     this.subject = this.processVariables(this.subject);
     this.content = this.processVariables(this.content);
