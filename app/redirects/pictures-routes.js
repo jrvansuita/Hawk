@@ -19,7 +19,11 @@ module.exports = class PicturesRoutes extends Routes{
       });
     });
 
-
+    this._post('/sku-picture-delete', (req, res) => {
+      SkuPic.findOne({_id:_id}, (err, item)=>{
+        item.remove(this._resp().redirect(res));
+      });
+    });
 
     this._post('/sku-picture-from-insta', (req, res) => {
       new SkuPictureLoader(req.body.skus).fromInsta(req.body.instaPost).load().then(this._resp().redirect(res));
