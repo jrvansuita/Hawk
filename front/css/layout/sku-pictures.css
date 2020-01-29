@@ -158,53 +158,41 @@
   padding: 5px 5px 15px 5px;
   position: relative;
   border: 1px solid whitesmoke;
-  max-width: 290px;
-  max-height: 145px;
 }
 
 .approve-item > img{
-  width: 124px;
-  height: 124px;
-  max-width: 124px;
-  max-height: 124px;
-  border: 2px solid #dfdddf;
-  border-radius: 10px;
+  width: auto;
+  max-height: 120px;
+  border-radius: 2px;
 }
-.approve-item > label{
-  display: block;
+
+.approve-item > .client-image{
+  padding-right: 5px;
+  border-right: 1px solid #e5e7e6;
+}
+
+.approve-item  > .preview-image{
+  padding-left: 5px;
+  z-index: 1;
+  top: 0;
+  right: 0;
+}
+
+
+.approve-item > p{
+
   text-align: center;
   color: gray;
   font-size: 12px;
-  position: absolute;
+  /* position: absolute; */
   bottom: 0;
-  left: 20px;
+  /* left: 20px; */
 }
 
 .to-be-approved-holder{
   overflow-x: auto;
   white-space: nowrap;
   padding: 10px;
-}
-
-.preview-image{
-  background: black;
-  z-index: 1;
-  top: 0;
-  right: 0;
-}
-
-.checked-img{
-  height: 48px;
-  width: 48px!important;
-  position: absolute;
-  left: 0;
-  -webkit-filter: drop-shadow(1px 1px 1px #222222a8);
-  filter: drop-shadow(1px 1px 1px #222222a8);
-  right: 0;
-  margin-left: auto;
-  margin-right: auto;
-  top: 40px;
-  border: none!important;
 }
 
 .menu-dots{

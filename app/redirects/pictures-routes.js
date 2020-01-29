@@ -49,8 +49,4 @@ module.exports = class PicturesRoutes extends Routes{
 
 
   }
-
-
-
-
 };

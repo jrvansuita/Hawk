@@ -1,11 +1,4 @@
 $(document).ready(()=>{
-  $('#insta-post').keypress(function(e){
-    if(e.which == 13){
-      _post('/sku-picture-from-insta', {instaPost : $('#insta-post').val(), sku: $('#sku').val()}, (data)=>{
-        console.log('veio' + data);
-      });
-    }
-  });
 
   $('.save').click(saveClick);
 
@@ -21,91 +14,84 @@ $(document).ready(()=>{
     handleProduct($('#sku').val());
   });
 
-  loadToBeApprovedImages();
+  loadImagesFromUrl('/get-sku-pictures-page');
+  loadImagesFromUrl('/get-sku-pictures-page-approve');
 
-  loadApprovedImages();
 });
 
-  function loadApprovedImages(){
-    _get('/get-sku-pictures-page', {page: 1}, (data)=>{
-      console.log(data);
-
-      data.forEach((each) =>{
-        loadImagesApproved(each);
-      })
-    })
-  }
-
-
-
-
-function loadToBeApprovedImages(){
-  _get('/get-sku-pictures-page-approve', {page: 1}, (data) => {
-    console.log(data);
-
-    data.forEach((each) => {
-      loadImagesToBeApproved(each);
-    });
-  });
+function loadImagesFromUrl(url){
+  _get(url, {page: 1}, onResultSucess());
 }
 
-function menuClick(holder, each){
-  holder.click(function(e){
+function onResultSucess(){
+  return (data) => {
+    console.log(data);
+    data.forEach((each) => {
+      loadImagesHolder(each);
+    });
+  };
+}
 
+function menuDotsClick(holder, each){
+
+  holder.click(function(e){
     var drop = new MaterialDropdown($(this), e, false, true);
 
-    drop.addItem('/img/checked.png', 'Aprovar', function(){
-      onApproveImageClick(holder.parent('.approve-item'), each._id);
-    });
+    if(each.approved){
+      drop.addItem('/img/block.png', 'Reprovar', function(){
+        onApproveImageClick(holder.parent('.approve-item'), each._id, false);
+      });
+    }else{
+      drop.addItem('/img/checked.png', 'Aprovar', function(){
+        onApproveImageClick(holder.parent('.approve-item'), each._id, true);
+      });
+    }
     drop.addItem('/img/website.png', 'Acessar Link', function(){
       window.open(each.url, '_blank');
     });
-    drop.addItem('/img/block.png', 'Excluir', function(){
 
+    drop.addItem('/img/delete.png', 'Excluir', function(){
+      window.open(each.url, '_blank');
     });
-
     drop.show();
   });
 }
 
-function onApproveImageClick(holder, _id){
-    _post('/sku-pictures-approve', {_id: _id, approved: true},(data) => {
-      holder.fadeOut(200, () => {
-        holder.remove();
-      });
+function onApproveImageClick(holder, _id, approved){
+  _post('/sku-pictures-approve', {_id: _id, approved: approved},(data) => {
+    holder.fadeOut(200, () => {
+      holder.remove();
     });
+  });
 }
 
-function loadImagesToBeApproved(each){
-  var $div = $('<div>').addClass('approve-item');
-  var $img = $('<img>').attr('src', each.img);
-  var $sku = $('<label>').text(each.sku);
-  var $previewImg = $('<img>').addClass('preview-image').attr('src', Params.productionUrl() + "/sku-image?sku="+ each.sku);
-  var $menu = $('<div>').addClass('menu-dots');
-  var $menuImg = $('<img>').addClass('dots-glyph').attr('src', '../../img/dots.png');
+function loadImagesHolder(each){
+  var $itemHolder = $('<div>').addClass('approve-item');
+  var $clientImg = $('<img>').addClass('client-image').attr('src', each.img);
+  var $skusHolder = $('<p>').text(each.sku);
 
+  var $previewImg = $('<div>');
+
+  each.sku.split(',').forEach((sku) => {
+    if(sku != ""){
+      $previewImg.append($('<img>').addClass('preview-image').attr('src', Params.productionUrl() + "/sku-image?sku="+ sku));
+    }
+  });
+
+  $itemHolder.append($clientImg, $previewImg, $skusHolder, builMenuItem(each));
+  $(each.approved  ? '.approved-images-holder' : '.to-be-approved-holder').append($itemHolder)
+}
+
+
+function builMenuItem(each){
+  $menu = $('<div>').addClass('menu-dots');
+  $menuImg = $('<img>').addClass('dots-glyph').attr('src', '../../img/dots.png');
   $menu.append($menuImg);
-  $div.append($img, $sku, $previewImg, $menu);
 
-  $('.to-be-approved-holder').append($div);
-  menuClick($menu, each);
+  menuDotsClick($menu, each);
+
+  return $menu;
 }
-
-function loadImagesApproved(each){
-  var $div = $('<div>').addClass('approve-item');
-  var $img = $('<img>').attr('src', each.img);
-  var $sku = $('<label>').text(each.sku);
-  var $previewImg = $('<img>').addClass('preview-image').attr('src', Params.productionUrl() + "/sku-image?sku="+ each.sku);
-  var $menu = $('<div>').addClass('menu-dots');
-  var $menuImg = $('<img>').addClass('dots-glyph').attr('src', '../../img/dots.png');
-
-  $menu.append($menuImg);
-  $div.append($img, $sku, $previewImg, $menu);
-
-  $('.approved-images-holder').append($div);
-  menuClick($menu, each);
-}
-
 
 function getSelectedSkus(){
   return $('.skus-box .toast-item')
@@ -129,8 +115,6 @@ function handleProduct(sku){
     showSkuError('Produto já adicionado!');
   }
 }
-
-
 
 function showSkuError(msg){
   $('.msg-box-sku').show();
@@ -197,6 +181,8 @@ function savePic(){
     }, (data)=>{
       console.log('veio' + data);
     });
+    $('#insta-post').val('');
+    $('.toast-item').remove();
   }else if($('#face-post').val()){
     console.log($('#face-post').val());
   }
