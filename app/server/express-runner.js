@@ -10,7 +10,7 @@ var app = global.app;
 
 app.set('port', process.env.PORT || 3000);
 
-app.use(fileUpload()); 
+app.use(fileUpload());
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({
   extended: true,

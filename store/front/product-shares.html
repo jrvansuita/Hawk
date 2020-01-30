@@ -80,13 +80,13 @@
     }
 
     getUrl(){
-      return host + "get-sku-pictures-page?sku=" + this.sku + "&page=" + this.page;
+      return host + "get-sku-pictures-page?sku=" + this.sku + "&page=" + this.page + "&cache=true";
     }
 
     loadNext(){
       this.page++;
 
-      $.get(this.getUrl(), (data) => {
+      $.post(this.getUrl(), (data) => {
         if(data && data.length){
           if(this.page == 1)
           this.onFirstPageLoad();

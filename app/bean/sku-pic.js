@@ -1,3 +1,5 @@
+const pageLimit = 16;
+
 module.exports = class SkuPic extends DataAccess {
 
   constructor(sku, url, img, type) {
@@ -31,7 +33,7 @@ module.exports = class SkuPic extends DataAccess {
   }
 
   static getToBeApprovedPage(page, callback) {
-    SkuPic.paginate({approved: false}, page, 'date', 20, callback);
+    SkuPic.paginate({approved: false}, page, 'date', pageLimit, callback);
   }
 
   static getPageQuery(sku, not){
@@ -47,24 +49,34 @@ module.exports = class SkuPic extends DataAccess {
     return result;
   }
 
-  static getPage(page, sku, callback) {
-    var limit = 16;
+  static getSkuPage(page, sku, callback){
+    SkuPic.paginate(SkuPic.getPageQuery(sku), page, '-date', pageLimit, (err, result)=>{
+      if (callback){
+        callback(result);
+      }
+    });
+  }
 
-    SkuPic.paginate(SkuPic.getPageQuery(sku), page, '-date', limit, (err, result)=>{
-      var dif = limit - result.length;
+
+  static getSkuPageFlex(page, sku, callback) {
+    SkuPic.getSkuPage(page, sku, (result) => {
+
+      var dif = pageLimit - result.length;
+
       if (dif <= 0){
         callback(result);
       }else{
         SkuPic.getLasts(SkuPic.getPageQuery(sku, true), dif, (err, docs) => {
           docs = docs ? docs : [];
-          callback(result.concat(docs.sort(function() {
+          var result = result.concat(docs.sort(function() {
             return .5 - Math.random();
-          })
-        ));
-      });
-    }
-  });
-}
+          }));
+
+          callback(result);
+        });
+      }
+    });
+  }
 
 
 };
