@@ -1,3 +1,7 @@
+var loading = false;
+var _page = 0;
+var showAll = false;
+
 $(document).ready(()=>{
 
   $('.save').click(saveClick);
@@ -14,76 +18,134 @@ $(document).ready(()=>{
     handleProduct($('#sku').val());
   });
 
-  loadImagesFromUrl('/get-sku-pictures-page');
-  loadImagesFromUrl('/get-sku-pictures-page-approve');
+  $('#search').on("keyup", function(e) {
+    if (e.which == 13){
+      startApprovedSearch($(this).val());
+    }
+  });
 
+  startApprovedSearch();
+  startToBeApprovedList();
 });
 
-function loadImagesFromUrl(url){
-  _get(url, {page: 1}, onResultSucess());
+
+
+function startToBeApprovedList(sku){
+  controlImagesList($('.to-be-approved-container-holder'), $('.to-be-approved-images-holder'), '/get-sku-pictures-page-to-approve');
 }
 
-function onResultSucess(){
-  return (data) => {
-    console.log(data);
-    data.forEach((each) => {
-      loadImagesHolder(each);
-    });
-  };
+function startApprovedSearch(sku){
+  controlImagesList($('.approved-container-holder'), $('.approved-images-holder'), '/get-sku-pictures-page', sku ? {sku: sku} : {});
 }
 
-function menuDotsClick(holder, each){
+function controlImagesList(pane, list, path, query){
+  var isLoading = false;
+  var page = 0;
+  var loadedAllResults = false;
 
-  holder.click(function(e){
-    var drop = new MaterialDropdown($(this), e, false, true);
+  var loadNextPage = ()=>{
+    if (!loadedAllResults && !isLoading){
+      isLoading = true;
+      page++;
 
-    if(each.approved){
-      drop.addItem('/img/block.png', 'Reprovar', function(){
-        onApproveImageClick(holder.parent('.approve-item'), each._id, false);
-      });
-    }else{
-      drop.addItem('/img/checked.png', 'Aprovar', function(){
-        onApproveImageClick(holder.parent('.approve-item'), each._id, true);
+      console.log('Load Next Page ' + page);
+
+      if (page == 1){
+        list.empty();
+      }
+
+      _post(path, {page: page, cache: false, ...query}, (data) => {
+
+        loadedAllResults = data.length == 0;
+
+        data.forEach((each) => {
+          loadImagesHolder(list, each);
+        });
+
+        isLoading = false;
+        bindCopiable();
       });
     }
-    drop.addItem('/img/website.png', 'Acessar Link', function(){
-      window.open(each.url, '_blank');
-    });
+  };
 
-    drop.addItem('/img/delete.png', 'Excluir', function(){
-      window.open(each.url, '_blank');
-    });
-    drop.show();
+  bindScrollLoadImages(isLoading, pane, list, loadNextPage);
+  loadNextPage();
+}
+
+
+
+function bindScrollLoadImages(isLoading, pane, list, onLoadNextPage){
+  pane.unbind('scroll').bind('scroll', function() {
+
+
+    var go = false;
+
+    if (pane.css('overflow-x') == 'hidden'){
+      go = (((pane.scrollTop() + pane.height()) + 500 >= list.height()));
+    }else{
+      go = (((pane.scrollLeft() + pane.width()) + 500 >= list.width()));
+    }
+
+
+    if (go){
+      if (onLoadNextPage){
+        onLoadNextPage();
+      }
+    }
   });
 }
+
 
 function onApproveImageClick(holder, _id, approved){
+
   _post('/sku-pictures-approve', {_id: _id, approved: approved},(data) => {
-    holder.fadeOut(200, () => {
-      holder.remove();
-    });
+    holderRemove(holder);
   });
 }
 
-function loadImagesHolder(each){
+function holderRemove(holder){
+  holder.fadeOut(200, () => {
+    holder.remove();
+  });
+}
+
+function deleteImage(holder, _id){
+  _post('/sku-picture-delete', {_id: _id},(data) => {
+    holderRemove(holder);
+  });
+}
+
+
+function loadListApprovedClientImages(){
+  if(!showAll){
+    _page++;
+    loading = true;
+    loadImagesFromUrl('/get-sku-pictures-page', _page);
+  }
+}
+function loadImagesHolder(listHolder, each){
+  var skusArr = each.sku.split(',');
+  var addrClassPreview = skusArr.length > 1 ? ' multiple-skus' : '';
+
   var $itemHolder = $('<div>').addClass('approve-item');
   var $clientImg = $('<img>').addClass('client-image').attr('src', each.img);
-  var $skusHolder = $('<p>').text(each.sku);
+  var $skusHolder = $('<div>').addClass('skus-holder');
+  var $previewImg = $('<div>').addClass('preview-image-holder' + addrClassPreview);
 
-  var $previewImg = $('<div>');
-
-  each.sku.split(',').forEach((sku) => {
+  skusArr.forEach((sku) => {
     if(sku != ""){
-      $previewImg.append($('<img>').addClass('preview-image').attr('src', Params.productionUrl() + "/sku-image?sku="+ sku));
+      $previewImg.append($('<img>').addClass('preview-image').attr('src', Params.skuImageUrl(sku)));
+      $skusHolder.append(createSingleTag(sku));
+      applyTagColor($skusHolder.children('span'));
+
     }
   });
 
-  $itemHolder.append($clientImg, $previewImg, $skusHolder, builMenuItem(each));
-  $(each.approved  ? '.approved-images-holder' : '.to-be-approved-holder').append($itemHolder)
+  $itemHolder.append($clientImg, $previewImg, $skusHolder, buildMenuItem(each));
+  listHolder.append($itemHolder)
 }
 
-
-function builMenuItem(each){
+function buildMenuItem(each){
   $menu = $('<div>').addClass('menu-dots');
   $menuImg = $('<img>').addClass('dots-glyph').attr('src', '../../img/dots.png');
   $menu.append($menuImg);
@@ -91,6 +153,32 @@ function builMenuItem(each){
   menuDotsClick($menu, each);
 
   return $menu;
+}
+
+function menuDotsClick(holder, each){
+
+  holder.click(function(e){
+    var drop = new MaterialDropdown($(this), e);
+    var $holder = holder.parent('.approve-item');
+
+    if(each.approved){
+      drop.addItem('/img/block.png', 'Reprovar', function(){
+        onApproveImageClick($holder, each._id, false);
+      });
+    }else{
+      drop.addItem('/img/checked.png', 'Aprovar', function(){
+        onApproveImageClick($holder, each._id, true);
+      });
+    }
+    drop.addItem('/img/website.png', 'Acessar Link', function(){
+      window.open(each.url, '_blank');
+    });
+
+    drop.addItem('/img/delete.png', 'Excluir', function(){
+      deleteImage($holder, each._id);
+    });
+    drop.show();
+  });
 }
 
 function getSelectedSkus(){
@@ -185,5 +273,19 @@ function savePic(){
     $('.toast-item').remove();
   }else if($('#face-post').val()){
     console.log($('#face-post').val());
+  }
+}
+
+function createSingleTag(sku){
+  return $('<span>').addClass('tag copiable').append(sku)
+  .attr('data-value', sku.toString().toLowerCase());
+}
+
+function applyTagColor(tag){
+  var value = tag.data('value');
+
+  if (value){
+    tag
+    .css('background', '#9c9a9a');
   }
 }
