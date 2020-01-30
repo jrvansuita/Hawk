@@ -10,7 +10,7 @@ var app = global.app;
 
 app.set('port', process.env.PORT || 3000);
 
-app.use(fileUpload()); 
+app.use(fileUpload());
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({
   extended: true,
@@ -37,7 +37,6 @@ app.set('views', global.__appDir + '/views');
 app.listen().setTimeout(120000); // 2 minutos
 
 var staticOptions = {};
-
 
 
 //CORS middleware

@@ -13,6 +13,7 @@ module.exports = class JobGift extends Job{
     this.stocks = {};
     this.giftRulesList = [];
     this.itemObsTag = "gift";
+    this.salesStatus = [];
   }
 
   getName(){
@@ -86,12 +87,23 @@ module.exports = class JobGift extends Job{
     GiftRule.findActives((err, all)=>{
       this.giftRulesList = all;
 
+
       //Coloca todos os skus com quantidade zero
       this.giftRulesList.forEach((each)=>{
         if (each.checkStock){
           each.skus.forEach((sku)=>{
             this.stocks[sku] = 0;
           });
+        }
+
+        var data = each.rules.find((e) => {
+          return e.attr.includes("SITUATION");
+        });
+
+        if (data){
+          this.salesStatus.push(data.val);
+        }else{
+          this.salesStatus.push("0");
         }
       });
 
@@ -226,32 +238,50 @@ module.exports = class JobGift extends Job{
     eachSaleProcess();
   }
 
-
+  makeCall(status, callback){
+    new EccosysProvider()
+    .pageCount(100)
+    .salesBySituation(status)
+    .pagging()
+    .each((sales, next)=>{
+      console.log('----- ' + sales.length + ' Pedidos - Situacao ' + status + '------');
+      if (callback){
+        callback(sales, next);
+      }
+    }).end(()=>{
+      if (callback){
+        callback(null);
+      }
+    });
+  }
 
 
   process(resolve){
-    new EccosysProvider()
-    .pageCount(100)
-    //.dates(Dat.yesterday().begin(), Dat.yesterday().end())
-    //.sales()
+    var current = -1;
+    this.salesStatus = [...new Set(this.salesStatus)];
 
-    //Todas as regras de brinde serão aplicadas para os pedidos
-    //Do dia que estão em Aberto
-    //Pedidos que já tem brinde, não serão analizados
-    .openSales()
+    var runEachStatus = () => {
+      current++;
+      var actual = this.salesStatus[current];
 
-
-    .pagging()
-    .each((sales, next)=>{
-      console.log('----- ' + sales.length + ' Pedidos ------');
-      if ((sales.length > 0) && this.whileHasRulesToWorkWith()){
-        this.loadSalesPage(sales, next);
+      if (actual){
+        this.makeCall(actual, (sales, next) => {
+          if (sales && (sales.length > 0) && this.whileHasRulesToWorkWith()){
+            this.loadSalesPage(sales, next);
+          }else{
+            if (this.salesStatus[current+1]){
+              runEachStatus();
+            }else{
+              this.endProcess();
+            }
+          }
+        });
       }else{
-        this.endProcess();
+
       }
-    }).end(()=>{
-      this.endProcess();
-    });
+    };
+
+    runEachStatus();
   }
 
   doWork(){
