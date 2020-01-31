@@ -13,6 +13,10 @@
   border-radius: 5px;
 }
 
+.fr-view .fr-no-border td, .fr-view .fr-no-border th{
+  border:none !important;
+}
+
 
 .fr-view .fr-rounded-borders td, .fr-view .fr-rounded-borders th{
   border:none !important;

@@ -61,7 +61,8 @@ class TemplateEditor{
       tableStyles: {
         "fr-dashed-borders":"Dashed Borders",
         "fr-alternate-rows":"Alternate Rows",
-        "fr-rounded-borders": "Rounded Borders"
+        "fr-rounded-borders": "Rounded Borders",
+        "fr-no-border" : "No Borders"
       }
     };
 

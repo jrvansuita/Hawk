@@ -94,21 +94,35 @@ module.exports = class EmailBuilder{
     return str;
   }
 
+  getBetween(str, findKey){
+    var arr = str.split(findKey);
+
+    //Remove Fisrt
+    arr.splice(0,1);
+
+    //Remove Last
+    arr.splice(-1,1);
+
+    return arr;
+  }
+
   processVariables(str){
     this.findAllVariables(str);
 
     if (this.variables && this.variables.length){
       str = this.proccessSingleValues(str, this.variables, this.data);
+    }
 
-      Object.keys(this.arrays).forEach((key) => {
-        if (this.data[key]){
-          var arrayVariables = this.arrays[key];
-          var findKey = "{" + key + "...}";
+    Object.keys(this.arrays).forEach((key) => {
+      if (this.data[key]){
+        var arrayVariables = this.arrays[key];
+        var findKey = "{" + key + "...}";
 
-          var matches = str.match(findKey + ".*?" + findKey, 'g');
+        var matches = this.getBetween(str, findKey); 
 
-          if (matches && matches.length){
-            var innerContent = matches[0];
+        if (matches && matches.length){
+          matches.forEach((each) => {
+            var innerContent = each;
             var contentResultArr = [];
 
             this.data[key].forEach((eachData) => {
@@ -119,10 +133,10 @@ module.exports = class EmailBuilder{
 
             str = str.replace(innerContent, contentResultArr.join(''));
             str = str.replaceAll(findKey, '');
-          }
+          });
         }
-      });
-    }
+      }
+    });
 
     return str;
   }
