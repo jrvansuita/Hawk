@@ -112,8 +112,7 @@ function sendEmail(sale, user, callback){
 
   new EmailBuilder()
   .template('PENDING')
-  //.to(sale.client.email)
-  .to('vansuita.jr@gmail.com')
+  .to(sale.client.email)
   .receiveCopy()
   .reply(Params.replayEmail())
   .setData({
