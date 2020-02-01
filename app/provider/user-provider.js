@@ -70,7 +70,7 @@ module.exports = class UsersProvider {
 
       result = (hour > parseInt(range[0]) && hour < parseInt(range[1]));
       result = result && !((now.getDay() === 6) || (now.getDay() === 0))
- 
+
       if (!result){
         result = time < Params.accessTimeRenew();
       }
@@ -131,6 +131,15 @@ module.exports = class UsersProvider {
 
     if (!user.active){
       Err.thrw("Usuário não está ativo.");
+    }
+
+    return true;
+  }
+
+
+  static checkUserPass(user, pass) {
+    if (user.pass !== pass){
+      Err.thrw("Senha incorreta.");
     }
 
     return true;

@@ -8,6 +8,8 @@ module.exports = class  {
   static storeFromScreen(params, callback) {
     var actual = UsersProvider.get(params.id);
 
+
+
     var token = params.token;
 
     if (!token){
@@ -19,6 +21,7 @@ module.exports = class  {
     params.sector,
     (actual ? actual.avatar : '/img/avatar.png'),
     params.access,
+    params.pass || actual.pass,
     params.full == 'on',
     params.active == 'on',
     token,

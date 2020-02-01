@@ -1,7 +1,7 @@
 const Routes = require('../redirects/controller/routes.js');
 const UsersProvider = require('../provider/user-provider.js');
 const Setts = require('../bean/setts.js');
-
+const User = require('../bean/user.js');
 
 module.exports = class LoginRoutes extends Routes{
 
@@ -18,11 +18,22 @@ module.exports = class LoginRoutes extends Routes{
     this._post('/login', (req, res) => {
       var user;
 
-      if (req.body.userAccess == undefined){
+      if (req.body.access == undefined){
         req.session.loggedUserID = 0;
       }else{
-        UsersProvider.checkUserExists(req.body.userAccess);
-        user = UsersProvider.get(req.body.userAccess);
+        UsersProvider.checkUserExists(req.body.access);
+        user = UsersProvider.get(req.body.access);
+
+
+        //Cria um password, caso não tenha nenhum para o usuário
+        if (!user.pass){
+          user.pass = req.body.pass;
+          console.log(user);
+          User.upsert({id: user.id}, user);
+        }
+
+
+        UsersProvider.checkUserPass(user, req.body.pass);
 
         UsersProvider.checkCanLogin(user, true);
 

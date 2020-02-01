@@ -1,5 +1,6 @@
 
 var userSelector;
+var passPlaceHolder = 'Impossível Decifrar';
 
 $(document).ready(() => {
 
@@ -120,6 +121,7 @@ $(document).ready(() => {
 
   loadMenuOpts();
 
+  $('#pass').val(passPlaceHolder);
 });
 
 function showAvatarCropper(){
@@ -180,7 +182,9 @@ function showAvatarCropper(){
       c = testUniqueAccess() & c;
     }
 
-
+    if ($('#pass').val() == passPlaceHolder){
+      $('#pass').val(selectedUser.pass);
+    }
 
     return c;
   }

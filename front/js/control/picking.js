@@ -227,7 +227,7 @@ $(document).ready(() => {
     var drop = new MaterialDropdown($(this), e, true);
     drop.setMenuPosAdjust(0, -90);
     drop.addItem('/img/print.png', 'Imprimir', ()=>{
-      openPrintPickingSale(sale, $('#user-logged-id').text());
+      openPrintPickingSale(sale, loggedUser.id);
     });
 
 

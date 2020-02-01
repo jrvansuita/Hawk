@@ -3,13 +3,8 @@ $(document).ready(() => {
   $('.login-form').hide().fadeIn();
 
 
-  /*$('#guest').click(() => {
-    login(100);
-  });*/
-
-  $('#user-access').on("keyup", function(e) {
-    var key = e.which;
-    if (key == 13){
+  $('#user-pass').on("keyup", function(e) {
+    if (e.which == 13){
       if (isEverythingRight(false))
       login();
     }
@@ -27,6 +22,7 @@ function onError() {
   });
 
   $('#user-access').val('');
+  $('#user-pass').val('');
   $('.login-form').shake({
     interval: 80,
     distance: 8,
@@ -43,7 +39,8 @@ function login(code) {
     url: "/login",
     type: "post",
     data: {
-      userAccess: code ? code : $('#user-access').val()
+      access: $('#user-access').val(),
+      pass: $('#user-pass').val()
     },
     success: function(response) {
       onSucess();
@@ -58,6 +55,8 @@ function login(code) {
 
 function isEverythingRight(doError){
   var ok = ($('#user-access').val().length >= 9 && isNum($('#user-access').val()));
+
+  ok = ok && $('#user-pass').val().length > 5;
 
   if (!ok && doError){
     onError();

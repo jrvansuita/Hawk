@@ -44,31 +44,16 @@ module.exports = class PicturesRoutes extends Routes{
       });
     });
 
-
+    
     //Post para Paginação das imagens aprovadas
     this._post('/get-sku-pictures-page', (req, res) => {
       var page = parseInt(req.body.page) || 1;
       var sku = req.body.sku;
-      var useCache = req.body.cache;
 
-      if (useCache){
-        var cached = cacheSkuPictures[sku + page];
-
-        if (cached){
-          res.send(cached);
-        }else{
-          SkuPic.getSkuPageFlex(page, sku, (all)=>{
-            cacheSkuPictures[sku + page] = all;
-            res.send(all);
-          });
-        }
-      }else{
-
-        SkuPic.getSkuPage(page, sku, (all)=>{
-          res.send(all);
-        });
-      }
-    }, true, true);
+      SkuPic.getSkuPage(page, sku, (all)=>{
+        res.send(all);
+      });
+    });
 
 
 

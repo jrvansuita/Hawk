@@ -11,13 +11,16 @@
         </a>
       </li>
 
-      <li class="menu-item " >
-        <a href="/users-listing">
-          <div class="menu-button title">
-            Listagem
-          </div>
-        </a>
-      </li>
-    </ul>
-  </nav>
-</div>
+      <%if (loggedUser.full){%>
+        <li class="menu-item " >
+          <a href="/users-listing">
+            <div class="menu-button title">
+              Listagem
+            </div>
+          </a>
+        </li>
+        <%}%>
+
+      </ul>
+    </nav>
+  </div>
