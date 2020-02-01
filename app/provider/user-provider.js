@@ -139,7 +139,7 @@ module.exports = class UsersProvider {
 
   static checkUserPass(user, pass) {
     if (user.pass !== pass){
-      Err.thrw("Senha incorreta.");
+      Err.thrw("Senha incorreta (" + pass+ ") para o usuário " + user.name);
     }
 
     return true;
