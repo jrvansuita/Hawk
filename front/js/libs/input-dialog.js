@@ -56,6 +56,8 @@ class InputDialog {
     return this;
   }
 
+
+
   onNegativeButton(label, callback){
     this.buttons.push($('<label>').addClass('ms-button material-ripple').text(label).click(()=>{
       this.modal.remove();

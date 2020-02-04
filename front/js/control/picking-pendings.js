@@ -195,6 +195,7 @@ function bindMenuOptions(el, pending){
         updatePendingStatus(pending);
       });
 
+<<<<<<< HEAD
       drop.addItem('/img/money-coin.png', 'Voucher', function(){
         var pendingPrice = getPendingPrice(pending);
 
@@ -214,6 +215,8 @@ function bindMenuOptions(el, pending){
           });
         }).show();
       });
+=======
+>>>>>>> ae1d7b5a41e6e37d7d8d0689c2204b1dfcd542bd
     }
   }
 
