@@ -67,12 +67,12 @@ module.exports = class UsersProvider {
 
 
       var now = Dat.now();
-      var hour = now.getHours();
+      var hour = now.getUTCHours();
       var time = now.getTime();
 
 
       console.log(Dat.now());
-      console.log(now.getHours());
+      console.log(hour);
       console.log(range);
 
       result = (hour > parseInt(range[0]) && hour < parseInt(range[1]));
