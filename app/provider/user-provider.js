@@ -64,6 +64,10 @@ module.exports = class UsersProvider {
     if (result && !user.full){
       var range = Params.workTimeRange();
 
+      console.log(Dat.now());
+      console.log(now.getHours());
+      console.log(range);
+
       var now = Dat.now();
       var hour = now.getHours();
       var time = now.getTime();
@@ -77,7 +81,7 @@ module.exports = class UsersProvider {
     }
 
     if (_throw && !result){
-        Err.thrw("Usuário "+ user.name + " - " + user.id + " não está habilitado para logar neste momento!");
+      Err.thrw("Usuário "+ user.name + " - " + user.id + " não está habilitado para logar neste momento!");
     }
 
     return result;

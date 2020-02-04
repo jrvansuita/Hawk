@@ -6,6 +6,10 @@ module.exports = class EccosysProvider extends EccosysApi{
     return this.get('clientes/' + id).single();
   }
 
+  clients() {
+    return this.get('clientes').multiple();
+  }
+
   sale(number) {
     return this.get('pedidos/' + number).single();
   }

@@ -194,6 +194,7 @@ function bindMenuOptions(el, pending){
       drop.addItem('/img/forward.png', 'Resolvido', function(){
         updatePendingStatus(pending);
       });
+
     }
   }
 
