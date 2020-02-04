@@ -21,6 +21,7 @@ module.exports = class PicturesRoutes extends Routes{
 
     //Post para excluir uma imagem
     this._post('/sku-picture-delete', (req, res) => {
+      
       this._resp().sucess(req);
 
       SkuPic.findOne({_id: req.body._id}, (err, item)=>{
@@ -44,7 +45,7 @@ module.exports = class PicturesRoutes extends Routes{
       });
     });
 
-    
+
     //Post para Paginação das imagens aprovadas
     this._post('/get-sku-pictures-page', (req, res) => {
       var page = parseInt(req.body.page) || 1;

@@ -34,7 +34,7 @@ module.exports = class EccosysStorer extends EccosysApi{
             return this.post('pedidos/' + saleNumber + '/items').setBody(body);
           },
 
-          delete:(body) => {
+          delete:() => {
             return this.delete('pedidos/' + saleNumber + '/items');
           },
         }

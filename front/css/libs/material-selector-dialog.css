@@ -50,7 +50,7 @@
 }
 
 .ms-title{
-  padding-left: 10px;
+  /* padding-left: 10px; */
   margin-bottom: 15px;
   font-size: 14px;
   font-weight: 600;
@@ -88,8 +88,8 @@
 }
 
 .material-input-holder{
-  margin-top: 55px;
-  margin-left: 100px;
+  /* margin-top: 55px; */
+  /* margin-left: 10px; */
   margin-right: 100px;
   margin-bottom: 35px;
 }
@@ -130,4 +130,10 @@
 
 .ms-button:hover{
   background-color: #efecec;
+}
+
+
+.ms-holder .sub-title{
+  margin-bottom: 10px;
+  font-size: 13px;
 }

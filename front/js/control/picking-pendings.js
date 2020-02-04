@@ -33,28 +33,28 @@ $(document).ready(() => {
         var drop = new MaterialDropdown($(this), e);
 
         /*if ($(el).hasClass('menu-red-top')){
-          if (Sett.get(loggedUser, 10)){
-            drop.addItem('/img/send-mass-email.png', 'Enviar Todos E-mails', function(){
-              $('.menu-red-top>.dots-glyph').attr('src','/img/loader/circle.svg');
-              doallSolvingPendingSale();
-            });
-          }
-        }*/
-
-        drop.addItem('/img/print.png', 'Imprimir Listagem', function(){
-          window.open(
-            '/pending-print-list?status=' +  ($(el).hasClass('menu-red-top') ? 0 : ($(el).hasClass('menu-orange-top')? 1 : 2)),
-            '_blank' // <- This is what makes it open in a new window.
-          );
-        });
-
-        drop.show();
-
+        if (Sett.get(loggedUser, 10)){
+        drop.addItem('/img/send-mass-email.png', 'Enviar Todos E-mails', function(){
+        $('.menu-red-top>.dots-glyph').attr('src','/img/loader/circle.svg');
+        doallSolvingPendingSale();
       });
+    }
+  }*/
 
-    });
+  drop.addItem('/img/print.png', 'Imprimir Listagem', function(){
+    window.open(
+      '/pending-print-list?status=' +  ($(el).hasClass('menu-red-top') ? 0 : ($(el).hasClass('menu-orange-top')? 1 : 2)),
+      '_blank' // <- This is what makes it open in a new window.
+    );
+  });
 
-  }
+  drop.show();
+
+});
+
+});
+
+}
 
 });
 
@@ -194,6 +194,26 @@ function bindMenuOptions(el, pending){
       drop.addItem('/img/forward.png', 'Resolvido', function(){
         updatePendingStatus(pending);
       });
+
+      drop.addItem('/img/money-coin.png', 'Voucher', function(){
+        var pendingPrice = getPendingPrice(pending);
+
+        new InputDialog("Trocar itens por Voucher", "Código do Voucher")
+        .addSubTitle("Valor total da pendência: <b>" + pendingPrice + "</b>")
+        .onChangeListener((key) => {
+          $('.ms-input').on("keyup", function(e) {
+            var key = e.which;
+            if (key == 13){
+              validateVoucher();
+            }
+          });
+        })
+        .onPositiveButton("Enviar", () => {
+          _post('/pending-send-voucher', {
+            pending: pending,
+          });
+        }).show();
+      });
     }
   }
 
@@ -207,7 +227,6 @@ function bindMenuOptions(el, pending){
     dots.hide();
   }
 }
-
 
 
 function getFirstBottomBarOptions(pending){
@@ -229,6 +248,40 @@ function getEmailImage(){
   var span = $('<span>').addClass('right').append(img);
   span.css('margin','10px 3px');
   return span;
+}
+
+function getPendingPrice(pending){
+  var valor = 0;
+  console.log(pending);
+  pending.sale.items.forEach(function(item){
+    valor += parseFloat(item.valor);
+  });
+  return Num.money(valor);
+}
+
+function validateVoucher(){
+  var voucher = $('.ms-input').val();
+
+  if(!voucher.startsWith("PEN")){
+    showMsgError("Voucher deve começar com 'PEN'!");
+  }
+}
+
+function showMsgError(msg){
+  var $info = $('<span>').addClass('pick-value error-text').text(msg);
+  var $imgError = $('<img>').addClass('icon-error').attr('src','img/error.png').css('width','10px');
+  var $errorHolder = $('<div>').add('error-holder');
+
+  $errorHolder.append($imgError, $info);
+
+  $('.material-input-holder').append($errorHolder).delay(4000).queue(function(next){
+    $errorHolder.remove();
+    next();
+  });
+
+
+
+
 }
 
 function addChangedLabel(el){
