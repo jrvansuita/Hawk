@@ -15,5 +15,10 @@ module.exports = {
     icon: 'gift'
   },
 
+  VOUCHER: {
+    name : 'Voucher',
+    icon: 'money-coin'
+  },
+
 
 };

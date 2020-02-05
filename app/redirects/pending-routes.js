@@ -69,7 +69,9 @@ module.exports = class PendingRoutes extends Routes{
         //      }
       });
 
+      this._post('/pending-send-voucher', (req, res, body, locals) => {
 
+      });
 
       this._page('/pending-products', (req, res, body, locals) => {
         new PendingProductProvider().load((list)=>{
