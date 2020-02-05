@@ -49,7 +49,7 @@ module.exports = {
   incStatus(pending, user, callback){
     var foundPending  = PendingLaws.find(pending.number);
 
-    if (foundPending.status < 2){
+    if (foundPending && foundPending.status < 2){
 
       foundPending.sendEmail = pending.sendEmail != undefined && pending.sendEmail.toString() == 'true';
 

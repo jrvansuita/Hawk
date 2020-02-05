@@ -71,7 +71,7 @@
                 </div>
 
                 <div class="material-input-holder type-holder">
-                  <input type="text" id="template-type" value="<%=(selected.type ? types[selected.type].name : '') %>" autocomplete="off" required/>
+                  <input type="text" id="template-type" value="<%=(selected.type && types[selected.type] ? types[selected.type].name : '') %>" autocomplete="off" required/>
                   <span class="bar"></span>
                   <label>Usado em</label>
                 </div>
