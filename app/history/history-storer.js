@@ -4,7 +4,7 @@ const History = require('../bean/history.js');
 module.exports={
 
   email(userId, sale, err){
-    
+
     var message = 'Pedido: ' + sale.numeroPedido + ' Ordem de Compra: ' + sale.numeroDaOrdemDeCompra;
     message+= '\n Destinatário: ' + sale.client.nome + ' - ' + sale.client.email;
 
@@ -120,6 +120,12 @@ module.exports={
   swapItems(saleNumber, targetSku, swapSku, quantity,  userId){
     onTry(()=>{
       History.notify(userId, 'Troca de Produto' , Const.swaped_items.format(quantity, targetSku, swapSku, saleNumber), 'Pendência');
+    });
+  },
+
+  voucher(userId, msg){
+    onTry(()=>{
+      History.notify(userId, 'Envio de Voucher' , msg, 'Voucher');
     });
   },
 

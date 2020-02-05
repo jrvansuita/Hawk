@@ -16,13 +16,14 @@ Pending status
     this.updateDate = Dat.now();
     this.sendEmail = false;
     this.local = Str.def(local ? local.toUpperCase() : "");
+    this.voucher = '';
   }
 
   static getKey() {
     return ['number'];
   }
 
-  
+
 
 
 };

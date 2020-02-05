@@ -1,7 +1,8 @@
 const Routes = require('../redirects/controller/routes.js');
 const PendingLaws = require('../laws/pending-laws.js');
 const PendingHandler = require('../handler/pending-handler.js');
-const SaleItemSwapper = require('../swap/sale-item-swapper.js');
+const SaleItemSwapper = require('../pending/sale-item-swapper.js');
+const PendingVoucherHandler = require('../pending/pending-voucher-handler.js');
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
 const BlockHandler = require('../handler/block-handler.js');
 const PendingProductProvider = require('../provider/pending-product-provider.js');
@@ -58,19 +59,17 @@ module.exports = class PendingRoutes extends Routes{
       });
 
       this._post('/pending-swap-items', (req, res, body, locals) => {
-        //if (locals.loggedUser.full){
         new SaleItemSwapper(body.saleNumber, locals.loggedUser.id)
         .on(body.targetSku)
         .to(body.swapSku)
         .with(body.quantity)
         .go(this._resp().redirect(res));
-        //}else{
-        //          this._resp().error(res, 'Você não tem permissão para função');
-        //      }
       });
 
       this._post('/pending-send-voucher', (req, res, body, locals) => {
-
+         new PendingVoucherHandler(locals.loggedUser.id)
+         .with(body.pending, body.voucher, body.totalValue)
+         .go(this._resp().redirect(res));
       });
 
       this._page('/pending-products', (req, res, body, locals) => {

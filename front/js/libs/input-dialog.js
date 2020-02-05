@@ -4,6 +4,7 @@ class InputDialog {
     this.dependencies = new FileLoader().css('material-selector-dialog');
     this.titleText = title;
     this.inputPlaceholder = placeholder;
+    this.checkChangeBeforePositiveClick = false;
 
     this._initialize();
   }
@@ -22,77 +23,96 @@ class InputDialog {
     var $input = $('<input>').attr('type', 'text').attr('required', '').addClass('ms-input');
     this.input = $input;
 
-   this.input.change(this.onChangeListener);
-
-    var $subTitle;
-
-    if (this.subTitle){
-      $subTitle = $('<span>').addClass('pick-value no-wrap sub-title').html(this.subTitle);
-    }
-
-    var $bar = $('<span>').addClass('bar');
-    var $label = $('<label>').text(this.inputPlaceholder);
-
-    $inputHolder.append($input, $bar, $label);
-
-    this.holder.append($title, $subTitle, $inputHolder);
-    this.modal.append(this.holder);
-
-    this.buttonsHolder = $('<div>').addClass('ms-buttons-holder');
-    this.holder.append(this.buttonsHolder);
-
-    this.buttons.forEach((each) => {
-      this.buttonsHolder.append(each);
-    });
-  }
-
-  addSubTitle(html){
-    this.subTitle = html;
-    return this;
-  }
-
-  onChangeListener(listener){
-    this.onChangeListener = listener;
-    return this;
-  }
-
-
-
-  onNegativeButton(label, callback){
-    this.buttons.push($('<label>').addClass('ms-button material-ripple').text(label).click(()=>{
-      this.modal.remove();
-
-      if (callback){
-        callback();
+    this.input.change((e) => {
+      if (this.onChangeListener){
+        this.onChangeListener(this.input, this.input.val());
       }
-    }));
+    }
+  );
 
-    return this;
+  var $subTitle;
+
+  if (this.subTitle){
+    $subTitle = $('<span>').addClass('pick-value no-wrap sub-title').html(this.subTitle);
   }
 
-  onPositiveButton(label, callback){
-    this.buttons.push($('<label>').addClass('ms-button material-ripple').text(label).click(()=>{
+  var $bar = $('<span>').addClass('bar');
+  var $label = $('<label>').text(this.inputPlaceholder);
 
+  $inputHolder.append($input, $bar, $label);
+
+  this.holder.append($title, $subTitle, $inputHolder);
+  this.modal.append(this.holder);
+
+  this.buttonsHolder = $('<div>').addClass('ms-buttons-holder');
+  this.holder.append(this.buttonsHolder);
+
+  this.buttons.forEach((each) => {
+    this.buttonsHolder.append(each);
+  });
+}
+
+addSubTitle(html){
+  this.subTitle = html;
+  return this;
+}
+
+onChangeListener(listener){
+  this.onChangeListener = listener;
+  return this;
+}
+
+checkInputChangeForPositiveButton(check){
+  this.checkChangeBeforePositiveClick = check;
+  return this;
+}
+
+
+checkBeforePositive(){
+  var ok = this.checkChangeBeforePositiveClick && this.onChangeListener && this.onChangeListener(this.input, this.input.val());
+
+  ok = ok || !this.checkChangeBeforePositiveClick;
+
+  return ok;
+}
+
+
+onNegativeButton(label, callback){
+  this.buttons.push($('<label>').addClass('ms-button material-ripple').text(label).click(()=>{
+    this.modal.remove();
+
+    if (callback){
+      callback();
+    }
+  }));
+
+  return this;
+}
+
+onPositiveButton(label, callback){
+  this.buttons.push($('<label>').addClass('ms-button material-ripple').text(label).click(()=>{
+    if (this.checkBeforePositive()){
       if (callback){
         callback(this.input.val());
       }
 
       this.modal.remove();
-    }));
+    }
+  }));
 
-    return this;
-  }
+  return this;
+}
 
-  _show(){
-    $('body').append(this.modal);
-    this.modal.fadeIn(400);
-  }
+_show(){
+  $('body').append(this.modal);
+  this.modal.fadeIn(400);
+}
 
-  async show(){
-    await this.dependencies.load();
+async show(){
+  await this.dependencies.load();
 
-    this._build();
-    this._show();
-  }
+  this._build();
+  this._show();
+}
 
 }

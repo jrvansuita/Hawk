@@ -651,15 +651,16 @@ tr.row-padding td{
 }
 
 
-.changed-label{
+.tag-label{
   border-radius: 2px;
   background-color: #20c361d1;
   color: white;
-  padding: 3px 3px;
+  padding: 3px 5px;
   display: -webkit-inline-box;
   font-size: 10px;
   margin-left: 5px;
   margin-right: 5px;
+  margin-top: 4px;
 }
 
 
@@ -723,4 +724,7 @@ tr.row-padding td{
   margin-left: -15px;
   margin-top: -15px;
   border-bottom: 1px solid #f3f3f3;
+}
+.ms-input{
+  text-transform: uppercase;
 }

@@ -101,11 +101,11 @@ module.exports = {
 
   //---- Update Elements ----//
 
-  incrementStatus(pending, user, callback){
+  incrementStatus(pending, userOrUserId, callback){
     pending.status = parseInt(pending.status) + 1;
     pending.updateDate = new Date();
 
-    HistoryStorer.pending(user.id, pending);
+    HistoryStorer.pending(userOrUserId.id || userOrUserId, pending);
 
     this.update(pending, callback);
   },

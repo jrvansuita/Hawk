@@ -119,9 +119,24 @@ function buildPendingItemsViews(el, pending){
 
   var last = $('<tr>').addClass('closable');
 
+  var voucherTag;
+
+
+
   last.append($('<td>').attr('colspan','2').append(getFirstBottomBarOptions(pending)));
   last.append($('<td>').addClass('middle-option-holder').attr('colspan','1').append(getPendingLocal(pending)));
-  last.append($('<td>').attr('colspan','1').append(getBlockedLabel(pending)));
+
+
+  var lastCol = $('<td>').attr('colspan','1').append(getBlockedLabel(pending));
+
+  last.append(lastCol);
+
+  if (pending.voucher){
+    addTagLabel('Voucher ' + pending.voucher, lastCol);
+  }
+
+
+
   table.append(last);
 
   bindMenuOptions(el, pending);
@@ -195,28 +210,27 @@ function bindMenuOptions(el, pending){
         updatePendingStatus(pending);
       });
 
-<<<<<<< HEAD
       drop.addItem('/img/money-coin.png', 'Voucher', function(){
         var pendingPrice = getPendingPrice(pending);
 
-        new InputDialog("Trocar itens por Voucher", "Código do Voucher")
-        .addSubTitle("Valor total da pendência: <b>" + pendingPrice + "</b>")
-        .onChangeListener((key) => {
-          $('.ms-input').on("keyup", function(e) {
-            var key = e.which;
-            if (key == 13){
-              validateVoucher();
-            }
-          });
-        })
-        .onPositiveButton("Enviar", () => {
-          _post('/pending-send-voucher', {
-            pending: pending,
-          });
-        }).show();
+        if(!pending.sale.items.changed){
+          new InputDialog("Trocar itens por Voucher", "Código do Voucher")
+          .addSubTitle("Valor total da pendência: <b>" + pendingPrice + "</b>")
+          .checkInputChangeForPositiveButton(true)
+          .onChangeListener((input, val) => {
+            return validateVoucher(input);
+          })
+          .onPositiveButton("Enviar", (text) => {
+            _post('/pending-send-voucher', {
+              pending: pending,
+              voucher: text,
+              totalValue: pendingPrice
+            }, (result) => {
+              window.location.reload();
+            });
+          }).show();
+        }
       });
-=======
->>>>>>> ae1d7b5a41e6e37d7d8d0689c2204b1dfcd542bd
     }
   }
 
@@ -254,41 +268,26 @@ function getEmailImage(){
 }
 
 function getPendingPrice(pending){
-  var valor = 0;
-  console.log(pending);
-  pending.sale.items.forEach(function(item){
-    valor += parseFloat(item.valor);
-  });
+
+  var valor = pending.sale.items.reduce((total, each) => {
+    return total + each.valor;
+  }, 0);
   return Num.money(valor);
 }
 
-function validateVoucher(){
-  var voucher = $('.ms-input').val();
-
-  if(!voucher.startsWith("PEN")){
-    showMsgError("Voucher deve começar com 'PEN'!");
+function validateVoucher(input){
+  if(!$(input).val().startsWith("PEN")){
+    onSimpleMaterialInputError($(input));
+    $(input).val("");
+    return false;
   }
+
+  return true;
 }
 
-function showMsgError(msg){
-  var $info = $('<span>').addClass('pick-value error-text').text(msg);
-  var $imgError = $('<img>').addClass('icon-error').attr('src','img/error.png').css('width','10px');
-  var $errorHolder = $('<div>').add('error-holder');
 
-  $errorHolder.append($imgError, $info);
-
-  $('.material-input-holder').append($errorHolder).delay(4000).queue(function(next){
-    $errorHolder.remove();
-    next();
-  });
-
-
-
-
-}
-
-function addChangedLabel(el){
-  el.prepend($('<label>').addClass('changed-label').text('Trocado'));
+function addTagLabel(tag, el){
+  el.prepend($('<label>').addClass('tag-label').text(tag));
 }
 
 function buildProductFirstCol(item, slim, pending){
@@ -333,8 +332,9 @@ function buildProductFirstCol(item, slim, pending){
 
 
   if (item.changed || item.observacao.includes('changed')){
-    addChangedLabel(gtin);
+    addTagLabel('Trocado', gtin);
   }
+
 
   div.append(sku);
   div.append(gtin);

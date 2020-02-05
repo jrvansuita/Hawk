@@ -113,30 +113,32 @@ module.exports = class EmailBuilder{
       str = this.proccessSingleValues(str, this.variables, this.data);
     }
 
-    Object.keys(this.arrays).forEach((key) => {
-      if (this.data[key]){
-        var arrayVariables = this.arrays[key];
-        var findKey = "{" + key + "...}";
+    if (this.arrays && this.arrays.length > 0){
+      Object.keys(this.arrays).forEach((key) => {
+        if (this.data[key]){
+          var arrayVariables = this.arrays[key];
+          var findKey = "{" + key + "...}";
 
-        var matches = this.getBetween(str, findKey); 
+          var matches = this.getBetween(str, findKey);
 
-        if (matches && matches.length){
-          matches.forEach((each) => {
-            var innerContent = each;
-            var contentResultArr = [];
+          if (matches && matches.length){
+            matches.forEach((each) => {
+              var innerContent = each;
+              var contentResultArr = [];
 
-            this.data[key].forEach((eachData) => {
-              var dataHolder = {};
-              dataHolder[key] = eachData;
-              contentResultArr.push(this.proccessSingleValues(innerContent, arrayVariables,  dataHolder));
+              this.data[key].forEach((eachData) => {
+                var dataHolder = {};
+                dataHolder[key] = eachData;
+                contentResultArr.push(this.proccessSingleValues(innerContent, arrayVariables,  dataHolder));
+              });
+
+              str = str.replace(innerContent, contentResultArr.join(''));
+              str = str.replaceAll(findKey, '');
             });
-
-            str = str.replace(innerContent, contentResultArr.join(''));
-            str = str.replaceAll(findKey, '');
-          });
+          }
         }
-      }
-    });
+      });
+    }
 
     return str;
   }
