@@ -20,11 +20,11 @@ module.exports = class JobGift extends Job{
     return 'Inclusão de Brinde no Pedido';
   }
 
-  getAvaliableSkus(rule){
+  getAvaliableSku(rule){
     for (var i = 0; i < rule.skus.length; i++) {
       var sku = rule.skus[i];
       var stock = this.stocks[sku];
-      if (stock){
+      if (stock != undefined){
         if (stock > 0){
           this.stocks[sku]--;
           return sku;
@@ -33,11 +33,16 @@ module.exports = class JobGift extends Job{
         return sku;
       }
     }
+
+    //Se acabou os skus para fazer, remove a rule daqui
+    this.giftRulesList = this.giftRulesList.filter((eachRule) => {
+      return eachRule.id != rule.id;
+    })
   }
 
   loadPreparedGiftItem(rule, callback){
-    var sku = this.getAvaliableSkus(rule);
-    if (sku){
+    var sku = this.getAvaliableSku(rule);
+    if (!sku){
       if (this.preparedItems[sku]){
         callback(this.preparedItems[sku]);
       }else{
@@ -71,11 +76,19 @@ module.exports = class JobGift extends Job{
   }
 
   removeNoStockGiftRules(){
-    //Remove as gift rules que não possuem mais estoque
+
+    //Remove ths skus no stock
+    this.giftRulesList.forEach((each) => {
+      if (each.checkStock){
+        each.skus = each.skus.filter((eachSku) => {
+          return this.stocks[eachSku] > 0;
+        });
+      }
+    });
+
+    //Remove as gift rules que não possuem mais produtos
     this.giftRulesList = this.giftRulesList.filter((rule)=>{
-      return !rule.checkStock || (rule.skus.every((sku) => {
-        return this.stocks[sku] > 0;
-      }));
+      return rule.skus.length > 0;
     });
   }
 
@@ -127,7 +140,7 @@ module.exports = class JobGift extends Job{
 
   putGiftItemOnSale(sale, rule, callback){
     this.loadPreparedGiftItem(rule, (giftItem) => {
-      if (giftItem.length){
+      if (giftItem && giftItem.length){
         new EccosysStorer()
         .sale(sale.numeroPedido)
         .items()
@@ -244,7 +257,7 @@ module.exports = class JobGift extends Job{
     .salesBySituation(status)
     .pagging()
     .each((sales, next)=>{
-      console.log('----- ' + sales.length + ' Pedidos - Situacao ' + status + '------');
+      console.log('----- ' + sales.length + ' Pedidos - Situacao ' + status + ' ------');
       if (callback){
         callback(sales, next);
       }

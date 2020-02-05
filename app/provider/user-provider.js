@@ -63,17 +63,10 @@ module.exports = class UsersProvider {
 
     if (result && !user.full){
       var range = Params.workTimeRange();
-
-
-
+      
       var now = Dat.now();
       var hour = now.getUTCHours();
       var time = now.getTime();
-
-
-      console.log(Dat.now());
-      console.log(hour);
-      console.log(range);
 
       result = (hour > parseInt(range[0]) && hour < parseInt(range[1]));
       result = result && !((now.getDay() === 6) || (now.getDay() === 0))
