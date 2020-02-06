@@ -10,28 +10,7 @@ module.exports = class JobSyncClients extends Job{
   }
 
   handleEach(client, next){
-  var client =  new Client(
-      client.id,
-      client.codigo,
-      client.nome,
-      client.fantasia,
-      client.cnpj,
-      client.ie,
-      client.tipo,
-
-      client.endereco,
-      client.enderecoNro,
-      client.bairro,
-      client.cidade,
-      client.uf,
-      client.cep,
-      client.fone,
-      client.celular,
-      client.email,
-      client.dataNascimento
-    );
-
-    client.upsert(next);
+    Client.from(client).upsert(next);
   }
 
   handlePage(page, nexPageCallback){
