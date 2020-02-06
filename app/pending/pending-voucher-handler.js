@@ -88,11 +88,8 @@ module.exports = class PendingVoucherHandler{
           if (callback){
             callback();
           }
-<<<<<<< HEAD
-          
+
           this._sendEmail();
-=======
->>>>>>> c0a87e131f60685bf73d6973dbd0938006711588
         });
       });
     });
