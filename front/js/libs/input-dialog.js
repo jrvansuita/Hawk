@@ -120,11 +120,19 @@ _show(){
   this.modal.fadeIn(400);
 }
 
-async show(){
+async show(callback){
   await this.dependencies.load();
 
   this._build();
   this._show();
+
+  if (callback){
+    callback();
+  }
 }
+
+
+
+
 
 }

@@ -4,6 +4,8 @@ var tooltips;
 
 $(document).ready(()=>{
 
+  var heightForEditor = $('#editor').innerHeight() - 128;
+
   new Tooltip('.using-template-circle', 'Template em uso')
   .autoHide(10000).load().then((data) => {
     tooltips = data;
@@ -28,7 +30,7 @@ $(document).ready(()=>{
 
 
 
-  new TemplateEditor()
+  new TemplateEditor(heightForEditor)
   .useImageUploader()
   .load('#editor').then((_editor) => {
     editor = _editor;

@@ -58,11 +58,13 @@ function controlImagesList(pane, list, path, query){
 
         loadedAllResults = data.length == 0;
 
+
         data.forEach((each) => {
           loadImagesHolder(list, each);
         });
 
         isLoading = false;
+          console.log('DATA', data);
         bindCopiable();
       });
     }
@@ -123,6 +125,7 @@ function loadListApprovedClientImages(){
     loadImagesFromUrl('/get-sku-pictures-page', _page);
   }
 }
+
 function loadImagesHolder(listHolder, each){
   var skusArr = each.sku.split(',');
   var addrClassPreview = skusArr.length > 1 ? ' multiple-skus' : '';

@@ -210,12 +210,12 @@ function bindMenuOptions(el, pending){
         updatePendingStatus(pending);
       });
 
-      drop.addItem('/img/money-coin.png', 'Voucher', function(){
-        var pendingPrice = getPendingPrice(pending);
-        console.log('PRE"CO:', pendingPrice);
-        if(!pending.sale.items.changed){
+      if(!pending.sale.items.some((each) => {return each.changed;})){
+        drop.addItem('/img/money-coin.png', 'Voucher', function(){
+
+          var pendingPrice = getPendingPrice(pending);
           new InputDialog("Trocar itens por Voucher", "Código do Voucher")
-          .addSubTitle("Valor total da pendência: <b>" + pendingPrice + "</b>")
+          .addSubTitle("Valor total da pendência: <b>" + pendingPrice + "</b><br><br>Email: <span class='copiable'>" + pending.sale.client.email + "</span>")
           .checkInputChangeForPositiveButton(true)
           .setAutoFocusOnInput(true)
           .onChangeListener((input, val) => {
@@ -229,17 +229,22 @@ function bindMenuOptions(el, pending){
             }, (result) => {
               window.location.reload();
             });
-          }).show();
-        }
-      });
+          })
+          .onNegativeButton("Cancelar")
+          .show(() => {
+            bindCopiable();
+          });
+        });
+      }
     }
   }
 
 
   if (drop.hasOptions()){
     dots.show();
-    dots.unbind('click').click(function (e){
+    dots.click(function (e){
       drop.show();
+      e.stopPropagation();
     });
   }else{
     dots.hide();
@@ -259,6 +264,8 @@ function getFirstBottomBarOptions(pending){
 
   return div;
 }
+
+
 
 
 function getEmailImage(){
@@ -529,9 +536,6 @@ function getBlockedLabel(pending){
     return "";
   }
 }
-
-
-
 
 function handlSwapProductSale(saleNumber, targerSku, swapSku, quantity, onSucess, onError ){
   _get('/product-child', {sku: swapSku },(product)=>{
