@@ -212,7 +212,7 @@ function bindMenuOptions(el, pending){
 
       drop.addItem('/img/money-coin.png', 'Voucher', function(){
         var pendingPrice = getPendingPrice(pending);
-
+        console.log('PRE"CO:', pendingPrice);
         if(!pending.sale.items.changed){
           new InputDialog("Trocar itens por Voucher", "Código do Voucher")
           .addSubTitle("Valor total da pendência: <b>" + pendingPrice + "</b>")
@@ -271,7 +271,7 @@ function getEmailImage(){
 function getPendingPrice(pending){
 
   var valor = pending.sale.items.reduce((total, each) => {
-    return total + each.valor;
+    return total + parseFloat(each.valor);
   }, 0);
   return Num.money(valor);
 }

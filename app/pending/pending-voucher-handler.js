@@ -65,7 +65,9 @@ module.exports = class PendingVoucherHandler{
     .reply(Params.replayEmail())
     .setData({
       cliente: this.sale.client,
-      voucher: this.voucher
+      voucher: this.voucher,
+      valor: this.totalValue,
+      pedido: this.sale
     }).send(callback);
   }
 
@@ -82,12 +84,15 @@ module.exports = class PendingVoucherHandler{
         this._updateSaleObs(() => {
           HistoryStorer.voucher(this.userId, this._getVoucherObs());
           //PendingLaws.incrementStatus(this.pending, this.userId, callback);
-
+          this._sendEmail();
           if (callback){
             callback();
           }
+<<<<<<< HEAD
           
           this._sendEmail();
+=======
+>>>>>>> c0a87e131f60685bf73d6973dbd0938006711588
         });
       });
     });
