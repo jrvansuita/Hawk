@@ -1,7 +1,7 @@
 
 module.exports = {
   PENDING: {
-    name : 'Pendência',
+    name : 'Pendência de Produtos',
     icon: 'pending'
   },
 
@@ -16,7 +16,7 @@ module.exports = {
   },
 
   VOUCHER: {
-    name : 'Voucher',
+    name : 'Pendência Voucher',
     icon: 'money-coin'
   },
 
