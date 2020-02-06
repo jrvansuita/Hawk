@@ -252,13 +252,15 @@ function buildProductFirstCol(item, slim, pending){
   div.append(gtin);
   first.append(div);
 
-  div = $('<div>').addClass('nobreak');
-  var descHolder = $('<label>').addClass('pick-value desc no-wrap').text(Util.ellipsis(Util.getProductName(item.descricao, true), 25));
-  div.append(descHolder);
-  var brand = $('<span>').addClass('pick-value right').text(Util.getProductBrand(item.descricao, true));
-  div.append(brand);
+  if (!slim){
+    div = $('<div>').addClass('nobreak');
+    var descHolder = $('<label>').addClass('pick-value desc no-wrap').text(Util.ellipsis(Util.getProductName(item.descricao, true), 25));
+    div.append(descHolder);
+    var brand = $('<span>').addClass('pick-value right').text(Util.getProductBrand(item.descricao, true));
+    div.append(brand);
 
-  first.append(div);
+    first.append(div);
+  }
 
 
   if (isSwapableSku){

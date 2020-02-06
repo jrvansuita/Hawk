@@ -419,9 +419,21 @@ tr.row-padding td{
   overflow-y: overlay;
 }
 
-.scrollable-table tr td{
-  padding-left: 8px;
+.done-sale-item.green-title{
   padding-right: 5px;
+}
+
+.mini-item.inprogress-item{
+      padding: 2px 4px!important;
+}
+
+.inprogress-item.clickable-mini-item td:first-child {
+    padding: 0px;
+    border-spacing: 0px;
+}
+
+.inprogress-item.pick-value{
+    padding: 0 !important;
 }
 
 .pending-inner{
