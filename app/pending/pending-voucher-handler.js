@@ -73,7 +73,9 @@ module.exports = class PendingVoucherHandler{
 
   _handleRemainingItems(){
     this.remainingItems = this.sale.items.filter((item) => {
-      return item.idProduto != this.pending.sale.items[0].idProduto;
+      return this.pending.sale.items.every((pendingItem) => {
+        return pendingItem.idProduto != item.idProduto;
+      });
     });
   }
 

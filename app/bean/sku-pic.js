@@ -45,12 +45,13 @@ module.exports = class SkuPic extends DataAccess {
     }else{
       result['sku'] = reg;
     }
-
+        
     return result;
   }
 
-  static getSkuPage(page, sku, callback){
-    SkuPic.paginate(SkuPic.getPageQuery(sku), page, '-date', pageLimit, (err, result)=>{
+  static getSkuPage(page, sku, limit, callback){
+    SkuPic.paginate(SkuPic.getPageQuery(sku), page, '-date', limit ? limit : pageLimit, (err, result)=>{
+
       if (callback){
         callback(result);
       }
