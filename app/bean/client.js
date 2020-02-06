@@ -22,6 +22,28 @@ module.exports = class Client extends DataAccess {
     this.bornDate = Dat.def(bornDate);
   }
 
+  static from(c){
+    return new Client(
+      c.id,
+      c.codigo,
+      c.nome,
+      c.fantasia,
+      c.cnpj,
+      c.ie,
+      c.tipo,
+      c.endereco,
+      c.enderecoNro,
+      c.bairro,
+      c.cidade,
+      c.uf,
+      c.cep,
+      c.fone,
+      c.celular,
+      c.email,
+      c.dataNascimento
+    );
+  }
+
 
   static getKey() {
     return ['id'];
