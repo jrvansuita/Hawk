@@ -7,8 +7,8 @@ class MaterialDropdown {
 
     this.remove();
 
-    var $div = $('<div>').addClass('md-dropdown');
-    $(parent).append($div);
+    this.holder = $('<div>').addClass('md-dropdown');
+    $(parent).append(this.holder);
 
     this.items = $('<ul>');
 
@@ -20,23 +20,23 @@ class MaterialDropdown {
       this.top = $(parent).offset().top;
       this.left = $(parent).offset().left;
 
-      $div.css('position', 'inherit');
+      this.holder.css('position', 'inherit');
     }else{
       if (fixed){
-        $div.css('position', 'fixed');
+        this.holder.css('position', 'fixed');
       }else{
-        $div.css('position', 'static');
+        this.holder.css('position', 'static');
       }
       this.items = $('<ul>');
     }
 
 
-    $div.append(this.items);
+    this.holder.append(this.items);
 
-    this.items.hide();
+    this.holder.hide();
 
-    $div.mouseleave(function(){
-      $div.remove();
+    this.holder.mouseleave(()=>{
+      this.holder.hide();
       if (this.onMouseLeave){
         this.onMouseLeave();
       }
@@ -83,7 +83,7 @@ class MaterialDropdown {
   show(callback){
 
     if (this.hasOptions()){
-      this.items.fadeIn(400);
+      this.holder.fadeIn(400);
 
       if (this.top + this.left > 0){
         this.items.css('left', this.left).css('top', this.top);
@@ -91,7 +91,7 @@ class MaterialDropdown {
 
 
       $('.md-dropdown li').click((e) =>{
-        this.remove();
+        this.holder.remove();
         e.stopPropagation();
       });
 
@@ -111,6 +111,10 @@ class MaterialDropdown {
   }
 
   remove(){
+    if (this.holder){
+      this.holder.remove();
+    }
+
     $('.md-dropdown').remove();
   }
 }

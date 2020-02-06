@@ -32,29 +32,20 @@ $(document).ready(() => {
       $(el).click(function(e){
         var drop = new MaterialDropdown($(this), e);
 
-        /*if ($(el).hasClass('menu-red-top')){
-        if (Sett.get(loggedUser, 10)){
-        drop.addItem('/img/send-mass-email.png', 'Enviar Todos E-mails', function(){
-        $('.menu-red-top>.dots-glyph').attr('src','/img/loader/circle.svg');
-        doallSolvingPendingSale();
+        drop.addItem('/img/print.png', 'Imprimir Listagem', function(){
+          window.open(
+            '/pending-print-list?status=' +  ($(el).hasClass('menu-red-top') ? 0 : ($(el).hasClass('menu-orange-top')? 1 : 2)),
+            '_blank' // <- This is what makes it open in a new window.
+          );
+        });
+
+        drop.show();
+
       });
-    }
-  }*/
 
-  drop.addItem('/img/print.png', 'Imprimir Listagem', function(){
-    window.open(
-      '/pending-print-list?status=' +  ($(el).hasClass('menu-red-top') ? 0 : ($(el).hasClass('menu-orange-top')? 1 : 2)),
-      '_blank' // <- This is what makes it open in a new window.
-    );
-  });
+    });
 
-  drop.show();
-
-});
-
-});
-
-}
+  }
 
 });
 
@@ -148,106 +139,19 @@ function bindMenuOptions(el, pending){
   var drop = new MaterialDropdown(dots).setOnAnyOptionsClick(function(e){
     e.stopPropagation();
     $('.mini-item-modal').parent().remove();
-
   });
 
-  if (location.pathname.includes('picking')){
-
-    //Com status em aberto ou resolvido
-    if (Util.isIn([0,2], pending.status)){
-
-      //Permitir assumir pendências
-      if (Sett.get(loggedUser, 3)){
-        drop.addItem('/img/back.png', 'Assumir', function(){
-          assumePendingSale(pending);
-        });
-
-        if (pending.status == 0){
-          drop.addItem('/img/lamp.png', 'Encontrado', function(){
-            assumePendingSale(pending, true);
-          });
-        }
-      }else{
-        if (pending.status == 0){
-          drop.addItem('/img/restart.png', 'Reiniciar', function(){
-            restartPendingSale(pending);
-          });
-        }
-      }
-    }
-
-  }else{
-
-    if (pending.status == 0){
-      if (!isBlocked(pending)){
-        drop.addItem('/img/forward.png', 'Em Atendimento', function(){
-          pending.sendEmail = false;
-          updatePendingStatus(pending);
-        });
-
-        if (Sett.get(loggedUser, 10)){
-          drop.addItem('/img/envelop.png', 'Enviar E-mail', function(){
-            pending.sendEmail = true;
-            updatePendingStatus(pending);
-          });
-        }
-      }
-    }else if (pending.status == 1){
-      drop.addItem('/img/block.png', 'Bloquear', function(){
-        new BlockedSelector().onSelect((reason)=>{
-          new BlockedPost(pending.number, reason)
-          .setUserId(pending.sale.pickUser.id)
-          .onSuccess(()=>{
-            //No Page Reload
-          })
-          .isPending()
-          .call();
-
-        }).show();
-      });
-
-      drop.addItem('/img/forward.png', 'Resolvido', function(){
-        updatePendingStatus(pending);
-      });
-
-      if(!pending.sale.items.some((each) => {return each.changed;})){
-        drop.addItem('/img/money-coin.png', 'Voucher', function(){
-
-          var pendingPrice = getPendingPrice(pending);
-          new InputDialog("Trocar itens por Voucher", "Código do Voucher")
-          .addSubTitle("Valor total da pendência: <b>" + pendingPrice + "</b><br><br>Email: <span class='copiable'>" + pending.sale.client.email + "</span>")
-          .checkInputChangeForPositiveButton(true)
-          .setAutoFocusOnInput(true)
-          .onChangeListener((input, val) => {
-            return validateVoucher(input);
-          })
-          .onPositiveButton("Enviar", (text) => {
-            _post('/pending-send-voucher', {
-              pending: pending,
-              voucher: text,
-              totalValue: pendingPrice
-            }, (result) => {
-              window.location.reload();
-            });
-          })
-          .onNegativeButton("Cancelar")
-          .show(() => {
-            bindCopiable();
-          });
-        });
-      }
-    }
-  }
+  onCreateOptionsPendingDropMenu(drop, pending);
 
 
   if (drop.hasOptions()){
     dots.show();
-    dots.click(function (e){
+    dots.unbind('click').click(function (e){
       drop.show();
       e.stopPropagation();
     });
   }else{
-    dots.hide();
+    dots.hide().unbind('click');
   }
 }
 
@@ -558,4 +462,105 @@ function handlSwapProductSale(saleNumber, targerSku, swapSku, quantity, onSucess
       });
     }
   });
+}
+
+
+function onCreateOptionsPendingDropMenu(drop, pending){
+  if (location.pathname.includes('picking')){
+
+    //Com status em aberto ou resolvido
+    if (Util.isIn([0,2], pending.status)){
+
+      //Permitir assumir pendências
+      if (Sett.get(loggedUser, 3)){
+        drop.addItem('/img/back.png', 'Assumir', function(){
+          assumePendingSale(pending);
+        });
+
+        if (pending.status == 0){
+          drop.addItem('/img/lamp.png', 'Encontrado', function(){
+            assumePendingSale(pending, true);
+          });
+        }
+      }else{
+        if (pending.status == 0){
+          drop.addItem('/img/restart.png', 'Reiniciar', function(){
+            restartPendingSale(pending);
+          });
+        }
+      }
+    }
+
+  }else{
+
+    if (pending.status == 0){
+      if (!isBlocked(pending)){
+        drop.addItem('/img/forward.png', 'Em Atendimento', function(){
+          pending.sendEmail = false;
+          updatePendingStatus(pending);
+        });
+
+        if (Sett.get(loggedUser, 10)){
+          drop.addItem('/img/envelop.png', 'Enviar E-mail', function(){
+            pending.sendEmail = true;
+            updatePendingStatus(pending);
+          });
+        }
+      }
+    }else if (pending.status == 1){
+      createBlockPendingMenuOption(drop, pending);
+
+      drop.addItem('/img/forward.png', 'Resolvido', function(){
+        updatePendingStatus(pending);
+      });
+
+      createVoucherPendingMenuOption(drop, pending);
+    }
+  }
+}
+
+
+function createBlockPendingMenuOption(drop, pending){
+  drop.addItem('/img/block.png', 'Bloquear', function(){
+    new BlockedSelector().onSelect((reason)=>{
+      new BlockedPost(pending.number, reason)
+      .setUserId(pending.sale.pickUser.id)
+      .onSuccess(()=>{
+        //No Page Reload
+      })
+      .isPending()
+      .call();
+
+    }).show();
+  });
+}
+
+
+function createVoucherPendingMenuOption(drop, pending){
+  if(!pending.sale.items.some((each) => {return each.changed;})){
+    drop.addItem('/img/money-coin.png', 'Voucher', function(){
+
+      var pendingPrice = getPendingPrice(pending);
+      new InputDialog("Trocar itens por Voucher", "Código do Voucher")
+      .addSubTitle("Valor total da pendência: <b>" + pendingPrice + "</b><br><br>Email: <span class='copiable'>" + pending.sale.client.email + "</span>")
+      .checkInputChangeForPositiveButton(true)
+      .setAutoFocusOnInput(true)
+      .onChangeListener((input, val) => {
+        return validateVoucher(input);
+      })
+      .onPositiveButton("Enviar", (text) => {
+        _post('/pending-send-voucher', {
+          pending: pending,
+          voucher: text,
+          totalValue: pendingPrice
+        }, (result) => {
+          window.location.reload();
+        });
+      })
+      .onNegativeButton("Cancelar")
+      .show(() => {
+        bindCopiable();
+      });
+    });
+  }
 }
