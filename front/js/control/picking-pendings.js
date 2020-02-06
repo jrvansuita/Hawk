@@ -217,6 +217,7 @@ function bindMenuOptions(el, pending){
           new InputDialog("Trocar itens por Voucher", "Código do Voucher")
           .addSubTitle("Valor total da pendência: <b>" + pendingPrice + "</b>")
           .checkInputChangeForPositiveButton(true)
+          .setAutoFocusOnInput(true)
           .onChangeListener((input, val) => {
             return validateVoucher(input);
           })
@@ -276,7 +277,7 @@ function getPendingPrice(pending){
 }
 
 function validateVoucher(input){
-  if(!$(input).val().startsWith("PEN")){
+  if(!$(input).val().toUpperCase().startsWith("PEN")){
     onSimpleMaterialInputError($(input));
     $(input).val("");
     return false;

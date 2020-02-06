@@ -86,7 +86,7 @@ module.exports = class PendingVoucherHandler{
           if (callback){
             callback();
           }
-
+          
           this._sendEmail();
         });
       });

@@ -5,6 +5,7 @@ class InputDialog {
     this.titleText = title;
     this.inputPlaceholder = placeholder;
     this.checkChangeBeforePositiveClick = false;
+    this.setFocusOnInputField = false;
 
     this._initialize();
   }
@@ -36,6 +37,10 @@ class InputDialog {
     $subTitle = $('<span>').addClass('pick-value no-wrap sub-title').html(this.subTitle);
   }
 
+  if(this.setFocusOnInputField){
+    this.input.attr('autofocus','');
+  }
+
   var $bar = $('<span>').addClass('bar');
   var $label = $('<label>').text(this.inputPlaceholder);
 
@@ -43,6 +48,8 @@ class InputDialog {
 
   this.holder.append($title, $subTitle, $inputHolder);
   this.modal.append(this.holder);
+
+
 
   this.buttonsHolder = $('<div>').addClass('ms-buttons-holder');
   this.holder.append(this.buttonsHolder);
@@ -66,7 +73,11 @@ checkInputChangeForPositiveButton(check){
   this.checkChangeBeforePositiveClick = check;
   return this;
 }
-
+//focus no input
+setAutoFocusOnInput(value){
+  this.setFocusOnInputField = value;
+  return this;
+}
 
 checkBeforePositive(){
   var ok = this.checkChangeBeforePositiveClick && this.onChangeListener && this.onChangeListener(this.input, this.input.val());
@@ -102,6 +113,7 @@ onPositiveButton(label, callback){
 
   return this;
 }
+
 
 _show(){
   $('body').append(this.modal);
