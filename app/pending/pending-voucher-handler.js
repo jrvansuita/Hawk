@@ -83,11 +83,7 @@ module.exports = class PendingVoucherHandler{
       this._updateSaleWithRemainingItems(() => {
         this._updateSaleObs(() => {
           HistoryStorer.voucher(this.userId, this._getVoucherObs());
-          //PendingLaws.incrementStatus(this.pending, this.userId, callback);
-          this._sendEmail();
-          if (callback){
-            callback();
-          }
+          PendingLaws.incrementStatus(this.pending, this.userId, callback);
 
           this._sendEmail();
         });
