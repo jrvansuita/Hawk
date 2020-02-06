@@ -4,7 +4,7 @@ var tooltips;
 
 $(document).ready(()=>{
 
-  new Tooltip('.using-template-circle', 'Template em uso')
+  new Tooltip('.active-circle', 'Template em uso')
   .autoHide(10000).load().then((data) => {
     tooltips = data;
   });
