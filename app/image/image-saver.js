@@ -32,6 +32,7 @@ module.exports = class ImageSaver {
 
   upload(){
     var promisse = this.connect().process();
+
     if (promisse){
       promisse
       .then((result) => {

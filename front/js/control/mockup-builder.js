@@ -52,7 +52,7 @@ $(document).ready(()=>{
     $('.img-edit').attr('src', 'img/loader/circle.svg');
     reader.onload = function(event) {
 
-      _postImg('/upload-base64-img', {img: event.target.result.split(',')[1]},(data)=>{
+      _postImg('/upload-base64-img', {base64: event.target.result.split(',')[1]},(data)=>{
         selected.imgUrl = data.link;
         $('.mock-img-select').attr('src', event.target.result);
         $('.img-edit').attr('src', 'img/img-edit.png');

@@ -113,7 +113,7 @@ module.exports = class EmailBuilder{
       str = this.proccessSingleValues(str, this.variables, this.data);
     }
 
-    if (this.arrays && this.arrays.length > 0){
+    if (this.arrays){
       Object.keys(this.arrays).forEach((key) => {
         if (this.data[key]){
           var arrayVariables = this.arrays[key];
