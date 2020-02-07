@@ -123,7 +123,7 @@ function buildPendingItemsViews(el, pending){
   last.append(lastCol);
 
   if (pending.voucher){
-    addTagLabel('Voucher ' + pending.voucher, lastCol);
+    addTagLabel(' ' + pending.voucher, lastCol);
   }
 
 
@@ -539,10 +539,11 @@ function createBlockPendingMenuOption(drop, pending){
 
 
 function createVoucherPendingMenuOption(drop, pending){
-  if(!pending.sale.items.some((each) => {return each.changed;})){
+  if(!pending.sale.items.some((each) => {return each.changed;}) && isTrueStr(pending.sendEmail)){
     drop.addItem('/img/money-coin.png', 'Voucher', function(){
 
       var pendingPrice = getPendingPrice(pending);
+
       new InputDialog("Trocar itens por Voucher", "Código do Voucher")
       .addSubTitle("Valor total da pendência: <b>" + pendingPrice + "</b><br><br>Email: <span class='copiable'>" + pending.sale.client.email + "</span>")
       .checkInputChangeForPositiveButton(true)

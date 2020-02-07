@@ -28,7 +28,7 @@ $(document).ready(()=>{
 
 
 
-  new TemplateEditor(heightForEditor)
+  new TemplateEditor()
   .useImageUploader()
   .load('#editor').then((_editor) => {
     editor = _editor;

@@ -79,6 +79,14 @@ module.exports = class PendingVoucherHandler{
     });
   }
 
+  findClientEmail(number, callback){
+    new SaleLoader(number)
+    .loadClient()
+    .run((cliente) => {
+      callback(cliente);
+    });
+  }
+
   go(callback){
     this._findSale(this.pending.number, () => {
       this._handleRemainingItems();

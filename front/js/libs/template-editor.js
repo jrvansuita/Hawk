@@ -2,11 +2,10 @@
 
 class TemplateEditor{
 
-  constructor(editorHeigth){
+  constructor(){
     this.dependencies = new FileLoader().css('template-editor')
     .css('froala-editor.min').js('froala-editor.min');
 
-    this.height = editorHeigth;
   }
 
   useImageUploader(){
@@ -50,7 +49,7 @@ class TemplateEditor{
     var options = {
       fullPage: true,
       useClasses: false,
-      height: this.height,
+      height: 500,
 
       // Define new inline styles.
       inlineClasses: {
@@ -79,6 +78,7 @@ class TemplateEditor{
 
     return new Promise((resolve, reject) => {
       this.editor = new FroalaEditor(selector,  this.getDefultOptions(), () => {
+
         resolve(this.editor);
       });
     });

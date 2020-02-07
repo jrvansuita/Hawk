@@ -121,7 +121,6 @@ function loadList(){
     },(result)=>{
       showAll = result.data.length == 0;
       loading = false;
-      console.log('RESULT', result);
       result.data.forEach((each, index)=>{
         productsListCount++;
         addProductLayout(each, index);

@@ -21,8 +21,7 @@ module.exports = class PicturesRoutes extends Routes{
 
     //Post para excluir uma imagem
     this._post('/sku-picture-delete', (req, res) => {
-
-      this._resp().sucess(req);
+      this._resp().sucess(res);
 
       SkuPic.findOne({_id: req.body._id}, (err, item)=>{
         item.remove();
@@ -34,8 +33,6 @@ module.exports = class PicturesRoutes extends Routes{
       SkuPic.approved(req.body._id, req.body.approved, this._resp().redirect(res));
     });
 
-
-
     //Post para Paginação das imagens para Aprovação.
     this._post('/get-sku-pictures-page-to-approve', (req, res) => {
       var page = parseInt(req.body.page) || 1;
@@ -44,7 +41,6 @@ module.exports = class PicturesRoutes extends Routes{
         res.send(all);
       });
     });
-
 
     //Post para Paginação das imagens aprovadas
     this._post('/get-sku-pictures-page', (req, res) => {
