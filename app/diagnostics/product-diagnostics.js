@@ -42,13 +42,16 @@ module.exports = class ProductDiagnostics{
       if (!hasSales(stocks, 7)){
 
         if (hasStock(product, true)){
-
           if (!isAssociated(product)){
             this._storeFix(product, 'ASSOCIATED');
           }else if(!isVisible(product)){
             this._storeFix(product, 'NOT_VISIBLE');
           }else if (isMoreThanXDaysRegistered(product, 20)){
             this._storeFix(product, 'SALE');
+          }
+        }else{
+          if (hasLockedStock(product) && !hasSales(stocks, 15)){
+          //  this._storeFix(product, 'LOCKED_STOCK');
           }
         }
       }else{
@@ -294,7 +297,6 @@ function hasAvailableStock(product){
   return product._Estoque.estoqueDisponivel > 0;
 }
 
-
 function hasLockedStock(product){
   return product._Estoque.estoqueDisponivel < product._Estoque.estoqueReal;
 }
@@ -387,7 +389,7 @@ function isVisible(product){
 
 function isAssociated(product){
   if (product.feedProduct){
-    var arr = product.feedProduct.associates;
+    var arr = product.feedProduct.associates || product.feedProduct.sku;
     if (arr || product.codigo.includes('-')){
       return arr.includes(product.codigo) || (product.codigo == product.feedProduct.sku)
     }

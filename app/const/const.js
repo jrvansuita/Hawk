@@ -33,6 +33,7 @@ module.exports = {
   sale_in_progress: 'Este pedido está em andamento no picking!',
   sale_in_pending: 'Este pedido está nas pendências!',
   sale_not_found: 'O pedido {0} não foi encontrado ou não existe.',
+  no_token: 'Usuário sem token definido para esta funcionalidade!',
 
   api_not_available : "API Eccosys indisponível no momento. Erro: {0}",
   sale_was_confirmed_mundi : 'Foi realizada a confirmação de pagamento do pedido {0} pela Mundipagg\nForma de Pagamento: {1}\nOrdem de Compra: {2} Data do Pedido: {3} Data de Vencimento: {4} Data do Pagamento: {5}',

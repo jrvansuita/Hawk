@@ -362,9 +362,17 @@ var Util = {
       },
 
 
-       getUrlParam: function (name){
+      getUrlParam: function (name){
         if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
         return decodeURIComponent(name[1]);
+      },
+
+      checkToken: (user)=>{
+        if (!user.token || user.token.length < 100){
+          return false;
+        }
+
+        return true;
       }
 
 

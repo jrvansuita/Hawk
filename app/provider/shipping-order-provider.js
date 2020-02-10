@@ -1,7 +1,4 @@
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
-const TransportLaws = require('../laws/transport-laws.js');
-
-var lastLoadedArr = [];
 
 module.exports = {
 
@@ -28,25 +25,16 @@ module.exports = {
     }
 
     provider.go((data) => {
-      lastLoadedArr = data;
       callback(data);
     });
   },
 
 
   get(query, callback){
-    var foundOc = lastLoadedArr.find((each) => {
-      return query.id ? (each.id == query.id) : (each.numeroColeta == query.number);
-    });
-
-    if (foundOc){
-      callback(foundOc);
-    }else{
       new EccosysProvider()
       .shippingOrder(query)
       .go((result) => {
         callback(result);
       });
-    }
   }
 };

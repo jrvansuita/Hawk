@@ -1,4 +1,5 @@
-var EccosysApi = require('../eccosys/eccosys-api.js');
+const EccosysApi = require('../eccosys/eccosys-api.js');
+const Err = require('../error/error.js');
 
 module.exports = class EccosysStorer extends EccosysApi{
 
@@ -44,7 +45,15 @@ module.exports = class EccosysStorer extends EccosysApi{
 
 
   shippingOrder(user) {
+    if (!Util.checkToken(user, true)){
+      throw Err.thrw(Const.no_token);
+    }
+
     return {
+      colected: (id) => {
+        return  this.post('ordem-de-coleta/' + id + '/coletada').withUser(user);
+      },
+
       update:(id, idsNfeArr) => {
         return  this.put('ordem-de-coleta/' + id).setBody(idsNfeArr).withUser(user);
       },

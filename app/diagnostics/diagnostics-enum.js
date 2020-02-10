@@ -93,5 +93,11 @@ module.exports = {
     name : 'Produtos não Visíveis',
     description: 'Produtos que não estão visiveis no site.',
     icon: 'eye'
+  },
+
+  LOCKED_STOCK: {
+    name : 'Produtos Bloqueados',
+    description: 'Produtos que estão com estoque bloqueado. Pedidos não faturados, Notas fiscais rejeitadas, vários podem ser os motivos das reservas de estoque.',
+    icon: 'lock'
   }
 }

@@ -41,7 +41,7 @@
 
           <% var error = sale && sale.error ? sale.error : '' %>
 
-          <% error = (!locals.loggedUser.token || locals.loggedUser.token.length < 100) ? 'Usuário sem token para faturamento definido!' : error; %>
+          <% error = Util.checkToken(locals.loggedUser, false) ? Const.no_token : error; %>
 
 
           <img class="mini-icon" src="<%=error ? 'img/error.png' : 'img/checked.png'%>" />
@@ -307,7 +307,7 @@
                       <div class="product-ean-holder">
                         <div class="product-ean-and-icon">
                           <img class="circle shadow icon"  id="product-ean-icon" class="product-icon" src="/img/scan-barcode.png" />
-                          <input type="text" id="product-ean"  class="simple-material-input%>" placeholder="Código de Barras"/>
+                          <input type="text" id="product-ean"  class="simple-material-input" placeholder="Código de Barras"/>
                           <span id="itens-progress"></span>
                         </div>
                         <label class="product-msg"></label>

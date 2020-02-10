@@ -111,12 +111,12 @@ $(document).ready(() => {
 
 
   $('#date-end').focusin(()=> {
-      dateBeginPicker.picker.datepicker('close');
+    dateBeginPicker.picker.datepicker('close');
   });
 
 
   $('#date-begin').focusin(()=> {
-      dateEndPicker.picker.datepicker('close');
+    dateEndPicker.picker.datepicker('close');
   });
 
 
@@ -205,13 +205,13 @@ function addItemLayout(item, index){
   tds.push($('<td>').append($('<span>').append(Num.money(valCount)).attr('title', valCount)));
   tds.push($('<td>').append(volCount));
   tds.push($('<td>').append(Object.keys(ufs).sort().join(', ')));
-  tds.push($('<td>').append(getSituationName(item.situacao)));
+  tds.push($('<td>').addClass('ship-status').append(getSituationName(item.situacao)));
 
 
 
 
   var dots = $('<div>').addClass('menu-dots').append($('<img>').attr('src','../img/dots.png').addClass('dots-glyph'));
-  dots.data('number', item.numeroColeta).click(getDropDow());
+  dots.data('number', item.numeroColeta).data('id', item.id).click(getDropDow());
 
   tds.push($('<td>').append(dots));
 
@@ -256,20 +256,28 @@ function applyBackgroundColor(situation, el){
 
 function getDropDow(){
   return function (e){
-    var number = $(this).data('number');
+    var holder = $(this);
+
+    var number = holder.data('number');
+    var id = holder.data('id');
     e.stopPropagation();
 
     var drop = new MaterialDropdown($(this), e, true);
     drop.addItem('../img/print.png', 'Imprimir', function(){
       window.open('/shipping-order-print?number=' + number ,'_blank');
     }).addItem('../img/delete.png', 'Excluir', function(){
-
+      holder.closest('tr').fadeOut(300, function(){
+        $(this).remove();
+      });
     }).addItem('../img/transport/default.png', 'Coletado', function(){
+      _post('/shipping-order-colected', {id: id}, () => {
+        console.log(holder);
+        var s = $(holder.closest('tr')).find('.ship-status');
+        s.text('Coletado').addClass('colected');
+        holder.closest('tr').removeClass('open-item').addClass('colected-item');
+      });
 
-    })/*.addItem('../img/all-papers.png', 'Enviado', function(){
-      //Aqui não faz nada, como trabalhamos com a intelipost, o eccosys não faz nada.
-      //Sem a intelipost, o eccosys iria enviar o lote de notas para o transportador
-    });*/
+    });
 
     drop.setMenuPosAdjust(-100, 0).show();
   }

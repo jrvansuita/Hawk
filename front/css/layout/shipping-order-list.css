@@ -157,3 +157,7 @@
 .content tr:nth-child(even) {
   background-color: #ddd6d757;
 }
+.ship-status.colected{
+  color: green;
+  font-weight: bolder;
+}

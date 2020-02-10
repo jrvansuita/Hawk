@@ -7,8 +7,6 @@ const TransportLaws = require('../laws/transport-laws.js');
 module.exports = class ShippingOrderRoutes extends Routes{
 
   attach(){
-
-
     this._page('/packing/shipping-order-list', (req, res) => {
       res.locals.shippingListQuery = req.session.shippingListQuery;
       res.render("packing/shipping-order/shipping-order-list", {transportList: TransportLaws.getObject()});
@@ -37,8 +35,6 @@ module.exports = class ShippingOrderRoutes extends Routes{
       });
     });
 
-
-
     this._post('/shipping-order-new', (req, res) => {
       new EccosysStorer().shippingOrder(res.locals.loggedUser).insert(req.body.data).go((data) => {
         var id = Num.extract(data);
@@ -49,13 +45,15 @@ module.exports = class ShippingOrderRoutes extends Routes{
       });
     });
 
-
     this._post('/shipping-order-save', (req, res) => {
-      new EccosysStorer(true).shippingOrder(res.locals.loggedUser).update(req.body.id, req.body.nfs).go((data) => {
-        this._resp().sucess(res, data);
-      });
+      try{
+        new EccosysStorer().shippingOrder(res.locals.loggedUser).update(req.body.id, req.body.nfs).go((data) => {
+          this._resp().sucess(res, data);
+        });
+      }catch(e){
+        this._resp().error(res, e);
+      }
     });
-
 
     this._get('/nfe', (req, res) => {
       new EccosysProvider().nfe(req.query.number).go(nfResult=>{
@@ -63,6 +61,10 @@ module.exports = class ShippingOrderRoutes extends Routes{
       });
     });
 
-
+    this._post('/shipping-order-colected', (req, res) => {
+      new EccosysStorer().shippingOrder(res.locals.loggedUser).colected(req.body.id).go(r=>{
+        this._resp().sucess(res, r);
+      });
+    });
 
   }};

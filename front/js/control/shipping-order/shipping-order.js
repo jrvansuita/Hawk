@@ -134,6 +134,7 @@ function addLines(nfes){
   }
 
   $('.nfs-in-holder').show();
+  $('#nf').focus();
 }
 
 function buildLine(each){
@@ -151,14 +152,13 @@ function buildLine(each){
 
   var lastCol = createColVal(each.uf);
 
-  if (each.memory){
-    lastCol.append($('<img>').attr('src','/img/delete.png').addClass('dots-glyph nfe-remove').click(() => {
-      $("tr[data-nfe='" + each.numero + "']").fadeOut(300, function(){
-        $(this).remove();
-      });
-      removeFromMemory(each.numero);
-    }));
-  }
+  lastCol.append($('<img>').attr('src','/img/delete.png').addClass('dots-glyph nfe-remove').click(() => {
+    $("tr[data-nfe='" + each.numero + "']").fadeOut(300, function(){
+      $(this).remove();
+    });
+
+    removeSale(each.numero);
+  }));
 
   cols.push(lastCol);
 
@@ -290,10 +290,17 @@ function addOnMemory(nfe){
   saveMemory();
 }
 
-function removeFromMemory(nfeNumber){
-  memoryList = memoryList.filter((e) => {
-    return e.numero != nfeNumber;
-  });
+function removeSale(nfeNumber){
+  var filter = (each) => {
+    return each.numero != nfeNumber;
+  };
+
+  memoryList = memoryList.filter(filter);
+
+
+  if (shippingOrder._NotasFiscais){
+    shippingOrder._NotasFiscais = shippingOrder._NotasFiscais.filter(filter);
+  }
 
   saveMemory();
 }
@@ -346,17 +353,25 @@ function onShippingOrderIsInMemory(nfe){
   }
 }
 
+var isLoadingNewShippingOrder = false;
+
 function createNewShippingOrder(firstNfe){
-  onShippingOrderIsInMemory(firstNfe);
+  if (!isLoadingNewShippingOrder){
+    isLoadingNewShippingOrder = true;
+    onShippingOrderIsInMemory(firstNfe);
 
-  shippingOrder.transportador = firstNfe.transportador;
-  shippingOrder._NotasFiscais = [firstNfe.numero];
-  shippingOrder.data = Dat.api(new Date(), false, true);
+    shippingOrder.transportador = firstNfe.transportador;
+    shippingOrder._NotasFiscais = [firstNfe.numero];
+    shippingOrder.data = Dat.api(new Date(), false, true);
 
-  _post('/shipping-order-new', {data: shippingOrder}, (data) => {
-    shippingOrder = data;
-    onShippingOrderStored();
-  });
+    _post('/shipping-order-new', {data: shippingOrder}, (data) => {
+      shippingOrder = data;
+      isLoadingNewShippingOrder = false;
+      onShippingOrderStored();
+    },(err) => {
+      showMsg(err.responseText, 'error', true);
+    });
+  }
 }
 
 function onShippingOrderStored(){
