@@ -43,14 +43,14 @@ module.exports = class EccosysStorer extends EccosysApi{
   }
 
 
-  shippingOrder() {
+  shippingOrder(user) {
     return {
-      update:(id, body) => {
-        return  this.put('ordem-de-coleta/' + id).setBody(body).single();
+      update:(id, idsNfeArr) => {
+        return  this.put('ordem-de-coleta/' + id).setBody(idsNfeArr).withUser(user);
       },
 
       insert: (body) => {
-        return this.post('ordem-de-coleta').setBody(body);
+        return this.post('ordem-de-coleta').setBody(body).withUser(user);
       }
     };
   }

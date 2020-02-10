@@ -1,12 +1,12 @@
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
-
+const TransportLaws = require('../laws/transport-laws.js');
 
 var lastLoadedArr = [];
 
 module.exports = {
 
   list(query, page, callback){
-    var provider = new EccosysProvider(true);
+    var provider = new EccosysProvider();
 
     provider
     .pageCount(50)
@@ -27,7 +27,6 @@ module.exports = {
       provider.dates(new Date(parseInt(query.begin)), new Date(parseInt(query.end)))
     }
 
-
     provider.go((data) => {
       lastLoadedArr = data;
       callback(data);
@@ -43,14 +42,11 @@ module.exports = {
     if (foundOc){
       callback(foundOc);
     }else{
-      new EccosysProvider(true)
+      new EccosysProvider()
       .shippingOrder(query)
       .go((result) => {
         callback(result);
       });
     }
   }
-
-
-
 };

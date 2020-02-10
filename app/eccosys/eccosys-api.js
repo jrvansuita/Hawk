@@ -214,7 +214,13 @@ module.exports = class EccosysApi{
     });
 
     if (this.body){
-      req.write(JSON.stringify(this.body));
+      var parsedBody = JSON.stringify(this.body);
+
+      if (this.log){
+        console.log(parsedBody);
+      }
+      
+      req.write(parsedBody);
     }
 
 

@@ -210,10 +210,12 @@ table{
   top: 0;
 }
 
-.nfs-table-holder{
+.nfs-in-holder{
   height: fit-content;
   margin-top: 15px;
   padding-top: 2px;
+  display: none;
+  margin-bottom: 200px;
 }
 
 
@@ -240,7 +242,6 @@ table{
 }
 
 #nfs-in{
-  margin-bottom: 200px;
 }
 
 #nfs-in td{

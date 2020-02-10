@@ -15,9 +15,15 @@ var Dat = {
     return formated.day + '/' + formated.month + '/' + formated.year.slice(2, 4) + " " + formated.hour + ":" + formated.min;
   },
 
-  api(date, monthIndex) {
+  api(date, monthIndex, withHour) {
     var formated = fmt(date);
-    return formated.year + '-' + (monthIndex ? --formated.month : formated.month) + '-' + formated.day;
+    var str = formated.year + '-' + (monthIndex ? --formated.month : formated.month) + '-' + formated.day;
+
+    if (withHour){
+      str += ' ' + formated.hour + ':' + formated.min + ':00';
+    }
+
+    return str;
   },
 
   id(date) {
@@ -63,7 +69,7 @@ var Dat = {
 
   rollHour(date, n) {
     date = !date ? new Date() : date;
-    
+
     date.setHours(date.getHours() + n);
     return date;
   },

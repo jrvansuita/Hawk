@@ -40,14 +40,20 @@ module.exports = class ShippingOrderRoutes extends Routes{
 
 
     this._post('/shipping-order-new', (req, res) => {
-       new EccosysStorer().shippingOrder().insert(req.body.data).go((data) => {
-         this._resp().sucess(res, data);
-       })
+      new EccosysStorer().shippingOrder(res.locals.loggedUser).insert(req.body.data).go((data) => {
+        var id = Num.extract(data);
+
+        ShippingOrderProvider.get({id: id}, (oc) => {
+          this._resp().sucess(res, oc);
+        });
+      });
     });
 
 
-    this._get('/shipping-order-save', (req, res) => {
-
+    this._post('/shipping-order-save', (req, res) => {
+      new EccosysStorer(true).shippingOrder(res.locals.loggedUser).update(req.body.id, req.body.nfs).go((data) => {
+        this._resp().sucess(res, data);
+      });
     });
 
 

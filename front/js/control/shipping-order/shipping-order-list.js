@@ -166,7 +166,6 @@ function loadList(){
       $('.loading').hide();
       showAll = result.length == 0;
 
-      console.log(result);
 
       result.forEach((each, index)=>{
         addItemLayout(each, index);

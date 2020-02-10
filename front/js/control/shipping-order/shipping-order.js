@@ -2,14 +2,11 @@ var MEM_TAG;
 var memoryList;
 var nfeHighlight;
 
-
-
 $(document).ready(()=>{
 
   nfeHighlight = Util.getUrlParam('nfe');
 
-  MEM_TAG = 'shipping-order-' + (shippingOrder.numeroColeta || 'new');
-  memoryList = Local.get(MEM_TAG) || [];
+  initMemoryHandler();
 
   onInit();
 
@@ -47,10 +44,30 @@ $(document).ready(()=>{
 
 });
 
+function initMemoryHandler(removeNew){
+  if (removeNew && MEM_TAG){
+    clearMemory();
+  }
+
+  MEM_TAG = 'shipping-order-' + (shippingOrder.numeroColeta || 'new');
+  memoryList = Local.get(MEM_TAG) || [];
+}
+
+function clearMemory(tag){
+  Local.put(tag || MEM_TAG, []);
+}
+
 function onInit(){
   createNfsTable('nfs-in-holder', 'nfs-in', {title: 'Lista de Notas da Ordem de Coleta'});
   loadNfsInTableFromDataBase();
   loadNfsInTableFromMemory();
+  refreshHeader();
+
+  if (shippingOrder.numeroColeta){
+    $('#save').show();
+  }else{
+    $('#save').hide();
+  }
 }
 
 
@@ -116,7 +133,7 @@ function addLines(nfes){
     $('#nfs-in tr:first').after(highlightedLine);
   }
 
-  refreshHeader(nfes);
+  $('.nfs-in-holder').show();
 }
 
 function buildLine(each){
@@ -167,13 +184,17 @@ function createIcon(iconPath){
   return $('<td>').append($('<img>').attr('src','/img/' + iconPath + '.png').addClass('mini-icon'));
 }
 
-function refreshHeader(nfs){
+function getAllNfs(){
+  return memoryList.concat(shippingOrder._NotasFiscais || []);
+}
+
+function refreshHeader(){
   var vols = 0;
   var val = 0;
   var wei = 0;
   var ufs = {};
 
-  nfs.forEach((e) => {
+  getAllNfs().forEach((e) => {
     vols+= parseFloat(e.qtdVolumes);
     val+= parseFloat(e.totalFaturado);
     wei+= parseFloat(e.pesoTransportadora);
@@ -205,7 +226,6 @@ function handleNfeInclusion(nfNumber){
 function onCheckNfeParameters(query, nfe){
   var sound = '';
   var msg = '';
-  console.log(nfe);
 
   if (!nfe){
     sound = beepError;
@@ -238,6 +258,7 @@ function onCheckNfeParameters(query, nfe){
 
 function onInsertNewNfeOnShippingOrder(nfe){
   var object = {
+    id: nfe.id,
     numero: nfe.numero,
     totalFaturado: nfe.totalFaturado,
     dataEmissao: nfe.dataEmissao,
@@ -253,6 +274,7 @@ function onInsertNewNfeOnShippingOrder(nfe){
   addLines([object]);
   showMsg(null, 'checked', false);
   beepSucess();
+  refreshHeader();
 
   if (!shippingOrder.numeroColeta){
     createNewShippingOrder(nfe);
@@ -303,27 +325,43 @@ function showMessage(msg, isError, onAutoHide){
 }
 
 function saveShippingOrder(){
-  _post('/shipping-order-save', )
+  if (shippingOrder.id){
+    var idsNfes = getAllNfs().map((e) => {
+      return e.id;
+    }).filter(Boolean);
+
+    _post('/shipping-order-save', {nfs: idsNfes, id: shippingOrder.id} ,() => {
+      clearMemory();
+      window.location = 'shipping-order?number=' + shippingOrder.numeroColeta;
+    });
+  }
 }
 
 function onShippingOrderIsInMemory(nfe){
   if (!shippingOrder.numeroColeta){
-    $('.transport-holder .icon').attr('src', '/img/transport/' + Util.transportName(nfe.transportador, 'none') + '.png');
-    $('.transport-holder .info').text(nfe.transportador);
+    var name = Util.transportName(nfe.transportador, 'none');
+
+    $('.transport-holder .icon').attr('src', '/img/transport/' + name + '.png');
+    $('.transport-holder .info').text(name);
   }
 }
-
 
 function createNewShippingOrder(firstNfe){
   onShippingOrderIsInMemory(firstNfe);
 
-  //shippingOrder.transportador = firstNfe.transportador;
-  //shippingOrder.transportador = 'ON TIME';
+  shippingOrder.transportador = firstNfe.transportador;
   shippingOrder._NotasFiscais = [firstNfe.numero];
+  shippingOrder.data = Dat.api(new Date(), false, true);
 
-  console.log(shippingOrder);
-
-  _post('/shipping-order-new', {data: {...shippingOrder, transportador: 'ON TIME'}}, (data) => {
-    console.log(data);
+  _post('/shipping-order-new', {data: shippingOrder}, (data) => {
+    shippingOrder = data;
+    onShippingOrderStored();
   });
+}
+
+function onShippingOrderStored(){
+  initMemoryHandler(true);
+  $('#save').show();
+
+  $('.shipping-order-number').text('#' + shippingOrder.numeroColeta);
 }

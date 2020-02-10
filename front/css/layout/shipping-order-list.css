@@ -62,7 +62,7 @@
 
 .material-input-holder>input{
   font-size: 15px !important;
-  padding: 25px 10px 5px 5px !important;
+  /* padding: 25px 10px 5px 5px !important; */
 }
 
 .material-input-holder>input:focus~label, .material-input-holder>input:valid~label {
