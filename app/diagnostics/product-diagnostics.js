@@ -192,7 +192,9 @@ module.exports = class ProductDiagnostics{
     new EccosysProvider()
     .active()
     .dates(new Date(new Date().setMonth(new Date().getMonth() - 6)), new Date(), 'data')
-    .products().pagging().each((items, next)=>{
+    .products()
+    .pagging()
+    .each((items, next)=>{
       this._loadCurrentProducts(items, next);
     });
   }

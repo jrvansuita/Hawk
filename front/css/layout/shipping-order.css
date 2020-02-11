@@ -105,6 +105,7 @@ table{
 
 .middle-line-inner{
   display: -webkit-box;
+  width: 100%;
 }
 
 
@@ -114,14 +115,16 @@ table{
   height: fit-content;
   padding-bottom: 4px;
   position: relative;
+  display: contents;
 }
 
 
 .right-middle-line{
   width: 20%;
-  float: right;
+  right: 0;
   height: fit-content;
-  position: relative;
+  position: absolute;
+  margin-right: 10px;
 }
 
 
@@ -152,10 +155,9 @@ table{
 }
 
 .nf-input-holder{
-  /* display: -webkit-inline-box; */
-  /* max-width: 500px; */
-  height: fit-content;
-  width: fit-content;
+   display: block;
+   height: fit-content;
+   width: fit-content;
 }
 
 .nf-input-icon{
@@ -166,7 +168,7 @@ table{
 
 .nf-msg{
   position: relative;
-  display: none;
+  /* display: none; */
   width: fit-content;
   height: fit-content;
   font-size: 13px;
@@ -207,7 +209,7 @@ table{
 .buttons-holder{
   display: block;
   float: right;
-  top: 0;
+  /* top: 0; */
 }
 
 .nfs-in-holder{
@@ -309,3 +311,9 @@ table{
 .hightlight-line{
   border-left: 4px solid #8181f9;
 }
+
+.allow-difal-holder{
+  transform: scale(0.9);
+}
+
+.difal-states{font-size: 12px;color: gray;display: block;padding-left: 6px;margin-top: 2px;}

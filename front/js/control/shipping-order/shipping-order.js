@@ -243,6 +243,9 @@ function onCheckNfeParameters(query, nfe){
   }else if(nfe.idOrdemColeta != 0){
     sound = beepError;
     msg = 'NF já foi incluida em uma Ordem de Coleta anteriormente.<a style="color: #5f5fda"  target="_blank" href="shipping-order?id=' + nfe.idOrdemColeta + '&nfe='+nfe.numero+'">Ver Mais.</a>';
+  }else if(!checkAndAllowDifal(nfe)){
+    sound = beepError;
+    msg = 'NF '+nfe.numero+' é do estado ' + nfe.uf + '. Difal não permitido!';
   }
 
   if (msg){
@@ -254,6 +257,21 @@ function onCheckNfeParameters(query, nfe){
   }
 
   return !msg;
+}
+
+function checkAndAllowDifal(nfe){
+  var result = true;
+  if (Params.activeDifalControlOC()){
+    if (!$('#allow-difal').is(':checked')){
+      var isDifal = Params.difalUfs().split(',').some((each) => {
+        return each.trim().includes(nfe.uf);
+      });
+
+      result = !isDifal;
+    }
+  }
+
+  return result;
 }
 
 function onInsertNewNfeOnShippingOrder(nfe){

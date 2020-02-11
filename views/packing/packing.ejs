@@ -41,7 +41,7 @@
 
           <% var error = sale && sale.error ? sale.error : '' %>
 
-          <% error = Util.checkToken(locals.loggedUser, false) ? Const.no_token : error; %>
+          <% error = Util.isTokenOk(locals.loggedUser) ? error: Const.no_token; %>
 
 
           <img class="mini-icon" src="<%=error ? 'img/error.png' : 'img/checked.png'%>" />

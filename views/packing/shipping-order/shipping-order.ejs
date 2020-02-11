@@ -9,6 +9,7 @@
   <script type="text/javascript" src="/util/local.js"></script>
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
   <script type="text/javascript" src="/front/js/libs/beep.js"></script>
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-checkbox.css">
 
 
 
@@ -130,7 +131,6 @@
           <div class="left-middle-line">
 
 
-
             <div class="nf-input-holder">
               <div class="nf-input-and-icon">
                 <img class="circle shadow icon"  id="nf-icon" class="nf-icon" src="/img/scan-barcode.png" />
@@ -140,26 +140,38 @@
               <label class="nf-msg"></label>
             </div>
 
-          </div>
 
-          <div class="right-middle-line">
-            <div class="buttons-holder">
-              <label class="button shadow" id="save" tabindex="0">Salvar</label>
+            <%if (Params.activeDifalControlOC()){%>
+              <div class="difal-holder">
+                <label class="pure-material-checkbox allow-difal-holder">
+                  <input type="checkbox" id="allow-difal">
+                  <span>Permitir Difal</span>
+                </label>
+                <label class="difal-states"><%=Params.difalUfs()%></label>
+              </div>
+              <%}%>
+
+
             </div>
-          </div>
 
+            <div class="right-middle-line">
+              <div class="buttons-holder">
+                <label class="button shadow" id="save" tabindex="0">Salvar</label>
+              </div>
+            </div>
+
+
+          </div>
 
         </div>
 
+        <%}%>
+
+
+
+        <div class="nfs-in-holder nfs-table-holder shadow"></div>
+
       </div>
 
-      <%}%>
-
-
-
-      <div class="nfs-in-holder nfs-table-holder shadow"></div>
-
-    </div>
-
-  </body>
-  </html>
+    </body>
+    </html>

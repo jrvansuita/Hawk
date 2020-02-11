@@ -45,7 +45,7 @@ module.exports = class EccosysStorer extends EccosysApi{
 
 
   shippingOrder(user) {
-    if (!Util.checkToken(user, true)){
+    if (!Util.isTokenOk(user)){
       throw Err.thrw(Const.no_token);
     }
 

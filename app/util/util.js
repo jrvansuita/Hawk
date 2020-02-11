@@ -367,17 +367,9 @@ var Util = {
         return decodeURIComponent(name[1]);
       },
 
-      checkToken: (user)=>{
-        if (!user.token || user.token.length < 100){
-          return false;
-        }
-
-        return true;
+      isTokenOk: (user)=>{
+        return user.token && (user.token.length > 100);
       }
-
-
-
-
 
     };
 

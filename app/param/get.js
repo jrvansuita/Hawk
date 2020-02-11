@@ -133,10 +133,16 @@ var Params = {
   },
 
   workTimeRange(){
-
     return this.get('work-time-range').split('-');
-  }
+  },
 
+  difalUfs(){
+    return this.get('difal-ufs');
+  },
+
+  activeDifalControlOC(){
+    return this.get('active-difal-oc');
+  }
 }
 
 
