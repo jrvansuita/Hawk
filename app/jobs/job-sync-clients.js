@@ -30,12 +30,12 @@ module.exports = class JobSyncClients extends Job{
 
   doWork(){
     return new Promise((resolve, reject)=>{
-      new EccosysProvider()
+      new EccosysProvider(true)
       .setOnError((err) => {
         reject(err);
       })
       .pageCount(1000)
-      //.dates(Dat.firstDayOfLastMonth(), Dat.rollDay(new Date(), -2), 'data')
+      .dates(Dat.rollDay(new Date(), -2), Dat.now())
       .clients()
       .pagging()
       .each((clientsPage, nextPage)=>{

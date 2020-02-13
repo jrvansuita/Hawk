@@ -9,7 +9,7 @@ $(document).ready(()=>{
 
     var drop = new MaterialDropdown($(this), e);
 
-    if (active){
+    if (active || loggedUser.full){
       drop.addItem('/img/play.png', 'Executar', function(){
         _post('  /job-run-force', {id: id});
       });

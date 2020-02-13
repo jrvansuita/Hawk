@@ -1,0 +1,33 @@
+<html lang="pt" dir="ltr">
+<head>
+  <%  include ../menus/main-menu %>
+  <meta charset="utf-8">
+
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/client.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
+
+  <script type="text/javascript" src="/front/js/control/client.js"></script>
+  <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
+  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+</head>
+<body>
+  <%  include ../menus/customer-menu %>
+
+  <script class="hidable-script">
+      window.client = <%- JSON.stringify(client || null) %>
+  </script>
+
+  <div class="main-content">
+
+    <div class="search-holder">
+
+    </div>
+
+    <div class="main-holder">
+
+    </div>
+
+  </div>
+
+</body>
+</html>

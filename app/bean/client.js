@@ -1,26 +1,29 @@
 module.exports = class Client extends DataAccess {
 
-  constructor(id, code, name, tradeName, cpnj, ie, type,  address, num, district, city, state, zipcode, phone, cell, email, bornDate) {
+  constructor(id, code, name, tradeName, socialCode, type, city, state, phone, cell, email, gender, bornDate, lastSale, lastUpdate) {
     super();
 
     this.id = Num.def(id);
     this.code = Num.def(code);
     this.name = Str.def(name);
     this.tradeName = Str.def(tradeName);
-    this.cpnj = Str.def(cpnj);
-    this.ie = Str.def(ie);
+    this.socialCode = Str.def(socialCode);
     this.type = Str.def(type);
-    this.address = Str.def(address);
-    this.num = Str.def(num);
-    this.district = Str.def(district);
     this.city = Str.def(city);
     this.state = Str.def(state);
-    this.zipcode = Str.def(zipcode);
     this.phone = Str.def(phone);
     this.cell = Str.def(cell);
     this.email = Str.def(email);
+    this.gender = Str.def(gender);
     this.bornDate = Dat.def(bornDate);
+    this.lastSale = Dat.def(lastSale);
+    this.lastUpdate = Dat.def(lastUpdate);
   }
+
+  static getKey() {
+    return ['id'];
+  }
+
 
   static from(c){
     return new Client(
@@ -29,25 +32,44 @@ module.exports = class Client extends DataAccess {
       c.nome,
       c.fantasia,
       c.cnpj,
-      c.ie,
       c.tipo,
-      c.endereco,
-      c.enderecoNro,
-      c.bairro,
       c.cidade,
       c.uf,
-      c.cep,
       c.fone,
       c.celular,
       c.email,
-      c.dataNascimento
+      c.sexo,
+      c.dataNascimento,
+      c.dataUltimaCompra,
+      c.dataAlteracao
     );
   }
 
-
-  static getKey() {
-    return ['id'];
+  static likeQuery(value){
+    var orOption = (field) => {
+      return { field: {
+        "$regex": value,
+        "$options": "i"
+      }
+    }
   }
 
+  return {
+    $or: [
+      orOption('name'),
+      orOption('tradeName'),
+      orOption('socialCode')
+    ]
+  };
+}
+
+static likeThis(keyValue, limit, callback){
+  var query = this.likeQuery(keyValue);
+
+  this.staticAccess()
+  .find(query)
+  .limit(limit)
+  .exec(callback);
+}
 
 }
