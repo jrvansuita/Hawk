@@ -21,6 +21,7 @@
 .md-dropdown li {
   display: -webkit-box;
   width: 100%;
+  z-index: 93333;
 }
 
 .md-dropdown ul:hover {

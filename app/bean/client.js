@@ -47,18 +47,21 @@ module.exports = class Client extends DataAccess {
 
   static likeQuery(value){
     var orOption = (field) => {
-      return { field: {
+      var r = {};
+      r[field] = {
         "$regex": value,
         "$options": "i"
-      }
-    }
+      };
+
+      return r;
   }
 
   return {
     $or: [
       orOption('name'),
       orOption('tradeName'),
-      orOption('socialCode')
+      orOption('socialCode'),
+      orOption('email')
     ]
   };
 }

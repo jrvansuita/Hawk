@@ -1,0 +1,232 @@
+.main-content{
+  width: 100%;
+  margin-top: 95px;
+  padding: 2px;
+  position: relative;
+}
+
+.search-box {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  position: relative;
+}
+.main-holder{
+  margin-left: 40px;
+margin-right: 40px;
+}
+
+.search-holder{
+  padding-bottom: 10px;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+#search-client{
+  flex: 100%;
+  width: -webkit-fill-available;
+  font-size: 15px;
+  margin: 10px;
+  position: relative;
+}
+
+#search-sale{
+  margin: 10px;
+  font-size: 15px;
+  width: 250px;
+}
+
+#search-button{
+  height: fit-content;
+  width: 40px;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+
+.is-open{
+  transform: inherit;
+}
+
+.is-closed{
+  transform: rotate(270deg);
+}
+
+.icon-open{
+  float: left;
+  margin-left: 8px;
+  margin-top: 13px;
+  vertical-align: middle;
+  width: 23px;
+  height: 23px;
+  min-width: 23px;
+  cursor: pointer;
+}
+
+.easy-autocomplete{
+  width: 100%;
+}
+
+.menu-dots{
+  margin-top: 15px;
+  margin-right: 10px;
+  margin-left: 5px;
+}
+
+.auto-client-name{
+  font-weight: 900;
+  font-size: 15px;
+}
+
+.auto-client-social{
+  font-weight: 400;
+  margin-left: 15px;
+  font-size: 14px;
+  color: gray
+}
+
+.auto-client-email{
+  font-weight: 400;
+  margin-left: 10px;
+  font-size: 13px;
+  color: gray
+}
+
+.auto-client-city{
+  float: right;
+  font-weight: 400;
+  margin-left: 10px;
+  font-size: 13px;
+  color: gray
+}
+
+
+.client-cards-holder{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: fit-content;
+  position: relative;
+  grid-gap: 15px;
+  margin-top: 20px;
+  max-width: 100%;
+  text-align: -webkit-auto;
+  padding-bottom: 20px;
+}
+
+.client-card-item{
+  padding: 20px 15px;
+  width: auto;
+  min-height: 155px;
+  /* position: relative; */
+}
+
+
+.client-card-item>.client-card-title{
+  padding-bottom: 10px;
+}
+
+.client-card-title{
+  font-size: 13px;
+  position: relative;
+  display: -webkit-box;
+  font-weight: 600;
+  color: #5d5b59;
+  padding-bottom: 1px;
+}
+
+
+.client-name{
+  font-size: 19px;
+  font-weight: 900;
+}
+
+.client-trade-name{
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.client-social-code{
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.client-card-item table{
+  width: 100%;
+}
+
+.client-card-item span{
+  display: block;
+  padding-bottom: 3px;
+}
+
+.client-card-item .divide td{
+  padding-bottom: 15px;
+}
+
+.client-card-item td{
+  padding-right: 15px;
+}
+
+.client-date{
+  font-size: 15px;
+  color: black;
+}
+
+.client-id{
+  text-align: right;
+  font-size: 15px;
+}
+
+.client-address{
+  font-size: 15px;
+}
+
+.gray{
+  color: #8e8c8b;
+}
+
+.right{
+  text-align: right;
+}
+
+.center{
+   text-align: center;
+}
+
+.client-tel{
+  font-size: 15px;
+}
+
+.client-email{
+  font-size: 15px;
+}
+
+
+.client-sales tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.client-sales td{
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-size: 15px;
+  color: #191717;
+  /* position: relative; */
+}
+
+.table-titles td{
+  font-size: 14px;
+  color: gray;
+  padding-bottom: 5px;
+}
+
+.sale-number{
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.sale-dots{
+  display: inline-block;
+  float: right;
+  margin-top: -20px;
+}

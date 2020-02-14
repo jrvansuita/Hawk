@@ -23,6 +23,14 @@ module.exports = class MagentoCalls{
     };
   }
 
+  async saleByClient(clientId){
+    return this.onInstance((api, resolve, reject) => {
+      api.salesOrder.list({
+        filters: { customer_id: clientId }
+      }, this.onResult(resolve, reject));
+    });
+  }
+
 
   async product(sku){
     return this.onInstance((api, resolve, reject) => {

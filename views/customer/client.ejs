@@ -6,6 +6,10 @@
   <link rel="stylesheet" type="text/css" href="/front/css/layout/client.css">
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
 
+
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/easy-autocomplete.css">
+  <script type="text/javascript" src="/front/js/libs/easy-autocomplete.min.js"></script>
+<script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
   <script type="text/javascript" src="/front/js/control/client.js"></script>
   <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
@@ -14,20 +18,149 @@
   <%  include ../menus/customer-menu %>
 
   <script class="hidable-script">
-      window.client = <%- JSON.stringify(client || null) %>
+  window.client = <%- JSON.stringify(client || null) %>
   </script>
 
   <div class="main-content">
 
-    <div class="search-holder">
+    <div class="search-holder shadow">
+
+      <div class="search-box">
+        <img class="icon-open is-open" title="Abrir seletor" src="/img/open-down.png">
+        <input type="text" id="search-client"  class="simple-material-input" placeholder="Pesquisar Clientes" autocomplete="off" value="<%=client.name%>"/>
+        <input type="number" id="search-sale"  class="simple-material-input" placeholder="Pesquisar Pedido" autocomplete="off"/>
+        <label class="button shadow" id="search-button" tabindex="0">Buscar</label>
+
+        <div class="menu-dots">
+          <img src="/img/dots.png" class="dots-glyph"/>
+        </div>
+
+      </div>
 
     </div>
 
     <div class="main-holder">
+      <%if (client.id){%>
+
+        <div class="client-cards-holder">
+
+          <div class="client-card-item shadow">
+
+            <label class="client-card-title"> <%=(client.tipo == 'F') ? 'Pessoa Física' : 'Pessoa Jurídica'%></label>
+            <table>
+              <tr>
+                <td>
+                  <span class="client-name copiable"><%=client.nome%></span>
+                  <span class="client-trade-name copiable"><%=client.fantasia%></span>
+                </td>
+                <td>
+                  <span class="client-id gray copiable"><%=client.codigo%></span>
+                  <span class="client-id gray copiable"><%=client.id%></span>
+                </td>
+              </tr>
+
+              <tr class="divide">
+                <td><span class="client-social-code gray copiable"><%=client.cnpj%></span></td>
+                <td><span class="client-social-code gray copiable"><%=client.ie%></span></td>
+              </tr>
+              <tr>
+                <td><label class="client-card-title">Data de Nascimento</label></td>
+                <td><label class="client-card-title right">Útilma Atualização</label></td>
+              </tr>
+              <tr>
+                <td><span class="client-date"><%=Dat.format(new Date(client.dataNascimento))%></span></td>
+                <td><span class="client-date right"><%=Dat.formatwTime(new Date(client.dataAlteracao || client.dtCriacao))%></span></td>
+              </tr>
+            </table>
+          </div>
+
+
+          <div class="client-card-item shadow">
+            <label class="client-card-title">Endereço</label>
+            <table>
+              <tr>
+                <td colspan="2">
+                  <span class="client-address"><%=client.endereco + ', ' + client.enderecoNro%></span>
+                </td>
+              </tr>
+
+              <tr class="divide">
+                <td><span class="client-address"><%=client.bairro%></span></td>
+                <td><span class="client-address right gray"><%=client.complemento%></span></td>
+              </tr>
+
+              <tr>
+                <td><span class="client-address"><%=client.cidade%></span></td>
+                <td><span class="client-address right"><%=client.uf%></span></td>
+              </tr>
+              <tr>
+                <td><span class="client-address gray copiable"><%=client.cep%></span></td>
+                <td></td>
+              </tr>
+            </table>
+          </div>
+
+
+          <div class="client-card-item shadow">
+            <label class="client-card-title">Contato</label>
+            <table>
+              <tr class="divide">
+                <td><span class="client-tel copiable"><%=client.fone%></span></td>
+                <td><span class="client-tel right copiable"><%=client.celular%></span></td>
+              </tr>
+
+              <tr>
+                <td colspan="2"><span class="client-email copiable"><%=client.email%></span></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+
+        <div class="client-card-item shadow">
+          <label class="client-card-title">Últimos Pedidos</label>
+          <table class="client-sales">
+            <tr class="table-titles">
+              <td>Número</td>
+              <td>Data da Compra</td>
+              <td>Quantidade de Produtos</td>
+              <td>Valor do Frete</td>
+              <td>Valor do Desconto</td>
+              <td>Valor do Pago</td>
+              <td>Status</td>
+              <td>Frete</td>
+            </tr>
+
+            <%client.sales.forEach((sale)=>{%>
+
+              <tr>
+                <td><span class="sale-number copiable"><%=sale.increment_id%></span></td>
+                <td><span class="sale-date"><%=Dat.formatwTime(Dat.rollHour(new Date(sale.created_at),-3))%></span></td>
+                <td><span class="sale-quantity"><%=Num.int(sale.total_qty_ordered)%></span></td>
+                <td><span class="sale-freight"><%=Num.money(sale.shipping_amount)%></span></td>
+                <td><span class="sale-desc"><%=Num.money(sale.discount_amount) %></span></td>
+                <td><span class="sale-total"><%=Num.money(sale.grand_total)%></span></td>
+                <td><span class="sale-status"><%=sale.status%></span></td>
+                <td><span class="sale-shipping"><%=sale.shipping_description%></span>
+
+                  <div class="menu-dots sale-dots" data-sale="<%=sale.increment_id%>">
+                    <img src="/img/dots.png" class="dots-glyph"/>
+                  </div>
+              </td>
+
+            </tr>
+
+            <%})%>
+          </table>
+
+
+        </div>
+
+        <%}%>
+
+      </div>
 
     </div>
 
-  </div>
-
-</body>
-</html>
+  </body>
+  </html>

@@ -30,41 +30,6 @@ module.exports = class MagentoApi extends MagentoAPI{
   }
 
 
-  
-
-  /*async product(sku){
-    let handler = await this._instance();
-
-    return new Promise((resolve, reject) => {
-      handler.catalogProduct.info({
-        id: sku,
-      }, (err, product) => {
-        resolve(product);
-      });
-    });
-  }
-
-
-  getProduct(sku, callback){
-    this.catalogProduct.info({
-      id: sku,
-    }, (err, product) => {
-      if (callback)
-      callback(product);
-    });
-  }
-
-  updateProductWeight(sku, weight, callback){
-    this.catalogProduct.update({
-      id:         sku,
-      data:       {weight: weight}
-    }, (err, doc) => {
-      if (callback)
-      callback(doc);
-    });
-  }*/
-
-
 
 
 };

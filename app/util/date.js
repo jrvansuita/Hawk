@@ -6,13 +6,21 @@ var Dat = {
 
 
   format(date) {
-    var formated = fmt(date);
-    return formated.day + '/' + formated.month + '/' + formated.year.slice(2, 4);
+    if (date){
+      var formated = fmt(date);
+      return formated.day + '/' + formated.month + '/' + formated.year.slice(2, 4);
+    }else{
+      return '';
+    }
   },
 
   formatwTime(date) {
-    var formated = fmt(date);
-    return formated.day + '/' + formated.month + '/' + formated.year.slice(2, 4) + " " + formated.hour + ":" + formated.min;
+    if (date){
+      var formated = fmt(date);
+      return formated.day + '/' + formated.month + '/' + formated.year.slice(2, 4) + " " + formated.hour + ":" + formated.min;
+    }else{
+      return '';
+    }
   },
 
   api(date, monthIndex, withHour) {

@@ -7,17 +7,21 @@ module.exports = class CustomerRoutes extends Routes{
   attach(){
 
     this._page('/customer-service/client', (req, res) => {
-      if (req.query.id){
-        CustomerProvider.get(req.query.id, (data) => {
+      var redirect = (data) => {
           res.render('customer/client', {client: data});
-        });
+      };
+
+      if (req.query.id){
+        CustomerProvider.load(req.query.id, redirect);
+      }else if (req.query.sale){
+        CustomerProvider.findBySale(req.query.sale, redirect);
       }else{
-        res.render('customer/client', {client: {}});
+        redirect({});
       }
     });
 
 
-    this._get('/curtomer-search-autocomplete', (req, res) => {
+    this._get('/customer-search-autocomplete', (req, res) => {
       CustomerProvider.searchAutoComplete(req.query.typing, this._resp().redirect(res));
     });
 
