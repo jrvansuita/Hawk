@@ -34,12 +34,11 @@ module.exports = class JobSyncClients extends Job{
       .setOnError((err) => {
         reject(err);
       })
-      .pageCount(1000)
-      .dates(Dat.rollDay(new Date(), -2), Dat.now())
+      .pageCount(5000)
+      //.dates(Dat.rollDay(new Date(), -2), Dat.now())
       .clients()
       .pagging()
       .each((clientsPage, nextPage)=>{
-        console.log(clientsPage);
         this.handlePage(clientsPage, nextPage);
       }).end(()=>{
         resolve();
