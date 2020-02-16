@@ -3,14 +3,14 @@
   <%  include ../menus/main-menu %>
   <meta charset="utf-8">
 
-  <link rel="stylesheet" type="text/css" href="/front/css/layout/client.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/customer/client.css">
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
 
 
   <link rel="stylesheet" type="text/css" href="/front/css/libs/easy-autocomplete.css">
   <script type="text/javascript" src="/front/js/libs/easy-autocomplete.min.js"></script>
-<script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
-  <script type="text/javascript" src="/front/js/control/client.js"></script>
+  <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
+  <script type="text/javascript" src="/front/js/control/customer/client.js"></script>
   <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
 </head>
@@ -117,13 +117,13 @@
         </div>
 
 
-        <div class="client-card-item shadow">
+        <div class="client-card-item last-sales-holder shadow">
           <label class="client-card-title">Últimos Pedidos</label>
           <table class="client-sales">
             <tr class="table-titles">
               <td>Número</td>
               <td>Data da Compra</td>
-              <td>Quantidade de Produtos</td>
+              <td>Itens</td>
               <td>Valor do Frete</td>
               <td>Valor do Desconto</td>
               <td>Valor do Pago</td>
@@ -131,36 +131,44 @@
               <td>Frete</td>
             </tr>
 
-            <%client.sales.forEach((sale)=>{%>
+            <%client.sales.reverse().forEach((sale)=>{%>
 
-              <tr>
-                <td><span class="sale-number copiable"><%=sale.increment_id%></span></td>
-                <td><span class="sale-date"><%=Dat.formatwTime(Dat.rollHour(new Date(sale.created_at),-3))%></span></td>
-                <td><span class="sale-quantity"><%=Num.int(sale.total_qty_ordered)%></span></td>
-                <td><span class="sale-freight"><%=Num.money(sale.shipping_amount)%></span></td>
-                <td><span class="sale-desc"><%=Num.money(sale.discount_amount) %></span></td>
-                <td><span class="sale-total"><%=Num.money(sale.grand_total)%></span></td>
-                <td><span class="sale-status"><%=sale.status%></span></td>
-                <td><span class="sale-shipping"><%=sale.shipping_description%></span>
+              <tr onclick="showSaleDialog(<%=sale.increment_id%>)">
+                <td><span class="increment-id copiable"><%=sale.increment_id%></span></td>
+                <td><span class="gray"><%=Dat.formatwTime(Dat.rollHour(new Date(sale.created_at),-3))%></span></td>
+                <td><span class=""><%=Num.int(sale.total_qty_ordered)%></span></td>
+                <td><span class=""><%=Num.money(sale.shipping_amount)%></span></td>
+                <td><span class=""><%=Num.money(sale.discount_amount) %></span></td>
+                <td><span class="bolder"><%=Num.money(sale.grand_total)%></span></td>
+                <td><span class=""><%=sale.status%></span></td>
+                <td><span class="gray"><%=sale.shipping_description%></span>
 
                   <div class="menu-dots sale-dots" data-sale="<%=sale.increment_id%>">
                     <img src="/img/dots.png" class="dots-glyph"/>
                   </div>
-              </td>
+                </td>
 
-            </tr>
+              </tr>
 
-            <%})%>
-          </table>
+              <%})%>
+            </table>
 
+
+          </div>
+
+          <%}%>
 
         </div>
 
-        <%}%>
-
       </div>
 
-    </div>
 
-  </body>
-  </html>
+      <div class="sale-modal">
+        <div class="sale-viewer-holder shadow">
+
+        </div>
+      </div>
+
+
+    </body>
+    </html>

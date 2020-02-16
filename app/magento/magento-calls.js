@@ -32,6 +32,12 @@ module.exports = class MagentoCalls{
   }
 
 
+  async sale(number){
+    return this.onInstance((api, resolve, reject) => {
+      api.salesOrder.info({orderIncrementId: number}, this.onResult(resolve, reject));
+    });
+  }
+
   async product(sku){
     return this.onInstance((api, resolve, reject) => {
       api.catalogProduct.info({ id: sku }, this.onResult(resolve, reject));

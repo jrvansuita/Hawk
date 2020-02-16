@@ -34,7 +34,7 @@ module.exports = class JobSyncClients extends Job{
       .setOnError((err) => {
         reject(err);
       })
-      .pageCount(5000)
+      .pageCount(20000)
       //.dates(Dat.rollDay(new Date(), -2), Dat.now())
       .clients()
       .pagging()

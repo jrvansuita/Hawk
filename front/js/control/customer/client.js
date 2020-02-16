@@ -5,24 +5,26 @@ $(document).ready(() => {
     search();
   });
 
-  prepareAutoComplete();
+  $('#search-sale').on("keyup", function(e) {
+    if (e.which == 13){
+      search();
+    }
+  });
 
-  $('.sale-dots').click(function (e){
-    var sale = $(this).data('sale');
-
-    new MaterialDropdown($(this), e)
-    .addItem('../img/transport/default.png', 'Rastreio', ()=>{
-      //window.open('https://status.ondeestameupedido.com/tracking/6560/' + sale, '_blank');
-         window.open('http://www.example.com?ReportID=1', '_blank');
-    }).show();
+  $('.sale-number').dblclick(function(e) {
+    e.stopPropagation();
+    window.open('/packing?sale=' + $(this).text(), '_blank');
   });
 
 
+  prepareAutoComplete();
+
+  $('.sale-dots').click(buildSaleMenuOptions());
 });
 
 function search(){
   if ($("#search-sale").val()){
-    open('sale', $("#search-sale").val());
+    reopenUrl('sale', $("#search-sale").val());
   }else{
     seachCurrentClient();
   }
@@ -74,11 +76,11 @@ function prepareAutoComplete(){
 
 function seachCurrentClient(){
   if ($("#search-client").getSelectedItemData().id){
-    open('id', $("#search-client").getSelectedItemData().id);
+    reopenUrl('id', $("#search-client").getSelectedItemData().id);
   }
 }
 
-function open(param, val){
+function reopenUrl(param, val){
   window.location.href = '/customer-service/client?'+ param + '=' +  val;
 }
 
@@ -89,4 +91,34 @@ function getAutoCompleteTemplate(data){
   var email = $('<span>').addClass('auto-client-email').append(data.email);
   var city = $('<span>').addClass('auto-client-city').append(data.city + '/' + data.state);
   return $('<div>').append(name, socialCode, email, city);
+}
+
+function buildSaleMenuOptions(){
+  return function(e){
+    var sale = $(this).data('sale');
+    new MaterialDropdown($(this), e)
+    .addItem('../img/transport/default.png', 'Rastreio', ()=>{
+      window.open('https://status.ondeestameupedido.com/tracking/6560/' + sale, '_blank');
+    }).show();
+  }
+}
+
+
+
+function showSaleDialog(sale){
+  $('.sale-modal').show();
+
+  $('.sale-modal').one('click', function (e){
+    $('.sale-viewer-holder').empty();
+    $('.sale-modal').hide();
+    e.stopPropagation();
+  });
+
+  $('.sale-viewer-holder').click(function (e){
+    e.stopPropagation();
+  });
+
+  $('.sale-viewer-holder').load('/customer-service/sale-dialog?saleNumber=' + sale, ()=>{
+    bindCopiable();
+  });
 }

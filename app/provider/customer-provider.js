@@ -11,7 +11,7 @@ module.exports = {
 
       new EccosysProvider().client(id).go((eccoClient) => {
 
-        this.findSales(eccoClient.codigo, (sales) => {
+        this.findSalesList(eccoClient.codigo, (sales) => {
 
           callback({...client, ...eccoClient, sales: sales});
         });
@@ -25,8 +25,17 @@ module.exports = {
     });
   },
 
-  findSales(idClient, callback){
+  findSalesList(idClient, callback){
     new MagentoCalls().saleByClient(idClient).then(callback);
+  },
+
+
+  loadSale(saleNumber, callback){
+    new EccosysProvider().sale(saleNumber).go((erpSale) => {
+      new MagentoCalls().sale(erpSale.numeroDaOrdemDeCompra).then((storeSale) => {
+        callback({erp: erpSale, store: storeSale});
+      });
+    });
   },
 
   searchAutoComplete(typing, callback){

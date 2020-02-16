@@ -214,7 +214,7 @@ var Util = {
 
   getSaleStatusName(status){
     if (status == 'N'){
-      return 'Aguardando Picking';
+      return 'Picking Não Realizado';
     }else if (status == 'A'){
       return 'Aguardando Faturamento';
     }else if (status == 'S'){

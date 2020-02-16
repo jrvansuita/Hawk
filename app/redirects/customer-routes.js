@@ -8,7 +8,7 @@ module.exports = class CustomerRoutes extends Routes{
 
     this._page('/customer-service/client', (req, res) => {
       var redirect = (data) => {
-          res.render('customer/client', {client: data});
+        res.render('customer/client', {client: data});
       };
 
       if (req.query.id){
@@ -20,6 +20,14 @@ module.exports = class CustomerRoutes extends Routes{
       }
     });
 
+    this._get('/customer-service/sale-dialog', (req, res) => {
+      res.render('customer/sale', {saleNumber: req.query.saleNumber});
+    });
+
+
+    this._get('/customer-service/sale', (req, res) => {
+      CustomerProvider.loadSale(req.query.saleNumber, this._resp().redirect(res));
+    });
 
     this._get('/customer-search-autocomplete', (req, res) => {
       CustomerProvider.searchAutoComplete(req.query.typing, this._resp().redirect(res));

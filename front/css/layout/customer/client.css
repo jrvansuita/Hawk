@@ -13,7 +13,7 @@
 }
 .main-holder{
   margin-left: 40px;
-margin-right: 40px;
+  margin-right: 40px;
 }
 
 .search-holder{
@@ -185,12 +185,16 @@ margin-right: 40px;
   color: #8e8c8b;
 }
 
+.bolder{
+  font-weight: 900;
+}
+
 .right{
   text-align: right;
 }
 
 .center{
-   text-align: center;
+  text-align: center;
 }
 
 .client-tel{
@@ -207,11 +211,16 @@ margin-right: 40px;
 }
 
 .client-sales td{
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 8px;
   font-size: 15px;
   color: #191717;
-  /* position: relative; */
+}
+
+.client-sales tr:hover:not(:first-child){
+  background-color: #d8d8d8;
+  cursor: pointer;
 }
 
 .table-titles td{
@@ -220,7 +229,7 @@ margin-right: 40px;
   padding-bottom: 5px;
 }
 
-.sale-number{
+.increment-id{
   font-size: 16px;
   font-weight: bold;
 }
@@ -229,4 +238,42 @@ margin-right: 40px;
   display: inline-block;
   float: right;
   margin-top: -20px;
+}
+
+
+.last-sales-holder{
+  padding: 0;
+}
+
+.last-sales-holder .client-card-title{
+  padding-left: 20px;
+  padding-top: 15px;
+}
+
+
+
+
+.sale-modal{
+  position: fixed;
+  width: 100%;
+  background-color: rgba(0,0,0,.6);
+  height: 100%;
+  left: 0;
+  z-index: 999;
+  top: 0;
+  display: none;
+}
+
+
+
+.sale-viewer-holder{
+  margin: auto;
+  width: 90%;
+  height: 90%;
+  left: 0;
+  right: 0;
+  top: 20px;
+  bottom: 0;
+  margin: auto;
+  position: fixed;
 }
