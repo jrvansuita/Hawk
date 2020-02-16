@@ -39,6 +39,7 @@ module.exports = class JobSyncClients extends Job{
       .clients()
       .pagging()
       .each((clientsPage, nextPage)=>{
+        console.log('Veio a página com ' + clientsPage.length + ' clientes');
         this.handlePage(clientsPage, nextPage);
       }).end(()=>{
         resolve();
