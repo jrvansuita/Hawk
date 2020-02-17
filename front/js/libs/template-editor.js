@@ -49,7 +49,7 @@ class TemplateEditor{
     var options = {
       fullPage: true,
       useClasses: false,
-      height: 500,
+      height: "auto",
 
       // Define new inline styles.
       inlineClasses: {

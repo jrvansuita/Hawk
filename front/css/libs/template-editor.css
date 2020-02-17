@@ -44,3 +44,9 @@ div.fr-wrapper>div>a {
     padding: 0px !important;
     height: 0px !important;
 }
+.fr-iframe{
+  height: 100%!important;
+}
+.fr-view{
+  overflow: auto!important;
+}

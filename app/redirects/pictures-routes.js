@@ -15,6 +15,8 @@ module.exports = class PicturesRoutes extends Routes{
 
     //Post para criação de imagem do instagram
     this._post('/sku-picture-from-insta', (req, res) => {
+      //fazer aqui a verificaçao
+
       new SkuPictureLoader(req.body.skus).fromInsta(req.body.instaPost).load().then(this._resp().redirect(res));
     });
 
@@ -27,6 +29,12 @@ module.exports = class PicturesRoutes extends Routes{
         item.remove();
       });
     });
+    //post para verificar a imagem
+    this._post('/check-if-picture-exists', (req, res)=>{
+     SkuPic.findOne({url: req.body.url}, (err, item)=>{
+       this._resp().sucess(res, item);
+     });
+   });
 
     //Post para Aprovar a Imagem
     this._post('/sku-pictures-approve', (req, res) => {

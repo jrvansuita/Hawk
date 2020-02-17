@@ -159,7 +159,7 @@ module.exports = class JobGift extends Job{
   }
 
   checkAndSendEmail(rule, sale, product){
-    product.img = Params.skuImageUrl(product.codigo);
+    product.img = Params.productImageUrl(product.codigo);
 
     if (rule.sendEmail){
       new EmailBuilder()

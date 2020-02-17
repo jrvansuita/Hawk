@@ -14,8 +14,12 @@ var Params = {
     return this.bundle()[name];
   },
 
-  skuImageUrl(sku){
-    return this.productionUrl() + '/sku-image?sku=' + sku;
+  productImageUrl(sku){
+    return this.productionUrl() + '/product-image-redirect?sku=' + sku;
+  },
+
+  productUrl(sku){
+    return this.productionUrl() + '/product-url-redirect?sku=' + sku;
   },
 
 

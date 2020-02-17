@@ -15,10 +15,17 @@ module.exports = class ProductRoutes extends Routes{
       ProductHandler.getImage(req.query.sku, this._resp().redirect(res));
     });
 
-    this._get('/sku-image', (req, res) => {
+    this._get('/product-image-redirect', (req, res) => {
       ProductHandler.getImage(req.query.sku, (product)=>{
         res.set('Cache-Control', 'public, max-age=86400'); // 1day
         res.redirect(product && product.image ? product.image : req.query.def);
+      });
+    }, true, true);
+
+    this._get('/product-url-redirect', (req, res) => {
+      ProductHandler.getImage(req.query.sku, (product)=>{
+        res.set('Cache-Control', 'public, max-age=86400'); // 1day
+        res.redirect(product && product.url ? product.url : req.query.def);
       });
     }, true, true);
 

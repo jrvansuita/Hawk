@@ -95,7 +95,7 @@ module.exports= class SaleLoader {
 
   prepareSaleItems(items){
     return items.map((item) => {
-      item.img = Params.skuImageUrl(item.codigo);
+      item.img = Params.productImageUrl(item.codigo);
       item.valorTotal = parseFloat(item.precoLista) * parseFloat(item.quantidade);
       return item;
     });

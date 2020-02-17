@@ -5,6 +5,7 @@ var showAll = false;
 $(document).ready(()=>{
 
   $('.save').click(saveClick);
+  $('.icon-open').click(openImageApproveHolder);
 
   $('#sku').on("keyup", function(e) {
     if (e.which == 13){
@@ -48,23 +49,20 @@ function controlImagesList(pane, list, path, query){
       isLoading = true;
       page++;
 
-      console.log('Load Next Page ' + page);
-
       if (page == 1){
         list.empty();
       }
 
       _post(path, {page: page, cache: false, ...query}, (data) => {
 
+        console.log('LOA ', loadedAllResults);
         loadedAllResults = data.length == 0;
 
-
-        data.forEach((each) => {
-          loadImagesHolder(list, each);
-        });
+          data.forEach((each) => {
+            loadImagesHolder(list, each);
+          });
 
         isLoading = false;
-          console.log('DATA', data);
         bindCopiable();
       });
     }
@@ -131,16 +129,21 @@ function loadImagesHolder(listHolder, each){
   var addrClassPreview = skusArr.length > 1 ? ' multiple-skus' : '';
 
   var $itemHolder = $('<div>').addClass('approve-item');
-  var $clientImg = $('<img>').addClass('client-image').attr('src', each.img);
+  var $clientImg = $('<img>').addClass('client-image').attr('src', each.img).click(() => {
+    window.open(each.url, '_blank');
+  });
   var $skusHolder = $('<div>').addClass('skus-holder');
   var $previewImg = $('<div>').addClass('preview-image-holder' + addrClassPreview);
 
   skusArr.forEach((sku) => {
     if(sku != ""){
-      $previewImg.append($('<img>').addClass('preview-image').attr('src', Params.skuImageUrl(sku)));
-      $skusHolder.append(createSingleTag(sku));
+      $previewImg.append($('<img>').addClass('preview-image').attr('src', '/product-image-redirect?sku=' + sku)).click(() => {
+        window.open('/product-url-redirect?sku=' + sku);
+      });
+      $skusHolder.append(createSingleTag(sku)).dblclick(() => {
+        window.open('/product?sku=' + sku);
+      });
       applyTagColor($skusHolder.children('span'));
-
     }
   });
 
@@ -173,10 +176,6 @@ function menuDotsClick(holder, each){
         onApproveImageClick($holder, each._id, true);
       });
     }
-    drop.addItem('/img/website.png', 'Acessar Link', function(){
-      window.open(each.url, '_blank');
-    });
-
     drop.addItem('/img/delete.png', 'Excluir', function(){
       deleteImage($holder, each._id);
     });
@@ -261,22 +260,36 @@ function checkInputs(){
 
 function saveClick(){
   if(checkInputs()){
-    savePic();
+    savePicClick();
   }
 }
 
-function savePic(){
-  if($('#insta-post').val()){
-    _post('/sku-picture-from-insta', {
-      instaPost : getInstaId(), skus: getSelectedSkus().join(',')
-    }, (data)=>{
-      console.log('veio' + data);
-    });
-    $('#insta-post').val('');
-    $('.toast-item').remove();
-  }else if($('#face-post').val()){
-    console.log($('#face-post').val());
-  }
+function savePictureToDatabase(){
+ _post('/sku-picture-from-insta', {
+   instaPost : getInstaId(), skus: getSelectedSkus().join(',')
+ }, (data)=>{
+   console.log('veio' + data);
+ });
+ $('#insta-post').val('');
+ $('.toast-item').remove();
+}
+
+
+function savePicClick(){
+ if($('#insta-post').val()){
+   if($('#insta-post').val().slice(-1) == '/'){
+     var url = $('#insta-post').val().slice(0, -1);
+   }
+   _post('/check-if-picture-exists', {
+     url: url || $('#insta-post').val()}, (data) => {
+       if(data){
+         checkMaterialInput($('#insta-post'));
+         console.log('Imagem já existe!');
+       }else{
+         savePictureToDatabase();
+       }
+     });
+ }
 }
 
 function createSingleTag(sku){
@@ -292,3 +305,21 @@ function applyTagColor(tag){
     .css('background', '#9c9a9a');
   }
 }
+
+function checkImageApproveHolder(){
+  if($('.to-be-approved-images-holder .approve-item').length <= 0){
+    openImageApproveHolder();
+  }
+}
+
+function openImageApproveHolder(){
+    $('.to-be-approved-container-holder').toggleClass('is-closed');
+    $('.icon-open').toggleClass('closed');
+
+    if($('.to-be-approved-container-holder').hasClass('is-closed')){
+      $('.main-top').css('flex','0');
+    }else{
+      $('.main-top').css('flex','20');
+    }
+  }
+    //$('.main-top').toggleClass('is-closed');
