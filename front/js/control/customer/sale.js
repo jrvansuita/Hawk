@@ -22,4 +22,6 @@ function bindSaleInfoViewer(data){
   $('.sale-situation').text(Util.getSaleSituationName(parseInt(data.erp.situacao)));
   $('.sale-step').text(Util.getSaleStatusName(data.erp.pickingRealizado));
   $('.sale-date').text(Dat.formatwTime(Dat.rollHour(new Date(data.store.created_at),-3)));
+
+
 }

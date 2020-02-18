@@ -31,8 +31,6 @@ var Params = {
     return this.get('store-url');
   },
 
-
-
   storeFeedUrl(){
     return this.get('store-feed-url');
   },
