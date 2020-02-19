@@ -35,6 +35,35 @@ var Util = {
     return JSON.parse(JSON.stringify(object));
   },
 
+   getPaymentDescription(method){
+    switch(method){
+      case 'mundipagg_boleto':{
+        return 'Boleto';
+      }
+      case 'mundipagg_creditcard':{
+        return 'Cartão de Crédito';
+      }
+    }
+  },
+  //remover os elementos null do objeto
+  removeNullElements(object){
+    for(var f in object){
+      if(object[f] == null){
+        delete object[f];
+      }
+    }
+    return object;
+  },
+
+  formatShippingAddress(address){
+    address['num'] = address.street.split(/\n/g)[1];
+    address['bairro'] = address.street.split(/\n/g)[3];
+    address['complemento'] = address.street.split(/\n/g)[2];
+    address['street'] = address.street.split(/\n/g)[0];
+    return address;
+  },
+  
+
   removeAttrs(object, keep){
     return Object.keys(object).reduce((obj, key) => {
       if (keep.includes(key)) {

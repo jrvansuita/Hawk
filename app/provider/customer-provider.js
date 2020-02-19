@@ -31,9 +31,15 @@ module.exports = {
 
 
   loadSale(saleNumber, callback){
-    new EccosysProvider().sale(saleNumber).go((erpSale) => {
+    new SaleLoader(saleNumber)
+    .loadItems()
+    .run((erpSale) => {
       new MagentoCalls().sale(erpSale.numeroDaOrdemDeCompra).then((storeSale) => {
-        callback({erp: erpSale, store: storeSale});
+
+        this.getTransportImage(erpSale);
+        Util.formatShippingAddress(storeSale.shipping_address);
+
+        callback({erp: Util.removeNullElements(erpSale), store: Util.removeNullElements(storeSale)});
       });
     });
   },
@@ -42,7 +48,14 @@ module.exports = {
     Client.likeThis(typing, 50, (err, data)=>{
       callback(data);
     });
-  }
+  },
+
+  //falta corrigir um bug
+  getTransportImage(obj){
+    obj["transportadora_img"] = '/img/transport/' + obj['transportador'].split(" ", 1) + '.png';
+    return obj;
+  },
+
 
 
 };

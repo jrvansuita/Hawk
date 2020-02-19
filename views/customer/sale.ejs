@@ -1,4 +1,4 @@
-
+<html>
 <script class="hidable-script">
   window.saleNumber = <%= saleNumber %>
 </script>
@@ -6,76 +6,277 @@
 <html>
 <head>
   <link rel="stylesheet" type="text/css" href="/front/css/layout/customer/sale.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-dropdown.css">
 
   <script type="text/javascript" src="/front/js/control/customer/sale.js"></script>
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+  <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
 </head>
 <body>
   <div class="loading-sale-modal barberpole-mini-green-background"></div>
 
+  <div class="main-holder">
+    <div class="sale-client-info-holder">
+      <table class="sale-head-table">
+        <tr>
+          <td>
+            <div class="field">
+              <label class="field-title">Número do Pedido</label>
+              <label class="info highlighted sale-number copiable">Carregando</label>
+            </div>
+          </td>
 
-  <table class="sale-head-table">
-    <tr>
-      <td>
-        <div class="field">
-          <label class="field-title">Número do Pedido</label>
-          <label class="info highlighted sale-number copiable">Carregando</label>
+          <td>
+            <div class="field">
+              <label class="field-title">Status</label>
+              <label class="info status"></label>
+            </div>
+          </td>
+
+          <td>
+            <div class="field">
+              <label class="field-title">Situação</label>
+              <label class="info sale-situation"></label>
+            </div>
+          </td>
+
+          <td>
+            <div class="field">
+              <label class="field-title">Etapa</label>
+              <label class="info sale-step"></label>
+            </div>
+          </td>
+
+          <td>
+            <div class="field">
+              <label class="field-title">Data do Pedido</label>
+              <label class="info sale-date"></label>
+            </div>
+          </td>
+
+          <td>
+            <div class="field">
+              <label class="field-title">Pedido Eccosys</label>
+              <label class="info sale-ecco copiable"></label>
+            </div>
+          </td>
+
+          <td>
+            <div class="field">
+              <label class="field-title">Nfe</label>
+              <label class="info sale-nfe copiable">########</label>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+
+          </td>
+        </tr>
+
+      </table>
+
+      <div class="sale-cards-holder">
+        <div class="sale-card-item shadow">
+          <label class="client-card-title">Dados do cliente</label>
+          <table>
+            <tr>
+              <td>
+                <label class="sale-client-name client-name copiable"></label>
+              </td>
+            </tr>
+            <tr class="divide">
+              <td>
+                <span class="sale-client-social-code client-social-code gray copiable"></span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label class="sale-card-title">Data de nascimento</label>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="sale-client-date"></span>
+              </td>
+            </tr>
+          </table>
         </div>
-      </td>
 
-      <td>
-        <div class="field">
-          <label class="field-title">Status</label>
-          <label class="info status"></label>
+        <div class="sale-card-item shadow">
+          <label class="client-card-title">Entrega</label>
+          <table>
+            <tr>
+              <td>
+                <span class="sale-shipping-adress-street"></span>
+              </td>
+            </tr>
+            <tr class="divide">
+              <td>
+                <span class="sale-shipping-adress-bairro"></span>
+              </td>
+              <td>
+                <span class="sale-shipping-adress-complemento gray"></span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="sale-card-title">Cidade</span>
+              </td>
+              <td>
+                <span class="sale-card-title">Estado</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="sale-shipping-city"></span>
+              </td>
+              <td>
+                <span class="sale-shipping-uf"></span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="sale-shipping-postal-code gray"></span>
+              </td>
+            </tr>
+          </table>
         </div>
-      </td>
 
-      <td>
-        <div class="field">
-          <label class="field-title">Situação</label>
-          <label class="info sale-situation"></label>
+        <div class="sale-card-item shadow">
+          <label class="client-card-title">Pagamento</label>
+          <table>
+            <tr>
+              <td>
+                <label>Método: </label>
+              </td>
+              <td>
+                <label class="sale-payment-method"></label>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>Parcelamento: </span>
+              </td>
+              <td>
+                <span class="sale-payment-info"></span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>Valor Total: </span>
+              </td>
+              <td>
+                <span class="sale-payment-total"></span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>Status: </span>
+              </td>
+              <td>
+                <span class="sale-payment-status"></span>
+              </td>
+            </tr>
+          </table>
         </div>
-      </td>
 
-      <td>
-        <div class="field">
-          <label class="field-title">Etapa</label>
-          <label class="info sale-step"></label>
+        <div class="sale-card-item shadow">
+          <div class="menu-dots menu-transport">
+            <img class="dots-glyph" src="/img/dots.png">
+          </div>
+          <label class="client-card-title">Transportadora</label>
+          <table>
+            <tr>
+              <td>
+                <span class="sale-shipping-transport"></span>
+                <img class="icon" id="transport-img" src="/img/wait.png">
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="sale-shipping-transport-description"></span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>Valor do Frete:</span>
+              </td>
+              <td>
+                <span class="sale-shipping-transport-cost gray"></span>
+              </td>
+            </tr>
+          </table>
         </div>
-      </td>
 
-      <td>
-        <div class="field">
-          <label class="field-title">Data do Pedido</label>
-          <label class="info sale-date"></label>
+        <div class="sale-card-item shadow">
+          <label class="client-card-title">Total do Pedido</label>
+          <table>
+            <tr>
+              <td>
+                <span>Subtotal:</span>
+              </td>
+              <td>
+                <span class="sale-info-subtotal"></span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>Desconto:</span>
+              </td>
+              <td>
+                <span class="sale-info-discount"></span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>Peso Total:</span>
+              </td>
+              <td>
+                <span class="sale-info-weight-total"></span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>Total Geral:</span>
+              </td>
+              <td>
+                <span class="sale-info-total"></span>
+              </td>
+            </tr>
+          </table>
         </div>
-      </td>
 
-      <td>
-        <div class="field">
-          <label class="field-title">Pedido Eccosys</label>
-          <label class="info sale-ecco copiable"></label>
+      </div>
+    </div>
+
+    <div class="sale-information-holder">
+      <div class="sale-itens-information-holder">
+          <label class="sale-card-title">Informações</label>
+        <div class="sale-itens-holder shadow">
+          <div class="sale-itens-table">
+            <table class="client-sale-itens">
+              <thead>
+                <tr class="table-titles sale-table-titles">
+                    <th class="sale-itens-count"></th>
+                    <th>Quantidade</th>
+                    <th>Preço</th>
+                    <th>Desconto</th>
+                    <th>Peso</th>
+                    <th>Valor Total</th>
+                  </tr>
+              </thead>
+            </table>
+          </div>
         </div>
-      </td>
+      </div>
 
-      <td>
-        <div class="field">
-          <label class="field-title">Nfe</label>
-          <label class="info sale-nfe copiable">########</label>
-        </div>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        
-      </td>
-    </tr>
-
-  </table>
+    <div class="sale-history-holder">
+      
+    </div>
 
 
-
-
+  </div>
 </body>
-<html>
+</html>

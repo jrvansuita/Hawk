@@ -14,6 +14,9 @@
 .main-holder{
   margin-left: 40px;
   margin-right: 40px;
+  display: flex;
+  flex-flow: column;
+  height: 100%;
 }
 
 .search-holder{
@@ -132,6 +135,7 @@
   font-weight: 600;
   color: #5d5b59;
   padding-bottom: 1px;
+  padding-bottom: 10px;
 }
 
 
@@ -267,7 +271,6 @@
 
 
 .sale-viewer-holder{
-  margin: auto;
   width: 90%;
   height: 90%;
   left: 0;
@@ -275,5 +278,6 @@
   top: 20px;
   bottom: 0;
   margin: auto;
-  position: fixed;
+  position: absolute;
+  flex: 1;
 }
