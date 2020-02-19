@@ -5,7 +5,7 @@ const Mock = require('../bean/mock.js');
 module.exports = class {
 
   constructor(id){
-   this.mockId = id;
+    this.mockId = id;
   }
 
   setProduct(product){
@@ -28,7 +28,17 @@ module.exports = class {
       loadImage(this.mockSett.imgUrl).then((image) => {
         this.mockupImage = image;
 
-        callback();
+
+        if (this.mockSett.backUrl){
+          // Load the mockup background imaage
+          loadImage(this.mockSett.backUrl).then((image) => {
+            this.backgroundImage = image;
+
+            callback();
+          });
+        }else{
+          callback();
+        }
       });
     });
   }
@@ -207,6 +217,10 @@ module.exports = class {
 
   renderingImages() {
     this.definePaddings();
+
+    if (this.backgroundImage){
+      this.context.drawImage(this.backgroundImage, 0, 0, this.canvas.width, this.canvas.height);
+    }
 
     this.context.drawImage(this.productImage, this.padding/2, this.paddingTop, this.canvas.width - this.padding, this.canvas.width - this.padding);
     this.context.drawImage(this.mockupImage, 0, this.canvas.height - this.mockupImage.height, this.canvas.width, this.mockupImage.height);

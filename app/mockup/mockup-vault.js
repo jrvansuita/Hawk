@@ -9,6 +9,7 @@ module.exports = class MockVault {
       params.name,
       params.fontName,
       params.mockurl,
+      params.backurl,
       params.msg,
       params.fontColor,
       params.fontShadowColor,

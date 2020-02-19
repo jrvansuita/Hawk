@@ -27,8 +27,12 @@ $(document).ready(()=>{
   loadPreview();
   updateSizeHint();
 
-  $('.img-edit').click(()=>{
+  $('.mock-img-edit').click(()=>{
     $('#mock-input-file').trigger('click');
+  });
+
+  $('.back-img-edit').click(()=>{
+    $('#back-input-file').trigger('click');
   });
 
   $('#width').change((event)=>{
@@ -45,21 +49,12 @@ $(document).ready(()=>{
     }
   });
 
-  $('#mock-input-file').change((event)=>{
-    var selectedFile = event.target.files[0];
-    var reader = new FileReader();
+  $('#mock-input-file').change(function (event){
+    loadImageResource(this, event);
+  });
 
-    $('.img-edit').attr('src', 'img/loader/circle.svg');
-    reader.onload = function(event) {
-
-      _postImg('/upload-base64-img', {base64: event.target.result.split(',')[1]},(data)=>{
-        selected.imgUrl = data.link;
-        $('.mock-img-select').attr('src', event.target.result);
-        $('.img-edit').attr('src', 'img/img-edit.png');
-      });
-    };
-
-    reader.readAsDataURL(selectedFile);
+  $('#back-input-file').change(function (event){
+    loadImageResource(this, event);
   });
 
   $('#search-sku').on("keyup", function(e) {
@@ -79,12 +74,32 @@ $(document).ready(()=>{
     $('.settings-box').find('input').val('');
     $('.settings-box').find('input').prop("checked", false);
 
-      $('.mock-preview').css({ opacity: 0 });
-      $('.mock-img-select').css({ opacity: 0 })
+    $('.mock-preview').css({ opacity: 0 });
+    $('.mock-img-select').css({ opacity: 0 })
   });
-
-
 });
+
+
+function loadImageResource(el, event){
+  var selectedFile = event.target.files[0];
+  var reader = new FileReader();
+  var icon = $('.' + $(el).data('icon'));
+  var target = $('.' + $(el).data('target'));
+  var attr = $(el).data('attr');
+
+  icon.attr('src', 'img/loader/circle.svg');
+  reader.onload = function(event) {
+
+    _postImg('/upload-base64-img', {base64: event.target.result.split(',')[1]},(data)=>{
+      console.log(attr);
+      selected[attr] = data.link;
+      target.attr('src', event.target.result);
+      icon.attr('src', 'img/img-edit.png');
+    });
+  };
+
+  reader.readAsDataURL(selectedFile);
+}
 
 
 function saveClick(){
@@ -126,6 +141,7 @@ function save() {
     fontName: $('#font').val(),
     fontNameDiscount: $('#font-discount').val(),
     mockurl: selected.imgUrl,
+    backurl: selected.backUrl,
     msg: $('#msg').val(),
     fontColor : fontColorPicker.getSelectedColor().toHEXA().toString(),
     fontShadowColor : fontShadowColorPicker.getSelectedColor().toHEXA().toString(),

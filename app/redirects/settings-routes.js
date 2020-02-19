@@ -26,6 +26,11 @@ module.exports = class SettingsRoutes extends Routes{
       res.render('settings/api-settings');
     });
 
+    this._page('/social-settings', (req, res) => {
+      res.render('settings/social-settings');
+    });
+
+
     this._post('/put-main-param', (req, res) => {
       ParamVault.put(req.body.name, req.body.val);
       res.status(200).send('OK');
