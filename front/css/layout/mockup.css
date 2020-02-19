@@ -90,9 +90,10 @@
 
 .material-input-holder>input{
   margin: 0 !important;
-  width: 100%;
+  width: 100% !important;
   font-size: 15px !important;
   padding: 8px 10px 5px 5px !important;
+  min-width: 100% !important;
 }
 
 .material-input-holder>label{
@@ -189,6 +190,7 @@
 .mock-art-holder{
   width: 100%;
   padding: 0;
+  max-width: 300px;
   margin-bottom: 35px;
 }
 
@@ -197,14 +199,19 @@
   margin-bottom: 10px;
 }
 
-.img-edit{
+.back-img-select{
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.img-edit-icon{
   float: left;
   width: 24px;
   height: 24px;
   cursor: pointer;
 }
 
-#mock-input-file{
+.mock-art-holder input{
   display: none;
 }
 
@@ -300,4 +307,5 @@
   display: inline-block;
   width: 70px;
   float: right;
+  min-width: 70px;
 }
