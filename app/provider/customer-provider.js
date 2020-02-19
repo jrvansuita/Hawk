@@ -1,7 +1,8 @@
 const Client = require('../bean/client.js');
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
-const SaleLoader = require('../loader/sale-loader.js');
+//const SaleLoader = require('../loader/sale-loader.js');
 const MagentoCalls = require('../magento/magento-calls.js');
+const SaleCustomerInfoBuilder = require('../builder/sale-customer-info-builder.js');
 
 module.exports = {
 
@@ -31,31 +32,14 @@ module.exports = {
 
 
   loadSale(saleNumber, callback){
-    new SaleLoader(saleNumber)
-    .loadItems()
-    .run((erpSale) => {
-      new MagentoCalls().sale(erpSale.numeroDaOrdemDeCompra).then((storeSale) => {
-
-        this.getTransportImage(erpSale);
-        Util.formatShippingAddress(storeSale.shipping_address);
-
-        callback({erp: Util.removeNullElements(erpSale), store: Util.removeNullElements(storeSale)});
-      });
-    });
+    new SaleCustomerInfoBuilder(saleNumber).load((data, provisorio) => {
+      callback({data : data, provisorio: provisorio});
+    })
   },
 
   searchAutoComplete(typing, callback){
     Client.likeThis(typing, 50, (err, data)=>{
       callback(data);
     });
-  },
-
-  //falta corrigir um bug
-  getTransportImage(obj){
-    obj["transportadora_img"] = '/img/transport/' + obj['transportador'].split(" ", 1) + '.png';
-    return obj;
-  },
-
-
-
+  }
 };

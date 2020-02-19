@@ -11,7 +11,8 @@ $(document).ready(() => {
 
 function loadCompletSaleData(callback){
   _get('/customer-service/sale', {saleNumber : saleNumber}, (data) => {
-    window.data = data;
+    window.data = data.data;
+    window.provisorio = data.provisorio;
     callback(data);
   })
 }

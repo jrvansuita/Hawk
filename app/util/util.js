@@ -45,6 +45,7 @@ var Util = {
       }
     }
   },
+
   //remover os elementos null do objeto
   removeNullElements(object){
     for(var f in object){
@@ -55,14 +56,14 @@ var Util = {
     return object;
   },
 
-  formatShippingAddress(address){
+  /*formatShippingAddress(address){
     address['num'] = address.street.split(/\n/g)[1];
     address['bairro'] = address.street.split(/\n/g)[3];
     address['complemento'] = address.street.split(/\n/g)[2];
     address['street'] = address.street.split(/\n/g)[0];
     return address;
-  },
-  
+  },*/
+
 
   removeAttrs(object, keep){
     return Object.keys(object).reduce((obj, key) => {
