@@ -17,7 +17,7 @@ new Initilizer(__dirname, true).begin(() => {
         pedido: doc.sale,
         cliente: client,
         produtos: doc.sale.items.filter((i) => {
-          i.img = "https://hawkproject.herokuapp.com/sku-image?sku=" + i.codigo;
+          i.img = "https://hawkproject.herokuapp.com/product-image-redirect?sku=" + i.codigo;
           i.total = parseFloat(i.precoLista) * parseFloat(i.quantidade);
           return i.pending == true;
         })

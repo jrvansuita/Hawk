@@ -403,7 +403,7 @@ function showLastProduct(saleItem){
 
   new ProductImageLoader($('#last-product-img'))
   .withAnim()
-  .src('/sku-image?sku='+saleItem.codigo).put();
+  .src('/product-image-redirect?sku='+saleItem.codigo).put();
 
   $('#last-product-sku').text(saleItem.codigo);
 }
