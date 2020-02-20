@@ -40,8 +40,7 @@ module.exports = class SaleCustomerInfoBuilder{
     //Guardar cada item do magento
     this.store.items.forEach((each) => {
       each.store = true;
-      items[each.sku] = each;
-      //console.log(items);
+      items[each.sku] = {...items[each.sku], ...each};
     });
 
     //Normalizar os Items
@@ -101,6 +100,17 @@ class SaleWrapper{
       cep: store.shipping_address.postcode
     }
 
+    this.billing_address = {
+      street: store.shipping_address.street.split(/\n/g)[0],
+      number: store.shipping_address.street.split(/\n/g)[1],
+      complement: store.shipping_address.street.split(/\n/g)[2],
+      bairro: store.shipping_address.street.split(/\n/g)[3],
+      city: store.shipping_address.city,
+      state: store.shipping_address.region,
+      cep: store.shipping_address.postcode
+    }
+
+
     this.payment = {
       method: store.payment.method,
       total: store.payment.base_amount_ordered,
@@ -127,8 +137,8 @@ class SaleItemWrapper{
     this.quantity = Num.def(item.quantidade || item.qty_ordered);
     this.weight = item.weight;
     this.changed = item.observacao ? item.observacao.includes('changed') : false;
-    this.store = item.store;
-    this.erp = item.erp;
+    this.store = item.store === true;
+    this.erp = item.erp === true;
 
   }
 }
