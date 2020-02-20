@@ -46,12 +46,12 @@ module.exports = class ProductDiagnostics{
             this._storeFix(product, 'ASSOCIATED');
           }else if(!isVisible(product)){
             this._storeFix(product, 'NOT_VISIBLE');
-          }else if (isMoreThanXDaysRegistered(product, 20)){
+          }else if (isMoreThanXDaysRegistered(product, 25)){
             this._storeFix(product, 'SALE');
           }
         }else{
           if (hasLockedStock(product) && !hasSales(stocks, 15)){
-          //  this._storeFix(product, 'LOCKED_STOCK');
+            this._storeFix(product, 'LOCKED_STOCK');
           }
         }
       }else{
