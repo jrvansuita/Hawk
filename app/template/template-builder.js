@@ -1,13 +1,20 @@
-const Template = require('../../bean/template.js')
-const Email = require('../email.js')
+const Template = require('../bean/template.js')
 const cheerio = require('cheerio');
 
-module.exports = class EmailBuilder{
+module.exports = class TemplateBuilder{
 
-  constructor(){
-    this.sender = new Email();
-    this.senderEmail = Params.email();
-    this.senderName = Params.emailName();
+  constructor(id){
+    this.id = id;
+  }
+
+  template(type){
+    this.templateType = type;
+    return this;
+  }
+
+  setData(data){
+    this.data = data;
+    return this;
   }
 
   findAllVariables(value){
@@ -43,37 +50,8 @@ module.exports = class EmailBuilder{
     });
   }
 
-  to(email){
-    this.to = email;
-    return this;
-  }
 
-  receiveCopy(){
-    this.wantMyCopy = true;
-    return this;
-  }
-
-  copy(email){
-    this.to = email;
-    return this;
-  }
-
-  reply(email){
-    this.replyEmail = email || Params.replayEmail();
-    return this;
-  }
-
-  template(type){
-    this.templateType = type;
-    return this;
-  }
-
-  setData(data){
-    this.data = data;
-    return this;
-  }
-
-  getFormatValue(value){
+  _getFormatValue(value){
     if (Num.isInt(value)){
       return Num.def(value);
     }else if (Floa.isFloat(value)){
@@ -87,7 +65,7 @@ module.exports = class EmailBuilder{
     arr.forEach((each) => {
       var value = Util.deepVal(each, data);
       if (value){
-        str = str.replaceAll("{" + each + "}", this.getFormatValue(value));
+        str = str.replaceAll("{" + each + "}", this._getFormatValue(value));
       }
     });
 
@@ -107,6 +85,7 @@ module.exports = class EmailBuilder{
   }
 
   processVariables(str){
+
     this.findAllVariables(str);
 
     if (this.variables && this.variables.length){
@@ -140,6 +119,7 @@ module.exports = class EmailBuilder{
       });
     }
 
+
     return str;
   }
 
@@ -161,36 +141,26 @@ module.exports = class EmailBuilder{
     return $.html();
   }
 
-  prepare(){
-    var destination = [this.to];
-    if (this.wantMyCopy){
-      destination.push(this.senderEmail);
+  _load(callback){
+    if (this.id){
+      Template.findByKey(this.id, (err, template) => {
+        callback(template);
+      });
+    }else if (this.templateType){
+      Template.findByType(this.templateType,(err, template) => {
+        callback(template);
+      });
     }
-
-    this.sender.to(destination);
-    this.sender.from(this.senderName, this.senderEmail);
-    this.sender.replyTo(this.replyEmail, this.replyEmail);
-
-    this.subject = this.processVariables(this.subject);
-    this.content = this.processVariables(this.content);
-    this.content = this.htmlFormatting(this.content);
-
-
-    this.sender.subject(this.subject);
-    this.sender.html(this.content);
   }
 
-  send(callback){
-    Template.findByType(this.templateType,(err, template) => {
-      this.subject = template.subject;
-      this.content = template.content;
+  build(callback){
+    this._load((template) => {
+      if (this.data){
+        template.subject = this.processVariables(template.subject);
+        template.content = this.htmlFormatting(this.processVariables(template.content));
+      }
 
-      this.prepare()
-      this.sender.send((err, id) => {
-        if (callback){
-          callback(err, id);
-        }
-      });
-    });
+      callback(template);
+    })
   }
 }

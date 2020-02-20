@@ -55,8 +55,11 @@
     border-spacing: 0;
   }
 
-  .transp{
-    padding: 5px 15px;
+  .transp img{
+    width: 30px;
+    height: 30px;
+    margin-bottom: -10px;
+
   }
 
   .vol-inc{
@@ -77,20 +80,31 @@
 
   <%
 
-   shippingOrder._NotasFiscais
+  shippingOrder._NotasFiscais
 
   var volTotal = shippingOrder._NotasFiscais.reduce((prev, e)=>{return parseInt(e.qtdVolumes) + prev},0);
   %>
 
-  <div class="top">
-    <p>
-      <span class="big"><%=shippingOrder.numeroColeta%></span>
-      <span class="transp"><%=shippingOrder.transportador%></span>
-      <span  style="float:right"><%=Dat.format(new Date(shippingOrder.data))%></span>
-    </p>
-    <span>Minuta de Despacho [Usuário: <%=shippingOrder.usuario_criacao%>]</span>
-    <span style="float:right" class="bold"><%=volTotal + ' Volumes'%></span>
-  </div>
+
+
+
+  <table class="top">
+    <tr>
+      <td><%-assContent%></td>
+      <td>
+
+        <p class="big">Coleta: <%=shippingOrder.numeroColeta%></p>
+        <p class="transp"> <img src="img/transport/<%=Util.transportName(shippingOrder.transportador).toLowerCase()%>.png"/> <%=shippingOrder.transportador%></p>
+        <p>Data da Ordem: <%=Dat.format(new Date(shippingOrder.data))%></p>
+        <p>Data da Impressão: <%=Dat.formatwTime(new Date())%></p>
+
+      </td>
+      <td style="text-align: right">
+        <p>Minuta de Despacho [Usuário: <%=shippingOrder.usuario_criacao%>]</p>
+        <p class="bold"><%=volTotal + ' Volumes'%></p>
+      </td>
+    </tr>
+  </table>
 
   <div class="holder">
 

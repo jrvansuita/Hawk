@@ -3,6 +3,7 @@ const ShippingOrderProvider = require('../provider/shipping-order-provider.js');
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
 const EccosysStorer = require('../eccosys/eccosys-storer.js');
 const TransportLaws = require('../laws/transport-laws.js');
+const TemplateBuilder = require('../template/template-builder.js');
 
 module.exports = class ShippingOrderRoutes extends Routes{
 
@@ -30,9 +31,12 @@ module.exports = class ShippingOrderRoutes extends Routes{
     });
 
     this._get('/shipping-order-print', (req, res) => {
-      ShippingOrderProvider.get(req.query, (data) => {
-        res.render("packing/shipping-order/shipping-order-print", {shippingOrder: data});
+      new TemplateBuilder().template('ASS').build((templateAss) => {
+        ShippingOrderProvider.get(req.query, (data) => {
+          res.render("packing/shipping-order/shipping-order-print", {shippingOrder: data, assContent: templateAss.content});
+        });
       });
+
     });
 
     this._post('/shipping-order-new', (req, res) => {

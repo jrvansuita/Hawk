@@ -1,7 +1,7 @@
 const EccosysStorer = require('../eccosys/eccosys-storer.js');
 const SaleLoader = require('../loader/sale-loader.js');
 const HistoryStorer = require('../history/history-storer.js');
-const EmailBuilder = require('../email/builder/email-builder.js');
+const EmailBuilder = require('../email/email-builder.js');
 const PendingLaws = require('../laws/pending-laws.js');
 
 module.exports = class PendingVoucherHandler{

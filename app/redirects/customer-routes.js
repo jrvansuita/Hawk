@@ -24,7 +24,6 @@ module.exports = class CustomerRoutes extends Routes{
       res.render('customer/sale', {saleNumber: req.query.saleNumber});
     });
 
-
     this._get('/customer-service/sale', (req, res) => {
       CustomerProvider.loadSale(req.query.saleNumber, this._resp().redirect(res));
     });

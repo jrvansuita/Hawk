@@ -43,26 +43,18 @@ $(document).ready(()=>{
     saveClick();
   });
 
-
   $(".each-template-line").click(function (){
-    window.location= 'email-templates?_id=' + $(this).data('id');
+    window.location= 'templates?_id=' + $(this).data('id');
   });
 
   $(".icon-dots").click(function (e){
     openOptionsMenu(this, e);
   });
 
-
   $('.add-new').click(() => {
-    window.location= 'email-templates';
+    window.location= 'templates';
   });
-
-
 });
-
-
-
-
 
 function saveClick(){
   if (checkFields()){
@@ -88,8 +80,8 @@ function save() {
     type: (typeSelector.getSelectedItem() && $('#template-type').val()) ? typeSelector.getSelectedItem().data.key : ''
   };
 
-  _post('email-template', data , (id)=>{
-    window.location= 'email-templates?_id=' + id;
+  _post('template', data , (id)=>{
+    window.location= 'templates?_id=' + id;
   },(error, message)=>{
     console.log(error);
   });
@@ -103,6 +95,8 @@ function openOptionsMenu(line, e){
     if (checkCanDelete(id)){
       deleteTemplate(id);
     }
+  }).addItem('../img/not-visible.png', 'Visualizar', function(){
+    window.open('templates-viewer?_id=' + id, '_blank');
   }).show();
 }
 
@@ -123,7 +117,7 @@ function checkCanDelete(id){
 }
 
 function deleteTemplate(id){
-  _post('/email-template-delete',{_id: id}, () => {
+  _post('/template-delete',{_id: id}, () => {
     var line = $(".each-template-line[data-id='"+id+"']");
     line.fadeOut(200, () => {
       line.remove();

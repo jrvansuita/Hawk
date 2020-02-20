@@ -3,7 +3,7 @@ const PickingLaws = require('../laws/picking-laws.js');
 const SaleLoader = require('../loader/sale-loader.js');
 const InprogressLaws = require('../laws/inprogress-laws.js');
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
-const EmailBuilder = require('../email/builder/email-builder.js');
+const EmailBuilder = require('../email/email-builder.js');
 
 const HistoryStorer = require('../history/history-storer.js');
 const BlockHandler = require('../handler/block-handler.js');
