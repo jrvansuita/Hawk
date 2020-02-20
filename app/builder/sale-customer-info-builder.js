@@ -31,16 +31,17 @@ module.exports = class SaleCustomerInfoBuilder{
       return each.parent_item_id === null;
     });
 
-    //Guardar cada item do magento
-    this.store.items.forEach((each) => {
-      each.store = true;
-      items[each.sku] = each;
-    });
-
     //Guardar cada item do eccosys
     this.erp.items.forEach((each) => {
       each.erp = true;
       items[each.codigo] = each;
+    });
+
+    //Guardar cada item do magento
+    this.store.items.forEach((each) => {
+      each.store = true;
+      items[each.sku] = each;
+      //console.log(items);
     });
 
     //Normalizar os Items
@@ -77,19 +78,57 @@ class SaleWrapper{
   constructor(store, erp){
     this.number = erp.numeroPedido;
     this.oc = store.increment_id;
+    this.nf = erp.numeroNotaFiscal;
+    this.status = store.status;
+    this.situation = Util.getSaleSituationName(parseInt(erp.situacao));
+    this.pickingStatus = Util.getSaleStatusName(erp.pickingRealizado);
+    this.saleDate = Dat.formatwTime(Dat.rollHour(new Date(store.created_at),-3));
+    this.subtotal = store.base_subtotal;
+
+    this.client = {
+      name: store.customer_firstname + " " + store.customer_lastname,
+      socialCode: store.customer_taxvat,
+      dateOfBirth: Dat.formatwTime(new Date(store.customer_dob)),
+    }
+
+    this.shipping_address = {
+      street: store.shipping_address.street.split(/\n/g)[0],
+      number: store.shipping_address.street.split(/\n/g)[1],
+      complement: store.shipping_address.street.split(/\n/g)[2],
+      bairro: store.shipping_address.street.split(/\n/g)[3],
+      city: store.shipping_address.city,
+      state: store.shipping_address.region,
+      cep: store.shipping_address.postcode
+    }
+
+    this.payment = {
+      method: store.payment.method,
+      total: store.payment.base_amount_ordered,
+      desc: store.payment.installment_description || "1x (à vista)"
+    }
+
+    this.transport = {
+      name: erp.transportador.split(" ",1),
+      desc: store.shipping_description,
+      cost: Floa.def(store.shipping_amount)
+    };
   }
 }
 
 
 class SaleItemWrapper{
   constructor(item){
+
     this.sku = item.codigo || item.sku;
     this.name = item.descricao || item.name;
     this.price = Floa.def(item.precoLista || item.price);
+    this.discount = Floa.def(item.discount_amount || item.desconto_adm);
+    this.total = Floa.def(item.price - item.discount_amount);
     this.quantity = Num.def(item.quantidade || item.qty_ordered);
+    this.weight = item.weight;
     this.changed = item.observacao ? item.observacao.includes('changed') : false;
-    this.store = item.store === true;
-    this.erp = item.erp === true;
+    this.store = item.store;
+    this.erp = item.erp;
 
   }
 }

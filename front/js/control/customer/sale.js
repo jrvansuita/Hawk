@@ -1,7 +1,7 @@
 $(document).ready(() => {
 
   loadCompletSaleData((data) => {
-    bindSaleInfoViewer(data);
+    bindSaleInfoViewer(data.data);
   });
   $('.menu-transport').click(() => {
     menuTransportClick();
@@ -18,28 +18,29 @@ function loadCompletSaleData(callback){
 }
 
 function bindClientSaleInfo(data){
-  $('.sale-client-name').text(data.store.customer_firstname + " " + data.store.customer_lastname);
-  $('.sale-client-social-code').text(data.store.customer_taxvat);
-  $('.sale-client-date').text(Dat.formatwTime(new Date(data.store.customer_dob)));
+  $('.sale-client-name').text(data.client.name);
+  $('.sale-client-social-code').text(data.client.socialCode);
+  $('.sale-client-date').text(data.client.dateOfBirth);
 }
 
 function bindSaleShippingInfo(data){
-  $('.sale-shipping-adress-street').text(data.store.shipping_address.street + ", " + data.store.shipping_address.num);
-  $('.sale-shipping-adress-bairro').text(data.store.shipping_address.street.bairro);
-  $('.sale-shipping-adress-complemento').text(data.store.shipping_address.complemento);
-  $('.sale-shipping-postal-code').text(data.store.shipping_address.postcode);
-  $('.sale-shipping-city').text(data.store.shipping_address.city);
-  $('.sale-shipping-uf').text(data.store.shipping_address.region);
-  $('.sale-shipping-transport').text(data.erp.transportador.split(" ",1));
-  $('#transport-img').attr('src', data.erp.transportadora_img);
-  $('.sale-shipping-transport-description').text(data.store.shipping_description);
-  $('.sale-shipping-transport-cost').text(Num.money(data.store.shipping_amount));
+  $('.sale-shipping-adress-street').text(data.shipping_address.street + ', ' + data.shipping_address.number);
+  $('.sale-shipping-adress-bairro').text(data.shipping_address.bairro);
+  $('.sale-shipping-adress-complemento').text(data.shipping_address.complement);
+  $('.sale-shipping-postal-code').text(data.shipping_address.cep);
+  $('.sale-shipping-city').text(data.shipping_address.city);
+  $('.sale-shipping-uf').text(data.shipping_address.state);
+
+  $('.sale-shipping-transport').text(data.transport.name);
+  //$('#transport-img').attr('src', data.erp.transportadora_img);
+  $('.sale-shipping-transport-description').text(data.transport.desc);
+  $('.sale-shipping-transport-cost').text(Num.money(data.transport.cost));
 }
 
 function bindPaymentInfo(data){
-  $('.sale-payment-method').text(Util.getPaymentDescription(data.store.payment.method));
-  $('.sale-payment-total').text(Num.money(data.store.payment.base_amount_ordered));
-  $('.sale-payment-info').text(data.store.payment.installment_description || "1x (à vista)");
+  $('.sale-payment-method').text(Util.getPaymentDescription(data.payment.method));
+  $('.sale-payment-total').text(Num.money(data.payment.total));
+  $('.sale-payment-info').text(data.payment.desc || "1x (à vista)");
 }
 
 
@@ -81,9 +82,7 @@ function bindSaleItens(data){
   var $tableHolder = $('.client-sale-itens');
 
   var itensCount = 0;
-  data.store.items.forEach((item) => {
-
-    if(item.parent_item_id === null){
+  data.items.forEach((item) => {
       itensCount++;
       var $saleItensHolder = $('<tr>').addClass('sale-itens-information');
       var $itemInfos = $('<td>').addClass('sale-item-infos');
@@ -99,15 +98,15 @@ function bindSaleItens(data){
       $itemInfos.append($itemDesc.text(item.name), $itemSku.text(item.sku));
 
       $saleItensHolder.append($itemInfos,
-        $itemQtd.text(Num.int(item.qty_ordered)),
+        $itemQtd.text(Num.int(item.quantity)),
         $itemPrice.text(Num.money(item.price)),
-        $itemDiscount.text(Num.money(item.discount_amount)),
+        $itemDiscount.text(Num.money(item.discount)),
         $itemWeight.text(item.weight),
-        $itemTotalValue.text(Num.money(item.price - item.discount_amount)));
+        $itemTotalValue.text(Num.money(item.total)));
 
         $tableHolder.append($saleItensHolder);
-      }});
-      $('.sale-itens-count').text("Itens Magento: "+ itensCount + " Itens Eccosys: " + data.erp.items.length);
+      });
+      $('.sale-itens-count').text("Itens: "+ data.items.length);
       bindCopiable();
 
     }
@@ -122,13 +121,13 @@ function bindSaleItens(data){
   }
 
   function bindSaleBasicInfos(data){
-    $('.sale-number').text(data.erp.numeroDaOrdemDeCompra);
-    $('.sale-ecco').text(data.erp.numeroPedido);
-    $('.sale-nfe').text(data.erp.numeroNotaFiscal || '########');
-    $('.status').text(saleStatusDePara(data.store.status));
-    $('.sale-situation').text(Util.getSaleSituationName(parseInt(data.erp.situacao)));
-    $('.sale-step').text(Util.getSaleStatusName(data.erp.pickingRealizado));
-    $('.sale-date').text(Dat.formatwTime(Dat.rollHour(new Date(data.store.created_at),-3)));
+    $('.sale-number').text(data.oc);
+    $('.sale-ecco').text(data.number);
+    $('.sale-nfe').text(data.nf || '########');
+    $('.status').text(saleStatusDePara(data.status));
+    $('.sale-situation').text(data.situation);
+    $('.sale-step').text(data.pickingStatus);
+    $('.sale-date').text(data.saleDate);
   }
 
   function menuTransportClick(){
@@ -148,5 +147,6 @@ function bindSaleItens(data){
     bindSaleShippingInfo(data);
     bindPaymentInfo(data);
     bindSaleItens(data);
-    bindSaleTotalInfo(data);
+    /*bindSaleTotalInfo(data);
+    */
   }
