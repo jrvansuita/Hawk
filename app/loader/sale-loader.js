@@ -74,7 +74,6 @@ module.exports= class SaleLoader {
             History.error(e, null, 'Erro ao carregar cliente ' + this.sale.idContato + ' do pedido ' + this.sale.numeroPedido);
           }
 
-          client.nome_curto = Util.twoNames(client.nome, 'Desconhecido', 30);
           this.sale.client = client;
 
           this._callbackHit(onCallNext, onCallOuter);

@@ -60,9 +60,9 @@ module.exports = class EmailBuilder{
 
   send(callback){
     this.prepare();
-    this.loadTemplate(() => {
-      this.sender.subject(data.subject);
-      this.sender.html(data.content);
+    this.loadTemplate((template) => {
+      this.sender.subject(template.subject);
+      this.sender.html(template.content);
       this.sender.send((err, id) => {
         if (callback){
           callback(err, id);
