@@ -51,7 +51,8 @@ module.exports = class PendingVoucherHandler{
 
     var body = {
       numeroPedido: this.sale.numeroPedido,
-      observacaoInterna: currentObs + '\n' + this._getVoucherObs()
+      observacaoInterna: currentObs + '\n' + this._getVoucherObs(),
+      observacoes: 'VOUCHER-' + this.voucher
     };
 
     new EccosysStorer().sale().update([body]).go(callback);
