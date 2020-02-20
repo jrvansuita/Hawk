@@ -1,5 +1,5 @@
 
-const Template = require('../../bean/template.js');
+const Template = require('../bean/template.js');
 
 module.exports = class TemplateHandler {
 

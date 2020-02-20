@@ -20,5 +20,10 @@ module.exports = {
     icon: 'money-coin'
   },
 
+  ASS: {
+    name : 'Assinatura Boutique',
+    icon: 'info'
+  },
+
 
 };

@@ -58,7 +58,7 @@ routes.push('settings-routes.js');
 routes.push('mock-routes.js');
 routes.push('gift-routes.js');
 routes.push('pictures-routes.js');
-routes.push('email-routes.js');
+routes.push('template-routes.js');
 routes.push('images-routes.js');
 routes.push('customer-routes.js');
 

@@ -75,6 +75,7 @@ module.exports= class SaleLoader {
           }
 
           this.sale.client = client;
+
           this._callbackHit(onCallNext, onCallOuter);
         });
       }else{

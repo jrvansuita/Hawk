@@ -3,7 +3,7 @@ const MD5 = require('../util/md5.js');
 const Err = require('../error/error.js');
 const Query = require('../util/query.js');
 
-const EmailBuilder = require('../email/builder/email-builder.js');
+const EmailBuilder = require('../email/email-builder.js');
 
 module.exports = class EccosysApi{
 
@@ -219,7 +219,7 @@ module.exports = class EccosysApi{
       if (this.log){
         console.log(parsedBody);
       }
-      
+
       req.write(parsedBody);
     }
 

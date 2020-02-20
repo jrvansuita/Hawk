@@ -141,7 +141,6 @@ class SaleWrapper{
 
 class SaleItemWrapper{
   constructor(item){
-
     this.sku = item.codigo || item.sku;
     this.name = item.descricao || item.name;
     this.price = Floa.def(item.precoLista || item.price);
@@ -152,6 +151,5 @@ class SaleItemWrapper{
     this.changed = item.observacao ? item.observacao.includes('changed') : false;
     this.store = item.store === true;
     this.erp = item.erp === true;
-
   }
 }
