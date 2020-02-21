@@ -57,7 +57,6 @@ module.exports = class EmailBuilder{
     .build(callback);
   }
 
-
   send(callback){
     this.prepare();
     this.loadTemplate((template) => {

@@ -17,6 +17,11 @@ module.exports = class TemplateBuilder{
     return this;
   }
 
+  useSampleData(){
+    this.useSample = true;
+    return this;
+  }
+
   findAllVariables(value){
     var matches = value.match(/{.*?}/g);
 
@@ -153,12 +158,24 @@ module.exports = class TemplateBuilder{
     }
   }
 
+  _handleSampleData(template){
+    if (this.useSample){
+      this.data = template.sample;
+    }else if (this.data){
+      Template.updateSample(template._id, this.data);
+    }
+
+    return this.data && (Object.keys(this.data).length > 0);
+  }
+
   build(callback){
     this._load((template) => {
-      if (this.data){
+      if (this._handleSampleData(template)){
         template.subject = this.processVariables(template.subject);
-        template.content = this.htmlFormatting(this.processVariables(template.content));
+        template.content = this.processVariables(template.content);
       }
+
+      template.content = this.htmlFormatting(template.content);
 
       callback(template);
     })

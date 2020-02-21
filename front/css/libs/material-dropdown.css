@@ -14,7 +14,7 @@
   position: absolute;
   padding-left: 0px;
   border-radius: 1px;
-  z-index: 9999999;
+  /* z-index: 9999999; */
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
 }
 

@@ -2,7 +2,7 @@ const Routes = require('../redirects/controller/routes.js');
 const TemplateVault = require('../template/template-vault.js');
 const Templates = require('../bean/template.js');
 const TemplatesTypes = require('../template/templates-types.js');
-const TemplatesBuilder = require('../template/template-builder.js');
+const TemplateBuilder = require('../template/template-builder.js');
 const ImageSaver = require('../image/image-saver.js');
 
 module.exports = class EmailRoutes extends Routes{
@@ -20,7 +20,7 @@ module.exports = class EmailRoutes extends Routes{
     });
 
     this._get('/templates-viewer', (req, res) => {
-      new TemplatesBuilder(req.query._id).build((template) => {
+      new TemplateBuilder(req.query._id).useSampleData().build((template) => {
 
         res.writeHead(200, {
           'Content-Type': 'text/html',
