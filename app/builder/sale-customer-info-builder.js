@@ -120,11 +120,12 @@ class SaleWrapper{
       method: store.payment.method,
       total: store.payment.base_amount_ordered,
       desc: store.payment.installment_description || "1x (à vista)",
-      boleto: store.payment.additional_information.BoletoUrl
+      boleto: store.payment.additional_information.BoletoUrl,
+      status: (store.payment.additional_information.BoletoTransactionStatusEnum || store.payment.additional_information["1_BoletoTransactionStatus"]) || store.payment.additional_information["1_CreditCardTransactionStatus"]
     }
 
     this.transport = {
-      name: erp.transportador.split(" ",1),
+      name: erp.transport,
       desc: store.shipping_description,
       cost: Floa.def(store.shipping_amount)
     }

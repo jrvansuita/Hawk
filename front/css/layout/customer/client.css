@@ -17,6 +17,8 @@
   display: flex;
   flex-flow: column;
   height: -webkit-fill-available;
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 
 .search-holder{

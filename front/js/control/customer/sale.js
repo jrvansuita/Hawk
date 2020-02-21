@@ -3,7 +3,17 @@ $(document).ready(() => {
   loadCompletSaleData((data) => {
     bindSaleInfoViewer(data.data);
   });
+
+  $('.sale-nfe').dblclick(() => {
+    printNFe();
+  });
 });
+
+function printNFe(){
+  if($('.sale-nfe').text() != '########'){
+    window.open('/packing-danfe?nfe=' +$('.sale-nfe').text());
+  }
+}
 
 function menuClick(menu){
 
@@ -49,7 +59,7 @@ function bindClientSaleInfo(data){
   $('.sale-client-date').text(data.client.dateOfBirth);
 }
 
-function bindSaleShippingInfo(data){
+function bindSaleAddressInfo(data){
   buildMenu($('.card-transport'));
 
   $('.sale-shipping-adress-street').text(data.shipping_address.street + ', ' + data.shipping_address.number);
@@ -59,8 +69,15 @@ function bindSaleShippingInfo(data){
   $('.sale-shipping-city').text(data.shipping_address.city);
   $('.sale-shipping-uf').text(data.shipping_address.state);
 
+  $('.sale-billing-adress-street').text(data.billing_address.street + ', ' + data.billing_address.number);
+  $('.sale-billing-adress-bairro').text(data.billing_address.bairro);
+  $('.sale-billing-adress-complemento').text(data.billing_address.complement);
+  $('.sale-billing-adress-postal-code').text(data.billing_address.cep);
+  $('.sale-billing-adress-city').text(data.billing_address.city);
+  $('.sale-billing-adress-uf').text(data.billing_address.state);
+
   $('.sale-shipping-transport').text(data.transport.name);
-  //$('#transport-img').attr('src', data.erp.transportadora_img);
+  $('#transport-img').attr('src', '/img/transport/' + provisorio.erp.transport + '.png');
   $('.sale-shipping-transport-description').text(data.transport.desc);
   $('.sale-shipping-transport-cost').text(Num.money(data.transport.cost));
 
@@ -69,9 +86,17 @@ function bindSaleShippingInfo(data){
 
 function bindPaymentInfo(data){
   buildMenu($('.card-payment'));
-  $('.sale-payment-method').text(Util.getPaymentDescription(data.payment.method));
+  $('.payment-img').attr('src','/img/' + checkPaymentMethod(data.payment.method) + '.png');
+  $('.sale-payment-method').text(Util.getPaymentType(data.payment.method));
   $('.sale-payment-total').text(Num.money(data.payment.total));
-  $('.sale-payment-info').text(data.payment.desc || "1x (à vista)");
+  $('.sale-payment-info').text(data.payment.desc);
+  $('.sale-payment-status').text(data.payment.status);
+}
+
+function checkPaymentMethod(method){
+  if(method.includes('boleto')) return 'barcode';
+  if(method.includes('creditcard')) return 'credit-card';
+  if(method.includes('paypal')) return 'paypal';
 }
 
 
@@ -114,8 +139,8 @@ function bindSaleItens(data){
   var itensCount = 0;
 
   data.items.sort((a, b) => {
-    if(a.erp < b.store) return -1;
-    if(a.erp > b.store) return 1;
+    if(a.erp.toString().length < b.store.toString().length ) return 1;
+    if(a.erp.toString().length  > b.store.toString().length ) return -1;
     return 0;
   });
 
@@ -129,19 +154,21 @@ function bindSaleItens(data){
     var $itemInfos = $('<td>').addClass('sale-item-infos');
 
     var $itemDesc = $('<span>').addClass('sale-item-desc');
-    var $itemSku = $('<p>').addClass('item-sku gray copiable');
-    var $itemQtd = $('<td>').addClass('sale-item-quantity');
-    var $itemPrice = $('<td>').addClass('sale-item-price');
-    var $itemDiscount = $('<td>').addClass('sale-item-discount');
-    var $itemWeight = $('<td>').addClass('sale-item-weight');
-    var $itemTotalValue = $('<td>').addClass('sale-item-total-value');
+    var $itemSku = $('<span>').addClass('item-sku copiable');
+    var $itemName = $('<span>').addClass('gray');
+
+    var $itemQtd = $('<td>').addClass('sale-item-quantity center');
+    var $itemPrice = $('<td>').addClass('sale-item-price center');
+    var $itemDiscount = $('<td>').addClass('sale-item-discount center');
+    var $itemWeight = $('<td>').addClass('sale-item-weight center');
+    var $itemTotalValue = $('<td>').addClass('sale-item-total-value center');
 
     if(itemErpChanged || itemStoreChanged){
       var $itemObs = $('<span>').addClass('right changed');
       $itemObs.text(itemErpChanged || itemStoreChanged);
     }
 
-    $itemInfos.append($itemDesc.text(item.name).append($itemObs, $itemSku.text(item.sku)));
+    $itemInfos.append($itemDesc.append($itemSku.text(item.sku + ' - '), $itemName.text(item.name), $itemObs));
 
     $saleItensHolder.append($itemInfos,
       $itemQtd.text(Num.int(item.quantity)),
@@ -193,7 +220,7 @@ function bindSaleItens(data){
     data.comments.store.filter((each) => {
       if(each.comment != null && each.comment != '[Intelipost Webhook] - ' && each.comment != '[ERP - ECCOSYS] - '){
         var $commentsTr = $('<tr>');
-        var $commentsDate = $('<td>');
+        var $commentsDate = $('<td>').addClass('comment-date');
         var $commentsTd = $('<td>');
 
         $commentsTd.text(each.comment);
@@ -206,14 +233,15 @@ function bindSaleItens(data){
   }
 
   function bindSaleInfoViewer(data){
-    $('.loading-sale-modal').hide();
-
     bindSaleBasicInfos(data);
     bindClientSaleInfo(data);
-    bindSaleShippingInfo(data);
+    bindSaleAddressInfo(data);
     bindPaymentInfo(data);
     bindSaleItens(data);
     bindSaleTotalInfo(data);
     bindSaleHistory(data);
+
+    $('.loading-sale-modal').hide();
+    $('.sale-dialog').css('display','flex');
 
   }

@@ -35,14 +35,11 @@ var Util = {
     return JSON.parse(JSON.stringify(object));
   },
 
-   getPaymentDescription(method){
+   getPaymentType(method){
     switch(method){
-      case 'mundipagg_boleto':{
-        return 'Boleto';
-      }
-      case 'mundipagg_creditcard':{
-        return 'Cartão de Crédito';
-      }
+      case 'mundipagg_boleto': return 'Boleto';
+      case 'mundipagg_creditcard': return 'Cartão de Crédito';
+      case 'paypal_express': return 'PayPal'
     }
   },
 
@@ -55,15 +52,6 @@ var Util = {
     }
     return object;
   },
-
-  /*formatShippingAddress(address){
-    address['num'] = address.street.split(/\n/g)[1];
-    address['bairro'] = address.street.split(/\n/g)[3];
-    address['complemento'] = address.street.split(/\n/g)[2];
-    address['street'] = address.street.split(/\n/g)[0];
-    return address;
-  },*/
-
 
   removeAttrs(object, keep){
     return Object.keys(object).reduce((obj, key) => {

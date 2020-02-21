@@ -15,7 +15,7 @@
 <body>
   <div class="loading-sale-modal barberpole-mini-green-background"></div>
 
-  <div class="main-holder">
+  <div class="main-holder sale-dialog">
     <div class="sale-client-info-holder">
       <table class="sale-head-table">
         <tr>
@@ -105,10 +105,50 @@
         </div>
 
         <div class="sale-card-item shadow">
+          <label class="client-card-title">Endereço de Cobrança</label>
+          <table>
+            <tr>
+              <td colspan="2">
+                <span class="sale-billing-adress-street"></span>
+              </td>
+            </tr>
+            <tr class="divide">
+              <td>
+                <span class="sale-billing-adress-bairro"></span>
+              </td>
+              <td>
+                <span class="sale-billing-adress-complemento right gray"></span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="sale-card-title">Cidade</span>
+              </td>
+              <td class="right">
+                <span class="sale-card-title">Estado</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="sale-billing-adress-city"></span>
+              </td>
+              <td class="right">
+                <span class="sale-billing-adress-uf"></span>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <span class="sale-billing-adress-postal-code gray"></span>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="sale-card-item shadow">
           <label class="client-card-title">Endereço de Entrega</label>
           <table>
             <tr>
-              <td>
+              <td colspan="2">
                 <span class="sale-shipping-adress-street"></span>
               </td>
             </tr>
@@ -117,7 +157,7 @@
                 <span class="sale-shipping-adress-bairro"></span>
               </td>
               <td>
-                <span class="sale-shipping-adress-complemento gray"></span>
+                <span class="sale-shipping-adress-complemento right gray"></span>
               </td>
             </tr>
             <tr>
@@ -138,6 +178,11 @@
             </tr>
             <tr>
               <td>
+                <span class="sale-card-title">CEP</span>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
                 <span class="sale-shipping-postal-code gray"></span>
               </td>
             </tr>
@@ -147,33 +192,34 @@
         <div class="sale-card-item shadow card-payment">
           <label class="client-card-title">Pagamento</label>
           <table>
-            <tr>
+            <tr class="divide">
               <td>
-                <label>Método: </label>
+                <span class="sale-card-title">Método: </span>
               </td>
-              <td>
-                <label class="sale-payment-method right"></label>
+              <td align="center">
+                <img class="icon payment-img">
+                <span class="sale-payment-method"></span>
               </td>
             </tr>
-            <tr>
+            <tr class="divide">
               <td>
-                <span>Parcelamento: </span>
+                <span class="sale-card-title">Parcelamento: </span>
               </td>
               <td>
                 <span class="sale-payment-info right"></span>
               </td>
             </tr>
-            <tr>
+            <tr class="divide">
               <td>
-                <span>Valor Total: </span>
+                <span class="sale-card-title">Valor Total: </span>
               </td>
               <td>
                 <span class="sale-payment-total right"></span>
               </td>
             </tr>
-            <tr>
+            <tr class="divide">
               <td>
-                <span>Status: </span>
+                <span class="sale-card-title">Status: </span>
               </td>
               <td>
                 <span class="sale-payment-status right"></span>
@@ -185,23 +231,23 @@
         <div class="sale-card-item shadow card-transport">
           <label class="client-card-title">Transportadora</label>
           <table>
-            <tr>
+            <tr class="divide">
               <td>
-                <span class="sale-shipping-transport"></span>
                 <img class="icon" id="transport-img" src="/img/wait.png">
+                <span class="sale-shipping-transport"></span>
               </td>
             </tr>
-            <tr>
-              <td>
-                <span class="sale-shipping-transport-description right"></span>
+            <tr class="divide">
+              <td colspan="2">
+                <span class="sale-shipping-transport-description"></span>
               </td>
             </tr>
-            <tr>
+            <tr class="divide">
               <td>
-                <span>Valor do Frete:</span>
+                <span class="sale-card-title">Valor do Frete:</span>
               </td>
               <td>
-                <span class="sale-shipping-transport-cost gray right"></span>
+                <span class="sale-shipping-transport-cost right"></span>
               </td>
             </tr>
           </table>
@@ -210,33 +256,33 @@
         <div class="sale-card-item shadow">
           <label class="client-card-title">Total do Pedido</label>
           <table>
-            <tr>
+            <tr class="divide">
               <td>
-                <span>Subtotal:</span>
+                <span class="sale-card-title">Subtotal:</span>
               </td>
               <td>
                 <span class="sale-info-subtotal right"></span>
               </td>
             </tr>
-            <tr>
+            <tr class="divide">
               <td>
-                <span>Desconto:</span>
+                <span class="sale-card-title">Desconto:</span>
               </td>
               <td>
                 <span class="sale-info-discount right"></span>
               </td>
             </tr>
-            <tr>
+            <tr class="divide">
               <td>
-                <span>Peso Total:</span>
+                <span class="sale-card-title">Peso Total:</span>
               </td>
               <td>
                 <span class="sale-info-weight-total right"></span>
               </td>
             </tr>
-            <tr>
+            <tr class="divide">
               <td>
-                <span>Total Geral:</span>
+                <span class="sale-card-title">Total Geral:</span>
               </td>
               <td>
                 <span class="sale-info-total right"></span>
@@ -250,18 +296,17 @@
 
     <div class="sale-information-holder">
       <div class="sale-itens-information-holder">
-          <label class="sale-card-title">Informações</label>
         <div class="sale-itens-holder shadow">
           <div class="sale-itens-table">
             <table class="client-sale-itens">
               <thead>
                 <tr class="table-titles sale-table-titles">
                     <th class="sale-itens-count"></th>
-                    <th>Quantidade</th>
-                    <th>Preço</th>
-                    <th>Desconto</th>
-                    <th>Peso</th>
-                    <th>Valor Total</th>
+                    <th align="center">Quantidade</th>
+                    <th align="center">Preço</th>
+                    <th align="center">Desconto</th>
+                    <th align="center">Peso</th>
+                    <th align="center">Valor Total</th>
                   </tr>
               </thead>
             </table>
@@ -270,7 +315,6 @@
       </div>
 
     <div class="sale-history-holder">
-      <label class="sale-card-title">Histórico</label>
       <div class="comments-ecco shadow">
         <table class="ecco-comments-table">
           <tr>
