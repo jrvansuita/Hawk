@@ -134,7 +134,9 @@ class SaleWrapper{
       erp: erp.observacaoInterna,
     }
     this.eccoItensQuantity = erp.items.length;
-    this.magentoItensQuantity = store.items.length;
+    this.magentoItensQuantity = store.items.filter((each) => {
+      return each.parent_item_id === null;
+    }).length;
   };
 }
 

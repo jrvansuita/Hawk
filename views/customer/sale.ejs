@@ -63,7 +63,7 @@
 
           <td>
             <div class="field">
-              <label class="field-title">Nfe</label>
+              <label class="field-title">NFe</label>
               <label class="info sale-nfe copiable">########</label>
             </div>
           </td>
@@ -144,10 +144,7 @@
           </table>
         </div>
 
-        <div class="sale-card-item shadow">
-          <div class="menu-dots menu-payment">
-            <img class="dots-glyph" src="/img/dots.png">
-          </div>
+        <div class="sale-card-item shadow card-payment">
           <label class="client-card-title">Pagamento</label>
           <table>
             <tr>
@@ -155,7 +152,7 @@
                 <label>Método: </label>
               </td>
               <td>
-                <label class="sale-payment-method"></label>
+                <label class="sale-payment-method right"></label>
               </td>
             </tr>
             <tr>
@@ -163,7 +160,7 @@
                 <span>Parcelamento: </span>
               </td>
               <td>
-                <span class="sale-payment-info"></span>
+                <span class="sale-payment-info right"></span>
               </td>
             </tr>
             <tr>
@@ -171,7 +168,7 @@
                 <span>Valor Total: </span>
               </td>
               <td>
-                <span class="sale-payment-total"></span>
+                <span class="sale-payment-total right"></span>
               </td>
             </tr>
             <tr>
@@ -179,16 +176,13 @@
                 <span>Status: </span>
               </td>
               <td>
-                <span class="sale-payment-status"></span>
+                <span class="sale-payment-status right"></span>
               </td>
             </tr>
           </table>
         </div>
 
-        <div class="sale-card-item shadow">
-          <div class="menu-dots menu-transport">
-            <img class="dots-glyph" src="/img/dots.png">
-          </div>
+        <div class="sale-card-item shadow card-transport">
           <label class="client-card-title">Transportadora</label>
           <table>
             <tr>
@@ -199,7 +193,7 @@
             </tr>
             <tr>
               <td>
-                <span class="sale-shipping-transport-description"></span>
+                <span class="sale-shipping-transport-description right"></span>
               </td>
             </tr>
             <tr>
@@ -207,7 +201,7 @@
                 <span>Valor do Frete:</span>
               </td>
               <td>
-                <span class="sale-shipping-transport-cost gray"></span>
+                <span class="sale-shipping-transport-cost gray right"></span>
               </td>
             </tr>
           </table>
@@ -278,18 +272,20 @@
     <div class="sale-history-holder">
       <label class="sale-card-title">Histórico</label>
       <div class="comments-ecco shadow">
-        <div>
-          <label class="comments-table-title">Comentários Eccosys</label>
-        </div>
         <table class="ecco-comments-table">
+          <tr>
+            <th class="comments-table-title">Comentários Eccosys</th>
+          </tr>
         </table>
       </div>
       <br>
       <div class="comments-magento shadow">
-        <div>
-          <label class="comments-table-title">Comentários Magento</label>
-        </div>
         <table class="magento-comments-table">
+          <thead>
+            <tr>
+              <th class="comments-table-title" colspan="2" >Comentários Magento</th>
+            </tr>
+          </thead>
           <tr>
             <th class="gray">Data</th>
             <th class="gray">Obs</th>
