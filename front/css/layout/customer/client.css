@@ -16,7 +16,7 @@
   margin-right: 40px;
   display: flex;
   flex-flow: column;
-  height: 100%;
+  height: -webkit-fill-available;
 }
 
 .search-holder{
@@ -275,9 +275,9 @@
   height: 90%;
   left: 0;
   right: 0;
-  top: 20px;
+  top: 60px;
   bottom: 0;
   margin: auto;
-  position: absolute;
+  position: relative;
   flex: 1;
 }

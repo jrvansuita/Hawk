@@ -94,20 +94,21 @@
 .sale-table-titles th{
   position: sticky;
   top: 0;
-  background: #b3b3b3;
+  background: #e8e8e8;
   padding: 3px;
   padding-left: 5px;
+  color: #302d2d;
 }
 .sale-itens-table{
   overflow: auto;
-  height: auto;
-  max-height: 90%;
+  height: 95%;
+  max-height: 100%;
 }
 
 .sale-itens-information-holder{
   padding-bottom: 15px;
   width: 70%;
-  height: 84%;
+  height: auto;
 }
 
 .sale-itens-count{
@@ -118,9 +119,10 @@
   padding-bottom: 15px;
 }
 .sale-information-holder{
-  height: 100%;
-  position: relative;
+  height: auto;
   display: flex;
+  flex: 80;
+  overflow: auto;
 }
 
 .sale-total-info-table{
@@ -148,4 +150,69 @@
 .sale-shipping-transport{
   vertical-align: super;
 }
-.menu-transport{float: right;margin-top: -5px;margin-right: -5px;display: inline-block;}
+.menu-dots{
+  float: right;
+  margin-top: -5px;
+  margin-right: -5px;
+  display: inline-block;
+}
+.sale-history-holder{
+  width: 100%;
+  margin-left: 2%;
+  flex: 1;
+  max-height: 68%;
+  display: inline-grid;
+  height: auto;
+}
+
+.sale-history-holder table{
+  width: 100%;
+}
+.sale-history-holder table td{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 8px;
+  font-size: 15px;
+  color: #191717;
+}
+
+.sale-history-holder table tr:nth-child(odd) {
+  background-color: #f2f2f2;
+}
+
+.comments-magento{
+  overflow-y: auto;
+  height: 90%;
+}
+.comments-ecco{
+  overflow: auto;
+}
+
+.comments-table-title{
+  background: #e8e8e8;
+  padding: 12px 15px !important;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  display: table-cell;
+  border-bottom: 0px !important;
+  color: #302d2d !important;
+  font-size: 15px;
+  position: sticky;
+  top: 0;
+}
+
+.changed{
+  border-width: 1.4px 1.4px 3px;
+  border-style: solid;
+  border-color: rgb(182, 199, 107);
+  border-image: initial;
+  background: rgba(182, 199, 107, 0.07);
+  border-radius: 3px;
+  padding: 3px 6px;
+  margin-bottom: 10px;
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 13px;
+  color: #807b7b;
+  text-transform: capitalize;
+}

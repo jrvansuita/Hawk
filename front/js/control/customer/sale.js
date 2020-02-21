@@ -3,10 +3,36 @@ $(document).ready(() => {
   loadCompletSaleData((data) => {
     bindSaleInfoViewer(data.data);
   });
-  $('.menu-transport').click(() => {
-    menuTransportClick();
-  });
 });
+
+function menuClick(menu){
+
+  menu.click(function(e){
+    var drop = new MaterialDropdown($(this), e);
+    var cardClass =  menu.parent().prop('className');
+
+    if(cardClass.includes('payment') && data.payment.method == 'mundipagg_boleto'){
+      drop.addItem('/img/barcode.png', 'Imprimir Boleto', function(){
+        window.open(data.payment.boleto);
+      });
+    }else if(cardClass.includes('transport')){
+      drop.addItem('/img/transport/default.png', 'Rastreio', function(){
+        window.open("https://status.ondeestameupedido.com/tracking/6560/" + data.oc);
+      });
+    }
+    drop.show();
+  });
+}
+
+function buildMenu(holder){
+  $menu = $('<div>').addClass('menu-dots');
+  $menuImg = $('<img>').addClass('dots-glyph').attr('src', '../../img/dots.png');
+
+  $menu.append($menuImg);
+  menuClick($menu);
+
+  return holder.prepend($menu);
+}
 
 
 function loadCompletSaleData(callback){
@@ -24,6 +50,8 @@ function bindClientSaleInfo(data){
 }
 
 function bindSaleShippingInfo(data){
+  buildMenu($('.card-transport'));
+
   $('.sale-shipping-adress-street').text(data.shipping_address.street + ', ' + data.shipping_address.number);
   $('.sale-shipping-adress-bairro').text(data.shipping_address.bairro);
   $('.sale-shipping-adress-complemento').text(data.shipping_address.complement);
@@ -35,9 +63,12 @@ function bindSaleShippingInfo(data){
   //$('#transport-img').attr('src', data.erp.transportadora_img);
   $('.sale-shipping-transport-description').text(data.transport.desc);
   $('.sale-shipping-transport-cost').text(Num.money(data.transport.cost));
+
+
 }
 
 function bindPaymentInfo(data){
+  buildMenu($('.card-payment'));
   $('.sale-payment-method').text(Util.getPaymentDescription(data.payment.method));
   $('.sale-payment-total').text(Num.money(data.payment.total));
   $('.sale-payment-info').text(data.payment.desc || "1x (à vista)");
@@ -80,43 +111,56 @@ function saleStatusDePara(status){
 function bindSaleItens(data){
 
   var $tableHolder = $('.client-sale-itens');
-
   var itensCount = 0;
+
+  data.items.sort((a, b) => {
+    if(a.erp < b.store) return -1;
+    if(a.erp > b.store) return 1;
+    return 0;
+  });
+
   data.items.forEach((item) => {
-      itensCount++;
-      var $saleItensHolder = $('<tr>').addClass('sale-itens-information');
-      var $itemInfos = $('<td>').addClass('sale-item-infos');
+    itensCount++;
 
-      var $itemDesc = $('<span>').addClass('sale-item-desc');
-      var $itemSku = $('<p>').addClass('item-sku copiable');
-      var $itemQtd = $('<td>').addClass('sale-item-quantity');
-      var $itemPrice = $('<td>').addClass('sale-item-price');
-      var $itemDiscount = $('<td>').addClass('sale-item-discount');
-      var $itemWeight = $('<td>').addClass('sale-item-weight');
-      var $itemTotalValue = $('<td>').addClass('sale-item-total-value');
+    var itemErpChanged = item.erp == false ? 'Removido' : '';
+    var itemStoreChanged = item.store == false ? 'Adicionado' : '';
 
-      $itemInfos.append($itemDesc.text(item.name), $itemSku.text(item.sku));
+    var $saleItensHolder = $('<tr>').addClass('sale-itens-information');
+    var $itemInfos = $('<td>').addClass('sale-item-infos');
 
-      $saleItensHolder.append($itemInfos,
-        $itemQtd.text(Num.int(item.quantity)),
-        $itemPrice.text(Num.money(item.price)),
-        $itemDiscount.text(Num.money(item.discount)),
-        $itemWeight.text(item.weight),
-        $itemTotalValue.text(Num.money(item.total)));
+    var $itemDesc = $('<span>').addClass('sale-item-desc');
+    var $itemSku = $('<p>').addClass('item-sku gray copiable');
+    var $itemQtd = $('<td>').addClass('sale-item-quantity');
+    var $itemPrice = $('<td>').addClass('sale-item-price');
+    var $itemDiscount = $('<td>').addClass('sale-item-discount');
+    var $itemWeight = $('<td>').addClass('sale-item-weight');
+    var $itemTotalValue = $('<td>').addClass('sale-item-total-value');
 
-        $tableHolder.append($saleItensHolder);
-      });
-      $('.sale-itens-count').text("Itens: "+ data.items.length);
-      bindCopiable();
-
+    if(itemErpChanged || itemStoreChanged){
+      var $itemObs = $('<span>').addClass('right changed');
+      $itemObs.text(itemErpChanged || itemStoreChanged);
     }
 
+    $itemInfos.append($itemDesc.text(item.name).append($itemObs, $itemSku.text(item.sku)));
+
+    $saleItensHolder.append($itemInfos,
+      $itemQtd.text(Num.int(item.quantity)),
+      $itemPrice.text(Num.money(item.price)),
+      $itemDiscount.text(Num.money(item.discount)),
+      $itemWeight.text(item.weight),
+      $itemTotalValue.text(Num.money(item.total)));
+
+      $tableHolder.append($saleItensHolder);
+    });
+    $('.sale-itens-count').text("Itens Magento: "+ data.magentoItensQuantity + " " + "Itens Eccosys: "+ data.eccoItensQuantity);
+    bindCopiable();
+  }
 
   function bindSaleTotalInfo(data){
-    $('.sale-info-subtotal').text(Num.money(data.store.base_subtotal));
-    $('.sale-info-discount').text(Num.money(data.store.discount_amount));
-    $('.sale-info-weight-total').text(data.store.weight);
-    $('.sale-info-total').text(Num.money(data.store.base_grand_total));
+    $('.sale-info-subtotal').text(Num.money(data.subtotal));
+    $('.sale-info-discount').text(Num.money(data.discount));
+    $('.sale-info-weight-total').text(data.weight);
+    $('.sale-info-total').text(Num.money(data.total));
 
   }
 
@@ -124,19 +168,41 @@ function bindSaleItens(data){
     $('.sale-number').text(data.oc);
     $('.sale-ecco').text(data.number);
     $('.sale-nfe').text(data.nf || '########');
-    $('.status').text(saleStatusDePara(data.status));
+    $('.status').text(data.status);
     $('.sale-situation').text(data.situation);
     $('.sale-step').text(data.pickingStatus);
     $('.sale-date').text(data.saleDate);
   }
 
-  function menuTransportClick(){
-    return function(e){
-      new MaterialDropdown($(this), e)
-      .addItem('../img/transport/default.png', 'Rastreio', ()=>{
-        window.open('https://status.ondeestameupedido.com/tracking/6560/' + sale, '_blank');
-      }).show();
-    }
+  function bindSaleHistory(data){
+
+    var comments = [];
+    var $commentsEccoTable = $('.ecco-comments-table');
+    var $commentsMageTable = $('.magento-comments-table');
+
+    comments = data.comments.erp.split(/\n/g);
+
+    comments.reverse().forEach((each) => {
+      var $commentsTr = $('<tr>');
+      var $commentsTd = $('<td>');
+      $commentsTd.text(each);
+
+      $commentsEccoTable.append($commentsTr.append($commentsTd));
+    });
+
+    data.comments.store.filter((each) => {
+      if(each.comment != null && each.comment != '[Intelipost Webhook] - ' && each.comment != '[ERP - ECCOSYS] - '){
+        var $commentsTr = $('<tr>');
+        var $commentsDate = $('<td>');
+        var $commentsTd = $('<td>');
+
+        $commentsTd.text(each.comment);
+        $commentsDate.text(Dat.formatwTime(Dat.rollHour(new Date(each.created_at),-3)));
+
+        $commentsMageTable.append($commentsTr.append($commentsDate,$commentsTd));
+      }
+    });
+
   }
 
   function bindSaleInfoViewer(data){
@@ -147,6 +213,7 @@ function bindSaleItens(data){
     bindSaleShippingInfo(data);
     bindPaymentInfo(data);
     bindSaleItens(data);
-    /*bindSaleTotalInfo(data);
-    */
+    bindSaleTotalInfo(data);
+    bindSaleHistory(data);
+
   }
