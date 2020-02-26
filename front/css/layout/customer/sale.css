@@ -126,6 +126,7 @@ table{
 
 .divide td{
   padding-bottom: 15px;
+  font-size: 15px;
 }
 .sale-information-holder{
   height: 100;
@@ -219,7 +220,6 @@ table{
   background: rgba(182, 199, 107, 0.07);
   border-radius: 3px;
   padding: 3px 6px;
-  margin-bottom: 10px;
   display: inline-block;
   margin-right: 10px;
   font-size: 13px;
@@ -238,4 +238,34 @@ table{
 .sale-payment-method{
   font-size: 12px;
   vertical-align: super;
+}
+.sale-info-cupom{
+  font-size: 13px;
+}
+
+.item-name{
+  font-size: 13px;
+  color: #5f5f5f;
+}
+
+.Captured{
+  padding: 5px;
+  border-radius: 5px;
+  border-width: 1.4px 1.4px 3px;
+  border-style: solid;
+  border-color: rgb(137, 228, 73);
+  background: rgba(182, 199, 107, 0.07);
+}
+.Paid{
+  background: #91fd91;
+  padding: 5px;
+  border-radius: 5px;
+}
+.Generated{
+  padding: 5px;
+  border-radius: 5px;
+  border-width: 1.4px 1.4px 3px;
+  border-color: rgb(255, 110, 82);
+  background: rgba(182, 199, 107, 0.07);
+  border-style: solid;
 }

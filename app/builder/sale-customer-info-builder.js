@@ -119,9 +119,10 @@ class SaleWrapper{
     this.payment = {
       method: store.payment.method,
       total: store.payment.base_amount_ordered,
-      desc: store.payment.installment_description || "1x (à vista)",
+      desc: store.payment.installment_description || store.payment.additional_information.mundipagg_creditcard_new_credito_parcelamento_1_1|| "1x (à vista)",
       boleto: store.payment.additional_information.BoletoUrl,
-      status: (store.payment.additional_information.BoletoTransactionStatusEnum || store.payment.additional_information["1_BoletoTransactionStatus"]) || store.payment.additional_information["1_CreditCardTransactionStatus"]
+      status: (store.payment.additional_information.BoletoTransactionStatusEnum || store.payment.additional_information["1_BoletoTransactionStatus"]) || store.payment.additional_information["1_CreditCardTransactionStatus"],
+      coupon: store.coupon_code
     }
 
     this.transport = {
@@ -131,7 +132,9 @@ class SaleWrapper{
     }
 
     this.comments = {
-      store: store.status_history,
+      store: store.status_history.filter((each) => {
+        return (each.comment != null && each.comment != '[Intelipost Webhook] - ' && each.comment != '[ERP - ECCOSYS] - ');
+      }),
       erp: erp.observacaoInterna,
     }
     this.eccoItensQuantity = erp.items.length;
