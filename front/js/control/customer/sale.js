@@ -88,13 +88,13 @@ function bindSaleAddressInfo(data){
 
 function bindPaymentInfo(data){
   buildMenu($('.card-payment'));
-  var saleStatus = saleStatusDePara(data.payment.status);
+  var saleStatus = getSaleStatus(data.payment.status);
 
   $('.payment-img').attr('src', getPaymentMethodImage(data.payment.method));
   $('.sale-payment-method').text(Util.getPaymentType(data.payment.method));
   $('.sale-payment-total').text(Num.money(data.payment.total));
   $('.sale-payment-info').text(data.payment.desc);
-  $('.sale-payment-status').addClass(data.payment.status).text(saleStatus);
+  $('.sale-payment-status').addClass('info').text(saleStatus).css('background',Util.strToColor(saleStatus));
 }
 
 function getPaymentMethodImage(method){
@@ -104,7 +104,7 @@ function getPaymentMethodImage(method){
 }
 
 
-function saleStatusDePara(status){
+function getSaleStatus(status){
   switch(status){
     //sale status
     case 'processing': return 'Pagamento Confirmado';
@@ -125,7 +125,8 @@ function saleStatusDePara(status){
     case 'ip_shipped': return 'Despachado';
 
     //sale payment status
-    case ('Captured' || 'Paid') : return 'Pago';
+    case 'Captured': return 'Pago';
+    case 'Paid': return 'Pago';
     case 'Generated': return 'Não Pago';
   }
 }
@@ -140,19 +141,32 @@ function bindSaleItens(data){
     return 0;
   });
 
-  data.items.forEach((item) => {
+  data.items.reverse().forEach((item) => {
 
     var itemErpChanged = item.erp == false ? 'Removido' : '';
     var itemStoreChanged = item.store == false ? 'Adicionado' : '';
 
+    //tabela de itens
     var $saleItensHolder = $('<tr>').addClass('sale-itens-information');
-    var $itemInfoHolder = $('<td>').addClass('sale-item-infos');
-    var $itemName = $('<span>').addClass('item-name');
-    var $itemDesc = $('<span>').addClass('sale-item-desc');
 
-    var $itemSku = $('<span>').addClass('item-sku copiable').dblclick(() => {
-      window.open('/product?sku=' + $itemSku.text());
+    //item sku
+    var $itemSkuHolder = $('<td>').addClass('item-sku-holder copiable').text(item.sku).dblclick(() => {
+      window.open('/product?sku=' + $itemSkuHolder.text());
     });
+
+    //item name
+    var $itemNameHolder = $('<td>').addClass('sale-item-infos');
+    var $itemName = $('<span>').addClass('item-name').dblclick(() => {
+      window.open('/product-url-redirect?sku=' + $itemSkuHolder.text());
+    });
+
+    if(itemErpChanged || itemStoreChanged){
+      var $itemObs = $('<span>').addClass('right changed');
+      $itemObs.text(itemErpChanged || itemStoreChanged);
+    }
+
+    $itemNameHolder.append($itemName.text(item.name), $itemObs);
+
 
     var $itemQtd = $('<td>').addClass('sale-item-quantity center');
     var $itemPrice = $('<td>').addClass('sale-item-price center');
@@ -160,14 +174,8 @@ function bindSaleItens(data){
     var $itemWeight = $('<td>').addClass('sale-item-weight center');
     var $itemTotalValue = $('<td>').addClass('sale-item-total-value center');
 
-    if(itemErpChanged || itemStoreChanged){
-      var $itemObs = $('<span>').addClass('right changed');
-      $itemObs.text(itemErpChanged || itemStoreChanged);
-    }
-
-    $itemInfoHolder.append($itemDesc.append($itemSku.text(item.sku), $itemName.text(' - ' + item.name), $itemObs));
-
-    $saleItensHolder.append($itemInfoHolder,
+    $saleItensHolder.append($itemSkuHolder,
+      $itemNameHolder,
       $itemQtd.text(Num.int(item.quantity)),
       $itemPrice.text(Num.money(item.price)),
       $itemDiscount.text(Num.money(item.discount)),
@@ -181,73 +189,73 @@ function bindSaleItens(data){
     bindCopiable();
   }
 
-function bindSaleTotalInfo(data){
+  function bindSaleTotalInfo(data){
     $('.sale-info-subtotal').text(Num.money(data.subtotal));
-    $('.sale-info-cupom').text(data.payment.coupon || 'Não possui');
+    $('.sale-info-cupom').text(data.payment.coupon);
     $('.sale-info-discount').text(Num.money(data.discount));
     $('.sale-info-weight-total').text(data.weight < 1.000 ? data.weight + 'g' : data.weight + 'Kg');
     $('.sale-info-total').text(Num.money(data.total));
   }
 
-function bindSaleBasicInfos(data){
+  function bindSaleBasicInfos(data){
     $('.sale-number').text(data.oc).dblclick(() => {
       window.open('/packing?sale=' +$('.sale-number').text());
     });
     $('.sale-ecco').text(data.number);
     $('.sale-nfe').text(data.nf || '########');
-    $('.status').text(saleStatusDePara(data.status));
+    $('.status').text(getSaleStatus(data.status)).css('background', Util.strToColor(data.status));
     $('.sale-situation').text(data.situation);
     $('.sale-step').text(data.pickingStatus);
     $('.sale-date').text(data.saleDate);
 
     //fazer logica para bordar do modal conforme o status do pedido
     /*if($('.status').text() == 'Cancelado'){
-      $('.sale-viewer-holder').css('border-top', '3px solid red');
-    }else if($('.status').text() != 'Pagamento Confirmado'){
-      $('.sale-viewer-holder').css('border-top', '3px solid #FF9800');
-    }
-    else{
-      $('.sale-viewer-holder').css('border-top', '3px solid rgb(74, 212, 79)');
-    }*/
-  }
+    $('.sale-viewer-holder').css('border-top', '3px solid red');
+  }else if($('.status').text() != 'Pagamento Confirmado'){
+  $('.sale-viewer-holder').css('border-top', '3px solid #FF9800');
+}
+else{
+$('.sale-viewer-holder').css('border-top', '3px solid rgb(74, 212, 79)');
+}*/
+}
 
 function bindSaleHistory(data){
 
-    var comments = [];
-    var $commentsEccoTable = $('.ecco-comments-table');
-    var $commentsMageTable = $('.magento-comments-table');
+  var comments = [];
+  var $commentsEccoTable = $('.ecco-comments-table');
+  var $commentsMageTable = $('.magento-comments-table');
 
-    comments = data.comments.erp.split(/\n/g);
+  comments = data.comments.erp.split(/\n/g);
 
-    comments.reverse().forEach((each) => {
-      var $commentsTr = $('<tr>');
-      var $commentsTd = $('<td>');
-      $commentsTd.text(each);
-      $commentsEccoTable.append($commentsTr.append($commentsTd));
-    });
+  comments.reverse().forEach((each) => {
+    var $commentsTr = $('<tr>');
+    var $commentsTd = $('<td>');
+    $commentsTd.text(each);
+    $commentsEccoTable.append($commentsTr.append($commentsTd));
+  });
 
-    data.comments.store.forEach((each) => {
-        var $commentsTr = $('<tr>');
-        var $commentsDate = $('<td>').addClass('comment-date');
-        var $commentsTd = $('<td>');
+  data.comments.store.forEach((each) => {
+    var $commentsTr = $('<tr>');
+    var $commentsDate = $('<td>').addClass('comment-date');
+    var $commentsTd = $('<td>');
 
-        $commentsTd.text(each.comment);
-        $commentsDate.text(Dat.formatwTime(Dat.rollHour(new Date(each.created_at),-3)));
-        $commentsMageTable.append($commentsTr.append($commentsDate,$commentsTd));
-    });
+    $commentsTd.text(each.comment);
+    $commentsDate.text(Dat.formatwTime(Dat.rollHour(new Date(each.created_at),-3)));
+    $commentsMageTable.append($commentsTr.append($commentsDate,$commentsTd));
+  });
 
-  }
+}
 
 function bindSaleInfoViewer(data){
-    bindSaleBasicInfos(data);
-    bindClientSaleInfo(data);
-    bindSaleAddressInfo(data);
-    bindPaymentInfo(data);
-    bindSaleItens(data);
-    bindSaleTotalInfo(data);
-    bindSaleHistory(data);
+  bindSaleBasicInfos(data);
+  bindClientSaleInfo(data);
+  bindSaleAddressInfo(data);
+  bindPaymentInfo(data);
+  bindSaleItens(data);
+  bindSaleTotalInfo(data);
+  bindSaleHistory(data);
 
-    $('.loading-sale-modal').hide();
-    $('.sale-dialog').css('display','flex');
+  $('.loading-sale-modal').hide();
+  $('.sale-dialog').css('display','flex');
 
-  }
+}
