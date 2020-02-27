@@ -327,7 +327,7 @@ function openPrintPickingSale(sale, userId){
   var url = '/print-picking-sale?userId=[U]&saleNumber=[S]';
 
   if (userId){
-    url = url.replace('[U]', userId.trim()).replace('[S]', sale);
+    url = url.replace('[U]', userId.toString().trim()).replace('[S]', sale);
   }else{
     url = url.replace('[U]', sale.pickUser.id).replace('[S]', sale.numeroPedido);
   }
