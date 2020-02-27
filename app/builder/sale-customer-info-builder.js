@@ -91,7 +91,7 @@ class SaleWrapper{
     this.client = {
       name: store.customer_firstname + " " + store.customer_lastname,
       socialCode: store.customer_taxvat,
-      dateOfBirth: Dat.formatwTime(new Date(store.customer_dob)),
+      dateOfBirth: Dat.format(new Date(store.customer_dob)),
       email: store.customer_email,
       tel: store.billing_address.telephone
     }
@@ -122,7 +122,7 @@ class SaleWrapper{
       desc: store.payment.installment_description || store.payment.additional_information.mundipagg_creditcard_new_credito_parcelamento_1_1|| "1x (à vista)",
       boleto: store.payment.additional_information.BoletoUrl,
       status: (store.payment.additional_information.BoletoTransactionStatusEnum || store.payment.additional_information["1_BoletoTransactionStatus"]) || store.payment.additional_information["1_CreditCardTransactionStatus"],
-      coupon: store.coupon_code
+      coupon: store.coupon_code ? store.coupon_code.toUpperCase() : 'Não possui'
     }
 
     this.transport = {

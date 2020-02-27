@@ -1,6 +1,6 @@
 
 .field{
-  margin-bottom: 8px;
+  /* margin-bottom: 8px; */
   vertical-align: middle;
   display: inline-block;
 }
@@ -22,6 +22,9 @@
   text-overflow: ellipsis;
   display: -webkit-box;
   vertical-align: bottom;
+  padding: 7px;
+  border-radius: 5px;
+  font-size: 15px;
 }
 
 .highlighted{
@@ -30,9 +33,12 @@
   position: relative;
 }
 
+.sale-header-holder{
+  padding: 10px 0px 4px 10px;
+}
+
 .sale-head-table{
   width: 100%;
-  margin: 10px 8px;
   position: relative;
 }
 
@@ -41,7 +47,7 @@
   grid-template-columns: repeat(6, 1fr);
   width: fit-content;
   position: relative;
-  grid-gap: 15px;
+  grid-gap: 17px;
   margin-top: 20px;
   max-width: 100%;
   text-align: -webkit-auto;
@@ -49,19 +55,20 @@
 }
 
 .sale-card-item{
-  padding: 20px 15px;
+  padding: 15px 15px;
   width: auto;
   min-height: 155px;
 }
 
 .client-sale-itens{
   width: 100%;
-  overflow: auto;
+  /* overflow: auto; */
 }
 .sale-itens-information td{
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 8px;
+  padding-right: 8px;
   font-size: 15px;
   color: #191717;
 }
@@ -72,11 +79,10 @@ table{
 
 .sale-card-title{
   font-size: 13px;
-  position: unset;
-  display: contents;
+  display: inline;
   font-weight: 600;
   color: #5d5b59;
-  /* padding: 10px; */
+  vertical-align: super;
 }
 .sale-itens-table .sale-card-title{
   padding-left: 10px;
@@ -98,10 +104,8 @@ table{
   border-top-right-radius: 4px;
 }
 .sale-table-titles th{
-  position: sticky;
   top: 0;
   background: #e8e8e8;
-  padding: 3px;
   padding-left: 5px;
   color: #302d2d;
   font-size: 15px;
@@ -109,9 +113,9 @@ table{
   padding: 12px 15px !important;
 }
 .sale-itens-table{
-  overflow: auto;
+  /* overflow: auto; */
   height: auto;
-  max-height: 98%;
+  max-height: 100%;
 }
 
 .sale-itens-information-holder{
@@ -129,10 +133,9 @@ table{
   font-size: 15px;
 }
 .sale-information-holder{
-  height: 100;
+  height: 100%;
   display: flex;
   flex: 80;
-  /* overflow: auto; */
   padding-top: 20px;
 }
 
@@ -154,9 +157,10 @@ table{
   padding-right: 25px;
 }
 .icon{
-  width: 35px;
-  height: 35px;
+  width: 30px;
+  height: 30px;
   vertical-align: sub;
+  margin: 0;
 }
 .sale-shipping-transport{
   vertical-align: super;
@@ -173,6 +177,7 @@ table{
   flex: 1;
   display: initial;
   height: auto;
+  padding-bottom: 15px;
 }
 
 .sale-history-holder table{
@@ -191,8 +196,8 @@ table{
 }
 
 .comments-magento{
-  overflow-y: auto;
-  max-height: 50%;
+  /* overflow-y: auto; */
+  max-height: min-content;
 }
 .comments-ecco{
   overflow: auto;
@@ -238,6 +243,7 @@ table{
 .sale-payment-method{
   font-size: 12px;
   vertical-align: super;
+  white-space: nowrap;
 }
 .sale-info-cupom{
   font-size: 13px;
@@ -246,6 +252,7 @@ table{
 .item-name{
   font-size: 13px;
   color: #5f5f5f;
+  cursor: default;
 }
 
 .Captured{
@@ -256,16 +263,13 @@ table{
   border-color: rgb(137, 228, 73);
   background: rgba(182, 199, 107, 0.07);
 }
-.Paid{
-  background: #91fd91;
-  padding: 5px;
-  border-radius: 5px;
+
+.total{
+  font-weight: 900;
+  color: black;
+  font-size: 15px;
 }
-.Generated{
-  padding: 5px;
-  border-radius: 5px;
-  border-width: 1.4px 1.4px 3px;
-  border-color: rgb(255, 110, 82);
-  background: rgba(182, 199, 107, 0.07);
-  border-style: solid;
+
+.title-holder{
+  margin-bottom: 5px;
 }
