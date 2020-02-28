@@ -12,9 +12,13 @@ module.exports = class JobFeedXmlProducts extends Job{
   doWork(){
     return new Promise((resolve, reject)=>{
       var min = new Date();
-      min.setMonth(min.getMonth() -3);
+      min.setMonth(min.getMonth() -1);
 
-      History.removeAll({'date':{'$lt': min}}, resolve);
+      var query = {date:{$lte: min}};
+
+      History.removeAll(query, (err, doc) => {
+        resolve();
+      });
     });
   }
 

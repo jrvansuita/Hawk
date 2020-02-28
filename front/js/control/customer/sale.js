@@ -1,5 +1,7 @@
 $(document).ready(() => {
 
+  $('.sale-viewer-holder').css('border-top', 'none');
+
   loadCompletSaleData((data) => {
     bindSaleInfoViewer(data.data);
   });
@@ -77,7 +79,7 @@ function bindSaleAddressInfo(data){
   $('.sale-billing-adress-uf').text(data.billing_address.state);
 
   $('.sale-shipping-transport').text(data.transport.name);
-  $('#transport-img').attr('src', '/img/transport/' + provisorio.erp.transport + '.png');
+  $('#transport-img').attr('src', '/img/transport/' + data.transport.name + '.png');
   $('.sale-shipping-transport-description').text(data.transport.desc);
   $('.sale-shipping-transport-cost').text(Num.money(data.transport.cost));
 
@@ -86,76 +88,85 @@ function bindSaleAddressInfo(data){
 
 function bindPaymentInfo(data){
   buildMenu($('.card-payment'));
-  $('.payment-img').attr('src','/img/' + checkPaymentMethod(data.payment.method) + '.png');
+  var saleStatus = getSaleStatus(data.payment.status);
+
+  $('.payment-img').attr('src', getPaymentMethodImage(data.payment.method));
   $('.sale-payment-method').text(Util.getPaymentType(data.payment.method));
   $('.sale-payment-total').text(Num.money(data.payment.total));
   $('.sale-payment-info').text(data.payment.desc);
-  $('.sale-payment-status').text(data.payment.status);
+  $('.sale-payment-status').addClass('info').text(saleStatus).css('background',Util.strToColor(saleStatus));
 }
 
-function checkPaymentMethod(method){
-  if(method.includes('boleto')) return 'barcode';
-  if(method.includes('creditcard')) return 'credit-card';
-  if(method.includes('paypal')) return 'paypal';
+function getPaymentMethodImage(method){
+  if(method.includes('boleto')) return '/img/barcode.png';
+  if(method.includes('creditcard')) return '/img/credit-card.png';
+  if(method.includes('paypal')) return '/img/paypal.png';
 }
 
 
-function saleStatusDePara(status){
+function getSaleStatus(status){
   switch(status){
-    case 'processing':{
-      return 'Pagamento Confirmado';
-      break;
-    }
-    case 'separation':{
-      return 'Em Separação';
-      break;
-    }
-    case 'pending_payment':{
-      return 'Pagamento Pendente';
-      break;
-    }
-    case 'payment_review':{
-      return 'Aguardando Analise Antifraude';
-      break;
-    }
-    case 'waiting_antifraud_analisys':{
-      return 'Análise do Credito';
-      break;
-    }
-    case 'holded':{
-      return 'Bloqueado na Expedição';
-      break;
-    }
-    case 'ip_delivered':{
-      return 'Entregue';
-      break;
-    }
+    //sale status
+    case 'processing': return 'Pagamento Confirmado';
+    case 'canceled': return 'Cancelado';
+    case 'separation': return 'Em Separação';
+    case 'pending_payment': return 'Pagamento Pendente';
+    case 'payment_review': return 'Aguardando Analise Antifraude';
+    case 'waiting_antifraud_analisys': return 'Análise do Credito';
+    case 'holded': return 'Bloqueado na Expedição';
+    case 'ip_delivered': return 'Entregue';
+    case 'ip_delivery_failed': return 'Entrega Falhou';
+    case 'ip_delivery_late': return 'Atraso na Entrega';
+    case 'ip_in_transit': return 'Em Trânsito';
+    case 'ip_shipped': return 'Despachado';
+    case 'awaiting': return 'Aguardando Devolução';
+    case 'complete': return 'Conferência do(s) produto(s) e NF-e';
+    case 'closed': return 'Estornado';
+    case 'ip_shipped': return 'Despachado';
+
+    //sale payment status
+    case 'Captured': return 'Pago';
+    case 'Paid': return 'Pago';
+    case 'Generated': return 'Não Pago';
   }
 }
 
 function bindSaleItens(data){
 
   var $tableHolder = $('.client-sale-itens');
-  var itensCount = 0;
 
   data.items.sort((a, b) => {
-    if(a.erp.toString().length < b.store.toString().length ) return 1;
-    if(a.erp.toString().length  > b.store.toString().length ) return -1;
+    if(a.erp < b.store ) return 1;
+    if(a.erp  > b.store ) return -1;
     return 0;
   });
 
-  data.items.forEach((item) => {
-    itensCount++;
+  data.items.reverse().forEach((item) => {
 
     var itemErpChanged = item.erp == false ? 'Removido' : '';
     var itemStoreChanged = item.store == false ? 'Adicionado' : '';
 
+    //tabela de itens
     var $saleItensHolder = $('<tr>').addClass('sale-itens-information');
-    var $itemInfos = $('<td>').addClass('sale-item-infos');
 
-    var $itemDesc = $('<span>').addClass('sale-item-desc');
-    var $itemSku = $('<span>').addClass('item-sku copiable');
-    var $itemName = $('<span>').addClass('gray');
+    //item sku
+    var $itemSkuHolder = $('<td>').addClass('item-sku-holder copiable').text(item.sku).dblclick(() => {
+      window.open('/product?sku=' + $itemSkuHolder.text());
+    });
+
+    //item name
+    var $itemNameHolder = $('<td>').addClass('sale-item-infos');
+    var $itemName = $('<span>').addClass('item-name').dblclick(() => {
+      window.open('/product-url-redirect?sku=' + $itemSkuHolder.text());
+    });
+
+    if(itemErpChanged || itemStoreChanged){
+      var $itemObs = $('<span>').addClass('right changed');
+      $itemObs.text(itemErpChanged || itemStoreChanged);
+    }
+
+    $itemNameHolder.append($itemName.text(item.name), $itemObs);
+
 
     var $itemQtd = $('<td>').addClass('sale-item-quantity center');
     var $itemPrice = $('<td>').addClass('sale-item-price center');
@@ -163,14 +174,8 @@ function bindSaleItens(data){
     var $itemWeight = $('<td>').addClass('sale-item-weight center');
     var $itemTotalValue = $('<td>').addClass('sale-item-total-value center');
 
-    if(itemErpChanged || itemStoreChanged){
-      var $itemObs = $('<span>').addClass('right changed');
-      $itemObs.text(itemErpChanged || itemStoreChanged);
-    }
-
-    $itemInfos.append($itemDesc.append($itemSku.text(item.sku + ' - '), $itemName.text(item.name), $itemObs));
-
-    $saleItensHolder.append($itemInfos,
+    $saleItensHolder.append($itemSkuHolder,
+      $itemNameHolder,
       $itemQtd.text(Num.int(item.quantity)),
       $itemPrice.text(Num.money(item.price)),
       $itemDiscount.text(Num.money(item.discount)),
@@ -179,69 +184,78 @@ function bindSaleItens(data){
 
       $tableHolder.append($saleItensHolder);
     });
+
     $('.sale-itens-count').text("Itens Magento: "+ data.magentoItensQuantity + " " + "Itens Eccosys: "+ data.eccoItensQuantity);
     bindCopiable();
   }
 
   function bindSaleTotalInfo(data){
     $('.sale-info-subtotal').text(Num.money(data.subtotal));
+    $('.sale-info-cupom').text(data.payment.coupon);
     $('.sale-info-discount').text(Num.money(data.discount));
-    $('.sale-info-weight-total').text(data.weight);
+    $('.sale-info-weight-total').text(data.weight < 1.000 ? data.weight + 'g' : data.weight + 'Kg');
     $('.sale-info-total').text(Num.money(data.total));
-
   }
 
   function bindSaleBasicInfos(data){
-    $('.sale-number').text(data.oc);
+    $('.sale-number').text(data.oc).dblclick(() => {
+      window.open('/packing?sale=' +$('.sale-number').text());
+    });
     $('.sale-ecco').text(data.number);
     $('.sale-nfe').text(data.nf || '########');
-    $('.status').text(data.status);
+    $('.status').text(getSaleStatus(data.status)).css('background', Util.strToColor(data.status));
     $('.sale-situation').text(data.situation);
     $('.sale-step').text(data.pickingStatus);
     $('.sale-date').text(data.saleDate);
-  }
 
-  function bindSaleHistory(data){
+    //fazer logica para bordar do modal conforme o status do pedido
+    /*if($('.status').text() == 'Cancelado'){
+    $('.sale-viewer-holder').css('border-top', '3px solid red');
+  }else if($('.status').text() != 'Pagamento Confirmado'){
+  $('.sale-viewer-holder').css('border-top', '3px solid #FF9800');
+}
+else{
+$('.sale-viewer-holder').css('border-top', '3px solid rgb(74, 212, 79)');
+}*/
+}
 
-    var comments = [];
-    var $commentsEccoTable = $('.ecco-comments-table');
-    var $commentsMageTable = $('.magento-comments-table');
+function bindSaleHistory(data){
 
-    comments = data.comments.erp.split(/\n/g);
+  var comments = [];
+  var $commentsEccoTable = $('.ecco-comments-table');
+  var $commentsMageTable = $('.magento-comments-table');
 
-    comments.reverse().forEach((each) => {
-      var $commentsTr = $('<tr>');
-      var $commentsTd = $('<td>');
-      $commentsTd.text(each);
+  comments = data.comments.erp.split(/\n/g);
 
-      $commentsEccoTable.append($commentsTr.append($commentsTd));
-    });
+  comments.reverse().forEach((each) => {
+    var $commentsTr = $('<tr>');
+    var $commentsTd = $('<td>');
+    $commentsTd.text(each);
+    $commentsEccoTable.append($commentsTr.append($commentsTd));
+  });
 
-    data.comments.store.filter((each) => {
-      if(each.comment != null && each.comment != '[Intelipost Webhook] - ' && each.comment != '[ERP - ECCOSYS] - '){
-        var $commentsTr = $('<tr>');
-        var $commentsDate = $('<td>').addClass('comment-date');
-        var $commentsTd = $('<td>');
+  data.comments.store.forEach((each) => {
+    var $commentsTr = $('<tr>');
+    var $commentsDate = $('<td>').addClass('comment-date');
+    var $commentsTd = $('<td>');
 
-        $commentsTd.text(each.comment);
-        $commentsDate.text(Dat.formatwTime(Dat.rollHour(new Date(each.created_at),-3)));
+    $commentsTd.text(each.comment);
+    $commentsDate.text(Dat.formatwTime(Dat.rollHour(new Date(each.created_at),-3)));
+    $commentsMageTable.append($commentsTr.append($commentsDate,$commentsTd));
+  });
 
-        $commentsMageTable.append($commentsTr.append($commentsDate,$commentsTd));
-      }
-    });
+}
 
-  }
+function bindSaleInfoViewer(data){
+  bindSaleBasicInfos(data);
+  bindClientSaleInfo(data);
+  bindSaleAddressInfo(data);
+  bindPaymentInfo(data);
+  bindSaleItens(data);
+  bindSaleTotalInfo(data);
+  bindSaleHistory(data);
 
-  function bindSaleInfoViewer(data){
-    bindSaleBasicInfos(data);
-    bindClientSaleInfo(data);
-    bindSaleAddressInfo(data);
-    bindPaymentInfo(data);
-    bindSaleItens(data);
-    bindSaleTotalInfo(data);
-    bindSaleHistory(data);
+  $('.loading-sale-modal').hide();
+  $('.sale-dialog').css('display','flex');
 
-    $('.loading-sale-modal').hide();
-    $('.sale-dialog').css('display','flex');
-
-  }
+}

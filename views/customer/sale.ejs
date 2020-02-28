@@ -1,6 +1,6 @@
 <html>
 <script class="hidable-script">
-  window.saleNumber = <%= saleNumber %>
+window.saleNumber = <%= saleNumber %>
 </script>
 
 <html>
@@ -17,69 +17,67 @@
 
   <div class="main-holder sale-dialog">
     <div class="sale-client-info-holder">
-      <table class="sale-head-table">
-        <tr>
-          <td>
-            <div class="field">
-              <label class="field-title">Número do Pedido</label>
-              <label class="info highlighted sale-number copiable">Carregando</label>
-            </div>
-          </td>
+      <div class="sale-header-holder shadow">
+        <table class="sale-head-table">
+          <tr>
+            <td>
+              <div class="field">
+                <label class="field-title">Número do Pedido</label>
+                <label class="info highlighted sale-number copiable">Carregando</label>
+              </div>
+            </td>
 
-          <td>
-            <div class="field">
-              <label class="field-title">Status</label>
-              <label class="info status"></label>
-            </div>
-          </td>
+            <td>
+              <div class="field">
+                <label class="field-title">Status</label>
+                <label class="info status"></label>
+              </div>
+            </td>
 
-          <td>
-            <div class="field">
-              <label class="field-title">Situação</label>
-              <label class="info sale-situation"></label>
-            </div>
-          </td>
+            <td>
+              <div class="field">
+                <label class="field-title">Situação</label>
+                <label class="info sale-situation"></label>
+              </div>
+            </td>
 
-          <td>
-            <div class="field">
-              <label class="field-title">Etapa</label>
-              <label class="info sale-step"></label>
-            </div>
-          </td>
+            <td>
+              <div class="field">
+                <label class="field-title">Etapa</label>
+                <label class="info sale-step"></label>
+              </div>
+            </td>
 
-          <td>
-            <div class="field">
-              <label class="field-title">Data do Pedido</label>
-              <label class="info sale-date"></label>
-            </div>
-          </td>
+            <td>
+              <div class="field">
+                <label class="field-title">Data do Pedido</label>
+                <label class="info sale-date"></label>
+              </div>
+            </td>
 
-          <td>
-            <div class="field">
-              <label class="field-title">Pedido Eccosys</label>
-              <label class="info sale-ecco copiable"></label>
-            </div>
-          </td>
+            <td>
+              <div class="field">
+                <label class="field-title">Pedido Eccosys</label>
+                <label class="info sale-ecco copiable"></label>
+              </div>
+            </td>
 
-          <td>
-            <div class="field">
-              <label class="field-title">NFe</label>
-              <label class="info sale-nfe copiable">########</label>
-            </div>
-          </td>
-        </tr>
+            <td>
+              <div class="field">
+                <label class="field-title">NFe</label>
+                <label class="info sale-nfe copiable">########</label>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
 
-        <tr>
-          <td>
-
-          </td>
-        </tr>
-
-      </table>
 
       <div class="sale-cards-holder">
         <div class="sale-card-item shadow">
-          <label class="client-card-title">Dados do cliente</label>
+          <div class="title-holder">
+            <label class="sale-card-title">Dados do cliente</label>
+          </div>
           <table>
             <tr>
               <td>
@@ -105,11 +103,21 @@
         </div>
 
         <div class="sale-card-item shadow">
-          <label class="client-card-title">Endereço de Cobrança</label>
+          <div class="title-holder">
+            <label class="sale-card-title">Endereço de Cobrança</label>
+          </div>
           <table>
-            <tr>
+            <tr class="divide">
               <td colspan="2">
                 <span class="sale-billing-adress-street"></span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="sale-card-title">Bairro</span>
+              </td>
+              <td class="right">
+                <span class="sale-card-title">Comp.</span>
               </td>
             </tr>
             <tr class="divide">
@@ -128,12 +136,17 @@
                 <span class="sale-card-title">Estado</span>
               </td>
             </tr>
-            <tr>
+            <tr class="divide">
               <td>
                 <span class="sale-billing-adress-city"></span>
               </td>
               <td class="right">
                 <span class="sale-billing-adress-uf"></span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="sale-card-title">CEP</span>
               </td>
             </tr>
             <tr>
@@ -145,11 +158,21 @@
         </div>
 
         <div class="sale-card-item shadow">
-          <label class="client-card-title">Endereço de Entrega</label>
+          <div class="title-holder">
+            <label class="sale-card-title">Endereço de Entrega</label>
+          </div>
           <table>
-            <tr>
+            <tr class="divide">
               <td colspan="2">
                 <span class="sale-shipping-adress-street"></span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="sale-card-title">Bairro</span>
+              </td>
+              <td class="right">
+                <span class="sale-card-title">Comp.</span>
               </td>
             </tr>
             <tr class="divide">
@@ -168,7 +191,7 @@
                 <span class="sale-card-title">Estado</span>
               </td>
             </tr>
-            <tr>
+            <tr class="divide">
               <td>
                 <span class="sale-shipping-city"></span>
               </td>
@@ -190,14 +213,16 @@
         </div>
 
         <div class="sale-card-item shadow card-payment">
-          <label class="client-card-title">Pagamento</label>
+          <div class="title-holder">
+            <img class="icon payment-img">
+            <span class="sale-card-title">Pagamento</span>
+          </div>
           <table>
             <tr class="divide">
               <td>
                 <span class="sale-card-title">Método: </span>
               </td>
               <td align="center">
-                <img class="icon payment-img">
                 <span class="sale-payment-method"></span>
               </td>
             </tr>
@@ -229,11 +254,13 @@
         </div>
 
         <div class="sale-card-item shadow card-transport">
-          <label class="client-card-title">Transportadora</label>
+          <div class="title-holder">
+            <img class="icon" id="transport-img" src="/img/wait.png">
+            <span class="sale-card-title">Transportadora</span>
+          </div>
           <table>
             <tr class="divide">
               <td>
-                <img class="icon" id="transport-img" src="/img/wait.png">
                 <span class="sale-shipping-transport"></span>
               </td>
             </tr>
@@ -254,7 +281,7 @@
         </div>
 
         <div class="sale-card-item shadow">
-          <label class="client-card-title">Total do Pedido</label>
+          <label class="sale-card-title">Total do Pedido</label>
           <table>
             <tr class="divide">
               <td>
@@ -262,6 +289,14 @@
               </td>
               <td>
                 <span class="sale-info-subtotal right"></span>
+              </td>
+            </tr>
+            <tr class="divide">
+              <td>
+                <span class="sale-card-title">Cupom:</span>
+              </td>
+              <td>
+                <span class="sale-info-cupom right"></span>
               </td>
             </tr>
             <tr class="divide">
@@ -282,10 +317,10 @@
             </tr>
             <tr class="divide">
               <td>
-                <span class="sale-card-title">Total Geral:</span>
+                <span class="sale-card-title total">Total Geral:</span>
               </td>
               <td>
-                <span class="sale-info-total right"></span>
+                <span class="sale-info-total right total"></span>
               </td>
             </tr>
           </table>
@@ -301,44 +336,44 @@
             <table class="client-sale-itens">
               <thead>
                 <tr class="table-titles sale-table-titles">
-                    <th class="sale-itens-count"></th>
-                    <th align="center">Quantidade</th>
-                    <th align="center">Preço</th>
-                    <th align="center">Desconto</th>
-                    <th align="center">Peso</th>
-                    <th align="center">Valor Total</th>
-                  </tr>
+                  <th  colspan="2" class="sale-itens-count"></th>
+                  <th align="center">Qtd</th>
+                  <th align="center">Preço</th>
+                  <th align="center">Desconto</th>
+                  <th align="center">Peso</th>
+                  <th align="center">Total</th>
+                </tr>
               </thead>
             </table>
           </div>
         </div>
       </div>
 
-    <div class="sale-history-holder">
-      <div class="comments-ecco shadow">
-        <table class="ecco-comments-table">
-          <tr>
-            <th class="comments-table-title">Comentários Eccosys</th>
-          </tr>
-        </table>
-      </div>
-      <br>
-      <div class="comments-magento shadow">
-        <table class="magento-comments-table">
-          <thead>
+      <div class="sale-history-holder">
+        <div class="comments-ecco shadow">
+          <table class="ecco-comments-table">
             <tr>
-              <th class="comments-table-title" colspan="2" >Comentários Magento</th>
+              <th class="comments-table-title">Comentários Eccosys</th>
             </tr>
-          </thead>
-          <tr>
-            <th class="gray">Data</th>
-            <th class="gray">Obs</th>
-          </tr>
-        </table>
+          </table>
+        </div>
+        <br>
+        <div class="comments-magento shadow">
+          <table class="magento-comments-table">
+            <thead>
+              <tr>
+                <th class="comments-table-title" colspan="2" >Comentários Magento</th>
+              </tr>
+            </thead>
+            <tr>
+              <th class="gray">Data</th>
+              <th class="gray">Obs</th>
+            </tr>
+          </table>
+        </div>
       </div>
+
+
     </div>
-
-
-  </div>
-</body>
-</html>
+  </body>
+  </html>

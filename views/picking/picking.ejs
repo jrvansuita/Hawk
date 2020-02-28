@@ -121,7 +121,7 @@
                 <span class="label header-count">
                   <%=previewSalesCount == totalSalesCount ? previewSalesCount : previewSalesCount + '/' + totalSalesCount%>
 
-                  <%if (locals.loggedUser && locals.loggedUser.full){%>
+                    <%if (Sett.get(locals.loggedUser, 9)){%>
                     <div class="upcoming-dots">
                       <img src="img/dots.png" class="dots-glyph"/>
                     </div>
@@ -174,7 +174,7 @@
                       <span class="label header-title">Bloqueados</span>
                       <span class="label header-count">
                         <%=blockedSalesCount%>
-                        <%if (locals.loggedUser && locals.loggedUser.full){%>
+                        <%if (Sett.get(locals.loggedUser, 11)){%>
                           <div class="blocked-dots">
                             <img src="img/dots.png" class="dots-glyph"/>
                           </div>

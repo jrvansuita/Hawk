@@ -12,13 +12,13 @@
   position: relative;
 }
 .main-holder{
-  margin-left: 40px;
-  margin-right: 40px;
+  margin-left: 20px;
+  margin-right: 20px;
   display: flex;
   flex-flow: column;
   height: -webkit-fill-available;
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .search-holder{
@@ -137,12 +137,11 @@
   font-weight: 600;
   color: #5d5b59;
   padding-bottom: 1px;
-  padding-bottom: 10px;
 }
 
 
 .client-name{
-  font-size: 19px;
+  font-size: 18px;
   font-weight: 900;
 }
 
@@ -273,13 +272,14 @@
 
 
 .sale-viewer-holder{
-  width: 90%;
-  height: 90%;
+  width: 95%;
+  height: 93%;
   left: 0;
   right: 0;
-  top: 60px;
+  top: 50px;
   bottom: 0;
   margin: auto;
   position: relative;
   flex: 1;
+  overflow: auto;
 }

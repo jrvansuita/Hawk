@@ -82,6 +82,10 @@ module.exports = {
           .run(onFinished);
 
         }else{
+          if (salesArrLoader){
+            salesArrLoader.cancel();
+          }
+
           onFinished();
         }
       }catch(e){

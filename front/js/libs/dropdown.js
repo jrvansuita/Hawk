@@ -36,10 +36,12 @@ class MaterialDropdown {
     this.holder.hide();
 
     this.holder.mouseleave(()=>{
-      this.holder.hide();
+      //this.holder.hide();
       if (this.onMouseLeave){
         this.onMouseLeave();
       }
+
+      this.remove();
     });
   }
 
