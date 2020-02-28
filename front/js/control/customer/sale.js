@@ -29,7 +29,7 @@ function menuClick(menu){
       });
     }else if(cardClass.includes('transport')){
       drop.addItem('/img/transport/default.png', 'Rastreio', function(){
-        window.open("https://status.ondeestameupedido.com/tracking/6560/" + data.oc);
+        window.open(Params.trackingUrl() + data.oc);
       });
     }
     drop.show();
@@ -64,14 +64,14 @@ function bindClientSaleInfo(data){
 function bindSaleAddressInfo(data){
   buildMenu($('.card-transport'));
 
-  $('.sale-shipping-adress-street').text(data.shipping_address.street + ', ' + data.shipping_address.number);
+  $('.sale-shipping-adress-street').text(data.shipping_address.street);
   $('.sale-shipping-adress-bairro').text(data.shipping_address.bairro);
   $('.sale-shipping-adress-complemento').text(data.shipping_address.complement);
   $('.sale-shipping-postal-code').text(data.shipping_address.cep);
   $('.sale-shipping-city').text(data.shipping_address.city);
   $('.sale-shipping-uf').text(data.shipping_address.state);
 
-  $('.sale-billing-adress-street').text(data.billing_address.street + ', ' + data.billing_address.number);
+  $('.sale-billing-adress-street').text(data.billing_address.street);
   $('.sale-billing-adress-bairro').text(data.billing_address.bairro);
   $('.sale-billing-adress-complemento').text(data.billing_address.complement);
   $('.sale-billing-adress-postal-code').text(data.billing_address.cep);
@@ -79,7 +79,7 @@ function bindSaleAddressInfo(data){
   $('.sale-billing-adress-uf').text(data.billing_address.state);
 
   $('.sale-shipping-transport').text(data.transport.name);
-  $('#transport-img').attr('src', '/img/transport/' + data.transport.name + '.png');
+  $('#transport-img').attr('src', '/img/transport/' + data.transport.name.toLocaleLowerCase() + '.png');
   $('.sale-shipping-transport-description').text(data.transport.desc);
   $('.sale-shipping-transport-cost').text(Num.money(data.transport.cost));
 
@@ -94,7 +94,7 @@ function bindPaymentInfo(data){
   $('.sale-payment-method').text(Util.getPaymentType(data.payment.method));
   $('.sale-payment-total').text(Num.money(data.payment.total));
   $('.sale-payment-info').text(data.payment.desc);
-  $('.sale-payment-status').addClass('info').text(saleStatus).css('background',Util.strToColor(saleStatus));
+  $('.sale-payment-status').addClass('info').text(saleStatus).css('border-color',Util.strToColor(saleStatus));
 }
 
 function getPaymentMethodImage(method){
@@ -133,6 +133,8 @@ function getSaleStatus(status){
 
 function bindSaleItens(data){
 
+  $('.qtd').text('Qtd' + ': ' + data.totalPecas);
+   
   var $tableHolder = $('.client-sale-itens');
 
   data.items.sort((a, b) => {
@@ -159,23 +161,24 @@ function bindSaleItens(data){
     var $itemName = $('<span>').addClass('item-name').dblclick(() => {
       window.open('/product-url-redirect?sku=' + $itemSkuHolder.text());
     });
+    var $itemBrand = $('<td>').addClass('item-brand');
 
     if(itemErpChanged || itemStoreChanged){
       var $itemObs = $('<span>').addClass('right changed');
       $itemObs.text(itemErpChanged || itemStoreChanged);
     }
 
-    $itemNameHolder.append($itemName.text(item.name), $itemObs);
-
+    $itemNameHolder.append($itemName.text(item.name.split('-')[0]), $itemObs);
 
     var $itemQtd = $('<td>').addClass('sale-item-quantity center');
     var $itemPrice = $('<td>').addClass('sale-item-price center');
-    var $itemDiscount = $('<td>').addClass('sale-item-discount center');
-    var $itemWeight = $('<td>').addClass('sale-item-weight center');
+    var $itemDiscount = $('<td>').addClass('sale-item-discount center gray');
+    var $itemWeight = $('<td>').addClass('sale-item-weight center gray');
     var $itemTotalValue = $('<td>').addClass('sale-item-total-value center');
 
     $saleItensHolder.append($itemSkuHolder,
       $itemNameHolder,
+      $itemBrand.text(item.name.split('-')[1]),
       $itemQtd.text(Num.int(item.quantity)),
       $itemPrice.text(Num.money(item.price)),
       $itemDiscount.text(Num.money(item.discount)),
@@ -183,6 +186,8 @@ function bindSaleItens(data){
       $itemTotalValue.text(Num.money(item.total)));
 
       $tableHolder.append($saleItensHolder);
+
+      hoverProductImage($itemName, item.sku);
     });
 
     $('.sale-itens-count').text("Itens Magento: "+ data.magentoItensQuantity + " " + "Itens Eccosys: "+ data.eccoItensQuantity);
@@ -193,17 +198,21 @@ function bindSaleItens(data){
     $('.sale-info-subtotal').text(Num.money(data.subtotal));
     $('.sale-info-cupom').text(data.payment.coupon);
     $('.sale-info-discount').text(Num.money(data.discount));
-    $('.sale-info-weight-total').text(data.weight < 1.000 ? data.weight + 'g' : data.weight + 'Kg');
+    $('.sale-info-weight-total').text(data.weight);
     $('.sale-info-total').text(Num.money(data.total));
   }
 
   function bindSaleBasicInfos(data){
+    if(data.payment.coupon == 'Não possui'){
+      $('.cupom-card').hide();
+    }
+
     $('.sale-number').text(data.oc).dblclick(() => {
       window.open('/packing?sale=' +$('.sale-number').text());
     });
     $('.sale-ecco').text(data.number);
     $('.sale-nfe').text(data.nf || '########');
-    $('.status').text(getSaleStatus(data.status)).css('background', Util.strToColor(data.status));
+    $('.status').text(getSaleStatus(data.status)).css('border-color', Util.strToColor(data.status));
     $('.sale-situation').text(data.situation);
     $('.sale-step').text(data.pickingStatus);
     $('.sale-date').text(data.saleDate);
@@ -222,16 +231,15 @@ $('.sale-viewer-holder').css('border-top', '3px solid rgb(74, 212, 79)');
 function bindSaleHistory(data){
 
   var comments = [];
-  var $commentsEccoTable = $('.ecco-comments-table');
-  var $commentsMageTable = $('.magento-comments-table');
+  var $commentsEccosysTable = $('.history-comments-table');
+  var $magentoCommentsTable = $('.magento-comments-table');
 
   comments = data.comments.erp.split(/\n/g);
 
   comments.reverse().forEach((each) => {
-    var $commentsTr = $('<tr>');
-    var $commentsTd = $('<td>');
-    $commentsTd.text(each);
-    $commentsEccoTable.append($commentsTr.append($commentsTd));
+    var $comment = $('<p>').addClass('ecco-comments');
+    $comment.text(each);
+    $commentsEccosysTable.append($comment);
   });
 
   data.comments.store.forEach((each) => {
@@ -241,9 +249,16 @@ function bindSaleHistory(data){
 
     $commentsTd.text(each.comment);
     $commentsDate.text(Dat.formatwTime(Dat.rollHour(new Date(each.created_at),-3)));
-    $commentsMageTable.append($commentsTr.append($commentsDate,$commentsTd));
+    $magentoCommentsTable.append($commentsTr.append($commentsDate,$commentsTd));
   });
+}
 
+function hoverProductImage(holder, sku){
+  new ImagePreview(holder).hover((self) => {
+    _get('/product-image', {sku: sku },(product)=>{
+      self.show(product.image);
+    });
+  });
 }
 
 function bindSaleInfoViewer(data){

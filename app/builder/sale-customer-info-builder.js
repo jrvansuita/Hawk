@@ -86,7 +86,7 @@ class SaleWrapper{
     this.subtotal = Floa.def(store.base_subtotal);
     this.discount = Floa.def(store.discount_amount);
     this.total = Floa.def(store.base_grand_total);
-    this.weight = Floa.def(store.weight);
+    this.weight = Floa.def(store.weight) < 1.000 ? Floa.def(store.weight) + 'g' : Floa.def(store.weight) + 'Kg';
 
     this.client = {
       name: store.customer_firstname + " " + store.customer_lastname,
@@ -97,8 +97,7 @@ class SaleWrapper{
     }
 
     this.shipping_address = {
-      street: store.shipping_address.street.split(/\n/g)[0],
-      number: store.shipping_address.street.split(/\n/g)[1],
+      street: store.shipping_address.street.split(/\n/g)[0] + ', ' + store.shipping_address.street.split(/\n/g)[1],
       complement: store.shipping_address.street.split(/\n/g)[2],
       bairro: store.shipping_address.street.split(/\n/g)[3],
       city: store.shipping_address.city,
@@ -107,8 +106,7 @@ class SaleWrapper{
     }
 
     this.billing_address = {
-      street: store.billing_address.street.split(/\n/g)[0],
-      number: store.billing_address.street.split(/\n/g)[1],
+      street: store.billing_address.street.split(/\n/g)[0] + ', ' + store.billing_address.street.split(/\n/g)[1],
       complement: store.billing_address.street.split(/\n/g)[2],
       bairro: store.billing_address.street.split(/\n/g)[3],
       city: store.billing_address.city,
@@ -137,11 +135,20 @@ class SaleWrapper{
       }),
       erp: erp.observacaoInterna,
     }
+
+    var count = 0;
+    erp.items.forEach((i) => {
+      count += Floa.def(i.quantidade);
+    });
+    this.totalPecas = count;
+
     this.eccoItensQuantity = erp.items.length;
     this.magentoItensQuantity = store.items.filter((each) => {
       return each.parent_item_id === null;
-    }).length;
+    }).length
   };
+
+
 }
 
 
@@ -153,7 +160,7 @@ class SaleItemWrapper{
     this.discount = Floa.def(item.discount_amount || item.desconto_adm);
     this.total = Floa.def(item.price - item.discount_amount);
     this.quantity = Num.def(item.quantidade || item.qty_ordered);
-    this.weight = Floa.def(item.weight);
+    this.weight = Floa.def(item.weight) < 1.000 ? Floa.def(item.weight) + 'g' : Floa.def(item.weight) + 'Kg';
     this.changed = item.observacao ? item.observacao.includes('changed') : false;
     this.store = item.store === true;
     this.erp = item.erp === true;

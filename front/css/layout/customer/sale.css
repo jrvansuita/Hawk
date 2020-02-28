@@ -9,7 +9,6 @@
   font-size: 13px;
   padding-bottom: 3px;
   color: rgb(116, 114, 116);
-  display: -webkit-box;
   width: fit-content;
   height: fit-content;
 }
@@ -22,7 +21,7 @@
   text-overflow: ellipsis;
   display: -webkit-box;
   vertical-align: bottom;
-  padding: 7px;
+  padding: 7px 0;
   border-radius: 5px;
   font-size: 15px;
 }
@@ -35,6 +34,9 @@
 
 .sale-header-holder{
   padding: 10px 0px 4px 10px;
+  flex: 80;
+  margin-right: 17px;
+  height: -webkit-fill-available;
 }
 
 .sale-head-table{
@@ -44,7 +46,7 @@
 
 .sale-cards-holder{
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(6, 2fr);
   width: fit-content;
   position: relative;
   grid-gap: 17px;
@@ -62,7 +64,6 @@
 
 .client-sale-itens{
   width: 100%;
-  /* overflow: auto; */
 }
 .sale-itens-information td{
   padding-top: 10px;
@@ -70,7 +71,7 @@
   padding-left: 8px;
   padding-right: 8px;
   font-size: 15px;
-  color: #191717;
+  border-bottom: 1px solid #e4e4e4;
 }
 
 table{
@@ -83,6 +84,7 @@ table{
   font-weight: 600;
   color: #5d5b59;
   vertical-align: super;
+  white-space: nowrap;
 }
 .sale-itens-table .sale-card-title{
   padding-left: 10px;
@@ -105,23 +107,22 @@ table{
 }
 .sale-table-titles th{
   top: 0;
-  background: #e8e8e8;
   padding-left: 5px;
-  color: #302d2d;
-  font-size: 15px;
-  border-bottom: 0px !important;
-  padding: 12px 15px !important;
+  padding: 8px 10px;
+  color: rgb(116, 114, 116);
+  font-size: 12px;
+  border-bottom: 1px solid #e4e4e4;
 }
 .sale-itens-table{
-  /* overflow: auto; */
   height: auto;
   max-height: 100%;
 }
 
 .sale-itens-information-holder{
   padding-bottom: 15px;
-  width: 70%;
+  width: 73%;
   height: auto;
+  border-radius: 4px;
 }
 
 .sale-itens-count{
@@ -130,7 +131,7 @@ table{
 
 .divide td{
   padding-bottom: 15px;
-  font-size: 15px;
+  font-size: 13px;
 }
 .sale-information-holder{
   height: 100%;
@@ -182,13 +183,15 @@ table{
 
 .sale-history-holder table{
   width: 100%;
+  height: auto;
 }
 .sale-history-holder table td{
   padding-top: 10px;
   padding-bottom: 10px;
-  padding-left: 8px;
+  padding-left: 5px;
   font-size: 12px;
   color: #8e8c8a;
+  padding-right: 5px;
 }
 
 .sale-history-holder table tr:nth-child(odd) {
@@ -196,25 +199,22 @@ table{
 }
 
 .comments-magento{
-  /* overflow-y: auto; */
   max-height: min-content;
 }
-.comments-ecco{
+.comments-holder{
   overflow: auto;
-  max-height: 50%;
 }
 
 .comments-table-title{
-  background: #e8e8e8;
-  padding: 12px 15px !important;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   display: table-cell;
-  border-bottom: 0px !important;
-  color: #302d2d !important;
-  font-size: 15px;
-  position: sticky;
   top: 0;
+  font-size: 12px;
+  border-bottom: 1px solid #e4e4e4;
+  color: rgb(116, 114, 116);
+  background: white;
+  padding: 8px 10px;
 }
 
 .changed{
@@ -252,16 +252,16 @@ table{
 .item-name{
   font-size: 13px;
   color: #5f5f5f;
-  cursor: default;
+  cursor: grab;
 }
 
-.Captured{
+.sale-status{
   padding: 5px;
   border-radius: 5px;
   border-width: 1.4px 1.4px 3px;
   border-style: solid;
-  border-color: rgb(137, 228, 73);
   background: rgba(182, 199, 107, 0.07);
+  white-space: nowrap;
 }
 
 .total{
@@ -272,4 +272,69 @@ table{
 
 .title-holder{
   margin-bottom: 5px;
+}
+.comments-holder{
+  height: auto;
+}
+
+.ecco-comments{
+  font-size: 12px;
+  color: #8e8c8a;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+.magento-comments{
+  background: #fff4e04f;
+}
+
+.item-brand{
+  text-align: right;
+  color: gray;
+  font-size: 12px!important;
+}
+
+.obs .title-holder{
+  text-align: center;
+  border-bottom: 1px solid #e4e4e4;
+  color: rgb(116, 114, 116);
+  background: white;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  padding: 8px 10px;
+}
+
+.obs .title-holder>span{
+  font-size: 12px;
+}
+
+.cupom-card{
+  flex: 15;
+  height: auto;
+  min-height: auto;
+}
+
+.top-holder{
+  display: flex;
+}
+
+.sale-total{
+  background: #f2f2f2;
+  border-top: 3px solid #009688;
+}
+
+.card-payment{
+  border-top: 3px solid #CDDC39;
+}
+
+.card-transport{
+  border-top: 3px solid #ff0006;
+}
+
+.sale-address {
+  border-top: 3px solid #8b00ff;
+}
+
+.sale-client{
+  border-top: 3px solid #FF9800;
 }

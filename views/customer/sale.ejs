@@ -11,77 +11,99 @@ window.saleNumber = <%= saleNumber %>
   <script type="text/javascript" src="/front/js/control/customer/sale.js"></script>
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
   <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
+
 </head>
 <body>
   <div class="loading-sale-modal barberpole-mini-green-background"></div>
 
   <div class="main-holder sale-dialog">
+
     <div class="sale-client-info-holder">
-      <div class="sale-header-holder shadow">
-        <table class="sale-head-table">
-          <tr>
-            <td>
-              <div class="field">
-                <label class="field-title">Número do Pedido</label>
-                <label class="info highlighted sale-number copiable">Carregando</label>
-              </div>
-            </td>
+      <div class="top-holder">
+        <div class="sale-header-holder shadow">
+          <table class="sale-head-table">
+            <tr>
+              <td>
+                <div class="field">
+                  <label class="field-title">Número do Pedido</label>
+                  <label class="info highlighted sale-number copiable">Carregando</label>
+                </div>
+              </td>
 
-            <td>
-              <div class="field">
-                <label class="field-title">Status</label>
-                <label class="info status"></label>
-              </div>
-            </td>
+              <td>
+                <div class="field">
+                  <label class="field-title">Status</label>
+                  <label class="info status sale-status"></label>
+                </div>
+              </td>
 
-            <td>
-              <div class="field">
-                <label class="field-title">Situação</label>
-                <label class="info sale-situation"></label>
-              </div>
-            </td>
+              <td>
+                <div class="field">
+                  <label class="field-title">Situação</label>
+                  <label class="info sale-situation"></label>
+                </div>
+              </td>
 
-            <td>
-              <div class="field">
-                <label class="field-title">Etapa</label>
-                <label class="info sale-step"></label>
-              </div>
-            </td>
+              <td>
+                <div class="field">
+                  <label class="field-title">Etapa</label>
+                  <label class="info sale-step"></label>
+                </div>
+              </td>
 
-            <td>
-              <div class="field">
-                <label class="field-title">Data do Pedido</label>
-                <label class="info sale-date"></label>
-              </div>
-            </td>
+              <td>
+                <div class="field">
+                  <label class="field-title">Data do Pedido</label>
+                  <label class="info sale-date"></label>
+                </div>
+              </td>
 
-            <td>
-              <div class="field">
-                <label class="field-title">Pedido Eccosys</label>
-                <label class="info sale-ecco copiable"></label>
-              </div>
-            </td>
+              <td>
+                <div class="field">
+                  <label class="field-title">Pedido Eccosys</label>
+                  <label class="info sale-ecco copiable"></label>
+                </div>
+              </td>
 
-            <td>
-              <div class="field">
-                <label class="field-title">NFe</label>
-                <label class="info sale-nfe copiable">########</label>
-              </div>
-            </td>
-          </tr>
-        </table>
+              <td>
+                <div class="field">
+                  <label class="field-title">NFe</label>
+                  <label class="info sale-nfe copiable">########</label>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="sale-card-item  cupom-card shadow">
+          <table>
+            <tr>
+              <th align="left" class="field-title">Cupom</th>
+            </tr>
+            <tr>
+              <td>
+                <span class="sale-info-cupom"></span>
+              </td>
+            </tr>
+          </table>
+        </div>
       </div>
 
 
       <div class="sale-cards-holder">
-        <div class="sale-card-item shadow">
+        <div class="sale-card-item sale-client shadow">
           <div class="title-holder">
             <label class="sale-card-title">Dados do cliente</label>
           </div>
           <table>
-            <tr>
+            <tr class="divide">
               <td>
                 <label class="sale-client-name client-name copiable"></label>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label class="sale-card-title">CPF</label>
               </td>
             </tr>
             <tr class="divide">
@@ -102,7 +124,7 @@ window.saleNumber = <%= saleNumber %>
           </table>
         </div>
 
-        <div class="sale-card-item shadow">
+        <div class="sale-card-item sale-address shadow">
           <div class="title-holder">
             <label class="sale-card-title">Endereço de Cobrança</label>
           </div>
@@ -157,7 +179,7 @@ window.saleNumber = <%= saleNumber %>
           </table>
         </div>
 
-        <div class="sale-card-item shadow">
+        <div class="sale-card-item sale-address shadow">
           <div class="title-holder">
             <label class="sale-card-title">Endereço de Entrega</label>
           </div>
@@ -223,7 +245,7 @@ window.saleNumber = <%= saleNumber %>
                 <span class="sale-card-title">Método: </span>
               </td>
               <td align="center">
-                <span class="sale-payment-method"></span>
+                <span class="sale-payment-method right"></span>
               </td>
             </tr>
             <tr class="divide">
@@ -247,7 +269,7 @@ window.saleNumber = <%= saleNumber %>
                 <span class="sale-card-title">Status: </span>
               </td>
               <td>
-                <span class="sale-payment-status right"></span>
+                <span class="sale-payment-status right sale-status"></span>
               </td>
             </tr>
           </table>
@@ -277,26 +299,28 @@ window.saleNumber = <%= saleNumber %>
                 <span class="sale-shipping-transport-cost right"></span>
               </td>
             </tr>
+            <tr class="divide">
+              <td>
+                <span class="sale-card-title">Peso Total:</span>
+              </td>
+              <td>
+                <span class="sale-info-weight-total right"></span>
+              </td>
+            </tr>
           </table>
         </div>
 
-        <div class="sale-card-item shadow">
-          <label class="sale-card-title">Total do Pedido</label>
+        <div class="sale-card-item sale-total shadow">
+          <div class="title-holder">
+            <span class="sale-card-title">Resumo do Pedido</span>
+          </div>
           <table>
             <tr class="divide">
               <td>
-                <span class="sale-card-title">Subtotal:</span>
+                <span class="sale-card-title">Total dos Produtos:</span>
               </td>
               <td>
                 <span class="sale-info-subtotal right"></span>
-              </td>
-            </tr>
-            <tr class="divide">
-              <td>
-                <span class="sale-card-title">Cupom:</span>
-              </td>
-              <td>
-                <span class="sale-info-cupom right"></span>
               </td>
             </tr>
             <tr class="divide">
@@ -309,10 +333,10 @@ window.saleNumber = <%= saleNumber %>
             </tr>
             <tr class="divide">
               <td>
-                <span class="sale-card-title">Peso Total:</span>
+                <span class="sale-card-title">Frete:</span>
               </td>
               <td>
-                <span class="sale-info-weight-total right"></span>
+                <span class="sale-shipping-transport-cost right"></span>
               </td>
             </tr>
             <tr class="divide">
@@ -337,7 +361,8 @@ window.saleNumber = <%= saleNumber %>
               <thead>
                 <tr class="table-titles sale-table-titles">
                   <th  colspan="2" class="sale-itens-count"></th>
-                  <th align="center">Qtd</th>
+                  <th align="right">Marca</th>
+                  <th align="center" class="qtd">Qtd</th>
                   <th align="center">Preço</th>
                   <th align="center">Desconto</th>
                   <th align="center">Peso</th>
@@ -350,30 +375,31 @@ window.saleNumber = <%= saleNumber %>
       </div>
 
       <div class="sale-history-holder">
-        <div class="comments-ecco shadow">
-          <table class="ecco-comments-table">
-            <tr>
-              <th class="comments-table-title">Comentários Eccosys</th>
-            </tr>
-          </table>
+        <div class="obs shadow">
+          <div class="title-holder">
+            <span class="sale-card-title">Observações</span>
+          </div>
+          <div class="comments-holder">
+            <div class="history-comments-table">
+            </div>
+          </div>
         </div>
         <br>
         <div class="comments-magento shadow">
           <table class="magento-comments-table">
             <thead>
               <tr>
-                <th class="comments-table-title" colspan="2" >Comentários Magento</th>
+                <th class="comments-table-title" colspan="2" >Histórico</th>
               </tr>
             </thead>
-            <tr>
-              <th class="gray">Data</th>
-              <th class="gray">Obs</th>
-            </tr>
           </table>
         </div>
       </div>
 
 
     </div>
-  </body>
-  </html>
+
+
+  </div>
+</body>
+</html>

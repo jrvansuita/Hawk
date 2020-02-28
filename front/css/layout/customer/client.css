@@ -141,8 +141,9 @@
 
 
 .client-name{
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 900;
+  white-space: nowrap;
 }
 
 .client-trade-name{
@@ -276,7 +277,7 @@
   height: 93%;
   left: 0;
   right: 0;
-  top: 50px;
+  top: 30px;
   bottom: 0;
   margin: auto;
   position: relative;
