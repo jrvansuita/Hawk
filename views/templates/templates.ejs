@@ -40,12 +40,12 @@
 
 
 
-            <div class="each-template-line <%=selected._id == each._id ? 'active' : ''%> " data-id="<%=each._id%>">
+            <div class="each-template-line <%=selected.id == each.id ? 'active' : ''%> " data-id="<%=each.id%>">
               <%if (each.type){%>
                 <div class="active-circle"></div>
                 <%}%>
                 <span><%=each.name%></span>
-                <div class="icon-dots" data-id="<%=each._id%>">
+                <div class="icon-dots" data-id="<%=each.id%>">
                   <img src="img/dots.png" class="dots-glyph" />
                 </div>
               </div>

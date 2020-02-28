@@ -134,9 +134,9 @@ module.exports = class {
     this.context.shadowOffsetY = 1;
   }
 
-  //Filling canvas with white background
-  fillCanvasWhiteBackground() {
-    this.context.fillStyle = 'white';
+  //Filling canvas background
+  fillCanvasBackground() {
+    this.context.fillStyle = 'black';
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
@@ -215,11 +215,42 @@ module.exports = class {
     }
   }
 
+
+  renderProductImage(){
+    var productImageCanvas = createCanvas(this.mockSett.width, this.mockSett.height);
+    var context = productImageCanvas.getContext('2d');
+    context.drawImage(this.productImage, this.padding/2, this.paddingTop, this.mockSett.width - this.padding, this.mockSett.width - this.padding);
+
+    // get the image data object
+    var imageData = context.getImageData(0, 0, productImageCanvas.width, productImageCanvas.height);
+
+    for (var x = 0; x < imageData.width; x++)
+    for (var y = 0; y < imageData.height; y++) {
+      var offset = (y * imageData.width + x) * 4;
+      var r = imageData.data[offset];
+      var g = imageData.data[offset + 1];
+      var b = imageData.data[offset + 2];
+
+      //if it is pure white, change its alpha to 0
+      if (r >= 250 && g >= 250 && b >= 250){
+        imageData.data[offset + 3] = 0;
+      }else if (r >= 245 && g >= 245 && b >= 245){
+        imageData.data[offset + 3] = 10;
+      }
+    };
+
+    context.putImageData(imageData,0,0);
+
+    this.productImage = productImageCanvas;
+  }
+
+
   renderingImages() {
     this.definePaddings();
+    this.renderProductImage();
 
     if (this.backgroundImage){
-      this.context.drawImage(this.backgroundImage, 0, 0, this.canvas.width, this.canvas.height);
+      this.context.drawImage(this.backgroundImage, 0, 0, this.canvas.width + 100, this.canvas.height);
     }
 
     this.context.drawImage(this.productImage, this.padding/2, this.paddingTop, this.canvas.width - this.padding, this.canvas.width - this.padding);
@@ -237,8 +268,9 @@ module.exports = class {
 
       this.loadImages(()=>{
         this.loadFont(()=>{
-          this.fillCanvasWhiteBackground();
+          this.fillCanvasBackground();
           this.renderingImages();
+
           this.renderProductPrice();
 
           if(this.mockSett.showDiscount){

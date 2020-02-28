@@ -12,18 +12,20 @@ module.exports = class TemplateHandler {
       params.type
     );
 
-
-    if (params._id && params._id.toString().length>0){
-      object._id = params._id;
+    if (params.id){
+      object.id = params.id;
     }
 
-    if (object._id){
-      object.upsert((err, doc)=>{
-        callback(doc ? doc._id : 0);
+    if (object.id){
+      Template.findOne({id : object.id}, (err, obj)=>{
+        object.sample = obj.sample || {};
+        object.upsert((err, doc)=>{
+          callback(doc ? doc.id : 0);
+        });
       });
     }else{
       Template.create(object, (err, doc)=>{
-        callback(doc ? doc._id : 0);
+        callback(doc ? doc.id : 0);
       });
     }
 

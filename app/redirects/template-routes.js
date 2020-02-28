@@ -12,7 +12,7 @@ module.exports = class EmailRoutes extends Routes{
     this._page('/templates', (req, res) => {
       Templates.findAll((err, all)=>{
         var selected = all.find((e) => {
-          return e._id == req.query._id;
+          return e.id == req.query.id;
         });
 
         res.render('templates/templates', {selected: selected || {}, all: all, types: TemplatesTypes});
@@ -20,7 +20,7 @@ module.exports = class EmailRoutes extends Routes{
     });
 
     this._get('/templates-viewer', (req, res) => {
-      new TemplateBuilder(req.query._id).useSampleData().build((template) => {
+      new TemplateBuilder(req.query.id).useSampleData().build((template) => {
 
         res.writeHead(200, {
           'Content-Type': 'text/html',
@@ -33,14 +33,20 @@ module.exports = class EmailRoutes extends Routes{
 
   this._post('/template', (req, res) =>{
     TemplateVault.storeFromScreen(req.body, (id)=>{
-      res.status(200).send(id);
+      res.status(200).send(id.toString());
     });
   });
 
 
   this._post('/template-delete', (req, res) =>{
-    Templates.delete(req.body._id, ()=>{
+    Templates.delete(req.body.id, ()=>{
       res.sendStatus(200);
+    });
+  });
+
+  this._post('/template-duplicate', (req, res) =>{
+    Templates.duplicate(req.body.id, (data)=>{
+      res.send(data);
     });
   });
 

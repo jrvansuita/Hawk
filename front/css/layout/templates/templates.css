@@ -35,12 +35,12 @@
   overflow-y: auto;
   flex-wrap: wrap;
   align-items: flex-start;
+  z-index: 1;
 }
 
 .material-input-holder{
   display: inline-block;
   width: 100%;
-  position: relative;
 }
 
 
@@ -97,7 +97,7 @@
 }
 
 
-.each-template-line{padding: 15px 22px 15px 10px;border-bottom: 1px solid #ececec;}
+.each-template-line{padding: 15px 22px 15px 10px;border-bottom: 1px solid #ececec;z-index: 2;}
 
 .each-template-line:hover, .active{
   background-color: #f3f1f1;

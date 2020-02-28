@@ -4,6 +4,7 @@
   height: fit-content;
   max-height: 85%;
   display: flex;
+  min-width: 80%;
   max-width: 90%;
   width: fit-content;
   margin: auto;
@@ -21,6 +22,7 @@
 
 .main-content{
   overflow: hidden;
+  margin: auto;
 }
 
 .left-panel{
@@ -165,8 +167,10 @@
   padding: 1px;
   position: relative;
   height: auto;
+  max-height: 100%;
   opacity: 0;
   margin: auto;
+  background: #737373;
   display: block;
 }
 
