@@ -240,6 +240,30 @@ var Util = {
     }
   },
 
+  getSaleStatusInfo(status){
+    switch(status){
+      //sale status
+      case 'pending': return 'Pedido Realizado';
+      case 'processing': return 'Pagamento Confirmado';
+      case 'canceled': return 'Cancelado';
+      case 'separation': return 'Em Separação';
+      case 'pending_payment': return 'Pagamento Pendente';
+      case 'payment_review': return 'Aguardando Analise Antifraude';
+      case 'waiting_antifraud_analisys': return 'Análise do Credito';
+      case 'holded': return 'Bloqueado na Expedição';
+      case 'ip_delivered': return 'Entregue';
+      case 'ip_to_be_delivered': return 'Saiu para Entrega';
+      case 'ip_delivery_failed': return 'Entrega Falhou';
+      case 'ip_delivery_late': return 'Atraso na Entrega';
+      case 'ip_in_transit': return 'Em Trânsito';
+      case 'ip_shipped': return 'Despachado';
+      case 'awaiting': return 'Aguardando Devolução';
+      case 'complete': return 'Conferência do(s) produto(s) e NF-e';
+      case 'closed': return 'Estornado';
+      case 'ip_shipped': return 'Despachado';
+    }
+  },
+
   getSaleStatusIcon(status){
     if (status == 'N'){
       return 'alert';

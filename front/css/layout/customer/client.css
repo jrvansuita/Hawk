@@ -121,7 +121,7 @@
 .client-card-item{
   padding: 20px 15px;
   width: auto;
-  min-height: 155px;
+  /* min-height: 155px; */
   /* position: relative; */
 }
 
@@ -158,6 +158,7 @@
 
 .client-card-item table{
   width: 100%;
+  height: auto;
 }
 
 .client-card-item span{
@@ -249,6 +250,7 @@
 
 .last-sales-holder{
   padding: 0;
+  height: 100%;
 }
 
 .last-sales-holder .client-card-title{
