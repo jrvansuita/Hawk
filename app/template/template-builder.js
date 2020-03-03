@@ -135,7 +135,7 @@ module.exports = class TemplateBuilder{
     $('img').each((i, el) => {
       var alt = $(el).attr('alt');
 
-      if (alt.includes('http')){
+      if (alt && alt.includes('http')){
         $(el).attr('src', alt);
       }
     });
