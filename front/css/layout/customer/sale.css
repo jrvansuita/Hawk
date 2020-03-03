@@ -1,6 +1,5 @@
 
 .field{
-  /* margin-bottom: 8px; */
   vertical-align: middle;
   display: inline-block;
 }
@@ -12,7 +11,6 @@
   width: fit-content;
   height: fit-content;
 }
-
 
 .info{
   overflow: hidden;
@@ -35,7 +33,7 @@
 .sale-header-holder{
   padding: 10px 0px 4px 10px;
   flex: 80;
-  margin-right: 17px;
+  margin-right: auto;
   height: -webkit-fill-available;
 }
 
@@ -47,7 +45,7 @@
 .sale-cards-holder{
   display: grid;
   grid-template-columns: repeat(6, 2fr);
-  width: fit-content;
+  width: auto;
   position: relative;
   grid-gap: 17px;
   margin-top: 20px;
@@ -105,6 +103,7 @@ table{
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
 }
+
 .sale-table-titles th{
   top: 0;
   padding-left: 5px;
@@ -146,9 +145,11 @@ table{
   margin-left: 30px;
   margin-top: 15px;
 }
+
 .sale-total-info-table th{
   padding: 15px;
 }
+
 .sale-total-info-table td{
   padding-top: 10px;
   padding-bottom: 10px;
@@ -157,21 +158,25 @@ table{
   color: #191717;
   padding-right: 25px;
 }
+
 .icon{
   width: 30px;
   height: 30px;
   vertical-align: sub;
   margin: 0;
 }
+
 .sale-shipping-transport{
   vertical-align: super;
 }
+
 .menu-dots{
   float: right;
   margin-top: -5px;
   margin-right: -5px;
   display: inline-block;
 }
+
 .sale-history-holder{
   width: 100%;
   margin-left: 2%;
@@ -185,6 +190,7 @@ table{
   width: 100%;
   height: auto;
 }
+
 .sale-history-holder table td{
   padding-top: 10px;
   padding-bottom: 10px;
@@ -192,6 +198,7 @@ table{
   font-size: 12px;
   color: #8e8c8a;
   padding-right: 5px;
+  width: fit-content;
 }
 
 .sale-history-holder table tr:nth-child(odd) {
@@ -201,6 +208,7 @@ table{
 .comments-magento{
   max-height: min-content;
 }
+
 .comments-holder{
   overflow: auto;
 }
@@ -217,10 +225,25 @@ table{
   padding: 8px 10px;
 }
 
-.changed{
+.item-add{
   border-width: 1.4px 1.4px 3px;
   border-style: solid;
-  border-color: rgb(182, 199, 107);
+  border-color: rgb(165, 214, 117);
+  border-image: initial;
+  background: rgba(182, 199, 107, 0.07);
+  border-radius: 3px;
+  padding: 3px 6px;
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 13px;
+  color: #807b7b;
+  text-transform: capitalize;
+}
+
+.item-removed{
+  border-width: 1.4px 1.4px 3px;
+  border-style: solid;
+  border-color: rgb(241, 81, 81);
   border-image: initial;
   background: rgba(182, 199, 107, 0.07);
   border-radius: 3px;
@@ -277,6 +300,10 @@ table{
   height: auto;
 }
 
+.comments:hover{
+  background-color: #d8d8d8!important;
+}
+
 .ecco-comments{
   font-size: 12px;
   color: #8e8c8a;
@@ -289,7 +316,7 @@ table{
 }
 
 .item-brand{
-  text-align: right;
+  text-align: center;
   color: gray;
   font-size: 12px!important;
 }
@@ -309,9 +336,10 @@ table{
 }
 
 .cupom-card{
-  flex: 15;
+  flex: 13.7;
   height: auto;
   min-height: auto;
+  margin-left: 14px;
 }
 
 .top-holder{
@@ -337,4 +365,19 @@ table{
 
 .sale-client{
   border-top: 3px solid #FF9800;
+}
+
+.comment-title{
+  color: #000000a1;
+  font-weight: bold;
+}
+
+.client-notified{
+  width: 15px;
+  vertical-align: bottom;
+  margin-left: 5px;
+}
+
+.sale-itens-information:hover{
+  background-color: #d8d8d8!important;
 }

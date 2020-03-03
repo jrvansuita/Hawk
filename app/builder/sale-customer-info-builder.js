@@ -119,8 +119,8 @@ class SaleWrapper{
       total: store.payment.base_amount_ordered,
       desc: store.payment.installment_description || store.payment.additional_information.mundipagg_creditcard_new_credito_parcelamento_1_1|| "1x (à vista)",
       boleto: store.payment.additional_information.BoletoUrl,
-      status: (store.payment.additional_information.BoletoTransactionStatusEnum || store.payment.additional_information["1_BoletoTransactionStatus"]) || store.payment.additional_information["1_CreditCardTransactionStatus"],
-      coupon: store.coupon_code ? store.coupon_code.toUpperCase() : 'Não possui'
+      status: store.payment.amount_paid ? 'Pago' : 'Não pago',
+      coupon: store.coupon_code ? store.coupon_code.toUpperCase() : 'Não possui',
     }
 
     this.transport = {
@@ -156,7 +156,7 @@ class SaleItemWrapper{
   constructor(item){
     this.sku = item.codigo || item.sku;
     this.name = item.descricao || item.name;
-    this.price = Floa.def(item.precoLista || item.price);
+    this.price = Floa.def(item.valor || item.price);
     this.discount = Floa.def(item.discount_amount || item.desconto_adm);
     this.total = Floa.def(item.price - item.discount_amount);
     this.quantity = Num.def(item.quantidade || item.qty_ordered);

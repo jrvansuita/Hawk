@@ -140,7 +140,7 @@
                 <td><span class=""><%=Num.money(sale.shipping_amount)%></span></td>
                 <td><span class=""><%=Num.money(sale.discount_amount) %></span></td>
                 <td><span class="bolder"><%=Num.money(sale.grand_total)%></span></td>
-                <td><span class=""><%=sale.status%></span></td>
+                <td><span class=""><%=Util.getSaleStatusInfo(sale.status)%></span></td>
                 <td><span class="gray"><%=sale.shipping_description%></span>
 
                   <div class="menu-dots sale-dots" data-sale="<%=sale.increment_id%>">

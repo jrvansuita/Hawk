@@ -12,7 +12,7 @@ $(document).ready(() => {
 });
 
 function printNFe(){
-  if($('.sale-nfe').text() != '########'){
+  if($('.sale-nfe').text() != 'Sem Nota Fiscal'){
     window.open('/packing-danfe?nfe=' +$('.sale-nfe').text());
   }
 }
@@ -27,6 +27,11 @@ function menuClick(menu){
       drop.addItem('/img/barcode.png', 'Imprimir Boleto', function(){
         window.open(data.payment.boleto);
       });
+
+      drop.addItem('/img/envelop.png', 'Enviar Boleto por Email', function(){
+        window.open(data.payment.boleto);
+      });
+
     }else if(cardClass.includes('transport')){
       drop.addItem('/img/transport/default.png', 'Rastreio', function(){
         window.open(Params.trackingUrl() + data.oc);
@@ -88,13 +93,12 @@ function bindSaleAddressInfo(data){
 
 function bindPaymentInfo(data){
   buildMenu($('.card-payment'));
-  var saleStatus = getSaleStatus(data.payment.status);
 
   $('.payment-img').attr('src', getPaymentMethodImage(data.payment.method));
   $('.sale-payment-method').text(Util.getPaymentType(data.payment.method));
   $('.sale-payment-total').text(Num.money(data.payment.total));
   $('.sale-payment-info').text(data.payment.desc);
-  $('.sale-payment-status').addClass('info').text(saleStatus).css('border-color',Util.strToColor(saleStatus));
+  $('.sale-payment-status').addClass('info').text(data.payment.status).css('border-color',Util.strToColor(data.payment.status));
 }
 
 function getPaymentMethodImage(method){
@@ -103,40 +107,31 @@ function getPaymentMethodImage(method){
   if(method.includes('paypal')) return '/img/paypal.png';
 }
 
+function setTagOnItem(itemStatus){
+  var $itemObs = $('<span>');
 
-function getSaleStatus(status){
-  switch(status){
-    //sale status
-    case 'processing': return 'Pagamento Confirmado';
-    case 'canceled': return 'Cancelado';
-    case 'separation': return 'Em Separação';
-    case 'pending_payment': return 'Pagamento Pendente';
-    case 'payment_review': return 'Aguardando Analise Antifraude';
-    case 'waiting_antifraud_analisys': return 'Análise do Credito';
-    case 'holded': return 'Bloqueado na Expedição';
-    case 'ip_delivered': return 'Entregue';
-    case 'ip_delivery_failed': return 'Entrega Falhou';
-    case 'ip_delivery_late': return 'Atraso na Entrega';
-    case 'ip_in_transit': return 'Em Trânsito';
-    case 'ip_shipped': return 'Despachado';
-    case 'awaiting': return 'Aguardando Devolução';
-    case 'complete': return 'Conferência do(s) produto(s) e NF-e';
-    case 'closed': return 'Estornado';
-    case 'ip_shipped': return 'Despachado';
+  if(itemStatus == 'Removido'){
+      $itemObs.addClass('right item-removed');
+      $itemObs.text(itemStatus);
 
-    //sale payment status
-    case 'Captured': return 'Pago';
-    case 'Paid': return 'Pago';
-    case 'Generated': return 'Não Pago';
+      return $itemObs;
+  }
+  else{
+    $itemObs.addClass('right item-add');
+    $itemObs.text(itemStatus);
+
+    return $itemObs;
   }
 }
 
 function bindSaleItens(data){
 
   $('.qtd').text('Qtd' + ': ' + data.totalPecas);
-   
+  $('.sale-itens-count').text("Itens Magento: "+ data.magentoItensQuantity + " " + "Itens Eccosys: "+ data.eccoItensQuantity);
+
   var $tableHolder = $('.client-sale-itens');
 
+  //sorting items
   data.items.sort((a, b) => {
     if(a.erp < b.store ) return 1;
     if(a.erp  > b.store ) return -1;
@@ -144,9 +139,6 @@ function bindSaleItens(data){
   });
 
   data.items.reverse().forEach((item) => {
-
-    var itemErpChanged = item.erp == false ? 'Removido' : '';
-    var itemStoreChanged = item.store == false ? 'Adicionado' : '';
 
     //tabela de itens
     var $saleItensHolder = $('<tr>').addClass('sale-itens-information');
@@ -163,9 +155,12 @@ function bindSaleItens(data){
     });
     var $itemBrand = $('<td>').addClass('item-brand');
 
+    //tag for item if is pending or voucher
+    var itemErpChanged = item.erp == false ? 'Removido' : '';
+    var itemStoreChanged = item.store == false ? 'Adicionado' : '';
+
     if(itemErpChanged || itemStoreChanged){
-      var $itemObs = $('<span>').addClass('right changed');
-      $itemObs.text(itemErpChanged || itemStoreChanged);
+      var $itemObs = setTagOnItem(itemErpChanged || itemStoreChanged);
     }
 
     $itemNameHolder.append($itemName.text(item.name.split('-')[0]), $itemObs);
@@ -190,7 +185,6 @@ function bindSaleItens(data){
       hoverProductImage($itemName, item.sku);
     });
 
-    $('.sale-itens-count').text("Itens Magento: "+ data.magentoItensQuantity + " " + "Itens Eccosys: "+ data.eccoItensQuantity);
     bindCopiable();
   }
 
@@ -211,8 +205,8 @@ function bindSaleItens(data){
       window.open('/packing?sale=' +$('.sale-number').text());
     });
     $('.sale-ecco').text(data.number);
-    $('.sale-nfe').text(data.nf || '########');
-    $('.status').text(getSaleStatus(data.status)).css('border-color', Util.strToColor(data.status));
+    $('.sale-nfe').text(data.nf || 'Sem Nota Fiscal');
+    $('.status').text(Util.getSaleStatusInfo(data.status)).css('border-color', Util.strToColor(data.status));
     $('.sale-situation').text(data.situation);
     $('.sale-step').text(data.pickingStatus);
     $('.sale-date').text(data.saleDate);
@@ -243,11 +237,24 @@ function bindSaleHistory(data){
   });
 
   data.comments.store.forEach((each) => {
-    var $commentsTr = $('<tr>');
+    var $commentsTr = $('<tr>').addClass('comments');
     var $commentsDate = $('<td>').addClass('comment-date');
     var $commentsTd = $('<td>');
 
-    $commentsTd.text(each.comment);
+    var $commentTitle = $('<span>').addClass('comment-title');
+    var $commentDesc = $('<span>');
+
+    var $commentNotified = $('<img>').attr('src','/img/checked.png').addClass('client-notified');
+
+    $commentTitle.text(Util.getSaleStatusInfo(each.status));
+    $commentDesc.text(each.comment);
+
+    if(each.is_customer_notified == 1){
+      $commentTitle.append($commentNotified);
+    }
+
+    $commentsTd.append($commentTitle, $('<br>'), $commentDesc);
+
     $commentsDate.text(Dat.formatwTime(Dat.rollHour(new Date(each.created_at),-3)));
     $magentoCommentsTable.append($commentsTr.append($commentsDate,$commentsTd));
   });
