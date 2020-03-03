@@ -119,14 +119,16 @@ class SaleWrapper{
       total: store.payment.base_amount_ordered,
       desc: store.payment.installment_description || store.payment.additional_information.mundipagg_creditcard_new_credito_parcelamento_1_1|| "1x (à vista)",
       boleto: store.payment.additional_information.BoletoUrl,
+      boleto_expires: store.payment.additional_information["1_ExpirationDate"],
       status: store.payment.amount_paid ? 'Pago' : 'Não pago',
-      coupon: store.coupon_code ? store.coupon_code.toUpperCase() : 'Não possui',
+      coupon: store.coupon_code,
+      discount_desc: store.discount_description
     }
 
     this.transport = {
       name: erp.transport,
       desc: store.shipping_description,
-      cost: Floa.def(store.shipping_amount)
+      cost: Floa.def(store.shipping_amount) == 0 ? "Frete Grátis" : Floa.def(store.shipping_amount)
     }
 
     this.comments = {
@@ -158,7 +160,7 @@ class SaleItemWrapper{
     this.name = item.descricao || item.name;
     this.price = Floa.def(item.valor || item.price);
     this.discount = Floa.def(item.discount_amount || item.desconto_adm);
-    this.total = Floa.def(item.price - item.discount_amount);
+    this.total = Floa.def((item.price - item.discount_amount) || item.valor);
     this.quantity = Num.def(item.quantidade || item.qty_ordered);
     this.weight = Floa.def(item.weight) < 1.000 ? Floa.def(item.weight) + 'g' : Floa.def(item.weight) + 'Kg';
     this.changed = item.observacao ? item.observacao.includes('changed') : false;

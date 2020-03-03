@@ -31,7 +31,7 @@
 }
 
 .sale-header-holder{
-  padding: 10px 0px 4px 10px;
+  padding: 7px 10px 4px 10px;
   flex: 80;
   margin-right: auto;
   height: -webkit-fill-available;
@@ -172,9 +172,10 @@ table{
 
 .menu-dots{
   float: right;
-  margin-top: -5px;
-  margin-right: -5px;
+  margin-top: 0px;
+  margin-right: -3px;
   display: inline-block;
+  position: relative;
 }
 
 .sale-history-holder{
@@ -269,7 +270,7 @@ table{
   white-space: nowrap;
 }
 .sale-info-cupom{
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .item-name{
