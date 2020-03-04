@@ -43,6 +43,10 @@ module.exports = class Email{
     this.mailOptions.html = html;
   }
 
+  attachments(attach){
+    this.mailOptions.attachments = attach;
+  }
+
   send(callback){
     // send mail with defined transport object
     this.transporter.sendMail(this.mailOptions, (error, info) => {

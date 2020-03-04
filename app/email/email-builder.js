@@ -39,10 +39,19 @@ module.exports = class EmailBuilder{
     return this;
   }
 
+  setAttachments(attach){
+    this.attach = attach;
+    return this;
+  }
+
   prepare(){
     var destination = [this.to];
     if (this.wantMyCopy){
       destination.push(this.senderEmail);
+    }
+
+    if(this.attach){
+      this.sender.attachments(this.attach);
     }
 
     this.sender.to(destination);

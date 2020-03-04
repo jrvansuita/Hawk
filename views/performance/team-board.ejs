@@ -74,7 +74,6 @@
   <div class="main-content">
     <%groups.forEach(group =>{%>
       <div class="group-box shadow">
-
         <p class="title-box"><%=group.title%></p>
         <p class="subtitle-box"><%=group.subtitle%></p>
 
@@ -90,7 +89,8 @@
           var groupVar = Str.normalize(group.title).toLowerCase();
 
           if (data[groupVar]){%>
-            <p class="team-title">Equipe</p>
+            <p class="team-title">Equipe: <span class="subtitle-box"><%=data[groupVar].length%></span></p>
+
 
 
             <div class="team-box">
@@ -98,7 +98,7 @@
 
                 <%- include('../user/avatar', {user: user, imgClass: 'mini-avatar'});  %>
 
-                
+
                   <%});%>
                 </div>
 
