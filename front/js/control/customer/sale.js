@@ -32,18 +32,19 @@ function menuClick(menu){
       });
 
       //if(actualDate < boletoExpiresDate){
-        drop.addItem('/img/envelop.png', 'Enviar Boleto por Email', function(){
-          _post('/customer-sending-boleto',{
-            cliente: data.client,
-            oc: data.oc,
-            boleto: data.payment.boleto
-          });
+      drop.addItem('/img/envelop.png', 'Enviar Boleto por Email', function(){
+        _post('/customer-sending-boleto',{
+          cliente: data.client,
+          oc: data.oc,
+          linkBoleto: data.payment.boleto
         });
-    //  }
+      });
+      //  }
     }else if(cardClass.includes('transport')){
       drop.addItem('/img/transport/default.png', 'Rastreio', function(){
         window.open(Params.trackingUrl() + data.oc);
       });
+
 
       drop.addItem('/img/envelop.png', 'Enviar Rastreio por Email', function(){
         _post('/customer-sending-tracking',{
@@ -53,12 +54,15 @@ function menuClick(menu){
         });
       });
     }
+
     else if(cardClass.includes('sale-header-holder')){
+
       drop.addItem('/img/transport/default.png', 'Enviar NF por Email', function(){
-        _post('/customer-sending-nf',{
+        _post('/customer-sending-nf?nf',{
           cliente: data.client,
           oc: data.oc,
-          nf: data.nf,
+          nfNumber: data.nf,
+          nfUrl: Params.productionUrl() + '/packing-danfe?nfe=' + $('.sale-nfe').text()
         });
       });
     }
@@ -89,6 +93,7 @@ function bindClientSaleInfo(data){
   $('.sale-client-name').text(data.client.name);
   $('.sale-client-social-code').text(data.client.socialCode);
   $('.sale-client-date').text(data.client.dateOfBirth);
+  $('.sale-client-email').text(data.client.email);
 }
 
 function bindSaleAddressInfo(data){
@@ -111,7 +116,7 @@ function bindSaleAddressInfo(data){
   //card transport
   $('.sale-shipping-transport').text(data.transport.name);
   $('#transport-img').attr('src', '/img/transport/' + data.transport.name.toLocaleLowerCase() + '.png');
-  $('.sale-shipping-transport-description').text(data.transport.desc);
+  $('.sale-shipping-transport-description').html(data.transport.desc + '<br><br>' + data.transport.tracking);
 
   if(data.transport.cost > 0){
     $('.sale-shipping-transport-cost').text(Num.money(data.transport.cost));
@@ -142,10 +147,10 @@ function setTagOnItem(itemStatus){
   var $itemObs = $('<span>');
 
   if(itemStatus == 'Removido'){
-      $itemObs.addClass('right item-removed');
-      $itemObs.text(itemStatus);
+    $itemObs.addClass('right item-removed');
+    $itemObs.text(itemStatus);
 
-      return $itemObs;
+    return $itemObs;
   }
   else{
     $itemObs.addClass('right item-add');
@@ -246,6 +251,7 @@ function bindSaleItens(data){
       buildMenu($('.sale-header-holder'));
     }
 
+    $('.sale-viewer-holder').css('border-top', '3px solid ' + Util.strToColor(data.status));
     //fazer logica para bordar do modal conforme o status do pedido
     /*if($('.status').text() == 'Cancelado'){
     $('.sale-viewer-holder').css('border-top', '3px solid red');

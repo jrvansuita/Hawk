@@ -258,9 +258,11 @@ var Util = {
       case 'ip_in_transit': return 'Em Trânsito';
       case 'ip_shipped': return 'Despachado';
       case 'awaiting': return 'Aguardando Devolução';
+      case 'devolucao_recebida': return 'Devolução Recebida';
       case 'complete': return 'Conferência do(s) produto(s) e NF-e';
       case 'closed': return 'Estornado';
       case 'ip_shipped': return 'Despachado';
+
     }
   },
 

@@ -47,7 +47,7 @@ module.exports = class PackingRoutes extends Routes{
     this._get('/packing-danfe', (req, res) => {
       req.setTimeout(3600000);
       PackingHandler.loadDanfe(res, req.query.nfe);
-    });
+    }, true, true);
 
     this._get('/packing-transport-tag', (req, res) => {
       req.setTimeout(3600000);
