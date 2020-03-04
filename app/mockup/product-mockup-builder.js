@@ -250,10 +250,10 @@ module.exports = class {
     this.renderProductImage();
 
     if (this.backgroundImage){
-      this.context.drawImage(this.backgroundImage, 0, 0, this.canvas.width + 100, this.canvas.height); 
+      this.context.drawImage(this.backgroundImage, 0, 0, this.canvas.width + 100, this.canvas.height);
     }
 
-    this.context.drawImage(this.productImage, this.padding/2, this.paddingTop, this.canvas.width - this.padding, this.canvas.width - this.padding);
+    this.context.drawImage(this.productImage, 0, 0, this.canvas.width, this.canvas.height);
     this.context.drawImage(this.mockupImage, 0, this.canvas.height - this.mockupImage.height, this.canvas.width, this.mockupImage.height);
   }
 
