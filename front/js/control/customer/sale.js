@@ -20,7 +20,7 @@ function printNFe(){
 function menuClick(menu){
 
   menu.click(function(e){
-    var drop = new MaterialDropdown($(this), e);
+    var drop = new MaterialDropdown($(this), e, false, true);
     var cardClass =  menu.parent().prop('className');
 
     if(cardClass.includes('payment') && data.payment.method == 'mundipagg_boleto'){
@@ -31,23 +31,22 @@ function menuClick(menu){
         window.open(data.payment.boleto);
       });
 
-      //if(actualDate < boletoExpiresDate){
-      drop.addItem('/img/envelop.png', 'Enviar Boleto por Email', function(){
-        _post('/customer-sending-boleto',{
-          cliente: data.client,
-          oc: data.oc,
-          linkBoleto: data.payment.boleto
+      if(actualDate < boletoExpiresDate){
+        drop.addItem('/img/envelop.png', 'Enviar Boleto por Email', function(){
+          _post('/customer-email-boleto',{
+            cliente: data.client,
+            oc: data.oc,
+            linkBoleto: data.payment.boleto
+          });
         });
-      });
-      //  }
+      }
     }else if(cardClass.includes('transport')){
       drop.addItem('/img/transport/default.png', 'Rastreio', function(){
         window.open(Params.trackingUrl() + data.oc);
       });
 
-
       drop.addItem('/img/envelop.png', 'Enviar Rastreio por Email', function(){
-        _post('/customer-sending-tracking',{
+        _post('/customer-email-tracking',{
           cliente: data.client,
           oc: data.oc,
           tracking: Params.trackingUrl() + data.oc
@@ -56,16 +55,22 @@ function menuClick(menu){
     }
 
     else if(cardClass.includes('sale-header-holder')){
-
-      drop.addItem('/img/transport/default.png', 'Enviar NF por Email', function(){
-        _post('/customer-sending-nf?nf',{
+      drop.addItem('/img/envelop.png', 'Enviar NF', function(){
+        _post('/customer-email-danfe',{
           cliente: data.client,
           oc: data.oc,
           nfNumber: data.nf,
-          nfUrl: Params.productionUrl() + '/packing-danfe?nfe=' + $('.sale-nfe').text()
         });
       });
+
+      drop.addItem('/img/paper.png', 'Visualizar NF', function(){
+        printNFe();
+      });
+
     }
+
+
+
     drop.show();
   });
 }
@@ -79,7 +84,6 @@ function buildMenu(holder){
 
   return holder.prepend($menu);
 }
-
 
 function loadCompletSaleData(callback){
   _get('/customer-service/sale', {saleNumber : saleNumber}, (data) => {
@@ -130,17 +134,42 @@ function bindSaleAddressInfo(data){
 function bindPaymentInfo(data){
   buildMenu($('.card-payment'));
 
+  $('.card-payment').css('border-top', '3px solid '+ setBorderOnCard(data.status));
+
   $('.payment-img').attr('src', getPaymentMethodImage(data.payment.method));
   $('.sale-payment-method').text(Util.getPaymentType(data.payment.method));
   $('.sale-payment-total').text(Num.money(data.payment.total));
   $('.sale-payment-info').text(data.payment.desc);
-  $('.sale-payment-status').addClass('info').text(data.payment.status).css('border-color',Util.strToColor(data.payment.status));
+  $('.sale-payment-status').addClass('info').text(data.payment.status).css('border-color', setBorderOnCard(data.status));
+
+  console.log(addDays(Dat.now(), data.transport.deliveryTime));
+}
+
+function setBorderOnCard(status){
+  if(status == 'pending_payment'){
+    return "#efd834";
+  }
+  else if(status == 'canceled'){
+    return "#ff0006";
+  }
+  else{
+    return "#009688";
+  }
+}
+
+function addDays(date, days){
+  var result = new Date(date);
+  console.log(result);
+  result.setDate(result.getDate() + days);
+  return result;
 }
 
 function getPaymentMethodImage(method){
   if(method.includes('boleto')) return '/img/barcode.png';
   if(method.includes('creditcard')) return '/img/credit-card.png';
   if(method.includes('paypal')) return '/img/paypal.png';
+  if(method.includes('free')) return '/img/voucher.png'
+
 }
 
 function setTagOnItem(itemStatus){
@@ -162,7 +191,7 @@ function setTagOnItem(itemStatus){
 
 function bindSaleItens(data){
 
-  $('.qtd').text('Qtd' + ': ' + data.totalPecas);
+  $('.qtd').text('Qtd: ' + data.totalPecas);
   $('.sale-itens-count').text("Itens Magento: "+ data.magentoItensQuantity + " " + "Itens Eccosys: "+ data.eccoItensQuantity);
 
   var $tableHolder = $('.client-sale-itens');
@@ -225,6 +254,9 @@ function bindSaleItens(data){
   }
 
   function bindSaleTotalInfo(data){
+    if(data.transport.cost == 'Frete Grátis'){
+      $('.tr-frete').hide();
+    }
     $('.sale-info-subtotal').text(Num.money(data.subtotal));
     $('.sale-info-cupom').html(data.payment.coupon ? data.payment.coupon.toLocaleUpperCase() + '<br>' + data.payment.discount_desc.split(',').join('<br>') : data.payment.discount_desc);
     $('.sale-info-discount').text(Num.money(data.discount));

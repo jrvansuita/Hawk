@@ -1,8 +1,7 @@
 const Client = require('../bean/client.js');
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
-//const SaleLoader = require('../loader/sale-loader.js');
 const MagentoCalls = require('../magento/magento-calls.js');
-const SaleCustomerInfoBuilder = require('../builder/sale-customer-info-builder.js');
+const SaleCustomerInfoBuilder = require('../customer/sale-customer-info-builder.js');
 
 
 module.exports = {

@@ -105,7 +105,7 @@ function sendEmailIfNeed(pending, user,  callback){
 function sendEmail(sale, user, callback){
   var items = sale.items.filter((i) => {
     i.img = Params.productImageUrl(i.codigo);
-    i.total = parseFloat(i.precoLista) * parseFloat(i.quantidade);
+    i.total = parseFloat(i.valor) * parseFloat(i.quantidade);
     return i.pending == true;
   });
 

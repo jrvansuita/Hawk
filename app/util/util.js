@@ -39,7 +39,8 @@ var Util = {
     switch(method){
       case 'mundipagg_boleto': return 'Boleto';
       case 'mundipagg_creditcard': return 'Cartão de Crédito';
-      case 'paypal_express': return 'PayPal'
+      case 'paypal_express': return 'PayPal';
+      case 'free': return 'Voucher';
     }
   },
 

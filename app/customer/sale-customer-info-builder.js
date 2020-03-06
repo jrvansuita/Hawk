@@ -129,7 +129,8 @@ class SaleWrapper{
       name: erp.transport,
       desc: store.shipping_description,
       cost: Floa.def(store.shipping_amount) == 0 ? "Frete Grátis" : Floa.def(store.shipping_amount),
-      tracking: erp.codigoRastreamento
+      tracking: erp.codigoRastreamento,
+      deliveryTime: erp.deliveryTime
     }
 
     this.comments = {
