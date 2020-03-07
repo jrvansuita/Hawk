@@ -22,7 +22,11 @@ module.exports = {
 
   findBySale(saleNumber, callback){
     new EccosysProvider().sale(saleNumber).go((sale) => {
-      this.load(sale.idContato, callback);
+      if (sale){
+        this.load(sale.idContato, callback);
+      }else{
+        callback({error: 'Pedido não encontrado. Talves seja um pedido muito recente.'});
+      }
     });
   },
 
@@ -30,15 +34,15 @@ module.exports = {
     new MagentoCalls().saleByClient(idClient).then(callback);
   },
 
-loadSale(saleNumber, callback){
-  new SaleCustomerInfoBuilder(saleNumber).load((data, provisorio) => {
-    callback({data :data, provisorio: provisorio});
-  })
-},
+  loadSale(saleNumber, callback){
+    new SaleCustomerInfoBuilder(saleNumber).load((data, provisorio) => {
+      callback({data :data, provisorio: provisorio});
+    })
+  },
 
-searchAutoComplete(typing, callback){
-  Client.likeThis(typing, 50, (err, data)=>{
-    callback(data);
-  });
-}
+  searchAutoComplete(typing, callback){
+    Client.likeThis(typing, 50, (err, data)=>{
+      callback(data);
+    });
+  }
 };

@@ -107,7 +107,7 @@ function openOptionsMenu(line, e){
 }
 
 function checkCanDelete(id){
-  var el = $(".each-template-line[data-id='"+id+"']").find('.using-template-circle');
+  var el = $(".each-template-line[data-id='"+id+"']").find('.active-circle');
 
   if (el.length){
     var tooltip = tooltips.find((e) => {
