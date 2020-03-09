@@ -267,6 +267,11 @@ var Util = {
     }
   },
 
+  formatCEP(cep){
+    cep = cep.replace(/^(\d{5})(\d)/,"$1-$2");
+    return cep;
+  },
+
   getSaleStatusIcon(status){
     if (status == 'N'){
       return 'alert';

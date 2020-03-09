@@ -35,17 +35,20 @@ module.exports = class CustomerRoutes extends Routes{
 
     //enviar boleto
     this._post('/customer-email-boleto', (req, res) => {
-      CustomerHandler.sendEmailBoleto(req.body);
+      new CustomerHandler(req.body.userid)
+      .sendEmailBoleto(req.body, this._resp().redirect(res));
     });
 
     //envia rastreio
-    this._post('/customer-email-tracking', (req, res) => {
-      CustomerHandler.sendEmailDanfe(req.body);
+    this._post('/customer-email-tracking', (req, res, locals) => {
+      new CustomerHandler(locals.loggedUser.id)
+      .sendEmailDanfe(req.body);
     });
 
     //envia nf
-    this._post('/customer-email-danfe', (req, res) => {
-      CustomerHandler.sendEmailDanfe(req.body);
+    this._post('/customer-email-danfe', (req, res, locals) => {
+      new CustomerHandler(locals.loggedUser.id)
+      .sendEmailDanfe(req.body);
     });
   };
 };

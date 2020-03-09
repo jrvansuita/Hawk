@@ -130,9 +130,9 @@ window.saleNumber = <%= saleNumber %>
                 <label class="sale-card-title">Data de nascimento</label>
               </td>
             </tr>
-            <tr>
+            <tr class="divide">
               <td>
-                <span class="sale-client-date"></span>
+                <span class="sale-client-date gray"></span>
               </td>
             </tr>
           </table>
@@ -254,33 +254,34 @@ window.saleNumber = <%= saleNumber %>
             <span class="sale-card-title">Pagamento</span>
           </div>
           <table>
-            <tr class="divide">
+            <tr>
               <td>
-                <span class="sale-card-title">Método: </span>
+                <span class="sale-card-title">Método</span>
               </td>
-              <td align="center">
-                <span class="sale-payment-method right"></span>
+              <td>
+                <span class="sale-card-title right">Parcelamento</span>
               </td>
+
             </tr>
             <tr class="divide">
               <td>
-                <span class="sale-card-title">Parcelamento: </span>
+                <span class="sale-payment-method"></span>
               </td>
               <td>
                 <span class="sale-payment-info right"></span>
               </td>
             </tr>
-            <tr class="divide">
+            <tr>
               <td>
-                <span class="sale-card-title">Valor Total: </span>
+                <span class="sale-card-title">Valor Total</span>
               </td>
               <td>
-                <span class="sale-payment-total right"></span>
+                <span class="sale-card-title right">Status</span>
               </td>
             </tr>
             <tr class="divide">
               <td>
-                <span class="sale-card-title">Status: </span>
+                <span class="sale-payment-total"></span>
               </td>
               <td>
                 <span class="sale-payment-status right sale-status"></span>
@@ -295,38 +296,46 @@ window.saleNumber = <%= saleNumber %>
             <span class="sale-card-title">Transportadora</span>
           </div>
           <table>
+            <tr>
+              <td>
+                <span class="sale-card-title">Transp.</span>
+              </td>
+              <td>
+                <span class="sale-card-title right">Método</span>
+              </td>
+            </tr>
             <tr class="divide">
               <td>
                 <span class="sale-shipping-transport"></span>
               </td>
+              <td>
+                <span class="sale-shipping-transport-description right"></span>
+              </td>
             </tr>
-            <tr class="divide">
-              <td colspan="2">
-                <span class="sale-shipping-transport-description"></span>
+            <tr>
+              <td>
+                <span class="sale-card-title">Entrega Estimada</span>
+              </td>
+              <td>
+                <span class="sale-card-title right">Valor do Frete</span>
               </td>
             </tr>
             <tr class="divide">
               <td>
-                <span class="sale-card-title">Entrega Estimada:</span>
-              </td>
-              <td>
-                <span class="sale-shipping-transport-delivery right"></span>
-              </td>
-            </tr>
-            <tr class="divide">
-              <td>
-                <span class="sale-card-title">Valor do Frete:</span>
+                <span class="sale-shipping-transport-delivery"></span>
               </td>
               <td>
                 <span class="sale-shipping-transport-cost right"></span>
               </td>
             </tr>
+            <tr>
+              <td>
+                <span class="sale-card-title">Peso Total</span>
+              </td>
+            </tr>
             <tr class="divide">
               <td>
-                <span class="sale-card-title">Peso Total:</span>
-              </td>
-              <td>
-                <span class="sale-info-weight-total right"></span>
+                <span class="sale-info-weight-total"></span>
               </td>
             </tr>
           </table>

@@ -31,12 +31,31 @@ function menuClick(menu){
         window.open(data.payment.boleto);
       });
 
-      if(actualDate < boletoExpiresDate || data.payment.status == 'Pago'){
+      if(actualDate < boletoExpiresDate){
         drop.addItem('/img/envelop.png', 'Enviar Boleto por Email', function(){
-          _post('/customer-email-boleto',{
+          $(menu).children().attr('src','/img/loader/circle.svg');
+
+          _post('/customer-email-boleto', {
             cliente: data.client,
             oc: data.oc,
-            linkBoleto: data.payment.boleto
+            linkBoleto: data.payment.boleto,
+            userid: loggedUser.id
+          }, (result) => {
+            if(result){
+              $(menu).children().attr('src','/img/checked.png');
+
+              setTimeout(function(){
+                $(menu).children().attr('src','/img/dots.png');
+              }, 3000);
+
+            }else{
+              $(menu).children().attr('src','/img/error.png');
+              showMsg(menu, 'Erro ao enviar email');
+
+              setTimeout(function(){
+                $(menu).children().attr('src','/img/dots.png');
+              }, 3000);
+            }
           });
         });
       }
@@ -68,11 +87,14 @@ function menuClick(menu){
       });
 
     }
-
-
-
     drop.show();
   });
+}
+
+function showMsg(holder, msg){
+  $(holder).append($('<span>').addClass('msg-info').text(msg).delay(3000).queue(() => {
+    $('.msg-info').remove();
+  }));
 }
 
 function buildMenu(holder){
@@ -106,21 +128,21 @@ function bindSaleAddressInfo(data){
   $('.sale-shipping-adress-street').text(data.shipping_address.street);
   $('.sale-shipping-adress-bairro').text(data.shipping_address.bairro);
   $('.sale-shipping-adress-complemento').text(data.shipping_address.complement);
-  $('.sale-shipping-postal-code').text(data.shipping_address.cep);
+  $('.sale-shipping-postal-code').text(Util.formatCEP(data.shipping_address.cep));
   $('.sale-shipping-city').text(data.shipping_address.city);
   $('.sale-shipping-uf').text(data.shipping_address.state);
 
   $('.sale-billing-adress-street').text(data.billing_address.street);
   $('.sale-billing-adress-bairro').text(data.billing_address.bairro);
   $('.sale-billing-adress-complemento').text(data.billing_address.complement);
-  $('.sale-billing-adress-postal-code').text(data.billing_address.cep);
+  $('.sale-billing-adress-postal-code').text(Util.formatCEP(data.billing_address.cep));
   $('.sale-billing-adress-city').text(data.billing_address.city);
   $('.sale-billing-adress-uf').text(data.billing_address.state);
 
   //card transport
   $('.sale-shipping-transport').text(data.transport.name);
   $('#transport-img').attr('src', '/img/transport/' + data.transport.name.toLocaleLowerCase() + '.png');
-  $('.sale-shipping-transport-description').html(data.transport.desc + '<br><br>' + data.transport.tracking);
+  $('.sale-shipping-transport-description').html(data.transport.desc + '<br>' + data.transport.tracking);
   $('.sale-shipping-transport-delivery').html(Dat.format(new Date(addDaysToDate(data.date, data.transport.deliveryTime))));
   if(data.transport.cost > 0){
     $('.sale-shipping-transport-cost').text(Num.money(data.transport.cost));
@@ -281,64 +303,64 @@ function bindSaleItens(data){
     }
 
     $('.sale-viewer-holder').css('border-top', '3px solid ' + setBorderOnCard(data.status));
-}
+  }
 
-function bindSaleHistory(data){
+  function bindSaleHistory(data){
 
-  var comments = [];
-  var $commentsEccosysTable = $('.history-comments-table');
-  var $magentoCommentsTable = $('.magento-comments-table');
+    var comments = [];
+    var $commentsEccosysTable = $('.history-comments-table');
+    var $magentoCommentsTable = $('.magento-comments-table');
 
-  comments = data.comments.erp.split(/\n/g);
+    comments = data.comments.erp.split(/\n/g);
 
-  comments.reverse().forEach((each) => {
-    var $comment = $('<p>').addClass('ecco-comments');
-    $comment.text(each);
-    $commentsEccosysTable.append($comment);
-  });
-
-  data.comments.store.forEach((each) => {
-    var $commentsTr = $('<tr>').addClass('comments');
-    var $commentsDate = $('<td>').addClass('comment-date');
-    var $commentsTd = $('<td>');
-
-    var $commentTitle = $('<p>').addClass('comment-title');
-    var $commentDesc = $('<span>');
-
-    var $commentNotified = $('<img>').attr('src','/img/checked.png').addClass('client-notified');
-
-    $commentTitle.text(Util.getSaleStatusInfo(each.status));
-    $commentDesc.text(each.comment);
-
-    if(each.is_customer_notified == 1){
-      $commentTitle.append($commentNotified);
-    }
-
-    $commentsTd.append($commentTitle, $commentDesc);
-
-    $commentsDate.text(Dat.formatwTime(Dat.rollHour(new Date(each.created_at),-3)));
-    $magentoCommentsTable.append($commentsTr.append($commentsDate,$commentsTd));
-  });
-}
-
-function hoverProductImage(holder, sku){
-  new ImagePreview(holder).hover((self) => {
-    _get('/product-image', {sku: sku },(product)=>{
-      self.show(product.image);
+    comments.reverse().forEach((each) => {
+      var $comment = $('<p>').addClass('ecco-comments');
+      $comment.text(each);
+      $commentsEccosysTable.append($comment);
     });
-  });
-}
 
-function bindSaleInfoViewer(data){
-  bindSaleBasicInfos(data);
-  bindClientSaleInfo(data);
-  bindSaleAddressInfo(data);
-  bindPaymentInfo(data);
-  bindSaleItens(data);
-  bindSaleTotalInfo(data);
-  bindSaleHistory(data);
+    data.comments.store.forEach((each) => {
+      var $commentsTr = $('<tr>').addClass('comments');
+      var $commentsDate = $('<td>').addClass('comment-date');
+      var $commentsTd = $('<td>');
 
-  $('.loading-sale-modal').hide();
-  $('.sale-dialog').css('display','flex');
+      var $commentTitle = $('<p>').addClass('comment-title');
+      var $commentDesc = $('<span>');
 
-}
+      var $commentNotified = $('<img>').attr('src','/img/checked.png').addClass('client-notified');
+
+      $commentTitle.text(Util.getSaleStatusInfo(each.status));
+      $commentDesc.text(each.comment);
+
+      if(each.is_customer_notified == 1){
+        $commentTitle.append($commentNotified);
+      }
+
+      $commentsTd.append($commentTitle, $commentDesc);
+
+      $commentsDate.text(Dat.formatwTime(Dat.rollHour(new Date(each.created_at),-3)));
+      $magentoCommentsTable.append($commentsTr.append($commentsDate,$commentsTd));
+    });
+  }
+
+  function hoverProductImage(holder, sku){
+    new ImagePreview(holder).hover((self) => {
+      _get('/product-image', {sku: sku },(product)=>{
+        self.show(product.image);
+      });
+    });
+  }
+
+  function bindSaleInfoViewer(data){
+    bindSaleBasicInfos(data);
+    bindClientSaleInfo(data);
+    bindSaleAddressInfo(data);
+    bindPaymentInfo(data);
+    bindSaleItens(data);
+    bindSaleTotalInfo(data);
+    bindSaleHistory(data);
+
+    $('.loading-sale-modal').hide();
+    $('.sale-dialog').css('display','flex');
+
+  }

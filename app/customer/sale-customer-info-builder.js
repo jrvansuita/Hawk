@@ -118,7 +118,7 @@ class SaleWrapper{
     this.payment = {
       method: store.payment.method,
       total: store.payment.base_amount_ordered,
-      desc: store.payment.installment_description || store.payment.additional_information.mundipagg_creditcard_new_credito_parcelamento_1_1|| "1x (à vista)",
+      desc: store.payment.installment_description || store.payment.additional_information.mundipagg_creditcard_new_credito_parcelamento_1_1 || "1x (à vista)",
       boleto: store.payment.additional_information.BoletoUrl,
       boleto_expires: store.payment.additional_information["1_ExpirationDate"],
       status: store.status == 'pending_payment' ? (store.payment.amount_paid ? 'Pago' : 'Pagamento Pendente') : (store.payment.amount_paid ? 'Pago' : 'Não Pago'),
