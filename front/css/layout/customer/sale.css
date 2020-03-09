@@ -31,7 +31,7 @@
 }
 
 .sale-header-holder{
-  padding: 7px 10px 4px 10px;
+  padding: 10px 15px 5px 15px;
   flex: 80;
   margin-right: auto;
   height: -webkit-fill-available;
@@ -352,9 +352,6 @@ table{
   border-top: 3px solid #009688;
 }
 
-.card-payment{
-}
-
 .card-transport{
   border-top: 3px solid #00adff;
 }
@@ -370,6 +367,8 @@ table{
 .comment-title{
   color: #000000a1;
   font-weight: bold;
+  font-size: 12px!important;
+  position: relative;
 }
 
 .client-notified{
@@ -380,4 +379,8 @@ table{
 
 .sale-itens-information:hover{
   background-color: #d8d8d8!important;
+}
+
+.comments td span{
+  font-size: 11px;
 }

@@ -67,7 +67,7 @@
               </tr>
               <tr>
                 <td><label class="client-card-title">Data de Nascimento</label></td>
-                <td><label class="client-card-title right">Útilma Atualização</label></td>
+                <td><label class="client-card-title right">Última Atualização</label></td>
               </tr>
               <tr>
                 <td><span class="client-date"><%=Dat.format(new Date(client.dataNascimento))%></span></td>
@@ -160,7 +160,7 @@
                     <td><span class="gray"><%=Dat.formatwTime(Dat.rollHour(new Date(sale.created_at),-3))%></span></td>
                     <td><span class=""><%=Num.int(sale.total_qty_ordered)%></span></td>
                     <td><span class=""><%=Num.money(sale.shipping_amount)%></span></td>
-                    <td><span class=""><%=Num.money(sale.discount_amount) %></span></td>
+                    <td><span class=""><%=Num.money(sale.discount_amount)%></span></td>
                     <td><span class="bolder"><%=Num.money(sale.grand_total)%></span></td>
                     <td><span class=""><%=Util.getSaleStatusInfo(sale.status)%></span></td>
                     <td><span class="gray"><%=sale.shipping_description%></span>

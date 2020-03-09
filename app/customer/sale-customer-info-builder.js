@@ -83,6 +83,7 @@ class SaleWrapper{
     this.situation = Util.getSaleSituationName(parseInt(erp.situacao));
     this.pickingStatus = Util.getSaleStatusName(erp.pickingRealizado);
     this.saleDate = Dat.formatwTime(Dat.rollHour(new Date(store.created_at),-3));
+    this.date = store.created_at;
     this.subtotal = Floa.def(store.base_subtotal);
     this.discount = Floa.def(store.discount_amount);
     this.total = Floa.def(store.base_grand_total);
@@ -120,7 +121,7 @@ class SaleWrapper{
       desc: store.payment.installment_description || store.payment.additional_information.mundipagg_creditcard_new_credito_parcelamento_1_1|| "1x (à vista)",
       boleto: store.payment.additional_information.BoletoUrl,
       boleto_expires: store.payment.additional_information["1_ExpirationDate"],
-      status: store.payment.amount_paid ? 'Pago' : 'Não pago',
+      status: store.status == 'pending_payment' ? (store.payment.amount_paid ? 'Pago' : 'Pagamento Pendente') : (store.payment.amount_paid ? 'Pago' : 'Não Pago'),
       coupon: store.coupon_code,
       discount_desc: store.discount_description
     }

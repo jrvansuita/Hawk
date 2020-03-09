@@ -31,7 +31,7 @@ function menuClick(menu){
         window.open(data.payment.boleto);
       });
 
-      if(actualDate < boletoExpiresDate){
+      if(actualDate < boletoExpiresDate || data.payment.status == 'Pago'){
         drop.addItem('/img/envelop.png', 'Enviar Boleto por Email', function(){
           _post('/customer-email-boleto',{
             cliente: data.client,
@@ -121,14 +121,12 @@ function bindSaleAddressInfo(data){
   $('.sale-shipping-transport').text(data.transport.name);
   $('#transport-img').attr('src', '/img/transport/' + data.transport.name.toLocaleLowerCase() + '.png');
   $('.sale-shipping-transport-description').html(data.transport.desc + '<br><br>' + data.transport.tracking);
-
+  $('.sale-shipping-transport-delivery').html(Dat.format(new Date(addDaysToDate(data.date, data.transport.deliveryTime))));
   if(data.transport.cost > 0){
     $('.sale-shipping-transport-cost').text(Num.money(data.transport.cost));
   }else{
     $('.sale-shipping-transport-cost').addClass('sale-status').text(data.transport.cost);
   }
-
-
 }
 
 function bindPaymentInfo(data){
@@ -142,7 +140,6 @@ function bindPaymentInfo(data){
   $('.sale-payment-info').text(data.payment.desc);
   $('.sale-payment-status').addClass('info').text(data.payment.status).css('border-color', setBorderOnCard(data.status));
 
-  console.log(addDays(Dat.now(), data.transport.deliveryTime));
 }
 
 function setBorderOnCard(status){
@@ -153,13 +150,13 @@ function setBorderOnCard(status){
     return "#ff0006";
   }
   else{
-    return "#009688";
+    return "#61d427";
   }
 }
 
-function addDays(date, days){
+function addDaysToDate(date, days){
   var result = new Date(date);
-  console.log(result);
+
   result.setDate(result.getDate() + days);
   return result;
 }
@@ -283,16 +280,7 @@ function bindSaleItens(data){
       buildMenu($('.sale-header-holder'));
     }
 
-    $('.sale-viewer-holder').css('border-top', '3px solid ' + Util.strToColor(data.status));
-    //fazer logica para bordar do modal conforme o status do pedido
-    /*if($('.status').text() == 'Cancelado'){
-    $('.sale-viewer-holder').css('border-top', '3px solid red');
-  }else if($('.status').text() != 'Pagamento Confirmado'){
-  $('.sale-viewer-holder').css('border-top', '3px solid #FF9800');
-}
-else{
-$('.sale-viewer-holder').css('border-top', '3px solid rgb(74, 212, 79)');
-}*/
+    $('.sale-viewer-holder').css('border-top', '3px solid ' + setBorderOnCard(data.status));
 }
 
 function bindSaleHistory(data){
@@ -314,7 +302,7 @@ function bindSaleHistory(data){
     var $commentsDate = $('<td>').addClass('comment-date');
     var $commentsTd = $('<td>');
 
-    var $commentTitle = $('<span>').addClass('comment-title');
+    var $commentTitle = $('<p>').addClass('comment-title');
     var $commentDesc = $('<span>');
 
     var $commentNotified = $('<img>').attr('src','/img/checked.png').addClass('client-notified');
@@ -326,7 +314,7 @@ function bindSaleHistory(data){
       $commentTitle.append($commentNotified);
     }
 
-    $commentsTd.append($commentTitle, $('<br>'), $commentDesc);
+    $commentsTd.append($commentTitle, $commentDesc);
 
     $commentsDate.text(Dat.formatwTime(Dat.rollHour(new Date(each.created_at),-3)));
     $magentoCommentsTable.append($commentsTr.append($commentsDate,$commentsTd));
