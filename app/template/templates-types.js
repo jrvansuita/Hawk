@@ -40,4 +40,9 @@ module.exports = {
     icon: 'nf'
   },
 
+  TF_WELLCOME: {
+    name : 'Troque Fácil - Bem Vindo',
+    icon: 'voucher'
+  },
+
 };
