@@ -1,5 +1,5 @@
 var editor;
-var typeSelector;
+var usagesSelector;
 var tooltips;
 
 $(document).ready(()=>{
@@ -9,19 +9,18 @@ $(document).ready(()=>{
     tooltips = data;
   });
 
-  new ComboBox($('#template-type'), types)
+  new ComboBox($('#template-usage'), usages)
   .setAutoShowOptions()
   .setDisabledCaption('Nenhum disponível')
-  .setOnItemBuild((type, index)=>{
-    console.log(type);
-    return {text : type.val.name, img : 'img/' + type.val.icon + '.png'};
+  .setOnItemBuild((o, index)=>{
+    return {text : o.val.name, img : 'img/' + o.val.icon + '.png'};
   })
   .load().then((binder) => {
-    typeSelector = binder;
+    usagesSelector = binder;
 
     if (selected){
-      typeSelector.selectByFilter((each)=>{
-        return each.data.key == selected.type;
+      usagesSelector.selectByFilter((each)=>{
+        return each.data.key == selected.usage;
       });
     }
   });
@@ -77,7 +76,7 @@ function save() {
     name: $('#template-name').val(),
     subject: $('#subject').val(),
     content:  editor.html.get(),
-    type: (typeSelector.getSelectedItem() && $('#template-type').val()) ? typeSelector.getSelectedItem().data.key : ''
+    usage: (usagesSelector.getSelectedItem() && $('#template-usage').val()) ? usagesSelector.getSelectedItem().data.key : ''
   };
 
   _post('template', data , (id)=>{

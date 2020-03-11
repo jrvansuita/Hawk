@@ -1,21 +1,30 @@
 module.exports = class Template extends DataAccess {
 
-  constructor(name, subject, content, type, sample) {
+  constructor(name, subject, content, usage, sample, type) {
     super();
     this.id = Util.id();
     this.name = Str.def(name);
     this.subject = Str.def(subject);
     this.content = Str.def(content);
-    this.type = Str.def(type);
+    this.usage = Str.def(usage);
     this.sample = sample || {};
+    this.type = Str.def(usage, 'block'); //block or email
   }
 
   static getKey() {
     return ['id'];
   }
 
-  static findByType(type, callback){
-    Template.findOne({type:type}, callback);
+  static getAllEmails(callback){
+    Template.find({type:'email'}, callback);
+  }
+
+  static getAllBlocks(callback){
+    Template.find({type:'block'}, callback);
+  }
+
+  static findByUsage(usage, callback){
+    Template.findOne({usage:usage}, callback);
   }
 
   static updateSample(id, data){

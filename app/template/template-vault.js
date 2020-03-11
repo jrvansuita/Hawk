@@ -9,6 +9,8 @@ module.exports = class TemplateHandler {
       params.name,
       params.subject,
       params.content,
+      params.usage,
+      null,
       params.type
     );
 

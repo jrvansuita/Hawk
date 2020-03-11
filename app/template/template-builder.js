@@ -7,8 +7,8 @@ module.exports = class TemplateBuilder{
     this.id = id;
   }
 
-  template(type){
-    this.templateType = type;
+  template(use){
+    this.templateUse = use;
     return this;
   }
 
@@ -151,8 +151,8 @@ module.exports = class TemplateBuilder{
       Template.findByKey(this.id, (err, template) => {
         callback(template);
       });
-    }else if (this.templateType){
-      Template.findByType(this.templateType,(err, template) => {
+    }else if (this.templateUse){
+      Template.findByUsage(this.templateUse,(err, template) => {
         callback(template);
       });
     }

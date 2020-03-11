@@ -1,7 +1,7 @@
 const Routes = require('../redirects/controller/routes.js');
 const TemplateVault = require('../template/template-vault.js');
 const Templates = require('../bean/template.js');
-const TemplatesTypes = require('../template/templates-types.js');
+const TemplatesUsages = require('../template/templates-usages.js');
 const TemplateBuilder = require('../template/template-builder.js');
 const ImageSaver = require('../image/image-saver.js');
 
@@ -9,13 +9,23 @@ module.exports = class EmailRoutes extends Routes{
 
   attach(){
 
-    this._page('/templates', (req, res) => {
-      Templates.findAll((err, all)=>{
-        var selected = all.find((e) => {
-          return e.id == req.query.id;
-        });
+   var templateRedirect = (req, res, all)=>{
+     var selected = all.find((e) => {
+       return e.id == req.query.id;
+     });
 
-        res.render('templates/templates', {selected: selected || {}, all: all, types: TemplatesTypes});
+     res.render('templates/templates', {selected: selected || {}, all: all, usages: TemplatesUsages});
+   };
+
+    this._page('/email-templates', (req, res) => {
+      Templates.getAllEmails((err, all)=>{
+         templateRedirect(req, res, all);
+      });
+    });
+
+    this._page('/block-templates', (req, res) => {
+      Templates.getAllBlocks((err, all)=>{
+        templateRedirect(req, res, all);
       });
     });
 

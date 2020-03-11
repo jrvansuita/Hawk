@@ -1,5 +1,5 @@
 
-<%var typesEnum = Util.clone(types);%>
+<%var usagesEnum = Util.clone(usages);%>
 
 <html>
 <%  include ../menus/main-menu %>
@@ -17,8 +17,6 @@
 <body>
 
 
-
-
   <div class="main-content">
     <div class="panels">
       <div class="left-panel shadow">
@@ -30,18 +28,18 @@
 
           <%
           all.sort((a,b) => {
-            return b.type.localeCompare(a.type);
+            return b.usage.localeCompare(a.usage);
           }).forEach((each)=>{
 
-            if (each.type != selected.type){
-              delete typesEnum[each.type];
+            if (each.usage != selected.usage){
+              delete usagesEnum[each.usage];
             }
             %>
 
 
 
             <div class="each-template-line <%=selected.id == each.id ? 'active' : ''%> " data-id="<%=each.id%>">
-              <%if (each.type){%>
+              <%if (each.usage){%>
                 <div class="active-circle"></div>
                 <%}%>
                 <span><%=each.name%></span>
@@ -70,8 +68,8 @@
                   <label>Nome do Template</label>
                 </div>
 
-                <div class="material-input-holder type-holder">
-                  <input type="text" id="template-type" value="<%=(selected.type && types[selected.type] ? types[selected.type].name : '') %>" autocomplete="off" required/>
+                <div class="material-input-holder usage-holder">
+                  <input type="text" id="template-usage" value="<%=(selected.usage && usages[selected.usage] ? usages[selected.usage].name : '') %>" autocomplete="off" required/>
                   <span class="bar"></span>
                   <label>Usado em</label>
                 </div>
@@ -113,7 +111,8 @@
       <script class="hidable-script">
 
         window.selected = <%- JSON.stringify(selected || {}) %>
-        window.types = <%- JSON.stringify(typesEnum || {}) %>
+        window.usages = <%- JSON.stringify(usagesEnum || {}) %>
+        window.templateType = <%- JSON.stringify(templateType || {}) %>
       </script>
 
 
