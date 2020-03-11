@@ -43,7 +43,7 @@ $(document).ready(()=>{
   });
 
   $(".each-template-line").click(function (){
-    window.location= 'templates?id=' + $(this).data('id');
+    goToTemplate($(this).data('id'));
   });
 
   $(".icon-dots").click(function (e){
@@ -51,9 +51,11 @@ $(document).ready(()=>{
   });
 
   $('.add-new').click(() => {
-    window.location= 'templates';
+    goToTemplate(null);
   });
 });
+
+
 
 function saveClick(){
   if (checkFields()){
@@ -76,11 +78,12 @@ function save() {
     name: $('#template-name').val(),
     subject: $('#subject').val(),
     content:  editor.html.get(),
-    usage: (usagesSelector.getSelectedItem() && $('#template-usage').val()) ? usagesSelector.getSelectedItem().data.key : ''
+    usage: (usagesSelector.getSelectedItem() && $('#template-usage').val()) ? usagesSelector.getSelectedItem().data.key : '',
+    type: templateType
   };
 
   _post('template', data , (id)=>{
-    window.location= 'templates?id=' + id;
+    goToTemplate(id);
   },(error, message)=>{
     console.log(error);
   });
@@ -132,6 +135,11 @@ function deleteTemplate(id){
 
 function duplicateTemplate(id){
   _post('/template-duplicate',{id: id}, (data) => {
-    window.location= 'templates?id=' + data.id;
+    goToTemplate(data.id);
   });
+}
+
+
+function goToTemplate(id){
+  window.location= location.pathname + (id ? '?id=' + id : '');
 }

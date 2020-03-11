@@ -8,7 +8,7 @@ module.exports = class Template extends DataAccess {
     this.content = Str.def(content);
     this.usage = Str.def(usage);
     this.sample = sample || {};
-    this.type = Str.def(usage, 'block'); //block or email
+    this.type = Str.def(type, 'block'); //block or email
   }
 
   static getKey() {

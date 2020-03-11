@@ -31,12 +31,9 @@ module.exports = class ShippingOrderRoutes extends Routes{
     });
 
     this._get('/shipping-order-print', (req, res) => {
-      new TemplateBuilder().template('ASS').build((templateAss) => {
-        ShippingOrderProvider.get(req.query, (data) => {
-          res.render("packing/shipping-order/shipping-order-print", {shippingOrder: data, assContent: templateAss.content});
-        });
+      ShippingOrderProvider.get(req.query, (data) => {
+        res.render("packing/shipping-order/shipping-order-print", {shippingOrder: data});
       });
-
     });
 
     this._post('/shipping-order-new', (req, res) => {

@@ -21,7 +21,7 @@
     <div class="panels">
       <div class="left-panel shadow">
 
-        <label class="sub-title left">Templates <img src="img/plus-gray.png" class="add-new mini-icon-button"> </label>
+        <label class="sub-title left"><%=templateType == 'email' ? 'Templates de E-mail' : 'Blocks Estáticos'%> <img src="img/plus-gray.png" class="add-new mini-icon-button"> </label>
 
 
         <div class="templates-holder">
@@ -39,7 +39,7 @@
 
 
             <div class="each-template-line <%=selected.id == each.id ? 'active' : ''%> " data-id="<%=each.id%>">
-              <%if (each.usage){%>
+              <%if (each.usage && templateType == 'email' ){%>
                 <div class="active-circle"></div>
                 <%}%>
                 <span><%=each.name%></span>
@@ -68,53 +68,57 @@
                   <label>Nome do Template</label>
                 </div>
 
-                <div class="material-input-holder usage-holder">
-                  <input type="text" id="template-usage" value="<%=(selected.usage && usages[selected.usage] ? usages[selected.usage].name : '') %>" autocomplete="off" required/>
-                  <span class="bar"></span>
-                  <label>Usado em</label>
+                <%if (templateType == 'email'){%>
+                  <div class="material-input-holder usage-holder">
+                    <input type="text" id="template-usage" value="<%=(selected.usage && usages[selected.usage] ? usages[selected.usage].name : '') %>" autocomplete="off" required/>
+                    <span class="bar"></span>
+                    <label>Usado em</label>
+                  </div>
+                  <%}%>
+
+                  <label class="button save shadow">Salvar</label>
                 </div>
 
-                <label class="button save shadow">Salvar</label>
-              </div>
 
+                <%if (templateType == 'email'){%>
+                  <div class="row">
+                    <div class="material-input-holder">
+                      <input type="text" id="subject"  value="<%=selected.subject%>" autocomplete="off" required/>
+                      <span class="bar"></span>
+                      <label>Assunto</label>
+                    </div>
+                  </div>
+                  <%}%>
 
-              <div class="row">
-                <div class="material-input-holder">
-                  <input type="text" id="subject"  value="<%=selected.subject%>" autocomplete="off" required/>
-                  <span class="bar"></span>
-                  <label>Assunto</label>
                 </div>
+
+                <div class="template-bottom">
+
+                  <div id="editor">
+
+                  </div>
+
+
+                </div>
+
+
+
+
+
+
               </div>
 
             </div>
-
-            <div class="template-bottom">
-
-              <div id="editor">
-
-              </div>
-
-
-            </div>
-
-
-
-
-
-
           </div>
 
-        </div>
-      </div>
+
+          <script class="hidable-script">
+
+            window.selected = <%- JSON.stringify(selected || {}) %>
+            window.usages = <%- JSON.stringify(usagesEnum || {}) %>
+            window.templateType = <%- JSON.stringify(templateType || {}) %>
+          </script>
 
 
-      <script class="hidable-script">
-
-        window.selected = <%- JSON.stringify(selected || {}) %>
-        window.usages = <%- JSON.stringify(usagesEnum || {}) %>
-        window.templateType = <%- JSON.stringify(templateType || {}) %>
-      </script>
-
-
-    </body>
-    </html>
+        </body>
+        </html>

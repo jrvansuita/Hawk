@@ -61,7 +61,6 @@ routes.push('pictures-routes.js');
 routes.push('template-routes.js');
 routes.push('images-routes.js');
 routes.push('customer-routes.js');
-routes.push('devolution-routes.js');
 
 
 // -- Run Routes -- //

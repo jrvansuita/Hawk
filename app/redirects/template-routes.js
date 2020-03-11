@@ -9,23 +9,23 @@ module.exports = class EmailRoutes extends Routes{
 
   attach(){
 
-   var templateRedirect = (req, res, all)=>{
+   var templateRedirect = (req, res, all, type)=>{
      var selected = all.find((e) => {
        return e.id == req.query.id;
      });
 
-     res.render('templates/templates', {selected: selected || {}, all: all, usages: TemplatesUsages});
+     res.render('templates/templates', {selected: selected || {}, all: all, usages: TemplatesUsages, templateType : type});
    };
 
     this._page('/email-templates', (req, res) => {
       Templates.getAllEmails((err, all)=>{
-         templateRedirect(req, res, all);
+         templateRedirect(req, res, all, 'email');
       });
     });
 
     this._page('/block-templates', (req, res) => {
       Templates.getAllBlocks((err, all)=>{
-        templateRedirect(req, res, all);
+        templateRedirect(req, res, all, 'block');
       });
     });
 
@@ -38,7 +38,7 @@ module.exports = class EmailRoutes extends Routes{
         });
         res.end(template.content);
       });
-  }, true, true); 
+  }, true, true);
 
 
   this._post('/template', (req, res) =>{
