@@ -32,12 +32,13 @@ module.exports = {
 
   TRACKING: {
     name : 'Rastreio',
-    icon: 'default'
+    icon: 'transport/default'
   },
 
   NF: {
     name : 'Nota Fiscal',
     icon: 'nf'
   },
+
 
 };

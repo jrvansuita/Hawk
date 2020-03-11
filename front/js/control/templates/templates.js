@@ -1,5 +1,5 @@
 var editor;
-var typeSelector;
+var usagesSelector;
 var tooltips;
 
 $(document).ready(()=>{
@@ -9,19 +9,18 @@ $(document).ready(()=>{
     tooltips = data;
   });
 
-  new ComboBox($('#template-type'), types)
+  new ComboBox($('#template-usage'), usages)
   .setAutoShowOptions()
   .setDisabledCaption('Nenhum disponível')
-  .setOnItemBuild((type, index)=>{
-    console.log(type);
-    return {text : type.val.name, img : 'img/' + type.val.icon + '.png'};
+  .setOnItemBuild((o, index)=>{
+    return {text : o.val.name, img : 'img/' + o.val.icon + '.png'};
   })
   .load().then((binder) => {
-    typeSelector = binder;
+    usagesSelector = binder;
 
     if (selected){
-      typeSelector.selectByFilter((each)=>{
-        return each.data.key == selected.type;
+      usagesSelector.selectByFilter((each)=>{
+        return each.data.key == selected.usage;
       });
     }
   });
@@ -44,7 +43,7 @@ $(document).ready(()=>{
   });
 
   $(".each-template-line").click(function (){
-    window.location= 'templates?id=' + $(this).data('id');
+    goToTemplate($(this).data('id'));
   });
 
   $(".icon-dots").click(function (e){
@@ -52,9 +51,11 @@ $(document).ready(()=>{
   });
 
   $('.add-new').click(() => {
-    window.location= 'templates';
+    goToTemplate(null);
   });
 });
+
+
 
 function saveClick(){
   if (checkFields()){
@@ -77,11 +78,12 @@ function save() {
     name: $('#template-name').val(),
     subject: $('#subject').val(),
     content:  editor.html.get(),
-    type: (typeSelector.getSelectedItem() && $('#template-type').val()) ? typeSelector.getSelectedItem().data.key : ''
+    usage: (usagesSelector.getSelectedItem() && $('#template-usage').val()) ? usagesSelector.getSelectedItem().data.key : '',
+    type: templateType
   };
 
   _post('template', data , (id)=>{
-    window.location= 'templates?id=' + id;
+    goToTemplate(id);
   },(error, message)=>{
     console.log(error);
   });
@@ -133,6 +135,11 @@ function deleteTemplate(id){
 
 function duplicateTemplate(id){
   _post('/template-duplicate',{id: id}, (data) => {
-    window.location= 'templates?id=' + data.id;
+    goToTemplate(data.id);
   });
+}
+
+
+function goToTemplate(id){
+  window.location= location.pathname + (id ? '?id=' + id : '');
 }

@@ -5,10 +5,14 @@ module.exports = class TemplateHandler {
 
   static storeFromScreen(params, callback) {
 
+console.log(params);
+
     var object = new Template(
       params.name,
       params.subject,
       params.content,
+      params.usage,
+      null,
       params.type
     );
 
@@ -16,8 +20,8 @@ module.exports = class TemplateHandler {
       object.id = params.id;
     }
 
-    if (object.id){
-      Template.findOne({id : object.id}, (err, obj)=>{
+    if (params.id){
+      Template.findOne({id : params.id}, (err, obj)=>{
         object.sample = obj.sample || {};
         object.upsert((err, doc)=>{
           callback(doc ? doc.id : 0);

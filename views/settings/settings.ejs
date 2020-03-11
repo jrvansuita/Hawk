@@ -13,46 +13,71 @@
 
 <body>
 
-<div class="main-content">
+  <div class="main-content">
 
 
-  <div class="content">
+    <table class="main-table">
 
-    <div class="forms shadow">
-      <label class="group-title">Configurações</label>
-      <a class="link" href="/main-settings%>">Gerais</a>
-      <a class="link" href="/social-settings%>">Contato & Social</a>
-      <a class="link" href="/api-settings%>">Integrações</a>
-    </div>
+      <tr>
 
-
-    <div class="forms shadow">
-      <label class="group-title">Cadastros</label>
-
-      <a class="link" href="/user-registering?userId=<%=loggedUser ? loggedUser.id: ''%>">Usuários</a>
-      <a class="link" href="/packages-registering">Embalagens</a>
-      <a class="link" href="/mockup-builder">Mockup de Produto</a>
-      <a class="link" href="/gift-rules">Regras de Brindes</a>
-      <a class="link" href="/job-registering">Tarefas & Integrações</a>
-      <a class="link" href="/sku-pictures">Compartilhamentos dos Clientes</a>
-      <a class="link" href="/templates">Templates Dinâmicos</a>
-    </div>
-
-    <div class="forms shadow">
-      <label class="group-title">Tarefas</label>
-
-      <table>
-        <%jobs.forEach((job)=>{%>
-          <tr class="job-item">
-            <td><img class="job-active" src="img/<%=job.active ? (job.running ? 'checked-running' : 'checked') : 'block'%>.png"></td>
-            <td><span class="job-name"><%=job.description%></span></td>
-            <td><span class="job-last"><%=Dat.formatwTime(new Date(job.lastExcecution) || new Date())%></span></td>
-            <td> <span class="job-item-menu" data-id="<%=job.id%>" data-tag="<%=job.tag%>" data-active="<%=job.active%>"> <img src="img/dots.png" class="dots-glyph"  /></span></td>
+        <td>
+          <div class="forms shadow">
+            <label class="group-title">Configurações</label>
+            <a class="link" href="/main-settings%>">Gerais</a>
+            <a class="link" href="/social-settings%>">Contato & Social</a>
+            <a class="link" href="/api-settings%>">Integrações</a>
           </div>
-          <%});%>
-        </table>
-      </div>
+        </td>
+
+        <td>
+          <div class="forms shadow">
+            <label class="group-title">Funcionalidades</label>
+            <a class="link" href="/mockup-builder">Mockup de Produto</a>
+            <a class="link" href="/gift-rules">Regras de Brindes</a>
+            <a class="link" href="/sku-pictures">Compartilhamentos dos Clientes</a>
+          </div>
+        </td>
+        <td>
+          <div class="forms shadow">
+            <label class="group-title">Cadastros</label>
+
+            <a class="link" href="/user-registering?userId=<%=loggedUser ? loggedUser.id: ''%>">Usuários</a>
+            <a class="link" href="/packages-registering">Embalagens</a>
+            <a class="link" href="/job-registering">Tarefas & Integrações</a>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <div class="forms shadow">
+            <label class="group-title">Templates</label>
+
+            <a class="link" href="/email-templates">Templates de E-mail</a>
+            <a class="link" href="/block-templates">Block Estáticos</a>
+          </div>
+        </td>
+
+        <td>
+          <div class="forms shadow">
+            <label class="group-title">Tarefas</label>
+
+            <table>
+              <%jobs.forEach((job)=>{%>
+                <tr class="job-item">
+                  <td><img class="job-active" src="img/<%=job.active ? (job.running ? 'checked-running' : 'checked') : 'block'%>.png"></td>
+                  <td><span class="job-name"><%=job.description%></span></td>
+                  <td><span class="job-last"><%=Dat.formatwTime(new Date(job.lastExcecution) || new Date())%></span></td>
+                  <td> <span class="job-item-menu" data-id="<%=job.id%>" data-tag="<%=job.tag%>" data-active="<%=job.active%>"> <img src="img/dots.png" class="dots-glyph"  /></span></td>
+                </div>
+                <%});%>
+              </table>
+            </div>
+
+          </td>
+        </tr>
+      </table>
+  
     </div>
-  </div>
-</body>
-</html>
+  </body>
+  </html>
