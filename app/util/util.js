@@ -39,7 +39,8 @@ var Util = {
     switch(method){
       case 'mundipagg_boleto': return 'Boleto';
       case 'mundipagg_creditcard': return 'Cartão de Crédito';
-      case 'paypal_express': return 'PayPal'
+      case 'paypal_express': return 'PayPal';
+      case 'free': return 'Voucher';
     }
   },
 
@@ -238,6 +239,37 @@ var Util = {
     }else if (status == 'S'){
       return 'Faturado';
     }
+  },
+
+  getSaleStatusInfo(status){
+    switch(status){
+      //sale status
+      case 'pending': return 'Pedido Realizado';
+      case 'processing': return 'Pagamento Confirmado';
+      case 'canceled': return 'Cancelado';
+      case 'separation': return 'Em Separação';
+      case 'pending_payment': return 'Pagamento Pendente';
+      case 'payment_review': return 'Aguardando Analise Antifraude';
+      case 'waiting_antifraud_analisys': return 'Análise do Credito';
+      case 'holded': return 'Bloqueado na Expedição';
+      case 'ip_delivered': return 'Entregue';
+      case 'ip_to_be_delivered': return 'Saiu para Entrega';
+      case 'ip_delivery_failed': return 'Entrega Falhou';
+      case 'ip_delivery_late': return 'Atraso na Entrega';
+      case 'ip_in_transit': return 'Em Trânsito';
+      case 'ip_shipped': return 'Despachado';
+      case 'awaiting': return 'Aguardando Devolução';
+      case 'devolucao_recebida': return 'Devolução Recebida';
+      case 'complete': return 'Conferência do(s) produto(s) e NF-e';
+      case 'closed': return 'Estornado';
+      case 'ip_shipped': return 'Despachado';
+
+    }
+  },
+
+  formatCEP(cep){
+    cep = cep.replace(/^(\d{5})(\d)/,"$1-$2");
+    return cep;
   },
 
   getSaleStatusIcon(status){

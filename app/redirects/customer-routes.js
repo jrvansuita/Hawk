@@ -1,5 +1,6 @@
 const Routes = require('../redirects/controller/routes.js');
 const CustomerProvider = require('../provider/customer-provider.js');
+const CustomerHandler = require('../customer/customer-handler.js');
 
 
 module.exports = class CustomerRoutes extends Routes{
@@ -32,6 +33,22 @@ module.exports = class CustomerRoutes extends Routes{
       CustomerProvider.searchAutoComplete(req.query.typing, this._resp().redirect(res));
     });
 
-  }
+    //enviar boleto
+    this._post('/customer-email-boleto', (req, res) => {
+      new CustomerHandler(req.body.userid)
+      .sendEmailBoleto(req.body, this._resp().redirect(res));
+    });
 
+    //envia rastreio
+    this._post('/customer-email-tracking', (req, res, locals) => {
+      new CustomerHandler(locals.loggedUser.id)
+      .sendEmailDanfe(req.body);
+    });
+
+    //envia nf
+    this._post('/customer-email-danfe', (req, res, locals) => {
+      new CustomerHandler(locals.loggedUser.id)
+      .sendEmailDanfe(req.body);
+    });
+  };
 };

@@ -25,5 +25,24 @@ module.exports = {
     icon: 'info'
   },
 
+  BOLETO: {
+    name : 'Segunda Via Boleto',
+    icon: 'barcode'
+  },
+
+  TRACKING: {
+    name : 'Rastreio',
+    icon: 'default'
+  },
+
+  NF: {
+    name : 'Nota Fiscal',
+    icon: 'nf'
+  },
+
+  TF_WELLCOME: {
+    name : 'Troque Fácil - Bem Vindo',
+    icon: 'voucher'
+  },
 
 };

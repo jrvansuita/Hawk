@@ -103,7 +103,7 @@ module.exports = class JobMundipaggChecker extends Job{
       if (data.BoletoTransactionStatus.includes('Paid')){
         this.saleWasPay(sale, payDate, expirationDate, method, nextSale);
       }else{
-        if (Dat.daysDif(expirationDate, new Date()) > 2){
+        if ((Dat.daysDif(expirationDate, new Date()) > 2)){
           this.saleHasOverdue(sale, payDate, expirationDate, method, nextSale);
         }else{
           this.logThis(sale, null);

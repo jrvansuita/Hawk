@@ -83,10 +83,11 @@ class SaleWrapper{
     this.situation = Util.getSaleSituationName(parseInt(erp.situacao));
     this.pickingStatus = Util.getSaleStatusName(erp.pickingRealizado);
     this.saleDate = Dat.formatwTime(Dat.rollHour(new Date(store.created_at),-3));
+    this.date = store.created_at;
     this.subtotal = Floa.def(store.base_subtotal);
     this.discount = Floa.def(store.discount_amount);
     this.total = Floa.def(store.base_grand_total);
-    this.weight = Floa.def(store.weight);
+    this.weight = Floa.def(store.weight) < 1.000 ? Floa.def(store.weight) + 'g' : Floa.def(store.weight) + 'Kg';
 
     this.client = {
       name: store.customer_firstname + " " + store.customer_lastname,
@@ -97,8 +98,7 @@ class SaleWrapper{
     }
 
     this.shipping_address = {
-      street: store.shipping_address.street.split(/\n/g)[0],
-      number: store.shipping_address.street.split(/\n/g)[1],
+      street: store.shipping_address.street.split(/\n/g)[0] + ', ' + store.shipping_address.street.split(/\n/g)[1],
       complement: store.shipping_address.street.split(/\n/g)[2],
       bairro: store.shipping_address.street.split(/\n/g)[3],
       city: store.shipping_address.city,
@@ -107,8 +107,7 @@ class SaleWrapper{
     }
 
     this.billing_address = {
-      street: store.billing_address.street.split(/\n/g)[0],
-      number: store.billing_address.street.split(/\n/g)[1],
+      street: store.billing_address.street.split(/\n/g)[0] + ', ' + store.billing_address.street.split(/\n/g)[1],
       complement: store.billing_address.street.split(/\n/g)[2],
       bairro: store.billing_address.street.split(/\n/g)[3],
       city: store.billing_address.city,
@@ -119,16 +118,20 @@ class SaleWrapper{
     this.payment = {
       method: store.payment.method,
       total: store.payment.base_amount_ordered,
-      desc: store.payment.installment_description || store.payment.additional_information.mundipagg_creditcard_new_credito_parcelamento_1_1|| "1x (à vista)",
+      desc: store.payment.installment_description || store.payment.additional_information.mundipagg_creditcard_new_credito_parcelamento_1_1 || "1x (à vista)",
       boleto: store.payment.additional_information.BoletoUrl,
-      status: (store.payment.additional_information.BoletoTransactionStatusEnum || store.payment.additional_information["1_BoletoTransactionStatus"]) || store.payment.additional_information["1_CreditCardTransactionStatus"],
-      coupon: store.coupon_code ? store.coupon_code.toUpperCase() : 'Não possui'
+      boleto_expires: store.payment.additional_information["1_ExpirationDate"],
+      status: store.status == 'pending_payment' ? (store.payment.amount_paid ? 'Pago' : 'Pagamento Pendente') : (store.payment.amount_paid ? 'Pago' : 'Não Pago'),
+      coupon: store.coupon_code,
+      discount_desc: store.discount_description
     }
 
     this.transport = {
       name: erp.transport,
       desc: store.shipping_description,
-      cost: Floa.def(store.shipping_amount)
+      cost: Floa.def(store.shipping_amount) == 0 ? "Frete Grátis" : Floa.def(store.shipping_amount),
+      tracking: erp.codigoRastreamento,
+      deliveryTime: erp.deliveryTime
     }
 
     this.comments = {
@@ -137,11 +140,20 @@ class SaleWrapper{
       }),
       erp: erp.observacaoInterna,
     }
+
+    var count = 0;
+    erp.items.forEach((i) => {
+      count += Floa.def(i.quantidade);
+    });
+    this.totalPecas = count;
+
     this.eccoItensQuantity = erp.items.length;
     this.magentoItensQuantity = store.items.filter((each) => {
       return each.parent_item_id === null;
-    }).length;
+    }).length
   };
+
+
 }
 
 
@@ -149,11 +161,11 @@ class SaleItemWrapper{
   constructor(item){
     this.sku = item.codigo || item.sku;
     this.name = item.descricao || item.name;
-    this.price = Floa.def(item.precoLista || item.price);
+    this.price = Floa.def(item.valor || item.price);
     this.discount = Floa.def(item.discount_amount || item.desconto_adm);
-    this.total = Floa.def(item.price - item.discount_amount);
+    this.total = Floa.def((item.price - item.discount_amount) || item.valor);
     this.quantity = Num.def(item.quantidade || item.qty_ordered);
-    this.weight = Floa.def(item.weight);
+    this.weight = Floa.def(item.weight) < 1.000 ? Floa.def(item.weight) + 'g' : Floa.def(item.weight) + 'Kg';
     this.changed = item.observacao ? item.observacao.includes('changed') : false;
     this.store = item.store === true;
     this.erp = item.erp === true;

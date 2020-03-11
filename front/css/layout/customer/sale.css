@@ -1,6 +1,5 @@
 
 .field{
-  /* margin-bottom: 8px; */
   vertical-align: middle;
   display: inline-block;
 }
@@ -9,11 +8,9 @@
   font-size: 13px;
   padding-bottom: 3px;
   color: rgb(116, 114, 116);
-  display: -webkit-box;
   width: fit-content;
   height: fit-content;
 }
-
 
 .info{
   overflow: hidden;
@@ -22,7 +19,7 @@
   text-overflow: ellipsis;
   display: -webkit-box;
   vertical-align: bottom;
-  padding: 7px;
+  padding: 7px 0;
   border-radius: 5px;
   font-size: 15px;
 }
@@ -34,24 +31,26 @@
 }
 
 .sale-header-holder{
-  padding: 10px 0px 4px 10px;
+  padding: 10px 15px 5px 15px;
+  flex: 80;
+  margin-right: auto;
+  height: -webkit-fill-available;
 }
 
 .sale-head-table{
-  width: 100%;
+  width: 98%;
   position: relative;
 }
 
 .sale-cards-holder{
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  width: fit-content;
+  grid-template-columns: repeat(6, 2fr);
+  width: auto;
   position: relative;
   grid-gap: 17px;
   margin-top: 20px;
   max-width: 100%;
   text-align: -webkit-auto;
-  padding-bottom: 20px;
 }
 
 .sale-card-item{
@@ -62,7 +61,6 @@
 
 .client-sale-itens{
   width: 100%;
-  /* overflow: auto; */
 }
 .sale-itens-information td{
   padding-top: 10px;
@@ -70,7 +68,7 @@
   padding-left: 8px;
   padding-right: 8px;
   font-size: 15px;
-  color: #191717;
+  border-bottom: 1px solid #e4e4e4;
 }
 
 table{
@@ -83,6 +81,7 @@ table{
   font-weight: 600;
   color: #5d5b59;
   vertical-align: super;
+  white-space: nowrap;
 }
 .sale-itens-table .sale-card-title{
   padding-left: 10px;
@@ -103,25 +102,25 @@ table{
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
 }
+
 .sale-table-titles th{
   top: 0;
-  background: #e8e8e8;
   padding-left: 5px;
-  color: #302d2d;
-  font-size: 15px;
-  border-bottom: 0px !important;
-  padding: 12px 15px !important;
+  padding: 8px 10px;
+  color: rgb(116, 114, 116);
+  font-size: 12px;
+  border-bottom: 1px solid #e4e4e4;
 }
 .sale-itens-table{
-  /* overflow: auto; */
   height: auto;
   max-height: 100%;
 }
 
 .sale-itens-information-holder{
   padding-bottom: 15px;
-  width: 70%;
+  width: 73%;
   height: auto;
+  border-radius: 4px;
 }
 
 .sale-itens-count{
@@ -130,7 +129,8 @@ table{
 
 .divide td{
   padding-bottom: 15px;
-  font-size: 15px;
+  font-size: 13px;
+  white-space: nowrap;
 }
 .sale-information-holder{
   height: 100%;
@@ -145,9 +145,11 @@ table{
   margin-left: 30px;
   margin-top: 15px;
 }
+
 .sale-total-info-table th{
   padding: 15px;
 }
+
 .sale-total-info-table td{
   padding-top: 10px;
   padding-bottom: 10px;
@@ -156,21 +158,26 @@ table{
   color: #191717;
   padding-right: 25px;
 }
+
 .icon{
   width: 30px;
   height: 30px;
   vertical-align: sub;
   margin: 0;
 }
+
 .sale-shipping-transport{
   vertical-align: super;
 }
+
 .menu-dots{
   float: right;
-  margin-top: -5px;
-  margin-right: -5px;
+  margin-top: 0px;
+  margin-right: -3px;
   display: inline-block;
+  position: relative;
 }
+
 .sale-history-holder{
   width: 100%;
   margin-left: 2%;
@@ -182,13 +189,17 @@ table{
 
 .sale-history-holder table{
   width: 100%;
+  height: auto;
 }
+
 .sale-history-holder table td{
   padding-top: 10px;
   padding-bottom: 10px;
-  padding-left: 8px;
+  padding-left: 5px;
   font-size: 12px;
   color: #8e8c8a;
+  padding-right: 5px;
+  width: fit-content;
 }
 
 .sale-history-holder table tr:nth-child(odd) {
@@ -196,31 +207,44 @@ table{
 }
 
 .comments-magento{
-  /* overflow-y: auto; */
   max-height: min-content;
 }
-.comments-ecco{
+
+.comments-holder{
   overflow: auto;
-  max-height: 50%;
 }
 
 .comments-table-title{
-  background: #e8e8e8;
-  padding: 12px 15px !important;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   display: table-cell;
-  border-bottom: 0px !important;
-  color: #302d2d !important;
-  font-size: 15px;
-  position: sticky;
   top: 0;
+  font-size: 12px;
+  border-bottom: 1px solid #e4e4e4;
+  color: rgb(116, 114, 116);
+  background: white;
+  padding: 8px 10px;
 }
 
-.changed{
+.item-add{
   border-width: 1.4px 1.4px 3px;
   border-style: solid;
-  border-color: rgb(182, 199, 107);
+  border-color: rgb(165, 214, 117);
+  border-image: initial;
+  background: rgba(182, 199, 107, 0.07);
+  border-radius: 3px;
+  padding: 3px 6px;
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 13px;
+  color: #807b7b;
+  text-transform: capitalize;
+}
+
+.item-removed{
+  border-width: 1.4px 1.4px 3px;
+  border-style: solid;
+  border-color: rgb(241, 81, 81);
   border-image: initial;
   background: rgba(182, 199, 107, 0.07);
   border-radius: 3px;
@@ -246,22 +270,23 @@ table{
   white-space: nowrap;
 }
 .sale-info-cupom{
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .item-name{
   font-size: 13px;
   color: #5f5f5f;
-  cursor: default;
+  cursor: grab;
 }
 
-.Captured{
+.sale-status{
   padding: 5px;
   border-radius: 5px;
   border-width: 1.4px 1.4px 3px;
   border-style: solid;
-  border-color: rgb(137, 228, 73);
   background: rgba(182, 199, 107, 0.07);
+  white-space: nowrap;
+  font-size: 13px;
 }
 
 .total{
@@ -271,5 +296,99 @@ table{
 }
 
 .title-holder{
-  margin-bottom: 5px;
+  margin-bottom: 7px;
+}
+.comments-holder{
+  height: auto;
+}
+
+.comments:hover{
+  background-color: #d8d8d8!important;
+}
+
+.ecco-comments{
+  font-size: 12px;
+  color: #8e8c8a;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+.magento-comments{
+  background: #fff4e04f;
+}
+
+.item-brand{
+  text-align: center;
+  color: gray;
+  font-size: 12px!important;
+}
+
+.obs .title-holder{
+  text-align: center;
+  border-bottom: 1px solid #e4e4e4;
+  color: rgb(116, 114, 116);
+  background: white;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  padding: 8px 10px;
+}
+
+.obs .title-holder>span{
+  font-size: 12px;
+}
+
+.cupom-card{
+  flex: 13.7;
+  height: auto;
+  min-height: auto;
+  margin-left: 14px;
+}
+
+.top-holder{
+  display: flex;
+}
+
+.sale-total{
+  background: #f2f2f2;
+  border-top: 3px solid #009688;
+}
+
+.card-transport{
+  border-top: 3px solid #00adff;
+}
+
+.sale-address {
+  border-top: 3px solid #8b00ff;
+}
+
+.sale-client{
+  border-top: 3px solid #FF9800;
+}
+
+.comment-title{
+  color: #000000a1;
+  font-weight: bold;
+  font-size: 12px!important;
+  position: relative;
+}
+
+.client-notified{
+  width: 15px;
+  vertical-align: bottom;
+  margin-left: 5px;
+}
+
+.sale-itens-information:hover{
+  background-color: #d8d8d8!important;
+}
+
+.comments td span{
+  font-size: 11px;
+}
+
+.msg-info{
+  font-size: 12px;
+  vertical-align: super;
+  margin-left: 8px;
+  color: #929191;
 }

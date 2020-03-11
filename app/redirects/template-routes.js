@@ -38,7 +38,7 @@ module.exports = class EmailRoutes extends Routes{
         });
         res.end(template.content);
       });
-  });
+  }, true, true); 
 
 
   this._post('/template', (req, res) =>{

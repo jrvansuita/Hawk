@@ -122,3 +122,18 @@ function showSaleDialog(sale){
     bindCopiable();
   });
 }
+
+function focusSale(){
+  var url = new URL(window.origin);
+  var searchParams = new URLSearchParams(url.search);
+  var sale = searchParams.get('sale');
+
+  var tr = $('.client-sales tr');
+
+  for(var i= 0; i < tr.length; i++){
+    console.log($(tr)[i]["cells"][0]);
+    if($(tr)[i]["cells"][0].innerText == sale){
+        console.log('achou na pos ' + i);
+    }
+  }
+}

@@ -144,6 +144,10 @@ var Params = {
 
   activeDifalControlOC(){
     return this.get('active-difal-oc');
+  },
+
+  trackingUrl(){
+    return this.get('tracking-url');
   }
 }
 

@@ -72,11 +72,6 @@ module.exports = class PendingRoutes extends Routes{
          .go(this._resp().redirect(res));
       });
 
-      this._post('/get-pending-client-email', (req, res, body, locals) => {
-        new PendingVoucherHandler(locals.loggedUser.id)
-        .findClientEmail(body.pendingNumber, this._resp().redirect(res));
-      })
-
       this._page('/pending-products', (req, res, body, locals) => {
         new PendingProductProvider().load((list)=>{
           res.render('pending/pending-products', {list: list});
