@@ -24,6 +24,8 @@ function menuClick(menu){
     var cardClass =  menu.parent().prop('className');
 
     if(cardClass.includes('payment') && data.payment.method == 'mundipagg_boleto'){
+
+      //data atual e data do vencimento do boleto
       var actualDate = new Date();
       var boletoExpiresDate = new Date(data.payment.boleto_expires);
 
@@ -31,6 +33,7 @@ function menuClick(menu){
         window.open(data.payment.boleto);
       });
 
+      //compara as datas, só mostra se a atual for menos que do vencimento
       if(actualDate < boletoExpiresDate){
         drop.addItem('/img/envelop.png', 'Enviar Boleto por Email', function(){
           $(menu).children().attr('src','/img/loader/circle.svg');
@@ -42,19 +45,10 @@ function menuClick(menu){
             userid: loggedUser.id
           }, (result) => {
             if(result){
-              $(menu).children().attr('src','/img/checked.png');
-
-              setTimeout(function(){
-                $(menu).children().attr('src','/img/dots.png');
-              }, 3000);
+              showMenuMsg(menu, 'Email enviado', 'sucess');
 
             }else{
-              $(menu).children().attr('src','/img/error.png');
-              showMsg(menu, 'Erro ao enviar email');
-
-              setTimeout(function(){
-                $(menu).children().attr('src','/img/dots.png');
-              }, 3000);
+              showMenuMsg(menu, 'Erro ao enviar email', 'error');
             }
           });
         });
@@ -65,20 +59,30 @@ function menuClick(menu){
       });
 
       drop.addItem('/img/envelop.png', 'Enviar Rastreio por Email', function(){
+        $(menu).children().attr('src','/img/loader/circle.svg');
+
         _post('/customer-email-tracking',{
           cliente: data.client,
           oc: data.oc,
-          tracking: Params.trackingUrl() + data.oc
+          tracking: Params.trackingUrl() + data.oc,
+          userid: loggedUser.id
+        }, (result) => {
+          result ? showMenuMsg(menu, 'Email enviado', 'sucess') : showMenuMsg(menu, 'Erro ao enviar email', 'error');
         });
       });
     }
 
     else if(cardClass.includes('sale-header-holder')){
       drop.addItem('/img/envelop.png', 'Enviar NF', function(){
+        $(menu).children().attr('src','/img/loader/circle.svg');
+
         _post('/customer-email-danfe',{
           cliente: data.client,
           oc: data.oc,
           nfNumber: data.nf,
+          userid: loggedUser.id
+        }, (result) => {
+          result ? showMenuMsg(menu, 'Nota fiscal enviada', 'sucess') : showMenuMsg(menu, 'Erro ao enviar nota fiscal', 'error');
         });
       });
 
@@ -91,9 +95,25 @@ function menuClick(menu){
   });
 }
 
-function showMsg(holder, msg){
+function copyTextFromElement(id) {
+  var range = document.createRange();
+  range.selectNode(document.getElementById(id));
+  window.getSelection().removeAllRanges();
+  window.getSelection().addRange(range);
+  document.execCommand("copy");
+  window.getSelection().removeAllRanges();
+}
+
+function showMenuMsg(holder, msg, type){
+  if(type == 'error'){
+    $(holder).children().attr('src','/img/error.png');
+  }else{
+    $(holder).children().attr('src','/img/checked.png');
+  }
+
   $(holder).append($('<span>').addClass('msg-info').text(msg).delay(3000).queue(() => {
     $('.msg-info').remove();
+    $(holder).children().attr('src','/img/dots.png');
   }));
 }
 
@@ -144,6 +164,7 @@ function bindSaleAddressInfo(data){
   $('#transport-img').attr('src', '/img/transport/' + data.transport.name.toLocaleLowerCase() + '.png');
   $('.sale-shipping-transport-description').html(data.transport.desc + '<br>' + data.transport.tracking);
   $('.sale-shipping-transport-delivery').html(Dat.format(new Date(addDaysToDate(data.date, data.transport.deliveryTime))));
+
   if(data.transport.cost > 0){
     $('.sale-shipping-transport-cost').text(Num.money(data.transport.cost));
   }else{
@@ -152,16 +173,16 @@ function bindSaleAddressInfo(data){
 }
 
 function bindPaymentInfo(data){
-  buildMenu($('.card-payment'));
-
   $('.card-payment').css('border-top', '3px solid '+ setBorderOnCard(data.status));
-
   $('.payment-img').attr('src', getPaymentMethodImage(data.payment.method));
   $('.sale-payment-method').text(Util.getPaymentType(data.payment.method));
   $('.sale-payment-total').text(Num.money(data.payment.total));
   $('.sale-payment-info').text(data.payment.desc);
   $('.sale-payment-status').addClass('info').text(data.payment.status).css('border-color', setBorderOnCard(data.status));
 
+  if($('.sale-payment-method').text() == "Boleto"){
+    buildMenu($('.card-payment'));
+  }
 }
 
 function setBorderOnCard(status){

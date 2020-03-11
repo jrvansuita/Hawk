@@ -142,7 +142,12 @@ window.saleNumber = <%= saleNumber %>
           <div class="title-holder">
             <label class="sale-card-title">Endereço de Cobrança</label>
           </div>
-          <table>
+          <table id="tba">
+            <tr>
+              <td>
+                <span class="sale-card-title">Rua</span>
+              </td>
+            </tr>
             <tr class="divide">
               <td colspan="2">
                 <span class="sale-billing-adress-street"></span>
@@ -191,13 +196,19 @@ window.saleNumber = <%= saleNumber %>
               </td>
             </tr>
           </table>
+          <label class="button shadow" onclick="copyTextFromElement('tba')" tabindex="0">Copiar</label>
         </div>
 
         <div class="sale-card-item sale-address shadow">
           <div class="title-holder">
             <label class="sale-card-title">Endereço de Entrega</label>
           </div>
-          <table>
+          <table id="tsa">
+            <tr>
+              <td>
+                <span class="sale-card-title">Rua</span>
+              </td>
+            </tr>
             <tr class="divide">
               <td colspan="2">
                 <span class="sale-shipping-adress-street"></span>
@@ -246,6 +257,7 @@ window.saleNumber = <%= saleNumber %>
               </td>
             </tr>
           </table>
+          <label class="button shadow" onclick="copyTextFromElement('tba')" tabindex="0">Copiar</label>
         </div>
 
         <div class="sale-card-item shadow card-payment">

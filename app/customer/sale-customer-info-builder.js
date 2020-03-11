@@ -87,7 +87,7 @@ class SaleWrapper{
     this.subtotal = Floa.def(store.base_subtotal);
     this.discount = Floa.def(store.discount_amount);
     this.total = Floa.def(store.base_grand_total);
-    this.weight = Floa.def(store.weight) < 1.000 ? Floa.def(store.weight) + 'g' : Floa.def(store.weight) + 'Kg';
+    this.weight = erp.pesoBruto ? (erp.pesoBruto < 1.000 ? erp.pesoBruto + 'g' : erp.pesoBruto + 'Kg') : (store.weight < 1.000 ? store.weight + 'g' : store.weight+ 'Kg');
 
     this.client = {
       name: store.customer_firstname + " " + store.customer_lastname,

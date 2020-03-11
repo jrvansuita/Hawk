@@ -44,5 +44,7 @@ module.exports = {
   user_already_on_picking: 'O usuário {0} já tem um pedido em processo de picking.',
   insufficient_picking_time : 'Tempo insuficiente para realizar o picking do pedido {0} com {1} items. Tempo mínimo é: {2} segundos. Você levou {3} segundos.',
 
+  customer_email_sending: 'Foi enviado {0} para o email {1} referente ao pedido {2}',
+
 
 };

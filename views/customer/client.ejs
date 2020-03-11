@@ -118,79 +118,82 @@
           </div>
 
           <div class="client-card-item shadow">
-            <label class="client-card-title">Resumo do cliente</label>
+            <label class="client-card-title">Resumo</label>
             <table>
-              <tr class="divide">
-                <td>Pedidos</span></td>
-                <td><span><%=client.sales.length%> pedidos</span></td>
-              </tr>
-              <tr class="divide">
-                <td>Ticket Médio</span></td>
+              <tr>
                 <td>
-                  <%
-                  var ticket = 0;
-                  client.sales.forEach((each) =>{
-                    ticket += Floa.def(each.grand_total);})%>
-                    <span><%=Num.money(ticket/client.sales.length)%></span></td>
-                    %>
-                  </tr>
-                </table>
-              </div>
-            </div>
+                  <span class="client-card-title">Pedidos</span>
+                </td>
+                <td>
+                  <span class="client-card-title right">Ticket Médio</span>
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <span class="client-resume-sales"></span>
+                </td>
+                <td>
+                  <span class="client-resume-ticket right"></span>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
 
 
-            <div class="client-card-item last-sales-holder shadow">
-              <label class="client-card-title">Últimos Pedidos</label>
-              <table class="client-sales">
-                <tr class="table-titles">
-                  <td>Número</td>
-                  <td>Data da Compra</td>
-                  <td>Itens</td>
-                  <td>Valor do Frete</td>
-                  <td>Valor do Desconto</td>
-                  <td>Valor do Pago</td>
-                  <td>Status</td>
-                  <td>Frete</td>
-                </tr>
+        <div class="client-card-item last-sales-holder shadow">
+          <label class="client-card-title">Últimos Pedidos</label>
+          <table class="client-sales">
+            <tr class="table-titles">
+              <td>Número</td>
+              <td>Data da Compra</td>
+              <td>Itens</td>
+              <td>Valor do Frete</td>
+              <td>Valor do Desconto</td>
+              <td>Valor do Pago</td>
+              <td>Status</td>
+              <td>Frete</td>
+            </tr>
 
-                <%client.sales.reverse().forEach((sale)=>{%>
+            <%client.sales.reverse().forEach((sale)=>{%>
 
-                  <tr onclick="showSaleDialog(<%=sale.increment_id%>)">
-                    <td><span class="increment-id copiable"><%=sale.increment_id%></span></td>
-                    <td><span class="gray"><%=Dat.formatwTime(Dat.rollHour(new Date(sale.created_at),-3))%></span></td>
-                    <td><span class=""><%=Num.int(sale.total_qty_ordered)%></span></td>
-                    <td><span class=""><%=Num.money(sale.shipping_amount)%></span></td>
-                    <td><span class=""><%=Num.money(sale.discount_amount)%></span></td>
-                    <td><span class="bolder"><%=Num.money(sale.grand_total)%></span></td>
-                    <td><span class=""><%=Util.getSaleStatusInfo(sale.status)%></span></td>
-                    <td><span class="gray"><%=sale.shipping_description%></span>
+              <tr onclick="showSaleDialog(<%=sale.increment_id%>)" data-sale="<%=sale.increment_id%>">
+                <td><span class="increment-id copiable"><%=sale.increment_id%></span></td>
+                <td><span class="gray"><%=Dat.formatwTime(Dat.rollHour(new Date(sale.created_at),-3))%></span></td>
+                <td><span class=""><%=Num.int(sale.total_qty_ordered)%></span></td>
+                <td><span class=""><%=Num.money(sale.shipping_amount)%></span></td>
+                <td><span class=""><%=Num.money(sale.discount_amount)%></span></td>
+                <td><span class="bolder"><%=Num.money(sale.grand_total)%></span></td>
+                <td><span class=""><%=Util.getSaleStatusInfo(sale.status)%></span></td>
+                <td><span class="gray"><%=sale.shipping_description%></span>
 
-                      <div class="menu-dots sale-dots" data-sale="<%=sale.increment_id%>">
-                        <img src="/img/dots.png" class="dots-glyph"/>
-                      </div>
-                    </td>
+                  <div class="menu-dots sale-dots" data-sale="<%=sale.increment_id%>">
+                    <img src="/img/dots.png" class="dots-glyph"/>
+                  </div>
+                </td>
 
-                  </tr>
+              </tr>
 
-                  <%})%>
-                </table>
+              <%})%>
+            </table>
 
-
-              </div>
-
-              <%}%>
-
-            </div>
 
           </div>
 
+          <%}%>
 
-          <div class="sale-modal">
-            <div class="sale-viewer-holder shadow">
+        </div>
 
-            </div>
-          </div>
+      </div>
 
 
-        </body>
-        </html>
+      <div class="sale-modal">
+        <div class="sale-viewer-holder shadow">
+
+        </div>
+      </div>
+
+
+    </body>
+    </html>

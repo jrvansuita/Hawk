@@ -23,8 +23,8 @@
 
 .search-holder{
   padding-bottom: 10px;
-  margin-left: 40px;
-  margin-right: 40px;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 #search-client{
@@ -131,7 +131,7 @@
 }
 
 .client-card-title{
-  font-size: 13px;
+  font-size: 12px;
   position: relative;
   display: -webkit-box;
   font-weight: 600;
@@ -164,6 +164,7 @@
 .client-card-item span{
   display: block;
   padding-bottom: 3px;
+  white-space: nowrap;
 }
 
 .client-card-item .divide td{
@@ -254,12 +255,9 @@
 }
 
 .last-sales-holder .client-card-title{
-  padding-left: 20px;
+  padding-left: 10px;
   padding-top: 15px;
 }
-
-
-
 
 .sale-modal{
   position: fixed;
@@ -272,8 +270,6 @@
   display: none;
 }
 
-
-
 .sale-viewer-holder{
   width: 95%;
   height: 93%;
@@ -285,4 +281,8 @@
   position: relative;
   flex: 1;
   overflow: auto;
+}
+
+.selected{
+  background: #d8d8d8!important;
 }

@@ -20,6 +20,8 @@ $(document).ready(() => {
   prepareAutoComplete();
 
   $('.sale-dots').click(buildSaleMenuOptions());
+
+  startBindingInformations();
 });
 
 function search(){
@@ -123,17 +125,33 @@ function showSaleDialog(sale){
   });
 }
 
-function focusSale(){
-  var url = new URL(window.origin);
-  var searchParams = new URLSearchParams(url.search);
-  var sale = searchParams.get('sale');
+function bindClientResume(){
+  $('.client-resume-sales').text(client.sales.length);
 
-  var tr = $('.client-sales tr');
+  var tm = client.sales.reduce((value, sale) => {
+    return value + parseFloat(sale.grand_total);
+  },0);
 
-  for(var i= 0; i < tr.length; i++){
-    console.log($(tr)[i]["cells"][0]);
-    if($(tr)[i]["cells"][0].innerText == sale){
-        console.log('achou na pos ' + i);
-    }
+  $('.client-resume-ticket').text(Num.money(tm/client.sales.length));
+}
+
+
+function setFocusOnSale(){
+  var sales = $('.client-sales tr');
+
+  var url_string = window.location.href;
+  var url = new URL(url_string);
+  var sale = url.searchParams.get("sale");
+
+  if(sale != null){
+    sales.each((i, el) => {
+      if($(el).data('sale') == sale){
+        $(el).addClass('selected');
+      }
+    });
   }
+}
+function startBindingInformations(){
+  bindClientResume();
+  setFocusOnSale();
 }

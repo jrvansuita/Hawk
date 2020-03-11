@@ -15,6 +15,7 @@ module.exports = {
         this.findSalesList(eccoClient.codigo, (sales) => {
 
           callback({...client, ...eccoClient, sales: sales});
+
         });
       });
     });
