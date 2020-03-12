@@ -4,26 +4,29 @@ var tooltips;
 
 $(document).ready(()=>{
 
-  new Tooltip('.active-circle', 'Template em uso')
-  .autoHide(10000).load().then((data) => {
-    tooltips = data;
-  });
 
-  new ComboBox($('#template-usage'), usages)
-  .setAutoShowOptions()
-  .setDisabledCaption('Nenhum disponível')
-  .setOnItemBuild((o, index)=>{
-    return {text : o.val.name, img : 'img/' + o.val.icon + '.png'};
-  })
-  .load().then((binder) => {
-    usagesSelector = binder;
+  if (templateType == 'email'){
+    new Tooltip('.active-circle', 'Template em uso')
+    .autoHide(10000).load().then((data) => {
+      tooltips = data;
+    });
 
-    if (selected){
-      usagesSelector.selectByFilter((each)=>{
-        return each.data.key == selected.usage;
-      });
-    }
-  });
+    new ComboBox($('#template-usage'), usages)
+    .setAutoShowOptions()
+    .setDisabledCaption('Nenhum disponível')
+    .setOnItemBuild((o, index)=>{
+      return {text : o.val.name, img : 'img/' + o.val.icon + '.png'};
+    })
+    .load().then((binder) => {
+      usagesSelector = binder;
+
+      if (selected){
+        usagesSelector.selectByFilter((each)=>{
+          return each.data.key == selected.usage;
+        });
+      }
+    });
+  }
 
 
 
@@ -65,12 +68,13 @@ function saveClick(){
 
 
 function checkFields(){
-  var c = checkMaterialInput($('#template-name'));
-  c = checkMaterialInput($('#subject')) & c;
-
-  return c;
+  return checkMaterialInput($('#template-name'));
 }
 
+
+function getUsage(){
+  return (usagesSelector && usagesSelector.getSelectedItem() && $('#template-usage').val()) ? usagesSelector.getSelectedItem().data.key : '';
+}
 
 function save() {
   var data = {
@@ -78,7 +82,7 @@ function save() {
     name: $('#template-name').val(),
     subject: $('#subject').val(),
     content:  editor.html.get(),
-    usage: (usagesSelector.getSelectedItem() && $('#template-usage').val()) ? usagesSelector.getSelectedItem().data.key : '',
+    usage: getUsage(),
     type: templateType
   };
 

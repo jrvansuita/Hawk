@@ -5,7 +5,6 @@ module.exports = class TemplateHandler {
 
   static storeFromScreen(params, callback) {
 
-console.log(params);
 
     var object = new Template(
       params.name,

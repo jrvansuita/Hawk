@@ -20,11 +20,6 @@ module.exports = {
     icon: 'money-coin'
   },
 
-  ASS: {
-    name : 'Assinatura Boutique',
-    icon: 'info'
-  },
-
   BOLETO: {
     name : 'Segunda Via Boleto',
     icon: 'barcode'
