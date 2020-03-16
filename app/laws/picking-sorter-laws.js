@@ -17,7 +17,7 @@ module.exports = {
     return global.selectedOrder;
   },
 
-  getOrder(){ 
+  getOrder(){
     return getFiltersObject()[global.selectedOrder];
   },
 
@@ -59,10 +59,17 @@ function getFiltersObject(){
       }
     },
 
-    items: {
+    more_items: {
       name: 'Mais Itens',
       func: (a, b) => {
         return b.itemsQuantity - a.itemsQuantity;
+      }
+    },
+
+    less_items: {
+      name: 'Poucos Itens',
+      func: (a, b) => {
+        return a.itemsQuantity - b.itemsQuantity;
       }
     },
 

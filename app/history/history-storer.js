@@ -79,10 +79,17 @@ module.exports={
       var title = 'Pendência ';
       var status = '';
       var emailStr = '';
+      var skus;
 
       if (pending.status == 0){
         title+= 'Adicionada';
         status= "adicionado";
+
+
+        skus = pending.sale.items.map((e)=>{
+          return e.codigo;
+        }).join(', ');
+
       }else if(pending.status == 1){
         title+= 'em Andamento';
         status= "colocado em atendimento";
@@ -100,12 +107,12 @@ module.exports={
         title+= 'Assumida';
       }
 
+
       var message = 'Pedido ' + pending.sale.numeroPedido + ' foi ' + status;
-      message += '\nLocalização: ' + pending.local;
+      message += '\nLocalização: ' + pending.local + (skus ? (' SKUs: ' + skus) : '');
       message+=emailStr;
 
       if (day){
-
         if (day.total < 0){
           message += '\nAcerto automático de pontos: ' + pending.sale.pickUser.name + ' recebeu ' + day.total + ' Pontos de Picking\n Foram encontrados o(s) ' + parseInt(pending.sale.pendingsQuantity) + ' iten(s) colocados em pendência';
         }else{
