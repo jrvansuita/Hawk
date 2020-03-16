@@ -21,7 +21,8 @@ module.exports = class MockVault {
       params.discountBackground,
       params.discountBackgroundShadow,
       params.width,
-      params.height
+      params.height,
+      params.productTopMargin
     );
 
 

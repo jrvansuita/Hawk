@@ -153,9 +153,8 @@ function save() {
     discountBackgroundShadow: discountBackgroundShadowColorPicker.getSelectedColor().toHEXA().toString(),
     width: Num.def($('#width').val()),
     height: Num.def($('#height').val()),
+    productTopMargin: $('#product-top-margin').val() || 0
   };
-
-  console.log(data);
 
   _post('mockup-builder', data , (mockId)=>{
     window.location= 'mockup-builder?_id=' + mockId;
