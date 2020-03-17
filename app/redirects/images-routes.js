@@ -16,7 +16,7 @@ module.exports = class ImagesRoutes extends Routes{
         this._resp().error(res, 'Erro: ' + data.message);
       })
       .upload();
-    });
+    }, true, true);
 
 
 

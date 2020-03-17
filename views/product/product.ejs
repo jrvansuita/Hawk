@@ -1,5 +1,5 @@
 <html>
-<%  include ../menus/main-menu %>
+<%- include('../menus/main-menu') %>
 
 
 <head>
@@ -27,7 +27,7 @@
   <script>
   window.product = <%- JSON.stringify(product || null) %>
   </script>
-  <%  include ../menus/stock-menu %>
+  <%- include('../menus/stock-menu') %>
 
 
   <div class="main-content">
