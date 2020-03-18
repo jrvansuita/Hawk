@@ -1,7 +1,7 @@
 const Routes = require('../redirects/controller/routes.js');
 const SkuPictureLoader = require('../pictures/sku-picture-loader.js');
 const SkuPic = require('../bean/sku-pic.js');
-const ImageSaver = require('../image/image-saver.js');
+const ClientShareHandler = require('../pictures/client-share-handler.js');
 
 var cacheSkuPictures = {};
 
@@ -24,17 +24,9 @@ module.exports = class PicturesRoutes extends Routes{
 
     //Post externo para fazer o upload via store front
     this._post('/share-picture-data', (req, res) => {
-      console.log('veio');
-      new ImageSaver()
-      .setBase64Image(req.body.base64)
-      .setOnSuccess((data) => {
-        var row = SkuPic.storeFront(req.body.sku, data.link);
-
-        SkuPic.create(row, (err, doc)=>{
-          this._resp().sucess(res, doc);
-        });
-      })
-      .upload();
+      new ClientShareHandler(req.body.sku).setBase64Image(req.body.base64).load((doc) => {
+        this._resp().sucess(res, doc);
+      });
     }, true);
 
     //Post para excluir uma imagem
@@ -47,10 +39,10 @@ module.exports = class PicturesRoutes extends Routes{
     });
     //post para verificar a imagem
     this._post('/check-if-picture-exists', (req, res)=>{
-     SkuPic.findOne({url: req.body.url}, (err, item)=>{
-       this._resp().sucess(res, item);
-     });
-   });
+      SkuPic.findOne({url: req.body.url}, (err, item)=>{
+        this._resp().sucess(res, item);
+      });
+    });
 
     //Post para Aprovar a Imagem
     this._post('/sku-pictures-approve', (req, res) => {
