@@ -67,8 +67,16 @@ module.exports = class ImageHandler {
 
     if (onFinish){
       image.getBase64(Jimp.AUTO, (err, src) => {
-        this.base64Image = src;
-        onFinish(this._getBase64());
+        if (err){
+          if (this.onError){
+            this.onError(err);
+          }else{
+            console.log(err);
+          }
+        }else{    
+          this.base64Image = src;
+          onFinish(this._getBase64());
+        }
       });
     }
   }

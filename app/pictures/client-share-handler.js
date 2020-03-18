@@ -21,6 +21,9 @@ module.exports = class ClientShareLoader{
     .setOnSuccess((newBase64) => {
       this.base64Image = newBase64;
       callback();
+    }).setOnError((err) => {
+      console.log(err);
+      callback();
     })
     .process();
   }
