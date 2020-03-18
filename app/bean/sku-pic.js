@@ -2,14 +2,14 @@ const pageLimit = 16;
 
 module.exports = class SkuPic extends DataAccess {
 
-  constructor(sku, url, img, type) {
+  constructor(sku, url, img, type, approved) {
     super();
     this.sku = Str.def(sku);
     this.url = Str.def(url);
     this.type = Str.def(type);
     this.img = Str.def(img);
     this.date = Dat.now();
-    this.approved = true;
+    this.approved = approved ? true : false;
   }
 
   static getKey() {
@@ -17,15 +17,15 @@ module.exports = class SkuPic extends DataAccess {
   }
 
   static storeFront(sku, img) {
-    return new SkuPic(sku, null, img, 'store-front');
+    return new SkuPic(sku,  '', img, 'store-front', false);
   }
 
   static insta(sku, url, img) {
-    return new SkuPic(sku, url, img, 'insta');
+    return new SkuPic(sku, url, img, 'insta', true);
   }
 
   static fb(sku, url, img) {
-    return new SkuPic(sku, url, img, 'fb');
+    return new SkuPic(sku, url, img, 'fb', true);
   }
 
 

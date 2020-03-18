@@ -28,12 +28,9 @@ module.exports = class PicturesRoutes extends Routes{
       new ImageSaver()
       .setBase64Image(req.body.base64)
       .setOnSuccess((data) => {
-        var data = JSON.parse(data);
-        console.log(req.body.sku);
-        SkuPic.storeFront(req.body.sku, data.link)
-        .create(row, (err, doc)=>{
-          console.log(doc);
-          console.log('fois');
+        var row = SkuPic.storeFront(req.body.sku, data.link);
+
+        SkuPic.create(row, (err, doc)=>{
           this._resp().sucess(res, doc);
         });
       })
