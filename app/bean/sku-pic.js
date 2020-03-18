@@ -16,6 +16,10 @@ module.exports = class SkuPic extends DataAccess {
     return ['_id'];
   }
 
+  static storeFront(sku, img) {
+    return new SkuPic(sku, null, img, 'store-front');
+  }
+
   static insta(sku, url, img) {
     return new SkuPic(sku, url, img, 'insta');
   }
@@ -45,7 +49,7 @@ module.exports = class SkuPic extends DataAccess {
     }else{
       result['sku'] = reg;
     }
-        
+
     return result;
   }
 

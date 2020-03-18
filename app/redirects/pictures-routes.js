@@ -1,6 +1,7 @@
 const Routes = require('../redirects/controller/routes.js');
 const SkuPictureLoader = require('../pictures/sku-picture-loader.js');
 const SkuPic = require('../bean/sku-pic.js');
+const ImageSaver = require('../image/image-saver.js');
 
 var cacheSkuPictures = {};
 
@@ -20,6 +21,19 @@ module.exports = class PicturesRoutes extends Routes{
       new SkuPictureLoader(req.body.skus).fromInsta(req.body.instaPost).load().then(this._resp().redirect(res));
     });
 
+
+    //Post externo para fazer o upload via store front
+    this._post('/share-picture-data', (req, res) => {
+      new ImageSaver()
+      .setBase64Image(req.body.base64)
+      .setOnSuccess((data) => {
+        SkuPic.storeFront(req.body.sku, data.link)
+        .create(row, (err, doc)=>{
+          this._resp().sucess(res, doc);
+        });
+      })
+      .upload();
+    }, true);
 
     //Post para excluir uma imagem
     this._post('/sku-picture-delete', (req, res) => {
