@@ -24,11 +24,15 @@ module.exports = class PicturesRoutes extends Routes{
 
     //Post externo para fazer o upload via store front
     this._post('/share-picture-data', (req, res) => {
+      console.log('veio');
       new ImageSaver()
       .setBase64Image(req.body.base64)
       .setOnSuccess((data) => {
+        console.log(data);
         SkuPic.storeFront(req.body.sku, data.link)
         .create(row, (err, doc)=>{
+          console.log(doc);
+          console.log('fois');
           this._resp().sucess(res, doc);
         });
       })
