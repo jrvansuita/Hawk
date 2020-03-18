@@ -27,7 +27,7 @@ module.exports = class PicturesRoutes extends Routes{
       new ClientShareHandler(req.body.sku).setBase64Image(req.body.base64).load((doc) => {
         this._resp().sucess(res, doc);
       });
-    }, true);
+    }, true, true);
 
     //Post para excluir uma imagem
     this._post('/sku-picture-delete', (req, res) => {

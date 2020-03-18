@@ -39,13 +39,19 @@ module.exports = class Routes {
     });
   }
 
-  _post(paths, callback, pathNotLogged){
+  _post(paths, callback, pathNotLogged, enableCors){
     if (pathNotLogged){
       this.addNotLoggedNeeded(paths);
     }
 
     this.app.post(paths, (req, res) => {
       Response.onTry(res,()=>{
+
+        if(enableCors){
+          res.setHeader("Access-Control-Allow-Origin", "*");
+          res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        }
+        
         callback(req, res, req.body, res.locals, req.session);
       });
     });
