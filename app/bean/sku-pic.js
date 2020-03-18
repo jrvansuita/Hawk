@@ -37,7 +37,7 @@ module.exports = class SkuPic extends DataAccess {
   }
 
   static getToBeApprovedPage(page, callback) {
-    SkuPic.paginate({approved: false}, page, 'date', pageLimit, callback);
+    SkuPic.paginate({approved: false}, page, '-date', pageLimit, callback);
   }
 
   static getPageQuery(sku, not){
