@@ -24,9 +24,7 @@ module.exports = class PicturesRoutes extends Routes{
 
     //Post externo para fazer o upload via store front
     this._post('/share-picture-data', (req, res) => {
-      console.log('veio aqui');
       new ClientShareHandler(req.body.sku).setBase64Image(req.body.base64).load((doc) => {
-        console.log(doc);
         this._resp().sucess(res, doc);
       });
     }, true, true);

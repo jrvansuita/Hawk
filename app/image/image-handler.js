@@ -40,8 +40,8 @@ module.exports = class ImageHandler {
   }
 
   _getBase64(){
-    if(this.base64Image.indexOf('base64') != -1) {
-      return this.base64Image.replace(/^data:image\/png;base64,/, "");
+    if(this.base64Image.includes('base64')) {
+      return this.base64Image.split(',')[1];
     }
 
     return this.base64Image;
@@ -73,7 +73,7 @@ module.exports = class ImageHandler {
           }else{
             console.log(err);
           }
-        }else{    
+        }else{
           this.base64Image = src;
           onFinish(this._getBase64());
         }

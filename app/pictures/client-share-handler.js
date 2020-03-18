@@ -23,6 +23,7 @@ module.exports = class ClientShareLoader{
       callback();
     }).setOnError((err) => {
       console.log(err);
+      this.base64Image = undefined;
       callback();
     })
     .process();
