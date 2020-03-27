@@ -1,6 +1,6 @@
 module.exports = class Sale extends DataAccess {
 
-  constructor(number, billingDate, userId, value) {
+  constructor(number, date, deliveryTime, freightValue, transport, total, productCost, quantityItems, uf, paymentType) {
     super();
     this.number = Str.def(number);
     this.billingDate = Dat.def(billingDate);
