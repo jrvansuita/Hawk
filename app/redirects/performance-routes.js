@@ -1,6 +1,7 @@
 const Routes = require('../redirects/controller/routes.js');
 const UsersProvider = require('../provider/user-provider.js');
 const MaganePoints = require('../handler/manage-points-handler.js');
+const SaleDashboardProvider = require('../provider/sale-dashboard-provider.js');
 
 module.exports = class PerformanceRoutes extends Routes{
 
@@ -45,10 +46,20 @@ module.exports = class PerformanceRoutes extends Routes{
 
 
       this._post('/balance-packing-to-picking', (req, res)=>{
-        console.log(req.body.picker, req.body.points, req.body.saleNumber);
-        
         MaganePoints.packingRemovingPointsFromPicker(res.locals.loggedUser, req.body.picker, req.body.points, req.body.saleNumber, this._resp().redirect(res));
       });
+
+      this._page('/sales-dashboard', (req, res)=>{
+        console.log(req.query);
+        res.locals.salesDashQuery = req.query || req.session.salesDashQuery;
+        SaleDashboardProvider.load(res.locals.salesDashQuery,(data) => {
+          res.render('sale/sales-dashboard', {data: data});
+        });
+      });
+      
+
+
+
     }
 
 

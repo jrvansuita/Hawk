@@ -30,6 +30,10 @@ module.exports = class EccosysProvider extends EccosysApi{
     return this.salesBySituation(-1);
   }
 
+  doneSales() {
+    return this.salesBySituation(1);
+  }
+
   salesBySituation(situation) {
     return this.param('$orderBy', 'data,ASC').get('pedidos/situacao/' + situation).multiple();
   }

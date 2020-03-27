@@ -1,51 +1,4 @@
-.main{
-  padding-top: 95px;
-  padding-bottom: 80px;
-  margin-left: 25px;
-  margin-right: 25px;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
 
-.top{
-  flex: 10%;
-  padding: 0px 5px;
-}
-
-.content-scroll{
-  margin-top: 15px;
-  flex: 90%;
-  overflow-y: auto;
-  max-height: -webkit-fill-available;
-  width: 100%;
-  padding: 3px;
-  margin-left: -3px;
-}
-
-.content{
-  margin-bottom: 30px;
-}
-
-
-
-
-
-.search-box {
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 5px;
-  width: 100%;
-  position: relative;
-}
-
-.tag-box{
-  min-height: fit-content;
-  padding: 0px 10px;
-  display: none;
-  /* margin-bottom: 25px; */
-  min-height: 35px;
-}
 
 #search-input{
   flex: 100%;
@@ -62,6 +15,22 @@
   margin-left: 10px;
 }
 
+
+
+.search-box {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 5px;
+  width: 100%;
+  position: relative;
+}
+
+.tag-box{
+  min-height: fit-content;
+  padding: 0px 10px;
+  display: none;
+  min-height: 35px;
+}
 
 
 .thumb {
@@ -225,25 +194,6 @@
   z-index: 1;
 }
 
-
-.is-open{
-  transform: inherit;
-}
-
-.is-closed{
-  transform: rotate(270deg);
-}
-
-.icon-open{
-  float: left;
-  margin-left: 8px;
-  margin-top: 13px;
-  vertical-align: middle;
-  width: 23px;
-  height: 23px;
-  min-width: 23px;
-  cursor: pointer;
-}
 
 
 img.dots-glyph {

@@ -3,40 +3,56 @@ module.exports = class Sale extends DataAccess {
   constructor(number, date, deliveryTime, freightValue, transport, total, productCost, quantityItems, uf, paymentType) {
     super();
     this.number = Str.def(number);
-    this.billingDate = Dat.def(billingDate);
-    this.userId = Num.def(userId);
-    this.value = Floa.def(value);
-    this.synced = false;
+    this.date = Dat.def(date);
+
+    this.deliveryTime = Num.def(deliveryTime);
+    this.freightValue = Floa.def(freightValue);
+    this.transport = Str.def(transport);
+
+    this.total = Floa.def(total);
+    this.productCost = Floa.def(productCost);
+    this.quantityItems = Num.def(quantityItems);
+    this.uf = Str.def(uf);
+    this.paymentType = Str.def(paymentType);
   }
 
   static getKey() {
     return ['number'];
   }
 
-  static findNotSynced(callback) {
-    this.find({
-        synced: false,
-      },
-      (err, docs) => {
-        if (callback)
-          callback(err, docs);
-      });
-  }
+  static likeQuery(value){
+    var result = {};
+    var fields = ['uf', 'paymentType', 'transport'];
 
-  static invoiceCode(sale) {
-    return sale.userId + '-invoie-' + sale.billingDate.getTime();
-  }
+    var like = fields.map((each) => {
+      var cond = {};
+      cond[each] = {
+        "$regex": value,
+        "$options": "i"
+      };
 
-  // static sync(sale) {
-  //   sale.synced = true;
-  //   this.upsert(this.getKeyQuery(sale.number), sale);
-  // }
-
-  static syncAll() {
-    this.updateAll({
-      synced: false,
-    }, {
-      synced: true,
+      return cond;
     });
+
+    return {'$or': like};
   }
+
+
+  static from(s){
+    var cost = s.items.reduce((count, i)=>{ return count + parseFloat(i.cost)}, 0)
+
+    return new Sale(
+      s.numeroPedido,
+      new Date(s.data),
+      s.deliveryTime,
+      s.frete,
+      s.transport,
+      s.totalVenda,
+      cost,
+      s.itemsQuantity,
+      s.client.uf,
+      s.paymentType
+    );
+  }
+
 };

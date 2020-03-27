@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<%include ../menus/main-menu %>
+<head>
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/sale-dashboard.css">
+  <script type="text/javascript" src="/front/js/control/sale-dashboard.js"></script>
+  <script type="text/javascript" src="/front/js/libs/date-picker.js"></script>
+
+  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+  <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
+</head>
+<body>
+  <%include ../menus/performance-menu %>
+  <script>
+    window.data = <%- JSON.stringify(data) %>;
+    window.memoryQuery = <%- JSON.stringify(locals.salesDashQuery ? locals.salesDashQuery : {}) %>
+  </script>
+
+  <div class="main">
+    <div class="top shadow">
+      <div class="search-box">
+        <img class="icon-open is-open" title="Abrir seletor" src="/img/open-down.png">
+        <input type="text" id="search-input"  class="simple-material-input" placeholder="Pesquisar Pedidos" autocomplete="off"/>
+
+
+        <div class="date-selectors">
+          <div class="material-input-holder date-begin-holder">
+            <input id="date-begin" maxlength="8"
+            autocomplete="off"
+            title="Data de Início" required/>
+
+            <span class="bar"></span>
+            <label>Data de Início</label>
+          </div>
+
+
+          <div class="material-input-holder date-end-holder">
+            <input id="date-end" maxlength="8"
+            autocomplete="off"
+            value="<%=Dat.format(Dat.today())%>"
+            title="Data de Fim" required/>
+
+            <span class="bar"></span>
+            <label>Data de Fim</label>
+          </div>
+        </div>
+
+
+        <label class="button shadow" id="search-button" tabindex="0">Buscar</label>
+
+        <div class="menu-dots">
+          <img src="img/dots.png" class="dots-glyph"/>
+        </div>
+
+        <label id="totals"></label>
+      </div>
+
+      <div class="tag-box">
+
+
+      </div>
+    </div>
+
+
+    <div class="content-scroll">
+
+      <div class="content">
+
+        <div class="card-item">
+          <span class="card-title">Geral</span>
+          <span><%=data.length%></span>
+
+
+        </div>
+
+
+
+
+      </div>
+
+
+
+
+    </div>
+
+  </div>
+
+</body>
+</html>

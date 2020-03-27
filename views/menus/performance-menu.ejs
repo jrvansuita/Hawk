@@ -26,6 +26,16 @@
           </a>
         </li>
         <%}%>
+
+        <%if (locals.loggedUser.full){%>
+          <li class="menu-item" >
+            <a href="/sales-dashboard">
+              <div class="menu-button title">
+                Pedidos
+              </div>
+            </a>
+          </li>
+          <%}%>
       </ul>
     </nav>
   </div>

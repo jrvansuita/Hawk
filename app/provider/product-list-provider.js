@@ -34,6 +34,7 @@ module.exports = {
 
     var result = Object.assign(Product.likeQuery(query.value), attrs);
 
+console.log(result);
     return result;
   },
 

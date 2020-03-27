@@ -13,7 +13,7 @@ module.exports = class JobSyncClients extends Job{
     Client.from(client).upsert(next);
   }
 
-  handlePage(page, nexPageCallback){
+  handlePage(page, nextPageCallback){
     var runEach = () => {
       if (page.length){
         this.handleEach(page[0], () => {
@@ -21,7 +21,7 @@ module.exports = class JobSyncClients extends Job{
           runEach();
         });
       }else{
-        nexPageCallback();
+        nextPageCallback();
       }
     }
 

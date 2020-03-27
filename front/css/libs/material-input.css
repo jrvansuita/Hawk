@@ -5,7 +5,7 @@
 }
 
 .material-input-holder>input {
-  background: #FFF;
+  background: transparent;
   font-family: 'Roboto';
   width: 100%;
   min-width: 150px;

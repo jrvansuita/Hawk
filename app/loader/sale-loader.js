@@ -143,6 +143,7 @@ module.exports= class SaleLoader {
               item.bru = product.pesoBruto;
               item.local = product.localizacao;
               item.ncm = product.cf;
+              item.cost = product.precoCusto;
               break;
             }
           }
