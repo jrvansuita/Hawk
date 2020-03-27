@@ -15,7 +15,7 @@ module.exports = class ClientShareLoader{
 
   _transform(callback){
     new ImageHandler()
-    .setQuality(60)
+    .setQuality(90)
     .setWidth(300)
     .setBase64Image(this.base64Image)
     .setOnSuccess((newBase64) => {
