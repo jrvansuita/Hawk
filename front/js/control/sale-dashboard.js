@@ -59,6 +59,7 @@ $(document).ready(()=>{
     toggleTagBox();
   });
 
+  coloringData();
 });
 
 function redirect(){
@@ -80,7 +81,6 @@ function redirect(){
 
   params +=   'begin=' + begin + '&end=' + end;
 
-
   window.location.href= '/sales-dashboard?' + params;
 }
 
@@ -94,6 +94,9 @@ function toggleTagBox(forceOpen){
   }
 }
 
-function bindData(data){
-  console.log(data);
+function coloringData(){
+  $('.coloring-data').each((i , each) => {
+    var perc = $(each).data('cur') / $(each).data('max');
+    $(each).css('background-color', $(each).data('color').replace('x', perc));
+  });
 }

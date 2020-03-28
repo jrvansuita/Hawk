@@ -13,8 +13,8 @@
 <body>
   <%include ../menus/performance-menu %>
   <script>
-    window.data = <%- JSON.stringify(data) %>;
-    window.memoryQuery = <%- JSON.stringify(locals.salesDashQuery ? locals.salesDashQuery : {}) %>
+  window.data = <%- JSON.stringify(data) %>;
+  window.memoryQuery = <%- JSON.stringify(locals.salesDashQuery ? locals.salesDashQuery : {}) %>
   </script>
 
   <div class="main">
@@ -65,16 +65,117 @@
 
     <div class="content-scroll">
 
-      <div class="content">
+      <div class="content-grid">
 
-        <div class="card-item">
-          <span class="card-title">Geral</span>
-          <span><%=data.length%></span>
+        <div class="grid-item shadow">
+
+
+          <div class="row">
+            <span class="title">Geral
+              <span class="right"> <%=data.count%></span>
+            </span>
+
+            <div class="col">
+              <span class="super">Valor</span>
+              <span class="value high-val"><%=Num.money(data.total)%></span>
+            </div>
+
+            <div class="col">
+              <span class="super">Desconto</span>
+              <span class="value high-val"><%=Num.money(data.discount)%></span>
+            </div>
+
+            <div class="col">
+              <span class="super">Ticket</span>
+              <span class="value"><%=Num.money(data.tkm)%></span>
+            </div>
+
+            <div class="col">
+              <span class="super">Custo Produtos</span>
+              <span class="value"><%=Num.money(data.cost)%></span>
+            </div>
+
+            <div class="col">
+              <span class="super">Frete</span>
+              <span class="value"><%=Num.money(data.freight)%></span>
+            </div>
+
+            <div class="col">
+              <span class="super">Lucro</span>
+              <span class="value <%= data.profit ? 'green-val' : 'red-val'%>"><%=Num.money(data.profit)%></span>
+            </div>
+
+          </div>
+
+
+
+
+          <div class="row gray">
+            <span class="title">Produtos
+              <span class="right"> <%=data.items%></span>
+            </span>
+
+            <div class="col">
+              <span class="super">Med. Pedido</span>
+              <span class="value"><%=Floa.abs(data.avgItems,3)%></span>
+            </div>
+
+            <div class="col">
+              <span class="super">Med. Un</span>
+              <span class="value"><%=Num.money(data.avgUnit)%></span>
+            </div>
+          </div>
 
 
         </div>
 
 
+        <div class="grid-item shadow">
+          <div class="row">
+            <%var book = data.uf%>
+            <%var keys = Object.keys(book).sort((a, b) => book[b].count - book[a].count);%>
+            <span class="title">Ufs
+              <span class="right"> <%=keys.length%></span>
+            </span>
+            <%keys.forEach((key)=>{%>
+              <div class="col coloring-data" data-color="rgba(200, 200, 200, x)" data-max="<%=book[keys[0]].count%>" data-cur="<%=book[key].count%>">
+                <span class="super"><%=key%> <span class="right"> <%=book[key].count%></span></span>
+                <span class="value min-val"><%=Num.format(book[key].total)%></span>
+              </div>
+            <%})%>
+          </div>
+        </div>
+
+        <div class="grid-item shadow">
+          <div class="row">
+            <%var book = data.paymentType%>
+            <%var keys = Object.keys(book).sort((a, b) => book[b].count - book[a].count);%>
+            <span class="title">Pagamentos
+              <span class="right"> <%=keys.length%></span>
+            </span>
+
+            <%keys.forEach((key)=>{%>
+              <div class="col coloring-data" data-color="rgba(218, 253, 249, x)" data-max="<%=book[keys[0]].count%>" data-cur="<%=book[key].count%>">
+                <span class="super"><%=Util.getPaymentType(key)%> <span class="right"> <%=book[key].count%></span></span>
+                <span class="value high-val"><%=Num.percent(book[key].count*100/data.count)%>  <span class="right min-val"> <%=Num.format(book[key].total)%></span></span>
+              </div>
+            <%})%>
+          </div>
+
+          <div class="row gray coupom-box">
+            <%var book = data.coupom%>
+            <%var keys = Object.keys(book).sort((a, b) => book[b].count - book[a].count);%>
+            <span class="title">Cupons
+              <span class="right"> <%=keys.length%></span>
+            </span>
+
+            <%keys.forEach((key)=>{%>
+              <div class="col coupom">
+                <span class="super"><%=key%> <span class="right high-val"> <%=book[key].count%></span></span>
+              </div>
+            <%})%>
+          </div>
+        </div>
 
 
       </div>

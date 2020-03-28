@@ -50,13 +50,13 @@ module.exports = class PerformanceRoutes extends Routes{
       });
 
       this._page('/sales-dashboard', (req, res)=>{
-        console.log(req.query);
         res.locals.salesDashQuery = req.query || req.session.salesDashQuery;
+
         SaleDashboardProvider.load(res.locals.salesDashQuery,(data) => {
           res.render('sale/sales-dashboard', {data: data});
         });
       });
-      
+
 
 
 

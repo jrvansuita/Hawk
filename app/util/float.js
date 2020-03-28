@@ -38,8 +38,12 @@ var Floa = {
     e = e || window.event;
     var charCode = e.which ? e.which : e.keyCode;
     return /^-?[0-9,]*$/.test(String.fromCharCode(charCode));
-  }
+  },
 
+
+  abs(val, digits) {
+    return parseFloat(val).toFixed(digits ? digits : 2).toString().replace('.', ',');
+  },
 
 };
 

@@ -27,8 +27,20 @@ module.exports= class SaleLoader {
     if (!this.innerAttrsLoaded && this.sale){
       this.innerAttrsLoaded = true;
       this.sale.transport = Util.transportName(this.sale.transportador);
-      this.sale.deliveryTime = Num.def(Str.between(this.sale.observacaoInterna, '- ', ' dias uteis'));
-      this.sale.paymentType = Str.between(this.sale.observacaoInterna, 'pagg_', ' ');
+      this.sale.paymentType = 'Não Encontrato';
+
+      this.sale.observacaoInterna.split('\n').forEach((eachLine) => {
+        if (eachLine.includes('dias uteis')){
+          this.sale.deliveryTime = Num.def(Str.between(eachLine, '- ', ' dias uteis'));
+        }else if (eachLine.includes('Meio de pagamento:')){
+
+          //this.sale.paymentType = Str.between(this.sale.observacaoInterna, 'Meio de pagamento: ', ' ').replace('mundipagg_', '');
+          var arr = eachLine.replace('Meio de pagamento: ', '').split(' ');
+
+          this.sale.paymentType = arr[0] ? arr[0].replace('mundipagg_', '') : this.sale.paymentType;
+          this.sale.coupom = arr[1] ? arr[1].toUpperCase() : '';
+        }
+      });
     }
   }
 

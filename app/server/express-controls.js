@@ -75,7 +75,7 @@ routes.forEach((r)=>{
 const History = require('../bean/history.js');
 
 process.on('uncaughtException', function (err) {
-  if(err){
+  if(err && process.env.NODE_ENV){
     History.error(err);
   }
 });

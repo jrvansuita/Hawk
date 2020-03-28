@@ -35,12 +35,17 @@ var Util = {
     return JSON.parse(JSON.stringify(object));
   },
 
-   getPaymentType(method){
-    switch(method){
-      case 'mundipagg_boleto': return 'Boleto';
-      case 'mundipagg_creditcard': return 'Cartão de Crédito';
-      case 'paypal_express': return 'PayPal';
-      case 'free': return 'Voucher';
+  getPaymentType(method){
+    if (method.includes('boleto')){
+      return 'Boleto';
+    }else if (method.includes('creditcard')){
+      return 'Cartão de Crédito';
+    }else if (method.includes('paypal')){
+       return 'PayPal';
+    }else if (method.includes('free')){
+      return 'Voucher';
+    }else{
+      return 'Indefinido';
     }
   },
 
