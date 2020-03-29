@@ -83,8 +83,8 @@ var Num = {
   },
 
   percent(num, trunc){
-
-    return parseFloat(num).toFixed(trunc ? 0 : 2).toString() + '%';
+    num = parseFloat(~~Number(num)>0 ? num : 0);
+    return (trunc ? Math.trunc(num) : num.toFixed(2)).toString() + '%';
   }
 
 };

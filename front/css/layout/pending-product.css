@@ -6,6 +6,7 @@
   max-height: 95%;
   margin: auto;
   margin-top: 95px !important;
+  flex-direction: row;
 }
 
 .divider {

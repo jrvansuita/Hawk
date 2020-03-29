@@ -55,16 +55,25 @@ module.exports = class EccosysProvider extends EccosysApi{
   }
 
   products() {
-    return this.get('produtos').multiple();
+    return this.get('produtos').multiple().prepare((data) => {
+        Util.bindProductAttrs(data);
+      return data;
+    });
   }
 
 
   product(skuOrEan) {
-    return this.get('produtos/' + (Num.isEan(skuOrEan) ? 'gtin=' + skuOrEan : skuOrEan)).single();
+    return this.get('produtos/' + (Num.isEan(skuOrEan) ? 'gtin=' + skuOrEan : skuOrEan)).single().prepare((data) => {
+      Util.bindProductAttrs(data);
+      return data;
+    });
   }
 
   skus(skus) {
-    return this.get('produtos/' + (Array.isArray(skus) ?  skus.join(';') : skus)).multiple();
+    return this.get('produtos/' + (Array.isArray(skus) ?  skus.join(';') : skus)).multiple().prepare((data) => {
+      Util.bindProductAttrs(data);
+      return data;
+    });
   }
 
   stockHistory(sku) {

@@ -142,7 +142,7 @@ module.exports= class SaleLoader {
     return this;
   }
 
-  loadItemsDeepAttrs(onCallOuter){
+  loadItemsDeepAttrs(onCallOuter, onBindEachProduct){
     var funcItemsWeight = (onCallNext)=>{
 
       new EccosysProvider()
@@ -155,7 +155,10 @@ module.exports= class SaleLoader {
               item.bru = product.pesoBruto;
               item.local = product.localizacao;
               item.ncm = product.cf;
-              item.cost = product.precoCusto;
+              
+              if (onBindEachProduct){
+                onBindEachProduct(item, product);
+              }
               break;
             }
           }

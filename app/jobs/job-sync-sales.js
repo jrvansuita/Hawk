@@ -12,9 +12,13 @@ module.exports = class JobSyncSales extends Job{
 
   handleEach(saleRow, next){
     new SaleLoader(saleRow.numeroPedido)
-    .loadClient()
+    //.loadClient()
     .loadItems()
-    .loadItemsDeepAttrs()
+    .loadItemsDeepAttrs(null, (item, product) => {
+      item.cost = product.precoCusto;
+      item.brand = product.Marca;
+      item.gender = product.Genero;
+    })
     .setOnError((err) => {
       this.onError(err);
     })
@@ -46,7 +50,8 @@ module.exports = class JobSyncSales extends Job{
         reject(err);
       })
       .pageCount(1000)
-      .dates(Dat.yesterday(), Dat.yesterday())
+      //.dates(Dat.yesterday(), Dat.yesterday())
+      .dates(Dat.rollDay(null, -2), Dat.yesterday())
       .doneSales()
       .pagging()
       .each((salePage, nextPage)=>{

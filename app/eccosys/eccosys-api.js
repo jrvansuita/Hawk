@@ -83,6 +83,11 @@ module.exports = class EccosysApi{
     return this;
   }
 
+  prepare(func){
+    this.onPrepare = func;
+    return this;
+  }
+
   filter(func){
     this.onFilter = func;
     return this;
@@ -196,6 +201,10 @@ module.exports = class EccosysApi{
 
           if (self.onFilter){
             responseBody = self.onFilter(responseBody);
+          }
+
+          if (self.onPrepare){
+            responseBody = self.onPrepare(responseBody);
           }
 
           onGetResponse(responseBody);

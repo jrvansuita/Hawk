@@ -33,9 +33,9 @@ function handleAttrs(product, callback){
     product.img = img;
 
     //Handle the products attirbutes
-    product._Atributos.forEach((attr)=>{
-      product[attr.descricao] = attr.valor;
-    });
+    //product._Atributos.forEach((attr)=>{
+    //  product[attr.descricao] = attr.valor;
+    //});
 
     callback(product);
   });

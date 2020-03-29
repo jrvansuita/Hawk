@@ -1,6 +1,6 @@
 module.exports = class Sale extends DataAccess {
 
-  constructor(number, date, deliveryTime, freightValue, transport, total, productCost, quantityItems, uf, paymentType, coupom, discount) {
+  constructor(number, date, deliveryTime, freightValue, transport, total, productCost, quantityItems, uf, city, paymentType, coupom, discount, repurchase, weight) {
     super();
     this.number = Str.def(number);
     this.date = Dat.def(date);
@@ -13,9 +13,12 @@ module.exports = class Sale extends DataAccess {
     this.productCost = Floa.def(productCost);
     this.quantityItems = Num.def(quantityItems);
     this.uf = Str.def(uf);
+    this.city = Str.def(city);
     this.paymentType = Str.def(paymentType);
     this.coupom = Str.def(coupom);
     this.discount = Floa.def(discount);
+    this.repurchase = repurchase ? true : false;
+    this.weight = Floa.def(weight);
   }
 
   static getKey() {
@@ -42,7 +45,7 @@ module.exports = class Sale extends DataAccess {
 
   static from(s){
     var cost = s.items.reduce((count, i)=>{ return count + parseFloat(i.cost)}, 0)
-    
+
     return new Sale(
       s.numeroPedido,
       new Date(s.data),
@@ -52,10 +55,13 @@ module.exports = class Sale extends DataAccess {
       s.totalVenda,
       cost,
       s.itemsQuantity,
-      s.client.uf,
+      s._OutroEndereco.uf,
+      s._OutroEndereco.cidade,
       s.paymentType,
       s.coupom,
-      s.desconto
+      s.desconto,
+      s.primeiraCompra == '0',
+      s.pesoTransportadora
     );
   }
 

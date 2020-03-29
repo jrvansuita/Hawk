@@ -21,7 +21,7 @@
     <div class="top shadow">
       <div class="search-box">
         <img class="icon-open is-open" title="Abrir seletor" src="/img/open-down.png">
-        <input type="text" id="search-input"  class="simple-material-input" placeholder="Pesquisar Pedidos" autocomplete="off"/>
+        <input type="text" id="search-input" value="<%=locals.salesDashQuery.value%>" class="simple-material-input" placeholder="Pesquisar Pedidos" autocomplete="off"/>
 
 
         <div class="date-selectors">
@@ -70,7 +70,7 @@
         <div class="grid-item shadow">
 
 
-          <div class="row">
+          <div class="row min-col">
             <span class="title">Geral
               <span class="right"> <%=data.count%></span>
             </span>
@@ -101,6 +101,21 @@
             </div>
 
             <div class="col">
+              <span class="super">Recompra</span>
+              <span class="value"><%=Num.percent(data.count/data.repurchaseCount)%></span>
+            </div>
+
+            <div class="col">
+              <span class="super">Peso</span>
+              <span class="value"><%=Floa.weight(data.weight)%> Kg</span>
+            </div>
+
+            <div class="col">
+              <span class="super">R$/Kg</span>
+              <span class="value"><%=Num.money(data.total/data.weight)%></span>
+            </div>
+
+            <div class="col">
               <span class="super">Lucro</span>
               <span class="value <%= data.profit ? 'green-val' : 'red-val'%>"><%=Num.money(data.profit)%></span>
             </div>
@@ -112,8 +127,13 @@
 
           <div class="row gray">
             <span class="title">Produtos
-              <span class="right"> <%=data.items%></span>
+              <span class="right"> <%=Num.points(data.items)%></span>
             </span>
+
+            <div class="col">
+              <span class="super">Markup</span>
+              <span class="value"><%=Floa.abs((data.total - data.freight) / data.cost, 3)%></span>
+            </div>
 
             <div class="col">
               <span class="super">Med. Pedido</span>
@@ -132,60 +152,128 @@
 
         <div class="grid-item shadow">
           <div class="row">
-            <%var book = data.uf%>
-            <%var keys = Object.keys(book).sort((a, b) => book[b].count - book[a].count);%>
-            <span class="title">Ufs
-              <span class="right"> <%=keys.length%></span>
+            <% var arr = data.uf; %>
+            <span class="title">Estados
+              <span class="right"> <%=arr.length%></span>
             </span>
-            <%keys.forEach((key)=>{%>
-              <div class="col coloring-data" data-color="rgba(200, 200, 200, x)" data-max="<%=book[keys[0]].count%>" data-cur="<%=book[key].count%>">
-                <span class="super"><%=key%> <span class="right"> <%=book[key].count%></span></span>
-                <span class="value min-val"><%=Num.format(book[key].total)%></span>
+            <%arr.forEach((each)=>{%>
+              <div class="col coloring-data" data-max="<%=arr[0].count%>" data-cur="<%=each.count%>">
+                <span class="super"><%=each.name%> <span class="right"> <%=each.count%></span></span>
+                <span class="value min-val"><%=Num.percent(each.count*100/data.count, true)%>  <span class="right min-val"> <%=Num.format(each.total)%></span></span>
               </div>
-            <%})%>
-          </div>
-        </div>
-
-        <div class="grid-item shadow">
-          <div class="row">
-            <%var book = data.paymentType%>
-            <%var keys = Object.keys(book).sort((a, b) => book[b].count - book[a].count);%>
-            <span class="title">Pagamentos
-              <span class="right"> <%=keys.length%></span>
-            </span>
-
-            <%keys.forEach((key)=>{%>
-              <div class="col coloring-data" data-color="rgba(218, 253, 249, x)" data-max="<%=book[keys[0]].count%>" data-cur="<%=book[key].count%>">
-                <span class="super"><%=Util.getPaymentType(key)%> <span class="right"> <%=book[key].count%></span></span>
-                <span class="value high-val"><%=Num.percent(book[key].count*100/data.count)%>  <span class="right min-val"> <%=Num.format(book[key].total)%></span></span>
-              </div>
-            <%})%>
+              <%})%>
+            </div>
           </div>
 
-          <div class="row gray coupom-box">
-            <%var book = data.coupom%>
-            <%var keys = Object.keys(book).sort((a, b) => book[b].count - book[a].count);%>
-            <span class="title">Cupons
-              <span class="right"> <%=keys.length%></span>
-            </span>
 
-            <%keys.forEach((key)=>{%>
-              <div class="col coupom">
-                <span class="super"><%=key%> <span class="right high-val"> <%=book[key].count%></span></span>
+
+
+          <div class="grid-item shadow">
+            <div class="row">
+              <% var arr = data.city; %>
+              <span class="title">Cidades
+                <span class="right"> <%=arr.length%></span>
+              </span>
+              <%arr.forEach((each)=>{%>
+                <div class="col coloring-data" data-max="<%=arr[0].count%>" data-cur="<%=each.count%>">
+                  <span class="super"><%=each.name%> <span class="right"> <%=each.count%></span></span>
+                  <span class="value min-val"><%=Num.format(each.total)%></span>
+                </div>
+                <%})%>
               </div>
-            <%})%>
-          </div>
-        </div>
+            </div>
+
+            <div class="grid-item shadow">
+              <div class="row">
+                <% var arr = data.paymentType; %>
+                <span class="title">Pagamentos
+                  <span class="right"> <%=arr.length%></span>
+                </span>
+
+                <%arr.forEach((each)=>{%>
+                  <div class="col coloring-data" data-max="<%=arr[0].count%>" data-cur="<%=each.count%>">
+                    <span class="super"><%=Util.getPaymentType(each.name)%> <span class="right"> <%=each.count%></span></span>
+                    <span class="value high-val"><%=Num.percent(each.count*100/data.count)%>  <span class="right min-val"> <%=Num.format(each.total)%></span></span>
+                  </div>
+                  <%})%>
+                </div>
+
+                <div class="row gray coupom-box">
+                  <% var arr = data.coupom; %>
+                  <span class="title">Cupons
+                    <span class="right"> <%=arr.length%></span>
+                  </span>
+
+                  <%arr.forEach((each)=>{%>
+                    <div class="col coupom">
+                      <span class="super"><%=each.name%> <span class="right high-val"> <%=each.count%></span></span>
+                    </div>
+                    <%})%>
+                  </div>
+                </div>
+
+                <div class="grid-item shadow" style="grid-column: 1 / 3;">
+                  <% var arr = data.transport; %>
+                  <table class="list" >
+                    <tr class="header">
+                      <td  class="title">Transportadoras</td>
+                      <td class="high-val">Pedidos</td>
+                      <td>Total</td>
+                      <td class="middle">%</td>
+
+                      <td>Prazo Min.</td>
+                      <td>Prazo Máx.</td>
+                      <td class="high-val">Prazo Méd.</td>
+                      <td>Valor Min.</td>
+                      <td>Valor Máx.</td>
+                      <td class="high-val">Valor Méd.</td>
+                      <td>% Ped.</td>
+                      <td>Total <span class="right"> <%=arr.length%></span></td>
+                    </tr>
+                    <%arr.forEach((each)=>{%>
+                      <tr>
+                        <td><span class="super high-val"><%=each.name%></span></td>
+                        <td><span class="super high-val"><%=each.count%></span></td>
+                        <td><span class="value"><%=Num.format(each.total)%></span></td>
+                        <td><span class="value"><%=Num.percent(each.count * 100 / data.count)%></span></td>
+
+                        <td><span class="value middle"><%=each.minDT%></span></td>
+                        <td><span class="value middle"><%=each.maxDT%></span></td>
+                        <td><span class="value high-val"><%=Num.int(each.countDT / each.count)%> dias</span></td>
+                        <td><span class="value"><%=Num.money(each.minValue)%></span></td>
+                        <td><span class="value"><%=Num.money(each.maxValue)%></span></td>
+                        <td><span class="value high-val"><%=Num.money(each.totalValue / each.count)%></span></td>
+                        <td><span class="value"><%=Num.percent(each.total / each.totalValue)%></span></td>
+                        <td><span class="value min-val"><%=Num.money(each.totalValue)%></span></td>
+                      </tr>
+                      <%})%>
+
+                      <tr class="footer">
+                        <td></td>
+                        <td class="high-val"><%=data.count%></td>
+                        <td><%=Num.format(data.total)%></td>
+                        <td></td>
+
+                        <td></td>
+                        <td></td>
+                        <td class="high-val"><%=Num.int(data.transportSummary.countDT / data.count)%> dias</td>
+
+                        <td></td>
+                        <td></td>
+                        <td class="high-val"><%=Num.money(data.transportSummary.totalValue / data.count)%></td>
+                        <td><%=Num.percent(data.total / data.freight)%></td>
+                        <td class="min-val"><%=Num.money(data.transportSummary.totalValue)%></td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
 
 
-      </div>
 
 
+              </div>
 
+            </div>
 
-    </div>
-
-  </div>
-
-</body>
-</html>
+          </body>
+          </html>

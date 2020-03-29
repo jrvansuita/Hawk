@@ -26,6 +26,7 @@
 .grid-item{
   width: auto;
   min-height: fit-content;
+  background: #f3f3f3;
 }
 
 
@@ -79,32 +80,36 @@ img.dots-glyph {
 }
 
 
-.row .title{
+.grid-item .title{
   font-size: 13px;
   display: block;
   font-weight: 600;
   color: #5d5b59;
   padding-bottom: 10px;
   margin-top: 3px;
-  position: relative;
 }
 
-.row{display: block;padding: 10px 12px;}
+.row{display: block;padding: 10px 12px;background-color: white;}
 
 .col{margin-right: 10px;display: inline-block;margin-bottom: 8px;}
 
-.col .super{font-size: 14px;color: rgb(64, 64, 64);font-weight: 500;display: block;margin-right: 5px;position: relative;min-width: 50px;width: fit-content;}
+.min-col .col{
+  min-width: 100px;
+}
+
+.grid-item .super{font-size: 14px;color: rgb(64, 64, 64);font-weight: 500;display: block;/* margin-right: 5px; */position: relative;min-width: 50px;}
 
 
-.col .value{font-size: 14px;color: rgb(130, 128, 125);font-weight: 400;display: block;margin-top: 3px;}
+.grid-item .value{font-size: 14px;color: rgb(130, 128, 125);font-weight: 400;display: block;margin-top: 3px;}
 
-.title .right, .super .right, .value .right{
+.grid-item .right{
   float: right;
   right: 0;
   top: 0;
   color: gray;
   margin-left: 10px;
   font-size: 13px;
+  margin-right: 4px;
 }
 
 .gray{
@@ -113,26 +118,26 @@ img.dots-glyph {
 }
 
 
-.col .high-val{
+.grid-item .high-val{
   font-weight: 600;
   color: #585858;
-  font-size: 13px;
+  font-size: 14px;
 }
 
-.col .green-val{
+.grid-item .green-val{
   color: #08ab08;
   font-weight: 900;
   font-size: 15px;
 }
 
-.col .red-val{
+.grid-item .red-val{
   color: #e60000;
   font-weight: 900;
   font-size: 15px;
 }
 
-.col .min-val{
-  font-size: 12px;
+.grid-item .min-val{
+  font-size: 12px !important;
 }
 
 
@@ -155,4 +160,48 @@ img.dots-glyph {
   color: rgb(138, 138, 138);
 }
 
+.coupom .high-val{
+  font-size: 12px;
+}
+
 .coupom-box .coupom{margin-right: 3px;margin-bottom: 5px;}
+
+
+.grid-item table{
+  width: 100%;
+  background-color: white;
+}
+
+.grid-item table td{
+  padding: 6px 10px 6px 10px;
+}
+
+tr:hover:not(.header):not(.footer){
+  background-color: #d8d8d8;
+}
+
+tr:nth-child(even):not(.header):not(.footer) {
+  background-color: #f2f2f2;
+}
+
+table .header td{
+  border-bottom:1px dashed #d8d8d8;
+  font-size: 13px;
+  color: rgb(130, 128, 125);
+  font-weight: 400;
+  display: table-cell !important;
+  padding: 10px 4px 10px 10px !important;
+}
+
+table .footer td{
+  border-top:1px dashed #d8d8d8;
+  font-size: 13px !important;
+  color: rgb(130, 128, 125);
+  font-weight: 400;
+  display: table-cell !important;
+  padding: 7px 4px 8px 10px !important;
+}
+
+table .header td:last-child > .right{
+  padding-right: 10px;
+}

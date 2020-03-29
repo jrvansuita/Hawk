@@ -207,9 +207,9 @@ function loadExtraProducts(skus, callback){
 class DataItem{
   constructor(product){
     //Handle the products attirbutes
-    product._Atributos.forEach((attr)=>{
-      product[attr.descricao] = attr.valor;
-    });
+    //product._Atributos.forEach((attr)=>{
+    //  product[attr.descricao] = attr.valor;
+    //});
 
     this.sku = product.codigo;
     this.brand = product.Marca;

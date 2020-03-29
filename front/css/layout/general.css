@@ -147,6 +147,10 @@ input[type=number]::-webkit-outer-spin-button {
   float: right;
 }
 
+.middle{
+text-align: center;
+}
+
 .avatar-img {
   margin-left: auto;
   margin-right: auto;
@@ -268,7 +272,7 @@ tr.line td{
 }
 
 table{
-  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 

@@ -41,7 +41,7 @@ var Util = {
     }else if (method.includes('creditcard')){
       return 'Cartão de Crédito';
     }else if (method.includes('paypal')){
-       return 'PayPal';
+      return 'PayPal';
     }else if (method.includes('free')){
       return 'Voucher';
     }else{
@@ -66,6 +66,24 @@ var Util = {
       }
       return obj
     }, {});
+  },
+
+  bindProductAttrs(data){
+    if (data){
+      var run = (product) => {
+        product._Atributos.forEach((attr)=>{
+          product[attr.descricao] = attr.valor;
+        });
+      };
+
+      if (Array.isArray(data)){
+        data.forEach((each) => {
+          run(each);
+        })
+      }else{
+        run(data);
+      }
+    }
   },
 
 

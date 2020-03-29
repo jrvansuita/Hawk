@@ -97,6 +97,6 @@ function toggleTagBox(forceOpen){
 function coloringData(){
   $('.coloring-data').each((i , each) => {
     var perc = $(each).data('cur') / $(each).data('max');
-    $(each).css('background-color', $(each).data('color').replace('x', perc));
+    $(each).css('background-color', "rgba(200, 200, 200, x)".replace('x', perc));
   });
 }
