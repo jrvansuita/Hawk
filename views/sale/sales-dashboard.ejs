@@ -116,6 +116,11 @@
             </div>
 
             <div class="col">
+              <span class="super">Margem</span>
+              <span class="value <%= data.profit ? 'green-val' : 'red-val'%>"><%=Num.percent((data.profit*100)/data.total)%></span>
+            </div>
+
+            <div class="col">
               <span class="super">Lucro</span>
               <span class="value <%= data.profit ? 'green-val' : 'red-val'%>"><%=Num.money(data.profit)%></span>
             </div>
@@ -219,6 +224,7 @@
                       <td  class="title">Transportadoras</td>
                       <td class="high-val">Pedidos</td>
                       <td>Total</td>
+                      <td>Ticket</td>
                       <td class="middle">%</td>
 
                       <td>Prazo Min.</td>
@@ -235,6 +241,7 @@
                         <td><span class="super high-val"><%=each.name%></span></td>
                         <td><span class="super high-val"><%=each.count%></span></td>
                         <td><span class="value"><%=Num.format(each.total)%></span></td>
+                        <td><span class="value"><%=Num.money(each.total/each.count)%></span></td>
                         <td><span class="value"><%=Num.percent(each.count * 100 / data.count)%></span></td>
 
                         <td><span class="value middle"><%=each.minDT%></span></td>
@@ -252,6 +259,7 @@
                         <td></td>
                         <td class="high-val"><%=data.count%></td>
                         <td><%=Num.format(data.total)%></td>
+                        <td></td>
                         <td></td>
 
                         <td></td>

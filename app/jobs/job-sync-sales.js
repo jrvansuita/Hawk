@@ -51,7 +51,7 @@ module.exports = class JobSyncSales extends Job{
       })
       .pageCount(1000)
       //.dates(Dat.yesterday(), Dat.yesterday())
-      .dates(Dat.rollDay(null, -2), Dat.yesterday())
+      .dates(Dat.firstDayOfMonth(), Dat.today())
       .doneSales()
       .pagging()
       .each((salePage, nextPage)=>{

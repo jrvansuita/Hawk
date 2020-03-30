@@ -45,6 +45,9 @@ module.exports = class Sale extends DataAccess {
 
   static from(s){
     var cost = s.items.reduce((count, i)=>{ return count + parseFloat(i.cost)}, 0)
+    var uf = s._OutroEndereco ? s._OutroEndereco.uf : '';
+    var city = s._OutroEndereco ? s._OutroEndereco.cidade : '';
+
 
     return new Sale(
       s.numeroPedido,
@@ -55,12 +58,12 @@ module.exports = class Sale extends DataAccess {
       s.totalVenda,
       cost,
       s.itemsQuantity,
-      s._OutroEndereco.uf,
-      s._OutroEndereco.cidade,
+      uf,
+      city,
       s.paymentType,
       s.coupom,
       s.desconto,
-      s.primeiraCompra == '0',
+      s.primeiraCompra != '1',
       s.pesoTransportadora
     );
   }

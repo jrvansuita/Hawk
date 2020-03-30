@@ -68,9 +68,12 @@ class SaleDash{
 
       this.handleArr(each, 'uf');
       this.handleArr(each, 'paymentType');
-      this.handleArr(each, 'transport', this.handleCustomTransport);
 
-      if (each.coupom){
+      if (each.freightValue > 0){
+        this.handleArr(each, 'transport', this.handleCustomTransport);
+      }
+
+      if (this.includesCoupom(each.coupom)){
         this.handleArr(each, 'coupom');
       }
 
@@ -90,7 +93,9 @@ class SaleDash{
       this.objectToArr(name);
     });
 
-    this.city.splice(15);
+    if (this.city){
+      this.city.splice(15);
+    }
 
     delete this.arrs;
   }
@@ -150,6 +155,9 @@ class SaleDash{
     self.transportSummary.totalValue = self.transportSummary.totalValue ? self.transportSummary.totalValue + item.freightValue : item.freightValue;
   }
 
+  includesCoupom(text){
+    return /PEN|TRC/.test(text) ? false : true;
+  }
 
 
 
