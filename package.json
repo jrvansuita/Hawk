@@ -4,7 +4,6 @@
   "description": "A predatory bird",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Test\" && exit 1",
     "start": "node app.js"
   },
   "author": "Jr",
