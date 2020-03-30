@@ -50,11 +50,17 @@ module.exports = class PerformanceRoutes extends Routes{
       });
 
       this._page('/sales-dashboard', (req, res)=>{
-        res.locals.salesDashQuery = req.query || req.session.salesDashQuery;
-
-        SaleDashboardProvider.load(res.locals.salesDashQuery,(data) => {
-          res.render('sale/sales-dashboard', {data: data});
-        });
+        new SaleDashboardProvider()
+        .with(req.query)
+        .maybe(req.session.salesDashQueryId)
+        .setOnResult((result) => {
+          if (result.id){
+            req.session.salesDashQueryId = result.id;
+            res.redirect('/sales-dashboard?id=' + result.id);
+          }else{
+            res.render('sale/sales-dashboard', {query: result.query, data: result.data});
+          }
+        }).load();
       });
 
 

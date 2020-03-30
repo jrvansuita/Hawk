@@ -10,8 +10,8 @@ $(document).ready(()=>{
     $('#date-begin').data('date', date);
   })
   .load().then(()=>{
-    if (memoryQuery.begin){
-      var date = new Date(parseInt(memoryQuery.begin));
+    if (query.begin){
+      var date = new Date(parseInt(query.begin));
     }else{
       var date = Dat.firstDayOfMonth();
     }
@@ -29,8 +29,8 @@ $(document).ready(()=>{
     $('#date-end').data('date', date);
   })
   .load().then(()=>{
-    if (memoryQuery.end){
-      var date = new Date(parseInt(memoryQuery.end));
+    if (query.end){
+      var date = new Date(parseInt(query.end));
     }else{
       var date = new Date();
     }
@@ -60,6 +60,7 @@ $(document).ready(()=>{
   });
 
   coloringData();
+  bindTags();
 });
 
 function redirect(){
@@ -99,4 +100,71 @@ function coloringData(){
     var perc = $(each).data('cur') / $(each).data('max');
     $(each).css('background-color', "rgba(200, 200, 200, x)".replace('x', perc));
   });
+}
+
+function bindTags(){
+  $(".taggable").click(function (){
+    selectAndPlaceTag($(this).text(), $(this).data('attr'));
+  });
+}
+
+
+function selectAndPlaceTag(value, attr){
+  var find = $('.tag-box').find("[data-attr='" + attr + "'][data-value='" + value + "']");
+
+  if (find.length == 0){
+    var tag = createClickableTag(value, attr);
+    $('.tag-box').append(tag);
+
+    if (!$('.tag-box').is(':visible')){
+      toggleTagBox(true);
+    }
+  }
+}
+
+function createClickableTag(value, attr){
+  if (value){
+    var tag = createSingleTag(value, attr);
+
+    applyTagColor(tag);
+    tag.click(function(){
+      $(this).remove();
+    });
+
+    return tag;
+  }
+}
+
+function createSingleTag(value, attr){
+  return $('<span>').addClass('tag').append(value)
+  .attr('data-value', value)
+  .attr('data-attr', attr ? attr : '');
+}
+
+function applyTagColor(tag){
+  var attr = tag.data('attr');
+  var value = tag.data('value');
+
+  if (attr){
+    color = Util.strToColor(value);
+    weakColor = Util.strToColor(value, '0.07');
+
+    tag
+    .css('border', '1.4px solid ' + color)
+    .css('background', weakColor)
+    .css('border-bottom-width', '3px');
+  }
+}
+
+function getAttrsTags(){
+  var attrs = {};
+
+  $('.tag-box').children('.tag').each(function(){
+    var attr = $(this).data('attr');
+    var value = $(this).data('value');
+
+    attrs[attr] = attrs[attr] ? attrs[attr] +  '|' + value : value;
+  });
+
+  return attrs;
 }

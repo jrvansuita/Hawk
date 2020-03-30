@@ -13,15 +13,15 @@
 <body>
   <%include ../menus/performance-menu %>
   <script>
+  window.query = <%- JSON.stringify(query) %>;
   window.data = <%- JSON.stringify(data) %>;
-  window.memoryQuery = <%- JSON.stringify(locals.salesDashQuery ? locals.salesDashQuery : {}) %>
   </script>
 
   <div class="main">
     <div class="top shadow">
       <div class="search-box">
         <img class="icon-open is-open" title="Abrir seletor" src="/img/open-down.png">
-        <input type="text" id="search-input" value="<%=locals.salesDashQuery.value%>" class="simple-material-input" placeholder="Pesquisar Pedidos" autocomplete="off"/>
+        <input type="text" id="search-input" value="<%=query.value%>" class="simple-material-input" placeholder="Pesquisar Pedidos" autocomplete="off"/>
 
 
         <div class="date-selectors">
@@ -238,7 +238,7 @@
                     </tr>
                     <%arr.forEach((each)=>{%>
                       <tr>
-                        <td><span class="super high-val"><%=each.name%></span></td>
+                        <td><span class="super high-val taggable" data-attr="transport"><%=each.name%></span></td>
                         <td><span class="super high-val"><%=each.count%></span></td>
                         <td><span class="value"><%=Num.format(each.total)%></span></td>
                         <td><span class="value"><%=Num.money(each.total/each.count)%></span></td>
@@ -255,7 +255,7 @@
                       </tr>
                       <%})%>
 
-                      <tr class="footer">  
+                      <tr class="footer">
                         <td></td>
                         <td class="high-val"><%=data.count%></td>
                         <td><%=Num.format(data.total)%></td>

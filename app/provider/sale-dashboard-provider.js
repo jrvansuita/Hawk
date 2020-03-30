@@ -1,40 +1,50 @@
 
 const Sale = require('../bean/sale.js');
 
+var temp = {};
+
+module.exports = class SaleDashboardProvider{
+
+  maybe(sessionQueryId){
+    this.sessionQueryId = sessionQueryId;
+    return this;
+  }
+
+  with(query){
+    this.query = query;
+
+    return this;
+  }
+
+  setOnResult(onResult){
+    this.onResult = onResult;
+
+    return this;
+  }
 
 
-module.exports = {
+  load(callback){
+    if (this.onResult){
+      if (this.query.id && temp[this.query.id]){
+        this.onResult(temp[this.query.id]);
+      }else  if ((Object.keys(this.query).length == 0) && this.sessionQueryId && temp[this.sessionQueryId]){
+        this.onResult({id: this.sessionQueryId});
+      }else{
+        var q = buildDataQuery(this.query);
 
-
-  buildQuery(query){
-    var result = {};
-
-    query.begin = query.begin ? query.begin : Dat.firstDayOfMonth().getTime();
-    query.end = query.end ? query.end : Dat.today().getTime();
-
-    result['date'] = {
-      $gte: new Date(parseInt(query.begin)).begin(),
-      $lte: new Date(parseInt(query.end)).end()
-    };
-
-    if (query.value){
-      result = {...result , ...Sale.likeQuery(query.value)};
+        Sale.find(q, (err, rows)=>{
+          this.onResult({id: this._keepTemp(new SaleDash(rows))});
+        });
+      }
     }
-
-    return result;
-  },
+  }
 
 
-  buildResult(rows){
-    return new SaleDash(rows);
-  },
-
-  load(query, callback){
-    Sale.find(this.buildQuery(query), (err, result)=>{
-      callback(this.buildResult(result));
-    });
-  },
-
+  _keepTemp(data){
+    var id = Util.id();
+    temp[id] = {query : this.query, data: data};
+    return id;
+  }
 
 };
 
@@ -158,8 +168,23 @@ class SaleDash{
   includesCoupom(text){
     return /PEN|TRC/.test(text) ? false : true;
   }
+}
 
 
+function buildDataQuery(query){
+  var result = {};
 
+  query.begin = query.begin ? query.begin : Dat.firstDayOfMonth().getTime();
+  query.end = query.end ? query.end : Dat.today().getTime();
 
+  result['date'] = {
+    $gte: new Date(parseInt(query.begin)).begin(),
+    $lte: new Date(parseInt(query.end)).end()
+  };
+
+  if (query.value){
+    result = {...result , ...Sale.likeQuery(query.value)};
+  }
+
+  return result;
 }
