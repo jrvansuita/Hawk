@@ -36,7 +36,7 @@ module.exports = class JobSyncSales extends Job{
           runEach();
         });
       }else{
-        nexPageCallback();
+        nextPageCallback();
       }
     }
 
