@@ -156,7 +156,7 @@ class SaleDash{
   }
 
   includesCoupom(text){
-    return true; ///PEN|TRC/.test(text) ? false : true;
+    return /PEN|TRC/.test(text) ? false : true;
   }
 
 
