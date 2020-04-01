@@ -13,12 +13,21 @@ module.exports = class SaleDashboardProvider{
   with(query){
     this.query = query;
 
+    //Initializing
+    query.begin = query.begin ? query.begin : Dat.firstDayOfMonth().getTime();
+    query.end = query.end ? query.end : Dat.today().getTime();
+
     return this;
   }
 
   setOnResult(onResult){
     this.onResult = onResult;
 
+    return this;
+  }
+
+  setOnError(onError){
+    this.onError = onError;
     return this;
   }
 
@@ -33,7 +42,11 @@ module.exports = class SaleDashboardProvider{
         var q = buildDataQuery(this.query);
 
         Sale.find(q, (err, rows)=>{
-          this.onResult({id: this._keepTemp(new SaleDash(rows))});
+          if (err && this.onError){
+            this.onError(err);
+          }else{
+            this.onResult({id: this._keepTemp(new SaleDash(rows))});
+          }
         });
       }
     }
@@ -66,6 +79,7 @@ class SaleDash{
     this.discount = 0;
     this.repurchaseCount = 0;
     this.weight = 0;
+
 
     rows.forEach((each) => {
       this.total += each.total;
@@ -166,25 +180,31 @@ class SaleDash{
   }
 
   includesCoupom(text){
-    return /PEN|TRC/.test(text) ? false : true;
+    return ((text.length > 0) && (!/PEN|TRC/.test(text)));
   }
 }
 
 
 function buildDataQuery(query){
-  var result = {};
+  console.log(query);
 
-  query.begin = query.begin ? query.begin : Dat.firstDayOfMonth().getTime();
-  query.end = query.end ? query.end : Dat.today().getTime();
+  var and = [];
 
-  result['date'] = {
-    $gte: new Date(parseInt(query.begin)).begin(),
-    $lte: new Date(parseInt(query.end)).end()
-  };
+  and.push(Sale.dateRange(query.begin, query.end));
 
   if (query.value){
-    result = {...result , ...Sale.likeQuery(query.value)};
+    and.push(Sale.likeQuery(query.value));
   }
+
+  Object.keys(query).filter((each) => {
+    return each.includes('attr_');
+  }).forEach((key) => {
+    and.push(Sale.attrsQuery(key.split('_').pop(), query[key].split('|')));
+  });
+
+ var result = {$and : and};
+
+  console.log(JSON.stringify(result));
 
   return result;
 }

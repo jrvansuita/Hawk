@@ -26,20 +26,15 @@ module.exports = class Sale extends DataAccess {
   }
 
   static likeQuery(value){
-    var result = {};
-    var fields = ['uf', 'paymentType', 'transport'];
+    return Sale.or(['uf', 'paymentType', 'transport'], value);
+  }
 
-    var like = fields.map((each) => {
-      var cond = {};
-      cond[each] = {
-        "$regex": value,
-        "$options": "i"
-      };
+  static dateRange(min, max){
+    return Sale.range('date', min, max, true);
+  }
 
-      return cond;
-    });
-
-    return {'$or': like};
+  static attrsQuery(field, values){
+    return Sale.or(field, values);
   }
 
 

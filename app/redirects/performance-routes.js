@@ -53,6 +53,9 @@ module.exports = class PerformanceRoutes extends Routes{
         new SaleDashboardProvider()
         .with(req.query)
         .maybe(req.session.salesDashQueryId)
+        .setOnError((err) => {
+          this._resp().error(res, err);
+        })
         .setOnResult((result) => {
           if (result.id){
             req.session.salesDashQueryId = result.id;

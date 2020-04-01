@@ -42,6 +42,7 @@
   padding: 0px 10px;
   display: none;
   min-height: 35px;
+  margin-top: -12px;
 }
 
 
@@ -215,7 +216,6 @@ table .header td:last-child > .right{
   border-radius: 3px;
   padding: 3px 6px;
   margin-bottom: 10px;
-  display: inline-block;
   margin-right: 10px;
   font-size: 13px;
   color: #807b7b;
@@ -225,4 +225,29 @@ table .header td:last-child > .right{
   border-color: rgb(162, 163, 161);
   border-image: initial;
   cursor: pointer;
+}
+
+.tag > *{
+  cursor: pointer;
+}
+
+.coupom-hidable{
+  display: none;
+}
+
+.hide-infos{
+  color: #797c82;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.hide-infos:hover{
+  text-decoration: underline;
+}
+
+.no-data{
+  color: gray;
+  font-size: 15px;
 }

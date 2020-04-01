@@ -23,7 +23,7 @@ module.exports = class JobSyncSales extends Job{
       this.onError(err);
     })
     .run((sale) => {
-      console.log('Loades sale ' + sale.numeroPedido);
+      console.log('JobSales - ' + sale.numeroPedido + ' - ' + Dat.format(new Date(sale.data)));
       Sale.from(sale).upsert(next);
     });
   }

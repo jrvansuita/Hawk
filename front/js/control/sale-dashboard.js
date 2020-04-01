@@ -61,6 +61,16 @@ $(document).ready(()=>{
 
   coloringData();
   bindTags();
+  toogleCupomHidable(true);
+
+  Object.keys(query).filter((each) => {
+    return each.includes('attr_');
+  }).forEach((key) => {
+    var values = query[key].split('|');
+    values.forEach((eachValue) => {
+      selectAndPlaceTag(eachValue, key.split('_').pop())
+    });
+  });
 });
 
 function redirect(){
@@ -80,9 +90,17 @@ function redirect(){
     'attrs=' + undefined + '&'
   }
 
-  params +=   'begin=' + begin + '&end=' + end;
+  params +=   'begin=' + begin + '&end=' + end + '&';
 
-  window.location.href= '/sales-dashboard?' + params;
+  var attrs = getAttrsTags();
+
+  if (attrs){
+    params += Object.keys(attrs).map((key) => {
+      return key + '=' + attrs[key] + '&';
+    }).join('');
+  }
+
+  window.location.href= '/sales-dashboard?' + encodeURI(params);
 }
 
 function toggleTagBox(forceOpen){
@@ -104,9 +122,10 @@ function coloringData(){
 
 function bindTags(){
   $(".taggable").click(function (){
-    selectAndPlaceTag($(this).text(), $(this).data('attr'));
+    selectAndPlaceTag($(this).data('value'), $(this).data('attr'));
   });
 }
+
 
 
 function selectAndPlaceTag(value, attr){
@@ -162,9 +181,30 @@ function getAttrsTags(){
   $('.tag-box').children('.tag').each(function(){
     var attr = $(this).data('attr');
     var value = $(this).data('value');
+    var key = 'attr_' + attr;
 
-    attrs[attr] = attrs[attr] ? attrs[attr] +  '|' + value : value;
+    attrs[key] = attrs[key] ? attrs[key] +  '|' + value : value;
   });
 
   return attrs;
+}
+
+
+function toogleCupomHidable(hide){
+  if (hide){
+    $('.coupom-hidable').fadeOut();
+  }else{
+    $('.coupom-hidable').fadeIn().css("display","inline-block");
+  }
+
+  if ($('.coupom-hidable').length && !$('.hide-infos').length){
+    var hide = $('<span>').addClass('hide-infos').text('Ver Mais');
+    hide.click(() => {
+      var toggle = $('.coupom-hidable').first().is(':visible');
+      hide.text(toggle ? 'Ver Mais' : 'Ver Menos');
+      toogleCupomHidable(toggle);
+    });
+    $('.coupom-box').append(hide);
+  }
+
 }
