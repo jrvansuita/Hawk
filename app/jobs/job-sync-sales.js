@@ -51,7 +51,7 @@ module.exports = class JobSyncSales extends Job{
       })
       .pageCount(1000)
       //.dates(Dat.yesterday(), Dat.yesterday())
-      .dates(new Date('03-13-2019'), Dat.today())
+      .dates(new Date('01-01-2020'), Dat.today())
       .doneSales()
       .pagging()
       .each((salePage, nextPage)=>{
