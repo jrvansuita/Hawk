@@ -133,6 +133,24 @@ function bindClientResume(){
   },0);
 
   $('.client-resume-ticket').text(Num.money(tm/client.sales.length));
+
+  $('.client-sale-total-value').text(Num.money(tm));
+
+  var tp = client.sales.reduce((value, sale) =>{
+    if(sale.status != 'canceled'){
+      value += parseFloat(sale.grand_total);
+    }
+    return value
+  },0);
+
+  $('.client-sale-total-paid').text(Num.money(tp));
+
+  var im = client.sales.reduce((value, sale) => {
+    return value + parseFloat(sale.total_item_count);
+  },0);
+
+  $('.client-resume-itens').text(Floa.abs(im/client.sales.length,2));
+
 }
 
 

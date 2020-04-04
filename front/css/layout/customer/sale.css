@@ -44,7 +44,7 @@
 
 .sale-cards-holder{
   display: grid;
-  grid-template-columns: repeat(6, 2fr);
+  grid-template-columns: repeat(auto-fill, 255px);
   width: auto;
   position: relative;
   grid-gap: 17px;
@@ -130,7 +130,6 @@ table{
 .divide td{
   padding-bottom: 15px;
   font-size: 13px;
-  white-space: nowrap;
 }
 .sale-information-holder{
   height: 100%;
