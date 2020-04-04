@@ -179,7 +179,7 @@ img.dots-glyph {
 }
 
 tr:hover:not(.header):not(.footer){
-  background-color: #d8d8d8;
+  background-color: #d8d8d8 !important;
 }
 
 tr:nth-child(even):not(.header):not(.footer) {

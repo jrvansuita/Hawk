@@ -45,16 +45,17 @@ module.exports = class JobSyncSales extends Job{
 
   doWork(){
     return new Promise((resolve, reject)=>{
-      new EccosysProvider(false)
+      new EccosysProvider(true)
       .setOnError((err) => {
         reject(err);
       })
-      .pageCount(1000)
+      .pageCount(3000)
       //.dates(Dat.yesterday(), Dat.yesterday())
-      .dates(new Date('01-01-2020'), Dat.today())
-      .doneSales()
+      .dates(new Date('04-01-2020'), Dat.today(), 'dataFaturamento', true)
+      .sales()
       .pagging()
       .each((salePage, nextPage)=>{
+        console.log('Page count:' + salePage.length);
         this.handlePage(salePage, nextPage);
       }).end(()=>{
         resolve();

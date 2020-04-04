@@ -34,9 +34,9 @@ module.exports = class EccosysApi{
     return this.pageCount(limit).page(0);
   }
 
-  dates(from, to, considerDate){
+  dates(from, to, considerDate, prefix){
     if (considerDate){
-      this.query.add('dataConsiderada', considerDate);
+      this.query.add((prefix ? '$' : '') + 'dataConsiderada', considerDate);
     }
 
     this.query.addDate('$fromDate', from);
