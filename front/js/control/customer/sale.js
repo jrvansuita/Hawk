@@ -283,7 +283,7 @@ function bindSaleItens(data){
       $itemPrice.text(Num.money(item.price)),
       $itemDiscount.text(Num.money(item.discount)),
       $itemWeight.text(item.weight),
-      $itemTotalValue.text(Num.money(item.total)));
+      $itemTotalValue.text(Num.money(item.total *item.quantity )));
 
       $tableHolder.append($saleItensHolder);
 
