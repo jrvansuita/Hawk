@@ -137,7 +137,7 @@ function bindClientResume(){
   $('.client-sale-total-value').text(Num.money(tm));
 
   var tp = client.sales.reduce((value, sale) =>{
-    if(sale.status != 'canceled'){
+    if(sale.status != 'canceled' && sale.status != 'pending_payment'){
       value += parseFloat(sale.grand_total);
     }
     return value
@@ -150,7 +150,6 @@ function bindClientResume(){
   },0);
 
   $('.client-resume-itens').text(Floa.abs(im/client.sales.length,2));
-
 }
 
 

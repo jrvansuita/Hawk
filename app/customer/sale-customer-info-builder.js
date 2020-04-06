@@ -163,7 +163,7 @@ class SaleItemWrapper{
     this.name = item.descricao || item.name;
     this.price = Floa.def(item.valor || item.price);
     this.discount = Floa.def(item.discount_amount || item.desconto_adm);
-    this.total = Floa.def((item.price - item.discount_amount) || item.valor);
+    this.total = Floa.def((item.price - (item.discount_amount/item.quantidade || item.discount_amount/item.qty_ordered)) || item.valor);
     this.quantity = Num.def(item.quantidade || item.qty_ordered);
     this.weight = Floa.def(item.weight) < 1.000 ? Floa.def(item.weight) + 'g' : Floa.def(item.weight) + 'Kg';
     this.changed = item.observacao ? item.observacao.includes('changed') : false;

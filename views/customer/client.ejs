@@ -55,14 +55,15 @@
                   <span class="client-name copiable"><%=client.nome%></span>
                   <span class="client-trade-name copiable"><%=client.fantasia%></span>
                 </td>
-                <td>
-                  <span class="client-id gray copiable"><%=client.codigo%></span>
-                  <span class="client-id gray copiable"><%=client.id%></span>
-                </td>
+
               </tr>
 
               <tr class="divide">
-                <td><span class="client-social-code gray copiable"><%=client.cnpj%></span></td>
+
+                <td>
+                  <label class="client-card-title social-code"><%=(client.tipo == 'F') ? 'CPF' : 'CNPJ'%></label>
+                  <span class="client-social-code gray copiable"><%=client.cnpj%></span>
+                </td>
                 <td><span class="client-social-code gray copiable"><%=client.ie%></span></td>
               </tr>
               <tr>
