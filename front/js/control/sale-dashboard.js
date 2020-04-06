@@ -62,6 +62,7 @@ $(document).ready(()=>{
   coloringData();
   bindTags();
   toogleCupomHidable(true);
+  paramsVariablesBinding();
 
   Object.keys(query).filter((each) => {
     return each.includes('attr_');
@@ -206,5 +207,39 @@ function toogleCupomHidable(hide){
     });
     $('.coupom-box').append(hide);
   }
+}
+
+function paramsVariablesBinding(){
+  $('.param-info > input').focusin(function (){
+    $(this).val($(this).val().split(' ').pop());
+    $(this).select();
+  });
+
+
+  var format = function(){
+    var val = _params[$(this).attr('id')] || Floa.def($(this).val());
+
+    if(val){
+      $(this).val(Num.money(val));
+    }
+
+    var label = $(this).parent().find('label');
+    if (label.length){
+      label.text(label.data('label') + ' ('+Num.percent((val*100)/data.total)+')');
+    }
+  };
+
+
+  $('.param-info > input').focusout(format);
+  $('.param-info > input').trigger('focusout');
+
+  $('.param-info > input').change(function() {
+    var id = $(this).attr('id');
+    var val = $(this).val();
+    _params[id] = val;
+    _post('/put-main-param', {name: id, val: val}, () => {
+      //nothing
+    });
+  });
 
 }

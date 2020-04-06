@@ -279,16 +279,137 @@
                         </tr>
                       </table>
                     </div>
+
+
+
+                    <div class="grid-item shadow" style="grid-column: 3 / 5;">
+                      <div class="row">
+                        <span class="title">Custos
+                        </span>
+                        <div class="col">
+                          <div class="material-input-holder param-info" >
+                            <input type="text" id="sd-marketing" required>
+
+                            <span class="bar"></span>
+                            <label data-label="Marketing">Marketing</label>
+                          </div>
+                        </div>
+
+                        <div class="col">
+                          <div class="material-input-holder param-info">
+                            <input type="text" id="sd-tax" required>
+
+                            <span class="bar"></span>
+                            <label data-label="Imposto"></label>
+                          </div>
+                        </div>
+
+                        <div class="col">
+                          <div class="material-input-holder param-info">
+                            <input type="text" id="sd-freight" value="<%=data.freight%>" required>
+
+                            <span class="bar"></span>
+                            <label data-label="Frete"></label>
+                          </div>
+                        </div>
+
+                        <div class="col">
+                          <div class="material-input-holder param-info">
+                            <input type="text" id="sd-cost" value="<%=data.cost%>" required>
+
+                            <span class="bar"></span>
+                            <label data-label="Custo Produtos"></label>
+                          </div>
+                        </div>
+
+                        <div class="col">
+                          <div class="material-input-holder param-info">
+                            <input type="text" id="sd-tec" required>
+
+                            <span class="bar"></span>
+                            <label data-label="Tecnologia"></label>
+                          </div>
+                        </div>
+
+                        <div class="col">
+                          <div class="material-input-holder param-info">
+                            <input type="text" id="sd-fp" required>
+
+                            <span class="bar"></span>
+                            <label data-label="Folha de Pagamento"></label>
+                          </div>
+                        </div>
+
+                        <div class="col">
+                          <div class="material-input-holder param-info">
+                            <input type="text" id="sd-op" required>
+
+                            <span class="bar"></span>
+                            <label data-label="Operacional"></label>
+                          </div>
+                        </div>
+
+                        <div class="col">
+                          <div class="material-input-holder param-info">
+                            <input type="text" id="sd-emp" required>
+
+                            <span class="bar"></span>
+                            <label data-label="Empréstimos"></label>
+                          </div>
+                        </div>
+
+
+                        <div class="col">
+                          <div class="material-input-holder param-info">
+                            <input type="text" id="sd-jur" required>
+
+                            <span class="bar"></span>
+                            <label data-label="Juros/Taxas"></label>
+                          </div>
+                        </div>
+
+
+                        <div class="col">
+                          <div class="material-input-holder param-info">
+                            <input type="text" id="sd-cb" required>
+
+                            <span class="bar"></span>
+                            <label data-label="Estornos/Chargeback"></label>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <div class="row gray">
+
+                        <div class="col">
+                          <span class="super">Faturamento</span>
+                          <span class="value high-val"><%=Num.money(data.total)%></span>
+                        </div>
+
+
+
+                        <div class="col">
+                          <span class="super">Margem Real</span>
+                          <span class="value high-val">0%</span>
+                        </div>
+
+                        <div class="col">
+                          <span class="super">Lucro Real</span>
+                          <span class="value high-val">0%</span>
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                    <%}else{%>
+                      <span class="no-data">Nenhuma informação foi encontrada com este filtro!</span>
+                      <%}%>
+
+                    </div>
+
                   </div>
 
-
-                  <%}else{%>
-                    <span class="no-data">Nenhuma informação foi encontrada com este filtro!</span>
-                    <%}%>
-
-                  </div>
-
-                </div>
-
-              </body>
-              </html>
+                </body>
+                </html>

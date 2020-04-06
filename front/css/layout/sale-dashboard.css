@@ -83,7 +83,7 @@ img.dots-glyph {
 
 
 .grid-item .title{
-  font-size: 13px;
+  font-size: 13px !important;
   display: block;
   font-weight: 600;
   color: #5d5b59;
@@ -188,7 +188,7 @@ tr:nth-child(even):not(.header):not(.footer) {
 
 table .header td{
   border-bottom:1px dashed #d8d8d8;
-  font-size: 13px;
+  font-size: 13px !important;
   color: rgb(130, 128, 125);
   font-weight: 400;
   display: table-cell !important;

@@ -8,7 +8,7 @@ module.exports = {
   init(callback){
     Params.findAll(function(err, docs) {
       global._mainParams = docs[0].toObject();
-      global.Params = require('../param/get.js');
+      global.Params = require('../vars/params.js');
       callback();
     });
   },
@@ -20,7 +20,6 @@ module.exports = {
 
 
     new Params().put(name, val).save();
-
   }
 
 

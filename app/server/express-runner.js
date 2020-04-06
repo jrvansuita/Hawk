@@ -65,7 +65,7 @@ app.use(allowCorsMiddleware);
 app.use('/img', express.static('front/img', staticOptions));
 app.use('/front', express.static('front', staticOptions));
 app.use('/util', express.static('app/util', staticOptions));
-app.use('/param', express.static('app/param/get.js', staticOptions));
+app.use('/param', express.static('app/vars/params.js', staticOptions));
 
 //Store external Views
 app.use('/store', express.static('store/front', staticOptions));
