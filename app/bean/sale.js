@@ -39,14 +39,14 @@ module.exports = class Sale extends DataAccess {
 
 
   static from(s){
-    var cost = s.items.reduce((count, i)=>{ return count + parseFloat(i.cost)}, 0)
+    var cost = Floa.abs(s.items.reduce((count, i)=>{ return count + parseFloat(i.cost)}, 0),2);
     var uf = s._OutroEndereco ? s._OutroEndereco.uf : '';
     var city = s._OutroEndereco ? s._OutroEndereco.cidade : '';
 
 
     return new Sale(
       s.numeroPedido,
-      new Date(s.data),
+      new Date(),
       s.deliveryTime,
       s.frete,
       s.transport,

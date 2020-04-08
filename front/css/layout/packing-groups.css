@@ -1,7 +1,7 @@
 .all-groups-holder{
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  width: fit-content;
+  /* width: fit-content; */
   position: relative;
   grid-gap: 15px;
   margin-top: 20px;

@@ -11,6 +11,8 @@ const PackageTypeVault = require('../vault/package-type-vault.js');
 const Day = require('../bean/day.js');
 const HistoryStorer = require('../history/history-storer.js');
 
+const SaleKeeper = require('../loader/sale-keeper.js');
+
 module.exports = {
 
   findSaleFromEan(ean, callback){
@@ -170,7 +172,7 @@ module.exports = {
 function onPackingRejected(params, user, result){
   var error = result.error[0].erro.split('\n')[0];
 
-  countPoints(params.saleNumber, user, (day, sale)=>{
+  onFinalPackingShoot(params.saleNumber, user, (day, sale)=>{
     HistoryStorer.packingRejected(user.id, params.saleNumber, params.oc, error);
   });
 
@@ -181,25 +183,22 @@ function onPackingDone(params, user){
   DoneLaws.remove(params.saleNumber);
   PackageTypeVault.decPackStock(params.packageId);
 
-  countPoints(params.saleNumber, user, (day, sale)=>{
+  onFinalPackingShoot(params.saleNumber, user, (day, sale)=>{
     HistoryStorer.packing(user.id, sale, day);
   });
 
   prepareDoneList();
 }
 
-function countPoints(saleNumber, user, callback){
-  new SaleLoader(saleNumber)
-  .loadClient()
-  .loadItems()
-  .run((sale)=>{
-    if (sale){
-      var day = Day.packing(user.id, Dat.today(), sale);
+function onFinalPackingShoot(saleNumber, user, callback){
+  new SaleKeeper(saleNumber)
+  .requestClient()
+  .save((sale) => {
+    var day = Day.packing(user.id, Dat.today(), sale);
 
-      Day.sync(day, (err, doc) => {
-        callback(day, sale);
-      });
-    }
+    Day.sync(day, (err, doc) => {
+      callback(day, sale);
+    });
   });
 }
 

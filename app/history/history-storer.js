@@ -38,7 +38,7 @@ module.exports={
   picking(userId, sale, day){
     onTry(()=>{
       var message = 'Pedido: ' + sale.numeroPedido + (sale.client ? ' - ' + sale.client.nome : '');
-      message += '\n'+ 'OC: ' + sale.numeroDaOrdemDeCompra + ' - ' + sale.transport + ' - ' + (sale.client ? sale.client.uf : 'UF Não encontrado') + ' - ' + Num.money(sale.totalProdutos);
+      message += '\n'+ 'OC: ' + sale.numeroDaOrdemDeCompra + ' - ' + sale.transport + ' - ' + (sale.client ? sale.client.uf : 'UF Não encontrado') + ' - ' + Num.money(sale.totalVenda);
 
       if (day){
         message += '\nItems: ' + day.total + " Secs: " + parseInt(day.count) + ' Pontos gerados: ' + day.points;
@@ -52,7 +52,7 @@ module.exports={
   packing(userId, sale, day){
     onTry(()=>{
       var message = 'Pedido: ' + sale.numeroPedido +  (sale.client ? ' - ' + sale.client.nome : '');
-      message += '\n'+ 'OC: ' + sale.numeroDaOrdemDeCompra + ' - ' + sale.transport + ' - ' + (sale.client ? sale.client.uf : 'UF Não encontrado') + ' - ' + Num.money(sale.totalProdutos);
+      message += '\n'+ 'OC: ' + sale.numeroDaOrdemDeCompra + ' - ' + sale.transport + ' - ' + (sale.client ? sale.client.uf : 'UF Não encontrado') + ' - ' + Num.money(sale.totalVenda);
 
       if (day){
         message += '\nItems: ' + sale.itemsQuantity + ' Pontos gerados: ' + day.points;

@@ -1,7 +1,6 @@
 const Job = require('../jobs/controller/job.js');
 const History = require('../bean/history.js');
-const Sale = require('../bean/sale.js');
-const SaleLoader = require('../loader/sale-loader.js');
+const SaleKeeper = require('../loader/sale-keeper.js');
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
 
 module.exports = class JobSyncSales extends Job{
@@ -11,21 +10,11 @@ module.exports = class JobSyncSales extends Job{
   }
 
   handleEach(saleRow, next){
-    new SaleLoader(saleRow.numeroPedido)
-    //.loadClient()
-    .loadItems()
-    .loadItemsDeepAttrs(null, (item, product) => {
-      item.cost = product.precoCusto;
-      item.brand = product.Marca;
-      item.gender = product.Genero;
-    })
+    new SaleKeeper(saleRow.numeroPedido)
     .setOnError((err) => {
       this.onError(err);
     })
-    .run((sale) => {
-      console.log('JobSales - ' + sale.numeroPedido + ' - ' + Dat.format(new Date(sale.data)));
-      Sale.from(sale).upsert(next);
-    });
+    .save(next);
   }
 
   handlePage(page, nextPageCallback){
