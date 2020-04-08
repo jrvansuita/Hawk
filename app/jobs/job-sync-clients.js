@@ -3,7 +3,10 @@ const History = require('../bean/history.js');
 const Client = require('../bean/client.js');
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
 
+const GetResponseProvider = require('../getresponse/getresponse-provider.js');
+
 module.exports = class JobSyncClients extends Job{
+
 
   getName(){
     return 'Sincronização de Clientes';
@@ -11,6 +14,8 @@ module.exports = class JobSyncClients extends Job{
 
   handleEach(client, next){
     Client.from(client).upsert(next);
+    
+    //new GetResponseProvider().addContact(client);
   }
 
   handlePage(page, nextPageCallback){

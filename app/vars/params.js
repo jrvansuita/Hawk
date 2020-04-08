@@ -148,6 +148,10 @@ var Params = {
 
   trackingUrl(){
     return this.get('tracking-url');
+  },
+
+  getResponseSecret(){
+    return this.get('getresponse-key');
   }
 }
 
