@@ -55,10 +55,7 @@ module.exports = class EccosysProvider extends EccosysApi{
   }
 
   products() {
-    return this.get('produtos').multiple().prepare((data) => {
-        Util.bindProductAttrs(data);
-      return data;
-    });
+    return this.get('produtos').multiple();
   }
 
 
