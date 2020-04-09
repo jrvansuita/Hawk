@@ -226,7 +226,7 @@
                     <% var arr = data.transport; %>
                     <table class="list" >
                       <tr class="header">
-                        <td  class="title">Transportadoras</td>
+                        <td  class="title"></td>
                         <td class="high-val">Pedidos</td>
                         <td>Total</td>
                         <td>Ticket</td>
@@ -246,17 +246,17 @@
                           <td><span class="super high-val taggable" data-attr="transport" data-value="<%=each.name%>"><%=each.name%></span></td>
                           <td><span class="super high-val"><%=each.count%></span></td>
                           <td><span class="value"><%=Num.format(each.total)%></span></td>
-                          <td><span class="value"><%=Num.money(each.total/each.count)%></span></td>
-                          <td><span class="value"><%=Num.percent(each.count * 100 / data.count)%></span></td>
+                          <td><span class="value"><%=Num.parse(each.total/each.count, true)%></span></td>
+                          <td><span class="value"><%=Num.percent((each.count * 100) / data.count)%></span></td>
 
                           <td><span class="value middle"><%=each.minDT%></span></td>
                           <td><span class="value middle"><%=each.maxDT%></span></td>
                           <td><span class="value high-val"><%=Num.int(each.countDT / each.count)%> dias</span></td>
-                          <td><span class="value"><%=Num.money(each.minValue)%></span></td>
-                          <td><span class="value"><%=Num.money(each.maxValue)%></span></td>
-                          <td><span class="value high-val"><%=Num.money(each.totalValue / each.count)%></span></td>
-                          <td><span class="value"><%=Num.percent(each.total / each.totalValue)%></span></td>
-                          <td><span class="value min-val"><%=Num.money(each.totalValue)%></span></td>
+                          <td><span class="value"><%=Num.parse(each.minValue)%></span></td>
+                          <td><span class="value"><%=Num.parse(each.maxValue)%></span></td>
+                          <td><span class="value high-val"><%=Num.parse(each.totalValue / each.count)%></span></td>
+                          <td><span class="value"><%=Num.percent((each.totalValue * 100) / each.total )%></span></td>
+                          <td><span class="value min-val"><%=Num.parse(each.totalValue)%></span></td>
                         </tr>
                         <%})%>
 
@@ -273,9 +273,9 @@
 
                           <td></td>
                           <td></td>
-                          <td class="high-val"><%=Num.money(data.transportSummary.totalValue / data.count)%></td>
-                          <td><%=Num.percent(data.total / data.freight)%></td>
-                          <td class="min-val"><%=Num.money(data.transportSummary.totalValue)%></td>
+                          <td class="high-val"><%=Num.format(data.transportSummary.totalValue / data.count)%></td>
+                          <td><%=Num.percent( (data.freight* 100) / data.total)%></td>
+                          <td class="min-val"><%=Num.format(data.transportSummary.totalValue)%></td>
                         </tr>
                       </table>
                     </div>
