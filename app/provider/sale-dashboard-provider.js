@@ -14,8 +14,8 @@ module.exports = class SaleDashboardProvider{
     this.query = query;
 
     //Initializing
-    query.begin = query.begin ? query.begin : Dat.firstDayOfMonth().getTime();
-    query.end = query.end ? query.end : Dat.today().getTime();
+    query.begin = query.begin ? query.begin : Dat.firstDayOfMonth().begin().getTime();
+    query.end = query.end ? query.end : Dat.today().end().getTime();
 
     return this;
   }
@@ -89,6 +89,7 @@ class SaleDash{
       this.discount += each.discount || 0;
       this.repurchaseCount += each.repurchase ? 1 : 0;
       this.weight += each.weight || 0;
+      console.log('Sale ' + each.number + ' ' +  each.weight);
 
       this.handleArr(each, 'uf');
       this.handleArr(each, 'paymentType');

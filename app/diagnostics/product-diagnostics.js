@@ -71,7 +71,7 @@ module.exports = class ProductDiagnostics{
     // --- Cascata --- //
 
 
-    if (isWeightMissing(product, true)){
+    if (isWeightProblem(product, true)){
       this._storeFix(product, 'WEIGHT');
     }
 
@@ -271,7 +271,7 @@ function getProductAttrBundle(product){
   return result;
 }
 
-function isWeightMissing(product, checkMagento){
+function isWeightProblem(product, checkMagento){
   //Considerar somente o peso liquido
   var isMissing = (parseFloat(product.pesoLiq) == 0) && !isPhotoMissing(product);
 
@@ -282,6 +282,10 @@ function isWeightMissing(product, checkMagento){
 
       isMissing = weight == 0;
     }
+  }
+
+  if (!isMissing){
+    isMissing = (parseFloat(product.pesoLiq) != parseFloat(product.pesoBruto)) || ((parseFloat(product.pesoLiq) + parseFloat(product.pesoBruto)) > 50);
   }
 
 
