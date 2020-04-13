@@ -1,12 +1,18 @@
 var Num = {
 
   money: function(val, trunc) {
+    return 'R$ ' + Num.parse(val, trunc);
+  },
+
+  parse: function(val, trunc) {
     var digits = trunc ? 0 : 2;
+    var val = parseFloat(val).toLocaleString('pt-BR', {maximumFractionDigits:digits, minimumFractionDigits:digits});
+
     if (typeof global !== 'undefined'){
-       return 'R$ ' + parseFloat(val).toLocaleString('pt-BR', {maximumFractionDigits:digits, minimumFractionDigits:digits}).replace('.', '_').replace(',', '.').replace('_', ',');
-    }else{
-      return 'R$ ' + parseFloat(val).toLocaleString('pt-BR', {maximumFractionDigits:digits, minimumFractionDigits:digits});
+      return val.replace('.', '_').replace(',', '.').replace('_', ',');
     }
+    
+    return val;
   },
 
   reduceFloat: function(number, trunc) {

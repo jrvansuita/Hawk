@@ -218,7 +218,7 @@ module.exports = class DataAccess {
       var result = {}
       result[field] = {
         $gte: isDate ? new Date(parseInt(min)).begin() : min,
-        $lte: isDate ? new Date(parseInt(max)).begin() : max,
+        $lte: isDate ? new Date(parseInt(max)).end() : max,
       };
       return result;
     }
