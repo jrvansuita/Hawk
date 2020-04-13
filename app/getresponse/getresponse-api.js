@@ -3,22 +3,12 @@ const Query = require('../util/query.js');
 
 module.exports = class GetResponseAPI {
 
-  prepareBody(data){
-    this.body = JSON.stringify({
-      "name": data.nome,
-      "campaign": {
-        "campaignId": "w"
-      },
-      "email": data.email,
+  constructor(){
+    this.query = new Query();
+  }
 
-      "customFieldValues": [
-        {
-          "customFieldId": "V",
-          "value": [
-            data.dataNascimento
-          ],
-        }]
-    });
+  setBody(data){
+    this.body = data;
     return this;
   }
 
@@ -40,16 +30,26 @@ module.exports = class GetResponseAPI {
     return this.setMethod('GET').setPath(path);
   }
 
+  findContact(email){
+    this.query.add('query[email]', email);
+    return this;
+  }
+
 
   options(){
+
+    var query = this.query.hasParams() ? this.query.build() : '';
+
+    var path = '/v3/'+ encodeURI(this.path + query);
+    //console.log(path);
 
     var options = {
       host: 'api.getresponse.com',
       method: this.method,
-      path: '/v3/' + this.path,
+      path: path,
       headers: {
         'Content-Type': 'application/json',
-        'X-Domain': 'emkt.boutiqueinfantil.com.br',
+        'X-Domain': Params.getResponseDomain(),
         'X-Auth-Token': 'api-key ' + Params.getResponseSecret(),
       }
     };
@@ -57,14 +57,25 @@ module.exports = class GetResponseAPI {
   }
 
 
-  go(){
+  go(callback){
 
     var req = https.request(this.options(), function(res) {
-      console.log(`statusCode: ${res.statusCode}`);
+      var responseBody = '';
 
-      res.on('data', data => {
-        process.stdout.write(data)
-      })
+      //console.log(`statusCode: ${res.statusCode}`);
+
+      res.on('data', function(data) {
+        responseBody +=data;
+      });
+
+      res.on('end', function(){
+        if(responseBody){
+          responseBody = JSON.parse(responseBody);
+          callback(responseBody);
+        }else{
+          callback();
+        }
+      });
     });
 
     req.on('error', error => {
