@@ -45,7 +45,7 @@ module.exports = class SaleDashboardProvider{
           if (err && this.onError){
             this.onError(err);
           }else{
-            this.onResult({id: this._keepTemp(new SaleDash(rows))});
+            this.onResult(this._keepTemp(new SaleDash(rows)));
           }
         });
       }
@@ -55,8 +55,10 @@ module.exports = class SaleDashboardProvider{
 
   _keepTemp(data){
     var id = Util.id();
-    temp[id] = {query : this.query, data: data};
-    return id;
+    var data = {id: id, query : this.query, data: data};
+
+    temp[id] = data;
+    return data;
   }
 
 };
@@ -192,7 +194,7 @@ function buildDataQuery(query){
 
   and.push(Sale.dateRange(query.begin, query.end));
 
-  if (query.value){
+  if (query.value && query.value.length){
     and.push(Sale.likeQuery(query.value));
   }
 
@@ -204,7 +206,7 @@ function buildDataQuery(query){
 
  var result = {$and : and};
 
-  //console.log(JSON.stringify(result));
+  console.log(JSON.stringify(result));
 
   return result;
 }

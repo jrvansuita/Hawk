@@ -2,8 +2,6 @@ var dateBeginPicker = null;
 var dateEndPicker = null;
 
 $(document).ready(()=>{
-  query = {};
-
   dateBeginPicker = new DatePicker();
 
   dateBeginPicker.holder('.date-begin-holder', true)
@@ -15,7 +13,7 @@ $(document).ready(()=>{
     if (query.begin){
       var date = new Date(parseInt(query.begin));
     }else{
-      var date = Dat.today();
+      var date = Dat.firstDayOfMonth();
     }
 
     dateBeginPicker.setSelected(date);
@@ -48,7 +46,7 @@ $(document).ready(()=>{
   });
 
   $('#search-button').click(()=>{
-    seachData();
+    redirect();
   });
 
   $('.button').on("keyup", function(e) {
@@ -65,59 +63,46 @@ $(document).ready(()=>{
   bindTags();
   toogleCupomHidable(true);
   paramsVariablesBinding();
-  placeQueryTags();
+
+  Object.keys(query).filter((each) => {
+    return each.includes('attr_');
+  }).forEach((key) => {
+    var values = query[key].split('|');
+    values.forEach((eachValue) => {
+      selectAndPlaceTag(eachValue, key.split('_').pop())
+    });
+  });
 });
 
-function seachData(){
+function redirect(){
   var begin = dateBeginPicker.getSelected();
   var end = dateEndPicker.getSelected();
   begin = begin && $('#date-begin').val() ? begin.getTime() : undefined;
   end = end && $('#date-end').val() ? end.getTime() : undefined
 
 
-  _get('/sales-dashboard-data',{
-    begin: begin,
-    end: end,
-    value: $('#search-input').val(),
-    attrs: getAttrsTags()
-  }, (result) => {
+  var params = '';
 
-    if (window.history.replaceState) {
-      window.history.replaceState("Data", null, location.pathname + '?id=' + result.id);
-    }
-
-   $('.no-data').hide();
-    console.log(result);
-    buildResumeBox(result.data);
-  });
-}
-
-
-
-function buildResumeBox(data){
-    new BuildBox().row('Geral', data.count, 'min-col');
-
-}
-
-class BuildBox{
-  constructor(){
-    this.box = $('<div>').addClass('grid-item shadow');
-    $('.content-grid').append(this.box);
+  if ($('#search-input').val()){
+    params += 'value=' + $('#search-input').val() + '&'
   }
 
-  row(title, num, clazz){
-    var row = $('<div>').addClass('row ' + clazz);
-    this.box.append(row);
-    row.append($('<span>').addClass('title').append(title, $('<span>').addClass('right').append(num)));
+  if (false){
+    'attrs=' + undefined + '&'
   }
 
+  params +=   'begin=' + begin + '&end=' + end + '&';
 
+  var attrs = getAttrsTags();
 
+  if (attrs){
+    params += Object.keys(attrs).map((key) => {
+      return key + '=' + attrs[key] + '&';
+    }).join('');
+  }
+
+  window.location.href= '/sales-dashboard?' + encodeURI(params);
 }
-
-
-
-
 
 function toggleTagBox(forceOpen){
   if ($('.icon-open').hasClass('is-closed') || forceOpen ){
@@ -257,16 +242,4 @@ function paramsVariablesBinding(){
     });
   });
 
-}
-
-
-function placeQueryTags(){
-  Object.keys(query).filter((each) => {
-    return each.includes('attr_');
-  }).forEach((key) => {
-    var values = query[key].split('|');
-    values.forEach((eachValue) => {
-      selectAndPlaceTag(eachValue, key.split('_').pop())
-    });
-  });
 }

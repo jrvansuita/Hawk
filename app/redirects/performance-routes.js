@@ -49,7 +49,15 @@ module.exports = class PerformanceRoutes extends Routes{
         MaganePoints.packingRemovingPointsFromPicker(res.locals.loggedUser, req.body.picker, req.body.points, req.body.saleNumber, this._resp().redirect(res));
       });
 
-      this._page('/sales-dashboard', (req, res)=>{
+
+
+
+
+
+
+
+
+      this._page('/sales-dashboard-copia', (req, res)=>{
         new SaleDashboardProvider()
         .with(req.query)
         .maybe(req.session.salesDashQueryId)
@@ -59,12 +67,38 @@ module.exports = class PerformanceRoutes extends Routes{
         .setOnResult((result) => {
           if (result.id){
             req.session.salesDashQueryId = result.id;
-            res.redirect('/sales-dashboard?id=' + result.id);
+            res.redirect('/sales-dashboard-copia?id=' + result.id);
           }else{
-            res.render('sale/sales-dashboard', {query: result.query, data: result.data});
+            res.render('sale/sales-dashboard-copia', {query: result.query, data: result.data});
           }
         }).load();
       });
+
+
+
+
+
+      this._page('/sales-dashboard', (req, res)=>{
+        res.render('sale/sales-dashboard');
+      });
+
+
+
+
+
+      this._get('/sales-dashboard-data', (req, res)=>{
+        new SaleDashboardProvider()
+        .with(req.query)
+        .maybe(req.session.salesDashQueryId)
+        .setOnError((err) => {
+          this._resp().error(res, err);
+        })
+        .setOnResult((result) => {
+          req.session.salesDashQueryId = result.id;
+          this._resp().sucess(res, result);
+        }).load();
+      });
+
 
 
 
