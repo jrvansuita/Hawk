@@ -152,6 +152,14 @@ var Params = {
 
   getResponseSecret(){
     return this.get('getresponse-key');
+  },
+
+  getResponseDomain(){
+    return this.get('getresponse-domain');
+  },
+
+  getResponseCheckbox(){
+    return this.get('getresponse-checkbox');
   }
 }
 
