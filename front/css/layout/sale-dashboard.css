@@ -42,7 +42,6 @@
   padding: 0px 10px;
   display: none;
   min-height: 35px;
-  margin-top: -12px;
 }
 
 
@@ -172,6 +171,7 @@ img.dots-glyph {
 .grid-item table{
   width: 100%;
   background-color: white;
+  border-radius: 5px;
 }
 
 .grid-item table td{
@@ -219,6 +219,7 @@ table .header td:last-child > .right{
   margin-right: 10px;
   font-size: 13px;
   color: #807b7b;
+  display: inline-block;
   text-transform: capitalize;
   border-width: 1.4px 1.4px 3px;
   border-style: solid;
@@ -241,6 +242,7 @@ table .header td:last-child > .right{
   font-weight: 900;
   cursor: pointer;
   white-space: nowrap;
+  margin-left: 4px;
 }
 
 .hide-infos:hover{
@@ -250,4 +252,8 @@ table .header td:last-child > .right{
 .no-data{
   color: gray;
   font-size: 15px;
+}
+
+.costs-box{
+  display: none;
 }

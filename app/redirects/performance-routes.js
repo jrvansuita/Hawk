@@ -57,26 +57,6 @@ module.exports = class PerformanceRoutes extends Routes{
 
 
 
-      this._page('/sales-dashboard-copia', (req, res)=>{
-        new SaleDashboardProvider()
-        .with(req.query)
-        .maybe(req.session.salesDashQueryId)
-        .setOnError((err) => {
-          this._resp().error(res, err);
-        })
-        .setOnResult((result) => {
-          if (result.id){
-            req.session.salesDashQueryId = result.id;
-            res.redirect('/sales-dashboard-copia?id=' + result.id);
-          }else{
-            res.render('sale/sales-dashboard-copia', {query: result.query, data: result.data});
-          }
-        }).load();
-      });
-
-
-
-
 
       this._page('/sales-dashboard', (req, res)=>{
         res.render('sale/sales-dashboard');

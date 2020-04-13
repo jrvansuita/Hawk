@@ -14,7 +14,7 @@ module.exports = class SaleDashboardProvider{
     this.query = query;
 
     //Initializing
-    query.begin = query.begin ? query.begin : Dat.firstDayOfMonth().begin().getTime();
+    query.begin = query.begin ? query.begin : Dat.today().begin().getTime();
     query.end = query.end ? query.end : Dat.today().end().getTime();
 
     return this;
@@ -90,7 +90,7 @@ class SaleDash{
       this.discount += each.discount || 0;
       this.repurchaseCount += each.repurchase ? 1 : 0;
       this.weight += each.weight || 0;
-      console.log('Sale ' + each.number + ' - ' +  each.freightValue);
+      //      console.log('Sale ' + each.number + ' - ' +  each.freightValue);
 
       this.handleArr(each, 'uf');
       this.handleArr(each, 'paymentType');
@@ -200,11 +200,11 @@ function buildDataQuery(query){
     and.push(Sale.likeQuery(query.value));
   }
 
-  Object.keys(query).filter((each) => {
-    return each.includes('attr_');
-  }).forEach((key) => {
-    and.push(Sale.attrsQuery(key.split('_').pop(), query[key].split('|')));
-  });
+  if (query.attrs){
+    Object.keys(query.attrs).forEach((key) => {
+      and.push(Sale.attrsQuery(key, query.attrs[key].split('|')));
+    });
+  }
 
   var result = {$and : and};
 
