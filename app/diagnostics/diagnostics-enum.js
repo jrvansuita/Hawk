@@ -27,8 +27,8 @@ module.exports = {
 
 
   WEIGHT: {
-    name : 'Produtos sem Peso',
-    description: 'Produtos com peso não informado no Eccosys ou no Magento.',
+    name : 'Produtos com Peso incorreto',
+    description: 'Produtos com peso líquido/peso bruto incorreto ou não informados no Eccosys ou no Magento.',
     icon: 'no-weight'
   },
 

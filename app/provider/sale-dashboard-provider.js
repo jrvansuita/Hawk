@@ -14,8 +14,8 @@ module.exports = class SaleDashboardProvider{
     this.query = query;
 
     //Initializing
-    query.begin = query.begin ? query.begin : Dat.firstDayOfMonth().getTime();
-    query.end = query.end ? query.end : Dat.today().getTime();
+    query.begin = query.begin ? query.begin : Dat.firstDayOfMonth().begin().getTime();
+    query.end = query.end ? query.end : Dat.today().end().getTime();
 
     return this;
   }
@@ -82,7 +82,6 @@ class SaleDash{
     this.repurchaseCount = 0;
     this.weight = 0;
 
-
     rows.forEach((each) => {
       this.total += each.total;
       this.items += each.quantityItems;
@@ -91,13 +90,16 @@ class SaleDash{
       this.discount += each.discount || 0;
       this.repurchaseCount += each.repurchase ? 1 : 0;
       this.weight += each.weight || 0;
+      console.log('Sale ' + each.number + ' - ' +  each.freightValue);
 
       this.handleArr(each, 'uf');
       this.handleArr(each, 'paymentType');
 
+
       if (each.freightValue > 0){
         this.handleArr(each, 'transport', this.handleCustomTransport);
       }
+
 
       if (this.includesCoupom(each.coupom)){
         this.handleArr(each, 'coupom');
@@ -204,7 +206,7 @@ function buildDataQuery(query){
     and.push(Sale.attrsQuery(key.split('_').pop(), query[key].split('|')));
   });
 
- var result = {$and : and};
+  var result = {$and : and};
 
   console.log(JSON.stringify(result));
 

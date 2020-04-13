@@ -64,6 +64,7 @@
           <td><%=user.title%></td>
           <td><%=user.full? 'Administrador' : (user.leader? 'Líder' : '')%></td>
           <td><%=user.access%></td>
+          <td title="<%=user.pass%>">######</td>
           <td><%=user.active ? 'Ativo' : 'Inativo'%></td>
           <td>
             <div class="icon-dots" data-userid="<%=user.id%>" data-active="<%=user.active%>">

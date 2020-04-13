@@ -67,7 +67,347 @@
 
       </div>
 
+<<<<<<< HEAD
     </div>
+=======
+            <div class="row min-col">
+              <span class="title">Geral
+                <span class="right"> <%=data.count%></span>
+              </span>
+
+              <div class="col">
+                <span class="super">Valor</span>
+                <span class="value high-val"><%=Num.money(data.total)%></span>
+              </div>
+
+              <div class="col">
+                <span class="super">Desconto</span>
+                <span class="value high-val"><%=Num.money(data.discount)%></span>
+              </div>
+
+              <div class="col">
+                <span class="super">Ticket</span>
+                <span class="value"><%=Num.money(data.tkm)%></span>
+              </div>
+
+              <div class="col">
+                <span class="super">Custo Produtos</span>
+                <span class="value"><%=Num.money(data.cost)%></span>
+              </div>
+
+              <div class="col">
+                <span class="super">Frete</span>
+                <span class="value"><%=Num.money(data.freight)%></span>
+              </div>
+
+              <div class="col">
+                <span class="super">Recompra</span>
+                <span class="value"><%=Num.percent((data.repurchaseCount*100)/data.count)%></span>
+              </div>
+
+              <div class="col">
+                <span class="super">Peso</span>
+                <span class="value"><%=Floa.weight(data.weight)%> Kg</span>
+              </div>
+
+              <div class="col">
+                <span class="super">R$/Kg</span>
+                <span class="value"><%=Num.money(data.total/data.weight)%></span>
+              </div>
+
+              <div class="col">
+                <span class="super">Margem</span>
+                <span class="value <%= data.profit ? 'green-val' : 'red-val'%>"><%=Num.percent((data.profit*100)/data.total)%></span>
+              </div>
+
+              <div class="col">
+                <span class="super">Lucro</span>
+                <span class="value <%= data.profit ? 'green-val' : 'red-val'%>"><%=Num.money(data.profit)%></span>
+              </div>
+
+            </div>
+
+
+
+
+            <div class="row gray">
+              <span class="title">Produtos
+                <span class="right"> <%=Num.points(data.items)%></span>
+              </span>
+
+              <div class="col">
+                <span class="super">Markup</span>
+                <span class="value"><%=Floa.abs((data.total - data.freight) / data.cost, 3)%></span>
+              </div>
+
+              <div class="col">
+                <span class="super">Med. Pedido</span>
+                <span class="value"><%=Floa.abs(data.avgItems,3)%></span>
+              </div>
+
+              <div class="col">
+                <span class="super">Med. Un</span>
+                <span class="value"><%=Num.money(data.avgUnit)%></span>
+              </div>
+            </div>
+
+
+          </div>
+
+
+          <div class="grid-item shadow">
+            <div class="row">
+              <% var arr = data.uf; %>
+              <span class="title">Estados
+                <span class="right"> <%=arr.length%></span>
+              </span>
+              <%arr.forEach((each)=>{%>
+                <div class="col coloring-data taggable" data-attr="uf" data-value="<%=each.name%>" data-max="<%=arr[0].count%>" data-cur="<%=each.count%>">
+                  <span class="super taggable" ><%=each.name%> <span class="right"> <%=each.count%></span></span>
+                  <span class="value min-val"><%=Num.percent(each.count*100/data.count, true)%>  <span class="right min-val"> <%=Num.format(each.total)%></span></span>
+                </div>
+                <%})%>
+              </div>
+            </div>
+
+
+
+
+            <div class="grid-item shadow">
+              <div class="row">
+                <% var arr = data.city; %>
+                <span class="title">Cidades
+                  <span class="right"> Top <%=arr.length%></span>
+                </span>
+                <%arr.forEach((each)=>{%>
+                  <div class="col coloring-data taggable" data-attr="city" data-value="<%=each.name%>" data-max="<%=arr[0].count%>" data-cur="<%=each.count%>">
+                    <span class="super"><%=each.name%> <span class="right"> <%=each.count%></span></span>
+                    <span class="value min-val"><%=Num.format(each.total)%></span>
+                  </div>
+                  <%})%>
+                </div>
+              </div>
+
+              <div class="grid-item shadow">
+                <div class="row">
+                  <% var arr = data.paymentType; %>
+                  <span class="title">Pagamentos
+                    <span class="right"> <%=arr.length%></span>
+                  </span>
+
+                  <%arr.forEach((each)=>{%>
+                    <div class="col coloring-data taggable" data-attr="paymentType" data-value="<%=each.name%>" data-max="<%=arr[0].count%>" data-cur="<%=each.count%>">
+                      <span class="super"><%=Util.getPaymentType(each.name)%> <span class="right"> <%=each.count%></span></span>
+                      <span class="value high-val"><%=Num.percent(each.count*100/data.count)%>  <span class="right min-val"> <%=Num.format(each.total)%></span></span>
+                    </div>
+                    <%})%>
+                  </div>
+
+                  <div class="row gray coupom-box">
+                    <% var arr = data.coupom; %>
+                    <span class="title">Cupons
+                      <span class="right"> <%=arr.length%></span>
+                    </span>
+
+                    <%
+                    var showedCount = 0;
+                    arr.forEach((each)=>{ %>
+
+                      <%if (each.count >= 5) showedCount++;%>
+                      <div class="col coupom <%=(each.count < 5) && (showedCount > 10) ? 'coupom-hidable' : ''%> taggable" data-attr="coupom" data-value="<%=each.name%>">
+                        <span class="super "><%=each.name%> <span class="right high-val"> <%=each.count%></span></span>
+                      </div>
+                      <%})%>
+                    </div>
+                  </div>
+
+                  <div class="grid-item shadow" style="grid-column: 1 / 3;">
+                    <% var arr = data.transport; %>
+                    <table class="list" >
+                      <tr class="header">
+                        <td  class="title"></td>
+                        <td class="high-val">Pedidos</td>
+                        <td>Total</td>
+                        <td>Ticket</td>
+                        <td class="middle">%</td>
+
+                        <td>Prazo Min.</td>
+                        <td>Prazo Máx.</td>
+                        <td class="high-val">Prazo Méd.</td>
+                        <td>Valor Min.</td>
+                        <td>Valor Máx.</td>
+                        <td class="high-val">Valor Méd.</td>
+                        <td>% Ped.</td>
+                        <td>Total <span class="right"> <%=arr.length%></span></td>
+                      </tr>
+                      <%arr.forEach((each)=>{%>
+                        <tr>
+                          <td><span class="super high-val taggable" data-attr="transport" data-value="<%=each.name%>"><%=each.name%></span></td>
+                          <td><span class="super high-val"><%=each.count%></span></td>
+                          <td><span class="value"><%=Num.format(each.total)%></span></td>
+                          <td><span class="value"><%=Num.parse(each.total/each.count, true)%></span></td>
+                          <td><span class="value"><%=Num.percent((each.count * 100) / data.count)%></span></td>
+
+                          <td><span class="value middle"><%=each.minDT%></span></td>
+                          <td><span class="value middle"><%=each.maxDT%></span></td>
+                          <td><span class="value high-val"><%=Num.int(each.countDT / each.count)%> dias</span></td>
+                          <td><span class="value"><%=Num.parse(each.minValue)%></span></td>
+                          <td><span class="value"><%=Num.parse(each.maxValue)%></span></td>
+                          <td><span class="value high-val"><%=Num.parse(each.totalValue / each.count)%></span></td>
+                          <td><span class="value"><%=Num.percent((each.totalValue * 100) / each.total )%></span></td>
+                          <td><span class="value min-val"><%=Num.parse(each.totalValue)%></span></td>
+                        </tr>
+                        <%})%>
+
+                        <tr class="footer">
+                          <td></td>
+                          <td class="high-val"><%=data.count%></td>
+                          <td><%=Num.format(data.total)%></td>
+                          <td></td>
+                          <td></td>
+
+                          <td></td>
+                          <td></td>
+                          <td class="high-val"><%=Num.int(data.transportSummary.countDT / data.count)%> dias</td>
+
+                          <td></td>
+                          <td></td>
+                          <td class="high-val"><%=Num.format(data.transportSummary.totalValue / data.count)%></td>
+                          <td><%=Num.percent( (data.freight* 100) / data.total)%></td>
+                          <td class="min-val"><%=Num.format(data.transportSummary.totalValue)%></td>
+                        </tr>
+                      </table>
+                    </div>
+
+
+
+                    <div class="grid-item shadow" style="grid-column: 3 / 5;">
+                      <div class="row">
+                        <span class="title">Custos
+                        </span>
+                        <div class="col">
+                          <div class="material-input-holder param-info" >
+                            <input type="text" id="sd-marketing" required>
+
+                            <span class="bar"></span>
+                            <label data-label="Marketing">Marketing</label>
+                          </div>
+                        </div>
+
+                        <div class="col">
+                          <div class="material-input-holder param-info">
+                            <input type="text" id="sd-tax" required>
+
+                            <span class="bar"></span>
+                            <label data-label="Imposto"></label>
+                          </div>
+                        </div>
+
+                        <div class="col">
+                          <div class="material-input-holder param-info">
+                            <input type="text" id="sd-freight" value="<%=data.freight%>" required>
+
+                            <span class="bar"></span>
+                            <label data-label="Frete"></label>
+                          </div>
+                        </div>
+
+                        <div class="col">
+                          <div class="material-input-holder param-info">
+                            <input type="text" id="sd-cost" value="<%=data.cost%>" required>
+
+                            <span class="bar"></span>
+                            <label data-label="Custo Produtos"></label>
+                          </div>
+                        </div>
+
+                        <div class="col">
+                          <div class="material-input-holder param-info">
+                            <input type="text" id="sd-tec" required>
+
+                            <span class="bar"></span>
+                            <label data-label="Tecnologia"></label>
+                          </div>
+                        </div>
+
+                        <div class="col">
+                          <div class="material-input-holder param-info">
+                            <input type="text" id="sd-fp" required>
+
+                            <span class="bar"></span>
+                            <label data-label="Folha de Pagamento"></label>
+                          </div>
+                        </div>
+
+                        <div class="col">
+                          <div class="material-input-holder param-info">
+                            <input type="text" id="sd-op" required>
+
+                            <span class="bar"></span>
+                            <label data-label="Operacional"></label>
+                          </div>
+                        </div>
+
+                        <div class="col">
+                          <div class="material-input-holder param-info">
+                            <input type="text" id="sd-emp" required>
+
+                            <span class="bar"></span>
+                            <label data-label="Empréstimos"></label>
+                          </div>
+                        </div>
+
+
+                        <div class="col">
+                          <div class="material-input-holder param-info">
+                            <input type="text" id="sd-jur" required>
+
+                            <span class="bar"></span>
+                            <label data-label="Juros/Taxas"></label>
+                          </div>
+                        </div>
+
+
+                        <div class="col">
+                          <div class="material-input-holder param-info">
+                            <input type="text" id="sd-cb" required>
+
+                            <span class="bar"></span>
+                            <label data-label="Estornos/Chargeback"></label>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <div class="row gray">
+
+                        <div class="col">
+                          <span class="super">Faturamento</span>
+                          <span class="value high-val"><%=Num.money(data.total)%></span>
+                        </div>
+
+
+
+                        <div class="col">
+                          <span class="super">Margem Real</span>
+                          <span class="value high-val">0%</span>
+                        </div>
+
+                        <div class="col">
+                          <span class="super">Lucro Real</span>
+                          <span class="value high-val">0%</span>
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                    <%}else{%>
+                      <span class="no-data">Nenhuma informação foi encontrada com este filtro!</span>
+                      <%}%>
+
+                    </div>
+>>>>>>> 54e23c7d2996251d151dbf8a64953699cfdbe215
 
   </div>
 
