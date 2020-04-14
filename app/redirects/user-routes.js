@@ -12,7 +12,7 @@ module.exports = class UserRoutes extends Routes{
       if(req.query.device && req.query.appId){
         //Is Mobile
         if (req.query.appId == Params.androidAppId()){
-          if (user){
+          if (user && (user.pass == req.query.pass)){
             if (UsersProvider.checkCanLogin(user)){
               this._resp().sucess(res, user);
             }else{
