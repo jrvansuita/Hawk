@@ -9,6 +9,12 @@ module.exports = class Query {
     return Object.keys(this).length > 0;
   }
 
+  clear(){
+   Object.keys(this).forEach((key, i) => {
+     delete this[key];
+   });
+  }
+
   add(key, value) {
     this[key] = value;
   }

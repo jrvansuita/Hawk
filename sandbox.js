@@ -6,11 +6,7 @@ const GetResponseHandler = require('./app/getresponse/getresponse-handler.js');
 
 new Initilizer(__dirname, true).begin(() => {
 
-  //new GetResponseHandler().getCustomFields((res) => {
-  //  console.log(res);
-//  });
-
-/*  var cliente = JSON.stringify({
+  var cliente = JSON.stringify({
     "nome": "Jaison Klemer Teste",
     "email": "jaison@boutiqueinfantil.com.br",
     "dataNascimento": "11/05/1998",
@@ -25,23 +21,11 @@ new Initilizer(__dirname, true).begin(() => {
   console.log(cliente.nome);
 
 
-  new GetResponseHandler().getContact(cliente.email, (data) => {
-
-    if(data[0] != null){
-      new GetResponseHandler()
-      .prepareBody(cliente)
-      .updateContact(data[0]['contactId'], (res) => {
-        console.log('Cliente atualizado');
-      });
-    }else{
-      new GetResponseHandler()
-      .prepareBody(cliente)
-      .createContact((res) => {
-        console.log('Cliente adicionado');
-      });
-    }
-  });*/
-
-  console.log(Params.getResponseCheckbox());
-
+  new GetResponseHandler().getCustomFields((res) => {
+    console.log(res);
   });
+  /*if(Params.getResponseCheckbox()){
+    new GetResponseHandler().handle(cliente);
+  }
+*/
+});

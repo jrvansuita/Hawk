@@ -160,6 +160,10 @@ var Params = {
 
   getResponseCheckbox(){
     return this.get('getresponse-checkbox');
+  },
+
+  getResponseBaseId(){
+    return this.get('getresponse-base-id');
   }
 }
 

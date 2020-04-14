@@ -45,7 +45,7 @@ function menuClick(menu){
             userid: loggedUser.id
           }, (result) => {
             if(result){
-              showMenuMsg(menu, 'Email enviado', 'sucess');
+              showMenuMsg(menu, 'Boleto enviado!', 'sucess');
 
             }else{
               showMenuMsg(menu, 'Erro ao enviar email', 'error');
@@ -298,7 +298,7 @@ function bindSaleItens(data){
       $('.tr-frete').hide();
     }
     $('.sale-info-subtotal').text(Num.money(data.subtotal));
-    $('.sale-info-cupom').html(data.payment.coupon ? data.payment.coupon.toLocaleUpperCase() + '<br>' + data.payment.discount_desc.split(',').join('<br>') : data.payment.discount_desc);
+    $('.sale-info-cupom').html(data.payment.discount_desc ? data.payment.discount_desc.split(',').join('<br>') : data.payment.coupon.toUpperCase());
     $('.sale-info-discount').text(Num.money(data.discount));
     $('.sale-info-weight-total').text(data.weight);
     $('.sale-info-total').text(Num.money(data.total));

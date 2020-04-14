@@ -91,8 +91,7 @@ function getAutoCompleteTemplate(data){
   var name = $('<span>').addClass('auto-client-name').append(data.name);
   var socialCode = $('<span>').addClass('auto-client-social').append(data.socialCode);
   var email = $('<span>').addClass('auto-client-email').append(data.email);
-  var city = $('<span>').addClass('auto-client-city').append(data.city + '/' + data.state);
-  return $('<div>').append(name, socialCode, email, city);
+  return $('<div>').append(name, socialCode, email);
 }
 
 function buildSaleMenuOptions(){

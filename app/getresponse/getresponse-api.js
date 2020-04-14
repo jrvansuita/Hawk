@@ -53,6 +53,9 @@ module.exports = class GetResponseAPI {
         'X-Auth-Token': 'api-key ' + Params.getResponseSecret(),
       }
     };
+
+    this.query.clear();
+
     return options;
   }
 

@@ -2,6 +2,23 @@ const GetResponseAPI = require('./getresponse-api.js');
 
 module.exports = class GetResponseHandler extends GetResponseAPI{
 
+  handle(client){
+      this.getContact(client.email, (data) => {
+
+        if(data[0] != null){
+          this.prepareBody(client)
+          .updateContact(data[0]['contactId'], (res) => {
+            console.log('Cliente atualizado');
+          });
+        }else{
+          this.prepareBody(client)
+          .createContact((res) => {
+            console.log('Cliente adicionado');
+          });
+        }
+      })
+  }
+
   createContact(callback){
     this.post('contacts/').setBody(this.body).go(callback);
   }
@@ -24,7 +41,7 @@ module.exports = class GetResponseHandler extends GetResponseAPI{
     this.body =  JSON.stringify({
       "name": data.nome,
       "campaign": {
-        "campaignId": "w"
+        "campaignId": Params.getResponseBaseId(),
       },
       "email": data.email,
 
@@ -35,6 +52,12 @@ module.exports = class GetResponseHandler extends GetResponseAPI{
             data.dataNascimento
           ],
         },
+        /*{
+          "customFieldId": "v",
+          "value": [
+            data.nome.split(' ', 1)[0]
+          ]
+        },*/
         {
           "customFieldId": "r",
           "value": [

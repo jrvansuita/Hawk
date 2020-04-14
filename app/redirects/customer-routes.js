@@ -41,8 +41,8 @@ module.exports = class CustomerRoutes extends Routes{
 
     //envia rastreio
     this._post('/customer-email-tracking', (req, res, locals) => {
-      new CustomerHandler(req.body.userid)
-      .sendEmailDanfe(req.body, this._resp().redirect(res));
+      //new CustomerHandler(req.body.userid)
+    //  .sendEmailDanfe(req.body, this._resp().redirect(res));
     });
 
     //envia nf

@@ -41,19 +41,32 @@ module.exports = class CustomerHandler{
     this._buildAndSendEmail('NF', data, callback);
   }
 
-  _buildAndSendEmail(template, body, callback){
+
+  sendEmailTracking(body, callback){
+
+    var data = [{
+      emailData: {
+        cliente: body.cliente,
+        oc: body.oc,
+        tracking: body.tracking
+      }
+    }];
+    this._buildAndSendEmail('TRACKING', data, callback);
+  }
+
+  _buildAndSendEmail(template, data, callback){
     new EmailBuilder()
     .template(template)
-    .to("jaison.com.br")//body[0].emailData.cliente.email)
+    .to("jaison@boutiqueinfantil.com.br")//body[0].emailData.cliente.email)
     //.receiveCopy()
     //.reply(Params.replayEmail())
-    .setAttachments(body[0].attach)
-    .setData(body[0].emailData)
+    .setAttachments(data[0].attach)
+    .setData(data[0].emailData)
     .send((err, id) => {
       if(err){
-        History.notify(this.userId, 'Erro ao enviar email', 'Ocorreu um erro ao tentar enviar o email referente ao pedido {0}'.format(body[0].emailData.oc), 'Email');
+        History.notify(this.userId, 'Erro ao enviar email', 'Ocorreu um erro ao tentar enviar o email referente ao pedido {0}'.format(data[0].emailData.oc), 'Email');
       }else{
-        History.notify(this.userId, 'Email Enviado', Const.customer_email_sending.format(template.toLocaleLowerCase(), body[0].emailData.cliente.email, body[0].emailData.oc), 'Email');
+        History.notify(this.userId, 'Email Enviado', Const.customer_email_sending.format(template.toLocaleLowerCase(), data[0].emailData.cliente.email, data[0].emailData.oc), 'Email');
       }
       callback(id);
     });

@@ -15,24 +15,9 @@ module.exports = class JobSyncClients extends Job{
   handleEach(client, next){
     Client.from(client).upsert(next);
 
-
-    //mostrar pro Jr
-  /*  new GetResponseHandler().getContact(client.email, (data) => {
-
-      if(data[0] != null){
-        new GetResponseHandler()
-        .prepareBody(client)
-        .updateContact(data[0]['contactId'], (res) => {
-          console.log('Cliente atualizado');
-        });
-      }else{
-        new GetResponseHandler()
-        .prepareBody(client)
-        .createContact((res) => {
-          console.log('Cliente adicionado');
-        });
-      }
-    }); */
+    if(Params.getResponseCheckbox()){
+      new GetResponseHandler().handle(client);
+    }
   }
 
   handlePage(page, nextPageCallback){
@@ -57,8 +42,7 @@ module.exports = class JobSyncClients extends Job{
         reject(err);
       })
       .pageCount(1000)
-      .dates(Dat.yesterday(), Dat.now())
-      //.dates(Dat.rollDay(new Date(), -2), Dat.now())
+      .dates(Dat.rollDay(new Date(), -2), Dat.now())
       .clients()
       .pagging()
       .each((clientsPage, nextPage)=>{

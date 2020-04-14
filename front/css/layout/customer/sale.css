@@ -44,7 +44,7 @@
 
 .sale-cards-holder{
   display: grid;
-  grid-template-columns: repeat(auto-fill, 255px);
+  grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
   width: auto;
   position: relative;
   grid-gap: 17px;
@@ -179,7 +179,7 @@ table{
 
 .sale-history-holder{
   width: 100%;
-  margin-left: 2%;
+  margin-left: 20px;
   flex: 1;
   display: initial;
   height: auto;

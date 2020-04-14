@@ -52,27 +52,30 @@
             <table>
               <tr>
                 <td>
+                  <span class="client-card-title">Nome</span>
                   <span class="client-name copiable"><%=client.nome%></span>
                   <span class="client-trade-name copiable"><%=client.fantasia%></span>
                 </td>
-
+                <td>
+                  <span class="client-card-title social-code"><%=(client.tipo == 'F') ? 'CPF' : 'CNPJ'%></span>
+                  <span class="client-social-code gray copiable"><%=client.cnpj%></span>
+                </td>
               </tr>
 
               <tr class="divide">
-
-                <td>
-                  <label class="client-card-title social-code"><%=(client.tipo == 'F') ? 'CPF' : 'CNPJ'%></label>
-                  <span class="client-social-code gray copiable"><%=client.cnpj%></span>
-                </td>
                 <td><span class="client-social-code gray copiable"><%=client.ie%></span></td>
               </tr>
               <tr>
                 <td><label class="client-card-title">Data de Nascimento</label></td>
-                <td><label class="client-card-title right">Última Atualização</label></td>
+                <td><label class="client-card-title">Última Atualização</label></td>
               </tr>
               <tr>
-                <td><span class="client-date"><%=Dat.format(new Date(client.dataNascimento))%></span></td>
-                <td><span class="client-date right"><%=Dat.formatwTime(new Date(client.dataAlteracao || client.dtCriacao))%></span></td>
+                <td>
+                  <span class="client-date"><%=Dat.format(new Date(client.dataNascimento))%></span>
+                </td>
+                <td>
+                  <span class="client-date"><%=Dat.formatwTime(new Date(client.dataAlteracao || client.dtCriacao))%></span>
+                </td>
               </tr>
             </table>
           </div>
@@ -81,24 +84,35 @@
           <div class="client-card-item shadow">
             <label class="client-card-title">Endereço</label>
             <table>
-              <tr>
+              <tr class="divide">
                 <td colspan="2">
-                  <span class="client-address"><%=client.endereco + ', ' + client.enderecoNro%></span>
+                  <span class="client-card-title">Rua</span>
+                  <span class="client-address gray"><%=client.endereco + ', ' + client.enderecoNro%></span>
+                </td>
+                <td>
+                  <span class="client-card-title">Bairro</span>
+                  <span class="client-address gray"><%=client.bairro%></span>
+                </td>
+
+                <td>
+                  <span class="client-card-title">Complemento</span>
+                  <span class="client-address gray"><%=client.complemento%></span>
                 </td>
               </tr>
 
-              <tr class="divide">
-                <td><span class="client-address"><%=client.bairro%></span></td>
-                <td><span class="client-address right gray"><%=client.complemento%></span></td>
-              </tr>
-
               <tr>
-                <td><span class="client-address"><%=client.cidade%></span></td>
-                <td><span class="client-address right"><%=client.uf%></span></td>
-              </tr>
-              <tr>
-                <td><span class="client-address gray copiable"><%=client.cep%></span></td>
-                <td></td>
+                <td colspan="2">
+                  <span class="client-card-title">Cidade</span>
+                  <span class="client-address gray"><%=client.cidade%></span>
+                </td>
+                <td>
+                  <span class="client-card-title">Estado</span>
+                  <span class="client-address gray"><%=client.uf%></span>
+                </td>
+                <td>
+                  <span class="client-card-title">CEP</span>
+                  <span class="client-address gray copiable"><%=client.cep%></span>
+                </td>
               </tr>
             </table>
           </div>
@@ -108,12 +122,22 @@
             <label class="client-card-title">Contato</label>
             <table>
               <tr class="divide">
-                <td><span class="client-tel copiable"><%=client.fone%></span></td>
-                <td><span class="client-tel right copiable"><%=client.celular%></span></td>
+                <td>
+                  <span class="client-card-title">Telefone</span>
+                  <span class="client-tel copiable gray"><%=client.fone%></span>
+                </td>
+                <%if(client.celular){%>
+                <td>
+                  <span class="client-card-title">Celular</span>
+                  <span class="client-tel copiable gray"><%=client.celular%></span>
+                </td>
+                <%}%>
               </tr>
-
               <tr>
-                <td colspan="2"><span class="client-email copiable"><%=client.email%></span></td>
+                <td colspan="2">
+                  <span class="client-card-title">Email</span>
+                  <span class="client-email copiable gray"><%=client.email%></span>
+                </td>
               </tr>
             </table>
           </div>
@@ -124,42 +148,26 @@
               <tr>
                 <td>
                   <span class="client-card-title">Pedidos</span>
+                  <span class="client-resume-sales gray"></span>
                 </td>
                 <td>
-                  <span class="client-resume-sales gray right"></span>
+                  <span class="client-card-title">Ticket Médio</span>
+                  <span class="client-resume-ticket gray"></span>
+                </td>
+                <td>
+                  <span class="client-card-title">Média de Itens</span>
+                  <span class="client-resume-itens gray"></span>
                 </td>
               </tr>
 
               <tr>
                 <td>
-                  <span class="client-card-title">Ticket Médio</span>
-                </td>
-                <td>
-                  <span class="client-resume-ticket gray right"></span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="client-card-title">Média de Itens</span>
-                </td>
-                <td>
-                  <span class="client-resume-itens gray right"></span>
-                </td>
-              </tr>
-              <tr>
-                <td>
                   <span class="client-card-title ">Total em compras</span>
+                  <span class="client-sale-total-value gray"></span>
                 </td>
-                <td>
-                  <span class="client-sale-total-value gray right"></span>
-                </td>
-              </tr>
-              <tr>
                 <td>
                   <span class="client-card-title">Total aprovado</span>
-                </td>
-                <td>
-                  <span class="client-sale-total-paid green-val right"></span>
+                  <span class="client-sale-total-paid green-val"></span>
                 </td>
               </tr>
             </table>
