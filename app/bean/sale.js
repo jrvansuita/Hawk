@@ -29,8 +29,8 @@ module.exports = class Sale extends DataAccess {
     return Sale.or(['uf', 'paymentType', 'transport'], value);
   }
 
-  static dateRange(min, max){
-    return Sale.range('date', min, max, true);
+  static dateRange(min, max, parseDate=true){
+    return Sale.range('date', min, max, parseDate);
   }
 
   static attrsQuery(field, values){

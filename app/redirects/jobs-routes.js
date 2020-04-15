@@ -9,6 +9,7 @@ module.exports = class JobsRoutes extends Routes{
 
     this._post('/job-run-force', (req, res)=>{
       JobsPool.runForce(req.body.id);
+      res.status(200).send("OK");
     });
 
     this._get('/jobs-all', (req, res)=>{

@@ -2,6 +2,7 @@ const Routes = require('../redirects/controller/routes.js');
 const UsersProvider = require('../provider/user-provider.js');
 const MaganePoints = require('../handler/manage-points-handler.js');
 const SaleDashboardProvider = require('../provider/sale-dashboard-provider.js');
+const Cost = require('../bean/cost.js');
 
 module.exports = class PerformanceRoutes extends Routes{
 
@@ -77,6 +78,12 @@ module.exports = class PerformanceRoutes extends Routes{
           req.session.salesDashQueryId = result.id;
           this._resp().sucess(res, result);
         }).load();
+      });
+
+      this._post('/sales-dashboard-cost', (req, res)=>{
+        Cost.put(req.body.tag, req.body.val, (err, docs) => {
+          this._resp().sucess(res, docs);
+        });
       });
 
 

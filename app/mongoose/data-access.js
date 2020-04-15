@@ -214,11 +214,11 @@ module.exports = class DataAccess {
     }
 
 
-    static range(field, min, max, isDate){
+    static range(field, min, max, parseDate){
       var result = {}
       result[field] = {
-        $gte: isDate ? new Date(parseInt(min)).begin() : min,
-        $lte: isDate ? new Date(parseInt(max)).end() : max,
+        $gte: parseDate ? new Date(parseInt(min)).begin() : min,
+        $lte: parseDate ? new Date(parseInt(max)).end() : max,
       };
       return result;
     }
