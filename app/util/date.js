@@ -34,6 +34,11 @@ var Dat = {
     return str;
   },
 
+  monthAndYear(date) {
+    var formated = fmt(date);
+    return parseInt(formated.month + '' + formated.year);
+  },
+
   id(date) {
     var formated = fmt(date);
     return formated.year + formated.month+ formated.day;
@@ -46,6 +51,14 @@ var Dat = {
 
   query(queryDate, def){
     return queryDate ? new Date(parseInt(queryDate)) : def;
+  },
+
+
+  monthDif(date1, date2) {
+    dt1 = fmt(new Date(date1));
+    dt2 = fmt(new Date(date2));
+
+    return parseInt(dt1.month) - parseInt(dt2.month);
   },
 
   daysDif(date1, date2) {

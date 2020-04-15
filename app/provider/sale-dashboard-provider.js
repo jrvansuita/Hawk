@@ -1,5 +1,6 @@
 
 const Sale = require('../bean/sale.js');
+const Cost = require('../bean/cost.js');
 
 var temp = {};
 
@@ -14,8 +15,8 @@ module.exports = class SaleDashboardProvider{
     this.query = query;
 
     //Initializing
-    query.begin = query.begin ? query.begin : Dat.today().begin().getTime();
-    query.end = query.end ? query.end : Dat.today().end().getTime();
+    this.query.begin = query.begin ? query.begin  : Dat.today().begin().getTime();
+    this.query.end = query.end ? query.end : Dat.today().end().getTime();
 
     return this;
   }
@@ -40,22 +41,23 @@ module.exports = class SaleDashboardProvider{
         this.onResult({id: this.sessionQueryId});
       }else{
         var q = buildDataQuery(this.query);
-
-        Sale.find(q, (err, rows)=>{
-          if (err && this.onError){
-            this.onError(err);
-          }else{
-            this.onResult(this._keepTemp(new SaleDash(rows)));
-          }
+        Cost.getRange(this.query.begin, this.query.end, (err, costs) => {
+          Sale.find(q, (err, rows)=>{
+            if (err && this.onError){
+              this.onError(err);
+            }else{
+              this.onResult(this._keepTemp(costs, new SaleDash(rows)));
+            }
+          });
         });
       }
     }
   }
 
 
-  _keepTemp(data){
+  _keepTemp(costs, data){
     var id = Util.id();
-    var data = {id: id, query : this.query, data: data};
+    var data = {id: id, query : this.query, data: data, costs: costs};
 
     temp[id] = data;
     return data;
@@ -190,11 +192,9 @@ class SaleDash{
 
 
 function buildDataQuery(query){
-  console.log(query);
-
   var and = [];
 
-  and.push(Sale.dateRange(query.begin, query.end));
+  and.push(Sale.dateRange(query.begin, query.end, true));
 
   if (query.value && query.value.length){
     and.push(Sale.likeQuery(query.value));
@@ -207,8 +207,6 @@ function buildDataQuery(query){
   }
 
   var result = {$and : and};
-
-  console.log(JSON.stringify(result));
 
   return result;
 }

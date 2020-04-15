@@ -53,7 +53,7 @@ $(document).ready(()=>{
     seachData(queryId);
   }
 
-  paramsVariablesBinding();
+
 });
 
 
@@ -91,7 +91,7 @@ function onHandleResult(result){
   setTimeout(() => {
     dateBeginPicker.setSelected(begin);
     dateEndPicker.setSelected(end);
-  },1000)
+  }, 1000)
 
 
   if (window.history.replaceState) {
@@ -102,7 +102,9 @@ function onHandleResult(result){
     $('.no-data').hide();
     $('.content-grid').empty();
     console.log(result);
-    buildBoxes(result.data);
+
+    buildBoxes(result);
+
     $('.costs-box').show();
   }else{
     $('.no-data').show();
@@ -118,7 +120,9 @@ function onHandleResult(result){
 
 
 
-function buildBoxes(data){
+function buildBoxes(results){
+  var data = results.data;
+
   new BuildBox()
   .group('Geral', data.count, 'min-col')
   .info('Valor', Num.money(data.total), 'high-val')
@@ -130,7 +134,7 @@ function buildBoxes(data){
   .info('Peso', Floa.weight(data.weight) + 'Kg')
   .info('R$/Kg', Num.money(data.total/data.weight))
   .info('Margem', Num.percent((data.profit*100)/data.total), data.profit ? 'green-val': 'red-val')
-  .info('Lucro', Num.money(data.profit), data.profit ? 'green-val': 'red-val')
+  .info('Lucro Bruto', Num.money(data.profit), data.profit ? 'green-val': 'red-val')
 
   .group('Produtos', Num.points(data.items), 'gray')
   .info('Markup', Floa.abs((data.total - data.freight) / data.cost, 3))
@@ -220,13 +224,8 @@ function buildBoxes(data){
   coloringData();
   tagsHandler.bind();
   toogleCupomHidable(true);
+  buildCostsBox(results);
 }
-
-
-
-
-
-
 
 
 function coloringData(){
@@ -235,13 +234,6 @@ function coloringData(){
     $(each).css('background-color', "rgba(200, 200, 200, x)".replace('x', perc));
   });
 }
-
-
-
-
-
-
-
 
 function toogleCupomHidable(hide){
   if (hide){
@@ -261,7 +253,26 @@ function toogleCupomHidable(hide){
   }
 }
 
-function paramsVariablesBinding(){
+
+function buildCostsBox(results){
+  new CostsBoxBuilder(results.costs, results.data.total)
+  .group('Custos', Dat.monthDif(parseInt(results.query.begin), new Date()) == 0)
+  .field('Marketing', 'marketing')
+  .field('Imposto', 'tax')
+  .field('Frete', 'freight')
+  .field('Custo Produtos', 'productCost')
+  .field('Tecnologia', 'tech')
+  .field('Folha de Pagamento', 'paperWork')
+  .field('Operacional', 'operation')
+  .field('Empréstimos', 'lend')
+  .field('Juros/Taxas', 'interest')
+  .field('Estornos/Chargeback', 'chargeback')
+
+
+  bindCostsVariables();
+}
+
+function bindCostsVariables(){
   $('.param-info > input').focusin(function (){
     $(this).val($(this).val().split(' ').pop());
     $(this).select();
