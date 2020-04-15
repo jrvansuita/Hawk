@@ -14,10 +14,16 @@ class BuildBox{
     return this;
   }
 
-  info(label, value, clazz=''){
+  info(label, value, clazz='', id=''){
     var col = $('<div>').addClass('col');
     this.currentGroup.append(col);
-    col.append($('<span>').addClass('super').append(label), $('<span>').addClass('value ' + clazz).append(value));
+    var val = $('<span>').addClass('value ' + clazz).append(value);
+
+    if (id){
+      val.attr('id', id);
+    }
+
+    col.append($('<span>').addClass('super').append(label), val);
 
     return this;
   }
