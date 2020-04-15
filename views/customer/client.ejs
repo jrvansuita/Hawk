@@ -66,15 +66,19 @@
                 <td><span class="client-social-code gray copiable"><%=client.ie%></span></td>
               </tr>
               <tr>
-                <td><label class="client-card-title">Data de Nascimento</label></td>
-                <td><label class="client-card-title">Última Atualização</label></td>
+                <td>
+                  <span class="client-card-title">Data de Nascimento</span>
+                </td>
+                <td>
+                  <span class="client-card-title">Última Atualização</span>
+                </td>
               </tr>
               <tr>
                 <td>
-                  <span class="client-date"><%=Dat.format(new Date(client.dataNascimento))%></span>
+                  <span class="client-date gray"><%=Dat.format(new Date(client.dataNascimento))%></span>
                 </td>
                 <td>
-                  <span class="client-date"><%=Dat.formatwTime(new Date(client.dataAlteracao || client.dtCriacao))%></span>
+                  <span class="client-date gray"><%=Dat.formatwTime(new Date(client.dataAlteracao || client.dtCriacao))%></span>
                 </td>
               </tr>
             </table>
@@ -145,7 +149,7 @@
           <div class="client-card-item shadow">
             <label class="client-card-title">Resumo</label>
             <table>
-              <tr>
+              <tr class="divide">
                 <td>
                   <span class="client-card-title">Pedidos</span>
                   <span class="client-resume-sales gray"></span>

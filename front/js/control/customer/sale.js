@@ -17,81 +17,89 @@ function printNFe(){
   }
 }
 
-function menuClick(menu){
+$('.payment-dots').click(function(e){
 
-  menu.click(function(e){
-    var drop = new MaterialDropdown($(this), e, false, true);
-    var cardClass =  menu.parent().prop('className');
+  var drop = new MaterialDropdown($(this), e, false, true);
 
-    if(cardClass.includes('payment') && data.payment.method == 'mundipagg_boleto'){
+  if(data.payment.method == 'mundipagg_boleto'){
+    var actualDate = new Date();
+    var boletoExpiresDate = new Date(data.payment.boleto_expires);
 
-      //data atual e data do vencimento do boleto
-      var actualDate = new Date();
-      var boletoExpiresDate = new Date(data.payment.boleto_expires);
+    drop.addItem('/img/barcode.png', 'Imprimir Boleto', function(){
+      window.open(data.payment.boleto);
+    });
 
-      drop.addItem('/img/barcode.png', 'Imprimir Boleto', function(){
-        window.open(data.payment.boleto);
-      });
+    //compara as datas, só mostra se a atual for menor que do vencimento
+    if(actualDate < boletoExpiresDate){
+      drop.addItem('/img/envelop.png', 'Enviar Boleto por Email', function(){
+        $('.payment-dots').attr('src','/img/loader/circle.svg');
 
-      //compara as datas, só mostra se a atual for menos que do vencimento
-      if(actualDate < boletoExpiresDate){
-        drop.addItem('/img/envelop.png', 'Enviar Boleto por Email', function(){
-          $(menu).children().attr('src','/img/loader/circle.svg');
-
-          _post('/customer-email-boleto', {
-            cliente: data.client,
-            oc: data.oc,
-            linkBoleto: data.payment.boleto,
-            userid: loggedUser.id
-          }, (result) => {
-            if(result){
-              showMenuMsg(menu, 'Boleto enviado!', 'sucess');
-
-            }else{
-              showMenuMsg(menu, 'Erro ao enviar email', 'error');
-            }
-          });
-        });
-      }
-    }else if(cardClass.includes('transport')){
-      drop.addItem('/img/transport/default.png', 'Rastreio', function(){
-        window.open(Params.trackingUrl() + data.oc);
-      });
-
-      drop.addItem('/img/envelop.png', 'Enviar Rastreio por Email', function(){
-        $(menu).children().attr('src','/img/loader/circle.svg');
-
-        _post('/customer-email-tracking',{
-          cliente: data.client,
-          oc: data.oc,
-          tracking: Params.trackingUrl() + data.oc,
-          userid: loggedUser.id
-        }, (result) => {
-          result ? showMenuMsg(menu, 'Email enviado', 'sucess') : showMenuMsg(menu, 'Erro ao enviar email', 'error');
+        _post('/customer-email-boleto', { cliente: data.client, oc: data.oc, linkBoleto: data.payment.boleto, userid: loggedUser.id }, (result) => {
+          result ? showMenuMsg('.payment-dots', 'Boleto enviado!', 'sucess') : showMenuMsg('.payment-dots', 'Erro ao enviar email', 'error');
         });
       });
     }
+  }
+  drop.show();
+});
 
-    else if(cardClass.includes('sale-header-holder')){
-      drop.addItem('/img/envelop.png', 'Enviar NF', function(){
-        $(menu).children().attr('src','/img/loader/circle.svg');
+$('.transport-dots').click(function(e){
 
-        _post('/customer-email-danfe',{
-          cliente: data.client,
-          oc: data.oc,
-          nfNumber: data.nf,
-          userid: loggedUser.id
-        }, (result) => {
-          result ? showMenuMsg(menu, 'Nota fiscal enviada', 'sucess') : showMenuMsg(menu, 'Erro ao enviar nota fiscal', 'error');
-        });
+  var drop = new MaterialDropdown($(this), e, false, true);
+
+  drop.addItem('/img/transport/default.png', 'Rastreio', function(){
+    window.open(Params.trackingUrl() + data.oc);
+  });
+
+  drop.addItem('/img/envelop.png', 'Enviar Rastreio por Email', function(){
+    $('.transport-dots').attr('src','/img/loader/circle.svg');
+
+    _post('/customer-email-tracking',{ cliente: data.client, oc: data.oc, tracking: 'https://www.boutiqueinfantil.com.br/rastreio?sale=' + data.oc, userid: loggedUser.id }, (result) => {
+      result ? showMenuMsg('.transport-dots', 'Email enviado', 'sucess') : showMenuMsg('.transport-dots', 'Erro ao enviar email', 'error');
+    });
+  });
+
+  drop.show();
+});
+
+$('.sale-header-dots').click(function(e){
+
+  var drop = new MaterialDropdown($(this), e, false, true);
+
+  if($('.sale-nfe').text() != 'Sem Nota Fiscal'){
+
+    drop.addItem('/img/envelop.png', 'Enviar NF', function(){
+      $('.sale-header-dots').attr('src','/img/loader/circle.svg');
+
+      _post('/customer-email-danfe',{ cliente: data.client, oc: data.oc, nfNumber: data.nf, userid: loggedUser.id }, (result) => {
+        result ? showMenuMsg('.sale-header-dots', 'Nota fiscal enviada', 'sucess') : showMenuMsg('.sale-header-dots', 'Erro ao enviar nota fiscal', 'error');
       });
+    });
 
-      drop.addItem('/img/paper.png', 'Visualizar NF', function(){
-        printNFe();
-      });
+    drop.addItem('/img/paper.png', 'Visualizar NF', function(){
+      printNFe();
+    });
+  }
 
-    }
-    drop.show();
+  var status = data.status;
+
+  if(status == 'pending_payment' || status == 'processing' || status == 'complete' || status == 'separation'){
+    drop.addItem('/img/block.png', 'Bloquear na Expedição', function(){
+      _updateSaleStatus('holded');
+    });
+  }
+
+  drop.addItem('/img/checked.png', 'Confirmar Pagamento', function(){
+    _updateSaleStatus('processing');
+  });
+
+  drop.show();
+});
+
+function _updateSaleStatus(status){
+  $('.sale-header-dots').children().attr('src', '/img/loader/circle.svg');
+  _post('/customer-sale-status-change',{ sale: data.oc, status: status, userName: loggedUser.name },(result) => {
+    result ? showMenuMsg('.sale-header-dots','Status alterado', 'sucess') : showMenuMsg('.sale-header-dots','Ocorreu um erro', 'error');
   });
 }
 
@@ -105,34 +113,12 @@ function copyTextFromElement(id) {
 }
 
 function showMenuMsg(holder, msg, type){
-  if(type == 'error'){
-    $(holder).children().attr('src','/img/error.png');
-  }else{
-    $(holder).children().attr('src','/img/checked.png');
-  }
+  type == 'error' ? $(holder).children().attr('src','/img/error.png') : $(holder).children().attr('src','/img/checked.png');
 
   $(holder).append($('<span>').addClass('msg-info').text(msg).delay(3000).queue(() => {
     $('.msg-info').remove();
     $(holder).children().attr('src','/img/dots.png');
   }));
-}
-
-function buildMenu(holder){
-  $menu = $('<div>').addClass('menu-dots');
-  $menuImg = $('<img>').addClass('dots-glyph').attr('src', '../../img/dots.png');
-
-  $menu.append($menuImg);
-  menuClick($menu);
-
-  return holder.prepend($menu);
-}
-
-function loadCompletSaleData(callback){
-  _get('/customer-service/sale', {saleNumber : saleNumber}, (data) => {
-    window.data = data.data;
-    window.provisorio = data.provisorio;
-    callback(data);
-  })
 }
 
 function bindClientSaleInfo(data){
@@ -143,7 +129,6 @@ function bindClientSaleInfo(data){
 }
 
 function bindSaleAddressInfo(data){
-  buildMenu($('.card-transport'));
 
   $('.sale-shipping-adress-street').text(data.shipping_address.street);
   $('.sale-shipping-adress-bairro').text(data.shipping_address.bairro);
@@ -180,9 +165,6 @@ function bindPaymentInfo(data){
   $('.sale-payment-info').text(data.payment.desc);
   $('.sale-payment-status').addClass('info').text(data.payment.status).css('border-color', setBorderOnCard(data.status));
 
-  if($('.sale-payment-method').text() == "Boleto"){
-    buildMenu($('.card-payment'));
-  }
 }
 
 function setBorderOnCard(status){
@@ -298,7 +280,7 @@ function bindSaleItens(data){
       $('.tr-frete').hide();
     }
     $('.sale-info-subtotal').text(Num.money(data.subtotal));
-    $('.sale-info-cupom').html(data.payment.discount_desc ? data.payment.discount_desc.split(',').join('<br>') : data.payment.coupon.toUpperCase());
+    $('.sale-info-cupom').html(data.payment.coupon ? data.payment.coupon.toUpperCase() + '<br>' + data.payment.discount_desc.split(',').join('<br>') : data.payment.discount_desc);
     $('.sale-info-discount').text(Num.money(data.discount));
     $('.sale-info-weight-total').text(data.weight);
     $('.sale-info-total').text(Num.money(data.total));
@@ -318,10 +300,6 @@ function bindSaleItens(data){
     $('.sale-situation').text(data.situation);
     $('.sale-step').text(data.pickingStatus);
     $('.sale-date').text(data.saleDate);
-
-    if($('.sale-nfe').text() != 'Sem Nota Fiscal'){
-      buildMenu($('.sale-header-holder'));
-    }
 
     $('.sale-viewer-holder').css('border-top', '3px solid ' + setBorderOnCard(data.status));
   }
@@ -370,6 +348,14 @@ function bindSaleItens(data){
         self.show(product.image);
       });
     });
+  }
+
+  function loadCompletSaleData(callback){
+    _get('/customer-service/sale', {saleNumber : saleNumber}, (data) => {
+      window.data = data.data;
+      window.provisorio = data.provisorio;
+      callback(data);
+    })
   }
 
   function bindSaleInfoViewer(data){
