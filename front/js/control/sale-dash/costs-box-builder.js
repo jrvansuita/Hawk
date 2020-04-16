@@ -94,7 +94,7 @@ class CostsBoxBuilder extends BuildBox{
   }
 
 
-  showPerformance(){
+  showPerformance(){ 
     this.group('Performance', 0, 'gray min-col')
     .info('Lucro Bruto', Num.money(this.profit))
     .info('Custos Totais', 0, null, 'costs-sum')
