@@ -46,5 +46,7 @@ module.exports = {
 
   customer_email_sending: 'Foi enviado {0} para o email {1} referente ao pedido {2}',
 
+  sale_magento_status_update: '[Hawk] - Status alterado via tela do Atendimento pelo usuário {0}',
+
 
 };

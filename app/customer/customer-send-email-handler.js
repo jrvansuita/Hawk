@@ -1,7 +1,7 @@
 const EmailBuilder = require('../email/email-builder.js');
 const History = require('../bean/history.js');
 
-module.exports = class CustomerHandler{
+module.exports = class CustomerSendEmailHandler{
 
   constructor(userId){
     this.userId = userId;
@@ -57,9 +57,9 @@ module.exports = class CustomerHandler{
   _buildAndSendEmail(template, data, callback){
     new EmailBuilder()
     .template(template)
-    .to("jaison@boutiqueinfantil.com.br")//body[0].emailData.cliente.email)
-    //.receiveCopy()
-    //.reply(Params.replayEmail())
+    .to(body[0].emailData.cliente.email)
+    .receiveCopy()
+    .reply(Params.replayEmail())
     .setAttachments(data[0].attach)
     .setData(data[0].emailData)
     .send((err, id) => {

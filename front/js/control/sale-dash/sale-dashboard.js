@@ -133,7 +133,7 @@ function buildBoxes(results){
   .info('Recompra', Num.percent((data.repurchaseCount*100)/data.count))
   .info('Peso', Floa.weight(data.weight) + 'Kg')
   .info('R$/Kg', Num.money(data.total/data.weight))
-  .info('Margem', Num.percent((data.profit*100)/data.total), data.profit ? 'green-val': 'red-val')
+  .info('Margem Bruta', Num.percent((data.profit*100)/data.total), data.profit ? 'green-val': 'red-val')
   .info('Lucro Bruto', Num.money(data.profit), data.profit ? 'green-val': 'red-val')
 
   .group('Produtos', Num.points(data.items), 'gray')
@@ -255,8 +255,8 @@ function toogleCupomHidable(hide){
 
 
 function buildCostsBox(results){
-  new CostsBoxBuilder(results.costs, results.data.total)
-  .group('Custos', Dat.monthDif(parseInt(results.query.begin), new Date()) == 0)
+  new CostsBoxBuilder(results.costs, results.data.total, results.data.profit)
+  .inputGroup('Custos', Dat.monthDif(parseInt(results.query.begin), new Date()) == 0)
   .field('Marketing', 'marketing')
   .field('Imposto', 'tax')
   .field('Frete', 'freight')
@@ -267,42 +267,7 @@ function buildCostsBox(results){
   .field('Empréstimos', 'lend')
   .field('Juros/Taxas', 'interest')
   .field('Estornos/Chargeback', 'chargeback')
+  .showPerformance();
 
-
-  bindCostsVariables();
-}
-
-function bindCostsVariables(){
-  $('.param-info > input').focusin(function (){
-    $(this).val($(this).val().split(' ').pop());
-    $(this).select();
-  });
-
-
-  var format = function(){
-    var val = _params[$(this).attr('id')] || Floa.def($(this).val());
-
-    if(val){
-      $(this).val(Num.money(val));
-    }
-
-    var label = $(this).parent().find('label');
-    if (label.length){
-      label.text(label.data('label') + ' ('+Num.percent((val*100)/data.total)+')');
-    }
-  };
-
-
-  $('.param-info > input').focusout(format);
-  $('.param-info > input').trigger('focusout');
-
-  $('.param-info > input').change(function() {
-    var id = $(this).attr('id');
-    var val = $(this).val();
-    _params[id] = val;
-    _post('/put-main-param', {name: id, val: val}, () => {
-      //nothing
-    });
-  });
 
 }

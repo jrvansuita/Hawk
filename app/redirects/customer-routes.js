@@ -1,6 +1,8 @@
 const Routes = require('../redirects/controller/routes.js');
 const CustomerProvider = require('../provider/customer-provider.js');
-const CustomerHandler = require('../customer/customer-handler.js');
+const CustomerSendEmailHandler = require('../customer/customer-send-email-handler.js');
+
+const SaleCustomerHandler = require('../customer/sale-customer-handler.js');
 
 
 module.exports = class CustomerRoutes extends Routes{
@@ -41,8 +43,8 @@ module.exports = class CustomerRoutes extends Routes{
 
     //envia rastreio
     this._post('/customer-email-tracking', (req, res, locals) => {
-      //new CustomerHandler(req.body.userid)
-    //  .sendEmailDanfe(req.body, this._resp().redirect(res));
+      new CustomerHandler(req.body.userid)
+      .sendEmailTracking(req.body, this._resp().redirect(res));
     });
 
     //envia nf
@@ -50,5 +52,13 @@ module.exports = class CustomerRoutes extends Routes{
       new CustomerHandler(req.body.userid)
       .sendEmailDanfe(req.body, this._resp().redirect(res));
     });
+
+
+
+    //alterar status de pedidos
+    this._post('/customer-sale-status-change', (req, res) => {
+      new SaleCustomerHandler().updateSaleMagento(req.body, this._resp().redirect(res));
+    });
+
   };
 };

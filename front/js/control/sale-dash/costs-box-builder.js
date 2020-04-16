@@ -1,14 +1,15 @@
 
-class CostsBoxBuilder{
-  constructor(costs, total){
+class CostsBoxBuilder extends BuildBox{
+  constructor(costs, total, profit){
+    super();
     this.data = costs;
     this.total = total;
+    this.profit = profit;
 
-    this.box = $('<div>').addClass('grid-item shadow').css('grid-column', '3 / 5');
-    $('.content-grid').append(this.box);
+    this.box.css('grid-column', '3 / 5');
   }
 
-  group(title, editable=false, num='', clazz=''){
+  inputGroup(title, editable=false, num='', clazz=''){
     var group = $('<div>').addClass('row ' + clazz);
     this.box.append(group);
 
@@ -35,10 +36,7 @@ class CostsBoxBuilder{
     var value = parseFloat(val);
     input.val(Num.money(value)).data('val', val);
 
-    //Update Sum
-    this.currentGroup.find('.sum').text('- ' + Num.money($('input').toArray().reduce((acun, each) => {
-      return acun + (parseFloat($(each).data('val')) || 0);
-    }, 0)));
+    this._refreshTotalInfos();
 
     var label = input.parent().find('label');
     if (label.length){
@@ -64,14 +62,47 @@ class CostsBoxBuilder{
     }
 
     $input.change(() => {
-      _post('/sales-dashboard-cost', {tag: $input.attr('id'), val:  $input.val()}, (e) => {
-        this._format($input, $input.val());
+      var val = this._prepareInputVal($input.val());
+
+      _post('/sales-dashboard-cost', {tag: $input.attr('id'), val:  val}, (e) => {
+        this._format($input, val);
       });
     });
 
     return this;
   }
 
+  _prepareInputVal(val){
+    return parseFloat(val.replace('.','').replace(',', '.').replace('R$ ', ''));
+  }
+
+  _refreshTotalInfos(){
+    var totalCost = parseFloat($('input').toArray().reduce((acun, each) => {
+      return acun + (parseFloat($(each).data('val')) || 0);
+    }, 0));
+
+    var sumCosts = Num.money(totalCost);
+
+    this.currentGroup.find('.sum').text(sumCosts);
+    $('#costs-sum').text(sumCosts)
+
+    var liqProfit = this.profit - totalCost;
+    var color = liqProfit  > 0 ? '#08ab08' : '#e60000';
+
+    $('#liq-profit').text(Num.money(liqProfit)).css('color', color);
+    $('#liq-perc').text(Num.percent((liqProfit*100/this.total))).css('color', color);
+  }
+
+
+  showPerformance(){ 
+    this.group('Performance', 0, 'gray min-col')
+    .info('Lucro Bruto', Num.money(this.profit))
+    .info('Custos Totais', 0, null, 'costs-sum')
+    .info('Lucro Líquido', 0, null, 'liq-profit')
+    .info('Margem Líquida', 0, null, 'liq-perc');
+
+    this._refreshTotalInfos();
+  }
 
 
 }
