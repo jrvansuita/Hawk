@@ -116,8 +116,15 @@ class SaleDash{
   finals(){
     this.tkm = this.total/this.count;
     this.avgItems = this.items/this.count;
-    this.avgUnit = this.total/this.items;
     this.profit =  this.total - (this.freight + this.cost);
+
+    this.avgCost = this.cost/this.items;
+    this.markup = (this.total - this.freight) / this.cost;
+    this.avgSell = (this.total - this.freight)/this.items;
+
+
+
+
 
     Object.keys(this.arrs).forEach((name) => {
       this.objectToArr(name);

@@ -137,9 +137,10 @@ function buildBoxes(results){
   .info('Lucro Bruto', Num.money(data.profit), data.profit ? 'green-val': 'red-val')
 
   .group('Produtos', Num.points(data.items), 'gray')
-  .info('Markup', Floa.abs((data.total - data.freight) / data.cost, 3))
+  .info('Med. Custo', Num.money(data.avgCost))
+  .info('Markup', Floa.abs(data.markup, 3))
+  .info('Med. Venda', Num.money(data.avgSell))
   .info('Med. Pedido', Floa.abs(data.avgItems,3))
-  .info('Med. Un', Num.money(data.avgUnit));
 
 
   var box = new BuildBox()
