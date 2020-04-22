@@ -44,6 +44,12 @@ module.exports = class MagentoCalls{
     });
   }
 
+  async productStock(sku){
+    return this.onInstance((api, resolve, reject) => {
+      api.catalogInventoryStockItem.list({ products: sku }, this.onResult(resolve, reject));
+    });
+  }
+
   async updateProductWeight(sku, weight){
     return this.onInstance((api, resolve, reject) => {
       api.catalogProduct.update({

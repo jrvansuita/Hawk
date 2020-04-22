@@ -1,31 +1,17 @@
 const https = require('https');
 const Initilizer = require('./app/abra-cadabra/initializer.js');
-const GetResponseHandler = require('./app/getresponse/getresponse-handler.js');
+
 
 
 
 new Initilizer(__dirname, true).begin(() => {
 
-  var cliente = JSON.stringify({
-    "nome": "Jaison Klemer Teste",
-    "email": "jaison@boutiqueinfantil.com.br",
-    "dataNascimento": "11/05/1998",
-    "cidade": "Gaspar",
-    "estado": "SC",
-    "celular": "47999999999",
-    "fone":"+5547999999999",
-    "socialCode":"101.027.049-45"
-  });
-  cliente = JSON.parse(cliente);
 
-  console.log(cliente.nome);
+const MagentoCalls = require('./app/magento/magento-calls.js');
 
+ new MagentoCalls().productStock('60311of-M').then((err, data) => {
+   console.log(data);
+   console.log(err);
+ });
 
-  new GetResponseHandler().getCustomFields((res) => {
-    console.log(res);
-  });
-  /*if(Params.getResponseCheckbox()){
-    new GetResponseHandler().handle(cliente);
-  }
-*/
 });

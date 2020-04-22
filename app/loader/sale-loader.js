@@ -109,7 +109,7 @@ module.exports= class SaleLoader {
   prepareSaleItems(items){
     return items.map((item) => {
       item.img = Params.productImageUrl(item.codigo);
-      item.valorTotal = parseFloat(item.precoLista) * parseFloat(item.quantidade);
+      item.valorTotal = (parseFloat(item.valor) - parseFloat(item.valorDesconto)) * parseFloat(item.quantidade);
       return item;
     });
   }
@@ -155,7 +155,7 @@ module.exports= class SaleLoader {
               item.bru = product.pesoBruto;
               item.local = product.localizacao;
               item.ncm = product.cf;
-              
+
               if (onBindEachProduct){
                 onBindEachProduct(item, product);
               }

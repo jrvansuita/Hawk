@@ -3,11 +3,13 @@
 <%include ../menus/main-menu %>
 <head>
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
-  <link rel="stylesheet" type="text/css" href="/front/css/layout/sale-dashboard.css">
-  <script type="text/javascript" src="/front/js/control/sale-dash/box-builder.js"></script>
-  <script type="text/javascript" src="/front/js/control/sale-dash/tags-handler.js"></script>
-  <script type="text/javascript" src="/front/js/control/sale-dash/costs-box-builder.js"></script>
-  <script type="text/javascript" src="/front/js/control/sale-dash/sale-dashboard.js"></script>
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/performance/general-dash.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/performance/sale-dashboard.css">
+  <script type="text/javascript" src="/front/js/control/performance/box-builder.js"></script>
+  <script type="text/javascript" src="/front/js/control/performance/tags-handler.js"></script>
+  <script type="text/javascript" src="/front/js/control/performance/costs-box-builder.js"></script>
+  <script type="text/javascript" src="/front/js/control/performance/general-dash.js"></script>
+  <script type="text/javascript" src="/front/js/control/performance/sale-dashboard.js"></script>
   <script type="text/javascript" src="/front/js/libs/date-picker.js"></script>
 
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
@@ -19,7 +21,7 @@
   <div class="main">
     <div class="top shadow">
       <div class="search-box">
-        <img class="icon-open is-open" title="Abrir seletor" src="/img/open-down.png">
+        <img class="icon-open is-closed" title="Abrir seletor" src="/img/open-down.png">
         <input type="text" id="search-input" value="<%=query.value%>" class="simple-material-input" placeholder="Pesquisar Pedidos" autocomplete="off"/>
 
 
@@ -52,8 +54,6 @@
         <div class="menu-dots">
           <img src="img/dots.png" class="dots-glyph"/>
         </div>
-
-        <label id="totals"></label>
       </div>
 
       <div class="tag-box">

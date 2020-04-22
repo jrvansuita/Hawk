@@ -25,17 +25,6 @@ module.exports = class Sale extends DataAccess {
     return ['number'];
   }
 
-  static likeQuery(value){
-    return Sale.or(['uf', 'paymentType', 'transport'], value);
-  }
-
-  static dateRange(min, max, parseDate=true){
-    return Sale.range('date', min, max, parseDate);
-  }
-
-  static attrsQuery(field, values){
-    return Sale.or(field, values);
-  }
 
 
   static from(s){

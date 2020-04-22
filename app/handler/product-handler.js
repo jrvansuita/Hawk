@@ -104,6 +104,8 @@ module.exports ={
     device = device || 'Desktop';
     stock = parseInt(stock);
 
+
+    /** Realiza a alteracao de estoque no eccosys **/
     this.getBySku(sku, false, (product)=>{
 
       var body = {
@@ -118,12 +120,19 @@ module.exports ={
 
 
       new EccosysStorer().stock(product.codigo, body).go(callback);
+      /** Realiza a alteracao de estoque no eccosys **/
 
-      var sum = product._Estoque.estoqueDisponivel + stock;
 
+      /** Realiza a alteracao de estoque no magento **/
       if(Params.updateProductStockMagento()){
-        new MagentoCalls().updateProductStock(product.codigo, sum);
+        new MagentoCalls().productStock(product.codigo).then((data) => {
+          if (data.length == 1){
+            new MagentoCalls().updateProductStock(product.codigo, parseFloat(data[0].qty) + stock);
+          }
+        });
       }
+
+      /** Realiza a alteracao de estoque no magento **/
 
     });
   },
