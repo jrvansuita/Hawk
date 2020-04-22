@@ -19,7 +19,7 @@ function printNFe(){
 
 $('.payment-dots').click(function(e){
 
-  var drop = new MaterialDropdown($(this), e, false, true);
+  var drop = new MaterialDropdown($(this), e,false, true);
 
   if(data.payment.method == 'mundipagg_boleto'){
     var actualDate = new Date();
@@ -32,7 +32,7 @@ $('.payment-dots').click(function(e){
     //compara as datas, só mostra se a atual for menor que do vencimento
     if(actualDate < boletoExpiresDate){
       drop.addItem('/img/envelop.png', 'Enviar Boleto por Email', function(){
-        $('.payment-dots').attr('src','/img/loader/circle.svg');
+        $('.payment-dots').children().attr('src','/img/loader/circle.svg');
 
         _post('/customer-email-boleto', { cliente: data.client, oc: data.oc, linkBoleto: data.payment.boleto, userid: loggedUser.id }, (result) => {
           result ? showMenuMsg('.payment-dots', 'Boleto enviado!', 'sucess') : showMenuMsg('.payment-dots', 'Erro ao enviar email', 'error');
@@ -45,14 +45,14 @@ $('.payment-dots').click(function(e){
 
 $('.transport-dots').click(function(e){
 
-  var drop = new MaterialDropdown($(this), e, false, true);
+  var drop = new MaterialDropdown($(this), e);
 
   drop.addItem('/img/transport/default.png', 'Rastreio', function(){
     window.open(Params.trackingUrl() + data.oc);
   });
 
   drop.addItem('/img/envelop.png', 'Enviar Rastreio por Email', function(){
-    $('.transport-dots').attr('src','/img/loader/circle.svg');
+    $('.transport-dots').children().attr('src','/img/loader/circle.svg');
 
     _post('/customer-email-tracking',{ cliente: data.client, oc: data.oc, tracking: 'https://www.boutiqueinfantil.com.br/rastreio?sale=' + data.oc, userid: loggedUser.id }, (result) => {
       result ? showMenuMsg('.transport-dots', 'Email enviado', 'sucess') : showMenuMsg('.transport-dots', 'Erro ao enviar email', 'error');
@@ -64,12 +64,12 @@ $('.transport-dots').click(function(e){
 
 $('.sale-header-dots').click(function(e){
 
-  var drop = new MaterialDropdown($(this), e, false, true);
+  var drop = new MaterialDropdown($(this),e, false, true);
 
   if($('.sale-nfe').text() != 'Sem Nota Fiscal'){
 
     drop.addItem('/img/envelop.png', 'Enviar NF', function(){
-      $('.sale-header-dots').attr('src','/img/loader/circle.svg');
+      $('.sale-header-dots').children().attr('src','/img/loader/circle.svg');
 
       _post('/customer-email-danfe',{ cliente: data.client, oc: data.oc, nfNumber: data.nf, userid: loggedUser.id }, (result) => {
         result ? showMenuMsg('.sale-header-dots', 'Nota fiscal enviada', 'sucess') : showMenuMsg('.sale-header-dots', 'Erro ao enviar nota fiscal', 'error');
@@ -80,25 +80,21 @@ $('.sale-header-dots').click(function(e){
       printNFe();
     });
   }
-
-  var status = data.status;
-
-  if(status == 'pending_payment' || status == 'processing' || status == 'complete' || status == 'separation'){
-    drop.addItem('/img/block.png', 'Bloquear na Expedição', function(){
-      _updateSaleStatus('holded');
+  if(data.status != 'canceled' && data.status != 'ip_delivered'){
+    drop.addItem('/img/gear.png', 'Alterar Status do Pedido', function(){
+      new SaleStatusDialog(data.status).onItemSelect((status) => {
+        new SaleStatusObsDialog('Adicionar Observação').make((text) => {
+          _updateSaleStatus(status, text);
+        })
+      }).show();
     });
   }
-
-  drop.addItem('/img/checked.png', 'Confirmar Pagamento', function(){
-    _updateSaleStatus('processing');
-  });
-
   drop.show();
 });
 
-function _updateSaleStatus(status){
+function _updateSaleStatus(status, msg){
   $('.sale-header-dots').children().attr('src', '/img/loader/circle.svg');
-  _post('/customer-sale-status-change',{ sale: data.oc, status: status, userName: loggedUser.name },(result) => {
+  _post('/customer-sale-status-change',{ sale: data.oc, status: status, user: loggedUser, obs: msg },(result) => {
     result ? showMenuMsg('.sale-header-dots','Status alterado', 'sucess') : showMenuMsg('.sale-header-dots','Ocorreu um erro', 'error');
   });
 }
@@ -280,7 +276,8 @@ function bindSaleItens(data){
       $('.tr-frete').hide();
     }
     $('.sale-info-subtotal').text(Num.money(data.subtotal));
-    $('.sale-info-cupom').html(data.payment.coupon ? data.payment.coupon.toUpperCase() + '<br>' + data.payment.discount_desc.split(',').join('<br>') : data.payment.discount_desc);
+    $('.sale-info-cupom').html(data.payment.discount_desc ? data.payment.discount_desc.split(',').join('<br>') : '');
+  //  $('.sale-info-cupom').html(data.payment.coupon ? data.payment.coupon.toUpperCase() + '<br>' + data.payment.discount_desc.split(',').join('<br>') : data.payment.discount_desc);
     $('.sale-info-discount').text(Num.money(data.discount));
     $('.sale-info-weight-total').text(data.weight);
     $('.sale-info-total').text(Num.money(data.total));
@@ -297,7 +294,7 @@ function bindSaleItens(data){
     $('.sale-ecco').text(data.number);
     $('.sale-nfe').text(data.nf || 'Sem Nota Fiscal');
     $('.status').text(Util.getSaleStatusInfo(data.status)).css('border-color', Util.strToColor(data.status));
-    $('.sale-situation').text(data.situation);
+    $('.sale-situation').text(data.situation).css('border-color', Util.strToColor(data.situation));
     $('.sale-step').text(data.pickingStatus);
     $('.sale-date').text(data.saleDate);
 
@@ -358,7 +355,7 @@ function bindSaleItens(data){
     })
   }
 
-  function bindSaleInfoViewer(data){
+  function bindSaleInfoViewer(data, callback){
     bindSaleBasicInfos(data);
     bindClientSaleInfo(data);
     bindSaleAddressInfo(data);
@@ -366,8 +363,6 @@ function bindSaleItens(data){
     bindSaleItens(data);
     bindSaleTotalInfo(data);
     bindSaleHistory(data);
-
     $('.loading-sale-modal').hide();
     $('.sale-dialog').css('display','flex');
-
   }

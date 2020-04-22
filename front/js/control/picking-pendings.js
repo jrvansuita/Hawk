@@ -546,7 +546,6 @@ function createVoucherPendingMenuOption(drop, pending){
 
       new InputDialog("Trocar itens por Voucher", "Código do Voucher")
       .addSubTitle("Valor total da pendência: <b>" + pendingPrice + "</b><br><br>Email: <span class='copiable'>" + pending.sale.client.email + "</span>")
-      .checkInputChangeForPositiveButton(true)
       .setAutoFocusOnInput(true)
       .onChangeListener((input, val) => {
         return validateVoucher(input);

@@ -69,8 +69,8 @@ onChangeListener(listener){
   return this;
 }
 
-checkInputChangeForPositiveButton(check){
-  this.checkChangeBeforePositiveClick = check;
+checkEmptyInputSubmit(check){
+  this.isCheckEmptyInputSubmit = check;
   return this;
 }
 //focus no input
@@ -80,11 +80,16 @@ setAutoFocusOnInput(value){
 }
 
 checkBeforePositive(){
-  var ok = this.checkChangeBeforePositiveClick && this.onChangeListener && this.onChangeListener(this.input, this.input.val());
+  if (this.isCheckEmptyInputSubmit){
+    if(this.input.val().trim().length == 0){
+      onSimpleMaterialInputError(this.input);
+      return false;
+    }
+  }else if (this.onChangeListener){
+    return this.onChangeListener(this.input, this.input.val());
+  }
 
-  ok = ok || !this.checkChangeBeforePositiveClick;
-
-  return ok;
+  return true;
 }
 
 

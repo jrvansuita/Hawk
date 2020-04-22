@@ -55,9 +55,10 @@ module.exports = class CustomerSendEmailHandler{
   }
 
   _buildAndSendEmail(template, data, callback){
+
     new EmailBuilder()
     .template(template)
-    .to(body[0].emailData.cliente.email)
+    .to(data[0].emailData.cliente.email)
     .receiveCopy()
     .reply(Params.replayEmail())
     .setAttachments(data[0].attach)

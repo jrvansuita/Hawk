@@ -37,19 +37,19 @@ module.exports = class CustomerRoutes extends Routes{
 
     //enviar boleto
     this._post('/customer-email-boleto', (req, res) => {
-      new CustomerHandler(req.body.userid)
+      new CustomerSendEmailHandler(req.body.userid)
       .sendEmailBoleto(req.body, this._resp().redirect(res));
     });
 
     //envia rastreio
     this._post('/customer-email-tracking', (req, res, locals) => {
-      new CustomerHandler(req.body.userid)
+      new CustomerSendEmailHandler(req.body.userid)
       .sendEmailTracking(req.body, this._resp().redirect(res));
     });
 
     //envia nf
     this._post('/customer-email-danfe', (req, res, locals) => {
-      new CustomerHandler(req.body.userid)
+      new CustomerSendEmailHandler(req.body.userid)
       .sendEmailDanfe(req.body, this._resp().redirect(res));
     });
 
@@ -57,7 +57,7 @@ module.exports = class CustomerRoutes extends Routes{
 
     //alterar status de pedidos
     this._post('/customer-sale-status-change', (req, res) => {
-      new SaleCustomerHandler().updateSaleMagento(req.body, this._resp().redirect(res));
+      new SaleCustomerHandler().updateSaleStatus(req.body, this._resp().redirect(res));
     });
 
   };

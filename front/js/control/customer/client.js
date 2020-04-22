@@ -119,6 +119,7 @@ function showSaleDialog(sale){
     e.stopPropagation();
   });
 
+
   $('.sale-viewer-holder').load('/customer-service/sale-dialog?saleNumber=' + sale, ()=>{
     bindCopiable();
   });
