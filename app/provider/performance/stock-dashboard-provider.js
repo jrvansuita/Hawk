@@ -1,78 +1,36 @@
+const PatternDashboardProvider = require('./dashboard-provider.js');
+const SaleStock = require('../../bean/sale-stock.js');
 
-const Sale = require('../bean/sale.js');
-const Cost = require('../bean/cost.js');
 
 var temp = {};
 
-module.exports = class SaleDashboardProvider{
+module.exports = class StockDashboardProvider extends PatternDashboardProvider{
 
-  maybe(sessionQueryId){
-    this.sessionQueryId = sessionQueryId;
-    return this;
+  _getSearchQueryFields(){
+    return ['sku', 'size'];
   }
 
-  with(query){
-    this.query = query;
-
-    //Initializing
-    this.query.begin = query.begin ? query.begin  : Dat.today().begin().getTime();
-    this.query.end = query.end ? query.end : Dat.today().end().getTime();
-
-    return this;
+  _onLoadData(callback){
+    SaleStock.find(this.getDataQuery(), (err, rows)=>{
+      callback(err, this._onParseData(rows));
+    });
   }
 
-  setOnResult(onResult){
-    this.onResult = onResult;
-
-    return this;
-  }
-
-  setOnError(onError){
-    this.onError = onError;
-    return this;
-  }
-
-
-  load(callback){
-    if (this.onResult){
-      if (this.query.id && temp[this.query.id]){
-        this.onResult(temp[this.query.id]);
-      }else  if ((Object.keys(this.query).length == 0) && this.sessionQueryId && temp[this.sessionQueryId]){
-        this.onResult({id: this.sessionQueryId});
-      }else{
-        var q = buildDataQuery(this.query);
-        Cost.getRange(this.query.begin, this.query.end, (err, costs) => {
-          Sale.find(q, (err, rows)=>{
-            if (err && this.onError){
-              this.onError(err);
-            }else{
-              this.onResult(this._keepTemp(costs, new SaleDash(rows)));
-            }
-          });
-        });
-      }
-    }
-  }
-
-
-  _keepTemp(costs, data){
-    var id = Util.id();
-    var data = {id: id, query : this.query, data: data, costs: costs};
-
-    temp[id] = data;
-    return data;
+  _onParseData(rows){
+    return new StockDash(rows);
   }
 
 };
 
 
-class SaleDash{
+class StockDash{
   constructor(rows){
     this.count = rows.length;
     this.arrs = {};
+    this.rows=rows;
 
-    this.rolling(rows);
-    this.finals();
+    //this.rolling(rows);
+    //this.finals();
   }
 
   rolling(rows){
@@ -195,25 +153,4 @@ class SaleDash{
   includesCoupom(text){
     return ((text.length > 0) && (!/PEN|TRC/.test(text)));
   }
-}
-
-
-function buildDataQuery(query){
-  var and = [];
-
-  and.push(Sale.dateRange(query.begin, query.end, true));
-
-  if (query.value && query.value.length){
-    and.push(Sale.likeQuery(query.value));
-  }
-
-  if (query.attrs){
-    Object.keys(query.attrs).forEach((key) => {
-      and.push(Sale.attrsQuery(key, query.attrs[key].split('|')));
-    });
-  }
-
-  var result = {$and : and};
-
-  return result;
 }

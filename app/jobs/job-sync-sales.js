@@ -38,7 +38,7 @@ module.exports = class JobSyncSales extends Job{
       .setOnError((err) => {
         reject(err);
       })
-      .pageCount(3000)
+      .pageCount(100)
       //.dates(Dat.yesterday(), Dat.yesterday())
       .dates(new Date('04-01-2020'), Dat.today(), 'dataFaturamento', true)
       .sales()

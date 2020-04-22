@@ -1,7 +1,8 @@
 const Routes = require('../redirects/controller/routes.js');
 const UsersProvider = require('../provider/user-provider.js');
 const MaganePoints = require('../handler/manage-points-handler.js');
-const SaleDashboardProvider = require('../provider/sale-dashboard-provider.js');
+const SaleDashboardProvider = require('../provider/performance/sale-dashboard-provider.js');
+const StockDashboardProvider = require('../provider/performance/stock-dashboard-provider.js');
 const Cost = require('../bean/cost.js');
 
 module.exports = class PerformanceRoutes extends Routes{
@@ -58,19 +59,15 @@ module.exports = class PerformanceRoutes extends Routes{
 
 
 
+      /** Sale Dashboard Performance **/
 
       this._page('/sales-dashboard', (req, res)=>{
-        res.render('sale/sales-dashboard');
+        res.render('performance/sales-dashboard');
       });
-
-
-
-
 
       this._get('/sales-dashboard-data', (req, res)=>{
         new SaleDashboardProvider()
-        .with(req.query)
-        .maybe(req.session.salesDashQueryId)
+        .with(req.query).maybe(req.session.salesDashQueryId)
         .setOnError((err) => {
           this._resp().error(res, err);
         })
@@ -86,7 +83,31 @@ module.exports = class PerformanceRoutes extends Routes{
         });
       });
 
+      /** Sale Dashboard Performance **/
 
+
+
+
+
+
+
+      /** Stock Dashboard Performance **/
+      this._page('/stock-dashboard', (req, res)=>{
+        res.render('performance/stock-dashboard');
+      });
+
+      this._get('/stock-dashboard-data', (req, res)=>{
+        new StockDashboardProvider()
+        .with(req.query).maybe(req.session.stockDashQueryId)
+        .setOnError((err) => {
+          this._resp().error(res, err);
+        })
+        .setOnResult((result) => {
+          req.session.stockDashQueryId = result.id;
+          this._resp().sucess(res, result);
+        }).load();
+      });
+      /** Stock Dashboard Performance **/
 
 
 

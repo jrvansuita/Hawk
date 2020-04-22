@@ -1,5 +1,6 @@
 const Sale = require('../bean/sale.js');
 const SaleLoader = require('./sale-loader.js');
+const SaleStock = require('../bean/sale-stock.js');
 
 module.exports = class SaleKeeper{
   constructor(saleNumber){
@@ -22,12 +23,25 @@ module.exports = class SaleKeeper{
     return this;
   }
 
-  store(sale, callback){
+  storeStock(item, callback){
+    console.log('Sale Keep Item - ' + item.codigo);
+    SaleStock.from(item).save(callback);
+  }
+
+  store(sale, onTerminate){
     console.log('Sale Keep - ' + sale.numeroPedido + ' - ' + Dat.format(new Date(sale.data)));
     Sale.from(sale).upsert(() => {
-      if (callback){
-        callback(sale);
+
+      var index = 0;
+      var runSaleItems = () => {
+        if (sale.items[index]){
+          this.storeStock(sale.items[index], runSaleItems);
+          index++;
+        }else{
+          if (onTerminate) onTerminate(sale);
+        }
       }
+      runSaleItems();
     });
   }
 
@@ -42,8 +56,11 @@ module.exports = class SaleKeeper{
     loader.loadItems()
     .loadItemsDeepAttrs(null, (item, product) => {
       item.cost = product.precoCusto;
-      //item.brand = product.Marca;
-      //item.gender = product.Genero;
+      item.gender = product.Genero;
+      item.season = product.Estacao;
+      item.category = product.Departamento;
+      item.manufacturer = product.Fabricante;
+      item.brand = product.Marca;
     })
     .setOnError(this.onError)
     .run((sale) => {
