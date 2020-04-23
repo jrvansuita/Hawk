@@ -6,6 +6,8 @@ const PendingVoucherHandler = require('../pending/pending-voucher-handler.js');
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
 const BlockHandler = require('../handler/block-handler.js');
 const PendingProductProvider = require('../provider/pending-product-provider.js');
+const TemplateBuilder = require('../template/template-builder.js');
+
 
 module.exports = class PendingRoutes extends Routes{
 
@@ -67,16 +69,29 @@ module.exports = class PendingRoutes extends Routes{
       });
 
       this._post('/pending-send-voucher', (req, res, body, locals) => {
-         new PendingVoucherHandler(locals.loggedUser.id)
-         .with(body.pending, body.voucher, body.totalValue)
-         .go(this._resp().redirect(res));
+        new PendingVoucherHandler(locals.loggedUser.id)
+        .with(body.pending, body.voucher, body.totalValue)
+        .go(this._resp().redirect(res));
       });
 
-      this._page('/pending-products', (req, res, body, locals) => {
-        new PendingProductProvider().load((list)=>{
-          res.render('pending/pending-products', {list: list});
+      this._get('/pending-voucher-print', (req, res, body, locals) => {
+        var pending = PendingLaws.find(req.query.sale);
+        var data = {cliente: pending.sale.client, oc: pending.sale.numeroDaOrdemDeCompra, voucher: pending.voucher};
+
+        new TemplateBuilder('54766499').setData(data).build((template) => {
+          res.writeHead(200, {
+            'Content-Type': 'text/html',
+            'Content-Length': template.content.length,
+          });
+          res.end(template.content);
         });
       });
 
-    }
-  };
+    this._page('/pending-products', (req, res, body, locals) => {
+      new PendingProductProvider().load((list)=>{
+        res.render('pending/pending-products', {list: list});
+      });
+    });
+
+  }
+};

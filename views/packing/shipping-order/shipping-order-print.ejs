@@ -129,7 +129,7 @@
       var val = 0;
       var wei = 0;
 
-      shippingOrder._NotasFiscais.sort((a, b) => a.contato.localeCompare(b.contato)).forEach((each)=>{
+      shippingOrder._NotasFiscais.sort((a, b) => a.numero.localeCompare(b.numero)).forEach((each)=>{
 
         val += parseFloat(each.totalFaturado);
         wei += parseFloat(each.pesoTransportadora);

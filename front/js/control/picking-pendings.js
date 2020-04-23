@@ -484,6 +484,12 @@ function onCreateOptionsPendingDropMenu(drop, pending){
             assumePendingSale(pending, true);
           });
         }
+
+        if(pending.voucher){
+          drop.addItem('/img/envelop.png', 'Imprimir cartinha', function(){
+            window.open('/pending-voucher-print?sale=' + pending.number);
+          });
+        }
       }else{
         if (pending.status == 0){
           drop.addItem('/img/restart.png', 'Reiniciar', function(){

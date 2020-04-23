@@ -32,7 +32,7 @@ module.exports = class GetResponseHandler extends GetResponseAPI{
   }
 
   getContact(email, callback){
-    this.get('contacts/').findContact(email).go((res) => {
+    this.get('campaigns/' + Params.getResponseBaseId() + '/contacts').findContact(email).go((res) => {
       callback(res);
     });
   }
@@ -49,15 +49,9 @@ module.exports = class GetResponseHandler extends GetResponseAPI{
         {
           "customFieldId": "V",
           "value": [
-            data.dataNascimento
-          ],
-        },
-        /*{
-          "customFieldId": "v",
-          "value": [
-            data.nome.split(' ', 1)[0]
+            data.dataNascimento || '01/01/1991'
           ]
-        },*/
+        },
         {
           "customFieldId": "r",
           "value": [
@@ -67,25 +61,13 @@ module.exports = class GetResponseHandler extends GetResponseAPI{
         {
           "customFieldId": "w",
           "value": [
-            data.estado
-          ]
-        },
-        {
-          "customFieldId": "f",
-          "value": [
-            '+55'+ data.celular
-          ]
-        },
-        {
-          "customFieldId": "Q",
-          "value": [
-            '+55'+ data.fone
+            data.uf
           ]
         },
         {
           "customFieldId": "t",
           "value": [
-            data.socialCode
+            data.cnpj
           ]
         }
       ]

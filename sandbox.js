@@ -1,17 +1,15 @@
 const https = require('https');
 const Initilizer = require('./app/abra-cadabra/initializer.js');
-
+const GetResponseHandler = require('./app/getresponse/getresponse-handler.js');
 
 
 
 new Initilizer(__dirname, true).begin(() => {
 
+var email = "adnesilny@gmail.com";
 
-const MagentoCalls = require('./app/magento/magento-calls.js');
-
- new MagentoCalls().productStock('60311of-M').then((err, data) => {
-   console.log(data);
-   console.log(err);
- });
+new GetResponseHandler().getContact(email, (result) => {
+  console.log(result);
+});
 
 });
