@@ -7,6 +7,7 @@ const EccosysProvider = require('../eccosys/eccosys-provider.js');
 const BlockHandler = require('../handler/block-handler.js');
 const PendingProductProvider = require('../provider/pending-product-provider.js');
 const TemplateBuilder = require('../template/template-builder.js');
+const SaleLoader = require('../loader/sale-loader.js');
 
 
 module.exports = class PendingRoutes extends Routes{
@@ -75,23 +76,31 @@ module.exports = class PendingRoutes extends Routes{
       });
 
       this._get('/pending-voucher-print', (req, res, body, locals) => {
-        var pending = PendingLaws.find(req.query.sale);
-        var data = {cliente: pending.sale.client, oc: pending.sale.numeroDaOrdemDeCompra, voucher: pending.voucher};
 
-        new TemplateBuilder('54766499').setData(data).build((template) => {
-          res.writeHead(200, {
-            'Content-Type': 'text/html',
-            'Content-Length': template.content.length,
-          });
-          res.end(template.content);
+        new SaleLoader(req.query.sale).loadClient((sale) => {
+          if(sale.observacoes){
+
+            var index = sale.observacoes.search('PEN');
+            var voucher = sale.observacoes.slice(index);
+            
+            var data = {cliente: sale.client, oc: sale.numeroDaOrdemDeCompra, voucher: voucher};
+
+            new TemplateBuilder('54766499').setData(data).build((template) => {
+              res.writeHead(200, {
+                'Content-Type': 'text/html',
+                'Content-Length': template.content.length,
+              });
+              res.end(template.content);
+            });
+          }
+        }).run();
+      });
+
+      this._page('/pending-products', (req, res, body, locals) => {
+        new PendingProductProvider().load((list)=>{
+          res.render('pending/pending-products', {list: list});
         });
       });
 
-    this._page('/pending-products', (req, res, body, locals) => {
-      new PendingProductProvider().load((list)=>{
-        res.render('pending/pending-products', {list: list});
-      });
-    });
-
-  }
-};
+    }
+  };

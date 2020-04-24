@@ -145,6 +145,7 @@ function bindSaleAddressInfo(data){
   $('#transport-img').attr('src', '/img/transport/' + data.transport.name.toLocaleLowerCase() + '.png');
   $('.sale-shipping-transport-description').html(data.transport.desc + '<br>' + data.transport.tracking);
   $('.sale-shipping-transport-delivery').html(Dat.format(new Date(addDaysToDate(data.date, data.transport.deliveryTime))));
+  $('.sale-info-coleted').text(data.coleted).css('border-color', setBorderOnCard(data.coleted));
 
   if(data.transport.cost > 0){
     $('.sale-shipping-transport-cost').text(Num.money(data.transport.cost));
@@ -164,7 +165,7 @@ function bindPaymentInfo(data){
 }
 
 function setBorderOnCard(status){
-  if(status == 'pending_payment'){
+  if(status == 'pending_payment' || status == 'Não'){
     return "#efd834";
   }
   else if(status == 'canceled'){

@@ -591,6 +591,10 @@ function showNfePrintControls(triggerClick){
     if (triggerClick){
       $('#print-nfe').click();
       $('#print-transport-tag').click();
+
+      if(sale.observacoes){
+        window.open('/pending-voucher-print?sale=' + sale.numeroPedido, '_blank');
+      }
     }
   }
 }
