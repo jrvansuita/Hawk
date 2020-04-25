@@ -1,10 +1,10 @@
-const PatternDashboardProvider = require('./dashboard-provider.js');
+const DashboardProvider = require('./dashboard-provider.js');
 const Sale = require('../../bean/sale.js');
 const Cost = require('../../bean/cost.js');
 
 var temp = {};
 
-module.exports = class SaleDashboardProvider extends PatternDashboardProvider{
+module.exports = class SaleDashboardProvider  extends DashboardProvider.Handler{
 
   _getSearchQueryFields(){
     return ['uf', 'paymentType', 'transport'];
@@ -19,15 +19,15 @@ module.exports = class SaleDashboardProvider extends PatternDashboardProvider{
    }
 
    _onParseData(rows, costs){
-     console.log(rows);
      return new SaleDash(rows, costs);
    }
 
 };
 
 
-class SaleDash{
+class SaleDash extends DashboardProvider.Helper{
   constructor(rows, costs){
+    super();
     this.costs = costs;
     this.count = rows.length;
     this.arrs = {};
@@ -83,10 +83,6 @@ class SaleDash{
     this.markup = (this.total - this.freight) / this.cost;
     this.avgSell = (this.total - this.freight)/this.items;
 
-
-
-
-
     Object.keys(this.arrs).forEach((name) => {
       this.objectToArr(name);
     });
@@ -96,33 +92,6 @@ class SaleDash{
     }
 
     delete this.arrs;
-  }
-
-  objectToArr(name){
-    if (this[name]){
-      this[name] = Object.values(this[name]).sort((a, b) => b.count - a.count);
-    }
-  }
-
-  handleArr(each, name, onCustom){
-    this.arrs[name] = true;
-
-    if (!this[name]){
-      this[name] = {};
-    }
-    var key = each[name] || 'Indefinido';
-
-    var result = this[name][key] || {};
-
-    result.name = key;
-    result.count = result.count ? result.count + 1 : 1;
-    result.total = result.total ? result.total + each.total : each.total;
-
-    if (onCustom){
-      onCustom(this, each, result);
-    }
-
-    this[name][key] = result;
   }
 
 

@@ -1,8 +1,12 @@
 
 class BuildBox{
-  constructor(){
+  constructor(gridSpan){
     this.box = $('<div>').addClass('grid-item shadow');
     $('.content-grid').append(this.box);
+
+    if (gridSpan){
+      this.box.css('grid-column', gridSpan);
+    }
   }
 
   group(title, num, clazz=''){
@@ -12,6 +16,20 @@ class BuildBox{
     this.currentGroup = group;
 
     return this;
+  }
+
+  hidableItems(items){
+    this.currentGroup.attr('data-show', items);
+    return this;
+  }
+
+  checkHidableItems(){
+    if (this.currentGroup){
+      if (this.currentGroup.find('.col').length > this.currentGroup.data('show')){
+        this.currentGroup.find('.col').last().addClass('hide-item');
+        this._spawSeeMore();
+      }
+    }
   }
 
   info(label, value, clazz='', id=''){
@@ -33,6 +51,8 @@ class BuildBox{
     this.currentGroup.append(col);
     col.append($('<span>').addClass('super').append(label, $('<span>').addClass('right high-val').append(value)));
 
+    this.checkHidableItems();
+
     return this;
   }
 
@@ -40,8 +60,10 @@ class BuildBox{
     var col = $('<div>').addClass('col coloring-data taggable').data('attr', attr).data('value', attrVal).data('max', max).data('cur', right);
     this.currentGroup.append(col);
 
-    col.append($('<span>').addClass('super').append(label, $('<span>').addClass('right').append(right)));
+    col.append($('<span>').addClass('super').append(label, $('<span>').addClass('right').append(Num.points(right))));
     col.append($('<span>').addClass('value min-val').append(sub, $('<span>').addClass('right min-val').append(value)));
+
+    this.checkHidableItems();
 
     return this;
   }
@@ -67,5 +89,24 @@ class BuildBox{
     var row = $('<td>').append($('<span>').addClass('value ' + clazz).append(val));
     this.currentRow.append(row);
     return this;
+  }
+
+
+  _spawSeeMore(){
+    if(!this.currentGroup.find('.see-more').length){
+      var hide = $('<span>').addClass('see-more').text('Ver Mais');
+      hide.click(() => {
+        var toggle = hide.parent().find('.hide-item').first().is(':visible');
+        hide.text(toggle ? 'Ver Mais' : 'Ver Menos');
+
+        if (toggle){
+          hide.parent().find('.hide-item').hide();
+        }else{
+          hide.parent().find('.hide-item').fadeIn().css("display","inline-block");
+        }
+      });
+
+      this.currentGroup.append(hide);
+    }
   }
 }

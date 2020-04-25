@@ -80,7 +80,7 @@ img.dots-glyph {
   margin-top: 3px;
 }
 
-.row{display: block;padding: 10px 12px;background-color: white;}
+.row{display: block;padding: 10px 12px;background-color: white;position: relative;}
 
 .col{margin-right: 10px;display: inline-block;margin-bottom: 8px;}
 
@@ -204,16 +204,21 @@ table .header td:last-child > .right{
 }
 
 
-.hide-infos{
+.see-more{
   color: #797c82;
   font-size: 12px;
   font-weight: 900;
   cursor: pointer;
   white-space: nowrap;
   margin-left: 4px;
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  background: white;
+  padding: 10px;
 }
 
-.hide-infos:hover{
+.see-more:hover{
   text-decoration: underline;
 }
 
@@ -223,5 +228,9 @@ table .header td:last-child > .right{
 }
 
 .costs-box{
+  display: none;
+}
+
+.hide-item:not(.see-more){
   display: none;
 }

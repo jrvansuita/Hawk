@@ -38,7 +38,7 @@ function buildBoxes(results){
 
   new BuildBox()
   .group('Geral', data.count, 'min-col')
-  .info('Valor', Num.money(data.total), 'high-val')
+  .info('Valor Faturado', Num.money(data.total), 'high-val')
   .info('Desconto', Num.money(data.discount), 'high-val')
   .info('Ticket', Num.money(data.tkm))
   .info('Custo Produtos', Num.money(data.cost))
@@ -76,11 +76,9 @@ function buildBoxes(results){
     box.square(Util.getPaymentType(each.name), each.count, Num.percent(each.count*100/data.count, true), Num.format(each.total), 'paymentType', each.name, data.paymentType[0].count);
   });
 
-  box.group('Cupons', data.coupom.length, 'gray coupom-box');
-  showedCount=0;
+  box.group('Cupons', data.coupom.length, 'gray coupom-box').hidableItems(16);
   data.coupom.forEach((each) => {
-    if (each.count >= 5) showedCount++;
-    box.toast(each.name, each.count, 'coupom ' + ((each.count < 5) && (showedCount > 10) ? 'coupom-hidable' : ''), 'coupom');
+    box.toast(each.name, each.count, 'coupom', 'coupom');
   });
 
 
@@ -137,31 +135,8 @@ function buildBoxes(results){
 
   coloringData();
   tagsHandler.bind();
-  toogleCupomHidable(true);
   buildCostsBox(results);
 }
-
-
-
-function toogleCupomHidable(hide){
-  if (hide){
-    $('.coupom-hidable').fadeOut();
-  }else{
-    $('.coupom-hidable').fadeIn().css("display","inline-block");
-  }
-
-  if ($('.coupom-hidable').length && !$('.hide-infos').length){
-    var hide = $('<span>').addClass('hide-infos').text('Ver Mais');
-    hide.click(() => {
-      var toggle = $('.coupom-hidable').first().is(':visible');
-      hide.text(toggle ? 'Ver Mais' : 'Ver Menos');
-      toogleCupomHidable(toggle);
-    });
-    $('.coupom-box').append(hide);
-  }
-}
-
-
 
 
 

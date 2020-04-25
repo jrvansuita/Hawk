@@ -1,10 +1,11 @@
-const PatternDashboardProvider = require('./dashboard-provider.js');
+const DashboardProvider = require('./dashboard-provider.js');
+
 const SaleStock = require('../../bean/sale-stock.js');
 
 
 var temp = {};
 
-module.exports = class StockDashboardProvider extends PatternDashboardProvider{
+module.exports = class StockDashboardProvider extends DashboardProvider.Handler{
 
   _getSearchQueryFields(){
     return ['sku', 'size'];
@@ -23,134 +24,58 @@ module.exports = class StockDashboardProvider extends PatternDashboardProvider{
 };
 
 
-class StockDash{
+class StockDash extends DashboardProvider.Helper{
   constructor(rows){
+    super();
     this.count = rows.length;
     this.arrs = {};
-    this.rows=rows;
 
-    //this.rolling(rows);
-    //this.finals();
+    this.rolling(rows);
+    this.finals();
   }
 
   rolling(rows){
     this.total = 0;
     this.items = 0;
     this.cost = 0;
-    this.freight = 0;
-    this.discount = 0;
-    this.repurchaseCount = 0;
-    this.weight = 0;
 
     rows.forEach((each) => {
       this.total += each.total;
-      this.items += each.quantityItems;
-      this.cost += each.productCost;
-      this.freight += each.freightValue;
-      this.discount += each.discount || 0;
-      this.repurchaseCount += each.repurchase ? 1 : 0;
-      this.weight += each.weight || 0;
-      //      console.log('Sale ' + each.number + ' - ' +  each.freightValue);
+      this.items += each.quantity;
+      this.cost += each.cost;
 
-      this.handleArr(each, 'uf');
-      this.handleArr(each, 'paymentType');
+      this.handleArr(each, 'season', this.handleCustom);
+      this.handleArr(each, 'gender', this.handleCustom);
+      this.handleArr(each, 'category', this.handleCustom);
+      this.handleArr(each, 'manufacturer', this.handleCustom);
+      this.handleArr(each, 'brand', this.handleCustom);
 
-
-      if (each.freightValue > 0){
-        this.handleArr(each, 'transport', this.handleCustomTransport);
-      }
-
-
-      if (this.includesCoupom(each.coupom)){
-        this.handleArr(each, 'coupom');
-      }
-
-      if (each.city){
-        this.handleArr(each, 'city');
-      }
     });
   }
 
   finals(){
-    this.tkm = this.total/this.count;
-    this.avgItems = this.items/this.count;
-    this.profit =  this.total - (this.freight + this.cost);
+    this.tkm = this.total/this.items;
+    //this.avgItems = this.items/this.count;
+    this.profit =  this.total - this.cost;
 
-    this.avgCost = this.cost/this.items;
-    this.markup = (this.total - this.freight) / this.cost;
-    this.avgSell = (this.total - this.freight)/this.items;
-
-
-
+    //this.avgCost = this.cost/this.items;
+    this.markup = this.total / this.cost;
+    //this.avgSell = (this.total - this.freight)/this.items;
 
 
     Object.keys(this.arrs).forEach((name) => {
-      this.objectToArr(name);
+      this.objectToArr(name, 'items');
     });
-
-    if (this.city){
-      this.city.splice(15);
-    }
 
     delete this.arrs;
   }
 
-  objectToArr(name){
-    if (this[name]){
-      this[name] = Object.values(this[name]).sort((a, b) => b.count - a.count);
-    }
-  }
-
-  handleArr(each, name, onCustom){
-    this.arrs[name] = true;
-
-    if (!this[name]){
-      this[name] = {};
-    }
-    var key = each[name] || 'Indefinido';
-
-    var result = this[name][key] || {};
-
-    result.name = key;
-    result.count = result.count ? result.count + 1 : 1;
-    result.total = result.total ? result.total + each.total : each.total;
-
-    if (onCustom){
-      onCustom(this, each, result);
-    }
-
-    this[name][key] = result;
+  handleCustom(self, item, result){
+    result.items = result.items ? result.items + item.quantity : item.quantity;
   }
 
 
-  handleCustomTransport(self, item, result){
-    if (!result.minDT || (result.minDT > item.deliveryTime)){
-      result.minDT = item.deliveryTime;
-    }
 
-    if (!result.maxDT || (result.maxDT < item.deliveryTime)){
-      result.maxDT = item.deliveryTime;
-    }
 
-    result.countDT = result.countDT ? result.countDT + item.deliveryTime : item.deliveryTime;
 
-    self.transportSummary = self.transportSummary || {}
-    self.transportSummary.countDT = self.transportSummary.countDT ? self.transportSummary.countDT + item.deliveryTime : item.deliveryTime;
-
-    if (!result.minValue || (result.minValue > item.freightValue)){
-      result.minValue = item.freightValue;
-    }
-
-    if (!result.maxValue || (result.maxValue < item.freightValue)){
-      result.maxValue = item.freightValue;
-    }
-
-    result.totalValue = result.totalValue ? result.totalValue + item.freightValue : item.freightValue;
-
-    self.transportSummary.totalValue = self.transportSummary.totalValue ? self.transportSummary.totalValue + item.freightValue : item.freightValue;
-  }
-
-  includesCoupom(text){
-    return ((text.length > 0) && (!/PEN|TRC/.test(text)));
-  }
 }

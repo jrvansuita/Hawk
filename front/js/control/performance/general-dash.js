@@ -57,7 +57,8 @@ $(document).ready(()=>{
 function coloringData(){
   $('.coloring-data').each((i , each) => {
     var perc = $(each).data('cur') / $(each).data('max');
-    $(each).css('background-color', "rgba(200, 200, 200, x)".replace('x', perc));
+    perc = perc < .1 ? .1 : perc;
+    $(each).css('background-color', "rgba(211, 211, 211, x)".replace('x', perc));
   });
 }
 
