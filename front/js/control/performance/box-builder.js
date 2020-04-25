@@ -9,10 +9,16 @@ class BuildBox{
     }
   }
 
+  get(){
+    return this.currentGroup;
+  }
+
   group(title, num, clazz=''){
     var group = $('<div>').addClass('row ' + clazz);
     this.box.append(group);
-    group.append($('<span>').addClass('title').append(title, $('<span>').addClass('right').append(num)));
+    if (title){
+      group.append($('<span>').addClass('title').append(title, $('<span>').addClass('right').append(num)));
+    }
     this.currentGroup = group;
 
     return this;
@@ -57,13 +63,33 @@ class BuildBox{
   }
 
   square(label, right, sub, value='', attr, attrVal, max){
-    var col = $('<div>').addClass('col coloring-data taggable').data('attr', attr).data('value', attrVal).data('max', max).data('cur', right);
+    var col = $('<div>').addClass('col coloring-data').data('max', max).data('cur', right);
+
+
+    if (attr){
+      col.addClass('taggable').data('attr', attr).data('value', attrVal);
+    }
+
     this.currentGroup.append(col);
 
     col.append($('<span>').addClass('super').append(label, $('<span>').addClass('right').append(Num.points(right))));
     col.append($('<span>').addClass('value min-val').append(sub, $('<span>').addClass('right min-val').append(value)));
 
     this.checkHidableItems();
+
+    return this;
+  }
+
+
+  img(path, label, right, click){
+    var col = $('<div>').addClass('col box-img-col');
+
+    this.currentGroup.append(col);
+
+    var img = $('<img>').attr('src', path).addClass('box-img');
+    col.append(img);
+    col.append($('<span>').addClass('super').append(label, $('<span>').addClass('right').append(right)));
+    col.click(click);
 
     return this;
   }
@@ -85,8 +111,13 @@ class BuildBox{
     return this;
   }
 
-  col(val, clazz=''){
+  col(val, clazz='', attr, attrVal){
     var row = $('<td>').append($('<span>').addClass('value ' + clazz).append(val));
+
+    if (attr){
+      row.addClass('taggable').data('attr', attr).data('value', attrVal);
+    }
+
     this.currentRow.append(row);
     return this;
   }

@@ -9,7 +9,7 @@ class TagsHandler{
 
 
   placeAll(attr){
-    $('.tag-box').empty();
+    $('.tag-box').find('.tag').remove();
     if (attr){
       Object.keys(attr).forEach((key) => {
         var values = attr[key].split('|');
@@ -28,6 +28,8 @@ class TagsHandler{
       var tag = this.create(value, attr);
       $('.tag-box').append(tag);
 
+      $('#search-button').focus();
+
       if (!$('.tag-box').is(':visible')){
         this.toggleTagBox(true);
       }
@@ -44,6 +46,7 @@ class TagsHandler{
       this.coloring(tag);
       tag.click(function(){
         $(this).remove();
+        $('#search-button').focus();
       });
 
       return tag;

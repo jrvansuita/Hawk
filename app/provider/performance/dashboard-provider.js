@@ -16,8 +16,6 @@ class DashboardProviderHandler{
     this.query.begin = query.begin ? query.begin  : Dat.yesterday().begin().getTime();
     this.query.end = query.end ? query.end : Dat.today().end().getTime();
 
-
-
     return this;
   }
 
@@ -35,8 +33,6 @@ class DashboardProviderHandler{
         and.push(DataAccess.or(key, this.query.attrs[key].split('|')));
       });
     }
-
-
 
     return {$and : and};
   }
@@ -95,6 +91,8 @@ class DashboardProviderHelper{
       this[name] = Object.values(this[name]).sort((a, b) => b[sortField] - a[sortField]);
     }
   }
+
+
 
   handleArr(each, name, onCustom){
     this.arrs[name] = true;

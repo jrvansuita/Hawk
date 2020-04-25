@@ -3,9 +3,9 @@ function onSearchData(id){
   loadingPattern(true);
 
   if (id){
-    _get('/sales-dashboard-data', {id: id}, onHandleResult);
+    _post('/sales-dashboard-data', {id: id}, onHandleResult);
   }else{
-    _get('/sales-dashboard-data',{
+    _post('/sales-dashboard-data',{
       begin: getDateVal('date-begin', dateBeginPicker),
       end: getDateVal('date-end', dateEndPicker),
       value: $('#search-input').val(),
@@ -100,7 +100,7 @@ function buildBoxes(results){
 
   data.transport.forEach((each) => {
     table.row()
-    .col(each.name, 'super high-val')
+    .col(each.name, 'super high-val', 'transport', each.name)
     .col(each.count, 'super high-val')
     .col(Num.format(each.total))
     .col(Num.parse(each.total/each.count, true))

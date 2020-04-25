@@ -8,27 +8,30 @@ var temp = {};
 module.exports = class StockDashboardProvider extends DashboardProvider.Handler{
 
   _getSearchQueryFields(){
-    return ['sku', 'size'];
+    return ['sku', 'season', 'manufacturer', 'brand', 'category'];
   }
 
   _onLoadData(callback){
-    SaleStock.find(this.getDataQuery(), (err, rows)=>{
-      callback(err, this._onParseData(rows));
+    SaleStock.byDay(this.query.begin, this.query.end, (err1, chartData) => {
+      SaleStock.find(this.getDataQuery(), (err2, rows)=>{
+        callback(err1 || err2, this._onParseData(rows, chartData));
+      });
     });
   }
 
-  _onParseData(rows){
-    return new StockDash(rows);
+  _onParseData(rows, chart){
+    return {...new StockDash(rows, this.query.showSkus), ...{chart : chart}};
   }
 
 };
 
 
 class StockDash extends DashboardProvider.Helper{
-  constructor(rows){
+  constructor(rows, loadSkusCount){
     super();
     this.count = rows.length;
     this.arrs = {};
+    this.loadSkusCount = loadSkusCount == undefined ? 25 : loadSkusCount;
 
     this.rolling(rows);
     this.finals();
@@ -50,22 +53,32 @@ class StockDash extends DashboardProvider.Helper{
       this.handleArr(each, 'manufacturer', this.handleCustom);
       this.handleArr(each, 'brand', this.handleCustom);
 
+      if (each.quantity_sizes){
+        Object.keys(each.quantity_sizes).forEach((key) => {
+          this.handleArr({size:key, quantity: each.quantity_sizes[key]}, 'size', this.handleCustom);
+        });
+      }
+
+      if (this.loadSkusCount){
+        this.handleArr(each, 'sku', this.handleCustom);
+      }
+
     });
   }
 
   finals(){
     this.tkm = this.total/this.items;
-    //this.avgItems = this.items/this.count;
     this.profit =  this.total - this.cost;
-
-    //this.avgCost = this.cost/this.items;
     this.markup = this.total / this.cost;
-    //this.avgSell = (this.total - this.freight)/this.items;
 
 
     Object.keys(this.arrs).forEach((name) => {
       this.objectToArr(name, 'items');
     });
+
+    if (this.sku){
+      this.sku.splice(this.loadSkusCount);
+    }
 
     delete this.arrs;
   }

@@ -75,4 +75,51 @@ module.exports = class SaleStock extends DataAccess {
   }
 
 
+
+
+
+
+    static byDay(from, to, callback){
+      SaleStock.aggregate([{
+        $match: SaleStock.range('date', from, to, true)
+      },
+      {
+        $group: {
+          _id: {
+            year: {
+              $year: "$date"
+            },
+            month: {
+              $month: "$date"
+            },
+            day: {
+              $dayOfMonth: "$date"
+            },
+          },
+          sum_total: {
+            $sum: "$total"
+          },
+          sum_cost: {
+            $sum: "$cost"
+          },
+          sum_quantity: {
+            $sum: "$quantity"
+          }
+        }
+      },
+      {
+        /* sort descending (latest subscriptions first) */
+        $sort: {
+          '_id.year': 1,
+          '_id.month': 1,
+          '_id.day': 1
+        }
+      }],
+      function(err, res) {
+        if (callback)
+        callback(err, res);
+      });
+    }
+
+
 };

@@ -21,6 +21,7 @@
   position: relative;
   grid-gap: 15px;
   max-width: 100%;
+  margin-bottom: 200px;
 }
 
 .grid-item{
@@ -58,7 +59,8 @@ img.dots-glyph {
   margin-right: 10px;
 }
 
-.date-selectors{
+.selectors{
+  min-width: fit-content;
   display: flex;
   background-color: #f3f3f3;
   padding-right: 10px;
@@ -214,12 +216,14 @@ table .header td:last-child > .right{
   position: absolute;
   right: 15px;
   bottom: 15px;
-  background: white;
-  padding: 10px;
+  padding: 4px;
+  background-color: white;
+  border: 1px solid #dedede;
+  border-radius: 2px;
 }
 
 .see-more:hover{
-  text-decoration: underline;
+  background-color: #f1f1f1;
 }
 
 .no-data{
@@ -233,4 +237,27 @@ table .header td:last-child > .right{
 
 .hide-item:not(.see-more){
   display: none;
+}
+
+
+.box-img{
+  width: 100px;
+  height: 100px;
+  mix-blend-mode: multiply;
+}
+
+.box-img-col{
+  border-radius: 4px;
+  border: 1px solid #e4e4e4;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.box-img-col:hover{
+  background-color: whitesmoke;
+}
+
+.material-input-holder>input{
+  max-width: 70px !important;
+  min-width: 70px !important;
 }
