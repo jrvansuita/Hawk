@@ -257,7 +257,7 @@ table .header td:last-child > .right{
   background-color: whitesmoke;
 }
 
-.material-input-holder>input{
+.selectors .material-input-holder>input{
   max-width: 70px !important;
   min-width: 70px !important;
 }
