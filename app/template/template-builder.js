@@ -5,7 +5,6 @@ module.exports = class TemplateBuilder{
 
   constructor(id){
     this.id = id;
-    this.updated = new Date();
   }
 
   template(use){

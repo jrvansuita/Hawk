@@ -3,18 +3,13 @@ var usagesSelector;
 var tooltips;
 
 $(document).ready(()=>{
-
-  if (templateType == 'block'){
-    dayUse();
-  }
+  new Tooltip('.active-circle', 'Template em uso')
+  .autoHide(10000).load().then((data) => {
+    tooltips = data;
+  });
 
 
   if (templateType == 'email'){
-    new Tooltip('.active-circle', 'Template em uso')
-    .autoHide(10000).load().then((data) => {
-      tooltips = data;
-    });
-
     new ComboBox($('#template-usage'), usages)
     .setAutoShowOptions()
     .setDisabledCaption('Nenhum disponível')
@@ -150,16 +145,4 @@ function duplicateTemplate(id){
 
 function goToTemplate(id){
   window.location= location.pathname + (id ? '?id=' + id : '');
-}
-function dayUse(){
-  var atual = new Date();
-  var past = new Date(selected.updated)
-  var dife = Math.abs(atual.getTime() - past.getTime());
-  var days = Math.ceil(dife / (1000 * 60 * 60 * 24));
-
-  if( days < 30){
-    var div = $('<div>').addClass('active-circle');
-
-    $('.each-template-line').prepend(div);
-  }
 }

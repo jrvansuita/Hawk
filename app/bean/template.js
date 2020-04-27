@@ -32,6 +32,10 @@ module.exports = class Template extends DataAccess {
     Template.upsert({id: id}, {sample : data});
   }
 
+  static refresh(id){
+    Template.upsert({id: id}, {updated : new Date()});
+  }
+
   static delete(id, callback){
     Template.findOne({id:id}, (err, obj)=>{
       if (obj)
