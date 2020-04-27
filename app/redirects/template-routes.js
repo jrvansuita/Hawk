@@ -36,6 +36,20 @@ module.exports = class EmailRoutes extends Routes{
           'Content-Type': 'text/html',
           'Content-Length': template.content.length,
         });
+
+        var data = {
+          id: template.id,
+           name: template.name,
+           subject: template.subject,
+           content:  template.content,
+           usage: template.usage,
+           type: template.type,
+           updated: template.updated
+       }
+
+       TemplateVault.storeFromScreen(data, (id) => {
+       });
+
         res.end(template.content);
       });
   }, true, true);

@@ -39,7 +39,7 @@
 
 
             <div class="each-template-line <%=selected.id == each.id ? 'active' : ''%> " data-id="<%=each.id%>">
-              <%if (each.usage && templateType == 'email' ){%>
+              <%if (each.usage && templateType == 'email'){%>
                 <div class="active-circle"></div>
                 <%}%>
                 <span><%=each.name%></span>
@@ -75,6 +75,14 @@
                     <label>Usado em</label>
                   </div>
                   <%}%>
+
+                  <%if (templateType == 'block'){%>
+                    <div class="material-input-holder usage-holder">
+                      <input type="text" id="template-usage" value="<%=(selected.updated ? Dat.formatwTime(new Date(selected.updated))  : '') %>" autocomplete="off" required/>
+                      <span class="bar"></span>
+                      <label>Ultima Renderização</label>
+                    </div>
+                    <%}%>
 
                   <label class="button save shadow">Salvar</label>
                 </div>

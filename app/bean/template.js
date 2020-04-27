@@ -9,6 +9,7 @@ module.exports = class Template extends DataAccess {
     this.usage = Str.def(usage);
     this.sample = sample || {};
     this.type = Str.def(type, 'block'); //block or email
+    this.updated = new Date();
   }
 
   static getKey() {
