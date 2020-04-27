@@ -2,25 +2,16 @@
 <html lang="en" dir="ltr">
 <%include ../menus/main-menu %>
 <head>
-  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-checkbox.css">
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
-  <link rel="stylesheet" type="text/css" href="/front/css/layout/performance/general-dash.css">
-  <link rel="stylesheet" type="text/css" href="/front/css/layout/performance/stock-dashboard.css">
-
-  <script type="text/javascript" src="/front/js/control/performance/box-builder.js"></script>
-  <script type="text/javascript" src="/front/js/control/performance/tags-handler.js"></script>
-
-  <script type="text/javascript" src="/front/js/control/performance/general-dash.js"></script>
-  <script type="text/javascript" src="/front/js/control/performance/stock-dashboard.js"></script>
-
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/sale-dashboard.css">
+  <script type="text/javascript" src="/front/js/control/sale-dash/box-builder.js"></script>
+  <script type="text/javascript" src="/front/js/control/sale-dash/tags-handler.js"></script>
+  <script type="text/javascript" src="/front/js/control/sale-dash/costs-box-builder.js"></script>
+  <script type="text/javascript" src="/front/js/control/sale-dash/sale-dashboard.js"></script>
   <script type="text/javascript" src="/front/js/libs/date-picker.js"></script>
 
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
   <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
-  <script type="text/javascript" src="/front/js/libs/Chart.min.js"></script>
-  <script type="text/javascript" src="/front/js/libs/dash-chart.js"></script>
-
-
 </head>
 <body>
   <%include ../menus/performance-menu %>
@@ -28,22 +19,11 @@
   <div class="main">
     <div class="top shadow">
       <div class="search-box">
-        <img class="icon-open is-closed" title="Abrir seletor" src="/img/open-down.png">
+        <img class="icon-open is-open" title="Abrir seletor" src="/img/open-down.png">
         <input type="text" id="search-input" value="<%=query.value%>" class="simple-material-input" placeholder="Pesquisar Pedidos" autocomplete="off"/>
 
 
-
-
-
-        <div class="selectors">
-
-          <div class="material-input-holder">
-            <input type="text" id="show-skus" value="25" onkeypress="return Num.isNumberKey(event);" required>
-            <span class="bar"></span>
-            <label>Mostrar Produtos</label>
-          </div>
-
-
+        <div class="date-selectors">
           <div class="material-input-holder date-begin-holder">
             <input id="date-begin" maxlength="8"
             autocomplete="off"
@@ -69,12 +49,11 @@
 
         <label class="button shadow" id="search-button" tabindex="0">Buscar</label>
 
-
-
         <div class="menu-dots">
           <img src="img/dots.png" class="dots-glyph"/>
         </div>
 
+        <label id="totals"></label>
       </div>
 
       <div class="tag-box">
