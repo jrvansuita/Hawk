@@ -2,12 +2,7 @@ const DataAccess = require('../../mongoose/data-access.js');
 
 var temp = {};
 
-module.exports = class PatternDashboardProvider{
-
-  //_getSearchQueryFields(){
-    //Not Implemented
-    //return [...fields];
-  //}
+class DashboardProviderHandler{
 
   maybe(sessionQueryId){
     this.sessionQueryId = sessionQueryId;
@@ -18,10 +13,8 @@ module.exports = class PatternDashboardProvider{
     this.query = query;
 
     //Initializing
-    this.query.begin = query.begin ? query.begin  : Dat.today().begin().getTime();
+    this.query.begin = query.begin ? query.begin  : Dat.yesterday().begin().getTime();
     this.query.end = query.end ? query.end : Dat.today().end().getTime();
-
-
 
     return this;
   }
@@ -40,8 +33,6 @@ module.exports = class PatternDashboardProvider{
         and.push(DataAccess.or(key, this.query.attrs[key].split('|')));
       });
     }
-
-    
 
     return {$and : and};
   }
@@ -88,5 +79,45 @@ module.exports = class PatternDashboardProvider{
     temp[id] = data;
     return data;
   }
+};
 
+
+class DashboardProviderHelper{
+
+  objectToArr(name, sortField){
+    sortField = sortField || 'count';
+
+    if (this[name]){
+      this[name] = Object.values(this[name]).sort((a, b) => b[sortField] - a[sortField]);
+    }
+  }
+
+
+
+  handleArr(each, name, onCustom){
+    this.arrs[name] = true;
+
+    if (!this[name]){
+      this[name] = {};
+    }
+    var key = each[name] || 'Indefinido';
+
+    var result = this[name][key] || {};
+
+    result.name = key;
+    result.count = result.count ? result.count + 1 : 1;
+    result.total = result.total ? result.total + each.total : each.total;
+
+    if (onCustom){
+      onCustom(this, each, result);
+    }
+
+    this[name][key] = result;
+  }
+}
+
+
+module.exports = {
+  Handler : DashboardProviderHandler,
+  Helper : DashboardProviderHelper
 };

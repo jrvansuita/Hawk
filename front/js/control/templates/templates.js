@@ -3,14 +3,13 @@ var usagesSelector;
 var tooltips;
 
 $(document).ready(()=>{
+  new Tooltip('.active-circle', 'Template em uso')
+  .autoHide(10000).load().then((data) => {
+    tooltips = data;
+  });
 
 
   if (templateType == 'email'){
-    new Tooltip('.active-circle', 'Template em uso')
-    .autoHide(10000).load().then((data) => {
-      tooltips = data;
-    });
-
     new ComboBox($('#template-usage'), usages)
     .setAutoShowOptions()
     .setDisabledCaption('Nenhum disponível')

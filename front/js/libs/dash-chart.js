@@ -1,14 +1,9 @@
-class PackingChart {
+class StockDashChart {
 
-  constructor(chartId, data, isFull, monthView){
-    this.chartId  = chartId;
+  constructor(holder, data){
+    this.holder  = holder;
     this.data = data;
-    this.isMonthView = monthView;
-    this.isFull = isFull;
   }
-
-
-
 
   load(){
     this.buildDataset();
@@ -17,88 +12,55 @@ class PackingChart {
 
   processDays(){
     this.labels = [];
-    this.values = [];
-    this.counts = [];
-    this.tkms = [];
+    this.totals = [];
+    this.quantities = [];
+    this.costs = [];
 
     this.data.forEach((each)=>{
       this.labels.push(each._id.day);
-      this.values.push(each.sum_total);
-      this.counts.push(each.sum_count);
-      this.tkms.push(each.sum_total/each.sum_count);
-    });
-  }
-
-  processMonths(){
-    var handler = {};
-
-    this.data.forEach((each)=>{
-
-      var item = handler[each._id.month];
-
-      if (item){
-        item.value +=each.sum_total;
-        item.count +=each.sum_count;
-      }else{
-        item = { label : each._id.month,
-          value : each.sum_total,
-          count : each.sum_count
-        };
-        handler[each._id.month] = item;
-      }
-    });
-
-
-    this.labels = [];
-    this.values = [];
-    this.counts = [];
-    this.tkms = [];
-
-    Object.values(handler).forEach((each)=>{
-      this.labels.push(Dat.monthDesc(each.label-1));
-      this.values.push(each.value);
-      this.counts.push(each.count);
-      this.tkms.push(each.value/each.count);
+      this.totals.push(each.sum_total);
+      this.quantities.push(each.sum_quantity);
+      this.costs.push(each.sum_cost);
     });
   }
 
   handleDatasets(){
     this.datasets = [];
 
-    if (this.isFull){
-      this.datasets.push({
-        backgroundColor: '#03c1844a',
-        borderColor: '#03c184',
-        pointRadius: 3,
-        label: 'Valor',
-        data: this.values,
-      });
-    }
+
+    this.datasets.push({
+      backgroundColor: '#03c1844a',
+      borderColor: '#03c184',
+      pointRadius: 3,
+      label: 'Faturado',
+      data: this.totals,
+    });
+
 
     this.datasets.push({
       backgroundColor: '#14b5a64a',
       borderColor: '#14b5a6',
       pointRadius: 3,
-      label: 'Pedidos',
-      data: this.counts
+      label: 'Custo',
+      data: this.costs
     });
 
     this.datasets.push({
       backgroundColor: '#3e55ff4a',
       borderColor: '#3e55ff',
       pointRadius: 3,
-      label: 'Ticket',
-      data: this.tkms
+      label: 'Quantidade',
+      data: this.quantities
     });
   }
 
 
   buildDataset(){
-    if (this.data.length > 30 || this.isMonthView){
-      this.processMonths();
-    }else{
-      this.processDays();
-    }
+    //if (this.data.length > 30 || this.isMonthView){
+    //      this.processMonths();
+    //  }else{
+    this.processDays();
+    //}
 
     this.handleDatasets();
   }
@@ -106,12 +68,13 @@ class PackingChart {
 
   buildChart(){
 
-    console.log({data: {
-      labels: this.labels,
-      datasets: this.datasets
-    }});
 
-    var ctx = document.getElementById(this.chartId).getContext('2d');
+    var canvas = $('<canvas>').addClass('stock-dash-chart');
+
+    this.holder.append(canvas);
+
+
+    var ctx = canvas[0].getContext('2d');
 
     var myChart = new Chart(ctx, {
       type: 'line',
@@ -151,19 +114,19 @@ class PackingChart {
         responsive: true,
         layout: {
           padding: {
-            left: 25,
-            right: 25,
-            top: 25,
-            bottom: 25
+            left: 7,
+            right: 15,
+            top: 0,
+            bottom: 0
           }
         },
 
         legend:{
           display:true,
           labels: {
-            fontSize: 14,
-            boxWidth: 12,
-            padding: 15,
+            fontSize: 11,
+            boxWidth: 1,
+            padding: 12,
             fontStyle: 'bold',
             usePointStyle: true
           }
@@ -197,7 +160,7 @@ class PackingChart {
               min: 1,
               display: false,
               callback: function(value, index, values) {
-                return Num.format(value, false);
+                return Num.format(value, false, true);
               }
             },
             gridLines: {
@@ -210,7 +173,7 @@ class PackingChart {
 
         elements: {
           line: {
-            fill: true,
+            fill: false,
             tension: 0.5,
           },
         }

@@ -38,6 +38,7 @@
 
 .image-holder{
   padding: 10px;
+  background-color: aliceblue;
   display: flex;
   text-align: center;
   margin: auto;

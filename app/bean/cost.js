@@ -31,7 +31,7 @@ module.exports = class Cost extends DataAccess {
       }
     };
 
-    console.log(query);
+  
     this.staticAccess()
     .find(query, callback);
   }

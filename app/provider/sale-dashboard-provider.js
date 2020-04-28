@@ -1,34 +1,73 @@
-const DashboardProvider = require('./dashboard-provider.js');
-const Sale = require('../../bean/sale.js');
-const Cost = require('../../bean/cost.js');
+
+const Sale = require('../bean/sale.js');
+const Cost = require('../bean/cost.js');
 
 var temp = {};
 
-module.exports = class SaleDashboardProvider  extends DashboardProvider.Handler{
+module.exports = class SaleDashboardProvider{
 
-  _getSearchQueryFields(){
-    return ['uf', 'paymentType', 'transport'];
+  maybe(sessionQueryId){
+    this.sessionQueryId = sessionQueryId;
+    return this;
   }
 
-   _onLoadData(callback){
-     Cost.getRange(this.query.begin, this.query.end, (err1, costs) => {
-       Sale.find(this.getDataQuery(), (err2, rows)=>{
-         callback(err1 || err2, this._onParseData(rows, costs));
-       });
-     });
-   }
+  with(query){
+    this.query = query;
 
-   _onParseData(rows, costs){
-     return new SaleDash(rows, costs);
-   }
+    //Initializing
+    this.query.begin = query.begin ? query.begin  : Dat.today().begin().getTime();
+    this.query.end = query.end ? query.end : Dat.today().end().getTime();
+
+    return this;
+  }
+
+  setOnResult(onResult){
+    this.onResult = onResult;
+
+    return this;
+  }
+
+  setOnError(onError){
+    this.onError = onError;
+    return this;
+  }
+
+
+  load(callback){
+    if (this.onResult){
+      if (this.query.id && temp[this.query.id]){
+        this.onResult(temp[this.query.id]);
+      }else  if ((Object.keys(this.query).length == 0) && this.sessionQueryId && temp[this.sessionQueryId]){
+        this.onResult({id: this.sessionQueryId});
+      }else{
+        var q = buildDataQuery(this.query);
+        Cost.getRange(this.query.begin, this.query.end, (err, costs) => {
+          Sale.find(q, (err, rows)=>{
+            if (err && this.onError){
+              this.onError(err);
+            }else{
+              this.onResult(this._keepTemp(costs, new SaleDash(rows)));
+            }
+          });
+        });
+      }
+    }
+  }
+
+
+  _keepTemp(costs, data){
+    var id = Util.id();
+    var data = {id: id, query : this.query, data: data, costs: costs};
+
+    temp[id] = data;
+    return data;
+  }
 
 };
 
 
-class SaleDash extends DashboardProvider.Helper{
-  constructor(rows, costs){
-    super();
-    this.costs = costs;
+class SaleDash{
+  constructor(rows){
     this.count = rows.length;
     this.arrs = {};
 
@@ -77,11 +116,8 @@ class SaleDash extends DashboardProvider.Helper{
   finals(){
     this.tkm = this.total/this.count;
     this.avgItems = this.items/this.count;
+    this.avgUnit = this.total/this.items;
     this.profit =  this.total - (this.freight + this.cost);
-
-    this.avgCost = this.cost/this.items;
-    this.markup = (this.total - this.freight) / this.cost;
-    this.avgSell = (this.total - this.freight)/this.items;
 
     Object.keys(this.arrs).forEach((name) => {
       this.objectToArr(name);
@@ -92,6 +128,33 @@ class SaleDash extends DashboardProvider.Helper{
     }
 
     delete this.arrs;
+  }
+
+  objectToArr(name){
+    if (this[name]){
+      this[name] = Object.values(this[name]).sort((a, b) => b.count - a.count);
+    }
+  }
+
+  handleArr(each, name, onCustom){
+    this.arrs[name] = true;
+
+    if (!this[name]){
+      this[name] = {};
+    }
+    var key = each[name] || 'Indefinido';
+
+    var result = this[name][key] || {};
+
+    result.name = key;
+    result.count = result.count ? result.count + 1 : 1;
+    result.total = result.total ? result.total + each.total : each.total;
+
+    if (onCustom){
+      onCustom(this, each, result);
+    }
+
+    this[name][key] = result;
   }
 
 
@@ -125,4 +188,25 @@ class SaleDash extends DashboardProvider.Helper{
   includesCoupom(text){
     return ((text.length > 0) && (!/PEN|TRC/.test(text)));
   }
+}
+
+
+function buildDataQuery(query){
+  var and = [];
+
+  and.push(Sale.dateRange(query.begin, query.end, true));
+
+  if (query.value && query.value.length){
+    and.push(Sale.likeQuery(query.value));
+  }
+
+  if (query.attrs){
+    Object.keys(query.attrs).forEach((key) => {
+      and.push(Sale.attrsQuery(key, query.attrs[key].split('|')));
+    });
+  }
+
+  var result = {$and : and};
+
+  return result;
 }
