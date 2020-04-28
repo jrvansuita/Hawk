@@ -19,6 +19,7 @@
   height: -webkit-fill-available;
   padding-top: 20px;
   padding-bottom: 20px;
+  height: auto;
 }
 
 .search-holder{
@@ -235,6 +236,9 @@
   font-size: 14px;
   color: gray;
   padding-bottom: 5px;
+  position: sticky;
+  top: 0;
+  background: white;
 }
 
 .increment-id{
@@ -252,6 +256,8 @@
 .last-sales-holder{
   padding: 0;
   height: 100%;
+  overflow: auto;
+  margin-bottom: 95px;
 }
 
 .last-sales-holder .client-card-title{

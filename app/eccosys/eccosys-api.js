@@ -45,6 +45,14 @@ module.exports = class EccosysApi{
     return this;
   }
 
+  nfeParams(){
+    this.query.add('serie','1');
+    this.query.add('estornarEstoque','S');
+    this.query.add('tipo','S');
+
+    return this;
+  }
+
   param(name, val){
     this.query.add(name, val);
     return this;
@@ -114,6 +122,7 @@ module.exports = class EccosysApi{
     var params = this.query.hasParams() ? this.query.build() : '';
 
     var path = '/api/' + encodeURI(this.path + params);
+
 
     var options = {
       host: Params.eccosysUrl(),

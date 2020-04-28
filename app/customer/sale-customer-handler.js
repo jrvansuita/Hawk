@@ -3,24 +3,53 @@ const EccosysStorer = require('../eccosys/eccosys-storer.js');
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
 const History = require('../bean/history.js');
 
+const SaleLoader = require('../loader/sale-loader.js');
+
 
 module.exports = class SaleCustomerHandler {
 
   updateSaleStatus(body, callback){
-    new EccosysProvider().sale(body.sale).go((sale) => {
 
+    new SaleLoader(body.sale).run((sale) => {
       this.saleObs = sale.observacaoInterna;
 
       this.updateSaleEccosys(body, () => {
-        this.updateSaleMagento(body, (data) => {
-          if(data){
-            History.notify(body.user.id, 'Status do Pedido', 'O status do pedido {0} foi alterado para {1}'.format(body.sale, Util.getSaleStatusInfo(body.status)), 'Informação');
-          }
 
-          callback(data);
-        });
+        if(sale.numeroNotaFiscal){
+          this.cancelNfe(body.obs, sale.numeroNotaFiscal, (res) => {
+            if(res.sucess){
+              this._updateSaleMagento(body, (res) => {
+
+              });
+            }
+            callback(res);
+          });
+        }else{
+          this._updateSaleMagento(body, (res) => {
+            console.log(res);
+            callback(res);
+          });
+        }
       });
 
+    });
+  }
+
+  cancelNfe(obs, numberNfe, callback){
+    var body = {
+      "justificativa": '[Hawk - Atendimento] - ' + obs
+    }
+    new EccosysStorer().cancelNfe(body.user, numberNfe, body).go((res) => {
+      callback(res);
+    });
+  }
+
+  _updateSaleMagento(body, callback){
+    this.updateSaleMagento(body, (data) => {
+      if(data){
+        History.notify(body.user.id, 'Status do Pedido', 'O status do pedido {0} foi alterado para {1}'.format(body.sale, Util.getSaleStatusInfo(body.status)), 'Informação');
+      }
+      callback(data);
     });
   }
 
