@@ -5,7 +5,7 @@
 <head>
   <link rel="stylesheet" type="text/css" href="/front/css/layout/user-listing.css">
   <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
-
+  <script type="text/javascript" src="/front/js/control/users/user-listing.js"></script>
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
 </head>
 <body>
@@ -16,68 +16,64 @@
   window.users = <%- JSON.stringify(users) %>
   </script>
 
-  <script type="text/javascript">
-  $(document).ready(() => {
-
-    $('.users-table tr').click(function(e) {
-      e.stopPropagation();
-      window.open('/user-registering?userId=' + $(this).data('userid') ,'_blank');
-    });
-
-    $('.icon-dots').click(function (e) {
-      e.stopPropagation();
-      var id = $(this).data('userid');
-      var active = $(this).data('active');
-
-      var drop = new MaterialDropdown($(this), e);
-
-      drop.addItem('/img/'+(active ?  'block' : 'checked')+'.png', active?  'Inativar' : 'Ativar', function(e){
-        e.stopPropagation();
-         _post('/user-active',{userId: id, active: !active}, () => {
-           window.location.reload();
-         })
-      });
-
-      drop.addItem('/img/delete.png', 'Excluir', function(e){
-        e.stopPropagation();
-         _post('/user-delete',{id: id}, () => {
-           window.location.reload();
-         })
-      });
-
-
-      drop.show();
-    });
-  });
-  </script>
-
-
-
   <div class="main-content">
+    <div class="list-users-holder">
+      <div class="list-users">
+        <label class="list-users-title">Ativos</label>
+        <label class="list-users-title-count"><%=Object.values(users).filter((user)=>{
+          return user.active;}).length;%></label>
+        <table class="users-table shadow table-active">
+          <% Object.values(users).sort((a, b) => a.name.localeCompare(b.name)).forEach((user)=>{
+            if(user.active)
+            {%>
 
-    <table class="users-table shadow">
-      <% Object.values(users).sort((a, b) => a.name.localeCompare(b.name)).forEach((user)=>{%>
+              <tr class="active-row" data-userid="<%=user.id%>">
+                <td ><%- include('../user/avatar', {user: user, showName: false});  %></td>
+                <td><%=user.name%></td>
+                <td><%=user.title%></td>
+                <td><%=user.full? 'Administrador' : (user.leader? 'Líder' : '')%></td>
+                <td><%=user.access%></td>
+                <td title="<%=user.pass%>">######</td>
+                <td>Ativo</td>
+                <td>
+                  <div class="icon-dots" data-userid="<%=user.id%>" data-active="<%=user.active%>">
+                    <img src="img/dots.png" class="dots-glyph" />
+                  </div>
+                </td>
+              </tr>
+              <% }})%>
+            </table>
+          </div>
 
-        <tr class="<%=user.active ? 'active-row': 'inactive-row'%>" data-userid="<%=user.id%>">
-          <td ><%- include('../user/avatar', {user: user, showName: false});  %></td>
-          <td><%=user.name%></td>
-          <td><%=user.title%></td>
-          <td><%=user.full? 'Administrador' : (user.leader? 'Líder' : '')%></td>
-          <td><%=user.access%></td>
-          <td title="<%=user.pass%>">######</td>
-          <td><%=user.active ? 'Ativo' : 'Inativo'%></td>
-          <td>
-            <div class="icon-dots" data-userid="<%=user.id%>" data-active="<%=user.active%>">
-              <img src="img/dots.png" class="dots-glyph" />
+          <div class="list-users">
+            <label class="list-users-title">Inativos</label>
+            <label class="list-users-title-count"><%=Object.values(users).filter((user)=>{
+              return user.active == false;
+            }).length; %></label>
+            <table class="users-table shadow table-inactive">
+              <% Object.values(users).sort((a, b) => a.name.localeCompare(b.name)).forEach((user)=>{
+                if(user.active == false){
+                  %>
+
+                  <tr class="inactive-row" data-userid="<%=user.id%>">
+                    <td ><%- include('../user/avatar', {user: user, showName: false});  %></td>
+                    <td><%=user.name%></td>
+                    <td><%=user.title%></td>
+                    <td><%=user.full? 'Administrador' : (user.leader? 'Líder' : '')%></td>
+                    <td><%=user.access%></td>
+                    <td title="<%=user.pass%>">######</td>
+                    <td>Inativo</td>
+                    <td>
+                      <div class="icon-dots" data-userid="<%=user.id%>" data-active="<%=user.active%>">
+                        <img src="img/dots.png" class="dots-glyph" />
+                      </div>
+                    </td>
+                  </tr>
+                  <%}})%>
+                </table>
+              </div>
             </div>
-          </td>
-        </tr>
-        <%})%>
+          </div>
 
-      </table>
-
-    </div>
-
-
-  </body>
-  </html>
+        </body>
+        </html>
