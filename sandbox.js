@@ -1,15 +1,25 @@
 const https = require('https');
 const Initilizer = require('./app/abra-cadabra/initializer.js');
-const GetResponseHandler = require('./app/getresponse/getresponse-handler.js');
+
 
 
 
 new Initilizer(__dirname, true).begin(() => {
 
-var email = "adnesilny@gmail.com";
+  const SaleLoader = require('./app/loader/sale-loader.js');
+  const SaleCustomerHandler = require('./app/customer/sale-customer-handler.js');
 
-new GetResponseHandler().getContact(email, (result) => {
-  console.log(result);
-});
+  var sale = "120956747";
+120943177
 
+
+
+ new SaleLoader(sale)
+  //.loadNfe()
+  .run((sale) => {
+    //console.log(sale.numeroNotaFiscal);
+    new SaleCustomerHandler().cancelNfe('Teste cancelamento', sale.numeroNotaFiscal, (res) => {
+      console.log(res.sucess);
+    })
+  });
 });

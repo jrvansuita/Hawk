@@ -10,6 +10,7 @@ module.exports = class SaleCustomerInfoBuilder{
   _get(callback){
     new SaleLoader(this.saleNumber)
     .loadItems()
+    .loadNfe()
     .run((erpSale) => {
       new MagentoCalls().sale(erpSale.numeroDaOrdemDeCompra).then((storeSale) => {
         this.store = storeSale;
@@ -88,6 +89,7 @@ class SaleWrapper{
     this.discount = Floa.def(store.discount_amount);
     this.total = Floa.def(store.base_grand_total);
     this.coleted = erp.pedidoColetado ? "Sim" : "Não";
+    this.idOrdemColeta = erp.nfe ? erp.nfe.idOrdemColeta : '';
     this.weight = erp.pesoBruto ? (erp.pesoBruto < 1.000 ? erp.pesoBruto + 'g' : erp.pesoBruto + 'Kg') : (store.weight < 1.000 ? store.weight + 'g' : store.weight+ 'Kg');
 
     this.client = {
