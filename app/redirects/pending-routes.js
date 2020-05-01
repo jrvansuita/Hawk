@@ -75,6 +75,9 @@ module.exports = class PendingRoutes extends Routes{
         .go(this._resp().redirect(res));
       });
 
+
+
+
       this._get('/pending-voucher-print', (req, res, body, locals) => {
 
         new SaleLoader(req.query.sale).loadClient((sale) => {
@@ -82,7 +85,7 @@ module.exports = class PendingRoutes extends Routes{
 
             var index = sale.observacoes.search('PEN');
             var voucher = sale.observacoes.slice(index);
-            
+
             var data = {cliente: sale.client, oc: sale.numeroDaOrdemDeCompra, voucher: voucher};
 
             new TemplateBuilder('54766499').setData(data).build((template) => {
@@ -95,6 +98,9 @@ module.exports = class PendingRoutes extends Routes{
           }
         }).run();
       });
+
+
+
 
       this._page('/pending-products', (req, res, body, locals) => {
         new PendingProductProvider().load((list)=>{

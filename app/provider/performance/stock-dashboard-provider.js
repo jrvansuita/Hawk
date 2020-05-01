@@ -12,7 +12,7 @@ module.exports = class StockDashboardProvider extends DashboardProvider.Handler{
   }
 
   _onLoadData(callback){
-    SaleStock.byDay(this.query.begin, this.query.end, (err1, chartData) => {
+    SaleStock.byDayChart(this.getDataQuery(), (err1, chartData) => {
       SaleStock.find(this.getDataQuery(), (err2, rows)=>{
         callback(err1 || err2, this._onParseData(rows, chartData));
       });

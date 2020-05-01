@@ -359,6 +359,11 @@ function addListeners(){
     window.open('/packing-transport-tag?idnfe=' + sale.idNotaFiscalRef, '_blank');
   });
 
+  $('#print-voucher').click(()=>{
+    window.open('/pending-voucher-print?sale=' + sale.numeroPedido, '_blank');
+  });
+
+
   bindCopiable();
 
 
@@ -588,12 +593,16 @@ function showNfePrintControls(triggerClick){
     $('#print-transport-tag').fadeIn();
     $('#print-nfe').fadeIn();
 
+    if(sale.observacoes){
+      $('#print-voucher').fadeIn();
+    }
+
     if (triggerClick){
       $('#print-nfe').click();
       $('#print-transport-tag').click();
 
       if(sale.observacoes){
-        window.open('/pending-voucher-print?sale=' + sale.numeroPedido, '_blank');
+        $('#print-voucher').click();
       }
     }
   }

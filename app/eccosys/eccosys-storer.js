@@ -19,6 +19,10 @@ module.exports = class EccosysStorer extends EccosysApi{
     return this.post('nfes/' + idNfe + '/autorizar').setBody({}).withUser(user).single();
   }
 
+  cancelNfe(user, numberNfe, body){
+    return this.post('nfes/' + numberNfe + '/cancelar').nfeParams().setBody(body).withUser(user).single();
+  }
+
   sale(saleNumber){
     return {
       update:(body) => {

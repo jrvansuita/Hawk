@@ -9,6 +9,7 @@ module.exports = class Template extends DataAccess {
     this.usage = Str.def(usage);
     this.sample = sample || {};
     this.type = Str.def(type, 'block'); //block or email
+    this.updated = new Date();
   }
 
   static getKey() {
@@ -29,6 +30,10 @@ module.exports = class Template extends DataAccess {
 
   static updateSample(id, data){
     Template.upsert({id: id}, {sample : data});
+  }
+
+  static refresh(id){
+    Template.upsert({id: id}, {updated : new Date()});
   }
 
   static delete(id, callback){

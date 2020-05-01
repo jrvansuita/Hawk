@@ -9,6 +9,11 @@ $(document).ready(() => {
   $('.sale-nfe').dblclick(() => {
     printNFe();
   });
+
+  $('.sale-info-coleted').dblclick(() => {
+    window.open('/shipping-order-print?id=' + data.idOrdemColeta);
+  });
+
 });
 
 function printNFe(){
@@ -95,7 +100,12 @@ $('.sale-header-dots').click(function(e){
 function _updateSaleStatus(status, msg){
   $('.sale-header-dots').children().attr('src', '/img/loader/circle.svg');
   _post('/customer-sale-status-change',{ sale: data.oc, status: status, user: loggedUser, obs: msg },(result) => {
-    result ? showMenuMsg('.sale-header-dots','Status alterado', 'sucess') : showMenuMsg('.sale-header-dots','Ocorreu um erro', 'error');
+
+    if(result.sucess != null || result == true){
+      showMenuMsg('.sale-header-dots','Status alterado', 'sucess')
+    }else{
+      showMenuMsg('.sale-header-dots', result.error[0]['erro'], 'error');
+    }
   });
 }
 
@@ -111,7 +121,7 @@ function copyTextFromElement(id) {
 function showMenuMsg(holder, msg, type){
   type == 'error' ? $(holder).children().attr('src','/img/error.png') : $(holder).children().attr('src','/img/checked.png');
 
-  $(holder).append($('<span>').addClass('msg-info').text(msg).delay(3000).queue(() => {
+  $(holder).append($('<span>').addClass('msg-info').text(msg).delay(4000).queue(() => {
     $('.msg-info').remove();
     $(holder).children().attr('src','/img/dots.png');
   }));
@@ -278,7 +288,7 @@ function bindSaleItens(data){
     }
     $('.sale-info-subtotal').text(Num.money(data.subtotal));
     $('.sale-info-cupom').html(data.payment.discount_desc ? data.payment.discount_desc.split(',').join('<br>') : '');
-  //  $('.sale-info-cupom').html(data.payment.coupon ? data.payment.coupon.toUpperCase() + '<br>' + data.payment.discount_desc.split(',').join('<br>') : data.payment.discount_desc);
+    //  $('.sale-info-cupom').html(data.payment.coupon ? data.payment.coupon.toUpperCase() + '<br>' + data.payment.discount_desc.split(',').join('<br>') : data.payment.discount_desc);
     $('.sale-info-discount').text(Num.money(data.discount));
     $('.sale-info-weight-total').text(data.weight);
     $('.sale-info-total').text(Num.money(data.total));

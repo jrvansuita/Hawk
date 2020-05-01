@@ -1,6 +1,7 @@
 .main-content{
   padding-top: 20px;
   padding-bottom: 20px;
+  display: flex;
 }
 
 .users-table{
@@ -20,7 +21,7 @@
 }
 
 .users-table td{
-  padding: 5px 15px;
+  padding: 5px 5px;
 }
 
 
@@ -36,4 +37,34 @@
 
 .icon-dots{
   margin-right: 20px;
+}
+.list-users-holder{
+  display: flex;
+  margin: auto;
+}
+.list-users{
+  margin-right: 20px;
+  margin-left: 20px;
+  position: relative;
+}
+.list-users-title{
+  font-size: 16px;
+  color: #656565;
+  font-weight: bolder;
+  vertical-align: super;
+  display: inline-block;
+  margin-top: 5px;
+  margin-left: 5px;
+  position: relative;
+}
+.list-users-title-count{
+  font-size: 16px;
+  color: #656565;
+  font-weight: bolder;
+  vertical-align: super;
+  display: inline-block;
+  margin-top: 5px;
+  margin-left: 5px;
+  position: relative;
+  float: right;
 }

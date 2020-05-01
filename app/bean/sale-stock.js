@@ -79,9 +79,9 @@ module.exports = class SaleStock extends DataAccess {
 
 
 
-    static byDay(from, to, callback){
+    static byDayChart(query, callback){
       SaleStock.aggregate([{
-        $match: SaleStock.range('date', from, to, true)
+        $match: query
       },
       {
         $group: {
