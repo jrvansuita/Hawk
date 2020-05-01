@@ -10,8 +10,8 @@
 #search-button{
   flex: auto;
   height: fit-content;
-  margin-top: 10px;
-  margin-left: 10px;
+  /* margin-top: 10px; */
+  /* margin-left: 10px; */
 }
 
 .content-grid{
@@ -48,7 +48,7 @@
 
 
 img.dots-glyph {
-  margin-top: 14px;
+  margin-top: 9px;
   margin-right: 5px;
   margin-left: 5px;
 }
@@ -56,12 +56,13 @@ img.dots-glyph {
 
 .material-input-holder{
   margin-left: 10px;
-  margin-right: 10px;
+  /* margin-right: 10px; */
 }
 
 .selectors{
   min-width: fit-content;
   display: flex;
+  position: relative;
   background-color: #f3f3f3;
   padding-right: 10px;
   margin-right: 10px;
@@ -260,4 +261,40 @@ table .header td:last-child > .right{
 .selectors .material-input-holder>input{
   max-width: 70px !important;
   min-width: 70px !important;
+}
+
+.button-area{
+  display: block;
+}
+
+.search-holder{
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.arrows-holder{
+  display: block;
+  width: fit-content;
+  margin: auto;
+}
+
+.date-arrow{
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  padding: 2px;
+}
+
+.date-arrow:hover{
+  background-color: #dcdcdc73;
+  transform: scale(1.2);
+  cursor: pointer !important;
+  border-radius: 50%;
+}
+
+.date-menu-dots{
+  position: absolute;
+  right: 5px;
+  bottom: 10px;
 }

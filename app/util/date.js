@@ -127,9 +127,14 @@ var Dat = {
 
   firstDayCurrentWeek() {
     var today = this.today();
-    today.setDate(today.getUTCDate() - today.getUTCDay() - 1);
-    return today;
+    var day = today.getUTCDay();
+    var dif = today.getUTCDate() - day - 1;
+
+    today.setDate(dif);
+    return new Date(today);
   },
+
+
 
   lastDayCurrentWeek() {
     var d = this.firstDayCurrentWeek();

@@ -20,7 +20,7 @@ $(document).ready(()=>{
     var tableId = $(this).data('table');
 
     if (!$(this).hasClass('closed')){
-      $(this).addClass('closed').attr('src','/img/open-down.png').hide().fadeIn();
+      $(this).addClass('closed').attr('src','/img/arrow-down.png').hide().fadeIn();
       $('#' + tableId + ' > tbody > tr').not(':first').hide();
 
       var title = $('<span>').addClass('title-closed ' + tableId).text($(this).data('title')).click(()=>{
@@ -30,7 +30,7 @@ $(document).ready(()=>{
       $('#' + tableId).parent().append(title);
     }else{
       $('.title-closed.' + tableId).remove();
-      $(this).removeClass('closed').attr('src','/img/open-up.png').hide().fadeIn();
+      $(this).removeClass('closed').attr('src','/img/arrow-up.png').hide().fadeIn();
       $('#' + tableId + ' > tbody  > tr').not(':first').show();
     }
 
@@ -80,7 +80,7 @@ function createNfsTable(holder, id, data){
   .data('table',id)
   .attr('title', data.title)
   .data('title', data.title)
-  .attr('src','../img/open-up.png');
+  .attr('src','../img/arrow-up.png');
 
   cols.push($('<td>'));
   cols.push($('<td>').append('NF'));

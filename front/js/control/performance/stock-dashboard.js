@@ -46,11 +46,13 @@ function buildBoxes(results){
   var data = results.data;
 
   var box = new BuildBox()
-  .group('Geral', Num.points(data.items), 'min-col')
+  .group('Venda', Num.points(data.items), 'min-col')
   .info('Valor', Num.money(data.total), 'high-val')
   .info('Ticket', Num.money(data.tkm))
   .info('Markup', Num.money(data.markup))
-  .info('Custo Produtos', Num.money(data.cost))
+  .group(null, null, 'min-col gray')
+  .info('Custo', Num.money(data.cost))
+  .info('Ticket', Num.money(data.tkmCost))
   .info('Margem Bruta', Num.percent((data.profit*100)/data.total), data.profit ? 'green-val': 'red-val')
   .info('Lucro Bruto', Num.money(data.profit), data.profit ? 'green-val': 'red-val');
 

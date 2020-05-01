@@ -20,7 +20,6 @@
   <script type="text/javascript" src="/front/js/libs/Chart.min.js"></script>
   <script type="text/javascript" src="/front/js/libs/dash-chart.js"></script>
 
-
 </head>
 <body>
   <%include ../menus/performance-menu %>
@@ -28,7 +27,7 @@
   <div class="main">
     <div class="top shadow">
       <div class="search-box">
-        <img class="icon-open is-closed" title="Abrir seletor" src="/img/open-down.png">
+        <img class="icon-open is-closed" title="Abrir seletor" src="/img/arrow-down.png">
         <input type="text" id="search-input" value="<%=query.value%>" class="simple-material-input" placeholder="Pesquisar Pedidos" autocomplete="off"/>
 
 
@@ -43,6 +42,7 @@
             <label>Mostrar Produtos</label>
           </div>
 
+          <img class="date-arrow left-arrow" src="img/left.png"/>
 
           <div class="material-input-holder date-begin-holder">
             <input id="date-begin" maxlength="8"
@@ -64,10 +64,31 @@
             <span class="bar"></span>
             <label>Data de Fim</label>
           </div>
+
+          <img class="date-arrow left-arrow" src="img/right.png"/>
+
+          <div class="date-menu-dots">
+            <img src="img/dots.png" class="dots-glyph"/>
+          </div>
         </div>
 
 
-        <label class="button shadow" id="search-button" tabindex="0">Buscar</label>
+
+        <div class="button-area">
+          <div class="search-holder">
+            <label class="button shadow" id="search-button" tabindex="0">Buscar</label>
+          </div>
+
+          <div class="arrows-holder">
+            <!--
+            <img class="left-arrow" src="img/arrow-left.png"/>
+            <img class="right-arrow" src="img/arrow-right.png"/>
+            <img class="right-arrow" src="img/arrow-down.png"/>
+
+          -->
+          </div>
+        </div>
+
 
 
 

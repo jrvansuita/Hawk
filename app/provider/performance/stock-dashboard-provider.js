@@ -68,6 +68,7 @@ class StockDash extends DashboardProvider.Helper{
 
   finals(){
     this.tkm = this.total/this.items;
+    this.tkmCost = this.cost/this.items;
     this.profit =  this.total - this.cost;
     this.markup = this.total / this.cost;
 

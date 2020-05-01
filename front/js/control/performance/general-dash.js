@@ -12,6 +12,7 @@ $(document).ready(()=>{
   dateBeginPicker.holder('.date-begin-holder', true)
   .setOnChange((formatedDate, date)=>{
     $('#date-begin').val(formatedDate);
+    dateEquilizer(true, date, dateEndPicker.getSelected());
   })
   .load();
 
@@ -21,12 +22,16 @@ $(document).ready(()=>{
   dateEndPicker.holder('.date-end-holder', true)
   .setOnChange((formatedDate, date)=>{
     $('#date-end').val(formatedDate);
+    dateEquilizer(false, dateBeginPicker.getSelected(), date);
   })
   .load().then(()=>{
     if (!queryId){
       onSearchData();
     }
   });
+
+
+  bindDateUtils();
 
   $('#search-input').on("keyup", function(e) {
     if (e.which == 13){
@@ -71,23 +76,30 @@ function loadingPattern(isLoading){
     $('.content-grid').empty();
 
     setTimeout(() => {
-      $('.icon-open').attr('src','/img/open-down.png');
+      $('.icon-open').attr('src','/img/arrow-down.png');
     },400);
   }
 }
 
 
-function setDates(begin, end){
-  begin = new Date(parseInt(begin));
-  end = new Date(parseInt(end));
+function setDates(begin, end, delay){
+  begin = typeof begin == 'number' ? new Date(parseInt(begin)) : begin;
+  end = typeof end == 'number' ? new Date(parseInt(end)) : end;
 
   $('#date-begin').val(Dat.format(begin));
   $('#date-end').val(Dat.format(end));
 
-  setTimeout(() => {
+
+  var changePicker =  () => {
     dateBeginPicker.setSelected(begin);
     dateEndPicker.setSelected(end);
-  }, 1000)
+  };
+
+  if (delay <= 0){
+    changePicker();
+  }else{
+    setTimeout(changePicker, delay || 500)
+  }
 }
 
 function setUrlId(id){
@@ -103,4 +115,59 @@ function setAttrsAndValue(value, attrs){
 
 function getDateVal(id, dateEl){
   return dateEl.getSelected() && $('#' + id).val() ? dateEl.getSelected().getTime() : undefined;
+}
+
+
+function dateEquilizer(tog, begin, end){
+  if (begin && end){
+    if (tog && begin.getTime() > end.getTime()){
+      setDates(begin, begin, 0);
+    }else if (!tog && end.getTime() < begin.getTime()){
+      setDates(end, end, 0);
+    }
+  }
+}
+
+
+function bindDateUtils(){
+  $('.left-arrow').click(() => {
+    setDates(Dat.rollDay(dateBeginPicker.getSelected(),-1) ,Dat.rollDay(dateEndPicker.getSelected(),-1), 0)
+  });
+
+  $('.right-arrow').click(() => {
+    setDates(Dat.rollDay(dateBeginPicker.getSelected(),1) ,Dat.rollDay(dateEndPicker.getSelected(),1), 0)
+  });
+
+
+  $('.date-menu-dots').click(function(e){
+    var drop = new MaterialDropdown($(this), e, false, true);
+
+    drop.addItem(null, 'Hoje', function(e){
+      setDates(Dat.today() ,Dat.today(), 0);
+    });
+
+    drop.addItem(null, 'Ontem', function(e){
+      setDates(Dat.yesterday() ,Dat.yesterday(), 0);
+    });
+
+    drop.addItem(null, 'Essa Semana', function(e){
+      setDates(Dat.firstDayCurrentWeek() ,Dat.lastDayCurrentWeek(), 0);
+    });
+
+    drop.addItem(null, 'Última Semana', function(e){
+      setDates(Dat.firstDayLastWeek() ,Dat.lastDayLastWeek(), 0);
+    });
+
+    drop.addItem(null, 'Este Mês', function(e){
+      setDates(Dat.firstDayOfMonth() ,Dat.lastDayOfMonth(), 0);
+    });
+
+    drop.addItem(null, 'Último Mês', function(e){
+      setDates(Dat.firstDayOfLastMonth() ,Dat.lastDayOfLastMonth(), 0);
+    });
+
+    drop.show();
+
+  });
+
 }
