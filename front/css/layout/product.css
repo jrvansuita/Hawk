@@ -38,11 +38,10 @@
 
 .image-holder{
   padding: 10px;
-  background-color: aliceblue;
+  background-color: #f7f7f7;
   display: flex;
   text-align: center;
   margin: auto;
-  width: fit-content;
 }
 
 .top-image-holder{
@@ -95,6 +94,8 @@
   background: white;
   min-height: 180px;
   max-height: 260px;
+  margin: auto;
+  mix-blend-mode: multiply;
 }
 
 
