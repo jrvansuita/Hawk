@@ -47,6 +47,7 @@ class StockDash extends DashboardProvider.Helper{
       this.items += each.quantity;
       this.cost += each.cost;
 
+
       this.handleArr(each, 'season', this.handleCustom);
       this.handleArr(each, 'gender', this.handleCustom);
       this.handleArr(each, 'category', this.handleCustom);
@@ -60,7 +61,7 @@ class StockDash extends DashboardProvider.Helper{
       }
 
       if (this.loadSkusCount){
-        this.handleArr(each, 'sku', this.handleCustom);
+        this.handleArr(each, 'sku', this.handleCustomSku);
       }
 
     });
@@ -86,6 +87,20 @@ class StockDash extends DashboardProvider.Helper{
 
   handleCustom(self, item, result){
     result.items = result.items ? result.items + item.quantity : item.quantity;
+  }
+
+  handleCustomSku(self, item, result){
+    result.items = result.items ? result.items + item.quantity : item.quantity;
+
+    /* - Calculo de score de vendas por quantidade total de estoque no dia - */
+    if (item.stock > 0){
+      var perc = (item.quantity * 100) / item.stock;
+
+      var score = Num.between(perc, 1, 100) / 10;
+
+      result.score = result.score ? (result.score + score) / 2 : score
+    }
+    /* ---  */
   }
 
 

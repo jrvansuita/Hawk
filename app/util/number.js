@@ -11,7 +11,7 @@ var Num = {
     if (typeof global !== 'undefined'){
       return val.replace('.', '_').replace(',', '.').replace('_', ',');
     }
-    
+
     return val;
   },
 
@@ -69,6 +69,10 @@ var Num = {
     }catch(e){
       return false;
     }
+  },
+
+  between(num, min, max){
+    return Math.min(max, Math.max(min, num));
   },
 
 

@@ -244,14 +244,38 @@ table .header td:last-child > .right{
 .box-img{
   width: 100px;
   height: 100px;
+  padding: 2px;
   mix-blend-mode: multiply;
+  margin: auto;
+  display: block;
+}
+
+.box-img-sub{
+  background-color: #f3f0f0;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  padding: 4px;
+}
+
+.box-img-score{
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ccc7c7;
+  border-radius: 50%;
+  padding: 3px;
+  color: white;
+  min-width: 14px;
+  text-align: center;
+  transform: scale(0.95);
+  font-size: 11px;
 }
 
 .box-img-col{
   border-radius: 4px;
   border: 1px solid #e4e4e4;
-  padding: 4px;
   cursor: pointer;
+  position: relative;
 }
 
 .box-img-col:hover{

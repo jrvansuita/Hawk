@@ -17,7 +17,7 @@ function onSearchData(id){
     _post('/stock-dashboard-data',{
       begin: getDateVal('date-begin', dateBeginPicker),
       end: getDateVal('date-end', dateEndPicker),
-      value: $('#search-input').val(),
+      value: $('#search-input').val().trim(),
       attrs: tagsHandler.get(),
       showSkus : parseInt($('#show-skus').val())
     }, onHandleResult);
@@ -92,7 +92,6 @@ function buildBoxes(results){
 
 
 
-
   var box = new BuildBox('1/3')
   .group('Fabricantes', data.manufacturer.length).hidableItems(20);
   data.manufacturer.forEach((each) => {
@@ -112,9 +111,16 @@ function buildBoxes(results){
     var box = new BuildBox('1/5')
     .group('Produtos', data.sku.length);
     data.sku.forEach((each) => {
-      box.img('/product-image-redirect?sku=' + each.name, each.items, Num.money(each.total/each.items), () => {
-        window.open('/product?sku=' + each.name, '_blank');
-      });
+     var click = () => {
+       window.open('/product-url-redirect?sku=' + each.name, '_blank');
+     }
+
+     var subclick = (e) => {
+       e.stopPropagation();
+       window.open('/product?sku=' + each.name, '_blank');
+     }
+
+      box.img('/product-image-redirect?sku=' + each.name, each.items, each.name, Math.trunc(each.score), click, subclick ).get();
     });
   }
 

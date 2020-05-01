@@ -10,7 +10,7 @@ class BuildBox{
   }
 
   get(){
-    return this.currentGroup;
+    return this.lastItem || this.currentGroup;
   }
 
   group(title, num, clazz=''){
@@ -20,6 +20,7 @@ class BuildBox{
       group.append($('<span>').addClass('title').append(title, $('<span>').addClass('right').append(num)));
     }
     this.currentGroup = group;
+    this.lastItem = null;
 
     return this;
   }
@@ -49,6 +50,8 @@ class BuildBox{
 
     col.append($('<span>').addClass('super').append(label), val);
 
+    this.lastItem = col;
+
     return this;
   }
 
@@ -58,6 +61,8 @@ class BuildBox{
     col.append($('<span>').addClass('super').append(label, $('<span>').addClass('right high-val').append(value)));
 
     this.checkHidableItems();
+
+    this.lastItem = col;
 
     return this;
   }
@@ -77,19 +82,38 @@ class BuildBox{
 
     this.checkHidableItems();
 
+    this.lastItem = col;
+
     return this;
   }
 
 
-  img(path, label, right, click){
+  img(path, label, right, score, click, subClick){
     var col = $('<div>').addClass('col box-img-col');
 
     this.currentGroup.append(col);
 
     var img = $('<img>').attr('src', path).addClass('box-img');
     col.append(img);
-    col.append($('<span>').addClass('super').append(label, $('<span>').addClass('right').append(right)));
+
+    var $sub = $('<div>').addClass('box-img-sub').append($('<span>').addClass('super').append(label, $('<span>').addClass('right').append(right))).click(subClick);
+
+
+
+    if (score > 3){
+      var $score = $('<span>').addClass('box-img-score').append(score);
+
+      col.append($score);
+
+      if (score >= 6){
+        $score.css('background', '#09c164').css('transform','scale(1)');
+      }
+    }
+
+    col.append($sub);
     col.click(click);
+
+    this.lastItem = col;
 
     return this;
   }

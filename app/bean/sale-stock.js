@@ -1,13 +1,14 @@
 
 module.exports = class SaleStock extends DataAccess {
 
-  constructor(sku, total, cost, quantity, size, manufacturer, brand, category, gender, season) {
+  constructor(sku, total, cost, quantity, stock, size, manufacturer, brand, category, gender, season) {
     super();
     this.sku = Str.def(sku);
     this.date = Dat.today();
     this.total = Floa.def(total);
     this.cost = Floa.def(cost);
     this.quantity = Num.def(quantity);
+    this.stock = Num.def(stock);
     this.size = Str.def(size);
     this.quantity_sizes = {};
 
@@ -38,6 +39,7 @@ module.exports = class SaleStock extends DataAccess {
       parseFloat(item.valorTotal),
       parseFloat(item.cost),
       Num.def(item.quantidade),
+      Num.def(item.stock),
       skuParts[1],
       item.manufacturer,
       item.brand,
@@ -65,6 +67,7 @@ module.exports = class SaleStock extends DataAccess {
       category: this.category,
       gender: this.gender,
       season: this.season,
+      stock: this.stock,
 
       $inc: incData
     }, (err, doc) => {

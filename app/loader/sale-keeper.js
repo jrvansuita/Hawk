@@ -61,6 +61,7 @@ module.exports = class SaleKeeper{
       item.category = product.Departamento;
       item.manufacturer = product.Fabricante;
       item.brand = product.Marca;
+      item.stock = product._Estoque.estoqueDisponivel;
     })
     .setOnError(this.onError)
     .run((sale) => {
