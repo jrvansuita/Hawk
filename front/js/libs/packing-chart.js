@@ -55,7 +55,7 @@ class PackingChart {
     this.tkms = [];
 
     Object.values(handler).forEach((each)=>{
-      this.labels.push(Dat.monthDesc(each.label-1));
+      this.labels.push(Dat.brevMonthDesc(each.label-1));
       this.values.push(each.value);
       this.counts.push(each.count);
       this.tkms.push(each.value/each.count);

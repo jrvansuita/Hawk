@@ -9,33 +9,51 @@
   <div class="all-groups-holder">
 
     <%if (groups.sales){%>
-      <%- include('../sale-groups/group-item', {group: groups.sales, title : 'Totais' });  %>
+      <%- include('../sale-groups/group-item', {group: groups.sales, title : 'Totais', addClazz:'span2' });  %>
       <%}%>
 
       <%if (groups.transps){%>
-        <%- include('../sale-groups/group-item', {group: groups.transps, title : 'Transportadoras' });  %>
+        <%- include('../sale-groups/group-item', {group: groups.transps, title : 'Transportadoras', addClazz:'span3' });  %>
         <%}%>
 
         <%if (groups.ufs){%>
-          <%- include('../sale-groups/group-item', {group: groups.ufs, title : 'Estados', showPapers:true});  %>
+          <%- include('../sale-groups/group-item', {group: groups.ufs, title : 'Estados', showPapers:true, addClazz:'span3'});  %>
           <%}%>
 
           <%if (groups.dates){%>
-            <%- include('../sale-groups/group-item', {group: Util.orderDatesObject(groups.dates), title : 'Datas', dates: true, showPapers:true});  %>
+            <%- include('../sale-groups/group-item', {group: Util.orderDatesObject(groups.dates), title : 'Datas', dates: true, showPapers:true, addClazz:'span3'});  %>
             <%}%>
 
 
-            <div class="group-single-holder this-month shadow">
+            <div class="group-single-holder span5 shadow">
               <label class="group-single-title">Este Mês</label>
-              <canvas id="packing-chart-month" height="120px"></canvas>
+              <canvas id="packing-chart-current-month" height="120px"></canvas>
             </div>
 
-            <div class="group-single-holder this-year shadow">
-              <label class="group-single-title">Este Ano</label>
-              <canvas id="packing-chart-year" height="120px"></canvas>
+            <div class="group-single-holder span6 shadow">
+              <label class="group-single-title">Mês Passado</label>
+              <canvas id="packing-chart-last-month" height="120px"></canvas>
             </div>
 
-          </div>
+            <div class="group-single-holder span2 shadow">
+            </div>
 
 
-          <%}%>
+            <%if (loggedUser && loggedUser.full){%>
+              
+              <div class="group-single-holder span4 shadow">
+                <label class="group-single-title">Este Ano</label>
+                <canvas id="packing-chart-year" height="120px"></canvas>
+              </div>
+
+              <div class="group-single-holder span4 shadow">
+                <label class="group-single-title">Ano Passado</label>
+                <canvas id="packing-chart-last-year" height="120px"></canvas>
+              </div>
+
+              <%}%>
+
+            </div>
+
+
+            <%}%>

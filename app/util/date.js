@@ -178,8 +178,22 @@ var Dat = {
     return new Date(Date.UTC(getCurrentYear(), 0, 2, 0));
   },
 
+
+  firstDayOfLastYear() {
+    return new Date(Date.UTC(getCurrentYear()-1, 0, 2, 0));
+  },
+
+  lastDayOfLastYear() {
+    return new Date(Date.UTC(getCurrentYear()-1, 12, 0, 23, 59,59));
+  },
+
   monthDesc(index) {
     var m = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+    return m[index];
+  },
+
+  brevMonthDesc(index) {
+    var m = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
     return m[index];
   },
 

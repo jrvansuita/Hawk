@@ -1,6 +1,6 @@
 .all-groups-holder{
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(8, 1fr);
   /* width: fit-content; */
   position: relative;
   grid-gap: 15px;
