@@ -262,6 +262,13 @@ table .header td:last-child > .right{
   padding: 4px;
 }
 
+.box-img-sub .right{
+  position: absolute;
+  right: 0;
+  font-size: 12px;
+  top: 2px;
+}
+
 .box-img-sub .right:hover{
   transform: scale(1.05);
   transition: all .1s ease-in-out;
