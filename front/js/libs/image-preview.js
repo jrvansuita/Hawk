@@ -3,6 +3,11 @@ class ImagePreview{
     this.element = element;
   }
 
+  delay(num){
+    this.delay = num;
+    return this;
+  }
+
   hover(over, leave){
 
     this.element.mouseenter(()=> {
@@ -14,7 +19,7 @@ class ImagePreview{
       ()=>{
         cancel = true;
 
-        if (leave){ 
+        if (leave){
           leave(this);
         }else{
           this.remove();
@@ -33,7 +38,7 @@ class ImagePreview{
           if (!cancel){
             runnable(_self.element, src);
           }
-        }, 500);
+        }, this.delay || 500);
       }
     }
 

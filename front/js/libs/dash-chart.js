@@ -3,6 +3,12 @@ class StockDashChart {
   constructor(holder, data){
     this.holder  = holder;
     this.data = data;
+    this.fields = [];
+  }
+
+  field(data){
+    this.fields.push(data);
+    return this;
   }
 
   load(){
@@ -12,56 +18,35 @@ class StockDashChart {
 
   processDays(){
     this.labels = [];
-    this.totals = [];
-    this.quantities = [];
-    this.costs = [];
 
-    this.data.forEach((each)=>{
-      this.labels.push(each._id.day);
-      this.totals.push(each.sum_total);
-      this.quantities.push(each.sum_quantity);
-      this.costs.push(each.sum_cost);
+    this.data.forEach((eachRow)=>{
+      this.labels.push(eachRow._id.day);
+
+      this.fields.forEach((eachField) => {
+        if (!eachField.data) eachField.data = [];
+        eachField.data.push(eachRow[eachField.tag]);
+      });
     });
   }
 
   handleDatasets(){
     this.datasets = [];
 
-
-    this.datasets.push({
-      backgroundColor: '#03c1844a',
-      borderColor: '#03c184',
-      pointRadius: 3,
-      label: 'Faturado',
-      data: this.totals,
+    this.fields.forEach((eachField) => {
+      this.datasets.push({
+        borderColor: eachField.color || Util.strToColor(eachField.label),
+        //pointRadius: 4,
+        label: eachField.label,
+        data: eachField.data,
+      });
     });
 
 
-    this.datasets.push({
-      backgroundColor: '#14b5a64a',
-      borderColor: '#14b5a6',
-      pointRadius: 3,
-      label: 'Custo',
-      data: this.costs
-    });
-
-    this.datasets.push({
-      backgroundColor: '#3e55ff4a',
-      borderColor: '#3e55ff',
-      pointRadius: 3,
-      label: 'Quantidade',
-      data: this.quantities
-    });
   }
 
 
   buildDataset(){
-    //if (this.data.length > 30 || this.isMonthView){
-    //      this.processMonths();
-    //  }else{
     this.processDays();
-    //}
-
     this.handleDatasets();
   }
 

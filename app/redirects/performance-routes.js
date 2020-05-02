@@ -5,6 +5,7 @@ const SaleDashboardProvider = require('../provider/performance/sale-dashboard-pr
 const StockDashboardProvider = require('../provider/performance/stock-dashboard-provider.js');
 const Cost = require('../bean/cost.js');
 
+
 module.exports = class PerformanceRoutes extends Routes{
 
   attach(){
@@ -108,6 +109,16 @@ module.exports = class PerformanceRoutes extends Routes{
         }).load();
       });
       /** Stock Dashboard Performance **/
+
+      this._post('/stock-dashboard-delete', (req, res)=>{
+        new StockDashboardProvider()
+        .with(req.body).delete((err, data) => {
+          console.log(data);
+          console.log(err);
+          this._resp().sucess(res, data);
+        });
+      })
+
 
 
 

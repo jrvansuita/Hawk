@@ -19,6 +19,10 @@ class DashboardProviderHandler{
     return this;
   }
 
+  getDaysDif(){
+    return Dat.daysDif(this.query.begin, this.query.end);
+  }
+
   getDataQuery(){
     var and = [];
 

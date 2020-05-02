@@ -5,6 +5,21 @@ $(document).ready(() => {
       $('#search-button').trigger('click');
     }
   });
+
+  $('.menu-dots').click(function(e) {
+    var drop = new MaterialDropdown($(this), e, false, true);
+
+    /*drop.addItem(null, 'Excluir', function(e){
+      _post('/stock-dashboard-delete', getQueryData(), (data) => {
+        console.log(data);
+      });
+    });*/
+
+    drop.show();
+  });
+
+
+
 })
 
 function onSearchData(id){
@@ -14,16 +29,19 @@ function onSearchData(id){
     _post('/stock-dashboard-data', {id: id}, onHandleResult);
   }else{
 
-    _post('/stock-dashboard-data',{
-      begin: getDateVal('date-begin', dateBeginPicker),
-      end: getDateVal('date-end', dateEndPicker),
-      value: $('#search-input').val().trim(),
-      attrs: tagsHandler.get(),
-      showSkus : parseInt($('#show-skus').val())
-    }, onHandleResult);
+    _post('/stock-dashboard-data', getQueryData(), onHandleResult);
   }
 }
 
+function getQueryData(){
+  return {
+    begin: getDateVal('date-begin', dateBeginPicker),
+    end: getDateVal('date-end', dateEndPicker),
+    value: $('#search-input').val().trim(),
+    attrs: tagsHandler.get(),
+    showSkus : parseInt($('#show-skus').val())
+  };
+}
 
 function onHandleResult(result){
   loadingPattern(false);
@@ -46,11 +64,14 @@ function buildBoxes(results){
   var data = results.data;
 
   var box = new BuildBox()
-  .group('Venda', Num.points(data.items), 'min-col')
+  .group('Faturamento', Num.points(data.items), '')
   .info('Valor', Num.money(data.total), 'high-val')
   .info('Ticket', Num.money(data.tkm))
   .info('Markup', Num.money(data.markup))
-  .group(null, null, 'min-col gray')
+  .info('Disponível', Num.points(data.stock) + ' itens')
+  .info('Faturado', Num.percent(data.percSold))
+  .info('Abrangência', Math.max(1, Num.int(data.stockCoverage)) + ' Dia(s)')
+  .group(null, null, 'gray')
   .info('Custo', Num.money(data.cost))
   .info('Ticket', Num.money(data.tkmCost))
   .info('Margem Bruta', Num.percent((data.profit*100)/data.total), data.profit ? 'green-val': 'red-val')
@@ -58,9 +79,13 @@ function buildBoxes(results){
 
 
 
-  if ((data.chart).length > 1){
+  if (data.chart && (data.chart.length > 1)){
     var row = box.group(null, null, 'gray').get();
-    new StockDashChart(row, data.chart).load();
+    new StockDashChart(row, data.chart)
+    .field({label: 'Receita', tag: 'sum_total', color: '#3e55ff'})
+    .field({label: 'Lucro', tag: 'sum_profit', color: '#03c184'})
+    .field({label: 'Custo', tag: 'sum_cost', color: '#f98929'})
+    .load();
   }
 
 
@@ -75,6 +100,15 @@ function buildBoxes(results){
   data.gender.forEach((each) => {
     box.square(each.name, each.items, Num.percent(each.items*100/data.items, true), Num.format(each.total), 'gender', each.name, data.gender[0].items);
   });
+
+  if (data.chart && (data.chart.length > 1)){
+    var row = box.group(null, null, 'gray').get();
+    new StockDashChart(row, data.chart)
+    .field({label: 'Disponibilidade', tag: 'sum_stock', color: '#03c184'})
+    .field({label: 'Estoque Faturado', tag: 'sum_quantity', color: '#996ef4'})
+    .field({label: 'Faturado (%)', tag: 'perc_sold', color: '#25d4f3'})
+    .load();
+  }
 
 
 
@@ -111,20 +145,44 @@ function buildBoxes(results){
     var box = new BuildBox('1/5')
     .group('Produtos', data.sku.length);
     data.sku.forEach((each) => {
-     var click = () => {
-       window.open('/product-url-redirect?sku=' + each.name, '_blank');
-     }
+      var click = () => {
+        window.open('/product-url-redirect?sku=' + each.name, '_blank');
+      }
 
-     var subclick = (e) => {
-       e.stopPropagation();
-       window.open('/product?sku=' + each.name, '_blank');
-     }
+      var subclick = (e) => {
+        e.stopPropagation();
+        window.open('/product?sku=' + each.name, '_blank');
+      }
 
-      box.img('/product-image-redirect?sku=' + each.name, each.items, each.name, Math.trunc(each.score), click, subclick ).get();
+      box.img('/product-image-redirect?sku=' + each.name, each.items, each.name, Math.trunc(each.score), click, subclick )
+      .get()
+      .data('sku', each.name)
+      .data('manufacturer', each.manufacturer);
     });
   }
 
 
   coloringData();
   tagsHandler.bind();
+  bindImagePreview();
+  bindTooltipManufacturer();
+}
+
+
+function bindImagePreview(){
+  $('.box-img').each(function(e){
+    new ImagePreview($(this)).delay(700).hover((self)=>{
+      _get('/product-image', {sku: $(this).parent().data('sku') },(product)=>{
+        self.show(product.image);
+      });
+    });
+  });
+}
+
+function bindTooltipManufacturer(){
+  $('.box-img-col').each(function(e){
+    new Tooltip(this, $(this).data('manufacturer'))
+    .autoHide(10000).load();
+  });
+
 }

@@ -17,7 +17,7 @@
 .content-grid{
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  width: fit-content;
+  /* width: fit-content; */
   position: relative;
   grid-gap: 15px;
   max-width: 100%;
@@ -83,7 +83,7 @@ img.dots-glyph {
   margin-top: 3px;
 }
 
-.row{display: block;padding: 10px 12px;background-color: white;position: relative;}
+.row{display: block;padding: 10px 12px;background-color: white;position: relative;height: -webkit-fill-available;}
 
 .col{margin-right: 10px;display: inline-block;margin-bottom: 8px;}
 
@@ -250,11 +250,21 @@ table .header td:last-child > .right{
   display: block;
 }
 
+.box-img:hover{
+  background-color: whitesmoke;
+}
+
+
 .box-img-sub{
   background-color: #f3f0f0;
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
   padding: 4px;
+}
+
+.box-img-sub .right:hover{
+  transform: scale(1.05);
+  transition: all .1s ease-in-out;
 }
 
 .box-img-score{
@@ -278,9 +288,6 @@ table .header td:last-child > .right{
   position: relative;
 }
 
-.box-img-col:hover{
-  background-color: whitesmoke;
-}
 
 .selectors .material-input-holder>input{
   max-width: 70px !important;
@@ -313,6 +320,7 @@ table .header td:last-child > .right{
 .date-arrow:hover{
   background-color: #dcdcdc73;
   transform: scale(1.2);
+  transition: all .1s ease-in-out;
   cursor: pointer !important;
   border-radius: 50%;
 }

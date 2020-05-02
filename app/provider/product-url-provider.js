@@ -1,6 +1,5 @@
 /*jshint esversion: 8 */
 const cheerio = require('cheerio');
-const Product = require('../bean/product.js');
 const https = require('https');
 
 
