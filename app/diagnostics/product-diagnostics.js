@@ -240,6 +240,8 @@ module.exports = class ProductDiagnostics{
 
 
   resync(sku, forceByFather, callback){
+    sku = sku.toString();
+
     if (forceByFather){
       this._loadChildProducts(sku, (skus)=>{
         this._checkRangeSku(skus, 0, ()=>{
