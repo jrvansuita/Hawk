@@ -29,6 +29,10 @@ module.exports = class SaleStock extends DataAccess {
   static from(item, product){
     var skuParts = item.codigo.split('-');
 
+    if (product.category){
+      product.category = product.category.split(',').pop().trim();
+    }
+
     var sku = skuParts[0];
     sku = sku || item.codigo;
 
@@ -120,7 +124,7 @@ module.exports = class SaleStock extends DataAccess {
     {
       $addFields:
       {
-      //  perc_sold : { $sum: { $multiply: [{$divide: ["$sum_quantity", "$sum_stock"]} , 100]} },
+        //  perc_sold : { $sum: { $multiply: [{$divide: ["$sum_quantity", "$sum_stock"]} , 100]} },
 
         perc_sold : { $sum: { $divide: [{$multiply:  ["$sum_quantity", 100]}, "$sum_stock"]}}
       }

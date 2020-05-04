@@ -89,7 +89,7 @@ class StockDash extends DashboardProvider.Helper{
     this.profit =  this.total - this.cost;
     this.markup = this.total / this.cost;
     this.percSold = this.items * 100 / this.stock;
-    this.stockCoverage = (this.items *  this.daysCount) / this.stock;
+    this.stockCoverage = this.stock/ (this.items *  this.daysCount);
     this.score = this.sumScore / this.count;
     delete this.sumScore;
 
