@@ -21,7 +21,7 @@
   position: relative;
   grid-gap: 15px;
   max-width: 100%;
-  margin-bottom: 200px;
+  margin-bottom: 50px;
 }
 
 .grid-item{
@@ -85,7 +85,7 @@ img.dots-glyph {
 
 .row{display: block;padding: 10px 12px;background-color: white;position: relative;height: -webkit-fill-available;}
 
-.col{margin-right: 10px;display: inline-block;margin-bottom: 8px;}
+.col{margin-right: 15px;display: inline-block;margin-bottom: 8px;}
 
 .min-col .col{
   min-width: 100px;
@@ -118,14 +118,20 @@ img.dots-glyph {
   font-size: 14px;
 }
 
+.green-val{
+  color: #08ab08 !important;
+}
+
 .grid-item .green-val{
-  color: #08ab08;
   font-weight: 900;
   font-size: 15px;
 }
 
+.red-val{
+  color: #e60000 !important;
+}
+
 .grid-item .red-val{
-  color: #e60000;
   font-weight: 900;
   font-size: 15px;
 }
@@ -293,6 +299,7 @@ table .header td:last-child > .right{
   border: 1px solid #e4e4e4;
   cursor: pointer;
   position: relative;
+  margin-right: 10px;
 }
 
 
@@ -337,3 +344,6 @@ table .header td:last-child > .right{
   right: 5px;
   bottom: 10px;
 }
+
+
+.sub-high{font-size: 13px;font-weight: 900;/* padding: .5px 4px; *//* background: #09c26426; *//* font-size: 11px; */}

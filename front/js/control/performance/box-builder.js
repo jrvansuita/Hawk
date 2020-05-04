@@ -67,7 +67,7 @@ class BuildBox{
     return this;
   }
 
-  square(label, right, sub, value='', attr, attrVal, max){
+  square(label, right, sub, value='', attr, attrVal, max, subHigh, subValLevel){
     var col = $('<div>').addClass('col coloring-data').data('max', max).data('cur', right);
 
 
@@ -77,8 +77,17 @@ class BuildBox{
 
     this.currentGroup.append(col);
 
+
     col.append($('<span>').addClass('super').append(label, $('<span>').addClass('right').append(Num.points(right))));
-    col.append($('<span>').addClass('value min-val').append(sub, $('<span>').addClass('right min-val').append(value)));
+
+    var subLeft = $('<label>').addClass(subHigh ? 'sub-high' : '').append(sub);
+
+    var subVal = $('<span>').addClass('right min-val').append(value);
+    col.append($('<span>').addClass('value min-val').append(subLeft, subVal));
+
+    if (subValLevel != undefined){
+      subVal.toggleClass(subValLevel > 0 ? 'green-val' : (subValLevel < 0 ? 'red-val' : ''));
+    }
 
     this.checkHidableItems();
 
@@ -88,7 +97,7 @@ class BuildBox{
   }
 
 
-  img(path, label, right, score, click, subClick){
+  img(path, label, right, score, click, subClick, scoreStyling){
     var col = $('<div>').addClass('col box-img-col');
 
     this.currentGroup.append(col);
@@ -99,14 +108,11 @@ class BuildBox{
     var $sub = $('<div>').addClass('box-img-sub').append($('<span>').addClass('super').append(label, $('<span>').addClass('right').append(right))).click(subClick);
 
 
-
-    if (score > 3){
+    if (score){
       var $score = $('<span>').addClass('box-img-score').append(score);
-
       col.append($score);
-
-      if (score >= 6){
-        $score.css('background', '#09c164').css('transform','scale(1)');
+      if (scoreStyling){
+        scoreStyling($score);
       }
     }
 

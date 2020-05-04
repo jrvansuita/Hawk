@@ -41,7 +41,7 @@ module.exports = class SaleStock extends DataAccess {
       skuParts[1],
       item.manufacturer,
       item.brand,
-      item.category,
+      product.category || item.category,
       item.gender,
       item.season,
     );

@@ -53,6 +53,7 @@ class StockDash extends DashboardProvider.Helper{
     this.items = 0;
     this.cost = 0;
     this.stock = 0;
+    this.sumScore = 0;
 
     rows.forEach((each) => {
       this.total += each.total;
@@ -60,10 +61,13 @@ class StockDash extends DashboardProvider.Helper{
       this.cost += each.cost;
       this.stock += each.stock || 0;
 
+      each.score = this.calcScore(each);
+      this.sumScore += each.score;
+
       this.handleArr(each, 'season', this.handleCustom);
       this.handleArr(each, 'gender', this.handleCustom);
       this.handleArr(each, 'category', this.handleCustom);
-      this.handleArr(each, 'manufacturer', this.handleCustom);
+      this.handleArr(each, 'manufacturer', this.handleCustomManufacturer);
       this.handleArr(each, 'brand', this.handleCustom);
 
       if (each.quantity_sizes){
@@ -86,7 +90,8 @@ class StockDash extends DashboardProvider.Helper{
     this.markup = this.total / this.cost;
     this.percSold = this.items * 100 / this.stock;
     this.stockCoverage = (this.items *  this.daysCount) / this.stock;
-
+    this.score = this.sumScore / this.count;
+    delete this.sumScore;
 
     Object.keys(this.arrs).forEach((name) => {
       this.objectToArr(name, 'items');
@@ -103,23 +108,41 @@ class StockDash extends DashboardProvider.Helper{
     result.items = result.items ? result.items + item.quantity : item.quantity;
   }
 
+  handleCustomManufacturer(self, item, result){
+    result.items = result.items ? result.items + item.quantity : item.quantity;
+    result.cost = result.cost ? result.cost + item.cost : item.cost
+    result.sumScore = result.sumScore ? (result.sumScore + item.score) : item.score;
+  }
+
   handleCustomSku(self, item, result){
     result.items = result.items ? result.items + item.quantity : item.quantity;
     result.manufacturer = item.manufacturer;
-    result.score = result.score ? (result.score + self.calcScore(item)) / 2 : self.calcScore(item);
+    result.score = result.score ? (result.score + item.score) / 2 : item.score;
   }
 
   /* - Calculo de score de vendas por quantidade parcial de estoque no dia - */
   calcScore(item){
     var score = 1;
 
-    if (item.stock > 0){
+    var _new = true;
+
+
+   //Verificar qual regra de score deixar
+    if (_new){
       //Considera somente 1/5 do estoque como parametro
-      var stockPonder = item.stock/5;
-      //Calcula o percentual de venda pelo estoque parcial
+      var stockPonder = item.stock/3;
       var perc = (item.quantity * 100) / stockPonder;
-      //Fixa a nota pelo percentual de 1 a 10
-      var score = Num.between(perc, 1, 100) / 10;
+      perc = Num.between(perc, 1, 100);
+      var score = (perc * 15) / 100;
+    }else{
+      if (item.stock > 0){
+        //Considera somente 1/5 do estoque como parametro
+        var stockPonder = item.stock/5;
+        //Calcula o percentual de venda pelo estoque parcial
+        var perc = (item.quantity * 100) / stockPonder;
+        //Fixa a nota pelo percentual de 1 a 10
+        var score = Num.between(perc, 1, 100) / 10;
+      }
     }
 
     return score;

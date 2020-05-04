@@ -10,13 +10,13 @@ $(document).ready(() => {
     var drop = new MaterialDropdown($(this), e, false, true);
 
     /*drop.addItem(null, 'Excluir', function(e){
-      _post('/stock-dashboard-delete', getQueryData(), (data) => {
-        console.log(data);
-      });
-    });*/
-
-    drop.show();
+    _post('/stock-dashboard-delete', getQueryData(), (data) => {
+    console.log(data);
   });
+});*/
+
+drop.show();
+});
 
 
 
@@ -67,10 +67,11 @@ function buildBoxes(results){
   .group('Faturamento', Num.points(data.items), '')
   .info('Valor', Num.money(data.total), 'high-val')
   .info('Ticket', Num.money(data.tkm))
-  .info('Markup', Num.money(data.markup))
+  .info('Markup', Floa.abs(data.markup, 2))
   .info('Disponível', Num.points(data.stock) + ' itens')
   .info('Faturado', Num.percent(data.percSold))
   .info('Abrangência', Math.max(1, Num.int(data.stockCoverage)) + ' Dia(s)')
+  .info('Score', Floa.abs(data.score,2))
   .group(null, null, 'gray')
   .info('Custo', Num.money(data.cost))
   .info('Ticket', Num.money(data.tkmCost))
@@ -129,7 +130,9 @@ function buildBoxes(results){
   var box = new BuildBox('1/3')
   .group('Fabricantes', data.manufacturer.length).hidableItems(20);
   data.manufacturer.forEach((each) => {
-    box.square(each.name, each.items, Num.percent(each.items*100/data.items, true), Num.format(each.total), 'manufacturer', each.name, data.manufacturer[0].items);
+    var markup = each.total/each.cost;
+    var subLevel = (markup > 2.19 ? 1 : (markup < 1.8 ? -1 : 0));
+    box.square(each.name, each.items, Floa.abs(each.sumScore/each.count, 2), Floa.abs(markup, 2), 'manufacturer', each.name, data.manufacturer[0].items, true, subLevel);
   });
 
 
@@ -142,6 +145,17 @@ function buildBoxes(results){
 
 
   if (data.sku){
+
+    var scoreStyling = (each) => {
+      return ($score) => {
+        var color = each.score > 10 ? '#09c164' : (each.score >= 6  ? '#0eb7a6' : false);
+        if (color) return $score.css('background', color).css('transform','scale(1)');
+        if (each.score <= 4){
+          $score.hide();
+        }
+      }
+    }
+
     var box = new BuildBox('1/5')
     .group('Produtos', data.sku.length);
     data.sku.forEach((each) => {
@@ -154,7 +168,7 @@ function buildBoxes(results){
         window.open('/product?sku=' + each.name, '_blank');
       }
 
-      box.img('/product-image-redirect?sku=' + each.name, each.items, each.name, Math.trunc(each.score), click, subclick )
+      box.img('/product-image-redirect?sku=' + each.name, each.items, each.name, Math.trunc(each.score), click, subclick, scoreStyling(each))
       .get()
       .data('sku', each.name)
       .data('manufacturer', each.manufacturer);

@@ -10,11 +10,13 @@ class ImagePreview{
 
   hover(over, leave){
     this.element.mouseenter(()=> {
+      this.cancel = false;
       if (over){
         over(this);
       }
     }).mouseleave(
       ()=>{
+        this.cancel = true;
         if (leave){
           leave(this);
         }else{
@@ -29,7 +31,9 @@ class ImagePreview{
       if (src && this.element){
         clearTimeout(this.timeoutId);
         this.timeoutId =  setTimeout(()=>{
-          runnable(this.element, src);
+          if (!this.cancel){
+            runnable(this.element, src);
+          }
         }, this.delay || 500);
       }
     }
