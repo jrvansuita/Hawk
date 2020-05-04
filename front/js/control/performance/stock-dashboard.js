@@ -120,10 +120,12 @@ function buildBoxes(results){
     box.square(each.name, each.items, Num.percent(each.items*100/data.items, true), Num.format(each.total), 'category', each.name, data.category[0].items);
   });
 
-  box.group('Tamanhos', data.size.length, 'gray').hidableItems(10);
-  data.size.forEach((each) => {
-    box.square(each.name, each.items, Num.percent(each.items*100/data.items, true), null, null, null, data.size[0].items);
-  });
+  if (data.size && data.size.length){
+    box.group('Tamanhos', data.size.length, 'gray').hidableItems(10);
+    data.size.forEach((each) => {
+      box.square(each.name, each.items, Num.percent(each.items*100/data.items, true), null, null, null, data.size[0].items);
+    });
+  }
 
 
 
