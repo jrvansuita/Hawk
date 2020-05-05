@@ -89,7 +89,7 @@ class StockDash extends DashboardProvider.Helper{
     this.profit =  this.total - this.cost;
     this.markup = this.total / this.cost;
     this.percSold = this.items * 100 / this.stock;
-    this.stockCoverage = this.stock/ (this.items *  this.daysCount);
+    this.stockCoverage = (this.stock/this.daysCount)/ (this.items / this.daysCount);
     this.score = this.sumScore / this.count;
     delete this.sumScore;
 
@@ -124,25 +124,11 @@ class StockDash extends DashboardProvider.Helper{
   calcScore(item){
     var score = 1;
 
-    var _new = true;
-
-
-   //Verificar qual regra de score deixar
-    if (_new){
-      //Considera somente 1/5 do estoque como parametro
+    if (item.stock > 0){
       var stockPonder = item.stock/3;
       var perc = (item.quantity * 100) / stockPonder;
       perc = Num.between(perc, 1, 100);
       var score = (perc * 15) / 100;
-    }else{
-      if (item.stock > 0){
-        //Considera somente 1/5 do estoque como parametro
-        var stockPonder = item.stock/5;
-        //Calcula o percentual de venda pelo estoque parcial
-        var perc = (item.quantity * 100) / stockPonder;
-        //Fixa a nota pelo percentual de 1 a 10
-        var score = Num.between(perc, 1, 100) / 10;
-      }
     }
 
     return score;
