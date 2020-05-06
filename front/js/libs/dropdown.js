@@ -62,7 +62,7 @@ class MaterialDropdown {
 
 
   addItem(icon, label, onClick, redirect, blank){
-    var $icon = $('<img>').attr('src', icon);
+    var $icon = icon ? $('<img>').attr('src', icon) : null;
     var $li = $('<li>').append($('<a>').attr('href',redirect ? redirect : '#').attr('target', blank ? '_blank' : '_self').append($icon, label));
 
     $li.click((e)=>{

@@ -8,7 +8,7 @@ function onSearchData(id){
     _post('/sales-dashboard-data',{
       begin: getDateVal('date-begin', dateBeginPicker),
       end: getDateVal('date-end', dateEndPicker),
-      value: $('#search-input').val(),
+      value: $('#search-input').val().trim(),
       attrs: tagsHandler.get()
     }, onHandleResult);
   }

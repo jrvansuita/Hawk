@@ -13,10 +13,14 @@ class DashboardProviderHandler{
     this.query = query;
 
     //Initializing
-    this.query.begin = query.begin ? query.begin  : Dat.yesterday().begin().getTime();
+    this.query.begin = query.begin ? query.begin  : Dat.today().begin().getTime();
     this.query.end = query.end ? query.end : Dat.today().end().getTime();
 
     return this;
+  }
+
+  getDaysDif(){
+    return Dat.daysDif(this.query.begin, this.query.end);
   }
 
   getDataQuery(){

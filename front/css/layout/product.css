@@ -38,14 +38,17 @@
 
 .image-holder{
   padding: 10px;
+<<<<<<< HEAD
+=======
+  background-color: #f7f7f7;
+>>>>>>> 2196c1fff061f46ccbccb0f5c3d0e44caf5bfed6
   display: flex;
   text-align: center;
   margin: auto;
-  width: fit-content;
 }
 
 .top-image-holder{
-  /* padding: 2px 15px; */
+  position: relative;
   background-color: #efebeb;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
@@ -76,6 +79,9 @@
   float: right;
   display: -webkit-box;
   cursor: pointer;
+  top: 0;
+  right: 0;
+  position: absolute;
 }
 
 #top-product-name{
@@ -94,6 +100,8 @@
   background: white;
   min-height: 180px;
   max-height: 260px;
+  margin: auto;
+  mix-blend-mode: multiply;
 }
 
 

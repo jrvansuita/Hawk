@@ -9,14 +9,16 @@ class ImagePreview{
   }
 
   hover(over, leave){
+
     this.element.mouseenter(()=> {
-      this.cancel = false;
+      cancel = false;
       if (over){
         over(this);
       }
     }).mouseleave(
       ()=>{
-        this.cancel = true;
+        cancel = true;
+
         if (leave){
           leave(this);
         }else{
@@ -24,23 +26,23 @@ class ImagePreview{
         }
       });
 
+
       return this;
     }
 
     show(src){
       if (src && this.element){
-        clearTimeout(this.timeoutId);
-        this.timeoutId =  setTimeout(()=>{
-          if (!this.cancel){
-            runnable(this.element, src);
+        var _self = this;
+
+        setTimeout(()=>{
+          if (!cancel){
+            runnable(_self.element, src);
           }
         }, this.delay || 500);
       }
     }
 
     remove(){
-      clearTimeout(this.timeoutId);
-
       if ($(this).is(":visible")){
         $('.image-preview').fadeOut(200, function() {
           $(this).remove();
@@ -53,6 +55,7 @@ class ImagePreview{
   }
 
 
+  var cancel = false;
 
 
   function runnable(element, src) {
@@ -73,4 +76,11 @@ class ImagePreview{
 
     $('.image-preview').remove();
     $('body').append($img);
+
+    /*if ($('.image-preview').is(":visible")){
+      setTimeout(()=>{
+        $('.image-preview').remove();
+      },
+      2000);
+    }*/
   }

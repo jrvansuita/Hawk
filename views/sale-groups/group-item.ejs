@@ -1,4 +1,4 @@
-<div class="group-single-holder shadow" data-title="<%=title%>">
+<div class="group-single-holder shadow <%=typeof addClazz !== 'undefined' ? addClazz : '' %>" data-title="<%=title%>">
   <label class="group-single-title"><%=title%></label>
 
   <% Object.keys(group).forEach((each)=>{%>

@@ -10,7 +10,7 @@ class BuildBox{
   }
 
   get(){
-    return this.currentGroup;
+    return this.lastItem || this.currentGroup;
   }
 
   group(title, num, clazz=''){
@@ -20,6 +20,7 @@ class BuildBox{
       group.append($('<span>').addClass('title').append(title, $('<span>').addClass('right').append(num)));
     }
     this.currentGroup = group;
+    this.lastItem = null;
 
     return this;
   }
@@ -49,6 +50,8 @@ class BuildBox{
 
     col.append($('<span>').addClass('super').append(label), val);
 
+    this.lastItem = col;
+
     return this;
   }
 
@@ -59,10 +62,12 @@ class BuildBox{
 
     this.checkHidableItems();
 
+    this.lastItem = col;
+
     return this;
   }
 
-  square(label, right, sub, value='', attr, attrVal, max){
+  square(label, right, sub, value='', attr, attrVal, max, subHigh, subValLevel){
     var col = $('<div>').addClass('col coloring-data').data('max', max).data('cur', right);
 
 
@@ -72,24 +77,57 @@ class BuildBox{
 
     this.currentGroup.append(col);
 
+
     col.append($('<span>').addClass('super').append(label, $('<span>').addClass('right').append(Num.points(right))));
-    col.append($('<span>').addClass('value min-val').append(sub, $('<span>').addClass('right min-val').append(value)));
+
+    var subLeft = $('<label>').addClass(subHigh ? 'sub-high' : '').append(sub);
+
+    var subVal = $('<span>').addClass('right min-val').append(value);
+    col.append($('<span>').addClass('value min-val').append(subLeft, subVal));
+
+    if (subValLevel != undefined){
+      subVal.toggleClass(subValLevel > 0 ? 'green-val' : (subValLevel < 0 ? 'red-val' : ''));
+    }
 
     this.checkHidableItems();
+
+    this.lastItem = col;
 
     return this;
   }
 
 
-  img(path, label, right, click){
+  img(path, label, barLabel, right, score, click, subClick, scoreStyling){
     var col = $('<div>').addClass('col box-img-col');
 
     this.currentGroup.append(col);
 
     var img = $('<img>').attr('src', path).addClass('box-img');
     col.append(img);
-    col.append($('<span>').addClass('super').append(label, $('<span>').addClass('right').append(right)));
+
+    if (barLabel){
+      label += '<span class="bar-label">/' + barLabel + '</span>';
+    }
+
+    var $sub = $('<div>').addClass('box-img-sub').append($('<span>')
+    .addClass('super').append(label, $('<span>')
+    .addClass('right')
+    .html(right)))
+    .click(subClick);
+
+
+    if (score){
+      var $score = $('<span>').addClass('box-img-score').append(score);
+      col.append($score);
+      if (scoreStyling){
+        scoreStyling($score);
+      }
+    }
+
+    col.append($sub);
     col.click(click);
+
+    this.lastItem = col;
 
     return this;
   }

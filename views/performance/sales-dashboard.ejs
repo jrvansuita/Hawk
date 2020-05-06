@@ -21,11 +21,13 @@
   <div class="main">
     <div class="top shadow">
       <div class="search-box">
-        <img class="icon-open is-closed" title="Abrir seletor" src="/img/open-down.png">
+        <img class="icon-open is-closed" title="Abrir seletor" src="/img/arrow-down.png">
         <input type="text" id="search-input" value="<%=query.value%>" class="simple-material-input" placeholder="Pesquisar Pedidos" autocomplete="off"/>
 
 
         <div class="selectors">
+          <img class="date-arrow left-arrow" src="img/left.png"/>
+
           <div class="material-input-holder date-begin-holder">
             <input id="date-begin" maxlength="8"
             autocomplete="off"
@@ -45,6 +47,12 @@
 
             <span class="bar"></span>
             <label>Data de Fim</label>
+          </div>
+
+          <img class="date-arrow right-arrow" src="img/right.png"/>
+
+          <div class="date-menu-dots">
+            <img src="img/dots.png" class="dots-glyph"/>
           </div>
         </div>
 

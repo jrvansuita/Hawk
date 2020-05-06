@@ -1,25 +1,29 @@
-const https = require('https');
+
 const Initilizer = require('./app/abra-cadabra/initializer.js');
-
-
 
 
 new Initilizer(__dirname, true).begin(() => {
 
   const SaleLoader = require('./app/loader/sale-loader.js');
-  const SaleCustomerHandler = require('./app/customer/sale-customer-handler.js');
-
-  var sale = "120956747";
-120943177
 
 
+  var loader = new SaleLoader('844949');
 
- new SaleLoader(sale)
-  //.loadNfe()
+  loader.loadItems()
+  .loadItemsDeepAttrs(null, (item, product) => {
+    item.cost = product.precoCusto;
+    item.gender = product.Genero;
+    item.season = product.Estacao;
+    item.category = product.Departamento;
+    item.manufacturer = product.Fabricante;
+    item.brand = product.Marca;
+    if (item.codigo.includes('CB545am')){
+      console.log(product);
+    }
+  })
+  .setOnError(this.onError)
   .run((sale) => {
-    //console.log(sale.numeroNotaFiscal);
-    new SaleCustomerHandler().cancelNfe('Teste cancelamento', sale.numeroNotaFiscal, (res) => {
-      console.log(res.sucess);
-    })
+
   });
+
 });
