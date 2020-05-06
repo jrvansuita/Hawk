@@ -97,7 +97,7 @@ class BuildBox{
   }
 
 
-  img(path, label, right, score, click, subClick, scoreStyling){
+  img(path, label, barLabel, right, score, click, subClick, scoreStyling){
     var col = $('<div>').addClass('col box-img-col');
 
     this.currentGroup.append(col);
@@ -105,7 +105,15 @@ class BuildBox{
     var img = $('<img>').attr('src', path).addClass('box-img');
     col.append(img);
 
-    var $sub = $('<div>').addClass('box-img-sub').append($('<span>').addClass('super').append(label, $('<span>').addClass('right').append(right))).click(subClick);
+    if (barLabel){
+      label += '<span class="bar-label">/' + barLabel + '</span>';
+    }
+
+    var $sub = $('<div>').addClass('box-img-sub').append($('<span>')
+    .addClass('super').append(label, $('<span>')
+    .addClass('right')
+    .html(right)))
+    .click(subClick);
 
 
     if (score){

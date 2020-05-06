@@ -89,6 +89,7 @@ class StockDash extends DashboardProvider.Helper{
     this.profit =  this.total - this.cost;
     this.markup = this.total / this.cost;
     this.percSold = this.items * 100 / this.stock;
+
     this.stockCoverage = (this.stock/this.daysCount)/ (this.items / this.daysCount);
     this.score = this.sumScore / this.count;
     delete this.sumScore;
@@ -98,6 +99,7 @@ class StockDash extends DashboardProvider.Helper{
     });
 
     if (this.sku){
+      this.skusCount = this.sku.length;
       this.sku.splice(this.loadSkusCount);
     }
 
@@ -118,6 +120,7 @@ class StockDash extends DashboardProvider.Helper{
     result.items = result.items ? result.items + item.quantity : item.quantity;
     result.manufacturer = item.manufacturer;
     result.score = result.score ? (result.score + item.score) / 2 : item.score;
+    result.stock =  item.stock;
   }
 
   /* - Calculo de score de vendas por quantidade parcial de estoque no dia - */

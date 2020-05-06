@@ -68,6 +68,7 @@ function buildBoxes(results){
   .info('Valor', Num.money(data.total), 'high-val')
   .info('Ticket', Num.money(data.tkm))
   .info('Markup', Floa.abs(data.markup, 2))
+  .info('Skus', Num.points(data.skusCount || 0))
   .info('Disponível', Num.points(data.stock) + ' itens')
   .info('Faturado', Num.percent(data.percSold))
   .info('Abrangência', Math.max(1, Num.int(data.stockCoverage)) + ' Dia(s)')
@@ -170,7 +171,7 @@ function buildBoxes(results){
         window.open('/product?sku=' + each.name, '_blank');
       }
 
-      box.img('/product-image-redirect?sku=' + each.name, each.items, each.name, Math.trunc(each.score), click, subclick, scoreStyling(each))
+      box.img('/product-image-redirect?sku=' + each.name, each.items, each.stock, each.name, Math.trunc(each.score), click, subclick, scoreStyling(each))
       .get()
       .data('sku', each.name)
       .data('manufacturer', each.manufacturer);
