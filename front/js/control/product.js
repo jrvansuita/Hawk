@@ -31,7 +31,10 @@ $(document).ready(() => {
 
 
   _get('/product-fixes', {sku : product.codigo}  , (all)=> {
-    console.log(all);
+    //  console.log(all);
+
+    window.fixes = all;
+
     if (all.length > 0){
       $('.diag-alert').fadeIn();
       $('.diag-alert').click(()=>{
@@ -63,9 +66,20 @@ $(document).ready(() => {
   });
 
 
+
+
 });
 
+function showFixesTooltip(){
+  $('.diag-alert').mouseover(function(){
 
+    var type = $(this).data('err');
+
+    var alertTooltip = new Tooltip($(this)[0], types[type].name);
+    alertTooltip.autoHide(10000).returnDefault(true).load();
+
+  });
+}
 
 function findCurrentProduct(){
   var skuOrEan = $('#search').val();
@@ -356,8 +370,28 @@ function buildCol($el){
 }
 
 function buildSkuCol(product){
+
+  var $div = $('<div>').css('display','flex');
+
   var $sku = $('<label>').addClass('child-value child-sku copiable').text(product.codigo);
   var $ean = $('<label>').addClass('child-title child-ean copiable').text(product.gtin);
+
+  $div.append($sku);
+
+  if(fixes){
+    var $err= $('<img>').addClass('diag-alert d-err').attr('src', 'img/alert.png').attr('data-err', '').show();
+    var alertText = types[fixes[0].type].name;
+
+    fixes.forEach((item) => {
+      if(product.codigo == item.sku){
+        $err.attr('data-err', item.type);
+        $div.append($err);
+
+      }
+
+    });
+
+  }
 
   var f = function(e){
     Util.selectContent(this);
@@ -368,7 +402,9 @@ function buildSkuCol(product){
   $sku.click(f);
   $ean.click(f);
 
-  return buildCol([$sku, $ean]);
+  showFixesTooltip();
+
+  return buildCol([$div, $ean]);
 }
 
 var estoqueRealTotal = 0;

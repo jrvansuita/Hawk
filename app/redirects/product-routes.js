@@ -46,7 +46,8 @@ module.exports = class ProductRoutes extends Routes{
 
       ProductLaws.load(skuOrEan, (result)=>{
         res.render('product/product',{
-          product : result
+          product : result,
+          types : DiagnosticsEnum 
         });
       });
     });
@@ -105,7 +106,8 @@ module.exports = class ProductRoutes extends Routes{
         });
       }else{
         new DiagnosticsProvider().findBySku(req.query.sku, (all)=>{
-          res.set('Cache-Control', 'public, max-age=86400'); // 1day
+          res.set('Cache-Control', 'public, max-age=86400');
+           // 1day
           this._resp().sucess(res, all);
         });
       }

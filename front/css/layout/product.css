@@ -38,7 +38,6 @@
 
 .image-holder{
   padding: 10px;
-  background-color: aliceblue;
   display: flex;
   text-align: center;
   margin: auto;
@@ -421,10 +420,11 @@ table{
 
 
 .diag-alert{
-  width: 45px;
-  height: 45px;
+  width: 30px;
+  height: 30px;
   display: none;
   cursor: pointer;
+  margin-top: -6%;
 }
 
 .main-menu-dots{

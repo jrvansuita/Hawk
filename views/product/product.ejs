@@ -19,6 +19,7 @@
   <script type="text/javascript" src="/front/js/libs/Chart.min.js"></script>
   <script type="text/javascript" src="/front/js/libs/stock-chart.js"></script>
   <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
+  <script type="text/javascript" src="/front/js/libs/tooltip.js"></script>
 </head>
 
 
@@ -26,6 +27,7 @@
 <body>
   <script>
   window.product = <%- JSON.stringify(product || null) %>
+  window.types = <%- JSON.stringify(types || null) %>
   </script>
   <%- include('../menus/stock-menu') %>
 
@@ -49,10 +51,12 @@
           <div class="image-holder">
 
             <img id="image" src="<%=product.img ? product.img.image : ''%>" onerror="this.src='/img/product-placeholder.png'"/>
-            <img src="img/alert.png" class="diag-alert" title="Foram encontratos problemas!">
+            <!--  <img src="img/alert.png" class="diag-alert" id="dalert-item" title="Foram encontratos problemas!"> -->
 
           </div>
-
+          <div>
+            <a href="<%=product.img ? product.img.image : ''%>" target="_blank"><img src="/img/search.png" style="width: 30px;transform: rotate(90deg);"></a>
+          </div>
 
           <%if (product.codigo){ %>
             <div class="product-attributes">
