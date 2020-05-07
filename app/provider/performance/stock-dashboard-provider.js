@@ -17,7 +17,8 @@ module.exports = class StockDashboardProvider extends DashboardProvider.Handler{
 
   _onLoadData(callback){
     var resume = (err1, chartData) => {
-      SaleStock.find(this.getDataQuery(), (err2, rows)=>{
+      SaleStock.findAndSort(this.getDataQuery(), 'date', (err2, rows)=>{
+
         callback(err1 || err2, this._onParseData(rows, chartData));
       });
     };
@@ -30,19 +31,19 @@ module.exports = class StockDashboardProvider extends DashboardProvider.Handler{
   }
 
   _onParseData(rows, chart, daysCount){
-    return {...new StockDash(rows, this.getDaysDif() + 1, this.query.showSkus), ...{chart : chart}};
+    return {...new StockDash(rows, this.query.showSkus), ...{chart : chart}};
   }
 
 };
 
 
 class StockDash extends DashboardProvider.Helper{
-  constructor(rows, daysCount, loadSkusCount){
+  constructor(rows, loadSkusCount){
     super();
     this.count = rows.length;
     this.arrs = {};
     this.loadSkusCount = loadSkusCount == undefined ? 25 : loadSkusCount;
-    this.daysCount = daysCount;
+
 
     this.rolling(rows);
     this.finals();
@@ -52,14 +53,16 @@ class StockDash extends DashboardProvider.Helper{
     this.total = 0;
     this.items = 0;
     this.cost = 0;
-    this.stock = 0;
     this.sumScore = 0;
+    this.stockCounter = {};
+    this.daysCounter = {};
 
     rows.forEach((each) => {
       this.total += each.total;
       this.items += each.quantity;
       this.cost += each.cost;
-      this.stock += each.stock || 0;
+      this.stockCounter[each.sku] = each.stock;
+      this.daysCounter[Dat.format(each.date)] = true;
 
       each.score = this.calcScore(each);
       this.sumScore += each.score;
@@ -88,9 +91,15 @@ class StockDash extends DashboardProvider.Helper{
     this.tkmCost = this.cost/this.items;
     this.profit =  this.total - this.cost;
     this.markup = this.total / this.cost;
-    this.percSold = this.items * 100 / this.stock;
+    this.daysCount = Object.keys(this.daysCounter).length;
 
-    this.stockCoverage = (this.stock/this.daysCount)/ (this.items / this.daysCount);
+
+    this.sumStock = Object.values(this.stockCounter).reduce((count, i)=>{ return count + i}, 0) + this.items;
+    delete this.stockCounter;
+
+    this.percSold = this.items * 100 / this.sumStock;
+
+    this.stockCoverage = (this.sumStock - this.items) / (this.items/this.daysCount) ;
     this.score = this.sumScore / this.count;
     delete this.sumScore;
 

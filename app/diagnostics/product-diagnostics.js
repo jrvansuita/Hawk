@@ -257,7 +257,7 @@ module.exports = class ProductDiagnostics{
 
   remove(sku){
     //Remove all from this sku
-    Fix.removeSkuAll(sku, (err)=>{
+    Fix.removeSkuAll(sku.toString(), (err)=>{
 
     });
   }
