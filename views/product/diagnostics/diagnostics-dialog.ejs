@@ -38,7 +38,9 @@
 
         <div class="top-sku">
           <label class="fixes-sku-list no-problem">Nenhum Problema Encontrado</label>
-          <div class="no-problem-menu" data-sku="<%=product.sku || data[0].sku%>">
+          <%console.log(product)%>
+          <%console.log(data)%>
+          <div class="no-problem-menu" data-sku="<%=(product ? product.sku : '') || ((data.length > 0) ? data[0].sku : '')%>">
             <img src="img/dots.png" class="dots-glyph" />
           </div>
         </div>
@@ -50,7 +52,7 @@
               <label class="fixes-sku-list copiable"><%=item.sku%></label>
 
               <%if (index == 0){%>
-                <div class="menu-dots" data-sku="<%=product.sku || data[0].sku%>">
+                <div class="menu-dots" data-sku="<%=(product ? product.sku : '') || (data ? data[0].sku : '')%>">
                   <img src="img/dots.png" class="dots-glyph" />
                 </div>
 

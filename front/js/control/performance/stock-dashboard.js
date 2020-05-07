@@ -64,12 +64,12 @@ function buildBoxes(results){
   var data = results.data;
 
   var box = new BuildBox()
-  .group('Faturamento', Num.points(data.items), '')
+  .group('Faturamento', Num.points(data.items) + (data.daysCount > 1 ?  ' em ' + data.daysCount + ' dias' : ''))
   .info('Valor', Num.money(data.total), 'high-val')
   .info('Ticket', Num.money(data.tkm))
   .info('Markup', Floa.abs(data.markup, 2))
   .info('Skus', Num.points(data.skusCount || 0))
-  .info('Disponível', Num.points(data.stock) + ' itens')
+  .info('Disponível', Num.points(data.sumStock) + ' itens')
   .info('Faturado', Num.percent(data.percSold))
   .info('Abrangência', Math.max(1, Num.int(data.stockCoverage)) + ' Dia(s)')
   .info('Score', Floa.abs(data.score,2))
@@ -166,12 +166,12 @@ function buildBoxes(results){
         window.open('/product-url-redirect?sku=' + each.name, '_blank');
       }
 
-      var subclick = (e) => {
+      var subDblClick = (e) => {
         e.stopPropagation();
         window.open('/product?sku=' + each.name, '_blank');
       }
 
-      box.img('/product-image-redirect?sku=' + each.name, each.items, each.stock, each.name, Math.trunc(each.score), click, subclick, scoreStyling(each))
+      box.img('/product-image-redirect?sku=' + each.name, each.items, each.stock, each.name, 'copiable', Math.trunc(each.score), click, null, subDblClick, scoreStyling(each))
       .get()
       .data('sku', each.name)
       .data('manufacturer', each.manufacturer);
@@ -183,6 +183,7 @@ function buildBoxes(results){
   tagsHandler.bind();
   bindImagePreview();
   bindTooltipManufacturer();
+  bindCopiable();
 }
 
 

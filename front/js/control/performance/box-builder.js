@@ -97,12 +97,12 @@ class BuildBox{
   }
 
 
-  img(path, label, barLabel, right, score, click, subClick, scoreStyling){
+  img(path, label, barLabel, right, rightClass, score, click, subClick, subDoubleClick, scoreStyling){
     var col = $('<div>').addClass('col box-img-col');
 
     this.currentGroup.append(col);
 
-    var img = $('<img>').attr('src', path).addClass('box-img');
+    var img = $('<img>').attr('src', path).attr('onerror',"this.src='img/product-placeholder.png'").addClass('box-img');
     col.append(img);
 
     if (barLabel){
@@ -111,9 +111,10 @@ class BuildBox{
 
     var $sub = $('<div>').addClass('box-img-sub').append($('<span>')
     .addClass('super').append(label, $('<span>')
-    .addClass('right')
+    .addClass('right ' + rightClass)
     .html(right)))
-    .click(subClick);
+    .click(subClick)
+    .dblclick(subDoubleClick);
 
 
     if (score){
