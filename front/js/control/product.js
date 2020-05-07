@@ -30,17 +30,6 @@ $(document).ready(() => {
   });
 
 
-  _get('/product-fixes', {sku : product.codigo}  , (all)=> {
-    console.log(all);
-    if (all.length > 0){
-      $('.diag-alert').fadeIn();
-      $('.diag-alert').click(()=>{
-        window.open('/diagnostics?sku=' + product.codigo, '_blank');
-      });
-    }
-  });
-
-
   $('.main-menu-dots').click(function (e){
     var drop = new MaterialDropdown($(this), e);
 
@@ -63,8 +52,9 @@ $(document).ready(() => {
   });
 
 
-});
 
+
+});
 
 
 function findCurrentProduct(){
@@ -84,33 +74,41 @@ function findCurrentProduct(){
   }
 }
 
+function requestProdutosFixes(callback){
+  _get('/product-fixes', {sku : product.codigo}  , (all)=> {
+    window.fixes = all;
+    callback();
+  });
+}
+
 var skusCount = 0;
 
 function requestProductChilds(){
+  requestProdutosFixes(() => {
+    if (product._Skus){
+      if (product._Skus.length == 0){
+        product._Skus = [{codigo:product.codigo}];
+      }
 
-  if (product._Skus){
-    if (product._Skus.length == 0){
-      product._Skus = [{codigo:product.codigo}];
+      skusCount = product._Skus.length;
+      product._Skus.forEach((sku)=>{
+        _get('/product-child', {sku: sku.codigo}, (child)=>{
+          if (!child.error){
+            buildChildSku(product, child);
+          }
+
+          skusCount--;
+
+          if (skusCount == 0){
+            onFinishedLoading();
+
+          }
+        });
+      });
+
     }
 
-    skusCount = product._Skus.length;
-    product._Skus.forEach((sku)=>{
-      _get('/product-child', {sku: sku.codigo}, (child)=>{
-        if (!child.error){
-          buildChildSku(product, child);
-        }
-
-        skusCount--;
-
-        if (skusCount == 0){
-          onFinishedLoading();
-
-        }
-      });
-    });
-
-  }
-
+  });
 }
 
 function onFinishedLoading(){
@@ -356,8 +354,25 @@ function buildCol($el){
 }
 
 function buildSkuCol(product){
+
+  var $div = $('<div>').css('display','flex');
+
   var $sku = $('<label>').addClass('child-value child-sku copiable').text(product.codigo);
   var $ean = $('<label>').addClass('child-title child-ean copiable').text(product.gtin);
+
+  $div.append($sku);
+
+  if(fixes){
+    fixes.forEach((item) => {
+      if(product.codigo == item.sku){
+        var $err = $('<img>').addClass('diag-alert d-err').attr('src', 'img/alert.png').show();
+
+        var alertTooltip = new Tooltip($err[0], item.data.name).load();
+        $div.append($err);
+      }
+    });
+
+  }
 
   var f = function(e){
     Util.selectContent(this);
@@ -368,7 +383,7 @@ function buildSkuCol(product){
   $sku.click(f);
   $ean.click(f);
 
-  return buildCol([$sku, $ean]);
+  return buildCol([$div, $ean]);
 }
 
 var estoqueRealTotal = 0;
