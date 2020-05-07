@@ -116,7 +116,7 @@ module.exports = class ProductRoutes extends Routes{
              result.push(s);
            });
 
-           console.log(result);
+           console.log(result); 
 
           this._resp().sucess(res, result);
         });
