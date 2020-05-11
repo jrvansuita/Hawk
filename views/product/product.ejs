@@ -48,13 +48,13 @@
             <%}%>
           </div>
           <div class="image-holder">
-
             <img id="image" src="<%=product.img ? product.img.image : ''%>" onerror="this.src='/img/product-placeholder.png'"/>
-            <!--  <img src="img/alert.png" class="diag-alert" id="dalert-item" title="Foram encontratos problemas!"> -->
-
           </div>
-          <div>
-            <a href="<%=product.img ? product.img.image : ''%>" target="_blank"><img src="/img/search.png" style="width: 30px;transform: rotate(90deg);"></a>
+
+          <div class="expanding-image-modal">
+            <div class="back-fixes-image shadow">
+              <img class="image-full" src="<%=product.img ? product.img.image : ''%>">
+            </div>
           </div>
 
           <%if (product.codigo){ %>
