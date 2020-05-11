@@ -38,7 +38,7 @@ module.exports = class SaleStock extends DataAccess {
 
     return new SaleStock(
       sku,
-      parseFloat(item.valorTotal),
+      Math.abs(parseFloat(item.valorTotal)),
       parseFloat(item.cost),
       Num.def(item.quantidade),
       Num.def(product.quantity),
