@@ -27,7 +27,7 @@
         </li>
         <%}%>
 
-        <%if (locals.loggedUser.full){%>
+        <%if (Sett.get(locals.loggedUser,18) ){%>
           <li class="menu-item" >
             <a href="/sales-dashboard">
               <div class="menu-button title">
@@ -35,7 +35,9 @@
               </div>
             </a>
           </li>
+          <%}%>
 
+          <%if (Sett.get(locals.loggedUser,17 )){%>
           <li class="menu-item" >
             <a href="/stock-dashboard">
               <div class="menu-button title">
@@ -44,6 +46,7 @@
             </a>
           </li>
           <%}%>
-      </ul>
-    </nav>
-  </div>
+
+        </ul>
+      </nav>
+    </div>
