@@ -4,25 +4,29 @@ const Initilizer = require('./app/abra-cadabra/initializer.js');
 
 new Initilizer(__dirname, true).begin(() => {
 
-  const SaleLoader = require('./app/loader/sale-loader.js');
+  const EccosysStorer = require('./app/eccosys/eccosys-storer.js');
 
+  var storer = new EccosysStorer(true);
 
-  var loader = new SaleLoader('844949');
+  var r2 = {
+    "id": "126192393",
+    //"descricao": "Faixa de Idade",
+    valor : "Bebe"
+  };
 
-  loader.loadItems()
-  .loadItemsDeepAttrs(null, (item, product) => {
-    item.cost = product.precoCusto;
-    item.gender = product.Genero;
-    item.season = product.Estacao;
-    item.category = product.Departamento;
-    item.manufacturer = product.Fabricante;
-    item.brand = product.Marca;
-    if (item.codigo.includes('CB545am')){
-      console.log(product);
-    }
-  })
-  .setOnError(this.onError)
-  .run((sale) => {
+  var r = {
+    //descricao: "Fabricante",
+    id: "163882126",
+    valor: 'Teste'
+  }
+
+  var r3 = {
+    id: "165229494",
+    valor: 'Até 1'
+  }
+
+  storer.product('JRTESTE3').attrs().put([r, r2, r3]).go((attributesResponse) => {
+    console.log(attributesResponse);
 
   });
 

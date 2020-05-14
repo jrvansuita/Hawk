@@ -7,6 +7,7 @@ const DiagnosticsEnum = require('../diagnostics/diagnostics-enum.js');
 const ProductBoard = require('../provider/product-board-provider.js');
 const ProductListProvider = require('../provider/product-list-provider.js');
 const ProductImageProvider = require('../provider/product-image-provider.js');
+const ProductStorer = require('../storer/product/product.js');
 
 module.exports = class ProductRoutes extends Routes{
 
@@ -45,7 +46,7 @@ module.exports = class ProductRoutes extends Routes{
       var skuOrEan = req.query.sku || req.query.ean;
 
       ProductLaws.load(skuOrEan, (result)=>{
-        res.render('product/product',{
+        res.render('product/stock/product',{
           product : result
         });
       });
@@ -108,15 +109,15 @@ module.exports = class ProductRoutes extends Routes{
           res.set('Cache-Control', 'public, max-age=86400');
 
           var result = [];
-           // 1day
-           all.forEach((each) => {
-             var s = each.toObject();
-             s.data=  DiagnosticsEnum[each.type];
+          // 1day
+          all.forEach((each) => {
+            var s = each.toObject();
+            s.data=  DiagnosticsEnum[each.type];
 
-             result.push(s);
-           });
+            result.push(s);
+          });
 
-           console.log(result);
+          console.log(result);
 
           this._resp().sucess(res, result);
         });
@@ -213,9 +214,24 @@ module.exports = class ProductRoutes extends Routes{
     });
 
 
+    /** --------------  Product Storer -------------- **/
 
 
+    this._page('/stock/storer', (req, res) => {
+      res.render('product/storer/product');
+    });
 
+    this._post('/stock/storer-insert', (req, res) => {
+      new ProductStorer().with(req.body).insert(this._resp().redirect(res));
+    });
+
+    this._post('/stock/storer-delete', (req, res) => {
+      new ProductStorer().with(req.body).delete(this._resp().redirect(res));
+    });
+
+    this._get('/stock/storer-attr', (req, res) => {
+      new ProductStorer().searchAttr(req.query.attr, this._resp().redirect(res));
+    });
 
 
   }

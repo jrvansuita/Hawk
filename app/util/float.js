@@ -45,6 +45,8 @@ var Floa = {
     return parseFloat(val).toFixed(digits ? digits : 2).toString().replace('.', ',');
   },
 
+  
+
 };
 
 

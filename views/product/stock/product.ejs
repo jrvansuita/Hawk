@@ -1,16 +1,16 @@
 <html>
-<%- include('../menus/main-menu') %>
+<%- include('../../menus/main-menu') %>
 
 
 <head>
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-select.css">
-  <link rel="stylesheet" type="text/css" href="/front/css/layout/product.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/product/product.css">
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
 
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-selector-dialog.css">
 
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
-  <script type="text/javascript" src="/front/js/control/product.js"></script>
+  <script type="text/javascript" src="/front/js/control/product/product.js"></script>
 
 
   <link rel="stylesheet" type="text/css" href="/front/css/libs/easy-autocomplete.css">
@@ -25,10 +25,10 @@
 
 
 <body>
-  <script>
+  <script class="hidable-script">
   window.product = <%- JSON.stringify(product || null) %>
   </script>
-  <%- include('../menus/stock-menu') %>
+  <%- include('../../menus/stock-menu') %>
 
 
   <div class="main-content">

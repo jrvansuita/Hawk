@@ -6,8 +6,7 @@ class ComboBox{
 
 
     this.element = element;
-    this.limit = 5;
-    this.minLength = 1;
+    this.setLimit(5);
 
     if (data instanceof Array){
       this.objects = data;
@@ -33,6 +32,8 @@ class ComboBox{
     select(item){
       this.element.val(item ? item.label : '');
 
+      if (this.callOnChangeBySelection) this.element.trigger("change");
+
       this.selectedItem = item;
       if (this.onItemSelect && item){
         this.onItemSelect(this.selectedItem, this.selectedItem.data);
@@ -50,6 +51,15 @@ class ComboBox{
 
     setOnItemSelect(onItemSelect){
       this.onItemSelect = onItemSelect;
+      return this;
+    }
+
+    setLimit(limit){
+      if (limit){
+        this.limit = limit || 5;
+        this.minLength = 1;
+      }
+
       return this;
     }
 
@@ -80,6 +90,11 @@ class ComboBox{
       });
     }
 
+    callOnChangeEventBySelecting(b){
+      this.callOnChangeBySelection = b;
+      return this;
+    }
+
 
     getSelectedItem(){
       return this.selectedItem;
@@ -101,7 +116,7 @@ class ComboBox{
       if (this.path){
         $.ajax({
           url: this.path,
-          type: this.method ? this.method : "get",
+          type: this.method || "get",
           success: (response) =>{
             this.objects = Object.values(response);
             this.handleData(callback);

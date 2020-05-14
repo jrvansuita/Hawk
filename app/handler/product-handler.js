@@ -26,7 +26,7 @@ module.exports ={
   },
 
   getBySku(sku, father, callback){
-    new EccosysProvider().product(father ? getFatherSku(sku) : sku ).go((product)=>{
+    new EccosysProvider(false).product(father ? getFatherSku(sku) : sku ).go((product)=>{
       handleCallback(callback, product, sku);
     });
   },
@@ -81,7 +81,7 @@ module.exports ={
       };
 
 
-      new EccosysStorer().product(body).go(callback);
+      new EccosysStorer().product().update(body).go(callback);
     });
   },
 
@@ -96,7 +96,7 @@ module.exports ={
         obs : lines +  "\n" + user.name + " | Desktop | " + newNCM + " | " + Dat.format(new Date()) + '| NCM'
       };
 
-      new EccosysStorer().product(body).go(callback);
+      new EccosysStorer().product().update(body).go(callback);
     });
   },
 
@@ -153,7 +153,7 @@ module.exports ={
         obs : lines +  "\n" + user.name + " | Desktop | " + Floa.weight(weight) + " | " + Dat.format(new Date()) + '| Peso'
       };
 
-      new EccosysStorer().product(body).go(callback);
+      new EccosysStorer().product().update(body).go(callback);
 
       if(Params.updateProductWeightMagento()){
         new MagentoCalls().updateProductWeight(product.codigo, weight);
@@ -184,7 +184,7 @@ module.exports ={
         });
       });
 
-      new EccosysStorer().product(body).go(callback);
+      new EccosysStorer().product().update(body).go(callback);
     });
   },
 

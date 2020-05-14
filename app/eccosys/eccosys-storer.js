@@ -3,8 +3,31 @@ const Err = require('../error/error.js');
 
 module.exports = class EccosysStorer extends EccosysApi{
 
-  product(body) {
-    return this.put('produtos').setBody(body).single();
+  product(sku){
+    return {
+      update:(body) => {
+        return this.put('produtos').setBody(body).single();
+      },
+
+      insert:(body) => {
+        return this.post('produtos').setBody(body).single();
+      },
+
+      delete:() => {
+        return this.delete('produtos/' + sku);
+      },
+
+      attrs:()=>{
+        return {
+          put:(body)=>{
+            return this.post('produtos/' + sku + '/atributos').setBody(body).single();
+          }
+
+        }
+      }
+
+
+    }
   }
 
   stock(sku, body) {

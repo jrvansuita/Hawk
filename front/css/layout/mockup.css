@@ -310,7 +310,9 @@
 
 .margin-price{
   display: inline-block;
-  width: 70px;
-  float: right;
-  min-width: 70px;
+    width: 70px !important;
+    position: absolute !important;
+    min-width: 70px;
+    right: 0;
+
 }
