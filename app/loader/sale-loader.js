@@ -109,7 +109,7 @@ module.exports= class SaleLoader {
   prepareSaleItems(items){
     return items.map((item) => {
       item.img = Params.productImageUrl(item.codigo);
-      item.valorTotal = (parseFloat(item.valor) - parseFloat(item.valorDesconto)) * parseFloat(item.quantidade);
+      item.valorTotal = Math.abs((parseFloat(item.valor) - parseFloat(item.valorDesconto)) * parseFloat(item.quantidade));
       return item;
     });
   }
