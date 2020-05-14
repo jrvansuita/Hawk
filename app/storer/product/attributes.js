@@ -68,7 +68,7 @@ module.exports = class AttributesStorer{
     this.onResultCallback = callback;
 
     if (!cache){
-      new EccosysProvider().attributes().go((data) => {
+      new EccosysProvider(true).attributes().go((data) => {
         this._prepare(data);
         callback(this._onResult());
       })

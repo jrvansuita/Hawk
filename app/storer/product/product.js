@@ -21,9 +21,12 @@ module.exports = class ProductStorer{
 
     //    storer.product().insert(this.binder).go((productResponse) => {
     //    if (productResponse.result.success.length > 0){
-    storer.product(this.binder.codigo).attrs().put(this.binder.attrs()).go((attributesResponse) => {
-      console.log(attributesResponse);
-      callback(attributesResponse);
+    this.binder.work();
+    this.attributesStorer.load(() => {
+      storer.product(this.binder.codigo).attrs().put(this.binder.attrs()).go((attributesResponse) => {
+        console.log(attributesResponse);
+        callback(attributesResponse);
+      });
     });
     //  }else{
     //  callback(productResponse);

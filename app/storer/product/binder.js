@@ -21,7 +21,7 @@ class ProductBinder{
       {key: 'manufacturer', tag: 'manufacturer'},
     ];
 
-    if (loader.isCached()){
+    if (this.attrLoader.isCached()){
       map.forEach((each) => {
         if (this.data[each.key]){
           var data = this.attrLoader.filter(each.tag, this.data[each.key]).get();
@@ -36,71 +36,66 @@ class ProductBinder{
 
   work(){
     if (this.data){
-      this.defaults();
-      delete this.data;
+      this.identification();
+      this.attributes();
+      this.prices();
+
+      this.unidade = 'UN';
+      this.cf = this.data.ncm || '6104.22.00';
+      this.calcAutomEstoque= "N";
+
+
+
+      this.origem = 0;
+      this.situacao =  "A";
+      this.situacaoCompra= "A";
+      this.situacaoVenda= "A";
+
+      this.valorIpiFixo = "0.00";
+      this.ipiCodigoEnquadramento = '';
+      this.tipo = "P";
+      this.tipoFrete = "0";
+      this.tipoProducao = "P";
+
+      this.peso =  "0.00";
+      this.pesoLiq =  "2.000";
+      this.pesoBruto = "2.000";
+
+      this.obs = 'Criado pelo Hawk';
+
+      //Verificar
+
+      this.descricaoComplementar = "Serve pra alguma coisa?";
+      this.descricaoEcommerce = "Produto teste criado pela API";
+
+
+      //Como fazer?
+      this.idFornecedor = 0;
+      this.idProdutoMaster = 0; //'ID do PAI';
+
+      //Do filho
+      this.gtin = "";
+      this.comprimento= "6.00",
+      this.altura = "9.00",
+      this.largura =  "7.00",
+      this.comprimentoReal = "0.00",
+      this.alturaReal =  "0.00",
+      this.larguraReal =  "0.00",
+      this.pesoReal =  "0.000",
+
+
+      this.opcEcommerce = "S";
+      this.opcEstoqueEcommerce =  "S";
+      this.tituloPagina = this.data.name;
+      this.urlEcommerce = 'testado';
+      this.keyword = '???';
+      this.metatagDescription = '???';
+      this.adwordsRmkCode = '???';
+
+      this.produtoAlterado = 'N'
+
+      return this;
     }
-
-    return this;
-  }
-
-  defaults(){
-    this.identification();
-    this.attributes();
-    this.prices();
-
-    this.unidade = 'UN';
-    this.cf = this.data.ncm || '6104.22.00';
-    this.calcAutomEstoque= "N";
-
-
-
-    this.origem = 0;
-    this.situacao =  "A";
-    this.situacaoCompra= "A";
-    this.situacaoVenda= "A";
-
-    this.valorIpiFixo = "0.00";
-    this.ipiCodigoEnquadramento = '';
-    this.tipo = "P";
-    this.tipoFrete = "0";
-    this.tipoProducao = "P";
-
-    this.peso =  "0.00";
-    this.pesoLiq =  "2.000";
-    this.pesoBruto = "2.000";
-
-    this.obs = 'Criado pelo Hawk';
-
-    //Verificar
-
-    this.descricaoComplementar = "Serve pra alguma coisa?";
-    this.descricaoEcommerce = "Produto teste criado pela API";
-
-
-    //Como fazer?
-    this.idFornecedor = 0;
-    this.idProdutoMaster = 0; //'ID do PAI';
-
-    //Do filho
-    this.gtin = "";
-    this.comprimento= "6.00",
-    this.altura = "9.00",
-    this.largura =  "7.00",
-    this.comprimentoReal = "0.00",
-    this.alturaReal =  "0.00",
-    this.larguraReal =  "0.00",
-    this.pesoReal =  "0.000",
-
-
-    this.opcEcommerce = "S";
-    this.opcEstoqueEcommerce =  "S";
-    this.tituloPagina = this.data.name;
-    this.urlEcommerce = 'testado';
-    this.keyword = '???';
-    this.metatagDescription = '???';
-    this.adwordsRmkCode = '???';
-
-    this.produtoAlterado = 'N'
   }
 
   identification(){
