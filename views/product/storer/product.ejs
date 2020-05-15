@@ -22,8 +22,7 @@
 </head>
 <body>
   <script class="hidable-script">
-
-
+  window.product = <%- JSON.stringify(product || {}) %>
   </script>
   <%- include('../../menus/stock-menu') %>
 
@@ -42,7 +41,7 @@
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input type="text" id="name" maxlength="500"  autocomplete="off" required tabindex="1"/>
+            <input type="text" id="name" maxlength="500"  autocomplete="off" value="<%=product.nome%>" required tabindex="0"/>
             <span class="bar"></span>
             <label>Nome</label>
           </div>
@@ -50,26 +49,26 @@
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input type="text" class="call-refresh" id="category" maxlength="100"  autocomplete="off"  tabindex="3" required/>
+            <input type="text" class="call-refresh" id="category" maxlength="100"  autocomplete="off" tabindex="0" value="<%=product.Departamento%>" required/>
             <span class="bar"></span>
             <label>Categoria</label>
           </div>
 
           <div class="material-input-holder">
-            <input type="text" id="material" class="call-refresh" maxlength="50"  autocomplete="off" tabindex="8" required/>
+            <input type="text" id="material" class="call-refresh" maxlength="50"  autocomplete="off" tabindex="0" value="<%=product.Material%>" required/>
             <span class="bar"></span>
             <label>Material</label>
           </div>
 
           <div class="material-input-holder">
-            <input type="text" id="color" class="call-refresh" maxlength="150"  autocomplete="off" tabindex="7" required/>
+            <input type="text" id="color" class="call-refresh" maxlength="150"  autocomplete="off" tabindex="0" value="<%=product.Cor%>" required/>
             <span class="bar"></span>
             <label>Cor</label>
           </div>
 
 
           <div class="material-input-holder">
-            <input type="text" id="year" maxlength="5"  autocomplete="off" tabindex="6" required/>
+            <input type="text" id="year" maxlength="5"  autocomplete="off" tabindex="0" value="<%=product.Colecao%>" required/>
             <span class="bar"></span>
             <label>Coleção</label>
           </div>
@@ -78,26 +77,26 @@
         <div class="flex-line">
 
           <div class="material-input-holder">
-            <input type="text" id="gender" maxlength="30"  autocomplete="off" tabindex="4" required/>
+            <input type="text" id="gender" maxlength="30"  autocomplete="off" tabindex="0" value="<%=product.Genero%>" required/>
             <span class="bar"></span>
             <label>Gênero</label>
           </div>
 
           <div class="material-input-holder">
-            <input type="text" id="season" maxlength="30"  autocomplete="off" tabindex="5" required/>
+            <input type="text" id="season" maxlength="30"  autocomplete="off" tabindex="0" value="<%=product.Estacao%>" required/>
             <span class="bar"></span>
             <label>Estação</label>
           </div>
 
 
           <div class="material-input-holder">
-            <input type="text" id="occasion" maxlength="30"  autocomplete="off" tabindex="9" required/>
+            <input type="text" id="occasion" maxlength="30"  autocomplete="off" tabindex="0" value="<%=product.Ocasiao%>" required/>
             <span class="bar"></span>
             <label>Ocasião</label>
           </div>
 
           <div class="material-input-holder">
-            <input type="text" id="ncm" maxlength="5"  autocomplete="off" tabindex="10" required/>
+            <input type="text" id="ncm" maxlength="5"  autocomplete="off" tabindex="0" value="<%=product.cf%>" required/>
             <span class="bar"></span>
             <label>NCM</label>
           </div>
@@ -108,7 +107,7 @@
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input type="text" id="sku" maxlength="20"  autocomplete="off" tabindex="-1" required/>
+            <input type="text" id="sku" maxlength="20"  autocomplete="off" tabindex="-1" value="<%=product.codigo%>" required/>
             <span class="bar"></span>
             <label>SKU</label>
           </div>
@@ -116,7 +115,7 @@
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input type="text" id="manufacturer" maxlength="50"  autocomplete="off" tabindex="2" required/>
+            <input type="text" id="manufacturer" maxlength="50"  autocomplete="off" tabindex="0" value="<%=product.Fabricante%>" required/>
             <span class="bar"></span>
             <label>Fabricante</label>
           </div>
@@ -124,7 +123,7 @@
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input type="text" id="brand" class="call-refresh" maxlength="50"  autocomplete="off" tabindex="11" required/>
+            <input type="text" id="brand" class="call-refresh" maxlength="50"  autocomplete="off" tabindex="0" value="<%=product.Marca%>" required/>
             <span class="bar"></span>
             <label>Marca</label>
           </div>
@@ -138,17 +137,18 @@
     <div class="row">
 
       <div class="box shadow" style="flex: 20%;">
-        <!--<span class="title">Preços<span class="right">59</span></span>-->
+
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input class="money call-refresh" type="text" id="cost" maxlength="50"  autocomplete="off" tabindex="12" value="R$ 0,00" onkeypress="return Floa.isFloatKey(event);" required/>
+            <input class="money call-refresh" type="text" id="cost" maxlength="50"  autocomplete="off" tabindex="0"
+            value="<%=Num.money(product.precoCusto)%>" onkeypress="return Floa.isFloatKey(event);"  required/>
             <span class="bar"></span>
             <label>Custo</label>
           </div>
 
           <div class="material-input-holder">
-            <input type="text" id="markup" class="call-refresh" maxlength="50"  autocomplete="off" tabindex="13" onkeypress="return Floa.isFloatKey(event);" required/>
+            <input type="text" id="markup" class="call-refresh" maxlength="50"  autocomplete="off" tabindex="0" onkeypress="return Floa.isFloatKey(event);" required/>
             <span class="bar"></span>
             <label>Markup</label>
           </div>
@@ -156,13 +156,13 @@
 
         <div class="flex-line gray">
           <div class="material-input-holder">
-            <input class="money" type="text" id="from-price" maxlength="50"  autocomplete="off" tabindex="12" value="R$ 0,00" disabled required/>
+            <input class="money" type="text" id="from-price" maxlength="50"  autocomplete="off" value="R$ 0,00" disabled required/>
             <span class="bar"></span>
             <label>Preço De</label>
           </div>
 
           <div class="material-input-holder">
-            <input class="money" type="text" id="price" maxlength="50"  autocomplete="off" tabindex="13"  value="R$ 0,00" disabled required/>
+            <input class="money" type="text" id="price" maxlength="50"  autocomplete="off" value="R$ 0,00" disabled required/>
             <span class="bar"></span>
             <label>Preço Por</label>
           </div>
@@ -172,31 +172,31 @@
       </div>
 
       <div class="box shadow" style="flex: 80%;">
-        <div class="flex-line">
+        <span class="title">Tamanhos<span class="right">
+          <label class="size-group-button" data-val="Bebe" tabindex="0">Bebe</label>
+          <label class="size-group-button" data-val="Primeiros Passos" tabindex="0">Prim. Passos</label>
+          <label class="size-group-button" data-val="Kids" tabindex="0">Infantil</label>
+          <label class="size-group-button" data-val="Juvenil" tabindex="0">Juvenil</label>
+        </span>
+      </span>
 
-
-          <div class="sizes-box">
-
-          </div>
-          <!--<div class="material-input-holder">
-            <input type="text" id="sizes" maxlength="50"  autocomplete="off" tabindex="13" onkeypress="return Floa.isFloatKey(event);" required/>
-            <span class="bar"></span>
-            <label>Tamanhos</label>
-          </div>-->
-        </div>
+      <div class="flex-line">
+        <div class="sizes-box">  </div>
       </div>
-
-
     </div>
 
 
-    <div class="row">
-      <label class="button save shadow">Salvar</label>
-      <label class="button delete shadow">Excluir</label>
 
-
-    </div>
   </div>
+
+
+  <div class="row">
+    <label class="button save shadow">Salvar</label>
+    <label class="button delete shadow">Excluir</label>
+
+
+  </div>
+</div>
 
 
 

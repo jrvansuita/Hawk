@@ -24,6 +24,7 @@
   height: auto;
   position: relative;
   display: block;
+  max-width: fit-content;
 }
 
 .image-holder img{
@@ -62,24 +63,27 @@
 
 
 .box .title{
-  font-size: 13px !important;
   display: block;
   font-weight: 600;
-  color: #5d5b59;
+  font-size: 11px !important;
+  color: #259587;
   padding-bottom: 10px;
+  position: relative;
   padding: 5px 10px 5px 10px;
-  margin-top: 3px;
+  margin-top: 8px;
 }
 
 
 .box .right{
-  float: right;
   right: 0;
+  float: none;
+  position: absolute;
   top: 0;
   color: gray;
   margin-left: 10px;
   font-size: 13px;
-  margin-right: 4px;
+  margin-right: 12px;
+  display: block;
 }
 
 .sizes-box{
@@ -100,7 +104,7 @@
   cursor: pointer;
   width: fit-content;
   background: white;
-  white-space: nowrap;
+  text-align: center;
   white-space: nowrap;
   margin-top: 10px;
   min-width: 20px;
@@ -109,4 +113,38 @@
   display: inline-block;
   outline: none;
   text-transform: uppercase;
+}
+
+
+.size-group-button{
+  padding: 4px 12px;
+  top: 4px;
+  margin-right: 0px;
+  display: inline;
+  position: relative;
+  border-radius: 2px;
+  border: 1px solid #ccc;
+  border-bottom: 2px solid #ccc;
+  cursor: pointer;
+  background: white !important;
+  font-size: 13px;
+  color: gray;
+}
+
+.size-group-button:focus, .size-group-button:hover{
+  background: #f3f3f3 !important;
+  outline:0;
+  color: GRAY;
+  font-weight: 900;
+  border: 1px solid #868686;
+  border-bottom: 2px solid #4644446e;
+}
+
+.size-group-button.active{
+  background: #969595 !important;
+  outline:0;
+  color:white;
+  font-weight: 900;
+  border: 1px solid #868686;
+  border-bottom: 2px solid #4644446e;
 }

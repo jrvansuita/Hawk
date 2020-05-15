@@ -19,41 +19,44 @@
         </a>
       </li>
 
-      <li class="menu-item" >
-        <a href="/product-storer-painel">
-          <div class="menu-button title">
-            Painel
-          </div>
-        </a>
-      </li>
-
-      <li class="menu-item" >
-        <a href="/stock/storer">
-          <div class="menu-button title">
-            Cadastro
-          </div>
-        </a>
-      </li>
-
-      <li class="menu-item" >
-        <a href="/product">
-          <div class="menu-button title">
-            Produto
-          </div>
-        </a>
-      </li>
-
-      <%if (Sett.get(locals.loggedUser,13)){%>
+      <%if (Sett.get(locals.loggedUser,19)){%>
         <li class="menu-item" >
-          <a href="/diagnostics">
+          <a href="/product-storer-painel">
             <div class="menu-button title">
-              Diagnóstico
+              Painel
             </div>
           </a>
         </li>
+
+        <li class="menu-item" >
+          <a href="/stock/storer">
+            <div class="menu-button title">
+              Cadastro
+            </div>
+          </a>
+        </li>
+
         <%}%>
 
+        <li class="menu-item" >
+          <a href="/product">
+            <div class="menu-button title">
+              Produto
+            </div>
+          </a>
+        </li>
 
-  </ul>
-</nav>
-</div>
+        <%if (Sett.get(locals.loggedUser,13)){%>
+          <li class="menu-item" >
+            <a href="/diagnostics">
+              <div class="menu-button title">
+                Diagnóstico
+              </div>
+            </a>
+          </li>
+          <%}%>
+
+
+        </ul>
+      </nav>
+    </div>

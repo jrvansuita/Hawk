@@ -1,10 +1,11 @@
+var productResult = {};
 var refreshBroadcast;
 
 $(document).ready(() => {
 
   refreshBroadcast = new Broadcast('post-refresh-storing-product').onReceive(onProductRefreshed);
 
-  testedata();
+  //testedata();
 
   $('.save').click(() => {
     _post('/stock/storer-insert', getData(), (data) => {
@@ -41,8 +42,12 @@ $(document).ready(() => {
     refreshBroadcast.emit(getData());
   });
 
-  $('.sizes-box').click(onSizesBoxClick);
+  $('.sizes-box').click(() => {
+    addNewSizeInput();
+  });
+
   loadAndKeepCachedAllSizes();
+  sizesGroupButtonBindClick();
 });
 
 function bindComboBox(el, data, limit){
@@ -71,26 +76,29 @@ function testedata(){
 
 
 function getData(){
-  var result = {};
-  result.sku = $('#sku').val();
-  result.name = $('#name').val();
-  result.ncm = $('#ncm').val();
-  result.cost = Num.moneyVal($('#cost').val() || 0);
-  result.markup = Floa.floa($('#markup').val() || 2);
-  result.category = $('#category').val();
-  result.material = $('#material').val();
-  result.color = $('#color').val();
 
-  result.gender = $('#gender').val();
-  result.season = $('#season').val();
-  result.year = $('#year').val();
-  result.occasion = $('#occasion').val();
-  result.ncm = $('#ncm').val();
-  result.brand = $('#brand').val();
-  result.manufacturer = $('#manufacturer').val();
+  productResult.sku = $('#sku').val();
+  productResult.name = $('#name').val();
+  productResult.ncm = $('#ncm').val();
+  productResult.cost = Num.moneyVal($('#cost').val() || 0);
+  productResult.markup = Floa.floa($('#markup').val() || 2);
+  productResult.category = $('#category').val();
+  productResult.material = $('#material').val();
+  productResult.color = $('#color').val();
 
+  productResult.gender = $('#gender').val();
+  productResult.season = $('#season').val();
+  productResult.year = $('#year').val();
+  productResult.occasion = $('#occasion').val();
+  productResult.ncm = $('#ncm').val();
+  productResult.brand = $('#brand').val();
+  productResult.manufacturer = $('#manufacturer').val();
 
-  return result;
+  productResult.sizes = $('.add-size-input').map((i,each)=>{
+    return $(each).text();
+  }).toArray();
+
+  return productResult;
 }
 
 
@@ -99,6 +107,7 @@ function onProductRefreshed(data){
   onIdentificationRefreshed(data);
   onPriceRefreshed(data);
   onAttributesRefreshed(data);
+  onSizesRefreshed(data);
 }
 
 function onIdentificationRefreshed(data){
@@ -116,26 +125,31 @@ function onPriceRefreshed(data){
   $('#markup').val(data.markup);
 }
 
-function onSizesBoxClick(){
-  var $input = $('<span>').addClass('add-size-input').attr('contenteditable', true);
-  $('.sizes-box').append($input);
-  $input.focus();
-  $input.click((e) => {
-    e.preventDefault();
-    $input.remove();
-  });
+function onSizesRefreshed(data){
+  if (data.sizes){
+    $('.sizes-box').empty();
+    data.sizes.forEach((size) => {
+      addNewSizeInput(size);
+    });
+  }
 
-  $input.keypress(function(e){
-    if(e.which == 13 || e.which == 9){
-      e.preventDefault();
-      onSizesBoxClick();
-    }
-  });
+  if (data.ageRange){
+    $('.size-group-button').removeClass('active');
+    data.ageRange.forEach((each) => {
+      $('.size-group-button[data-val="'+each+'"]').addClass('active');
+    });
+  }
+}
 
+function sizesGroupButtonBindClick(){
+  $('.size-group-button').click(function () {
+    if (!productResult.ageRange) productResult.ageRange = [];
+    productResult.ageRange.push($(this).data('val'));
 
-  loadAndKeepCachedAllSizes((sizes) => {
-    bindComboBox($input, sizes, 5);
-  });
+    refreshBroadcast.emit(getData());
+  }).keypress(function(e) {
+    if(e.which == 13) $(this).click()
+  })
 }
 
 var cachedSizes;
@@ -151,4 +165,26 @@ function loadAndKeepCachedAllSizes(callback){
       }
     });
   }
+}
+
+
+function addNewSizeInput(size){
+  var $input = $('<span>').addClass('add-size-input').attr('contenteditable', true);
+  $('.sizes-box').append($input);
+
+  $input.click((e) => {
+    $input.remove();
+    e.stopPropagation();
+    e.preventDefault();
+  }).keypress((e)=>{
+    if(e.which == 13) {e.preventDefault(); onSizesBoxClick();}
+  }).focusout(() => {
+    if (!$input.text()) $input.remove()
+  });
+
+  if (size) { $input.text(size) } else{ $input.focus() }
+
+  loadAndKeepCachedAllSizes((sizes) => {
+    bindComboBox($input, sizes, 5);
+  });
 }

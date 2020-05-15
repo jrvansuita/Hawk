@@ -16,9 +16,10 @@ class ProductBinder{
       {key: 'color', tag: 'color'},
       {key: 'material', tag: 'material'},
       {key: 'occasion', tag: 'occasion'},
-
       {key: 'brand', tag: 'marca'},
       {key: 'manufacturer', tag: 'manufacturer'},
+      {key: 'firstAgeRange', tag: 'faixa_de_idade'},
+      {key: 'age', tag: 'idade'},
     ];
 
     if (this.attrLoader.isCached()){
@@ -37,25 +38,14 @@ class ProductBinder{
   work(){
     if (this.data){
       this.identification();
+      this.defaults();
       this.attributes();
       this.prices();
+      this.sizes();
 
-      this.unidade = 'UN';
+
       this.cf = this.data.ncm || '6104.22.00';
-      this.calcAutomEstoque= "N";
 
-
-
-      this.origem = 0;
-      this.situacao =  "A";
-      this.situacaoCompra= "A";
-      this.situacaoVenda= "A";
-
-      this.valorIpiFixo = "0.00";
-      this.ipiCodigoEnquadramento = '';
-      this.tipo = "P";
-      this.tipoFrete = "0";
-      this.tipoProducao = "P";
 
       this.peso =  "0.00";
       this.pesoLiq =  "2.000";
@@ -84,13 +74,9 @@ class ProductBinder{
       this.pesoReal =  "0.000",
 
 
-      this.opcEcommerce = "S";
-      this.opcEstoqueEcommerce =  "S";
-      this.tituloPagina = this.data.name;
+
       this.urlEcommerce = 'testado';
       this.keyword = '???';
-      this.metatagDescription = '???';
-      this.adwordsRmkCode = '???';
 
       this.produtoAlterado = 'N'
 
@@ -118,9 +104,29 @@ class ProductBinder{
 
     if (this.data.brand){
       this.nome +=  ' - ' + this.data.brand;
-
       this.codigo = Util.acronym(this.data.brand).toUpperCase();
     }
+
+    this.tituloPagina = this.nome;
+  }
+
+  defaults(){
+    this.unidade = 'UN';
+    this.calcAutomEstoque= "N";
+    this.origem = 0;
+    this.situacao =  "A";
+    this.situacaoCompra= "A";
+    this.situacaoVenda= "A";
+    this.valorIpiFixo = "0.00";
+    this.ipiCodigoEnquadramento = '';
+    this.tipo = "P";
+    this.tipoFrete = "0";
+    this.tipoProducao = "P";
+    this.metatagDescription = '';
+    this.adwordsRmkCode = '';
+    this.opcEcommerce = "S";
+    this.opcEstoqueEcommerce =  "S";
+
   }
 
 
@@ -144,6 +150,23 @@ class ProductBinder{
     this.markup = Floa.abs(this.preco/this.precoCusto, 2);
   }
 
+  sizes(){
+    this.sizes = this.data.sizes || [];
+
+    if (this.data.ageRange){
+      this.firstAgeRange = this.data.ageRange[0];
+      this.ageRange = this.data.ageRange;
+      this.age = Util.ternalNext(this.firstAgeRange, ...commonAge)
+
+      this.data.ageRange.forEach((each) => {
+        this.sizes = this.sizes.concat(Util.ternalNext(each, ...commonSizes));
+      });
+    }
+
+    //Remove Duplicates
+    this.sizes = [...new Set(this.sizes)];
+  }
+
 }
 
 module.exports = ProductBinder;
@@ -159,3 +182,5 @@ global.io.on('connection', (socket) => {
 
 var commonCategories = ['Conjunto', 'Kit Body', 'Pijama', 'Casaco', 'Jaqueta', 'Blusa', 'Legging', 'Calça', 'Vestido', 'Meia'];
 var commonMaterials = ['Cotton', 'Flamê', 'Jacquard', 'Jeans', 'Moletom', 'Sarja', 'Soft'];
+var commonAge = ['Bebe', 'Até 1', 'Primeiros Passos', '1-3', 'Kids', '4-6', 'Juvenil', '12-16'];
+var commonSizes = ['Bebe', ['P', 'M', 'G'], 'Primeiros Passos', ['1','2','3'], 'Kids', ['4','6','8','10'], 'Juvenil', ['12','14', '16']];
