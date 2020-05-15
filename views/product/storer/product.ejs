@@ -34,14 +34,14 @@
 
 
       <div class="box shadow image-holder" style="flex: 20%;">
-        <img src="/img/product-placeholder.png" />
+        <img src="<%=product.img.url ? product.img.image : '/img/product-placeholder.png'%>" />
       </div>
 
       <div class="box shadow" style="flex: 60%;">
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input type="text" id="name" maxlength="500"  autocomplete="off" value="<%=product.nome%>" required tabindex="0"/>
+            <input type="text" id="name" class="bindable" data-bind="nome" maxlength="500" autocomplete="off" required tabindex="0"/>
             <span class="bar"></span>
             <label>Nome</label>
           </div>
@@ -49,26 +49,26 @@
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input type="text" class="call-refresh" id="category" maxlength="100"  autocomplete="off" tabindex="0" value="<%=product.Departamento%>" required/>
+            <input type="text" id="category" class="call-refresh bindable" data-bind="Departamento" maxlength="100"  autocomplete="off" tabindex="0"  required/>
             <span class="bar"></span>
             <label>Categoria</label>
           </div>
 
           <div class="material-input-holder">
-            <input type="text" id="material" class="call-refresh" maxlength="50"  autocomplete="off" tabindex="0" value="<%=product.Material%>" required/>
+            <input type="text" id="material" class="call-refresh bindable" data-bind="Material" maxlength="50"  autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>Material</label>
           </div>
 
           <div class="material-input-holder">
-            <input type="text" id="color" class="call-refresh" maxlength="150"  autocomplete="off" tabindex="0" value="<%=product.Cor%>" required/>
+            <input type="text" id="color" class="call-refresh bindable" data-bind="Cor" maxlength="150" autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>Cor</label>
           </div>
 
 
           <div class="material-input-holder">
-            <input type="text" id="year" maxlength="5"  autocomplete="off" tabindex="0" value="<%=product.Colecao%>" required/>
+            <input type="text" id="year" class="bindable" data-bind="Coleção" maxlength="5"  autocomplete="off" tabindex="0"  required/>
             <span class="bar"></span>
             <label>Coleção</label>
           </div>
@@ -77,26 +77,26 @@
         <div class="flex-line">
 
           <div class="material-input-holder">
-            <input type="text" id="gender" maxlength="30"  autocomplete="off" tabindex="0" value="<%=product.Genero%>" required/>
+            <input type="text" id="gender" class="bindable" data-bind="Genero" maxlength="30"  autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>Gênero</label>
           </div>
 
           <div class="material-input-holder">
-            <input type="text" id="season" maxlength="30"  autocomplete="off" tabindex="0" value="<%=product.Estacao%>" required/>
+            <input type="text" id="season" class="bindable" data-bind="Estacao" maxlength="30"  autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>Estação</label>
           </div>
 
 
           <div class="material-input-holder">
-            <input type="text" id="occasion" maxlength="30"  autocomplete="off" tabindex="0" value="<%=product.Ocasiao%>" required/>
+            <input type="text" id="occasion" class="bindable" data-bind="Ocasiao" maxlength="30"  autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>Ocasião</label>
           </div>
 
           <div class="material-input-holder">
-            <input type="text" id="ncm" maxlength="5"  autocomplete="off" tabindex="0" value="<%=product.cf%>" required/>
+            <input type="text" id="ncm" class="bindable" data-bind="cf" maxlength="15" autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>NCM</label>
           </div>
@@ -107,7 +107,7 @@
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input type="text" id="sku" maxlength="20"  autocomplete="off" tabindex="-1" value="<%=product.codigo%>" required/>
+            <input type="text" id="sku" class="bindable" data-bind="codigo" maxlength="20" autocomplete="off" tabindex="-1" required/>
             <span class="bar"></span>
             <label>SKU</label>
           </div>
@@ -115,7 +115,7 @@
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input type="text" id="manufacturer" maxlength="50"  autocomplete="off" tabindex="0" value="<%=product.Fabricante%>" required/>
+            <input type="text" id="manufacturer" class="bindable" data-bind="Fabricante" maxlength="50" autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>Fabricante</label>
           </div>
@@ -123,7 +123,7 @@
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input type="text" id="brand" class="call-refresh" maxlength="50"  autocomplete="off" tabindex="0" value="<%=product.Marca%>" required/>
+            <input type="text" id="brand" class="call-refresh bindable" data-bind="Marca" maxlength="50"  autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>Marca</label>
           </div>
@@ -141,8 +141,8 @@
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input class="money call-refresh" type="text" id="cost" maxlength="50"  autocomplete="off" tabindex="0"
-            value="<%=Num.money(product.precoCusto)%>" onkeypress="return Floa.isFloatKey(event);"  required/>
+            <input class="money bindable call-refresh" data-bind="precoCusto" type="text" id="cost" maxlength="50"  autocomplete="off" tabindex="0"
+            value="R$ 0,00" onkeypress="return Floa.isFloatKey(event);"  required/>
             <span class="bar"></span>
             <label>Custo</label>
           </div>
@@ -156,13 +156,13 @@
 
         <div class="flex-line gray">
           <div class="material-input-holder">
-            <input class="money" type="text" id="from-price" maxlength="50"  autocomplete="off" value="R$ 0,00" disabled required/>
+            <input class="money bindable" type="text" data-bind="precoDe" id="from-price" maxlength="50"  autocomplete="off" value="R$ 0,00" disabled required/>
             <span class="bar"></span>
             <label>Preço De</label>
           </div>
 
           <div class="material-input-holder">
-            <input class="money" type="text" id="price" maxlength="50"  autocomplete="off" value="R$ 0,00" disabled required/>
+            <input class="money bindable" type="text" data-bind="preco" id="price" maxlength="50"  autocomplete="off" value="R$ 0,00" disabled required/>
             <span class="bar"></span>
             <label>Preço Por</label>
           </div>

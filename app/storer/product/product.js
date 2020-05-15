@@ -8,7 +8,7 @@ module.exports = class ProductStorer{
   }
 
   with(data){
-    this.binder = new ProductBinder(data).work();
+    this.binder = ProductBinder.create(data).work();
     return this;
   }
 

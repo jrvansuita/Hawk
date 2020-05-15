@@ -72,6 +72,20 @@ var Util = {
     return Util.ternal(_content, 1, data);
   },
 
+  isObject(a) {
+    return (!!a) && (a.constructor === Object);
+  },
+
+  //remover os objects  objeto
+  keepPrimitiveAttrs(object){
+    for(var f in object){
+      if(Util.isObject(object[f]) || Array.isArray(object[f])){
+        delete object[f];
+      }
+    }
+    return object;
+  },
+
   //remover os elementos null do objeto
   removeNullElements(object){
     for(var f in object){

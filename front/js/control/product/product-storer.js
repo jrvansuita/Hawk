@@ -1,27 +1,12 @@
-var productResult = {};
 var refreshBroadcast;
 
 $(document).ready(() => {
+  //testingData();
+  onBindViewValues();
+
+  product = Util.keepPrimitiveAttrs(product);
 
   refreshBroadcast = new Broadcast('post-refresh-storing-product').onReceive(onProductRefreshed);
-
-  //testedata();
-
-  $('.save').click(() => {
-    _post('/stock/storer-insert', getData(), (data) => {
-      console.log(data);
-    })
-  });
-
-  $('.delete').click(() => {
-    _post('/stock/storer-delete', getData(), (data) => {
-      console.log(data);
-    })
-  });
-
-  $("input[type='text']").on("click", function () {
-    $(this).select();
-  });
 
   bindComboBox($('#brand'), 'marca');
   bindComboBox($('#manufacturer'), 'manufacturer');
@@ -34,20 +19,8 @@ $(document).ready(() => {
   bindComboBox($('#occasion'), 'ocasiao');
 
 
-  $('.money').change(function () {
-    $(this).val(Num.money(Num.moneyVal($(this).val())));
-  });
-
-  $('.call-refresh').change(function () {
-    refreshBroadcast.emit(getData());
-  });
-
-  $('.sizes-box').click(() => {
-    addNewSizeInput();
-  });
-
+  onBindViewsListeners();
   loadAndKeepCachedAllSizes();
-  sizesGroupButtonBindClick();
 });
 
 function bindComboBox(el, data, limit){
@@ -61,68 +34,78 @@ function bindComboBox(el, data, limit){
 }
 
 
-function testedata(){
-  $('#sku').val('JRTESTE');
-  $('#name').val('PRODUTO TESTE JR');
-  $('#ncm').val('6104.22.00');
+function testingData(){
+  product.codigo = 'JRTESTE';
+  product.nome = 'PRODUTO TESTE JR';
+  product.cf = '6104.22.00';
+  product.Departamento = 'Conjunto';
+  product.Material = 'Moletom';
+  product.Cor = 'Azul';
+  product.markup = '2,3';
+  product.precoCusto = '10';
+}
 
-  $('#category').val('Conjunto');
-  $('#material').val('Moletom');
-  $('#color').val('Azul');
+function onBindViewsListeners(){
+  $('.save').click(() => { _post('/stock/storer-insert', getData(), (data) => { console.log(data); }); });
+  $('.delete').click(() => { _post('/stock/storer-delete', getData(), (data) => { console.log(data); }) });
 
-  $('#markup').val('2,3');
-  $('#cost').val(Num.money('10'));
+  $("input[type='text']").on("click", function () {
+    $(this).select();
+  });
+
+  $('.money').change(function () {
+    $(this).val(Num.money(Num.moneyVal($(this).val())));
+  });
+
+  $('.sizes-box').click(() => {
+    addNewSizeInput();
+  });
+
+  $('.bindable').change(function () {
+    product[$(this).data('bind')] = $(this).val();
+  });
+
+  $('.size-group-button').click(function () {
+    product.ageRange = [$(this).data('val')].concat(product.ageRange).filter(Boolean);
+    refreshBroadcast.emit(getData());
+  }).keypress(function(e) {
+    if(e.which == 13) $(this).click()
+  });
+
+  $('.call-refresh').change(function () {
+    refreshBroadcast.emit(getData());
+  });
+}
+
+function onBindViewValues(){
+  $('.bindable').each((i, each) => {
+    if($(each).hasClass('money')){
+      $(each).val(Num.money(Floa.floa(product[$(each).data('bind')])));
+    }else{
+      $(each).val(product[$(each).data('bind')]);
+    }
+  });
+
+  //Exceptions Handling
+  $('#markup').val(Floa.abs(Floa.floa(product.preco)/Floa.floa(product.precoCusto),2));
 }
 
 
 function getData(){
-
-  productResult.sku = $('#sku').val();
-  productResult.name = $('#name').val();
-  productResult.ncm = $('#ncm').val();
-  productResult.cost = Num.moneyVal($('#cost').val() || 0);
-  productResult.markup = Floa.floa($('#markup').val() || 2);
-  productResult.category = $('#category').val();
-  productResult.material = $('#material').val();
-  productResult.color = $('#color').val();
-
-  productResult.gender = $('#gender').val();
-  productResult.season = $('#season').val();
-  productResult.year = $('#year').val();
-  productResult.occasion = $('#occasion').val();
-  productResult.ncm = $('#ncm').val();
-  productResult.brand = $('#brand').val();
-  productResult.manufacturer = $('#manufacturer').val();
-
-  productResult.sizes = $('.add-size-input').map((i,each)=>{
+  product.markup = $('#markup').val();
+  product.precoCusto = Num.moneyVal($('#cost').val());
+  product.sizes = $('.add-size-input').map((i,each)=>{
     return $(each).text();
   }).toArray();
 
-  return productResult;
+  return product;
 }
 
 
 function onProductRefreshed(data){
-  console.log(data);
-  onIdentificationRefreshed(data);
-  onPriceRefreshed(data);
-  onAttributesRefreshed(data);
+  product = data;
+  onBindViewValues();
   onSizesRefreshed(data);
-}
-
-function onIdentificationRefreshed(data){
-  $('#name').val(data.nome);
-  $('#sku').val(data.codigo);
-}
-
-function onAttributesRefreshed(data){
-  $('#year').val(data.year);
-}
-
-function onPriceRefreshed(data){
-  $('#price').val(Num.money(data.preco));
-  $('#from-price').val(Num.money(data.precoDe));
-  $('#markup').val(data.markup);
 }
 
 function onSizesRefreshed(data){
@@ -141,16 +124,6 @@ function onSizesRefreshed(data){
   }
 }
 
-function sizesGroupButtonBindClick(){
-  $('.size-group-button').click(function () {
-    if (!productResult.ageRange) productResult.ageRange = [];
-    productResult.ageRange.push($(this).data('val'));
-
-    refreshBroadcast.emit(getData());
-  }).keypress(function(e) {
-    if(e.which == 13) $(this).click()
-  })
-}
 
 var cachedSizes;
 
@@ -177,7 +150,7 @@ function addNewSizeInput(size){
     e.stopPropagation();
     e.preventDefault();
   }).keypress((e)=>{
-    if(e.which == 13) {e.preventDefault(); onSizesBoxClick();}
+    if(e.which == 13) {e.preventDefault(); addNewSizeInput();}
   }).focusout(() => {
     if (!$input.text()) $input.remove()
   });
