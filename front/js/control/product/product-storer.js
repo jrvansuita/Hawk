@@ -1,26 +1,12 @@
 var refreshBroadcast;
 
 $(document).ready(() => {
+  //testingData();
+  onBindViewValues();
+
+  product = Util.keepPrimitiveAttrs(product);
 
   refreshBroadcast = new Broadcast('post-refresh-storing-product').onReceive(onProductRefreshed);
-
-  testedata();
-
-  $('.save').click(() => {
-    _post('/stock/storer-insert', getData(), (data) => {
-      console.log(data);
-    })
-  });
-
-  $('.delete').click(() => {
-    _post('/stock/storer-delete', getData(), (data) => {
-      console.log(data);
-    })
-  });
-
-  $("input[type='text']").on("click", function () {
-    $(this).select();
-  });
 
   bindComboBox($('#brand'), 'marca');
   bindComboBox($('#manufacturer'), 'manufacturer');
@@ -33,15 +19,7 @@ $(document).ready(() => {
   bindComboBox($('#occasion'), 'ocasiao');
 
 
-  $('.money').change(function () {
-    $(this).val(Num.money(Num.moneyVal($(this).val())));
-  });
-
-  $('.call-refresh').change(function () {
-    refreshBroadcast.emit(getData());
-  });
-
-  $('.sizes-box').click(onSizesBoxClick);
+  onBindViewsListeners();
   loadAndKeepCachedAllSizes();
 });
 
@@ -56,87 +34,96 @@ function bindComboBox(el, data, limit){
 }
 
 
-function testedata(){
-  $('#sku').val('JRTESTE');
-  $('#name').val('PRODUTO TESTE JR');
-  $('#ncm').val('6104.22.00');
+function testingData(){
+  product.codigo = 'JRTESTE';
+  product.nome = 'PRODUTO TESTE JR';
+  product.cf = '6104.22.00';
+  product.Departamento = 'Conjunto';
+  product.Material = 'Moletom';
+  product.Cor = 'Azul';
+  product.markup = '2,3';
+  product.precoCusto = '10';
+}
 
-  $('#category').val('Conjunto');
-  $('#material').val('Moletom');
-  $('#color').val('Azul');
+function onBindViewsListeners(){
+  $('.save').click(() => { _post('/stock/storer-insert', getData(), (data) => { console.log(data); }); });
+  $('.delete').click(() => { _post('/stock/storer-delete', getData(), (data) => { console.log(data); }) });
 
-  $('#markup').val('2,3');
-  $('#cost').val(Num.money('10'));
+  $("input[type='text']").on("click", function () {
+    $(this).select();
+  });
+
+  $('.money').change(function () {
+    $(this).val(Num.money(Num.moneyVal($(this).val())));
+  });
+
+  $('.sizes-box').click(() => {
+    addNewSizeInput();
+  });
+
+  $('.bindable').change(function () {
+    product[$(this).data('bind')] = $(this).val();
+  });
+
+  $('.size-group-button').click(function () {
+    product.ageRange = [$(this).data('val')].concat(product.ageRange).filter(Boolean);
+    refreshBroadcast.emit(getData());
+  }).keypress(function(e) {
+    if(e.which == 13) $(this).click()
+  });
+
+  $('.call-refresh').change(function () {
+    refreshBroadcast.emit(getData());
+  });
+}
+
+function onBindViewValues(){
+  $('.bindable').each((i, each) => {
+    if($(each).hasClass('money')){
+      $(each).val(Num.money(Floa.floa(product[$(each).data('bind')])));
+    }else{
+      $(each).val(product[$(each).data('bind')]);
+    }
+  });
+
+  //Exceptions Handling
+  $('#markup').val(Floa.abs(Floa.floa(product.preco)/Floa.floa(product.precoCusto),2));
 }
 
 
 function getData(){
-  var result = {};
-  result.sku = $('#sku').val();
-  result.name = $('#name').val();
-  result.ncm = $('#ncm').val();
-  result.cost = Num.moneyVal($('#cost').val() || 0);
-  result.markup = Floa.floa($('#markup').val() || 2);
-  result.category = $('#category').val();
-  result.material = $('#material').val();
-  result.color = $('#color').val();
+  product.markup = $('#markup').val();
+  product.precoCusto = Num.moneyVal($('#cost').val());
+  product.sizes = $('.add-size-input').map((i,each)=>{
+    return $(each).text();
+  }).toArray();
 
-  result.gender = $('#gender').val();
-  result.season = $('#season').val();
-  result.year = $('#year').val();
-  result.occasion = $('#occasion').val();
-  result.ncm = $('#ncm').val();
-  result.brand = $('#brand').val();
-  result.manufacturer = $('#manufacturer').val();
-
-
-  return result;
+  return product;
 }
 
 
 function onProductRefreshed(data){
-  console.log(data);
-  onIdentificationRefreshed(data);
-  onPriceRefreshed(data);
-  onAttributesRefreshed(data);
+  product = data;
+  onBindViewValues();
+  onSizesRefreshed(data);
 }
 
-function onIdentificationRefreshed(data){
-  $('#name').val(data.nome);
-  $('#sku').val(data.codigo);
+function onSizesRefreshed(data){
+  if (data.sizes){
+    $('.sizes-box').empty();
+    data.sizes.forEach((size) => {
+      addNewSizeInput(size);
+    });
+  }
+
+  if (data.ageRange){
+    $('.size-group-button').removeClass('active');
+    data.ageRange.forEach((each) => {
+      $('.size-group-button[data-val="'+each+'"]').addClass('active');
+    });
+  }
 }
 
-function onAttributesRefreshed(data){
-  $('#year').val(data.year);
-}
-
-function onPriceRefreshed(data){
-  $('#price').val(Num.money(data.preco));
-  $('#from-price').val(Num.money(data.precoDe));
-  $('#markup').val(data.markup);
-}
-
-function onSizesBoxClick(){
-  var $input = $('<span>').addClass('add-size-input').attr('contenteditable', true);
-  $('.sizes-box').append($input);
-  $input.focus();
-  $input.click((e) => {
-    e.preventDefault();
-    $input.remove();
-  });
-
-  $input.keypress(function(e){
-    if(e.which == 13 || e.which == 9){
-      e.preventDefault();
-      onSizesBoxClick();
-    }
-  });
-
-
-  loadAndKeepCachedAllSizes((sizes) => {
-    bindComboBox($input, sizes, 5);
-  });
-}
 
 var cachedSizes;
 
@@ -151,4 +138,26 @@ function loadAndKeepCachedAllSizes(callback){
       }
     });
   }
+}
+
+
+function addNewSizeInput(size){
+  var $input = $('<span>').addClass('add-size-input').attr('contenteditable', true);
+  $('.sizes-box').append($input);
+
+  $input.click((e) => {
+    $input.remove();
+    e.stopPropagation();
+    e.preventDefault();
+  }).keypress((e)=>{
+    if(e.which == 13) {e.preventDefault(); addNewSizeInput();}
+  }).focusout(() => {
+    if (!$input.text()) $input.remove()
+  });
+
+  if (size) { $input.text(size) } else{ $input.focus() }
+
+  loadAndKeepCachedAllSizes((sizes) => {
+    bindComboBox($input, sizes, 5);
+  });
 }

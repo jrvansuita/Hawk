@@ -234,7 +234,13 @@ module.exports = class ProductRoutes extends Routes{
 
 
     this._page('/stock/storer', (req, res) => {
-      res.render('product/storer/product');
+      var skuOrEan = req.query.sku || req.query.ean;
+
+      ProductLaws.load(skuOrEan, (result)=>{
+        res.render('product/storer/product',{
+          product : result
+        });
+      });
     });
 
     this._post('/stock/storer-insert', (req, res) => {

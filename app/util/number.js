@@ -12,6 +12,7 @@ var Num = {
     var digits = trunc ? 0 : 2;
     var val = parseFloat(val).toLocaleString('pt-BR', {maximumFractionDigits:digits, minimumFractionDigits:digits});
 
+
     if (typeof global !== 'undefined'){
       return val.replace('.', '_').replace(',', '.').replace('_', ',');
     }

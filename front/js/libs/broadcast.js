@@ -4,8 +4,13 @@ class Broadcast{
     this.socket = io.connect(window.location.origin);
   }
 
+  setEmitData(data){
+    this.data = data;
+    return this;
+  }
+
   emit(data){
-    this.socket.emit(this.channel, data || true);
+    this.socket.emit(this.channel, data || this.data || true);
     return this;
   }
 

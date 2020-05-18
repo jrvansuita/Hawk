@@ -1,8 +1,13 @@
 const Attributes = require('./attributes.js');
 
+
 class ProductBinder{
-  constructor(data){
-    this.data = data;
+
+  static create(data){
+    return Object.assign(new ProductBinder(), data);
+  }
+
+  constructor(){
     this.attrLoader = new Attributes();
   }
 
@@ -16,15 +21,16 @@ class ProductBinder{
       {key: 'color', tag: 'color'},
       {key: 'material', tag: 'material'},
       {key: 'occasion', tag: 'occasion'},
-
       {key: 'brand', tag: 'marca'},
       {key: 'manufacturer', tag: 'manufacturer'},
+      {key: 'firstAgeRange', tag: 'faixa_de_idade'},
+      {key: 'age', tag: 'idade'},
     ];
 
     if (this.attrLoader.isCached()){
       map.forEach((each) => {
-        if (this.data[each.key]){
-          var data = this.attrLoader.filter(each.tag, this.data[each.key]).get();
+        if (this[each.key]){
+          var data = this.attrLoader.filter(each.tag, this[each.key]).get();
           result.push(data);
         }
       })
@@ -35,113 +41,131 @@ class ProductBinder{
 
 
   work(){
-    if (this.data){
-      this.identification();
-      this.attributes();
-      this.prices();
-
-      this.unidade = 'UN';
-      this.cf = this.data.ncm || '6104.22.00';
-      this.calcAutomEstoque= "N";
+    this.identification();
+    this.defaults();
+    this.attributes();
+    this.prices();
+    this.sizing();
 
 
-
-      this.origem = 0;
-      this.situacao =  "A";
-      this.situacaoCompra= "A";
-      this.situacaoVenda= "A";
-
-      this.valorIpiFixo = "0.00";
-      this.ipiCodigoEnquadramento = '';
-      this.tipo = "P";
-      this.tipoFrete = "0";
-      this.tipoProducao = "P";
-
-      this.peso =  "0.00";
-      this.pesoLiq =  "2.000";
-      this.pesoBruto = "2.000";
-
-      this.obs = 'Criado pelo Hawk';
-
-      //Verificar
-
-      this.descricaoComplementar = "Serve pra alguma coisa?";
-      this.descricaoEcommerce = "Produto teste criado pela API";
+    this.cf = this.ncm || '6104.22.00';
 
 
-      //Como fazer?
-      this.idFornecedor = 0;
-      this.idProdutoMaster = 0; //'ID do PAI';
+    this.peso =  "0.00";
+    this.pesoLiq =  "2.000";
+    this.pesoBruto = "2.000";
 
-      //Do filho
-      this.gtin = "";
-      this.comprimento= "6.00",
-      this.altura = "9.00",
-      this.largura =  "7.00",
-      this.comprimentoReal = "0.00",
-      this.alturaReal =  "0.00",
-      this.larguraReal =  "0.00",
-      this.pesoReal =  "0.000",
+    this.obs = 'Criado pelo Hawk';
+
+    //Verificar
+
+    this.descricaoComplementar = "Serve pra alguma coisa?";
+    this.descricaoEcommerce = "Produto teste criado pela API";
 
 
-      this.opcEcommerce = "S";
-      this.opcEstoqueEcommerce =  "S";
-      this.tituloPagina = this.data.name;
-      this.urlEcommerce = 'testado';
-      this.keyword = '???';
-      this.metatagDescription = '???';
-      this.adwordsRmkCode = '???';
+    //Como fazer?
+    this.idFornecedor = 0;
+    this.idProdutoMaster = 0; //'ID do PAI';
 
-      this.produtoAlterado = 'N'
+    //Do filho
+    this.gtin = "";
+    this.comprimento= "6.00",
+    this.altura = "9.00",
+    this.largura =  "7.00",
+    this.comprimentoReal = "0.00",
+    this.alturaReal =  "0.00",
+    this.larguraReal =  "0.00",
+    this.pesoReal =  "0.000",
 
-      return this;
-    }
+
+
+    this.urlEcommerce = 'testado';
+    this.keyword = '???';
+
+    this.produtoAlterado = 'N'
+
+    return this;
   }
 
   identification(){
     var nameConcat = [];
 
-    if (this.data.category){
-      nameConcat.push(Util.ternalSame(this.data.category, ...commonCategories));
+    if (this.Departamento){
+      nameConcat.push(Util.ternalSame(this.Departamento, ...commonCategories));
 
-      if (this.data.material){
-        nameConcat.push(Util.ternalSame(this.data.material, ...commonMaterials));
+      if (this.Material){
+        nameConcat.push(Util.ternalSame(this.Material, ...commonMaterials));
 
-
-        if (this.data.color){
-          nameConcat.push(this.data.color);
+        if (this.Cor){
+          nameConcat.push(this.Cor);
         }
       }
     }
 
     this.nome = nameConcat.filter(Boolean).join(' ');
 
-    if (this.data.brand){
-      this.nome +=  ' - ' + this.data.brand;
-
-      this.codigo = Util.acronym(this.data.brand).toUpperCase();
+    if (this.Marca){
+      this.nome +=  ' - ' + this.Marca;
+      this.codigo = Util.acronym(this.Marca).toUpperCase();
     }
+
+    this.tituloPagina = this.nome;
+  }
+
+  defaults(){
+    this.unidade = 'UN';
+    this.calcAutomEstoque= "N";
+    this.origem = 0;
+    this.situacao =  "A";
+    this.situacaoCompra= "A";
+    this.situacaoVenda= "A";
+    this.valorIpiFixo = "0.00";
+    this.ipiCodigoEnquadramento = '';
+    this.tipo = "P";
+    this.tipoFrete = "0";
+    this.tipoProducao = "P";
+    this.metatagDescription = '';
+    this.adwordsRmkCode = '';
+    this.opcEcommerce = "S";
+    this.opcEstoqueEcommerce =  "S";
   }
 
 
   attributes(){
-    this.year = this.data.year;
-
-    if (!this.data.year){
+    if (!this['Coleção']){
       var all = this.attrLoader.filter('colecao').get();
       if (all && all.length > 0){
-        this.year = all.slice(-1)[0].description;
+        this['Coleção'] = all.slice(-1)[0].description;
       }
     }
   }
 
   prices(){
-    this.markup = Floa.floa(this.data.markup);
+    this.markup = Floa.def(this.markup, 2.5);
 
-    this.precoCusto = Floa.floa(this.data.cost);
+
+    this.precoCusto = Floa.def(this.precoCusto,0);
     this.preco = Math.trunc(this.markup * this.precoCusto) + .9;
     this.precoDe = Math.trunc(this.preco * 2.5) + .9;
     this.markup = Floa.abs(this.preco/this.precoCusto, 2);
+  }
+
+  sizing(){
+    this.sizes = this.sizes || [];
+
+    if (this.ageRange){
+      this.firstAgeRange = this.ageRange[0];
+      this.ageRange = this.ageRange;
+      this.age = Util.ternalNext(this.firstAgeRange, ...commonAge)
+
+      this.ageRange.forEach((each) => {
+        this.sizes = this.sizes.concat(Util.ternalNext(each, ...commonSizes));
+      });
+    }
+
+
+    //Remove Duplicates
+    this.sizes = [...new Set(this.sizes)];
   }
 
 }
@@ -152,10 +176,12 @@ var tag = 'post-refresh-storing-product';
 
 global.io.on('connection', (socket) => {
   socket.on(tag , (data, e) => {
-    global.io.sockets.emit(tag, new ProductBinder(data).work());
+    global.io.sockets.emit(tag, ProductBinder.create(data).work());
   });
 });
 
 
 var commonCategories = ['Conjunto', 'Kit Body', 'Pijama', 'Casaco', 'Jaqueta', 'Blusa', 'Legging', 'Calça', 'Vestido', 'Meia'];
 var commonMaterials = ['Cotton', 'Flamê', 'Jacquard', 'Jeans', 'Moletom', 'Sarja', 'Soft'];
+var commonAge = ['Bebe', 'Até 1', 'Primeiros Passos', '1-3', 'Kids', '4-6', 'Juvenil', '12-16'];
+var commonSizes = ['Bebe', ['P', 'M', 'G'], 'Primeiros Passos', ['1','2','3'], 'Kids', ['4','6','8','10'], 'Juvenil', ['12','14', '16']];
