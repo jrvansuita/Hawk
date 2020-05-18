@@ -22,93 +22,6 @@ function printNFe(){
   }
 }
 
-$('.payment-dots').click(function(e){
-
-  var drop = new MaterialDropdown($(this), e,false, true);
-
-  if(data.payment.method == 'mundipagg_boleto'){
-    var actualDate = new Date();
-    var boletoExpiresDate = new Date(data.payment.boleto_expires);
-
-    drop.addItem('/img/barcode.png', 'Imprimir Boleto', function(){
-      window.open(data.payment.boleto);
-    });
-
-    //compara as datas, só mostra se a atual for menor que do vencimento
-    if(actualDate < boletoExpiresDate){
-      drop.addItem('/img/envelop.png', 'Enviar Boleto por Email', function(){
-        $('.payment-dots').children().attr('src','/img/loader/circle.svg');
-
-        _post('/customer-email-boleto', { cliente: data.client, oc: data.oc, linkBoleto: data.payment.boleto, userid: loggedUser.id }, (result) => {
-          result ? showMenuMsg('.payment-dots', 'Boleto enviado!', 'sucess') : showMenuMsg('.payment-dots', 'Erro ao enviar email', 'error');
-        });
-      });
-    }
-  }
-  drop.show();
-});
-
-$('.transport-dots').click(function(e){
-
-  var drop = new MaterialDropdown($(this), e);
-
-  drop.addItem('/img/transport/default.png', 'Rastreio', function(){
-    window.open(Params.trackingUrl() + data.oc);
-  });
-
-  drop.addItem('/img/envelop.png', 'Enviar Rastreio por Email', function(){
-    $('.transport-dots').children().attr('src','/img/loader/circle.svg');
-
-    _post('/customer-email-tracking',{ cliente: data.client, oc: data.oc, tracking: 'https://www.boutiqueinfantil.com.br/rastreio?sale=' + data.oc, userid: loggedUser.id }, (result) => {
-      result ? showMenuMsg('.transport-dots', 'Email enviado', 'sucess') : showMenuMsg('.transport-dots', 'Erro ao enviar email', 'error');
-    });
-  });
-
-  drop.show();
-});
-
-$('.sale-header-dots').click(function(e){
-
-  var drop = new MaterialDropdown($(this),e, false, true);
-
-  if($('.sale-nfe').text() != 'Sem Nota Fiscal'){
-
-    drop.addItem('/img/envelop.png', 'Enviar NF', function(){
-      $('.sale-header-dots').children().attr('src','/img/loader/circle.svg');
-
-      _post('/customer-email-danfe',{ cliente: data.client, oc: data.oc, nfNumber: data.nf, userid: loggedUser.id }, (result) => {
-        result ? showMenuMsg('.sale-header-dots', 'Nota fiscal enviada', 'sucess') : showMenuMsg('.sale-header-dots', 'Erro ao enviar nota fiscal', 'error');
-      });
-    });
-
-    drop.addItem('/img/paper.png', 'Visualizar NF', function(){
-      printNFe();
-    });
-  }
-  if(data.status != 'canceled' && data.status != 'ip_delivered'){
-    drop.addItem('/img/gear.png', 'Alterar Status do Pedido', function(){
-      new SaleStatusDialog(data.status).onItemSelect((status) => {
-        new SaleStatusObsDialog('Adicionar Observação').make((text) => {
-          _updateSaleStatus(status, text);
-        })
-      }).show();
-    });
-  }
-  drop.show();
-});
-
-function _updateSaleStatus(status, msg){
-  $('.sale-header-dots').children().attr('src', '/img/loader/circle.svg');
-  _post('/customer-sale-status-change',{ sale: data.oc, status: status, user: loggedUser, obs: msg },(result) => {
-
-    if(result.sucess != null || result == true){
-      showMenuMsg('.sale-header-dots','Status alterado', 'sucess')
-    }else{
-      showMenuMsg('.sale-header-dots', result.error[0]['erro'], 'error');
-    }
-  });
-}
-
 function copyTextFromElement(id) {
   var range = document.createRange();
   range.selectNode(document.getElementById(id));
@@ -366,7 +279,76 @@ function bindSaleItens(data){
     })
   }
 
+  function bindDropdowns(data){
+    if(data.payment.method == 'mundipagg_boleto'){
+      var dropdown = Dropdown.on($('.payment-dots')).item('/img/barcode.png', 'Imprimir Boleto', function(){
+        window.open(data.payment.boleto);
+      });
+
+      //compara as datas, só mostra se a atual for menor que do vencimento
+      if(new Date() < new Date(data.payment.boleto_expires)){
+        dropdown.item('/img/envelop.png', 'Enviar Boleto por Email', function(helper){
+          helper.loading(true);
+
+          _post('/customer-email-boleto', { cliente: data.client, oc: data.oc, linkBoleto: data.payment.boleto, userid: loggedUser.id }, (result) => {
+            helper.finished(result);
+          });
+        });
+      }
+    }
+
+    Dropdown.on($('.transport-dots')).item('/img/transport/default.png', 'Rastreio', function(){
+      window.open(Params.trackingUrl() + data.oc);
+    }).item('/img/envelop.png', 'Enviar Rastreio por Email', function(helper){
+      helper.loading(true);
+
+      //Usar aqui o url dinamico atraves os parametros
+      _post('/customer-email-tracking',{ cliente: data.client, oc: data.oc, tracking: 'https://www.boutiqueinfantil.com.br/rastreio?sale=' + data.oc, userid: loggedUser.id }, (result) => {
+        helper.finished(result);
+      });
+    });
+
+    var drop = Dropdown.on($('.sale-header-dots'));
+
+    if($('.sale-nfe').text() != 'Sem Nota Fiscal'){
+      drop.item('/img/envelop.png', 'Enviar NF', (helper) => {
+        helper.loading(true);
+
+        _post('/customer-email-danfe',{ cliente: data.client, oc: data.oc, nfNumber: data.nf, userid: loggedUser.id }, (result) => {
+          helper.finished(result);
+        });
+      });
+
+      drop.item('/img/paper.png', 'Visualizar NF', function(){
+        printNFe();
+      });
+    }
+
+    if(data.status != 'canceled' && data.status != 'ip_delivered'){
+      drop.item('/img/gear.png', 'Alterar Status do Pedido', function(helper){
+        new SaleStatusDialog(data.status).onItemSelect((status) => {
+          new SaleStatusObsDialog('Adicionar Observação').make((text) => {
+            helper.loading();
+
+            _post('/customer-sale-status-change',{ sale: data.oc, status: status, user: loggedUser, obs: msg },(result) => {
+              if(result.sucess != null || result == true){
+                showMenuMsg('.sale-header-dots','Status alterado', 'sucess')
+              }else{
+                //Veriricar outra forma de mostrar o erro na tela.
+                //Ta muito feito assim
+                showMenuMsg('.sale-header-dots', result.error[0]['erro'], 'error');
+              }
+            });
+          })
+        }).show();
+      });
+    }
+  }
+
   function bindSaleInfoViewer(data, callback){
+
+    bindDropdowns(data);
+
     bindSaleBasicInfos(data);
     bindClientSaleInfo(data);
     bindSaleAddressInfo(data);

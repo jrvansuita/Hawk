@@ -14,23 +14,26 @@ class ProductBinder{
   attrs(){
     var result = [];
     var map = [
-      {key: 'category', tag: 'departamento'},
-      {key: 'gender', tag: 'genero'},
-      {key: 'season', tag: 'season'},
-      {key: 'year', tag: 'colecao'},
-      {key: 'color', tag: 'color'},
-      {key: 'material', tag: 'material'},
-      {key: 'occasion', tag: 'occasion'},
-      {key: 'brand', tag: 'marca'},
-      {key: 'manufacturer', tag: 'manufacturer'},
+      {key: 'Departamento', tag: 'departamento'},
+      {key: 'Genero', tag: 'genero'},
+      {key: 'Estacao', tag: 'season'},
+      {key: 'Coleção', tag: 'colecao'},
+      {key: 'Cor', tag: 'color'},
+      {key: 'Material', tag: 'material'},
+      {key: 'Ocasiao', tag: 'ocasiao'},
+      {key: 'Marca', tag: 'marca'},
+      {key: 'Fabricante', tag: 'manufacturer'},
       {key: 'firstAgeRange', tag: 'faixa_de_idade'},
       {key: 'age', tag: 'idade'},
     ];
+
 
     if (this.attrLoader.isCached()){
       map.forEach((each) => {
         if (this[each.key]){
           var data = this.attrLoader.filter(each.tag, this[each.key]).get();
+          data.valor = this[each.key];
+          //data.descricao = each.tag;
           result.push(data);
         }
       })
@@ -77,34 +80,35 @@ class ProductBinder{
     this.larguraReal =  "0.00",
     this.pesoReal =  "0.000",
 
-
-
     this.urlEcommerce = 'testado';
-    this.keyword = '???';
 
-    this.produtoAlterado = 'N'
 
+
+    delete this.attrLoader;
     return this;
   }
 
+
   identification(){
-    var nameConcat = [];
+    if (!this.id){
+      var nameConcat = [];
 
-    if (this.Departamento){
-      nameConcat.push(Util.ternalSame(this.Departamento, ...commonCategories));
+      if (this.Departamento){
+        nameConcat.push(Util.ternalSame(this.Departamento, ...commonCategories));
 
-      if (this.Material){
-        nameConcat.push(Util.ternalSame(this.Material, ...commonMaterials));
+        if (this.Material){
+          nameConcat.push(Util.ternalSame(this.Material, ...commonMaterials));
 
-        if (this.Cor){
-          nameConcat.push(this.Cor);
+          if (this.Cor){
+            nameConcat.push(this.Cor);
+          }
         }
       }
+
+      this.nome = nameConcat.filter(Boolean).join(' ');
     }
 
-    this.nome = nameConcat.filter(Boolean).join(' ');
-
-    if (this.Marca){
+    if (!this.codigo && this.Marca){
       this.nome +=  ' - ' + this.Marca;
       this.codigo = Util.acronym(this.Marca).toUpperCase();
     }
@@ -122,17 +126,20 @@ class ProductBinder{
     this.valorIpiFixo = "0.00";
     this.ipiCodigoEnquadramento = '';
     this.tipo = "P";
-    this.tipoFrete = "0";
+    this.tipoFrete = "1";
     this.tipoProducao = "P";
     this.metatagDescription = '';
     this.adwordsRmkCode = '';
+    this.keyword = '';
     this.opcEcommerce = "S";
     this.opcEstoqueEcommerce =  "S";
+    this.produtoAlterado = 'N'
+    this.unPorCaixa = '1';
+    this.spedTipoItem = '00';
   }
 
-
   attributes(){
-    if (!this['Coleção']){
+    if (!this['Coleção'] && this.attrLoader.isCached()){
       var all = this.attrLoader.filter('colecao').get();
       if (all && all.length > 0){
         this['Coleção'] = all.slice(-1)[0].description;
@@ -141,13 +148,13 @@ class ProductBinder{
   }
 
   prices(){
-    this.markup = Floa.def(this.markup, 2.5);
-
-
-    this.precoCusto = Floa.def(this.precoCusto,0);
-    this.preco = Math.trunc(this.markup * this.precoCusto) + .9;
-    this.precoDe = Math.trunc(this.preco * 2.5) + .9;
-    this.markup = Floa.abs(this.preco/this.precoCusto, 2);
+    if (this.precoCusto){
+      this.markup = Floa.def(this.markup, 2.5);
+      this.precoCusto = Floa.def(this.precoCusto, 0);
+      this.preco = Math.trunc(this.markup * this.precoCusto) + .9;
+      this.precoDe = Math.trunc(this.preco * 2.5) + .9;
+      this.markup = Floa.abs(this.preco/this.precoCusto, 2);
+    }
   }
 
   sizing(){
@@ -176,7 +183,9 @@ var tag = 'post-refresh-storing-product';
 
 global.io.on('connection', (socket) => {
   socket.on(tag , (data, e) => {
-    global.io.sockets.emit(tag, ProductBinder.create(data).work());
+    var binder = ProductBinder.create(data).work();
+    //binder.attrs();
+    global.io.sockets.emit(tag, binder);
   });
 });
 

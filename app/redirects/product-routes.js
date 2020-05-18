@@ -225,8 +225,8 @@ module.exports = class ProductRoutes extends Routes{
       });
     });
 
-    this._post('/stock/storer-insert', (req, res) => {
-      new ProductStorer().with(req.body).insert(this._resp().redirect(res));
+    this._post('/stock/storer-upsert', (req, res) => {
+      new ProductStorer().with(req.body).upsert(this._resp().redirect(res));
     });
 
     this._post('/stock/storer-delete', (req, res) => {

@@ -6,19 +6,12 @@ $(document).ready(() => {
     }
   });
 
-  $('.menu-dots').click(function(e) {
-    var drop = new MaterialDropdown($(this), e, false, true);
 
-    /*drop.addItem(null, 'Excluir', function(e){
+  /*MaterialDropdown.fromClick($('.menu-dots')).addItem('/img/delete.png', 'Excluir', function(e){
     _post('/stock-dashboard-delete', getQueryData(), (data) => {
-    console.log(data);
-  });
-});*/
-
-drop.show();
-});
-
-
+      console.log(data);
+    });
+  });*/
 
 })
 

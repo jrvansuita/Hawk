@@ -62,26 +62,29 @@ module.exports = class SaleStock extends DataAccess {
       incData["quantity_sizes." + this.size] = this.quantity;
     }
 
-
-    SaleStock.upsert(this.getPKQuery(), {
+    var upsertData = {
       manufacturer: this.manufacturer,
       brand: this.brand,
       category: this.category,
       gender: this.gender,
       season: this.season,
-      stock: this.stock,
-
       $inc: incData
-    }, (err, doc) => {
+    }
+
+    //Se o stock estiver vazio, o produto ainda nao foi importado pela integracao
+    //Ainda nao existe no db, entao seta a quantidade que vendeu
+    if (this.stock){
+      upsertData.stock = this.stock;
+    }else{
+      incData.stock = this.quantity;
+    }
+
+    SaleStock.upsert(this.getPKQuery(), upsertData, (err, doc) => {
       if (callback){
         callback(err, doc);
       }
     });
   }
-
-
-
-
 
 
   static byDayChart(query, callback){

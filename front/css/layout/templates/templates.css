@@ -68,7 +68,7 @@
   height: 83%;
   position: relative;
   margin: 15px 55px;
-  display: block;
+  /* display: block; */
   /* overflow: auto; */
 }
 

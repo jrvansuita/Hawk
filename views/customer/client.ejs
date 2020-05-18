@@ -36,11 +36,7 @@
         <input type="number" id="search-sale"  class="simple-material-input" placeholder="Pesquisar Pedido" autocomplete="off"/>
         <label class="button shadow" id="search-button" tabindex="0">Buscar</label>
 
-        <div class="menu-dots">
-          <img src="/img/dots.png" class="dots-glyph"/>
         </div>
-
-      </div>
 
     </div>
 
@@ -200,7 +196,7 @@
 
             <%client.sales.reverse().forEach((sale)=>{%>
 
-              <tr onclick="showSaleDialog(<%=sale.increment_id%>)" data-sale="<%=sale.increment_id%>">
+              <tr onclick="showSaleDialog(<%=sale.increment_id%>)">
                 <td><span class="increment-id copiable"><%=sale.increment_id%></span></td>
                 <td><span class="gray"><%=Dat.formatwTime(Dat.rollHour(new Date(sale.created_at),-3))%></span></td>
                 <td><span class=""><%=Num.int(sale.total_qty_ordered)%></span></td>
@@ -210,7 +206,7 @@
                 <td><span class=""><%=Util.getSaleStatusInfo(sale.status)%></span></td>
                 <td><span class="gray"><%=sale.shipping_description%></span>
 
-                  
+
                 </td>
 
               </tr>

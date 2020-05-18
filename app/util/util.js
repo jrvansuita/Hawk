@@ -49,7 +49,7 @@ var Util = {
   },
 
   ternal(_content, addIndex, data){
-    var content = _content.toLowerCase();
+    var content = _content.trim().toLowerCase();
     if (_content){
       for (var i = 0; i < data.length; i++) {
         if (i % 2 == 0){

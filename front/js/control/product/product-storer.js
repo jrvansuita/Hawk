@@ -4,21 +4,11 @@ $(document).ready(() => {
   //testingData();
   onBindViewValues();
 
-  product = Util.keepPrimitiveAttrs(product);
+  //product = Util.keepPrimitiveAttrs(product);
 
   refreshBroadcast = new Broadcast('post-refresh-storing-product').onReceive(onProductRefreshed);
 
-  bindComboBox($('#brand'), 'marca');
-  bindComboBox($('#manufacturer'), 'manufacturer');
-  bindComboBox($('#category'), 'departamento');
-  bindComboBox($('#gender'), 'genero');
-  bindComboBox($('#season'), 'season');
-  bindComboBox($('#year'), 'colecao');
-  bindComboBox($('#color'), 'color');
-  bindComboBox($('#material'), 'material');
-  bindComboBox($('#occasion'), 'ocasiao');
-
-
+  onBindComboBoxes();
   onBindViewsListeners();
   loadAndKeepCachedAllSizes();
 });
@@ -33,7 +23,6 @@ function bindComboBox(el, data, limit){
   }).load();
 }
 
-
 function testingData(){
   product.codigo = 'JRTESTE';
   product.nome = 'PRODUTO TESTE JR';
@@ -46,7 +35,7 @@ function testingData(){
 }
 
 function onBindViewsListeners(){
-  $('.save').click(() => { _post('/stock/storer-insert', getData(), (data) => { console.log(data); }); });
+  $('.save').click(() => { _post('/stock/storer-upsert', getData(), (data) => { console.log(data); }); });
   $('.delete').click(() => { _post('/stock/storer-delete', getData(), (data) => { console.log(data); }) });
 
   $("input[type='text']").on("click", function () {
@@ -75,34 +64,62 @@ function onBindViewsListeners(){
   $('.call-refresh').change(function () {
     refreshBroadcast.emit(getData());
   });
+
+
+  Dropdown.on($('.sizes-dots'))
+  .item('/img/delete.png', 'Remover Todos', function(){
+    $('.sizes-box').empty();
+  });
+
+  new TemplateEditor()
+  .useUnicodeEmoticons(true)
+  .showRichButtons(false)
+  .load('.description-editor').then((_editor) => {
+    window.editor = _editor;
+    if (product._FichaTecnica){
+      editor.html.set(product._FichaTecnica[0].descricaoDetalhada);
+    }
+  });
 }
 
 function onBindViewValues(){
-  $('.bindable').each((i, each) => {
-    if($(each).hasClass('money')){
-      $(each).val(Num.money(Floa.floa(product[$(each).data('bind')])));
-    }else{
-      $(each).val(product[$(each).data('bind')]);
-    }
-  });
+  if (Object.keys(product).length > 0){
+    $('.bindable').each((i, each) => {
+      var val = product[$(each).data('bind')];
+      if(val){
+        if($(each).hasClass('money')){
+          $(each).val(Num.money(Floa.floa(val)));
+        }else{
+          $(each).val(val);
+        }
+      }
+    });
 
-  //Exceptions Handling
-  $('#markup').val(Floa.abs(Floa.floa(product.preco)/Floa.floa(product.precoCusto),2));
+    //Exceptions Handling
+    if (product.precoCusto){
+      $('#markup').val(Floa.abs(Floa.floa(product.preco)/Floa.floa(product.precoCusto),2));
+    }
+  }
 }
 
+
+function onBindComboBoxes(){
+  $('.combobox').each((i, each) => {
+    bindComboBox($(each), $(each).data('bind'));
+  });
+}
 
 function getData(){
   product.markup = $('#markup').val();
   product.precoCusto = Num.moneyVal($('#cost').val());
-  product.sizes = $('.add-size-input').map((i,each)=>{
-    return $(each).text();
-  }).toArray();
+  product.sizes = $('.size-input').map((i,each)=>{ return $(each).text(); }).toArray();
+  product.descricaoDetalhada =  editor.html.get();
 
   return product;
 }
 
-
 function onProductRefreshed(data){
+  console.log(data);
   product = data;
   onBindViewValues();
   onSizesRefreshed(data);
@@ -131,7 +148,7 @@ function loadAndKeepCachedAllSizes(callback){
   if (cachedSizes){
     callback(cachedSizes);
   }else{
-    _get('/stock/storer-attr?attr=tamanho',{}, (data) => {
+    _get('/stock/storer-attr?attr=Tamanho',{}, (data) => {
       cachedSizes = data;
       if (callback){
         callback(data);
@@ -141,14 +158,13 @@ function loadAndKeepCachedAllSizes(callback){
 }
 
 
-function addNewSizeInput(size){
-  var $input = $('<span>').addClass('add-size-input').attr('contenteditable', true);
+function addNewSizeInput(size, callRe){
+  var $input = $('<span>').addClass('size-input').attr('contenteditable', true);
   $('.sizes-box').append($input);
 
   $input.click((e) => {
     $input.remove();
     e.stopPropagation();
-    e.preventDefault();
   }).keypress((e)=>{
     if(e.which == 13) {e.preventDefault(); addNewSizeInput();}
   }).focusout(() => {

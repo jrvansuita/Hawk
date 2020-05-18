@@ -30,7 +30,9 @@ module.exports = class AttributesStorer{
         })
       }
 
-      cache[each.idExterno] = items;
+      //Mudei para a própria Descrição para reduzir código
+      //cache[each.idExterno] = items;
+      cache[each.descricao] = items;
     });
   }
 
@@ -40,9 +42,11 @@ module.exports = class AttributesStorer{
     if (this.type){
       if (this.description){
         var arr = cache[this.type];
-        for (var i = 0; i < arr.length; i++) {
-          if (arr[i].description == this.description){
-            return arr[i];
+        if (arr != undefined){
+          for (var i = 0; i < arr.length; i++) {
+            if (arr[i].description == this.description){
+              return arr[i];
+            }
           }
         }
 

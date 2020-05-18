@@ -31,6 +31,7 @@ $(document).ready(()=>{
 
   new TemplateEditor()
   .useImageUploader()
+  .useQuickInsert(true)
   .load('#editor').then((_editor) => {
     editor = _editor;
 

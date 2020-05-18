@@ -278,7 +278,7 @@ table{
 }
 
 
-
+/**
 .dots-glyph{
   width: 15px;
   margin-right: -5px;
@@ -295,7 +295,7 @@ table{
   cursor: pointer !important;
   border-radius: 50%;
 }
-
+**/
 
 
 

@@ -1,9 +1,12 @@
 const EccosysStorer = require('../../eccosys/eccosys-storer.js');
+const EccosysProvider = require('../../eccosys/eccosys-provider.js');
 const AttributesStorer = require('./attributes.js');
 const ProductBinder = require('./binder.js');
 
 module.exports = class ProductStorer{
   constructor(){
+    this.provider = new EccosysProvider();
+    this.storer = new EccosysStorer();
     this.attributesStorer = new AttributesStorer();
   }
 
@@ -16,22 +19,32 @@ module.exports = class ProductStorer{
     this.attributesStorer.filter(type).load(callback);
   }
 
-  insert(callback){
-    var storer = new EccosysStorer(true);
+  upsert(callback){
+    this.onFinishListener = callback;
+    this.provider.product(this.binder.codigo).go(found => this._onHandleProductFind(found) );
+  }
 
-    //    storer.product().insert(this.binder).go((productResponse) => {
-    //    if (productResponse.result.success.length > 0){
-    this.binder.work();
+  _onHandleProductFind(found){
+    this.storer.product().upsert(found && found.codigo, this.binder).go(response => this._onStoringResponseHandler(response));
+  }
+
+  _onStoringResponseHandler(response){
+    console.log(response);
+    response = response.result || response;
+    if (response.success.length > 0){
+      this._onAttributesHandler();
+    }else{
+      this.onFinishListener(response);
+    }
+  }
+
+  _onAttributesHandler(){
     this.attributesStorer.load(() => {
-      storer.product(this.binder.codigo).attrs().put(this.binder.attrs()).go((attributesResponse) => {
-        console.log(attributesResponse);
-        callback(attributesResponse);
+      this.storer.product(this.binder.codigo).attrs().put(this.binder.attrs()).go((response) => {
+        console.log(response);
+        this.onFinishListener(response);
       });
     });
-    //  }else{
-    //  callback(productResponse);
-    //      }
-    //  });
   }
 
   delete(callback){
