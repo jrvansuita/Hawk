@@ -6,7 +6,10 @@ class Dropdown {
 
   static on(el){
     var drop = new Dropdown($(el));
-    $(el).click(()=>{ drop.show()});
+    $(el).click((e)=>{
+      e.stopPropagation();
+      drop.show()
+    });
     return drop;
   }
 

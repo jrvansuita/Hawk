@@ -41,24 +41,17 @@ $(document).ready(()=>{
     window.open('/product?sku=' + $(this).text(),'_blank');
   });
 
-  $('.no-problem-menu').click(function(e){
-    var sku = $(this).data('sku');
-    var drop = new MaterialDropdown($(this), e, false, true);
 
-    drop.addItem('/img/restart.png', 'Verificar Agora', function(e){
-      $('.loading-circle').show();
-      $('.no-problem-menu .dots-glyph').attr('src', 'img/loader/circle.svg');
-
-      _post('/check-product-diagnostic', {sku: sku, forceFather : true},(data)=>{
-        showSkuFixesDialog(sku);
-        $('.loading-circle').hide();
-      });
+  Dropdown.on($('.no-problem-menu'))
+  .item('/img/restart.png', 'Verificar Agora', (helper)=>{
+    $('.loading-circle').show();
+    helper.loading();
+    _post('/check-product-diagnostic', {sku: helper.data.sku, forceFather : true},(data)=>{
+      showSkuFixesDialog(sku);
+      $('.loading-circle').hide();
     });
-
-    drop.show();
-
-    e.stopPropagation();
   });
+  
 
   $('.menu-dots').click(function(e){
     var sku = $(this).data('sku');
