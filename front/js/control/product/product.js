@@ -1,5 +1,5 @@
 $(document).ready(() => {
-     imageClickOpen();
+  imageClickOpen();
   $('#search').focusin(function(){
     $('#search').select();
   });
@@ -99,20 +99,16 @@ function requestProductChilds(){
         product._Skus = [{codigo:product.codigo}];
       }
 
-      skusCount = product._Skus.length;
-      product._Skus.forEach((sku)=>{
-        _get('/product-child', {sku: sku.codigo}, (child)=>{
-          if (!child.error){
-            buildChildSku(product, child);
-          }
+      var skus = product._Skus.map((e) => {
+        return e.codigo;
+      });
 
-          skusCount--;
-
-          if (skusCount == 0){
-            onFinishedLoading();
-
-          }
+      _get('/product-skus', {skus:skus}, (childs)=>{
+        childs.forEach((child) => {
+          buildChildSku(product, child);
         });
+
+        onFinishedLoading();
       });
 
     }
@@ -373,12 +369,12 @@ function buildSkuCol(product){
   if(fixes){
     fixes.forEach((item) => {
       if(product.codigo == item.sku && !$div.find('img').length){
-          var $err = $('<img>').addClass('diag-alert').attr('src', 'img/alert.png').show();
-          $err.click(()=>{
-            window.open('/diagnostics?sku=' + product.codigo, '_blank');
-          });
-          var alertTooltip = new Tooltip($err[0], item.data.name).load();
-          $div.append($err);
+        var $err = $('<img>').addClass('diag-alert').attr('src', 'img/alert.png').show();
+        $err.click(()=>{
+          window.open('/diagnostics?sku=' + product.codigo, '_blank');
+        });
+        var alertTooltip = new Tooltip($err[0], item.data.name).load();
+        $div.append($err);
       }
     });
   }

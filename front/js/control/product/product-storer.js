@@ -11,6 +11,8 @@ $(document).ready(() => {
   onBindComboBoxes();
   onBindViewsListeners();
   loadAndKeepCachedAllSizes();
+
+  requestProductChilds();
 });
 
 function bindComboBox(el, data, limit){
@@ -66,6 +68,10 @@ function onBindViewsListeners(){
   });
 
 
+  $('#sku').keypress(function(e) {
+    if(e.which == 13) window.location.href = window.location.origin + window.location.pathname + '?sku=' + $(this).val();
+  });
+
   Dropdown.on($('.sizes-dots'))
   .item('/img/delete.png', 'Remover Todos', function(){
     $('.sizes-box').empty();
@@ -76,9 +82,7 @@ function onBindViewsListeners(){
   .showRichButtons(false)
   .load('.description-editor').then((_editor) => {
     window.editor = _editor;
-    if (product._FichaTecnica){
-      editor.html.set(product._FichaTecnica[0].descricaoDetalhada);
-    }
+    onBindDetailsDescriptions();
   });
 }
 
@@ -99,9 +103,16 @@ function onBindViewValues(){
     if (product.precoCusto){
       $('#markup').val(Floa.abs(Floa.floa(product.preco)/Floa.floa(product.precoCusto),2));
     }
+
+    onBindDetailsDescriptions();
   }
 }
 
+function onBindDetailsDescriptions(){
+  if (product._FichaTecnica && (product._FichaTecnica.length == 1) && window.editor){
+    window.editor.html.set(product._FichaTecnica[0].descricaoDetalhada);
+  }
+}
 
 function onBindComboBoxes(){
   $('.combobox').each((i, each) => {
@@ -113,7 +124,7 @@ function getData(){
   product.markup = $('#markup').val();
   product.precoCusto = Num.moneyVal($('#cost').val());
   product.sizes = $('.size-input').map((i,each)=>{ return $(each).text(); }).toArray();
-  product.descricaoDetalhada =  editor.html.get();
+  product._FichaTecnica[0].descricaoDetalhada =  editor.html.get();
 
   return product;
 }
@@ -176,4 +187,57 @@ function addNewSizeInput(size, callRe){
   loadAndKeepCachedAllSizes((sizes) => {
     bindComboBox($input, sizes, 5);
   });
+}
+
+
+
+function requestProductChilds(){
+  if (product._Skus){
+    var skus = product._Skus.map((e) => {
+      return e.codigo;
+    });
+
+    _get('/product-skus', {skus:skus}, (childs)=>{
+      $('.childs').not('.header').empty();
+      childs.forEach((e) => {
+        buildChildSku(e);
+      })
+    });
+  }
+}
+
+
+function buildChildSku(item){
+  newChildLine()
+  .col(item.codigo)
+  .input('Ean', item.gtin)
+  .input('Peso', null)
+  .input('Largura', null)
+  .input('Altura', null)
+  .input('Comprimento', null)
+}
+
+function newChildLine(){
+  var line = $('<tr>');
+  $('.childs').append(line);
+  return {
+    col: function (label) {
+      line.append($('<td>').append($('<span>').addClass('static-label').append(label)));
+      return this;
+    },
+
+    input: function (label, value) {
+      line.append(buildChildInput(label, value));
+      return this;
+    }
+  }
+}
+
+function buildChildInput(label, value){
+  var $input = $('<input>').attr('value', value)
+  .addClass('editable-input')
+  .attr('placeholder', label)
+  .data('value', value);
+
+  return $('<td>').append($input);
 }

@@ -25,6 +25,13 @@ module.exports ={
     });
   },
 
+  getSkus(skus, callback){
+    new EccosysProvider(false).skus(skus).go((products)=>{
+      callback(products);
+      //handleCallback(callback, products);
+    });
+  },
+
   getBySku(sku, father, callback){
     new EccosysProvider(false).product(father ? getFatherSku(sku) : sku ).go((product)=>{
       handleCallback(callback, product, sku);

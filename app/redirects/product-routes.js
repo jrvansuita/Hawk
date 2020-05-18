@@ -35,6 +35,10 @@ module.exports = class ProductRoutes extends Routes{
       ProductHandler.getBySku(req.query.sku, false, this._resp().redirect(res));
     });
 
+    this._get('/product-skus', (req, res) => {
+      ProductHandler.getSkus(req.query.skus, this._resp().redirect(res));
+    });
+
     this._get('/product-stock-history', (req, res) => {
       ProductHandler.getStockHistory(req.query.sku, this._resp().redirect(res));
     });
