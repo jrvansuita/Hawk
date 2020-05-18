@@ -8,6 +8,7 @@ const ProductBoard = require('../provider/product-board-provider.js');
 const ProductListProvider = require('../provider/product-list-provider.js');
 const ProductImageProvider = require('../provider/product-image-provider.js');
 const ProductStorer = require('../storer/product/product.js');
+const EccosysProvider = require('../eccosys/eccosys-provider.js');
 
 module.exports = class ProductRoutes extends Routes{
 
@@ -192,6 +193,23 @@ module.exports = class ProductRoutes extends Routes{
       req.session.productListQuery = req.query.query;
       ProductListProvider.load(req.query.query, req.query.page, (data, info)=>{
         this._resp().sucess(res, {data, info});
+      });
+    });
+
+    this._get('/product-list-export', (req, res) => {
+      ProductListProvider.load(req.session.productListQuery, null, (data, info)=>{
+        new EccosysProvider().skus(data.map((e)=>{return e.sku})).go((skus) => {
+
+          var result = {};
+          skus.forEach((each) => {
+            if (each._Skus){
+              each._Skus.forEach((eachChild) => {
+                 result[eachChild.codigo] = eachChild.gtin;
+              });
+            }
+          });
+          res.render('product/board/product-list-export', {data: data, eans:result});
+        });
       });
     });
 
