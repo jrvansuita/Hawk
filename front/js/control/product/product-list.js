@@ -83,6 +83,10 @@ $(document).ready(()=>{
       window.open('/product-multiple-imgs?skus=' + Object.keys(selectedSkus), '_blank');
     });
 
+    drop.addItem('/img/print.png', 'Imprimir Relatório', function(){
+      window.open('/product-list-export');
+    });
+
 
     drop.show();
   });
