@@ -5,11 +5,13 @@ $(document).ready(() => {
 class Dropdown {
 
   static on(el){
+
     var drop = new Dropdown($(el));
     $(el).click((e)=>{
       e.stopPropagation();
       drop.show()
     });
+
     return drop;
   }
 
@@ -113,6 +115,8 @@ class Dropdown {
 
   show(callback){
     if (this.hasOptions() && !this.isLoading){
+      $('.md-dropdown').hide();
+
       this.holder.show();
 
       if (this.top + this.left > 0){
