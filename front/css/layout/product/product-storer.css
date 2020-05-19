@@ -207,3 +207,18 @@ textarea{
 .description-editor > *{
   border-color: var(--border-color) !important;
 }
+
+.childs .editable-input{
+  font-size: 15px;
+  min-height: 35px;
+}
+
+.childs .static-label{color: #757373;}
+
+.childs td{
+  padding: 16px 12px;
+}
+
+.childs tr:nth-child(odd) {
+  background-color: #f2f2f2;
+}

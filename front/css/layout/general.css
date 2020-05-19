@@ -304,6 +304,7 @@ table{
   margin-top: -5px;
   text-align: center;
   display: block;
+  transition: all .1s ease-in-out;
   color: black;
   width: -webkit-fill-available;
   text-transform: uppercase;
@@ -312,16 +313,19 @@ table{
   background-color: transparent;
   border-style: none none none none;
   transform: scale(1);
+  border: 2px transparent;
+  border-style: none none solid none;
 }
 
 .editable-input:hover:enabled{
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .editable-input:focus{
   border-radius: 0px;
   border: 2px #1c796b;
   border-style: none none solid none;
+  transform: scale(1.05);
 }
 
 .disabled{
