@@ -5,6 +5,14 @@ $(document).ready(() => {
     window.open('/user-registering?userId=' + $(this).data('userid') ,'_blank');
   });
 
+  Dropdown.on($('.icon-dots'))
+  .item(('/img/checked.png', 'Ativar', (helper) => {
+    _post('/user-active',{userId: id, active: !active}, () => {
+      $(lineTr).toggleClass('active-row').toggleClass('inactive-row');
+      active? $(tdS).text('Inativo') : $(tdS).text('Ativo'), $(lineTr).fadeOut('slow');
+    })
+  })
+  /*
   $('.icon-dots').click(function (e) {
     e.stopPropagation();
     var id = $(this).data('userid');
@@ -32,20 +40,7 @@ $(document).ready(() => {
 
 
     drop.show();
-  });
+  });*/
 
 
 });
-
-
-function listar(){
-  var running = 0;
-  var stopped = 0;
-  Object.values(users).forEach((item) => {
-    item.active ? running++ : stopped++;
-  });
-console.log('Ativo', running);
-console.log('inativo', stopped);
-
-
-}

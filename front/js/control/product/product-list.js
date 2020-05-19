@@ -56,39 +56,25 @@ $(document).ready(()=>{
     toggleTagBox();
   });
 
-  $('.menu-dots').click(function(e){
-    var drop = new MaterialDropdown($(this), e, false, true);
-    drop.addItem('/img/copy.png', 'Copiar Skus', function(){
-      var val = '';
-      $(".sku.copiable").each(function() {
-        val += '\n' + $(this).text();
-      });
-
-      Util.copySeleted(val);
+  Dropdown.on($('.menu-dots'))
+  .item('/img/copy.png', 'Copiar Skus', (helper) => {
+    var val = '';
+    $(".sku.copiable").each(function() {
+      val += '\n' + $(this).text();
     });
 
-
-    drop.addItem('/img/mockup.png', 'Gerar Mockups', function(){
-      new MockupSelector().onSelect((id)=>{
-
-
-        window.open('/build-multiple-mockups?skus=' + Object.keys(selectedSkus) + '&mockId=' + id, '_blank');
-
-
-      }).show();
-    });
-
-
-    drop.addItem('/img/photo.png', 'Baixar Imagens', function(){
-      window.open('/product-multiple-imgs?skus=' + Object.keys(selectedSkus), '_blank');
-    });
-
-    drop.addItem('/img/print.png', 'Imprimir Relatório', function(){
-      window.open('/product-list-export');
-    });
-
-
-    drop.show();
+    Util.copySeleted(val);
+  })
+  .item('/img/mockup.png', 'Gerar Mockups', (helper) => {
+    new MockupSelector().onSelect((id)=>{
+      window.open('/build-multiple-mockups?skus=' + Object.keys(selectedSkus) + '&mockId=' + id, '_blank');
+    }).show();
+  })
+  .item('/img/photo.png', 'Baixar Imagens', (helper) => {
+    window.open('/product-multiple-imgs?skus=' + Object.keys(selectedSkus), '_blank');
+  })
+  .item('/img/print.png', 'Imprimir Relatório', (helper) => {
+    window.open('/product-list-export');
   });
 });
 
