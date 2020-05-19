@@ -1,7 +1,6 @@
 var refreshBroadcast;
 
 $(document).ready(() => {
-  //testingData();
   onBindViewValues();
 
   //product = Util.keepPrimitiveAttrs(product);
@@ -21,20 +20,10 @@ function bindComboBox(el, data, limit){
   .callOnChangeEventBySelecting(true)
   .setLimit(limit)
   .setOnItemBuild((item, index)=>{
-    return {text : item.description};
+    return {text : item.description, value: item.value};
   }).load();
 }
 
-function testingData(){
-  product.codigo = 'JRTESTE';
-  product.nome = 'PRODUTO TESTE JR';
-  product.cf = '6104.22.00';
-  product.Departamento = 'Conjunto';
-  product.Material = 'Moletom';
-  product.Cor = 'Azul';
-  product.markup = '2,3';
-  product.precoCusto = '10';
-}
 
 function onBindViewsListeners(){
   $('.save').click(() => { _post('/stock/storer-upsert', getData(), (data) => { console.log(data); }); });
@@ -103,14 +92,14 @@ function onBindViewValues(){
     if (product.precoCusto){
       $('#markup').val(Floa.abs(Floa.floa(product.preco)/Floa.floa(product.precoCusto),2));
     }
-
-    onBindDetailsDescriptions();
   }
 }
 
 function onBindDetailsDescriptions(){
-  if (product._FichaTecnica && (product._FichaTecnica.length == 1) && window.editor){
-    window.editor.html.set(product._FichaTecnica[0].descricaoDetalhada);
+  if (product._FichaTecnica){
+    if (window.editor) window.editor.html.set(product._FichaTecnica[0].descricaoDetalhada);
+  }else{
+    product._FichaTecnica = [{}];
   }
 }
 
@@ -118,6 +107,9 @@ function onBindComboBoxes(){
   $('.combobox').each((i, each) => {
     bindComboBox($(each), $(each).data('bind'));
   });
+
+
+  bindComboBox($('input[data-bind="cf"]'),  getNcmOptions());
 }
 
 function getData(){
@@ -198,7 +190,8 @@ function requestProductChilds(){
     });
 
     _get('/product-skus', {skus:skus}, (childs)=>{
-      $('.childs').not('.header').empty();
+      console.log(childs);
+      $('.childs').find("tr:gt(0)").empty();
       childs.forEach((e) => {
         buildChildSku(e);
       })
@@ -208,16 +201,27 @@ function requestProductChilds(){
 
 
 function buildChildSku(item){
-  newChildLine()
+  var onChange = function(){
+    if (!product._Skus) product._Skus = [];
+
+    product._Skus.forEach((each) => {
+      if (each.codigo == item.codigo){
+        each.changed = true;
+        each[$(this).data('tag')] = $(this).val();
+      }
+    });
+  }
+
+  newChildLine(onChange)
   .col(item.codigo)
-  .input('Ean', item.gtin)
-  .input('Peso', null)
-  .input('Largura', null)
-  .input('Altura', null)
-  .input('Comprimento', null)
+  .input('Ean', 'gtin', item.gtin, '0000000000000', null, 'int')
+  .input('Peso', 'peso', Floa.def(item.peso) || Floa.def(item.pesoLiq), '0,000', 'short-input', 'float')
+  .input('Largura', 'lagura', item.largura, '0,000', 'short-input', 'int')
+  .input('Altura', 'altura', item.altura, '0,000', 'short-input', 'int')
+  .input('Comprimento', 'comprimento', item.comprimento, '0,000', 'short-input', 'int')
 }
 
-function newChildLine(){
+function newChildLine(onChange){
   var line = $('<tr>');
   $('.childs').append(line);
   return {
@@ -226,18 +230,39 @@ function newChildLine(){
       return this;
     },
 
-    input: function (label, value) {
-      line.append(buildChildInput(label, value));
+    input: function (...params) {
+      line.append($('<td>').append(buildChildInput(...params).change(onChange)));
       return this;
     }
   }
 }
 
-function buildChildInput(label, value){
-  var $input = $('<input>').attr('value', value)
+function buildChildInput(label, tag, value, placeholder, addClass, type, onChange){
+  var $input = $('<input>').addClass(addClass)
   .addClass('editable-input')
-  .attr('placeholder', label)
-  .data('value', value);
+  .data('tag', tag)
+  .attr('placeholder', placeholder)
+  .on("click", function () {
+    $(this).select();
+  });
 
-  return $('<td>').append($input);
+  if (type == 'float'){
+    $input.val(Floa.weight(value)).attr('onkeypress', "return Floa.isFloatKey(event);");
+  }else if (type == 'int'){
+    $input.val(Num.int(value)).attr('onkeypress',"return Num.isNumberKey(event);");
+  }
+
+  return $input;
+}
+
+
+function getNcmOptions(){
+  var ncms = [];
+  ncms.push({description: '6111.20.00 - Vestuário', value : '6111.20.00'});
+  ncms.push({description: '6402.99.90 - Calçados', value : '6402.99.90'});
+  ncms.push({description: '8715.00.00 - Carrinho de Bebê', value : '8715.00.00'});
+  ncms.push({description: '3926.90.90 - Plásticos', value : '3926.90.90'});
+  ncms.push({description: '6217.10.00 - Acessórios de Tecido', value : '6217.10.00'});
+  ncms.push({description: '4202.22.20 - Bolsas e Mochilas', value : '4202.22.20'});
+  return ncms;
 }

@@ -124,7 +124,7 @@ function buildIndRows(rows){
         showLoading("Carregando produtos...");
         var type = $('.ind-item.active').data('type');
         _post('/run-product-diagnostics', {refresh:true, brand: brand, type: type}, ()=>{
-          console.log('rodou');
+          
         });
       });
 

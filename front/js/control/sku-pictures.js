@@ -54,8 +54,6 @@ function controlImagesList(pane, list, path, query){
       }
 
       _post(path, {page: page, cache: false, ...query}, (data) => {
-
-        console.log('LOA ', loadedAllResults);
         loadedAllResults = data.length == 0;
 
           data.forEach((each) => {

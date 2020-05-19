@@ -271,7 +271,6 @@ function getDropDow(){
       });
     }).addItem('../img/transport/default.png', 'Coletado', function(){
       _post('/shipping-order-colected', {id: id}, () => {
-        console.log(holder);
         var s = $(holder.closest('tr')).find('.ship-status');
         s.text('Coletado').addClass('colected');
         holder.closest('tr').removeClass('open-item').addClass('colected-item');

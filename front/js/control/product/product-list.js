@@ -116,8 +116,6 @@ function loadList(){
         addProductLayout(each, index);
       });
 
-      console.log(result);
-
       showMessageTotals(result.info);
 
       bindCopiable();

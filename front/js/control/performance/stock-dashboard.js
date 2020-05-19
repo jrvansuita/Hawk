@@ -45,7 +45,6 @@ function onHandleResult(result){
   $('#show-skus').val(result.query.showSkus || 25);
 
   if (result.data.count){
-    console.log(result);
     buildBoxes(result);
   }else{
     $('.no-data').show();

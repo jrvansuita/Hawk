@@ -248,7 +248,7 @@ module.exports = class ProductRoutes extends Routes{
     });
 
     this._post('/stock/storer-upsert', (req, res) => {
-      new ProductStorer().with(req.body).upsert(this._resp().redirect(res));
+      new ProductStorer().with(req.body).setOnFinished(this._resp().redirect(res)).upsert();
     });
 
     this._post('/stock/storer-delete', (req, res) => {

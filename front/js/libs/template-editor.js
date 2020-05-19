@@ -147,7 +147,6 @@ class TemplateEditor{
 
 
     options = {...options,   ...this.getImageUploadOptions()}
-    console.log(options);
 
     return options;
   }

@@ -74,7 +74,5 @@ function checkform(){
 
 function onDoSubmit(){
   document.jobform.jobType.value = jobTypeSelector.getSelectedItem().data.key;
-  console.log(document.jobform.jobType.value );
-  console.log('passou');
   return true;
 }

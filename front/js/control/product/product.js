@@ -205,7 +205,6 @@ function buildChildSku(product, child){
 
       drop.addItem('/img/' + (active ? 'block' : 'checked') + '.png', active ? 'Inativar' : 'Ativar' , function(){
         showLoadingStatus();
-        console.log(active)
         _post('/product-active', {
           sku: child.codigo,
           active: !active,
@@ -275,11 +274,6 @@ function buildStockCol(product){
 
 
         _post('/product-stock',requestBody , (res)=>{
-          console.log(parseInt($(this).data('value')));
-          console.log(val);
-
-          console.log(parseInt($(this).data('value')) + val);
-
           handleInputUpdate($(this), res, parseInt($(this).data('value')) + val);
 
           var $disp = $(this).closest('tr').find('.available-stock .child-value');
