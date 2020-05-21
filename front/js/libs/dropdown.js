@@ -4,9 +4,9 @@ $(document).ready(() => {
 
 class Dropdown {
 
-  static on(el){
+  static on(el, ...params){
 
-    var drop = new Dropdown($(el));
+    var drop = new Dropdown($(el), ...params);
     $(el).click((e)=>{
       e.stopPropagation();
       drop.show()
@@ -15,9 +15,13 @@ class Dropdown {
     return drop;
   }
 
-  constructor(parent) {
+  constructor(parent, createDots) {
     this.parent = parent;
-    this.createMenuButton();
+
+    if (createDots){
+      this.createMenuButton();
+    }
+    
     this.createMenuList();
     this.onBindMouseOver();
     this.hide();
@@ -65,11 +69,13 @@ class Dropdown {
       menuList: this.holder,
       data : this.parent.data(),
       setMenuIcon: (path, delay, greaterIcon) => {
-        this.menuIcon.attr('src', path).toggleClass('greater-icon', greaterIcon);
-        if (delay){
-          this.parent.children().delay(delay).queue(() => {
-            helper.loading(false);
-          });
+        if (this.menuIcon){
+          this.menuIcon.attr('src', path).toggleClass('greater-icon', greaterIcon);
+          if (delay){
+            this.parent.children().delay(delay).queue(() => {
+              helper.loading(false);
+            });
+          }
         }
       },
       loading : (is = true) => {
