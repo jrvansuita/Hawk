@@ -9,6 +9,7 @@ class Dropdown {
     var drop = new Dropdown($(holder), ...params);
     $(holder).click((e)=>{
       e.stopPropagation();
+      drop.prepare(e);
       drop.show()
     });
 
@@ -47,14 +48,12 @@ class Dropdown {
     });
   }
 
-  hasOptions(){
-    return this._hasOptions;
+  hasItems(){
+    return this.list && (this.list.length > 0);
   }
 
   bindMousePos(){
-    this.setMenuPos($(this.holder).offset().top, $(this.holder).offset().left);
-    this.dropdown.css('position', 'inherit');
-
+    this.bindMousePosition = true;
     return this;
   }
 
@@ -74,6 +73,7 @@ class Dropdown {
       event: event,
       holder: this.holder,
       parent: this.holder.parent(),
+      menuList: this.list,
       dropDown: this.dropdown,
       data : this.holder.data(),
       setMenuIcon: (path, delay, greaterIcon) => {
@@ -118,29 +118,32 @@ class Dropdown {
       if (this.onAnyOptionClick){
         this.onAnyOptionClick(e);
       }
+
+      this.hide();
+      e.stopPropagation();
     });
 
     this.list.append($li);
-    this._hasOptions = true;
 
     return this;
   }
 
+  prepare(e){
+    if (this.bindMousePosition){
+      this.setMenuPos(e.pageY -10, e.pageX -10);
+      this.dropdown.css('position', 'inherit');
+    }
+
+    if ((this.top + this.left) > 0){
+      this.dropdown.css('left', this.left).css('top', this.top);
+    }
+  }
 
   show(callback){
     if (this.hasOptions() && !this.isLoading){
       $('.md-dropdown').hide();
 
       this.dropdown.show();
-
-      if (this.top + this.left > 0){
-        this.list.css('left', this.left).css('top', this.top);
-      }
-
-      $('.md-dropdown li').click((e) =>{
-        this.hide();
-        e.stopPropagation();
-      });
 
       if (callback){
         this.callback(false);
@@ -150,7 +153,6 @@ class Dropdown {
         this.callback(false);
       }
     }
-
   }
 
   onMouseLeave(onMouseLeave){
