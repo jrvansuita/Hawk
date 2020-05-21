@@ -1,32 +1,19 @@
 $(document).ready(()=>{
-
-
-
-  $('.job-item-menu').click(function(e) {
-    var id = $(this).data('id');
-    var tag = $(this).data('tag');
+  $('.job-item-menu').each((index, each) => {
+    
     var active = $(this).data('active');
-
-    var drop = new MaterialDropdown($(this), e);
+    var drop = Dropdown.on(each)
 
     if (active || loggedUser.full){
-      drop.addItem('/img/play.png', 'Executar', function(){
-        _post('  /job-run-force', {id: id});
-      });
+      drop.item('/img/play.png', 'Executar', (helper) =>{
+        _post('  /job-run-force', {id: helper.data.id});
+      })
     }
-
-    drop.addItem('/img/gear.png', 'Editar', function(){
-      window.location = '/job-registering?id=' +id;
+    drop.item('/img/gear.png', 'Editar', (helper) =>{
+      window.location = '/job-registering?id=' + helper.data.id;
+    })
+    .item('/img/registering.png', 'Log', (helper) =>{
+      window.location = '/history?tag=' + helper.data.tag;
     });
-
-    drop.addItem('/img/registering.png', 'Log', function(){
-      window.location = '/history?tag=' + tag;
-    });
-
-
-
-
-    drop.show();
   });
-
 });

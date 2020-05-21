@@ -10,27 +10,21 @@ $(document).ready(()=>{
     });
   });
 
-  $('.main-menu-dots').click(function(e){
-    var drop = new MaterialDropdown($(this), e);
-    drop.addItem('/img/search.png', 'Pesquisar Produto', function(){
+  Dropdown.on($('.main-menu-dots'))
+  .item('/img/search.png', 'Pesquisar Produto', (helper) => {
+    if ($('#search').is(':visible')){
+      $('#search').hide();
+    }else{
+      $('#search').fadeIn();
+      $('#search').focus()
+    }
+  })
+  .item('/img/restart.png', 'Atualizar Problemas', (helper) => {
+    showLoading();
 
-      if ($('#search').is(':visible')){
-        $('#search').hide();
-      }else{
-        $('#search').fadeIn();
-        $('#search').focus()
-      }
+    _post('/run-product-diagnostics', {refresh:true}, ()=>{
+      console.log('rodou');
     });
-
-    drop.addItem('/img/restart.png', 'Atualizar Problemas', function(){
-      showLoading();
-
-      _post('/run-product-diagnostics', {refresh:true}, ()=>{
-        console.log('rodou');
-      });
-    });
-
-    drop.show();
   });
 
   new Broadcast('product-diagnostics').onReceive((result)=>{
@@ -108,29 +102,24 @@ function buildIndRows(rows){
     var $brandLabel = $('<label>').append(brand);
     var $brandTotal = $('<label>').addClass('brand-total');
 
-    var $brandMenu = $('<div>').addClass('main-menu-dots').append($('<img>').attr('src','img/dots.png').addClass('dots-glyph'));
-    $brandMenu.click(function(e){
-      var drop = new MaterialDropdown($(this), e);
-      drop.addItem('/img/copy.png', 'Copiar Skus', function(){
-        var val = '';
-        $(this).closest('.brand-group').find(".row-sku.copiable").each(function() {
-          val += '\n' + $(this).text();
-        });
+    var $brandMenu = $('<div>').addClass('main-menu-dots');
 
-        Util.copySeleted(val);
+
+    Dropdown.on($brandMenu)
+    .item('/img/copy.png', 'Copiar Skus', (helper) => {
+      var val = '';
+      $brandMenu.closest('.brand-group').find(".row-sku.copiable").each(function() {
+        val += '\n' + $(this).text();
       });
-
-      drop.addItem('/img/restart.png', 'Atualizar Marca', function(){
-        showLoading("Carregando produtos...");
-        var type = $('.ind-item.active').data('type');
-        _post('/run-product-diagnostics', {refresh:true, brand: brand, type: type}, ()=>{
-          console.log('rodou');
-        });
-      });
-
-
-      drop.show();
+      Util.copySeleted(val);
     })
+    .item('/img/restart.png', 'Atualizar Marca', (helper) => {
+      showLoading("Carregando produtos...");
+      var type = $('.ind-item.active').data('type');
+      _post('/run-product-diagnostics', {refresh:true, brand: brand, type: type}, ()=>{
+        console.log('rodou');
+      });
+    });
 
 
     var $brandTitle = $('<span>').addClass('brand-title').append($brandLabel, $brandMenu, $brandTotal);

@@ -138,36 +138,24 @@ function bindDateUtils(){
     setDates(Dat.rollDay(dateBeginPicker.getSelected(),1) ,Dat.rollDay(dateEndPicker.getSelected(),1), 0)
   });
 
-
-  $('.date-menu-dots').click(function(e){
-    var drop = new MaterialDropdown($(this), e, false, true);
-
-    drop.addItem(null, 'Hoje', function(e){
-      setDates(Dat.today() ,Dat.today(), 0);
-    });
-
-    drop.addItem(null, 'Ontem', function(e){
-      setDates(Dat.yesterday() ,Dat.yesterday(), 0);
-    });
-
-    drop.addItem(null, 'Essa Semana', function(e){
-      setDates(Dat.firstDayCurrentWeek() ,Dat.lastDayCurrentWeek(), 0);
-    });
-
-    drop.addItem(null, 'Última Semana', function(e){
-      setDates(Dat.firstDayLastWeek() ,Dat.lastDayLastWeek(), 0);
-    });
-
-    drop.addItem(null, 'Este Mês', function(e){
-      setDates(Dat.firstDayOfMonth() ,Dat.lastDayOfMonth(), 0);
-    });
-
-    drop.addItem(null, 'Último Mês', function(e){
-      setDates(Dat.firstDayOfLastMonth() ,Dat.lastDayOfLastMonth(), 0);
-    });
-
-    drop.show();
-
+  Dropdown.on($('.date-menu-dots'))
+  .item(null, 'Hoje', () => {
+    setDates(Dat.today() ,Dat.today(), 0);
+  })
+  .item(null, 'Ontem', () => {
+    setDates(Dat.yesterday() ,Dat.yesterday(), 0);
+  })
+  .item(null, 'Essa Semana', () => {
+    setDates(Dat.firstDayCurrentWeek() ,Dat.lastDayCurrentWeek(), 0);
+  })
+  .item(null, 'Última Semana', () => {
+    setDates(Dat.firstDayLastWeek() ,Dat.lastDayLastWeek(), 0);
+  })
+  .item(null, 'Este Mês', () => {
+    setDates(Dat.firstDayOfMonth() ,Dat.lastDayOfMonth(), 0);
+  })
+  .item(null, 'Último Mês', () => {
+    setDates(Dat.firstDayOfLastMonth() ,Dat.lastDayOfLastMonth(), 0);
   });
 
 }
