@@ -4,9 +4,9 @@ $(document).ready(() => {
 
 class Dropdown {
 
-  static on(el, ...params){
+  static on(holder, ...params){
 
-    var drop = new Dropdown($(el), ...params);
+    var drop = new Dropdown($(holder), ...params);
     $(el).click((e)=>{
       e.stopPropagation();
       drop.show()
@@ -15,8 +15,13 @@ class Dropdown {
     return drop;
   }
 
+<<<<<<< HEAD
   constructor(parent, createDots=true) {
     this.parent = parent;
+=======
+  constructor(holder, createDots) {
+    this.holder = holder;
+>>>>>>> a63dff6d21dae93d6f70bdd11227889b2bf00a18
 
     if (createDots){
       this.createMenuButton();
@@ -30,18 +35,18 @@ class Dropdown {
   createMenuButton(){
     this.defMenuIcon = '/img/dots.png';
     this.menuIcon = $('<img>').attr('src', this.defMenuIcon).addClass('md-dots-icon');
-    $(this.parent).append(this.menuIcon);
+    $(this.holder).append(this.menuIcon);
   }
 
   createMenuList(){
-    this.holder = $('<div>').addClass('md-dropdown');
+    this.dropdown = $('<div>').addClass('md-dropdown');
     this.list = $('<ul>');
-    this.holder.append(this.list);
-    $(this.parent).append(this.holder);
+    this.dropdown.append(this.list);
+    $(this.holder).append(this.dropdown);
   }
 
   onBindMouseOver(){
-    this.holder.mouseleave(()=>{
+    this.dropdown.mouseleave(()=>{
       if (this.onMouseLeave) this.onMouseLeave();
       this.hide();
     });
@@ -51,7 +56,14 @@ class Dropdown {
     return this._hasOptions;
   }
 
-  setMenuPosAdjust(addX, addY){
+  bindMousePos(){
+    this.setMenuPos($(parent).offset().top, $(parent).offset().left);
+    this.dropdown.css('position', 'inherit');
+
+    return this;
+  }
+
+  setMenuPos(addX, addY){
     this.top = this.top + addY;
     this.left = this.left + addX;
     return this;
@@ -65,14 +77,15 @@ class Dropdown {
   getHelper(event){
     var helper = {
       event: event,
-      menuButton: this.parent,
-      menuList: this.holder,
-      data : this.parent.data(),
+      holder: this.holder,
+      parent: this.holder.parent(),
+      dropDown: this.dropdown,
+      data : this.holder.data(),
       setMenuIcon: (path, delay, greaterIcon) => {
         if (this.menuIcon){
           this.menuIcon.attr('src', path).toggleClass('greater-icon', greaterIcon);
           if (delay){
-            this.parent.children().delay(delay).queue(() => {
+            this.holder.children().delay(delay).queue(() => {
               helper.loading(false);
             });
           }
@@ -123,7 +136,7 @@ class Dropdown {
     if (this.hasOptions() && !this.isLoading){
       $('.md-dropdown').hide();
 
-      this.holder.show();
+      this.dropdown.show();
 
       if (this.top + this.left > 0){
         this.list.css('left', this.left).css('top', this.top);
@@ -150,9 +163,8 @@ class Dropdown {
   }
 
   hide(){
-    if (this.holder){
-      this.holder.hide();
+    if (this.dropdown){
+      this.dropdown.hide();
     }
-
   }
 }
