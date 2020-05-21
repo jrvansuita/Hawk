@@ -13,8 +13,8 @@ module.exports = class EccosysStorer extends EccosysApi{
         return this.post('produtos').setBody(body).single();
       },
 
-      upsert: function (isUpdate, body) {
-        if (isUpdate){ return this.update(body) }else{ return this.insert(body) }
+      upsert: function (isInsert, body) {
+        if (isInsert){ return this.insert(body) }else{ return this.update(body) }
       },
 
       delete:() => {

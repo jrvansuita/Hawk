@@ -91,7 +91,6 @@ function loadImageResource(el, event){
   reader.onload = function(event) {
 
     _postImg('/upload-base64-img', {base64: event.target.result.split(',')[1]},(data)=>{
-      console.log(attr);
       selected[attr] = data.link;
       target.attr('src', event.target.result);
       icon.attr('src', 'img/img-edit.png');

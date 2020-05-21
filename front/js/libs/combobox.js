@@ -30,7 +30,7 @@ class ComboBox{
     }
 
     select(item){
-      this.element.val(item ? item.label : '');
+      this.element.val(item ? (item.value || item.label) : '');
 
       if (this.callOnChangeBySelection) this.element.trigger("change");
 
@@ -147,12 +147,14 @@ class ComboBox{
         if (this.onBuildItem){
           var struct = this.onBuildItem(each, index);
           item.label = struct.text;
+          item.value = struct.value || struct.text;
           item.img = struct.img;
           item.data = each;
         }else if (typeof each === "string"){
           item.label = each;
-        }else  if (typeof each.val === "string"){
+        }else if (typeof each.val === "string"){
           item.label = each.val;
+          item.value = each.val;
           item.data = each;
         }
 

@@ -24,7 +24,7 @@ class ProductBinder{
       {key: 'Marca', tag: 'marca'},
       {key: 'Fabricante', tag: 'manufacturer'},
       {key: 'firstAgeRange', tag: 'faixa_de_idade'},
-      {key: 'age', tag: 'idade'},
+      {key: 'Idade', tag: 'idade'},
     ];
 
 
@@ -54,9 +54,7 @@ class ProductBinder{
     this.cf = this.ncm || '6104.22.00';
 
 
-    this.peso =  "0.00";
-    this.pesoLiq =  "2.000";
-    this.pesoBruto = "2.000";
+
 
     this.obs = 'Criado pelo Hawk';
 
@@ -68,21 +66,7 @@ class ProductBinder{
 
     //Como fazer?
     this.idFornecedor = 0;
-    this.idProdutoMaster = 0; //'ID do PAI';
-
-    //Do filho
-    this.gtin = "";
-    this.comprimento= "6.00",
-    this.altura = "9.00",
-    this.largura =  "7.00",
-    this.comprimentoReal = "0.00",
-    this.alturaReal =  "0.00",
-    this.larguraReal =  "0.00",
-    this.pesoReal =  "0.000",
-
     this.urlEcommerce = 'testado';
-
-
 
     delete this.attrLoader;
     return this;
@@ -158,23 +142,75 @@ class ProductBinder{
   }
 
   sizing(){
-    this.sizes = this.sizes || [];
+    if (!this._Skus){
+      if (this.ageRange){
+        this.Idade = Util.ternalNext(this.ageRange[0], ...commonAge)
+        this['Faixa de Idade'] = this.ageRange[0];
+      }
 
-    if (this.ageRange){
-      this.firstAgeRange = this.ageRange[0];
-      this.ageRange = this.ageRange;
-      this.age = Util.ternalNext(this.firstAgeRange, ...commonAge)
 
-      this.ageRange.forEach((each) => {
-        this.sizes = this.sizes.concat(Util.ternalNext(each, ...commonSizes));
-      });
+      //Remove Duplicates
+      //this.sizes = [...new Set(this.sizes)];
+    }
+  }
+
+  hasChilds(){
+    return this._SkusUpdate && this._SkusUpdate.length;
+  }
+
+  getChildBy(data){
+    var child = Util.clone(this);
+    delete child._Skus;
+    delete child._Atributos;
+    delete child._Componentes;
+    delete child._Estoque;
+    delete child.img;
+
+    child.idProdutoMaster = this.id;
+
+    delete child.id;
+
+    if (data.id){
+      child.id = data.id;
     }
 
 
-    //Remove Duplicates
-    this.sizes = [...new Set(this.sizes)];
+    child.codigo = data.codigo;
+    child.gtin = data.gtin;
+
+    if (data.comprimento){
+      child.comprimento = data.comprimento;
+      child.comprimentoReal = data.comprimento;
+    }
+
+    if (data.altura){
+      child.altura = data.altura;
+      child.alturaReal =  data.altura;
+    }
+
+    if (data.largura){
+      child.largura = data.largura;
+      child.larguraReal = data.largura;
+    }
+
+    if (data.peso){
+      child.peso = data.peso;
+      child.pesoLiq =  data.peso;
+      child.pesoBruto = data.peso;
+      child.pesoReal = data.peso;
+    }
+
+    return child;
   }
 
+  getChilds(){
+    var childs = [];
+    this._Skus.filter(e => e.changed).forEach((each) => {
+      childs.push(this.getChildBy(each));
+    });
+
+    return childs.filter(Boolean);
+  }
 }
 
 module.exports = ProductBinder;
