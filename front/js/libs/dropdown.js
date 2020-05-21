@@ -15,13 +15,8 @@ class Dropdown {
     return drop;
   }
 
-<<<<<<< HEAD
-  constructor(parent, createDots=true) {
-    this.parent = parent;
-=======
-  constructor(holder, createDots) {
+  constructor(holder, createDots=true) {
     this.holder = holder;
->>>>>>> a63dff6d21dae93d6f70bdd11227889b2bf00a18
 
     if (createDots){
       this.createMenuButton();
