@@ -7,7 +7,7 @@ class Dropdown {
   static on(holder, ...params){
 
     var drop = new Dropdown($(holder), ...params);
-    $(el).click((e)=>{
+    $(holder).click((e)=>{
       e.stopPropagation();
       drop.show()
     });
@@ -52,7 +52,7 @@ class Dropdown {
   }
 
   bindMousePos(){
-    this.setMenuPos($(parent).offset().top, $(parent).offset().left);
+    this.setMenuPos($(this.holder).offset().top, $(this.holder).offset().left);
     this.dropdown.css('position', 'inherit');
 
     return this;
