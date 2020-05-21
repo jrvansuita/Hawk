@@ -15,13 +15,13 @@ class Dropdown {
     return drop;
   }
 
-  constructor(parent, createDots) {
+  constructor(parent, createDots=true) {
     this.parent = parent;
 
     if (createDots){
       this.createMenuButton();
     }
-    
+
     this.createMenuList();
     this.onBindMouseOver();
     this.hide();
