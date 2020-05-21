@@ -26,13 +26,26 @@ $(document).ready(() => {
 
 
 
+
   if (location.pathname.includes('pending')){
 
+    $('.menu-dots').each((index, el) => {
+      Dropdown.on(el)
+      .item('/img/print.png', 'Imprimir Listagem', () => {
+        window.open(
+          '/pending-print-list?status=' +  ($(el).hasClass('menu-red-top') ? 0 : ($(el).hasClass('menu-orange-top')? 1 : 2)),
+          '_blank' // <- This is what makes it open in a new window.
+        );
+      })
+    })
+
+
+/*
     $('.menu-dots').each((index, el)=>{
       $(el).click(function(e){
-        var drop = new MaterialDropdown($(this), e);
+        var drop = new Dropdown($(this), e);
 
-        drop.addItem('/img/print.png', 'Imprimir Listagem', function(){
+        drop.item('/img/print.png', 'Imprimir Listagem', function(){
           window.open(
             '/pending-print-list?status=' +  ($(el).hasClass('menu-red-top') ? 0 : ($(el).hasClass('menu-orange-top')? 1 : 2)),
             '_blank' // <- This is what makes it open in a new window.
@@ -43,7 +56,7 @@ $(document).ready(() => {
 
       });
 
-    });
+    });*/
 
   }
 
@@ -136,8 +149,7 @@ function buildPendingItemsViews(el, pending){
 function bindMenuOptions(el, pending){
   var dots = el.find('.menu-dots-pending');
 
-  var drop = new MaterialDropdown(dots).setOnAnyOptionsClick(function(e){
-    e.stopPropagation();
+  var drop = Dropdown.on(dots).setOnAnyOptionsClick(() => {
     $('.mini-item-modal').parent().remove();
   });
 
@@ -147,7 +159,6 @@ function bindMenuOptions(el, pending){
   if (drop.hasOptions()){
     dots.show();
     dots.unbind('click').click(function (e){
-      drop.show();
       e.stopPropagation();
     });
   }else{
@@ -475,24 +486,24 @@ function onCreateOptionsPendingDropMenu(drop, pending){
 
       //Permitir assumir pendências
       if (Sett.get(loggedUser, 3)){
-        drop.addItem('/img/back.png', 'Assumir', function(){
+        drop.item('/img/back.png', 'Assumir', function(){
           assumePendingSale(pending);
         });
 
         if (pending.status == 0){
-          drop.addItem('/img/lamp.png', 'Encontrado', function(){
+          drop.item('/img/lamp.png', 'Encontrado', function(){
             assumePendingSale(pending, true);
           });
         }
 
         if(pending.voucher){
-          drop.addItem('/img/envelop.png', 'Imprimir cartinha', function(){
+          drop.item('/img/envelop.png', 'Imprimir cartinha', function(){
             window.open('/pending-voucher-print?sale=' + pending.number);
           });
         }
       }else{
         if (pending.status == 0){
-          drop.addItem('/img/restart.png', 'Reiniciar', function(){
+          drop.item('/img/restart.png', 'Reiniciar', function(){
             restartPendingSale(pending);
           });
         }
@@ -503,13 +514,13 @@ function onCreateOptionsPendingDropMenu(drop, pending){
 
     if (pending.status == 0){
       if (!isBlocked(pending)){
-        drop.addItem('/img/forward.png', 'Em Atendimento', function(){
+        drop.item('/img/forward.png', 'Em Atendimento', function(){
           pending.sendEmail = false;
           updatePendingStatus(pending);
         });
 
         if (Sett.get(loggedUser, 10)){
-          drop.addItem('/img/envelop.png', 'Enviar E-mail', function(){
+          drop.item('/img/envelop.png', 'Enviar E-mail', function(){
             pending.sendEmail = true;
             updatePendingStatus(pending);
           });
@@ -518,7 +529,7 @@ function onCreateOptionsPendingDropMenu(drop, pending){
     }else if (pending.status == 1){
       createBlockPendingMenuOption(drop, pending);
 
-      drop.addItem('/img/forward.png', 'Resolvido', function(){
+      drop.item('/img/forward.png', 'Resolvido', function(){
         updatePendingStatus(pending);
       });
 
@@ -529,7 +540,7 @@ function onCreateOptionsPendingDropMenu(drop, pending){
 
 
 function createBlockPendingMenuOption(drop, pending){
-  drop.addItem('/img/block.png', 'Bloquear', function(){
+  drop.item('/img/block.png', 'Bloquear', function(){
     new BlockedSelector().onSelect((reason)=>{
       new BlockedPost(pending.number, reason)
       .setUserId(pending.sale.pickUser.id)
@@ -546,7 +557,7 @@ function createBlockPendingMenuOption(drop, pending){
 
 function createVoucherPendingMenuOption(drop, pending){
   if(!pending.sale.items.some((each) => {return each.changed;}) && isTrueStr(pending.sendEmail)){
-    drop.addItem('/img/money-coin.png', 'Voucher', function(){
+    drop.item('/img/money-coin.png', 'Voucher', function(){
 
       var pendingPrice = getPendingPrice(pending);
 

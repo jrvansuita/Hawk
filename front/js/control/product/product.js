@@ -29,8 +29,18 @@ $(document).ready(() => {
     }
   });
 
+  var drop = Dropdown.on($('.main-menu-dots'));
 
+  if(isUnlocked()){
+    var active = product.situacao == 'A';
+
+    drop.item('/img/' + (active ? 'block' : 'checked') + '.png', active ? 'Inativar' : 'Ativar', () => {
+
+    });
+  }
+/*
   $('.main-menu-dots').click(function (e){
+
     var drop = new MaterialDropdown($(this), e);
 
     if (isUnlocked()){
@@ -49,7 +59,7 @@ $(document).ready(() => {
     }
 
     drop.show();
-  });
+  });*/
 
 
 
