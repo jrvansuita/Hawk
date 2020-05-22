@@ -70,6 +70,7 @@ class ProductBinder{
     this.tituloPagina = this.nome;
 
     if (this.id == undefined){
+      let user = {name : 'teste'};
       this.obs = user.name + " | Desktop | " + this.codigo + " | " + Dat.format(new Date()) + '| Cadastro'
     }else{
       delete this.obs;
@@ -131,6 +132,9 @@ class ProductBinder{
       //this.sizes = [...new Set(this.sizes)];
     }
   }
+
+
+
 
   hasChilds(){
     return this._SkusUpdate && this._SkusUpdate.length;
@@ -197,7 +201,7 @@ var tag = 'post-refresh-storing-product';
 
 global.io.on('connection', (socket) => {
   socket.on(tag , (data, e) => {
-    var binder = ProductBinder.create(data).work();
+    var binder = ProductBinder.create(data).body();
     //binder.attrs();
     global.io.sockets.emit(tag, binder);
   });

@@ -140,7 +140,7 @@ class Dropdown {
   }
 
   show(callback){
-    if (this.hasOptions() && !this.isLoading){
+    if (this.hasItems() && !this.isLoading){
       $('.md-dropdown').hide();
 
       this.dropdown.show();

@@ -18,7 +18,7 @@ module.exports = class Product extends DataAccess {
     this.color = Str.def(color);
     this.quantity = Num.def(quantity);
     this.newStock = Num.def(newStock);
-    this.sync = sync;
+    this.sync = sync ? true : false;
 
     this.age = Str.def(age);
     this.year = Str.def(year);
@@ -28,8 +28,6 @@ module.exports = class Product extends DataAccess {
 
     this.visible = visble ? true : false;
     this.associates = Str.def(associates);
-
-
   }
 
   static getKey() {
@@ -43,8 +41,6 @@ module.exports = class Product extends DataAccess {
 
     return {
       $or: [
-
-
         { 'sku': {
           "$regex": value,
           "$options": "i"
@@ -81,44 +77,15 @@ static get(sku, callback){
   });
 }
 
-static boardPerformance(query, callback){
-  Product.aggregate([
-    { $match: query },
-    {
-      $facet: {
-        manufacturer: [
-          {
-            $group: {
-              _id: '$manufacturer',
-              count: {
-                $sum: 1
-              },
-              stock: {
-                $sum: {$abs: "$newStock"}
-              },
-            }
-          },
-        ],
-        category :  [
-          {
-            $group: {
-              _id: '$category',
-              count: {
-                $sum: 1
-              },
-              stock: {
-                $sum: {$abs: "$newStock"}
-              },
-            }
-          },
-        ],
-    },
-  },
+static getStockBalance(newStockLevel, props, callback){
+  var result = {};
+  var query = {sync: true, newStock: newStockLevel > 0 ? {$gt:newStockLevel} : {$lt:newStockLevel}};
 
-],function(err, res) {
-  if (callback)
-  callback(err, res);
-});
+  props.forEach((eachProp) => {
+    result[eachProp] = [{$group : {  _id: '$' + eachProp, count: { $sum: 1 }, stock: { $sum: {$abs: "$newStock"}} }}]
+  });
+
+  Product.aggregate([ { $match: query }, { $facet: result}], callback);
 }
 
 static paging(query, page, callback){

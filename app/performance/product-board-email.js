@@ -5,13 +5,12 @@ const EmailBuilder = require('../email/email-builder.js');
 module.exports = class ProductBoardEmailHandler {
 
   go(callback){
-    Product.boardPerformance({sync: true, newStock: {$gt:100}}, (err, data) => {
-      Product.boardPerformance({sync: true, newStock: {$lt: -50}}, (err, saida)=>{
-        var result = Object.assign({}, this._buildObject(data[0], "in_"), this._buildObject(saida[0], "out_"));
-        this._sendEmail(result, (res) => {
-          console.log(res);
-        });
+    var props = ['manufacturer', 'category'];
+    Product.getStockBalance(100, props, (err, inData) => {
+      Product.getStockBalance(-50, props, (err, outData)=>{
+        var result = Object.assign({}, this._buildObject(inData[0], "in_"), this._buildObject(outData[0], "out_"));
 
+        this._sendEmail(result);
       });
     });
   }
@@ -28,10 +27,13 @@ module.exports = class ProductBoardEmailHandler {
     return arrays;
   }
 
-  _sendEmail(data, callback){
+  _sendEmail(data){
     new EmailBuilder()
     .template('STOCK')
     .to(Params.performanceEmailsReport())
-    .setData(data).send(callback);
+    .setData(data)
+    .send(() => {
+
+    });
   }
 }

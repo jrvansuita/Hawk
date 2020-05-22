@@ -4,8 +4,6 @@ const FeedXml = require('../feedxml/feed-xml.js');
 const Product = require('../bean/product.js');
 const ProductBoardEmailHandler = require('../performance/product-board-email.js');
 
-
-
 module.exports = class JobFeedXmlProducts extends Job{
 
   getName(){
@@ -16,7 +14,7 @@ module.exports = class JobFeedXmlProducts extends Job{
     return new Promise((resolve, reject)=>{
       //define todos como sync = false
       Product.updateAll({}, {sync: false}, (err, dos)=>{
-        this._updateProducts(() => {
+        this._handleAllSkus(() => {
           this._updateNonSyncProducts(() => {
             resolve();
           });
@@ -26,72 +24,80 @@ module.exports = class JobFeedXmlProducts extends Job{
     });
   }
 
-  _updateProducts(callback){
-    this.count = 0;
-    this.itemCount = 0;
+  _handleAllSkus(callback){
     FeedXml.get((xml) => {
       if (xml){
+        var current = -1;
         var items = xml.feed.item;
-        items.forEach((item, index) => {
-          var sku = FeedXml.val(item, "sku");
 
-          if (!sku.includes('-')){
-            this.itemCount++;
+        var innerHandleAllSkus = (onFinished) => {
+          current++;
 
-            var name = Util.getProductName(FeedXml.val(item, "name"), sku.includes('-'));
-            var brand = FeedXml.val(item, "brand").trim();
-
-            var url = FeedXml.val(item, "link");
-            var image = FeedXml.val(item, "image");
-            var price = FeedXml.val(item, "price");
-            var fromPrice = FeedXml.val(item, "fromPrice");
-            var cost = FeedXml.val(item, "cost");
-
-            var discount = FeedXml.val(item, "discount");
-
-            var category = FeedXml.val(item, "department");
-            var gender = Str.capitalize(FeedXml.val(item, "gender")).trim();
-            var color = Str.capitalize(FeedXml.val(item, "color")).trim();
-            var quantity = FeedXml.val(item, "quantity");
-
-            var year = FeedXml.val(item, "collection");
-            var season = FeedXml.val(item, "season");
-            var age = FeedXml.val(item, "age");
-            var manufacturer = FeedXml.val(item, "manufacturer");
-            var weight = FeedXml.val(item, "child_weight") || FeedXml.val(item, "weight");
-
-
-            var visible = FeedXml.val(item, "visible").includes('true');
-            var associates = FeedXml.val(item, "associates");
-
-
-            Product.get(sku, (res) => {
-              var newStock = 0;
-              this.count++;
-              //se o item ja existe faz a diferença, se não é um item novo
-              if(res){
-                newStock = quantity - res.quantity;
-              }
-
-              var product = new Product(sku, name, brand, url,
-                image,
-                price, fromPrice, cost, discount,
-                category, gender, color,
-                quantity, newStock, true,
-                age, year, season, manufacturer,
-                visible, associates, weight
-              );
-              product.upsert();
-
-              if(this.count == this.itemCount){
-                callback();
-              }
+          if (current == items.length){
+            onFinished();
+          }else{
+            this._handleEachSku(items[current], () => {
+              innerHandleAllSkus(onFinished);
             });
-
           }
-        });
+        };
+
+
+        innerHandleAllSkus(callback);
+      }else{
+        callback();
       }
     });
+  }
+
+  _handleEachSku(data, callback){
+    var product = this.getXmlItemLoaded(data);
+
+    if (product.sku.includes('-')){
+      if(callback){
+        callback();
+      }
+    }else{
+      Product.get(product.sku, (responseProduct) => {
+        product.newStock = (product.quantity - (responseProduct ? responseProduct.quantity : product.quantity));
+        product.sync = true;
+
+        product.upsert();
+
+        if(callback){
+          callback();
+        }
+      });
+    }
+  }
+
+  getXmlItemLoaded(item){
+    var sku = FeedXml.val(item, "sku");
+
+    return new Product(
+      sku,
+      Util.getProductName(FeedXml.val(item, "name"), sku.includes('-')),
+      FeedXml.val(item, "brand").trim(),
+      FeedXml.val(item, "link"),
+      FeedXml.val(item, "image"),
+      FeedXml.val(item, "price"),
+      FeedXml.val(item, "fromPrice"),
+      FeedXml.val(item, "cost"),
+      FeedXml.val(item, "discount"),
+      FeedXml.val(item, "department"),
+      Str.capitalize(FeedXml.val(item, "gender")).trim(),
+      Str.capitalize(FeedXml.val(item, "color")).trim(),
+      FeedXml.val(item, "quantity"),
+      0,
+      true,
+      FeedXml.val(item, "age"),
+      FeedXml.val(item, "collection"),
+      FeedXml.val(item, "season"),
+      FeedXml.val(item, "manufacturer"),
+      FeedXml.val(item, "visible").includes('true'),
+      FeedXml.val(item, "associates"),
+      FeedXml.val(item, "child_weight") || FeedXml.val(item, "weight")
+    );
   }
 
   _updateNonSyncProducts(callback){
