@@ -29,7 +29,7 @@
 .main-panel{
   margin-right: 15px;
   flex: 0 80%;
-  display: flex;
+  /* display: flex; */
   flex-direction: column;
   height: 100%;
   overflow-y: auto;
@@ -57,7 +57,7 @@
 
 .template-bottom{
   flex: 1;
-  width: 100%;
+  /* width: 100%; */
   height: max-content;
   position: relative;
 }
@@ -68,7 +68,7 @@
   height: 83%;
   position: relative;
   margin: 15px 55px;
-  display: block;
+  /* display: block; */
   /* overflow: auto; */
 }
 

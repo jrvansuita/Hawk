@@ -25,7 +25,6 @@ function onHandleResult(result){
 
   setUrlId(result.id);
   if (result.data.count){
-    console.log(result);
     buildBoxes(result);
   }else{
     $('.no-data').show();
@@ -135,7 +134,10 @@ function buildBoxes(results){
 
   coloringData();
   tagsHandler.bind();
-  buildCostsBox(results);
+
+  if (loggedUser.full){
+    buildCostsBox(results);
+  }
 }
 
 

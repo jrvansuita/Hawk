@@ -26,13 +26,13 @@ module.exports = class SaleKeeper{
 
   storeStock(item, callback){
     Product.get(item.codigo, (product)=>{
-      //console.log('Sale Keep Item - ' + item.codigo);
+      console.log('Sale Keep Item - ' + item.codigo);
       SaleStock.from(item, product).save(callback);
     });
   }
 
   store(sale, onTerminate){
-    //console.log('Sale Keep - ' + sale.numeroPedido + ' - ' + Dat.format(new Date(sale.data)));
+    console.log('Sale Keep - ' + sale.numeroPedido + ' - ' + Dat.format(new Date(sale.data)));
     Sale.from(sale).upsert(() => {
 
       var index = 0;

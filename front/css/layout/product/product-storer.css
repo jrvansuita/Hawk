@@ -1,0 +1,238 @@
+
+.main-content{
+  margin-top: 100px !important;
+  width: 95%;
+  margin: auto;
+  padding: 3px;
+  height: 100%;
+  overflow-y: scroll !important;
+}
+
+
+.box{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-right: 15px;
+}
+
+.row{
+  margin-top: 15px;
+  margin-bottom: 15px;
+  display: flex;
+}
+
+.image-holder{
+  height: auto;
+  position: relative;
+  display: block;
+  max-width: fit-content;
+}
+
+.image-holder img{
+  width: 230px;
+  height: 230px;
+  border-radius: 3px;
+  margin: 8px;
+}
+
+
+
+.flex-line{
+  display: flex;
+  padding: 8px 12px 0px 12px;
+  height: 100%;
+  position: relative;
+}
+
+
+.material-input-holder{
+  margin-right: 10px !important;
+  /* width: 100px !important; */
+  margin-bottom: 10px !important;
+}
+
+.material-input-holder>input{
+  font-size: 16px !important;
+}
+
+
+.gray{
+  background-color: #f3f3f3;
+  border-top: 1px dashed #d8d8d8;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+
+
+.box .title{
+  display: flex;
+  font-weight: 600;
+  font-size: 11px !important;
+  color: #259587;
+  padding-bottom: 10px;
+  position: relative;
+  padding: 5px 10px 5px 10px;
+  margin-top: 8px;
+}
+
+
+.box .right{
+  right: 0;
+  float: none;
+  position: absolute;
+  top: 0;
+  color: gray;
+  margin-left: 10px;
+  font-size: 13px;
+  margin-right: 12px;
+  display: block;
+}
+
+.sizes-box{
+  width: -webkit-fill-available;
+  height: 103px;
+  background: #f3f3f3;
+  border: 0.5px solid var(--border-color);
+  border-radius: var(--border-radius);
+  cursor: text;
+  margin-bottom: 10px;
+}
+
+.size-input{
+  padding: 4px 12px;
+  border-radius: 2px;
+  border: 1px solid #ccc;
+  border-bottom: 2px solid #ccc;
+  cursor: pointer;
+  width: fit-content;
+  background: white;
+  text-align: center;
+  white-space: nowrap;
+  margin-top: 10px;
+  min-width: 20px;
+  font-size: 16px;
+  margin-left: 10px;
+  display: inline-block;
+  outline: none;
+  text-transform: uppercase;
+}
+
+.size-input:not(:empty):hover {
+  background: #fdd8d88a;
+  border: 1px solid #f1a9a6;
+  border-bottom: 2px solid #f77e79;
+}
+
+
+.size-group-button{
+  padding: 4px 12px;
+  top: 4px;
+  margin-right: 0px;
+  display: inline;
+  position: relative;
+  border-radius: 2px;
+  border: 1px solid #ccc;
+  border-bottom: 2px solid #ccc;
+  cursor: pointer;
+  background: white !important;
+  font-size: 14px;
+  color: #545353;
+}
+
+.size-group-button:focus, .size-group-button:hover{
+  background: #008b7f24 !important;
+  outline:0;
+  color: #545353;
+  font-weight: 900;
+  border: 1px solid #13ad9d;
+  border-bottom: 2px solid #4644446e;
+}
+
+.size-group-button.active{
+  background: #009586 !important;
+  outline:0;
+  color:white;
+  font-weight: 900;
+  border: 1px solid #00786a;
+  border-bottom: 2px solid #4644446e;
+}
+
+.sizes-dots{
+  top: 8px;
+  margin-top: -20px;
+  display: inline-flex;
+  position: relative;
+}
+
+:root{
+  --border-color: #e6e6e6;
+  --border-radius : 4px;
+}
+
+textarea{
+  display: block;
+  width: -webkit-fill-available;
+  height: 104px;
+  font-size: 14px;
+  border: 0.5px solid var(--border-color);
+  border-radius: var(--border-radius);
+  position: relative;
+  resize: none;
+  padding: 5px 10px;
+  color: #4c4c4c;
+}
+
+.relative-inputs .material-input-holder input, .relative-inputs .material-input-holder{
+  min-width: 100px !important;
+  width: 100px;
+}
+
+.editor-holder{
+  height: auto;
+  min-height: 350px;
+}
+
+.description-editor{
+  margin: 8px 10px;
+  width: -webkit-fill-available;
+}
+
+.description-editor .fr-toolbar{
+  border-top-left-radius: var(--border-radius) !important;
+  border-top-right-radius: var(--border-radius) !important;
+}
+
+.description-editor > *{
+  border-color: var(--border-color) !important;
+}
+
+.childs .editable-input{
+  font-size: 15px;
+  min-height: 35px;
+  color: black;
+  margin: auto;
+  max-width: 130px;
+}
+
+.childs .static-label{color: #757373;font-size: 14px;text-align: center;}
+
+.childs td{
+  padding: 12px 10px;
+}
+
+.childs tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.header td{
+    font-size: 12px;
+    color: #757373;
+    border-bottom: 1px dashed #d8d8d8;
+    text-align: center;
+}
+
+.short-input{
+  max-width: 60px !important;
+}

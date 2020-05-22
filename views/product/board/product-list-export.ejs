@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>Relatório</title>
+  <link rel="icon" href="/img/icon/favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="/front/css/layout/product/product-list-export.css">
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="/front/js/control/product/product-list-export.js"></script>
+  <script type="text/javascript" src="/util/number.js"></script>
+  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+  <script type="text/javascript" src="/front/js/libs/JsBarcode.all.min.js"></script>
+
+  <script>
+  window.data = <%- JSON.stringify(data)%>
+  window.eans = <%- JSON.stringify(eans)%>
+  </script>
+</head>
+<body>
+
+  <table class="top">
+    <tr>
+      <td style="width:">
+        <iframe frameborder='0' src="templates-viewer?id=84155975" width="100%" scrolling="no" ></iframe>
+      </td>
+      <td class="impress-rel">
+        <h1>Relatório de Produtos</h1>
+        <p>Data da Impressão: <%=Dat.formatwTime(new Date())%></p>
+      </td>
+      <td style="text-align: right">
+
+      </td>
+    </tr>
+
+  </table>
+  <div class="product">
+    <table style="margin-top:10px;">
+
+      <%data.forEach((item)=>{%>
+
+        <tr class="all">
+
+          <td class="item-information">
+            <img class="image-export filter" src="<%=item.image%>">
+          </td>
+
+          <td class="item-description">
+            <div class="">
+              <ul>
+                <li class="item-sku sku"><b><%=item.sku%></b></li>
+                <li class="item-manufac"><%=item.brand%></li>
+                <li class="item-name"><%=item.name%></li>
+              </ul>
+              <ul class="then">
+                <li class="item-cost"><%=Num.money(item.cost)%></li>
+                <li class="item-manufac"><%=item.manufacturer%></li>
+              </ul>
+            </div>
+
+          </td>
+
+          <td class="child-information">
+            <%
+            if(item.associates){
+
+
+              var skus = item.associates.split(',');
+
+              skus.forEach((sku)=>{%>
+
+                <div class="child-item" data-sku="<%=sku%>">
+                  <span><%=sku%></span>
+                  <svg id="barcode"></svg>
+                </div>
+
+
+                <%});}%>
+              </td>
+            </tr>
+            <%})%>
+          </table>
+
+        </div>
+
+
+      </body>
+      </html>

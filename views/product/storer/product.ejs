@@ -1,0 +1,243 @@
+<html>
+<%- include('../../menus/main-menu') %>
+<head>
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/product/product-storer.css">
+  <script type="text/javascript" src="/front/js/control/product/product-storer.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-select.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-selector-dialog.css">
+
+
+  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+
+  <script type="text/javascript" src="/front/js/libs/socket.io.slim.js"></script>
+  <script type="text/javascript" src="/front/js/libs/broadcast.js"></script>
+
+
+  <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
+  <script type="text/javascript" src="/front/js/libs/input-dialog.js"></script>
+  <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
+  <script type="text/javascript" src="/front/js/libs/tooltip.js"></script>
+  <script type="text/javascript" src="/front/js/libs/template-editor.js"></script>
+</head>
+<body>
+  <script class="hidable-script">
+  window.product = <%- JSON.stringify(product || {}) %>
+  </script>
+  <%- include('../../menus/stock-menu') %>
+
+
+  <div class="main-content">
+
+
+    <div class="row">
+
+
+      <div class="box shadow image-holder" style="flex: 20%;">
+        <img src="<%=product.img && product.img.url ? product.img.image : '/img/product-placeholder.png'%>" />
+      </div>
+
+      <div class="box shadow" style="flex: 60%;">
+
+        <div class="flex-line">
+          <div class="material-input-holder">
+            <input type="text" class="bindable" data-bind="nome" maxlength="500" autocomplete="off" required tabindex="0"/>
+            <span class="bar"></span>
+            <label>Nome</label>
+          </div>
+        </div>
+
+        <div class="flex-line">
+          <div class="material-input-holder">
+            <input type="text" class="call-refresh bindable combobox" data-bind="Departamento" maxlength="100"  autocomplete="off" tabindex="0"  required/>
+            <span class="bar"></span>
+            <label>Categoria</label>
+          </div>
+
+          <div class="material-input-holder">
+            <input type="text" class="call-refresh bindable combobox" data-bind="Material" maxlength="50"  autocomplete="off" tabindex="0" required/>
+            <span class="bar"></span>
+            <label>Material</label>
+          </div>
+
+          <div class="material-input-holder">
+            <input type="text" class="call-refresh bindable combobox" data-bind="Cor" maxlength="150" autocomplete="off" tabindex="0" required/>
+            <span class="bar"></span>
+            <label>Cor</label>
+          </div>
+
+
+          <div class="material-input-holder">
+            <input type="text" class="bindable combobox" data-bind="Coleção" maxlength="5"  autocomplete="off" tabindex="0"  required/>
+            <span class="bar"></span>
+            <label>Coleção</label>
+          </div>
+        </div>
+
+        <div class="flex-line">
+
+          <div class="material-input-holder">
+            <input type="text" class="bindable combobox" data-bind="Genero" maxlength="30"  autocomplete="off" tabindex="0" required/>
+            <span class="bar"></span>
+            <label>Gênero</label>
+          </div>
+
+          <div class="material-input-holder">
+            <input type="text" class="bindable combobox" data-bind="Estacao" maxlength="30"  autocomplete="off" tabindex="0" required/>
+            <span class="bar"></span>
+            <label>Estação</label>
+          </div>
+
+
+          <div class="material-input-holder">
+            <input type="text" class="bindable combobox" data-bind="Ocasiao" maxlength="30"  autocomplete="off" tabindex="0" required/>
+            <span class="bar"></span>
+            <label>Ocasião</label>
+          </div>
+
+          <div class="material-input-holder">
+            <input type="text" class="bindable" data-bind="cf" maxlength="15" autocomplete="off" tabindex="0" required/>
+            <span class="bar"></span>
+            <label>NCM</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="box shadow" style="flex: 20%;">
+
+        <div class="flex-line">
+          <div class="material-input-holder">
+            <input id="sku" type="text" class="bindable" data-bind="codigo" maxlength="20" autocomplete="off" tabindex="-1" required/>
+            <span class="bar"></span>
+            <label>SKU</label>
+          </div>
+        </div>
+
+        <div class="flex-line">
+          <div class="material-input-holder">
+            <input type="text" class="bindable combobox" data-bind="Fabricante" maxlength="50" autocomplete="off" tabindex="0" required/>
+            <span class="bar"></span>
+            <label>Fabricante</label>
+          </div>
+        </div>
+
+        <div class="flex-line">
+          <div class="material-input-holder">
+            <input type="text" class="call-refresh bindable combobox" data-bind="Marca" maxlength="50"  autocomplete="off" tabindex="0" required/>
+            <span class="bar"></span>
+            <label>Marca</label>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+    <div class="row">
+
+      <div class="box shadow relative-inputs" style="flex: 10%;">
+
+
+        <div class="flex-line">
+          <div class="material-input-holder">
+            <input type="text" id="cost" class="money bindable call-refresh" data-bind="precoCusto" type="text"  maxlength="50"  autocomplete="off" tabindex="0"
+            value="R$ 0,00" onkeypress="return Floa.isFloatKey(event);"  required/>
+            <span class="bar"></span>
+            <label>Custo</label>
+          </div>
+
+          <div class="material-input-holder">
+            <input type="text" id="markup" class="call-refresh" maxlength="50"  autocomplete="off" tabindex="0" onkeypress="return Floa.isFloatKey(event);" required/>
+            <span class="bar"></span>
+            <label>Markup</label>
+          </div>
+        </div>
+
+        <div class="flex-line gray">
+          <div class="material-input-holder">
+            <input type="text" class="money bindable" data-bind="precoDe" maxlength="50"  autocomplete="off" value="R$ 0,00" disabled required/>
+            <span class="bar"></span>
+            <label>Preço De</label>
+          </div>
+
+          <div class="material-input-holder">
+            <input type="text" class="money bindable" data-bind="preco" maxlength="50"  autocomplete="off" value="R$ 0,00" disabled required/>
+            <span class="bar"></span>
+            <label>Preço Por</label>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="box shadow" style="flex: 50%;">
+        <span class="title">Tamanhos<span class="right">
+          <label class="size-group-button" data-val="Bebe" tabindex="0">Bebe</label>
+          <label class="size-group-button" data-val="Primeiros Passos" tabindex="0">Prim. Passos</label>
+          <label class="size-group-button" data-val="Kids" tabindex="0">Infantil</label>
+          <label class="size-group-button" data-val="Juvenil" tabindex="0">Juvenil</label>
+
+          <div class="sizes-dots"></div>
+
+        </span>
+      </span>
+
+      <div class="flex-line">
+        <div class="sizes-box">  </div>
+      </div>
+    </div>
+
+    <div class="box shadow" style="flex: 40%">
+      <span class="title">Descrição Curta</span>
+      <div class="flex-line">
+      <textarea class="bindable" data-bind="descricaoComplementar" rows="3"></textarea>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="row">
+
+
+    <div class="box shadow editor-holder" style="flex: 50%;">
+      <span class="title">Descrição Detalhada </span>
+      <div class="description-editor">
+
+      </div>
+
+    </div>
+
+    <div class="box shadow" style="flex: 50%;">
+      <table class="childs">
+        <tr class="header">
+          <td>SKU</td>
+          <td>EAN</td>
+          <td>Peso (kg) </td>
+          <td>Largura (cm) </td>
+          <td>Altura (cm) </td>
+          <td>Comprimento (cm) </td>
+        </tr>
+
+      </table>
+
+    </div>
+
+  </div>
+
+  <div class="row">
+    <label class="button save shadow">Salvar</label>
+    <label class="button delete shadow">Excluir</label>
+
+
+  </div>
+</div>
+
+
+
+
+</div>
+</body>
+</html>

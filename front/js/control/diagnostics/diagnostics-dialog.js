@@ -1,9 +1,5 @@
 $(document).ready(()=>{
 
-
-
-
-
   $('.f-icon').click(function(e){
     $(this).attr('src', 'img/loader/circle.svg');
     var sku = $(this).data('sku');
@@ -22,7 +18,7 @@ $(document).ready(()=>{
         $(this).attr('src', 'img/restart-error.png');
       }
 
-      $('.menu-dots .dots-glyph').attr('src', 'img/dots.png');
+      //$('.menu-dots .dots-glyph').attr('src', 'img/dots.png');
 
       if ($('.f-icon.fix').length == 0){
         $('.sku-fixes-modal').delay(500).fadeOut(400, ()=>{
@@ -41,66 +37,45 @@ $(document).ready(()=>{
     window.open('/product?sku=' + $(this).text(),'_blank');
   });
 
-  $('.no-problem-menu').click(function(e){
-    var sku = $(this).data('sku');
-    var drop = new MaterialDropdown($(this), e, false, true);
 
-    drop.addItem('/img/restart.png', 'Verificar Agora', function(e){
-      $('.loading-circle').show();
-      $('.no-problem-menu .dots-glyph').attr('src', 'img/loader/circle.svg');
-
-      _post('/check-product-diagnostic', {sku: sku, forceFather : true},(data)=>{
-        showSkuFixesDialog(sku);
-        $('.loading-circle').hide();
-      });
+  Dropdown.on($('.no-problem-menu'))
+  .item('/img/restart.png', 'Verificar Agora', (helper)=>{
+    $('.loading-circle').show();
+    helper.loading();
+    _post('/check-product-diagnostic', {sku: helper.data.sku, forceFather : true},(data)=>{
+      showSkuFixesDialog(sku);
+      $('.loading-circle').hide();
     });
-
-    drop.show();
-
-    e.stopPropagation();
   });
 
-  $('.menu-dots').click(function(e){
-    var sku = $(this).data('sku');
+  var done = (sku)=>{
+    $('.sku-fixes-modal').trigger('click');
+    $(".row-item[data-sku='"+sku.split('-')[0]+"']").fadeOut(600);
+  }
 
-    var done = (sku)=>{
-      $('.sku-fixes-modal').trigger('click');
-      $(".row-item[data-sku='"+sku.split('-')[0]+"']").fadeOut(600);
-    }
+  Dropdown.on($('.menu-dots'))
+  .item('/img/restart-plus.png', 'Checar Todos', () => {
+    $('.f-icon').trigger('click');
+  })
+  .item('/img/delete.png', 'Remover', (helper) => {
+    helper.loading();
+    _post('/product-diagnostic-remove', {sku: helper.data.sku},(data)=>{
+      done(helper.data.sku);
+    });
+  })
+  .item('/img/block.png', 'Inativar', (helper) => {
+    helper.loading();
 
-    var drop = new MaterialDropdown($(this), e, false, true);
-
-    drop.addItem('/img/restart-plus.png', 'Checar Todos', function(e){
-      $('.f-icon').trigger('click');
-      e.stopPropagation();
+    _post('/product-diagnostic-remove', {sku: helper.data.sku},(data)=>{
+      done(helper.data.sku);
     });
 
-    drop.addItem('/img/delete.png', 'Remover', function(e){
-      $('.menu-dots .dots-glyph').attr('src', 'img/loader/circle.svg');
+    _post('/product-active', {
+      sku: helper.data.sku,
+      active: false,
+      user: loggedUser
+    },(data)=>{
 
-      _post('/product-diagnostic-remove', {sku: sku},(data)=>{
-        done(sku);
-      });
     });
-
-    drop.addItem('/img/block.png', 'Inativar', function(e){
-      $('.menu-dots .dots-glyph').attr('src', 'img/loader/circle.svg');
-
-      _post('/product-diagnostic-remove', {sku: sku},(data)=>{
-        done(sku);
-      });
-
-      _post('/product-active', {
-        sku: sku,
-        active: false,
-        user: loggedUser
-      },(data)=>{
-
-      });
-    });
-
-    drop.show();
-
-    e.stopPropagation();
   });
 });

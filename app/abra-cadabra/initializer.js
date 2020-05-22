@@ -22,7 +22,7 @@ module.exports = class Initializer{
           console.log('[Initilizer] - Carregou os Usuários');
           this.expressServer();
           this.jobs(() => {
-            onTerminate();
+            if (onTerminate) onTerminate();
           });
         });
       }
@@ -71,8 +71,12 @@ module.exports = class Initializer{
     require('../server/express-controls.js');
   }
 
-  jobs(){
-    require('../jobs/controller/pool.js').initialize();
+  jobs(callback){
+    if (process.env.NODE_ENV) {
+      require('../jobs/controller/pool.js').initialize(callback);
+    }else{
+      callback();
+    }
   }
 
 }

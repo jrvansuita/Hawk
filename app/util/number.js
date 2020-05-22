@@ -4,9 +4,14 @@ var Num = {
     return 'R$ ' + Num.parse(val, trunc);
   },
 
+  moneyVal(val){
+    return parseFloat(val.replace('.','').replace(',', '.').replace('R$ ', ''));
+  },
+
   parse: function(val, trunc) {
     var digits = trunc ? 0 : 2;
     var val = parseFloat(val).toLocaleString('pt-BR', {maximumFractionDigits:digits, minimumFractionDigits:digits});
+
 
     if (typeof global !== 'undefined'){
       return val.replace('.', '_').replace(',', '.').replace('_', ',');

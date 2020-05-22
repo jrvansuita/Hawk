@@ -108,44 +108,30 @@ $(document).ready(() => {
     );
   });
 
-
-
-  $('.upcoming-dots').click(function(e){
-    var drop = new MaterialDropdown($(this), e);
-    drop.addItem('/img/restart.png', 'Recarregar', function(){
-      $('.upcoming-dots img').attr('src', 'img/loader/circle.svg');
-
-      _post("/picking-reload", {ref: 'picking'}, (data) => {
-        window.location.reload();
-      });
+  Dropdown.on($('.upcoming-dots'))
+  .item('/img/restart.png', 'Recarregar', (helper) => {
+    helper.loading();
+    _post("/picking-reload", {ref: 'picking'}, (data) => {
+      window.location.reload();
     });
-
-    drop.addItem('/img/back.png', 'Separar Novamente', function(){
-      $('.upcoming-dots img').attr('src', 'img/loader/circle.svg');
-
-      _post("/picking-reload", {ref: 'picking', ignoreDone:true}, (data) => {
-        window.location.reload();
-      });
+  })
+  .item('/img/back.png', 'Separar Novamente', (helper) => {
+    helper.loading();
+    _post("/picking-reload", {ref: 'picking', ignoreDone:true}, (data) => {
+      window.location.reload();
     });
-    drop.show();
   });
 
-  $('.blocked-dots').click(function(e){
-    var drop = new MaterialDropdown($(this), e);
-
-    drop.addItem('/img/recycle.png', 'Reciclar Todos', function(){
-      $(".table-sale-blocked-holder.not-blocking").each(function(){
-        new BlockedPost($(this).data("blocknumber")).call();
-      });
+  Dropdown.on($('.blocked-dots'))
+  .item('/img/recycle.png', 'Reciclar Todos', (helper) => {
+    $(".table-sale-blocked-holder.not-blocking").each(function(){
+      new BlockedPost($(this).data("blocknumber")).call();
     });
-
-    drop.addItem('/img/delete-all.png', 'Remover Todos', function(){
-      $(".table-sale-blocked-holder").each(function(){
-        new BlockedPost($(this).data("blocknumber")).call();
-      });
+  })
+  .item('/img/delete-all.png', 'Remover Todos', () => {
+    $(".table-sale-blocked-holder").each(function(){
+      new BlockedPost($(this).data("blocknumber")).call();
     });
-
-    drop.show();
   });
 
   window.setInterval(function() {
@@ -208,41 +194,39 @@ $(document).ready(() => {
   });
 
   if (userSetts[11] != undefined){
-    $('.table-sale-blocked-holder').click(function(e){
-      var blockNumber = $(this).data('blocknumber');
+    $('.blockedDots').each((index, each) =>{
+      var blockNumber = $('.table-sale-blocked-holder').data('blocknumber');
 
-      var drop = new MaterialDropdown($(this), e, false);
-      drop.addItem('/img/delete.png', 'Remover', function(){
+    Dropdown.on(each)
+      .item('/img/delete.png', 'Remover', () =>{
         new BlockedPost(blockNumber).call();
       });
-
-      drop.show();
     });
   }
 
-  $('.done-sale-item').click(function(e){
-    var saleId = $(this).data('saleid').split('-')[1];
-    var sale = $(this).data('sale').split('-')[1];
 
-    var drop = new MaterialDropdown($(this), e, true);
-    drop.setMenuPosAdjust(0, -90);
-    drop.addItem('/img/print.png', 'Imprimir', ()=>{
-      openPrintPickingSale(sale, loggedUser.id);
-    });
+$('.done-sale-item').each((index, each) => {
+  var saleId = $(each).data('saleid').split('-')[1];
+  var sale = $(each).data('sale').split('-')[1];
 
+  var drop = Dropdown.on(each);
 
-    if (userSetts[12] != undefined){
-      drop.addItem('/img/back.png', 'Reseparar', function(){
-        doneSaleRestart(sale);
-      });
-    }
+  //drop.setMenuPosAdjust(0, -90);
 
-    drop.onMouseLeave(()=>{
-      $( "#user-id" ).focus();
-    });
-
-    drop.show();
+  drop.item('/img/print.png', 'Imprimir', ()=>{
+    openPrintPickingSale(sale, loggedUser.id);
   });
+  if (userSetts[12] != undefined){
+    drop.item('/img/back.png', 'Reseparar', () =>{
+      doneSaleRestart(sale);
+    });
+  }
+
+  drop.onMouseLeave(()=>{
+    $( "#user-id" ).focus();
+  });
+});
+
 });
 
 function getInProgressSale(number){

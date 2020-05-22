@@ -34,14 +34,22 @@ module.exports = {
 
     var result = Object.assign(Product.likeQuery(query.value), attrs);
 
-console.log(result);
     return result;
   },
 
   load(query, page, callback){
-    Product.paging(this.buildQuery(query), page, (err, result)=>{
-      callback(result[0].items, result[0].info[0]);
-    });
+    if(page == null){
+      Product.find(this.buildQuery(query), (err, result) => {
+        callback(result);
+      });
+    }else{
+      Product.paging(this.buildQuery(query), page, (err, result)=>{
+        callback(result[0].items, result[0].info[0]);
+      });
+    }
+
+
+
   },
 
 

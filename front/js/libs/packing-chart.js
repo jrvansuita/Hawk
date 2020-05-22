@@ -105,12 +105,6 @@ class PackingChart {
 
 
   buildChart(){
-
-    console.log({data: {
-      labels: this.labels,
-      datasets: this.datasets
-    }});
-
     var ctx = document.getElementById(this.chartId).getContext('2d');
 
     var myChart = new Chart(ctx, {

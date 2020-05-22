@@ -7,6 +7,8 @@ const DiagnosticsEnum = require('../diagnostics/diagnostics-enum.js');
 const ProductBoard = require('../provider/product-board-provider.js');
 const ProductListProvider = require('../provider/product-list-provider.js');
 const ProductImageProvider = require('../provider/product-image-provider.js');
+const ProductStorer = require('../storer/product/product.js');
+const EccosysProvider = require('../eccosys/eccosys-provider.js');
 
 module.exports = class ProductRoutes extends Routes{
 
@@ -33,6 +35,10 @@ module.exports = class ProductRoutes extends Routes{
       ProductHandler.getBySku(req.query.sku, false, this._resp().redirect(res));
     });
 
+    this._get('/product-skus', (req, res) => {
+      ProductHandler.getSkus(req.query.skus, this._resp().redirect(res));
+    });
+
     this._get('/product-stock-history', (req, res) => {
       ProductHandler.getStockHistory(req.query.sku, this._resp().redirect(res));
     });
@@ -45,7 +51,7 @@ module.exports = class ProductRoutes extends Routes{
       var skuOrEan = req.query.sku || req.query.ean;
 
       ProductLaws.load(skuOrEan, (result)=>{
-        res.render('product/product',{
+        res.render('product/stock/product',{
           product : result
         });
       });
@@ -105,8 +111,18 @@ module.exports = class ProductRoutes extends Routes{
         });
       }else{
         new DiagnosticsProvider().findBySku(req.query.sku, (all)=>{
-          res.set('Cache-Control', 'public, max-age=86400'); // 1day
-          this._resp().sucess(res, all);
+          res.set('Cache-Control', 'public, max-age=86400');
+
+          var result = [];
+          // 1day
+          all.forEach((each) => {
+            var s = each.toObject();
+            s.data=  DiagnosticsEnum[each.type];
+
+            result.push(s);
+          });
+
+          this._resp().sucess(res, result);
         });
       }
     });
@@ -184,6 +200,23 @@ module.exports = class ProductRoutes extends Routes{
       });
     });
 
+    this._get('/product-list-export', (req, res) => {
+      ProductListProvider.load(req.session.productListQuery, null, (data, info)=>{
+        new EccosysProvider().skus(data.map((e)=>{return e.sku})).go((skus) => {
+
+          var result = {};
+          skus.forEach((each) => {
+            if (each._Skus){
+              each._Skus.forEach((eachChild) => {
+                 result[eachChild.codigo] = eachChild.gtin;
+              });
+            }
+          });
+          res.render('product/board/product-list-export', {data: data, eans:result});
+        });
+      });
+    });
+
 
     this._get('/product-multiple-imgs', (req, res) => {
       let fs = require('fs')
@@ -201,9 +234,30 @@ module.exports = class ProductRoutes extends Routes{
     });
 
 
+    /** --------------  Product Storer -------------- **/
 
 
+    this._page('/stock/storer', (req, res) => {
+      var skuOrEan = req.query.sku || req.query.ean;
 
+      ProductLaws.load(skuOrEan, (result)=>{
+        res.render('product/storer/product',{
+          product : result
+        });
+      });
+    });
+
+    this._post('/stock/storer-upsert', (req, res) => {
+      new ProductStorer().with(req.body).setOnFinished(this._resp().redirect(res)).upsert();
+    });
+
+    this._post('/stock/storer-delete', (req, res) => {
+      new ProductStorer().with(req.body).delete(this._resp().redirect(res));
+    });
+
+    this._get('/stock/storer-attr', (req, res) => {
+      new ProductStorer().searchAttr(req.query.attr, this._resp().redirect(res));
+    });
 
 
   }

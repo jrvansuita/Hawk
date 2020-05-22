@@ -1,47 +1,49 @@
 $(document).ready(() => {
-  new FileLoader().css('material-dropdown').load();
+  new FileLoader().css('dropdown').load();
 });
 
-class MaterialDropdown {
-  constructor(parent, event, bindMousePosition, fixed) {
+class Dropdown {
 
-    this.remove();
+  static on(holder, ...params){
 
-    this.holder = $('<div>').addClass('md-dropdown');
-    $(parent).append(this.holder);
+    var drop = new Dropdown($(holder), ...params);
+    $(holder).click((e)=>{
+      e.stopPropagation();
+      drop.show()
+    });
 
-    this.items = $('<ul>');
+    return drop;
+  }
 
+  constructor(holder, createDots=true) {
+    this.holder = holder;
 
-    if (bindMousePosition){
-      //this.top = event.pageY -10
-      //this.left = event.pageX -10;
-
-      this.top = $(parent).offset().top;
-      this.left = $(parent).offset().left;
-
-      this.holder.css('position', 'inherit');
-    }else{
-      if (fixed){
-        this.holder.css('position', 'fixed');
-      }else{
-        this.holder.css('position', 'static');
-      }
-      this.items = $('<ul>');
+    if (createDots){
+      this.createMenuButton();
     }
 
+    this.createMenuList();
+    this.onBindMouseOver();
+    this.hide();
+  }
 
-    this.holder.append(this.items);
+  createMenuButton(){
+    this.defMenuIcon = '/img/dots.png';
+    this.menuIcon = $('<img>').attr('src', this.defMenuIcon).addClass('md-dots-icon');
+    $(this.holder).append(this.menuIcon);
+  }
 
-    this.holder.hide();
+  createMenuList(){
+    this.dropdown = $('<div>').addClass('md-dropdown');
+    this.list = $('<ul>');
+    this.dropdown.append(this.list);
+    $(this.holder).append(this.dropdown);
+  }
 
-    this.holder.mouseleave(()=>{
-      //this.holder.hide();
-      if (this.onMouseLeave){
-        this.onMouseLeave();
-      }
-
-      this.remove();
+  onBindMouseOver(){
+    this.dropdown.mouseleave(()=>{
+      if (this.onMouseLeave) this.onMouseLeave();
+      this.hide();
     });
   }
 
@@ -49,7 +51,14 @@ class MaterialDropdown {
     return this._hasOptions;
   }
 
-  setMenuPosAdjust(addX, addY){
+  bindMousePos(){
+    this.setMenuPos($(this.holder).offset().top, $(this.holder).offset().left);
+    this.dropdown.css('position', 'inherit');
+
+    return this;
+  }
+
+  setMenuPos(addX, addY){
     this.top = this.top + addY;
     this.left = this.left + addX;
     return this;
@@ -60,14 +69,50 @@ class MaterialDropdown {
     return this;
   }
 
+  getHelper(event){
+    var helper = {
+      event: event,
+      holder: this.holder,
+      parent: this.holder.parent(),
+      dropDown: this.dropdown,
+      data : this.holder.data(),
+      setMenuIcon: (path, delay, greaterIcon) => {
+        if (this.menuIcon){
+          this.menuIcon.attr('src', path).toggleClass('greater-icon', greaterIcon);
+          if (delay){
+            this.holder.children().delay(delay).queue(() => {
+              helper.loading(false);
+            });
+          }
+        }
+      },
+      loading : (is = true) => {
+        this.isLoading = is;
+        helper.setMenuIcon(is ? '/img/loader/circle.svg' : '/img/dots.png', 0, is);
+      },
 
-  addItem(icon, label, onClick, redirect, blank){
+      finished : (success) => {
+        if (success) {helper.success()} else{helper.error()}
+      },
+
+      success: () => {
+        helper.setMenuIcon('/img/checked.png', 3000, true);
+      },
+      error: () => {
+        helper.setMenuIcon('/img/error.png', 3000, true);
+      }
+    };
+
+    return helper;
+  }
+
+  item(icon, label, onClick, redirect, blank){
     var $icon = icon ? $('<img>').attr('src', icon) : null;
     var $li = $('<li>').append($('<a>').attr('href',redirect ? redirect : '#').attr('target', blank ? '_blank' : '_self').append($icon, label));
 
     $li.click((e)=>{
       if (onClick){
-        onClick(e);
+        onClick(this.getHelper(e));
       }
 
       if (this.onAnyOptionClick){
@@ -75,7 +120,7 @@ class MaterialDropdown {
       }
     });
 
-    this.items.append($li);
+    this.list.append($li);
     this._hasOptions = true;
 
     return this;
@@ -83,17 +128,17 @@ class MaterialDropdown {
 
 
   show(callback){
+    if (this.hasOptions() && !this.isLoading){
+      $('.md-dropdown').hide();
 
-    if (this.hasOptions()){
-      this.holder.fadeIn(400);
+      this.dropdown.show();
 
       if (this.top + this.left > 0){
-        this.items.css('left', this.left).css('top', this.top);
+        this.list.css('left', this.left).css('top', this.top);
       }
 
-
       $('.md-dropdown li').click((e) =>{
-        this.holder.remove();
+        this.hide();
         e.stopPropagation();
       });
 
@@ -112,11 +157,9 @@ class MaterialDropdown {
     this.onMouseLeave = onMouseLeave;
   }
 
-  remove(){
-    if (this.holder){
-      this.holder.remove();
+  hide(){
+    if (this.dropdown){
+      this.dropdown.hide();
     }
-
-    $('.md-dropdown').remove();
   }
 }

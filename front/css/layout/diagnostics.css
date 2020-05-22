@@ -193,7 +193,7 @@ a{
   max-height: 500px;
   overflow-y: auto;
   border-top-right-radius: 5px;
-  margin-right: 1px;
+  overflow-x: hidden;
 }
 
 .top-image-holder {
@@ -317,7 +317,7 @@ a{
   width: 30px;
   height: auto;
   float: right;
-  position: relative;
+  /* position: relative; */
   margin-right: 10px;
 }
 
@@ -335,7 +335,7 @@ a{
 
 
 .main-menu-dots>.md-dropdown{
-  right: 200px;
+  /* right: 200px; */
 }
 
 #search{

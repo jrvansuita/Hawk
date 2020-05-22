@@ -85,4 +85,8 @@ module.exports = class EccosysProvider extends EccosysApi{
     this.download('etiquetas/' + idNfe, res, idNfe + '.pdf');
   }
 
+  attributes(){
+    return this.get('atributos').multiple();
+  }
+
 };

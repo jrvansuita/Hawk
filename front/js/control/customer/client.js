@@ -18,9 +18,6 @@ $(document).ready(() => {
 
 
   prepareAutoComplete();
-
-  $('.sale-dots').click(buildSaleMenuOptions());
-
   startBindingInformations();
 });
 
@@ -93,17 +90,6 @@ function getAutoCompleteTemplate(data){
   var email = $('<span>').addClass('auto-client-email').append(data.email);
   return $('<div>').append(name, socialCode, email);
 }
-
-function buildSaleMenuOptions(){
-  return function(e){
-    var sale = $(this).data('sale');
-    new MaterialDropdown($(this), e)
-    .addItem('../img/transport/default.png', 'Rastreio', ()=>{
-      window.open('https://status.ondeestameupedido.com/tracking/6560/' + sale, '_blank');
-    }).show();
-  }
-}
-
 
 
 function showSaleDialog(sale){

@@ -54,13 +54,11 @@ function controlImagesList(pane, list, path, query){
       }
 
       _post(path, {page: page, cache: false, ...query}, (data) => {
-
-        console.log('LOA ', loadedAllResults);
         loadedAllResults = data.length == 0;
 
-          data.forEach((each) => {
-            loadImagesHolder(list, each);
-          });
+        data.forEach((each) => {
+          loadImagesHolder(list, each);
+        });
 
         isLoading = false;
         bindCopiable();
@@ -148,13 +146,11 @@ function loadImagesHolder(listHolder, each){
   });
 
   $itemHolder.append($clientImg, $previewImg, $skusHolder, buildMenuItem(each));
-  listHolder.append($itemHolder)
+  listHolder.append($itemHolder);
 }
 
 function buildMenuItem(each){
-  $menu = $('<div>').addClass('menu-dots');
-  $menuImg = $('<img>').addClass('dots-glyph').attr('src', '../../img/dots.png');
-  $menu.append($menuImg);
+  $menu = $('<div>').addClass('menu-dots').attr('data-active', each.approved).attr('data-id', each._id);
 
   menuDotsClick($menu, each);
 
@@ -162,24 +158,19 @@ function buildMenuItem(each){
 }
 
 function menuDotsClick(holder, each){
+  var drop = Dropdown.on(holder);
 
-  holder.click(function(e){
-    var drop = new MaterialDropdown($(this), e);
-    var $holder = holder.parent('.approve-item');
-
-    if(each.approved){
-      drop.addItem('/img/block.png', 'Reprovar', function(){
-        onApproveImageClick($holder, each._id, false);
-      });
-    }else{
-      drop.addItem('/img/checked.png', 'Aprovar', function(){
-        onApproveImageClick($holder, each._id, true);
-      });
-    }
-    drop.addItem('/img/delete.png', 'Excluir', function(){
-      deleteImage($holder, each._id);
+  if(each.approved){
+    drop.item('/img/block.png', 'Reprovar',(helper) => {
+      onApproveImageClick(helper.parent, each._id, false);
+    })
+  }else{
+    drop.item('/img/checked.png', 'Aprovar', (helper)=>{
+      onApproveImageClick(helper.parent, each._id, true);
     });
-    drop.show();
+  }
+  drop.item('/img/delete.png', 'Excluir', (helper)=>{
+    deleteImage(helper.parent, each._id);
   });
 }
 
@@ -265,54 +256,54 @@ function saveClick(){
 }
 
 function savePictureToDatabase(){
- _post('/sku-picture-from-insta', {
-   instaPost : getInstaId(), skus: getSelectedSkus().join(',')
- }, (data)=>{
-   console.log('veio' + data);
- });
- $('#insta-post').val('');
- $('.toast-item').remove();
+  _post('/sku-picture-from-insta', {
+    instaPost : getInstaId(), skus: getSelectedSkus().join(',')
+  }, (data)=>{
+    console.log('veio' + data);
+  });
+  $('#insta-post').val('');
+  $('.toast-item').remove();
 }
 
 
 function savePicClick(){
- if($('#insta-post').val()){
-   if($('#insta-post').val().slice(-1) == '/'){
-     var url = $('#insta-post').val().slice(0, -1);
-   }
-   _post('/check-if-picture-exists', {
-     url: url || $('#insta-post').val()}, (data) => {
-       if(data){
-         checkMaterialInput($('#insta-post'));
-         console.log('Imagem já existe!');
-       }else{
-         savePictureToDatabase();
-       }
-     });
- }
-}
-
-function createSingleTag(sku){
-  return $('<span>').addClass('tag copiable').append(sku)
-  .attr('data-value', sku.toString().toLowerCase());
-}
-
-function applyTagColor(tag){
-  var value = tag.data('value');
-
-  if (value){
-    tag
-    .css('background', '#9c9a9a');
+  if($('#insta-post').val()){
+    if($('#insta-post').val().slice(-1) == '/'){
+      var url = $('#insta-post').val().slice(0, -1);
+    }
+    _post('/check-if-picture-exists', {
+      url: url || $('#insta-post').val()}, (data) => {
+        if(data){
+          checkMaterialInput($('#insta-post'));
+          console.log('Imagem já existe!');
+        }else{
+          savePictureToDatabase();
+        }
+      });
+    }
   }
-}
 
-function checkImageApproveHolder(){
-  if($('.to-be-approved-images-holder .approve-item').length <= 0){
-    openImageApproveHolder();
+  function createSingleTag(sku){
+    return $('<span>').addClass('tag copiable').append(sku)
+    .attr('data-value', sku.toString().toLowerCase());
   }
-}
 
-function openImageApproveHolder(){
+  function applyTagColor(tag){
+    var value = tag.data('value');
+
+    if (value){
+      tag
+      .css('background', '#9c9a9a');
+    }
+  }
+
+  function checkImageApproveHolder(){
+    if($('.to-be-approved-images-holder .approve-item').length <= 0){
+      openImageApproveHolder();
+    }
+  }
+
+  function openImageApproveHolder(){
     $('.to-be-approved-container-holder').toggleClass('is-closed');
     $('.icon-open').toggleClass('closed');
 
@@ -322,4 +313,4 @@ function openImageApproveHolder(){
       $('.main-top').css('flex','20');
     }
   }
-    //$('.main-top').toggleClass('is-closed');
+  //$('.main-top').toggleClass('is-closed');

@@ -68,8 +68,11 @@ $(document).ready(()=>{
   });
 
 
-  $(".icon-dots").click(function (e){
-    openOptionsMenu(this, e);
+  $(".icon-dots").each((index, each) =>{
+    Dropdown.on(each)
+    .item('../img/delete.png', 'Excluir', (helper) => {
+      deleteGiftRule(helper.data.id);
+    })
   });
 
 
@@ -97,17 +100,6 @@ $(document).ready(()=>{
 
   }
 });
-
-
-
-function openOptionsMenu(line, e){
-  var id = $(line).data('id');
-  e.stopPropagation();
-  new MaterialDropdown($(line))
-  .addItem('../img/delete.png', 'Excluir', function(){
-    deleteGiftRule(id);
-  }).setMenuPosAdjust(0, -90).show();
-}
 
 function getSelectedSkus(){
   return $('.skus-box .toast-item')

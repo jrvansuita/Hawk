@@ -22,7 +22,7 @@
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-switch.css">
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-checkbox.css">
   <link rel="stylesheet" type="text/css" href="/front/css/libs/line-selector.css">
-
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/dropdown.css">
 
   <script type="text/javascript" src="/front/js/libs/tooltip.js"></script>
 
@@ -123,7 +123,7 @@
 
                     <%if (Sett.get(locals.loggedUser, 9)){%>
                     <div class="upcoming-dots">
-                      <img src="img/dots.png" class="dots-glyph"/>
+
                     </div>
                     <%}%>
 
@@ -176,7 +176,7 @@
                         <%=blockedSalesCount%>
                         <%if (Sett.get(locals.loggedUser, 11)){%>
                           <div class="blocked-dots">
-                            <img src="img/dots.png" class="dots-glyph"/>
+
                           </div>
                           <%}%>
                         </span>
@@ -212,6 +212,8 @@
                                       <%=days%>
                                       <span class="pick-value mini-red-circle"><%=blocked.blockings %></span>
                                     </label>
+                                  </td>
+                                  <td class="blockedDots">
                                   </td>
                                 </tr>
                               </table>

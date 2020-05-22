@@ -1,7 +1,7 @@
 module.exports = class Setts extends DataAccess {
 
   /*
-  group = 0 - General, 1 - Picking, 2 - Packing, 3 - Stock, 4 - Pending
+  group = 0 - General, 1 - Picking, 2 - Packing, 3 - Stock, 4 - Pending, 5 - Performance
   type = 0 - boolean, 1 number, 2 - string
   */
 

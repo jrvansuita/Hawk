@@ -31,6 +31,7 @@ $(document).ready(()=>{
 
   new TemplateEditor()
   .useImageUploader()
+  .useQuickInsert(true)
   .load('#editor').then((_editor) => {
     editor = _editor;
 
@@ -48,9 +49,7 @@ $(document).ready(()=>{
     goToTemplate($(this).data('id'));
   });
 
-  $(".icon-dots").click(function (e){
-    openOptionsMenu(this, e);
-  });
+  openOptionsMenu();
 
   $('.add-new').click(() => {
     goToTemplate(null);
@@ -93,22 +92,20 @@ function save() {
 }
 
 function openOptionsMenu(line, e){
-  var id = $(line).data('id');
-  e.stopPropagation();
-  new MaterialDropdown($(line), e, false, true)
-
-  .addItem('../img/not-visible.png', 'Visualizar', function(){
-    window.open('templates-viewer?id=' + id, '_blank');
-  })
-  .addItem('../img/duplicate.png', 'Duplicar', function(){
-    duplicateTemplate(id);
-  })
-  .addItem('../img/delete.png', 'Excluir', function(){
-    if (checkCanDelete(id)){
-      deleteTemplate(id);
-    }
-  })
-  .show();
+  $(".icon-dots").each((index, each) => {
+    Dropdown.on(each)
+    .item('../img/not-visible.png', 'Visualizar', (helper) => {
+      window.open('templates-viewer?id=' + helper.data.id, '_blank');
+    })
+    .item('../img/duplicate.png', 'Duplicar', (helper) => {
+      duplicateTemplate(helper.data.id);
+    })
+    .item('../img/delete.png', 'Excluir', (helper) => {
+      if (checkCanDelete(helper.data.id)){
+        deleteTemplate(helper.data.id);
+      }
+    });
+  });
 }
 
 function checkCanDelete(id){

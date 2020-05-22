@@ -62,7 +62,7 @@ class CostsBoxBuilder extends BuildBox{
     }
 
     $input.change(() => {
-      var val = this._prepareInputVal($input.val());
+      var val = Num.moneyVal($input.val());
 
       _post('/sales-dashboard-cost', {tag: $input.attr('id'), val:  val}, (e) => {
         this._format($input, val);
@@ -72,9 +72,7 @@ class CostsBoxBuilder extends BuildBox{
     return this;
   }
 
-  _prepareInputVal(val){
-    return parseFloat(val.replace('.','').replace(',', '.').replace('R$ ', ''));
-  }
+
 
   _refreshTotalInfos(){
     var totalCost = parseFloat($('input').toArray().reduce((acun, each) => {
@@ -94,7 +92,7 @@ class CostsBoxBuilder extends BuildBox{
   }
 
 
-  showPerformance(){ 
+  showPerformance(){
     this.group('Performance', 0, 'gray min-col')
     .info('Lucro Bruto', Num.money(this.profit))
     .info('Custos Totais', 0, null, 'costs-sum')

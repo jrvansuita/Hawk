@@ -33,6 +33,7 @@
 .sale-header-holder{
   padding: 10px 15px 5px 15px;
   flex: 80;
+  position: relative;
   margin-right: auto;
   height: -webkit-fill-available;
 }
@@ -57,6 +58,7 @@
   padding: 15px 15px;
   width: auto;
   min-height: 155px;
+  position: relative;
 }
 
 .client-sale-itens{
@@ -159,8 +161,8 @@ table{
 }
 
 .icon{
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   vertical-align: sub;
   margin: 0;
 }
@@ -170,11 +172,11 @@ table{
 }
 
 .menu-dots{
-  float: right;
+  right: 0;
   margin-top: 0px;
-  margin-right: -3px;
-  display: inline-block;
-  position: relative;
+  margin-right: 10px;
+  display: block;
+  position: absolute;
 }
 
 .sale-history-holder{

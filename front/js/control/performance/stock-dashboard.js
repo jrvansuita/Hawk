@@ -6,19 +6,12 @@ $(document).ready(() => {
     }
   });
 
-  $('.menu-dots').click(function(e) {
-    var drop = new MaterialDropdown($(this), e, false, true);
 
-    /*drop.addItem(null, 'Excluir', function(e){
+  /*MaterialDropdown.fromClick($('.menu-dots')).addItem('/img/delete.png', 'Excluir', function(e){
     _post('/stock-dashboard-delete', getQueryData(), (data) => {
-    console.log(data);
-  });
-});*/
-
-drop.show();
-});
-
-
+      console.log(data);
+    });
+  });*/
 
 })
 
@@ -52,7 +45,6 @@ function onHandleResult(result){
   $('#show-skus').val(result.query.showSkus || 25);
 
   if (result.data.count){
-    console.log(result);
     buildBoxes(result);
   }else{
     $('.no-data').show();
@@ -64,11 +56,12 @@ function buildBoxes(results){
   var data = results.data;
 
   var box = new BuildBox()
-  .group('Faturamento', Num.points(data.items), '')
+  .group('Faturamento', Num.points(data.items) + (data.daysCount > 1 ?  ' em ' + data.daysCount + ' dias' : ''))
   .info('Valor', Num.money(data.total), 'high-val')
   .info('Ticket', Num.money(data.tkm))
   .info('Markup', Floa.abs(data.markup, 2))
-  .info('Disponível', Num.points(data.stock) + ' itens')
+  .info('Skus', Num.points(data.skusCount || 0))
+  .info('Disponível', Num.points(data.sumStock) + ' itens')
   .info('Faturado', Num.percent(data.percSold))
   .info('Abrangência', Math.max(1, Num.int(data.stockCoverage)) + ' Dia(s)')
   .info('Score', Floa.abs(data.score,2))
@@ -165,12 +158,12 @@ function buildBoxes(results){
         window.open('/product-url-redirect?sku=' + each.name, '_blank');
       }
 
-      var subclick = (e) => {
+      var subDblClick = (e) => {
         e.stopPropagation();
         window.open('/product?sku=' + each.name, '_blank');
       }
 
-      box.img('/product-image-redirect?sku=' + each.name, each.items, each.name, Math.trunc(each.score), click, subclick, scoreStyling(each))
+      box.img('/product-image-redirect?sku=' + each.name, each.items, each.stock, each.name, 'copiable', Math.trunc(each.score), click, null, subDblClick, scoreStyling(each))
       .get()
       .data('sku', each.name)
       .data('manufacturer', each.manufacturer);
@@ -182,6 +175,7 @@ function buildBoxes(results){
   tagsHandler.bind();
   bindImagePreview();
   bindTooltipManufacturer();
+  bindCopiable();
 }
 
 

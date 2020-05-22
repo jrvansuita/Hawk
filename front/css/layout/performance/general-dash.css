@@ -270,9 +270,14 @@ table .header td:last-child > .right{
 
 .box-img-sub .right{
   position: absolute;
-  right: 0;
-  font-size: 12px;
-  top: 2px;
+  /* right: 0; */
+  font-size: 11px;
+  width: 60px;
+  text-align: right;
+  top: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .box-img-sub .right:hover{
@@ -346,4 +351,16 @@ table .header td:last-child > .right{
 }
 
 
-.sub-high{font-size: 13px;font-weight: 900;/* padding: .5px 4px; *//* background: #09c26426; *//* font-size: 11px; */}
+.sub-high{font-size: 13px;font-weight: 900;}
+
+
+.box-img-sub .super{
+  font-size: 13px;
+  color: #332f2f;
+  font-weight: 900;
+}
+
+.bar-label{
+  color: gray;
+  font-size: 10px;
+}

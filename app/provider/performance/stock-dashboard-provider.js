@@ -17,7 +17,8 @@ module.exports = class StockDashboardProvider extends DashboardProvider.Handler{
 
   _onLoadData(callback){
     var resume = (err1, chartData) => {
-      SaleStock.find(this.getDataQuery(), (err2, rows)=>{
+      SaleStock.findAndSort(this.getDataQuery(), 'date', (err2, rows)=>{
+
         callback(err1 || err2, this._onParseData(rows, chartData));
       });
     };
@@ -30,36 +31,39 @@ module.exports = class StockDashboardProvider extends DashboardProvider.Handler{
   }
 
   _onParseData(rows, chart, daysCount){
-    return {...new StockDash(rows, this.getDaysDif() + 1, this.query.showSkus), ...{chart : chart}};
+    return {...new StockDash(rows, this.query.showSkus), ...{chart : chart}};
   }
 
 };
 
 
 class StockDash extends DashboardProvider.Helper{
-  constructor(rows, daysCount, loadSkusCount){
+  constructor(rows, loadSkusCount){
     super();
     this.count = rows.length;
     this.arrs = {};
     this.loadSkusCount = loadSkusCount == undefined ? 25 : loadSkusCount;
-    this.daysCount = daysCount;
+
 
     this.rolling(rows);
     this.finals();
   }
 
   rolling(rows){
+    console.log(rows);
     this.total = 0;
     this.items = 0;
     this.cost = 0;
-    this.stock = 0;
     this.sumScore = 0;
+    this.stockCounter = {};
+    this.daysCounter = {};
 
     rows.forEach((each) => {
       this.total += each.total;
       this.items += each.quantity;
       this.cost += each.cost;
-      this.stock += each.stock || 0;
+      this.stockCounter[each.sku] = each.stock;
+      this.daysCounter[Dat.format(each.date)] = true;
 
       each.score = this.calcScore(each);
       this.sumScore += each.score;
@@ -88,8 +92,15 @@ class StockDash extends DashboardProvider.Helper{
     this.tkmCost = this.cost/this.items;
     this.profit =  this.total - this.cost;
     this.markup = this.total / this.cost;
-    this.percSold = this.items * 100 / this.stock;
-    this.stockCoverage = this.stock/ (this.items *  this.daysCount);
+    this.daysCount = Object.keys(this.daysCounter).length;
+
+
+    this.sumStock = Object.values(this.stockCounter).reduce((count, i)=>{ return count + i}, 0) + this.items;
+    delete this.stockCounter;
+
+    this.percSold = this.items * 100 / this.sumStock;
+
+    this.stockCoverage = (this.sumStock - this.items) / (this.items/this.daysCount) ;
     this.score = this.sumScore / this.count;
     delete this.sumScore;
 
@@ -98,6 +109,7 @@ class StockDash extends DashboardProvider.Helper{
     });
 
     if (this.sku){
+      this.skusCount = this.sku.length;
       this.sku.splice(this.loadSkusCount);
     }
 
@@ -118,31 +130,18 @@ class StockDash extends DashboardProvider.Helper{
     result.items = result.items ? result.items + item.quantity : item.quantity;
     result.manufacturer = item.manufacturer;
     result.score = result.score ? (result.score + item.score) / 2 : item.score;
+    result.stock =  item.stock;
   }
 
   /* - Calculo de score de vendas por quantidade parcial de estoque no dia - */
   calcScore(item){
     var score = 1;
 
-    var _new = true;
-
-
-   //Verificar qual regra de score deixar
-    if (_new){
-      //Considera somente 1/5 do estoque como parametro
+    if (item.stock > 0){
       var stockPonder = item.stock/3;
       var perc = (item.quantity * 100) / stockPonder;
       perc = Num.between(perc, 1, 100);
       var score = (perc * 15) / 100;
-    }else{
-      if (item.stock > 0){
-        //Considera somente 1/5 do estoque como parametro
-        var stockPonder = item.stock/5;
-        //Calcula o percentual de venda pelo estoque parcial
-        var perc = (item.quantity * 100) / stockPonder;
-        //Fixa a nota pelo percentual de 1 a 10
-        var score = Num.between(perc, 1, 100) / 10;
-      }
     }
 
     return score;

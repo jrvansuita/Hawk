@@ -4,7 +4,6 @@ var Util = {
     return parseInt(new Date().getTime().toString().slice(-8));
   },
 
-
   transportName: (name, def)=>{
     return Util.twoNames(name, def ? def : Const.no_transport);
   },
@@ -49,6 +48,44 @@ var Util = {
     }
   },
 
+  ternal(_content, addIndex, data){
+    var content = _content.trim().toLowerCase();
+    if (_content){
+      for (var i = 0; i < data.length; i++) {
+        if (i % 2 == 0){
+          if (content.includes(data[i].toLowerCase())){
+            return data[i + addIndex];
+          }
+        }
+      }
+    }
+
+    return undefined;
+  },
+
+
+  ternalSame(_content, ...data){
+    return Util.ternal(_content, 0, data);
+  },
+
+  ternalNext(_content, ...data){
+    return Util.ternal(_content, 1, data);
+  },
+
+  isObject(a) {
+    return (!!a) && (a.constructor === Object);
+  },
+
+  //remover os objects  objeto
+  keepPrimitiveAttrs(object){
+    for(var f in object){
+      if(Util.isObject(object[f]) || Array.isArray(object[f])){
+        delete object[f];
+      }
+    }
+    return object;
+  },
+
   //remover os elementos null do objeto
   removeNullElements(object){
     for(var f in object){
@@ -86,6 +123,17 @@ var Util = {
     }
   },
 
+
+  objectToArray(object){
+    var result = [];
+    for (var key in object) {
+      if (object.hasOwnProperty(key)) {
+        result.push(object[key]);
+      }
+    }
+
+    return result;
+  },
 
   forProperty(object, callback){
     for (var key in object) {
@@ -158,6 +206,12 @@ var Util = {
   strToColor: function(str, alpha) {
     var shortened = this.hashCode(str) % 160;
     return 'hsl(' + shortened + ', 45%, 60%'+ (alpha ? ', ' + alpha : '') + ')';
+  },
+
+  acronym: (text) =>{
+    var result = text.match(/[A-Z]/g).join('');
+
+    return result.length == 1 ? text.replace( /[aeiou]/g, '').trim().substr(0, 3) : result;
   },
 
   historyTagColor(tag){
