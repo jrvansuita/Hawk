@@ -14,8 +14,8 @@ module.exports = class ProductStorer{
     return this;
   }
 
-  searchAttr(type, callback){
-    AttributesLoader.filter(type).load(callback);
+  searchAttr(description, callback){
+    AttributesLoader.filter(description).load(callback);
   }
 
   setOnFinished(callback){

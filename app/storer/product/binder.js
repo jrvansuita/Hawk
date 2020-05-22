@@ -14,12 +14,18 @@ class ProductBinder{
 
     if (AttributesLoader.isCached()){
       keys.forEach(key => {
-        if (this[key]) result.push({valor: this[key], descricao: key, ...AttributesLoader.filter(key, this[key]).get()});
+        if (this[key]) {
+          var item = AttributesLoader.filter(key, this[key]).get();
+          result.push({id: item.idAttr, valor: item.id, description: item.description, value: this[key]});
+        }
       });
     }
 
+
+
+
     if (this.largura){
-      result.push({valor: this.largura, descricao: 'Largura (em cm)'});
+      result.push({id:'163882319',  valor: '155'});
     }
 
     return result;
@@ -32,8 +38,6 @@ class ProductBinder{
     this.attributes();
     this.prices();
     this.sizing();
-
-    console.log(this.cf);
 
     //Como fazer?
     this.idFornecedor = 0;
@@ -101,9 +105,8 @@ class ProductBinder{
   }
 
   attributes(){
-
     if (!this['Coleção'] && AttributesLoader.isCached()){
-      var all = AttributesLoader.filter('colecao').get();
+      var all = AttributesLoader.tag('colecao').get();
       if (all && all.length > 0){
         this['Coleção'] = all.slice(-1)[0].description;
       }

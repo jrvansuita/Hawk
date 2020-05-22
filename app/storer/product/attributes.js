@@ -2,6 +2,7 @@ const EccosysStorer = require('../../eccosys/eccosys-storer.js');
 const EccosysProvider = require('../../eccosys/eccosys-provider.js');
 
 var cache;
+var map;
 
 module.exports = {
 
@@ -9,26 +10,39 @@ module.exports = {
     return cache != undefined;
   },
 
-  filter(type, description){
-    this.type = type;
-    this.description = description;
+  description(description){
+    this.filterDescription = description;
     return this;
+  },
+
+  option(option){
+    this.filterOption = option;
+    return this;
+  },
+
+  tag(tag){
+    this.filterTag = tag;
+    return this;
+  },
+
+  filter(description, option){
+    return this.description(description).option(option);
   },
 
   _prepare(data){
     cache = {};
+    map = {};
 
     data.forEach((each) => {
       var items = [];
+      map[each.idExterno] = each.descricao;
 
       if (each._Opcoes && each._Opcoes.length == 1){
         Object.keys(each._Opcoes[0]).forEach((key) => {
-          items.push({/*id: key*/ id: each.id, description: each._Opcoes[0][key]});
+          items.push({id: key, idAttr: each.id, tag: each.idExterno, description: each._Opcoes[0][key]});
         })
       }
 
-      //Mudei para a própria Descrição para reduzir código
-      //cache[each.idExterno] = items;
       cache[each.descricao] = items;
     });
   },
@@ -36,12 +50,12 @@ module.exports = {
   _onResult(){
     var result = cache;
 
-    if (this.type){
-      if (this.description){
-        var arr = cache[this.type];
+    if (this.filterDescription){
+      if (this.filterOption){
+        var arr = cache[this.filterDescription];
         if (arr != undefined){
           for (var i = 0; i < arr.length; i++) {
-            if (arr[i].description == this.description){
+            if (arr[i].description == this.filterOption){
               return arr[i];
             }
           }
@@ -50,7 +64,10 @@ module.exports = {
         return null;
       }
 
-      return cache[this.type];
+      return cache[this.filterDescription];
+
+    }else if(this.filterTag){
+      return cache[map[this.filterTag]];
     }
 
     return result;
@@ -69,7 +86,7 @@ module.exports = {
     this.onResultCallback = callback;
 
     if (!cache){
-      new EccosysProvider().attributes().go((data) => {
+      new EccosysProvider(true).attributes().go((data) => {
         this._prepare(data);
         callback(this._onResult());
       })
