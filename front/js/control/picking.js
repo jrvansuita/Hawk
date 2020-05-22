@@ -209,7 +209,7 @@ $('.done-sale-item').each((index, each) => {
   var saleId = $(each).data('saleid').split('-')[1];
   var sale = $(each).data('sale').split('-')[1];
 
-  var drop = Dropdown.on(each);
+  var drop = Dropdown.on(each, false).bindMousePos();
 
   //drop.setMenuPosAdjust(0, -90);
 

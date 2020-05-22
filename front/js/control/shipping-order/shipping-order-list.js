@@ -208,10 +208,27 @@ function addItemLayout(item, index){
   tds.push($('<td>').addClass('ship-status').append(getSituationName(item.situacao)));
 
 
+  var dots = $('<div>').addClass('menu-dots').data('number', item.numeroColeta).data('id', item.id);
 
+    dots.each((index, each) => {
+      Dropdown.on(each)
+      .item('../img/print.png', 'Imprimir', (helper) => {
+        window.open('/shipping-order-print?number=' + helper.data.number ,'_blank');
+      })
+      .item('../img/delete.png', 'Excluir', (helper) =>{
+        $(each.closest('tr')).fadeOut(300, () =>{
+          $(this).remove();
+        });
+      })
+      .item('../img/transport/default.png', 'Coletado', (helper) =>{
+        _post('/shipping-order-colected', {id: helper.data.id}, () => {
+          var s = $(each.closest('tr')).find('.ship-status');
+          s.text('Coletado').addClass('colected');
+          each.closest('tr').removeClass('open-item').addClass('colected-item');
+        });
+      });
+    });
 
-  var dots = $('<div>').addClass('menu-dots').append($('<img>').attr('src','../img/dots.png').addClass('dots-glyph'));
-  dots.data('number', item.numeroColeta).data('id', item.id).click(getDropDow());
 
   tds.push($('<td>').append(dots));
 
@@ -250,34 +267,5 @@ function applyBackgroundColor(situation, el){
     case 2:
     el.addClass('send-item');
     break;
-  }
-}
-
-
-function getDropDow(){
-  return function (e){
-    var holder = $(this);
-
-    var number = holder.data('number');
-    var id = holder.data('id');
-    e.stopPropagation();
-
-    var drop = new MaterialDropdown($(this), e, true);
-    drop.addItem('../img/print.png', 'Imprimir', function(){
-      window.open('/shipping-order-print?number=' + number ,'_blank');
-    }).addItem('../img/delete.png', 'Excluir', function(){
-      holder.closest('tr').fadeOut(300, function(){
-        $(this).remove();
-      });
-    }).addItem('../img/transport/default.png', 'Coletado', function(){
-      _post('/shipping-order-colected', {id: id}, () => {
-        var s = $(holder.closest('tr')).find('.ship-status');
-        s.text('Coletado').addClass('colected');
-        holder.closest('tr').removeClass('open-item').addClass('colected-item');
-      });
-
-    });
-
-    drop.setMenuPosAdjust(-100, 0).show();
   }
 }

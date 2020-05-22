@@ -28,43 +28,30 @@ $(document).ready(() => {
       window.open('/product-print-locals?sku=' + lastSelected , '_blank');
     }
   });
+});
 
-  var drop = Dropdown.on($('.main-menu-dots'));
+function makeMenu(){
 
-  if(isUnlocked()){
+  if (isUnlocked()){
+
+    var drop = Dropdown.on($('.main-menu-dots'));
+
     var active = product.situacao == 'A';
 
-    drop.item('/img/' + (active ? 'block' : 'checked') + '.png', active ? 'Inativar' : 'Ativar', () => {
-
-    });
-  }
-/*
-  $('.main-menu-dots').click(function (e){
-
-    var drop = new MaterialDropdown($(this), e);
-
-    if (isUnlocked()){
-      var active = product.situacao == 'A';
-
-      drop.addItem('/img/' + (active ? 'block' : 'checked') + '.png', active ? 'Inativar' : 'Ativar' , function(){
-        showLoadingStatus();
-        _post('/product-active', {
-          sku: product.codigo,
-          active: !active,
-          user: currentUser
-        },(data)=>{
-          window.location.reload();
-        });
+    drop.item('/img/' + (active ? 'block' : 'checked') + '.png', active ? 'Inativar' : 'Ativar' , () =>{
+      showLoadingStatus();
+      _post('/product-active', {
+        sku: product.codigo,
+        active: !active,
+        user: currentUser
+      },(data)=>{
+        window.location.reload();
       });
-    }
+    }).bindMousePos();
 
-    drop.show();
-  });*/
+  }
+}
 
-
-
-
-});
 
 
 function findCurrentProduct(){
@@ -170,7 +157,7 @@ function buildChildSku(product, child){
   cols.push(buildTextCol(estoque.estoqueReal - estoque.estoqueDisponivel).addClass('reserved-stock'));
   cols.push(buildWeightCol(child));
 
-  var $options = buildImgCol('img/dots.png', 'Opções');
+  var $options = buildMenuOpt();
 
   cols.push($options);
 
@@ -202,18 +189,18 @@ function buildChildSku(product, child){
     $tr.trigger('click');
   }
 
-
-  $options.click(function(e){
-    var drop = new MaterialDropdown($(this), e, false);
-    drop.addItem('/img/barcode.png', 'Imprimir Etiqueta', function(){
+  $options.each((index, each) =>{
+    var drop = Dropdown.on(each);
+    drop.item('/img/barcode.png', 'Imprimir Etiqueta', (helper) =>{
       window.open('/barcode?sku=' + child.codigo, '_blank');
     });
 
+  //isUnlocked dont working here
 
     if (isUnlocked()){
       var active = child.situacao == 'A';
 
-      drop.addItem('/img/' + (active ? 'block' : 'checked') + '.png', active ? 'Inativar' : 'Ativar' , function(){
+      drop.item('/img/' + (active ? 'block' : 'checked') + '.png', active ? 'Inativar' : 'Ativar' , (helper) =>{
         showLoadingStatus();
         _post('/product-active', {
           sku: child.codigo,
@@ -225,9 +212,6 @@ function buildChildSku(product, child){
         });
       });
     }
-
-
-    drop.show();
 
   });
 
@@ -284,6 +268,11 @@ function buildStockCol(product){
 
 
         _post('/product-stock',requestBody , (res)=>{
+          console.log(parseInt($(this).data('value')));
+          console.log(val);
+
+          console.log(parseInt($(this).data('value')) + val);
+
           handleInputUpdate($(this), res, parseInt($(this).data('value')) + val);
 
           var $disp = $(this).closest('tr').find('.available-stock .child-value');
@@ -350,11 +339,15 @@ function buildTextCol(val){
 }
 
 function buildImgCol(path, title, addClass){
-  var $img = $('<img>').addClass('dots-glyph').attr('src',path).attr('title',title);
-
-
+  var $img = $('<img>').addClass('md-dots-icon').attr('src',path).attr('title',title);
 
   return buildCol($img).css('text-align', 'center');
+}
+
+function buildMenuOpt(){
+  var $menuD = $('<div>').addClass('md-dots-icon');
+
+  return buildCol($menuD).css('text-align', 'center');
 }
 
 
@@ -743,6 +736,7 @@ function loadLayoutHistory(rows){
   function checkPermissionUser(){
     if (Sett.every(loggedUser,[4])){
       unlock(loggedUser);
+      makeMenu();
     }
   }
 

@@ -35,25 +35,23 @@ $(document).ready(()=>{
 
 
 
-  $('.icon-dots').click(function(e){
-    var sku = $(this).data('sku');
-    var type = $(this).data('type');
+  $('.icon-dots').each((index, each) =>{
 
-    var drop = new MaterialDropdown($(this), e, true, true);
+    var drop = Dropdown.on(each);
 
-    if (!$(this).data('father')){
-      drop.addItem('/img/print.png', 'Localizações', function(){
-        window.open('/product-print-locals?sku=' + sku , '_blank');
+    if (!$(each).data('father')){
+      drop.item('/img/print.png', 'Localizações', (helper) =>{
+        console.log(helper);
+        window.open('/product-print-locals?sku=' + helper.data.sku , '_blank');
       });
     }
 
-    if (type == 'block'){
-      drop.addItem('/img/delete.png', 'Desbloquear', function(){
-        new BlockedPost(sku).call();
+    if ($(each).data('type') == 'block'){
+      drop.item('/img/delete.png', 'Desbloquear', (helper) =>{
+        console.log(helper);
+        new BlockedPost(helper.data.sku).call();
       });
     }
-
-    drop.show();
   });
 
 
