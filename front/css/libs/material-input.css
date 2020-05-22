@@ -21,6 +21,8 @@
 
 .material-input-holder>input:focus {
   outline: none;
+  /* background-color: #e9f5ff; */
+  /* border-radius: 4px; */
 }
 
 /* LABEL ======================================= */

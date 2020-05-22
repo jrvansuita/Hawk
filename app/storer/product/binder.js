@@ -1,4 +1,4 @@
-const Attributes = require('./attributes.js');
+const AttributesLoader = require('./attributes.js');
 
 
 class ProductBinder{
@@ -7,68 +7,38 @@ class ProductBinder{
     return Object.assign(new ProductBinder(), data);
   }
 
-  constructor(){
-    this.attrLoader = new Attributes();
-  }
-
   attrs(){
     var result = [];
-    var map = [
-      {key: 'Departamento', tag: 'departamento'},
-      {key: 'Genero', tag: 'genero'},
-      {key: 'Estacao', tag: 'season'},
-      {key: 'Coleção', tag: 'colecao'},
-      {key: 'Cor', tag: 'color'},
-      {key: 'Material', tag: 'material'},
-      {key: 'Ocasiao', tag: 'ocasiao'},
-      {key: 'Marca', tag: 'marca'},
-      {key: 'Fabricante', tag: 'manufacturer'},
-      {key: 'firstAgeRange', tag: 'faixa_de_idade'},
-      {key: 'Idade', tag: 'idade'},
-    ];
+    var keys = [ 'Departamento', 'Genero', 'Estacao', 'Coleção', 'Cor',
+    'Material', 'Ocasiao', 'Marca','Fabricante', 'Idade' ];
 
+    if (AttributesLoader.isCached()){
+      keys.forEach(key => {
+        if (this[key]) result.push({valor: this[key], descricao: key, ...AttributesLoader.filter(key, this[key]).get()});
+      });
+    }
 
-    if (this.attrLoader.isCached()){
-      map.forEach((each) => {
-        if (this[each.key]){
-          var data = this.attrLoader.filter(each.tag, this[each.key]).get();
-          data.valor = this[each.key];
-          //data.descricao = each.tag;
-          result.push(data);
-        }
-      })
+    if (this.largura){
+      result.push({valor: this.largura, descricao: 'Largura (em cm)'});
     }
 
     return result;
   }
 
 
-  work(){
+  body(){
     this.identification();
     this.defaults();
     this.attributes();
     this.prices();
     this.sizing();
 
-
-    this.cf = this.ncm || '6104.22.00';
-
-
-
-
-    this.obs = 'Criado pelo Hawk';
-
-    //Verificar
-
-    this.descricaoComplementar = "Serve pra alguma coisa?";
-    this.descricaoEcommerce = "Produto teste criado pela API";
-
+    console.log(this.cf);
 
     //Como fazer?
     this.idFornecedor = 0;
     this.urlEcommerce = 'testado';
 
-    delete this.attrLoader;
     return this;
   }
 
@@ -98,6 +68,12 @@ class ProductBinder{
     }
 
     this.tituloPagina = this.nome;
+
+    if (this.id == undefined){
+      this.obs = user.name + " | Desktop | " + this.codigo + " | " + Dat.format(new Date()) + '| Cadastro'
+    }else{
+      delete this.obs;
+    }
   }
 
   defaults(){
@@ -120,11 +96,13 @@ class ProductBinder{
     this.produtoAlterado = 'N'
     this.unPorCaixa = '1';
     this.spedTipoItem = '00';
+    this.descricaoEcommerce = this.descricaoDetalhada;
   }
 
   attributes(){
-    if (!this['Coleção'] && this.attrLoader.isCached()){
-      var all = this.attrLoader.filter('colecao').get();
+
+    if (!this['Coleção'] && AttributesLoader.isCached()){
+      var all = AttributesLoader.filter('colecao').get();
       if (all && all.length > 0){
         this['Coleção'] = all.slice(-1)[0].description;
       }
@@ -174,9 +152,9 @@ class ProductBinder{
       child.id = data.id;
     }
 
-
     child.codigo = data.codigo;
     child.gtin = data.gtin;
+
 
     if (data.comprimento){
       child.comprimento = data.comprimento;
