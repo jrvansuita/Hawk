@@ -47,7 +47,7 @@ module.exports = class Template extends DataAccess {
 
   static duplicate(id, callback){
     Template.findOne({id:id}, (err, obj)=>{
-      new Template('[Duplicado] ' + obj.name, obj.subject, obj.content).upsert((err, doc) => {
+      new Template('[Duplicado] ' + obj.name, obj.subject, obj.content, null, null, obj.type).upsert((err, doc) => {
         callback(doc);
       })
     });
