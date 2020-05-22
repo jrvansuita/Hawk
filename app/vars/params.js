@@ -164,7 +164,15 @@ var Params = {
 
   getResponseBaseId(){
     return this.get('getresponse-base-id');
-  }
+  },
+
+  performanceEmailsReport(){
+    return this.get('performance-emails');
+  },
+
+  activePerformanceEmailReport(){
+    return this.get('active-performance-report');
+  },
 }
 
 
