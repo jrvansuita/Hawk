@@ -189,31 +189,27 @@ function buildChildSku(product, child){
     $tr.trigger('click');
   }
 
-  $options.each((index, each) =>{
-    var drop = Dropdown.on(each);
-    drop.item('/img/barcode.png', 'Imprimir Etiqueta', (helper) =>{
-      window.open('/barcode?sku=' + child.codigo, '_blank');
+  var active = child.situacao == 'A';
+
+  Dropdown.on($options)
+  .item('/img/barcode.png', 'Imprimir Etiqueta', (helper) =>{
+    window.open('/barcode?sku=' + child.codigo, '_blank');
+  })
+  .item('/img/' + (active ? 'block' : 'checked') + '.png', active ? 'Inativar' : 'Ativar' , (helper) =>{
+    showLoadingStatus();
+    _post('/product-active', {
+      sku: child.codigo,
+      active: !active,
+      user: currentUser,
+      forceSingle: true
+    },(data)=>{
+      window.location.reload();
     });
-
-  //isUnlocked dont working here
-
-    if (isUnlocked()){
-      var active = child.situacao == 'A';
-
-      drop.item('/img/' + (active ? 'block' : 'checked') + '.png', active ? 'Inativar' : 'Ativar' , (helper) =>{
-        showLoadingStatus();
-        _post('/product-active', {
-          sku: child.codigo,
-          active: !active,
-          user: currentUser,
-          forceSingle: true
-        },(data)=>{
-          window.location.reload();
-        });
-      });
-    }
-
+  })
+  .setOnDynamicShow(() => {
+    return {1: isUnlocked()};
   });
+
 
   $('#child-skus-holder').append($tr);
 }

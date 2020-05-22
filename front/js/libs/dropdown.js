@@ -58,13 +58,18 @@ class Dropdown {
   }
 
   setMenuPos(addX, addY){
-    this.top = this.top + addY;
-    this.left = this.left + addX;
+    this.top = Num.def(this.top) + addY;
+    this.left = Num.def(this.left) + addX;
     return this;
   }
 
   setOnAnyOptionsClick(callback){
     this.onAnyOptionClick = callback;
+    return this;
+  }
+
+  setOnDynamicShow(callback){
+    this.onDynamicShow = callback;
     return this;
   }
 
@@ -129,13 +134,22 @@ class Dropdown {
   }
 
   prepare(e){
-    if (this.bindMousePosition){
-      this.setMenuPos(e.pageY -10, e.pageX -10);
-      this.dropdown.css('position', 'inherit');
+    if ((this.top + this.left) > 0){
+      this.dropdown.css('top', this.top).css('left', this.left);
     }
 
-    if ((this.top + this.left) > 0){
-      this.dropdown.css('left', this.left).css('top', this.top);
+    if (this.bindMousePosition){
+      console.log(e.pageY + ' - ' + e.pageX);
+      this.dropdown.css('top', e.pageY).css('left', e.pageX);
+      //this.dropdown.css('position', 'inherit');
+    }
+
+    if(this.onDynamicShow){
+      var result = this.onDynamicShow();
+
+      this.list.children().each((i, each) => {
+        $(each).toggle(!(result[i] == false));
+      });
     }
   }
 
