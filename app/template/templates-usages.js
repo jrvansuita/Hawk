@@ -35,5 +35,10 @@ module.exports = {
     icon: 'nf'
   },
 
+  STOCK: {
+    name : 'Relatório de Estoque',
+    icon: 'box'
+  },
+
 
 };

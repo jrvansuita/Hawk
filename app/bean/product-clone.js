@@ -1,6 +1,8 @@
+//backup product.js
+
 module.exports = class Product extends DataAccess {
 
-  constructor(sku, name, brand, url, image, price, fromPrice, cost, discount, category, gender, color, quantity, newStock, sync, age, year, season, manufacturer, visble, associates, weight) {
+  constructor(sku, name, brand, url, image, price, fromPrice, cost, discount, category, gender, color, quantity, age, year, season, manufacturer, visble, associates, weight) {
     super();
     this.sku = Str.def(sku);
     this.name = Str.def(name);
@@ -17,8 +19,7 @@ module.exports = class Product extends DataAccess {
     this.gender = Str.def(gender);
     this.color = Str.def(color);
     this.quantity = Num.def(quantity);
-    this.newStock = Num.def(newStock);
-    this.sync = sync;
+
 
     this.age = Str.def(age);
     this.year = Str.def(year);
@@ -61,7 +62,7 @@ module.exports = class Product extends DataAccess {
       "$options": "i"
     }
   }
-]
+  ]
 };
 }
 
@@ -78,46 +79,6 @@ static get(sku, callback){
   Product.findOne(Product.getKeyQuery(sku.split('-')[0]), (err, product)=>{
     callback(product);
   });
-}
-
-static boardPerformance(query, callback){
-  Product.aggregate([
-    { $match: query },
-    {
-      $facet: {
-        manufacturer: [
-          {
-            $group: {
-              _id: '$manufacturer',
-              count: {
-                $sum: 1
-              },
-              stock: {
-                $sum: {$abs: "$newStock"}
-              },
-            }
-          },
-        ],
-        category :  [
-          {
-            $group: {
-              _id: '$category',
-              count: {
-                $sum: 1
-              },
-              stock: {
-                $sum: {$abs: "$newStock"}
-              },
-            }
-          },
-        ],
-    },
-  },
-
-],function(err, res) {
-  if (callback)
-  callback(err, res);
-});
 }
 
 static paging(query, page, callback){
@@ -152,7 +113,7 @@ static paging(query, page, callback){
               $sum: { $multiply: [ "$quantity", "$price" ] }
             }
 
-          } },
+           } },
         ],
       },
     },
@@ -161,4 +122,6 @@ static paging(query, page, callback){
     callback(err, res);
   });
 }
+
+
 };

@@ -16,11 +16,15 @@
 
       <%data[attr].forEach(item=>{%>
 
-        <div class="line-item clickable" data-attr="<%=attr%>" data-value="<%=item.title%>">
+        <div class="line-item clickable <%=item.balance < 0 ? 'red' : 'green'%>" data-attr="<%=attr%>" data-value="<%=item.title%>">
           <label class="data-title"><%=item.title%>
             <label class="count-label" title="<%=Num.points(item.count)%>"><%=Num.format(item.count)%></label>
           </label>
-          <label class="data-quantity" title="<%=Num.points(item.quantity)%>"><%=Num.format(item.quantity)%></label>
+          <label class="<%=item.balance <0 ? 'red-label': 'green-label'%>" title="<%=Num.points(item.balance)%>"><%=Num.format(Math.abs(item.balance))%>
+            <label class="data-quantity" title="<%=Num.points(item.quantity)%>"><%=Num.format(item.quantity)%>
+            </label>
+          </label>
+
 
         </div>
         <%});%>

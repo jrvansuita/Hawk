@@ -56,6 +56,7 @@ module.exports = {
               if (result[attr] && result[attr][eachValue]){
                 result[attr][eachValue].quantity += each.quantity;
                 result[attr][eachValue].count++;
+                result[attr][eachValue].balance += each.newStock;
               }else{
                 if (!result[attr]){
                   result[attr]={};
@@ -64,7 +65,9 @@ module.exports = {
                 result[attr][eachValue] = {
                   title: eachValue,
                   quantity : each.quantity,
-                  count : 1
+                  count : 1,
+                  balance: each.newStock
+
                 };
               }
 
@@ -74,8 +77,6 @@ module.exports = {
           }
         });
       });
-
-
       callback(this.order(result));
     });
 
