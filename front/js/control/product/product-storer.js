@@ -216,7 +216,7 @@ function buildChildSku(item){
   .col(item.codigo)
   .input('Ean', 'gtin', item.gtin, '0000000000000', null, 'int')
   .input('Peso', 'peso', Floa.def(item.peso) || Floa.def(item.pesoLiq), '0,000', 'short-input', 'float')
-  .input('Largura', 'lagura', item.largura, '0,000', 'short-input', 'int')
+  .input('Largura', 'largura', item.largura, '0,000', 'short-input', 'int')
   .input('Altura', 'altura', item.altura, '0,000', 'short-input', 'int')
   .input('Comprimento', 'comprimento', item.comprimento, '0,000', 'short-input', 'int')
 }

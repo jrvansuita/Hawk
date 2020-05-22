@@ -1,22 +1,21 @@
 const EccosysStorer = require('../../eccosys/eccosys-storer.js');
 const EccosysProvider = require('../../eccosys/eccosys-provider.js');
-const AttributesStorer = require('./attributes.js');
+const AttributesLoader = require('./attributes.js');
 const ProductBinder = require('./binder.js');
 
 module.exports = class ProductStorer{
   constructor(){
     this.provider = new EccosysProvider();
-    this.storer = new EccosysStorer();
-    this.attributesStorer = new AttributesStorer();
+    this.storer = new EccosysStorer(false);
   }
 
   with(data){
-    this.binder = ProductBinder.create(data).work();
+    this.fatherBody = ProductBinder.create(data).body();
     return this;
   }
 
   searchAttr(type, callback){
-    this.attributesStorer.filter(type).load(callback);
+    AttributesLoader.filter(type).load(callback);
   }
 
   setOnFinished(callback){
@@ -25,22 +24,21 @@ module.exports = class ProductStorer{
   }
 
   upsert(){
-    //Faz o pai
-    this._onSkuUpsert(this.binder, () => {
+    //Father Handler
+    this._onSkuUpsert(this.fatherBody, () => {
+      //Childs Handler
       this._handleChildsUpsert();
     });
-
-    //this.provider.product(this.binder.codigo).go(found => this._onHandleProductFind(found) );
   }
 
   _handleChildsUpsert(){
-    var childs = this.binder.getChilds();
+    var childs = this.fatherBody.getChilds();
     var index = -1;
 
     if (childs && childs.length > 0){
       var handlerFunction = (onFinished) => {
         index++;
-        if (index == (childs.length-1)){
+        if (index == childs.length){
           onFinished();
         }else{
           this._onSkuUpsert(childs[index], () => {
@@ -56,30 +54,30 @@ module.exports = class ProductStorer{
   }
 
   _onSkuUpsert(data, callback){
-    this.storer.product().upsert(data.id == undefined, data).go(response => this._onStoringResponseHandler(response, callback));
+    this.storer.product().upsert(data.id == undefined, data).go(response => this._onStoringResponseHandler(data, response, callback));
   }
 
-  _onStoringResponseHandler(response, callback){
+  _onStoringResponseHandler(data, response, callback){
     response = response.result || response;
     if (response.success.length > 0){
-      this._onAttributesHandler(callback);
+      this._onAttributesHandler(data, callback);
     }else{
       this.onFinishListener(response);
     }
   }
 
-  _onAttributesHandler(callback){
-    callback();
+  _onAttributesHandler(data, callback){
+    var attrs = ProductBinder.create(data).attrs()
 
     //Ainda não ta pronto a atualização de atributos
-    /*this.attributesStorer.load(() => {
-      this.storer.product(this.binder.codigo).attrs().put(this.binder.attrs()).go((response) => {
+    AttributesLoader.load(() => {
+      this.storer.product(data.codigo).attrs().put(attrs).go((response) => {
         callback(response);
       });
-    });*/
+    });
   }
 
   delete(callback){
-    new EccosysStorer().product(this.binder.codigo).delete().go(callback);
+    new EccosysStorer().product(this.fatherBody.codigo).delete().go(callback);
   }
 }

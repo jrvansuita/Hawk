@@ -278,3 +278,21 @@ html,body {
   float: right;
   margin-top: 2px;
 }
+
+.red-label{
+  color: red!important;
+  font-size: 11px;
+  float: right;
+}
+.green-label{
+  color: green!important;
+  font-size: 10px;
+  float: right;
+}
+
+.red{
+  background: #ff000052!important;
+}
+.green{
+  background: #00800045!important;
+}

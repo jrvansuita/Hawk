@@ -134,7 +134,7 @@ function bindMenuOptions(el, pending){
   onCreateOptionsPendingDropMenu(drop, pending);
 
 
-  if (drop.hasOptions()){
+  if (drop.hasItems()){
     dots.show();
     dots.unbind('click').click(function (e){
       drop.show();

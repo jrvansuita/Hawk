@@ -3,20 +3,17 @@ const EccosysProvider = require('../../eccosys/eccosys-provider.js');
 
 var cache;
 
-module.exports = class AttributesStorer{
-  constructor(){
-
-  }
+module.exports = {
 
   isCached(){
     return cache != undefined;
-  }
+  },
 
   filter(type, description){
     this.type = type;
     this.description = description;
     return this;
-  }
+  },
 
   _prepare(data){
     cache = {};
@@ -34,7 +31,7 @@ module.exports = class AttributesStorer{
       //cache[each.idExterno] = items;
       cache[each.descricao] = items;
     });
-  }
+  },
 
   _onResult(){
     var result = cache;
@@ -57,7 +54,7 @@ module.exports = class AttributesStorer{
     }
 
     return result;
-  }
+  },
 
   get(){
     if (this.isCached()){
@@ -65,7 +62,7 @@ module.exports = class AttributesStorer{
     }else{
       return undefined;
     }
-  }
+  },
 
 
   load(callback){
@@ -77,8 +74,6 @@ module.exports = class AttributesStorer{
         callback(this._onResult());
       })
     }else{
-
-
       callback(this._onResult());
     }
   }

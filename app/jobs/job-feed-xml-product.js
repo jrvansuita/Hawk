@@ -1,10 +1,8 @@
 const Job = require('../jobs/controller/job.js');
 
-
 const FeedXml = require('../feedxml/feed-xml.js');
 const Product = require('../bean/product.js');
-
-
+const ProductBoardEmailHandler = require('../performance/product-board-email.js');
 
 module.exports = class JobFeedXmlProducts extends Job{
 
@@ -14,66 +12,101 @@ module.exports = class JobFeedXmlProducts extends Job{
 
   doWork(){
     return new Promise((resolve, reject)=>{
-      Product.updateAll({quantity : {$gt: 0}},{quantity: 0}, (err, dos)=>{
-        //Zera as quantidades em estoque para depois atualizar.
-
-        FeedXml.get((xml) => {
-          if (xml){
-            var items = xml.feed.item;
-            items.forEach((item, index) => {
-
-              var sku = FeedXml.val(item, "sku");
-
-              if (!sku.includes('-')){
-                var name = Util.getProductName(FeedXml.val(item, "name"), sku.includes('-'));
-                var brand = FeedXml.val(item, "brand").trim();
-
-                var url = FeedXml.val(item, "link");
-                var image = FeedXml.val(item, "image");
-                var price = FeedXml.val(item, "price");
-                var fromPrice = FeedXml.val(item, "fromPrice");
-                var cost = FeedXml.val(item, "cost");
-
-                var discount = FeedXml.val(item, "discount");
-
-                var category = FeedXml.val(item, "department");
-                var gender = Str.capitalize(FeedXml.val(item, "gender")).trim();
-                var color = Str.capitalize(FeedXml.val(item, "color")).trim();
-                var quantity = FeedXml.val(item, "quantity");
-
-                var year = FeedXml.val(item, "collection");
-                var season = FeedXml.val(item, "season");
-                var age = FeedXml.val(item, "age");
-                var manufacturer = FeedXml.val(item, "manufacturer");
-                var weight = FeedXml.val(item, "child_weight") || FeedXml.val(item, "weight");
-
-
-                var visible = FeedXml.val(item, "visible").includes('true');
-                var associates = FeedXml.val(item, "associates");
-
-
-                var product = new Product(sku, name, brand, url,
-                  image,
-                  price, fromPrice, cost, discount,
-                  category, gender, color,
-                  quantity,
-                  age, year, season, manufacturer,
-                  visible, associates, weight
-                  );
-
-                  product.upsert();
-                }
-              });
-
-              setTimeout(() => {
-                resolve();
-              },5000)
-            }
+      //define todos como sync = false
+      Product.updateAll({}, {sync: false}, (err, dos)=>{
+        this._handleAllSkus(() => {
+          this._updateNonSyncProducts(() => {
+            resolve();
           });
-
         });
+
+      });
+    });
+  }
+
+  _handleAllSkus(callback){
+    FeedXml.get((xml) => {
+      if (xml){
+        var current = -1;
+        var items = xml.feed.item;
+
+        var innerHandleAllSkus = (onFinished) => {
+          current++;
+
+          if (current == items.length){
+            onFinished();
+          }else{
+            this._handleEachSku(items[current], () => {
+              innerHandleAllSkus(onFinished);
+            });
+          }
+        };
+
+
+        innerHandleAllSkus(callback);
+      }else{
+        callback();
+      }
+    });
+  }
+
+  _handleEachSku(data, callback){
+    var product = this.getXmlItemLoaded(data);
+
+    if (product.sku.includes('-')){
+      if(callback){
+        callback();
+      }
+    }else{
+      Product.get(product.sku, (responseProduct) => {
+        product.newStock = (product.quantity - (responseProduct ? responseProduct.quantity : product.quantity));
+        product.sync = true;
+
+        product.upsert();
+
+        if(callback){
+          callback();
+        }
       });
     }
+  }
 
+  getXmlItemLoaded(item){
+    var sku = FeedXml.val(item, "sku");
 
-  };
+    return new Product(
+      sku,
+      Util.getProductName(FeedXml.val(item, "name"), sku.includes('-')),
+      FeedXml.val(item, "brand").trim(),
+      FeedXml.val(item, "link"),
+      FeedXml.val(item, "image"),
+      FeedXml.val(item, "price"),
+      FeedXml.val(item, "fromPrice"),
+      FeedXml.val(item, "cost"),
+      FeedXml.val(item, "discount"),
+      FeedXml.val(item, "department"),
+      Str.capitalize(FeedXml.val(item, "gender")).trim(),
+      Str.capitalize(FeedXml.val(item, "color")).trim(),
+      FeedXml.val(item, "quantity"),
+      0,
+      true,
+      FeedXml.val(item, "age"),
+      FeedXml.val(item, "collection"),
+      FeedXml.val(item, "season"),
+      FeedXml.val(item, "manufacturer"),
+      FeedXml.val(item, "visible").includes('true'),
+      FeedXml.val(item, "associates"),
+      FeedXml.val(item, "child_weight") || FeedXml.val(item, "weight")
+    );
+  }
+
+  _updateNonSyncProducts(callback){
+    Product.updateAll({sync: false}, {newStock: 0, quantity: 0 }, (err, doc) => {
+      if(Params.activePerformanceEmailReport()){
+        new ProductBoardEmailHandler().go(() => {});
+      }
+      callback();
+    });
+  }
+
+};
