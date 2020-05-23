@@ -10,23 +10,11 @@ module.exports = {
     return cache != undefined;
   },
 
-  description(description){
-    this.filterDescription = description;
-    return this;
-  },
-
-  option(option){
-    this.filterOption = option;
-    return this;
-  },
-
-  tag(tag){
-    this.filterTag = tag;
-    return this;
-  },
-
   filter(description, option){
-    return this.description(description).option(option);
+    this.filterDescriptionOrTag = description;
+    this.filterOption = option;
+
+    return this;
   },
 
   _prepare(data){
@@ -34,25 +22,27 @@ module.exports = {
     map = {};
 
     data.forEach((each) => {
-      var items = [];
       map[each.idExterno] = each.descricao;
+      var options = each._Opcoes ? each._Opcoes[0] : null;
 
-      if (each._Opcoes && each._Opcoes.length == 1){
-        Object.keys(each._Opcoes[0]).forEach((key) => {
-          items.push({id: key, idAttr: each.id, tag: each.idExterno, description: each._Opcoes[0][key]});
-        })
+      if (options){
+        cache[each.descricao] = Object.keys(options).map((key) => {
+          return {id: key, idAttr: each.id, tag: each.idExterno, description: options[key]};
+        });
+      }else{
+        cache[each.descricao] = each;
       }
-
-      cache[each.descricao] = items;
     });
   },
 
   _onResult(){
     var result = cache;
 
-    if (this.filterDescription){
+    if (this.filterDescriptionOrTag){
+
+      var arr = cache[this.filterDescriptionOrTag] || cache[map[this.filterDescriptionOrTag]];
+
       if (this.filterOption){
-        var arr = cache[this.filterDescription];
         if (arr != undefined){
           for (var i = 0; i < arr.length; i++) {
             if (arr[i].description == this.filterOption){
@@ -64,10 +54,7 @@ module.exports = {
         return null;
       }
 
-      return cache[this.filterDescription];
-
-    }else if(this.filterTag){
-      return cache[map[this.filterTag]];
+      return arr;
     }
 
     return result;
@@ -86,7 +73,7 @@ module.exports = {
     this.onResultCallback = callback;
 
     if (!cache){
-      new EccosysProvider(true).attributes().go((data) => {
+      new EccosysProvider().attributes().go((data) => {
         this._prepare(data);
         callback(this._onResult());
       })

@@ -54,6 +54,7 @@ module.exports = class Initializer{
 
   utilities(){
     global.Util = require('../util/util.js');
+    global.Arr = require('../util/array.js');
     global.Num = require('../util/number.js');
     global.Floa = require('../util/float.js');
     global.Dat = require('../util/date.js');

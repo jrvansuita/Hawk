@@ -53,7 +53,13 @@ var Util = {
     if (_content){
       for (var i = 0; i < data.length; i++) {
         if (i % 2 == 0){
-          if (content.includes(data[i].toLowerCase())){
+          var datas = [].concat(data[i]);
+
+          var includes = datas.some((s)=>{
+            return content.includes(s.toString().toLowerCase());
+          });
+
+          if (includes){
             return data[i + addIndex];
           }
         }
@@ -232,20 +238,6 @@ var Util = {
     }else if(status == 4){
       return "gear";
     }
-
-
-  },
-
-  notIn(array, str){
-    return !this.isIn(array, str);
-  },
-
-  isIn(array, str){
-    str = str.toString().toLowerCase();
-
-    return array.some((s)=>{
-      return str == s.toString().toLowerCase();
-    });
   },
 
   ellipsis(str, max){

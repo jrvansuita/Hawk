@@ -97,9 +97,10 @@ function onBindViewValues(){
 
 function onBindDetailsDescriptions(){
   if (product._FichaTecnica){
-    if (window.editor) window.editor.html.set(product._FichaTecnica[0].descricaoDetalhada);
+    var holder = product._FichaTecnica[0] || product._FichaTecnica;
+    if (window.editor) window.editor.html.set(holder.descricaoDetalhada);
   }else{
-    product._FichaTecnica = [{}];
+    product._FichaTecnica = {};
   }
 }
 
@@ -116,7 +117,7 @@ function getData(){
   product.markup = $('#markup').val();
   product.precoCusto = Num.moneyVal($('#cost').val());
   product.sizes = $('.size-input').map((i,each)=>{ return $(each).text(); }).toArray();
-  product._FichaTecnica[0].descricaoDetalhada =  editor.html.get();
+  product._FichaTecnica = { descricaoDetalhada : editor.html.get()};
 
   return product;
 }
