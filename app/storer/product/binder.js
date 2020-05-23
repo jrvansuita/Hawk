@@ -10,27 +10,23 @@ class ProductBinder{
   attrs(){
     var result = [];
     var map = [
-      //Atributes Selectors
-      {sel: 'Departamento'}, {sel: 'Genero'}, {sel: 'Estacao'},
-      {sel: 'Coleção'}, {sel: 'Cor'}, {sel: 'Material'},
-      {sel: 'Ocasiao'}, {sel: 'Marca'}, {sel: 'Fabricante'},
-      {sel: 'Idade'}, {sel: 'faixa_de_idade'},
-      {sel: 'country_of_manufacture'}, {sel: 'attribute_set'}, {sel: 'tax_class_id'},
-      //Atributes Texts
-      {text: 'taxonomia'}, {text: 'largura'},
-      {text: 'comprimento'}, {text: 'altura'}, {text: 'size'},
-      {text: 'age_group'}, {text: 'gender'}, {text: 'conteudo'}
+      //Atributes keyectors
+      {key: 'Departamento'}, {key: 'Genero'}, {key: 'Estacao'},
+      {key: 'Coleção'}, {key: 'Cor'}, {key: 'Material'},
+      {key: 'Ocasiao'}, {key: 'Marca'}, {key: 'Fabricante'},
+      {key: 'Idade'}, {key: 'faixa_de_idade'},
+      {key: 'country_of_manufacture'}, {key: 'attribute_set'}, {key: 'tax_class_id'},
+      //Atributes keys
+      {key: 'taxonomia'}, {key: 'largura'},
+      {key: 'comprimento'}, {key: 'altura'}, {key: 'size'},
+      {key: 'age_group'}, {key: 'gender'}, {key: 'conteudo'},
+      {key: 'tamanho'}
     ];
 
     if (AttributesLoader.isCached()){
       map.forEach(each => {
-        if (each.sel) {
-          var item = AttributesLoader.filter(each.sel, this[each.sel]).get();
-          result.push({id: item.idAttr, valor: item.id, description: item.description, value: this[each.sel]});
-        }else if (each.text){
-          var item = AttributesLoader.filter(each.text, null).get();
-          result.push({id: item.id, valor: this[each.text], description: item.descricao});
-        }
+        var item = AttributesLoader.filter(each.key, this[each.key]).get();
+        result.push({id: item.idAttr || item.id, valor: item.tag ? item.id : this[each.key]});
       });
     }
 
@@ -47,11 +43,6 @@ class ProductBinder{
     this.attributes();
     this.prices();
     this.sizing();
-
-    //Como fazer?
-    this.idFornecedor = 0;
-    this.urlEcommerce = 'testado';
-
     return this;
   }
 
@@ -92,6 +83,7 @@ class ProductBinder{
 
   defaults(){
     this.unidade = 'UN';
+    this.idProdutoMaster = 0;
     this.calcAutomEstoque= "N";
     this.origem = 0;
     this.situacao =  "A";
@@ -110,16 +102,35 @@ class ProductBinder{
     this.produtoAlterado = 'N'
     this.unPorCaixa = '1';
     this.spedTipoItem = '00';
-    this.descricaoEcommerce = this.descricaoDetalhada;
+
+    if (!this.descricaoEcommerce){
+      this.descricaoEcommerce = this.nome;
+    }
+
+    if (!this.urlEcommerce){
+      this.urlEcommerce = 'testado';
+    }
+
+    //Como fazer?
+    this.idFornecedor = 0;
 
     //Default Attributes
-    this.taxonomia  = Util.ternalNext(this.Departamento, ...commonCategoryGoogleIds) || '5622';
-    this.gender = Util.ternalNext(this.Genero, ...commonGender);
+    if(this.Departamento){
+      this.taxonomia  = Util.ternalNext(this.Departamento, ...commonCategoryGoogleIds) || '5622';
+    }
+
+    if (this.Genero){
+      this.gender = Util.ternalNext(this.Genero, ...commonGender);
+    }
+
     this.size = 'G';
     this.country_of_manufacture = 'Brasil';
     this.attribute_set = 'Default';
     this.tax_class_id = 'None';
-    this.conteudo = this._FichaTecnica.descricaoDetalhada;
+
+    let holder = this._FichaTecnica[0];
+    this.conteudo = holder ? holder.descricaoDetalhada : this.conteudo;
+    this._FichaTecnica = { descricaoDetalhada : this.conteudo };
   }
 
   attributes(){
@@ -132,11 +143,13 @@ class ProductBinder{
   }
 
   prices(){
-    if (this.precoCusto){
+    if (this.markup){
       this.markup = Floa.def(this.markup, 2.5);
       this.precoCusto = Floa.def(this.precoCusto, 0);
       this.preco = Math.trunc(this.markup * this.precoCusto) + .9;
       this.precoDe = Math.trunc(this.preco * 2.5) + .9;
+      this.markup = Floa.abs(this.preco/this.precoCusto, 2);
+    }else{
       this.markup = Floa.abs(this.preco/this.precoCusto, 2);
     }
   }
@@ -168,71 +181,67 @@ class ProductBinder{
         this.Idade = "8-10";
         this.faixa_de_idade = 'Juvenil';
       }
-
-      console.log(this.sizes);
-      console.log(this.Idade);
     }
-}
-
-
-
-
-hasChilds(){
-  return this._SkusUpdate && this._SkusUpdate.length;
-}
-
-getChildBy(data){
-  var child = Util.clone(this);
-  delete child._Skus;
-  delete child._Atributos;
-  delete child._Componentes;
-  delete child._Estoque;
-  delete child.img;
-
-  child.idProdutoMaster = this.id;
-
-  delete child.id;
-
-  if (data.id){
-    child.id = data.id;
   }
 
-  child.codigo = data.codigo;
-  child.gtin = data.gtin;
+  getChildBy(data){
+    var child = Util.clone(this);
+    delete child._Skus;
+    delete child._Atributos;
+    delete child._Componentes;
+    delete child._Estoque;
+    delete child.img;
+    delete child.comprimento;
+    delete child.altura;
+    delete child.largura;
+    delete child.peso;
 
-  if (data.comprimento){
-    child.comprimento = data.comprimento;
-    child.comprimentoReal = data.comprimento;
+    if(data.active){
+      child.idProdutoMaster = this.id;
+    }
+
+    delete child.id;
+
+    if (data.id){
+      child.id = data.id;
+    }
+
+    child.codigo = data.codigo;
+    child.gtin = data.gtin || '';
+    child.tamanho = data.codigo.split('-').pop().trim();
+    child.descricaoEcommerce = this.nome + '-' + child.tamanho;
+
+    if (data.comprimento){
+      child.comprimento = child.comprimentoReal = data.comprimento;
+    }
+
+    if (data.altura){
+      child.altura = child.alturaReal = data.altura;
+    }
+
+    if (data.largura){
+      child.largura = child.larguraReal = data.largura;
+    }
+
+    data.peso = Floa.floa(data.peso || 0);
+
+    if (data.peso){
+      child.peso = child.pesoLiq = child.pesoBruto = child.pesoReal = data.peso;
+    }
+
+    child.situacao = child.situacaoCompra = child.situacaoVenda = (data.active ? "A" : 'I');
+
+    return child;
   }
 
-  if (data.altura){
-    child.altura = data.altura;
-    child.alturaReal =  data.altura;
+  getChilds(){
+    var childs = [];
+    this._Skus.forEach((each) => {
+      childs.push(this.getChildBy(each));
+    });
+
+    return childs.filter(Boolean);
   }
-
-  if (data.largura){
-    child.largura = data.largura;
-    child.larguraReal = data.largura;
-  }
-
-  if (data.peso){
-    child.peso = data.peso;
-    child.pesoLiq =  data.peso;
-    child.pesoBruto = data.peso;
-    child.pesoReal = data.peso;
-  }
-
-  return child;
-}
-
-getChilds(){
-  var childs = [];
-  this._Skus.filter(e => e.changed).forEach((each) => {
-    childs.push(this.getChildBy(each));
-  });
-
-  return childs.filter(Boolean);
-}
 }
 
 module.exports = ProductBinder;

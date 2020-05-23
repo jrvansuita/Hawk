@@ -24,6 +24,7 @@ module.exports = class ProductStorer{
   }
 
   upsert(){
+    console.log('Upsert ' + this.fatherBody.codigo);
     //Father Handler
     this._onSkuUpsert(this.fatherBody, () => {
       //Childs Handler
@@ -41,6 +42,7 @@ module.exports = class ProductStorer{
         if (index == childs.length){
           onFinished();
         }else{
+          console.log('Upsert ' + childs[index].codigo);
           this._onSkuUpsert(childs[index], () => {
             handlerFunction(onFinished);
           });
@@ -59,6 +61,7 @@ module.exports = class ProductStorer{
 
   _onStoringResponseHandler(data, response, callback){
     response = response.result || response;
+    console.log(response);
     if (response.success.length > 0){
       this._onAttributesHandler(data, callback);
     }else{

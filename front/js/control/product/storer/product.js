@@ -1,16 +1,17 @@
 var refreshBroadcast;
+var childsBuilder;
+var sizesBox;
 
 $(document).ready(() => {
+  //product = Util.keepPrimitiveAttrs(product);
   onBindViewValues();
 
-  //product = Util.keepPrimitiveAttrs(product);
-
-  refreshBroadcast = new Broadcast('post-refresh-storing-product').onReceive(onProductRefreshed);
+  refreshBroadcast = new Broadcast('post-refresh-storing-product').onReceive(onProductRefreshed).emit(product);
+  sizesBox = new SizesBox($('.sizes-box')).startCache();
 
   onBindComboBoxes();
+  onBindSizeBoxListeners();
   onBindViewsListeners();
-  loadAndKeepCachedAllSizes();
-
   requestProductChilds();
 });
 
@@ -35,10 +36,6 @@ function onBindViewsListeners(){
 
   $('.money').change(function () {
     $(this).val(Num.money(Num.moneyVal($(this).val())));
-  });
-
-  $('.sizes-box').click(() => {
-    addNewSizeInput();
   });
 
   $('.bindable').change(function () {
@@ -96,11 +93,8 @@ function onBindViewValues(){
 }
 
 function onBindDetailsDescriptions(){
-  if (product._FichaTecnica){
-    var holder = product._FichaTecnica[0] || product._FichaTecnica;
-    if (window.editor) window.editor.html.set(holder.descricaoDetalhada);
-  }else{
-    product._FichaTecnica = {};
+  if (product.conteudo){
+    if (window.editor) window.editor.html.set(product.conteudo);
   }
 }
 
@@ -116,8 +110,7 @@ function onBindComboBoxes(){
 function getData(){
   product.markup = $('#markup').val();
   product.precoCusto = Num.moneyVal($('#cost').val());
-  product.sizes = $('.size-input').map((i,each)=>{ return $(each).text(); }).toArray();
-  product._FichaTecnica = { descricaoDetalhada : editor.html.get()};
+  product.conteudo = editor.html.get();
 
   return product;
 }
@@ -130,59 +123,13 @@ function onProductRefreshed(data){
 }
 
 function onSizesRefreshed(data){
-  if (data.sizes){
-    $('.sizes-box').empty();
-    data.sizes.forEach((size) => {
-      addNewSizeInput(size);
-    });
-  }
+  sizesBox.refresh(data.sizes);
 
-  if (data.ageRange){
+  if (data.faixa_de_idade){
     $('.size-group-button').removeClass('active');
-    data.ageRange.forEach((each) => {
-      $('.size-group-button[data-val="'+each+'"]').addClass('active');
-    });
+    $('.size-group-button[data-val="'+data.faixa_de_idade+'"]').addClass('active');
   }
 }
-
-
-var cachedSizes;
-
-function loadAndKeepCachedAllSizes(callback){
-  if (cachedSizes){
-    callback(cachedSizes);
-  }else{
-    _get('/stock/storer-attr?attr=Tamanho',{}, (data) => {
-      cachedSizes = data;
-      if (callback){
-        callback(data);
-      }
-    });
-  }
-}
-
-
-function addNewSizeInput(size, callRe){
-  var $input = $('<span>').addClass('size-input').attr('contenteditable', true);
-  $('.sizes-box').append($input);
-
-  $input.click((e) => {
-    $input.remove();
-    e.stopPropagation();
-  }).keypress((e)=>{
-    if(e.which == 13) {e.preventDefault(); addNewSizeInput();}
-  }).focusout(() => {
-    if (!$input.text()) $input.remove()
-  });
-
-  if (size) { $input.text(size) } else{ $input.focus() }
-
-  loadAndKeepCachedAllSizes((sizes) => {
-    bindComboBox($input, sizes, 5);
-  });
-}
-
-
 
 function requestProductChilds(){
   if (product._Skus){
@@ -191,71 +138,43 @@ function requestProductChilds(){
     });
 
     _get('/product-skus', {skus:skus}, (childs)=>{
-      console.log(childs);
-      $('.childs').find("tr:gt(0)").empty();
-      childs.forEach((e) => {
-        buildChildSku(e);
-      })
+      childsBuilder = ChildsBuilder.bind($('.childs'), childs);
     });
   }
 }
 
-
-function buildChildSku(item){
-  var onChange = function(){
-    if (!product._Skus) product._Skus = [];
-
-    product._Skus.forEach((each) => {
-      if (each.codigo == item.codigo){
-        each.changed = true;
-        each[$(this).data('tag')] = $(this).val();
-      }
-    });
+function onBindSizeBoxListeners(){
+  var getSku = (size) => {
+    return product.codigo + '-' + size;
   }
 
-  newChildLine(onChange)
-  .col(item.codigo)
-  .input('Ean', 'gtin', item.gtin, '0000000000000', null, 'int')
-  .input('Peso', 'peso', Floa.def(item.peso) || Floa.def(item.pesoLiq), '0,000', 'short-input', 'float')
-  .input('Largura', 'largura', item.largura, '0,000', 'short-input', 'int')
-  .input('Altura', 'altura', item.altura, '0,000', 'short-input', 'int')
-  .input('Comprimento', 'comprimento', item.comprimento, '0,000', 'short-input', 'int')
-}
+  sizesBox.setOnSizeCreated((size) => {
+    var sku = getSku(size);
 
-function newChildLine(onChange){
-  var line = $('<tr>');
-  $('.childs').append(line);
-  return {
-    col: function (label) {
-      line.append($('<td>').append($('<span>').addClass('static-label').append(label)));
-      return this;
-    },
+    var found = product._Skus.find(function(i){
+      return i.codigo == sku;
+    });
 
-    input: function (...params) {
-      line.append($('<td>').append(buildChildInput(...params).change(onChange)));
-      return this;
+    var item = {...found, codigo: getSku(size), active: true};
+
+    childsBuilder.addChild(item);
+    if (!found){
+      product._Skus.push(item);
     }
-  }
-}
-
-function buildChildInput(label, tag, value, placeholder, addClass, type, onChange){
-  var $input = $('<input>').addClass(addClass)
-  .addClass('editable-input')
-  .data('tag', tag)
-  .attr('placeholder', placeholder)
-  .on("click", function () {
-    $(this).select();
   });
 
-  if (type == 'float'){
-    $input.val(Floa.weight(value)).attr('onkeypress', "return Floa.isFloatKey(event);");
-  }else if (type == 'int'){
-    $input.val(Num.int(value)).attr('onkeypress',"return Num.isNumberKey(event);");
-  }
+  sizesBox.setOnSizeDeleted((size) => {
+    var sku = getSku(size);
 
-  return $input;
+    childsBuilder.removeChild(sku);
+
+    var item = product._Skus.find(function(i){
+      return i.codigo == sku;
+    });
+
+    item.active = false;
+  });
 }
-
 
 function getNcmOptions(){
   var ncms = [];

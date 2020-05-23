@@ -1,5 +1,9 @@
 var Arr = {
 
+  is(a){
+    return Array.isArray(a);
+  },
+
   notIn(array, str){
     return !this.isIn(array, str);
   },

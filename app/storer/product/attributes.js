@@ -36,28 +36,20 @@ module.exports = {
   },
 
   _onResult(){
-    var result = cache;
-
     if (this.filterDescriptionOrTag){
 
-      var arr = cache[this.filterDescriptionOrTag] || cache[map[this.filterDescriptionOrTag]];
+      var data = cache[this.filterDescriptionOrTag] || cache[map[this.filterDescriptionOrTag]];
 
-      if (this.filterOption){
-        if (arr != undefined){
-          for (var i = 0; i < arr.length; i++) {
-            if (arr[i].description == this.filterOption){
-              return arr[i];
-            }
-          }
-        }
-
-        return null;
+      if (this.filterOption && Arr.is(data)){
+        return data.find((each) => {
+          return each.description == this.filterOption;
+        });
       }
 
-      return arr;
+      return data;
     }
 
-    return result;
+    return cache;
   },
 
   get(){

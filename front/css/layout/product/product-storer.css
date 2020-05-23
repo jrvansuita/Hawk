@@ -96,8 +96,9 @@
   background: #f3f3f3;
   border: 0.5px solid var(--border-color);
   border-radius: var(--border-radius);
-  cursor: text;
   margin-bottom: 10px;
+  outline: none;
+  cursor: text;
 }
 
 .size-input{
@@ -180,8 +181,10 @@ textarea{
   border-radius: var(--border-radius);
   position: relative;
   resize: none;
+  font-family: sans-serif;
   padding: 5px 10px;
   color: #4c4c4c;
+  outline-color: #009586;
 }
 
 .relative-inputs .material-input-holder input, .relative-inputs .material-input-holder{
@@ -214,9 +217,11 @@ textarea{
   color: black;
   margin: auto;
   max-width: 130px;
+  width: auto;
+  text-align: center;
 }
 
-.childs .static-label{color: #757373;font-size: 14px;text-align: center;}
+.childs .static-label{color: #5d5b5b;font-size: 14px;text-align: center;white-space: nowrap;}
 
 .childs td{
   padding: 12px 10px;
