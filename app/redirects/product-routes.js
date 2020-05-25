@@ -200,7 +200,8 @@ module.exports = class ProductRoutes extends Routes{
       });
     });
 
-    this._get('/product-list-export', (req, res) => {
+    this._get('/product-list-export', (req, res, locals) => {
+
       ProductListProvider.load(req.session.productListQuery, null, (data, info)=>{
         new EccosysProvider().skus(data.map((e)=>{return e.sku})).go((skus) => {
 
@@ -212,7 +213,8 @@ module.exports = class ProductRoutes extends Routes{
               });
             }
           });
-          res.render('product/board/product-list-export', {data: data, eans:result});
+          res.render('product/board/product-list-export', {data: data, eans:result, user: res.locals.loggedUser.name});
+          console.log(res);
         });
       });
     });

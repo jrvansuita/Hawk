@@ -14,27 +14,23 @@
   <script>
   window.data = <%- JSON.stringify(data)%>
   window.eans = <%- JSON.stringify(eans)%>
+  window.user = <%- JSON.stringify(user)%>
   </script>
 </head>
 <body>
+  <div class="top">
+    <div class="ifr">
+      <iframe frameborder='0' src="templates-viewer?id=84155975" width="100%" scrolling="no" ></iframe>
+    </div>
+    <div class="impress-rel">
+      <h1>Relatório de Produtos</h1>
+      <p>Data da Impressão: <%=Dat.formatwTime(new Date())%></p>
+      <span>Usuário: <%=loggedUser.name%></span>
+    </div>
+  </div>
 
-  <table class="top">
-    <tr>
-      <td style="width:">
-        <iframe frameborder='0' src="templates-viewer?id=84155975" width="100%" scrolling="no" ></iframe>
-      </td>
-      <td class="impress-rel">
-        <h1>Relatório de Produtos</h1>
-        <p>Data da Impressão: <%=Dat.formatwTime(new Date())%></p>
-      </td>
-      <td style="text-align: right">
-
-      </td>
-    </tr>
-
-  </table>
   <div class="product">
-    <table style="margin-top:10px;">
+    <table style="">
 
       <%data.forEach((item)=>{%>
 

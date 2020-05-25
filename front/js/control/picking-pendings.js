@@ -35,7 +35,7 @@ $(document).ready(() => {
           '/pending-print-list?status=' +  ($(el).hasClass('menu-red-top') ? 0 : ($(el).hasClass('menu-orange-top')? 1 : 2)),
           '_blank' // <- This is what makes it open in a new window.
         );
-      });
+      }).bindMousePos();
     });
   }
 });
@@ -137,9 +137,9 @@ function bindMenuOptions(el, pending){
 
     if (drop.hasItems()){
       dots.show();
-      //dots.unbind('click').click(function (e){
-      //drop.show();
-      //});
+      dots.unbind('click').click(function (e){
+      drop.show();
+      });
     }else{
       dots.hide().unbind('click');
     }
