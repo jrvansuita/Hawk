@@ -32,13 +32,10 @@ $(document).ready(() => {
 
 function makeMenu(){
 
-  if (isUnlocked()){
-
-    var drop = Dropdown.on($('.main-menu-dots'));
-
     var active = product.situacao == 'A';
 
-    drop.item('/img/' + (active ? 'block' : 'checked') + '.png', active ? 'Inativar' : 'Ativar' , () =>{
+    Dropdown.on($('.main-menu-dots'))
+    .item('/img/' + (active ? 'block' : 'checked') + '.png', active ? 'Inativar' : 'Ativar' , () =>{
       showLoadingStatus();
       _post('/product-active', {
         sku: product.codigo,
@@ -47,9 +44,9 @@ function makeMenu(){
       },(data)=>{
         window.location.reload();
       });
-    }).bindMousePos();
-
-  }
+    }).setOnDynamicShow(() => {
+      return {1: isUnlocked()};
+    });
 }
 
 

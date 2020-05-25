@@ -72,7 +72,7 @@ function hidePedingItemModal(){
   el.find('.closable').remove();
   changeFontSize(el, -2);
   $( "#user-id" ).focus();
-  el.find('.menu-dots-pending').hide();
+  el.find('.menu-dots-pending').empty().hide();
 }
 
 function buildPendingItemsViews(el, pending){
@@ -125,24 +125,24 @@ function buildPendingItemsViews(el, pending){
 }
 
 function bindMenuOptions(el, pending){
+
   var dots = el.find('.menu-dots-pending');
 
-  var drop = Dropdown.on(dots).setOnAnyOptionsClick( (helper) =>{
-    $('.mini-item-modal').parent().remove();
-  });
-
-  onCreateOptionsPendingDropMenu(drop, pending);
-
-
-  if (drop.hasItems()){
-    dots.show();
-    dots.unbind('click').click(function (e){
-      drop.show();
-      e.stopPropagation();
+    var drop = Dropdown.on(dots).setOnAnyOptionsClick( (helper) =>{
+      $('.mini-item-modal').parent().remove();
     });
-  }else{
-    dots.hide().unbind('click');
-  }
+
+    onCreateOptionsPendingDropMenu(drop, pending);
+
+
+    if (drop.hasItems()){
+      dots.show();
+      //dots.unbind('click').click(function (e){
+      //drop.show();
+      //});
+    }else{
+      dots.hide().unbind('click');
+    }
 }
 
 
@@ -461,7 +461,7 @@ function onCreateOptionsPendingDropMenu(drop, pending){
   if (location.pathname.includes('picking')){
 
     //Com status em aberto ou resolvido
-    if (Util.isIn([0,2], pending.status)){
+    if (Arr.isIn([0,2], pending.status)){
 
       //Permitir assumir pendências
       if (Sett.get(loggedUser, 3)){

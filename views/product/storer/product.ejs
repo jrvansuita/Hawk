@@ -2,7 +2,9 @@
 <%- include('../../menus/main-menu') %>
 <head>
   <link rel="stylesheet" type="text/css" href="/front/css/layout/product/product-storer.css">
-  <script type="text/javascript" src="/front/js/control/product/product-storer.js"></script>
+  <script type="text/javascript" src="/front/js/control/product/storer/product.js"></script>
+  <script type="text/javascript" src="/front/js/control/product/storer/childs-builder.js"></script>
+  <script type="text/javascript" src="/front/js/control/product/storer/sizes-box.js"></script>
 
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-select.css">
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
@@ -185,14 +187,14 @@
       </span>
 
       <div class="flex-line">
-        <div class="sizes-box">  </div>
+        <div class="sizes-box" tabindex="0">  </div>
       </div>
     </div>
 
     <div class="box shadow" style="flex: 40%">
       <span class="title">Descrição Curta</span>
       <div class="flex-line">
-      <textarea class="bindable" data-bind="descricaoComplementar" rows="3"></textarea>
+        <textarea class="bindable" data-bind="descricaoComplementar" rows="3"></textarea>
       </div>
     </div>
 
@@ -228,15 +230,20 @@
   </div>
 
   <div class="row">
-    <label class="button save shadow">Salvar</label>
-    <label class="button delete shadow">Excluir</label>
+    <div class="box shadow buttons-bar" style="flex: 100%;">
 
+      <div class="loading-holder">
+        <img src="/img/loader/circle.svg" class="loading-circle"/>
+        <span class="loading-msg">Carregando</span>
+      </div>
 
+      <div class="buttons-holder">
+        <label class="button save shadow">Salvar</label>
+        <label class="button delete shadow">Excluir</label>
+      </div>
+    </div>
   </div>
 </div>
-
-
-
 
 </div>
 </body>

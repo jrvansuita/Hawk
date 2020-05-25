@@ -106,7 +106,7 @@ function checkIsInDevMode(){
   var maxSalesOnDevMove = Params.devMaxSalesOnPicking() || 12;
   //If this Env Var is not defined, it's on development mode
   //Not necessary to load all sales for tests porpouse
-  if (!process.env.NODE_ENV){
+  if (!process.env.IS_PRODUCTION){
     if (global.staticPickingList.length > maxSalesOnDevMove){
       global.staticPickingList.splice(maxSalesOnDevMove);
     }

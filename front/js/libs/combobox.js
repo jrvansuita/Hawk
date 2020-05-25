@@ -104,8 +104,6 @@ class ComboBox{
       return  this.selectedItem && this.selectedItem.data ? this.selectedItem.data : this.selectedItem;
     }
 
-
-
     getData(){
       return this.data;
     }
@@ -184,12 +182,12 @@ class ComboBox{
       this.instance = this.element.autocomplete(options);
 
       this.element.autocomplete('instance')._renderItem = (ul, item)=>{
-        return buildItemLayout(item).appendTo(ul);
+        return this._buildItemLayout(item).appendTo(ul);
       };
 
       if (this.minLength == 0){
-        this.instance.focus(function () {
-          $(this).autocomplete("search", "");
+        this.instance.focus(() => {
+          this.element.autocomplete("search", "");
         });
       }
     }
@@ -199,15 +197,15 @@ class ComboBox{
       this.element.autocomplete({source: []});
     }
 
-  }
 
-  function buildItemLayout(item){
-    var img;
 
-    if (item.img){
-      img = $('<img>').addClass('.circle').attr('src', item.img);
+    _buildItemLayout(item){
+      var img;
+
+      if (item.img){
+        img = $('<img>').addClass('.circle').attr('src', item.img);
+      }
+
+      return $('<li>').append($('<div>').append(img, $('<span>').text(item.label)));
     }
-
-    return $('<li>').append($('<div>').append(img, $('<span>').text(item.label)));
-
   }

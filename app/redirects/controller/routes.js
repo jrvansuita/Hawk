@@ -51,7 +51,7 @@ module.exports = class Routes {
           res.setHeader("Access-Control-Allow-Origin", "*");
           res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         }
-        
+
         callback(req, res, req.body, res.locals, req.session);
       });
     });
@@ -87,6 +87,6 @@ module.exports = class Routes {
 
   //Verifica se o caminho é uma das páginas acessiveis sem login como Login/User-registering etc
   static checkIsPathNotLogged(path){
-    return Util.isIn(global.pathNotLogged, path);
+    return Arr.isIn(global.pathNotLogged, path);
   }
 };

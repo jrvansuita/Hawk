@@ -183,7 +183,7 @@ function getSelectedSkus(){
 }
 
 function handleProduct(sku){
-  if (Util.notIn(getSelectedSkus(), sku)){
+  if (Arr.notIn(getSelectedSkus(), sku)){
     _get('/product-child', {sku: sku}, (p)=>{
       if (!p){
         showSkuError('Produto não encontrado!');

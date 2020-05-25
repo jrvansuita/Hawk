@@ -533,7 +533,7 @@ function postPackingDone(){
 function onSucess(result){
   if (result.code == 200){
     showMainInputTitle('Enviando Nf-e...','/loader/circle.svg',  '#7eb5f1');
-    new Broadcast(sale.numeroPedido).onReceive((result)=>{
+    new Broadcast('packing-' + sale.numeroPedido).onReceive((result)=>{
       console.log('Recebeu retorno do faturamento');
       console.log("Pedido: " + sale.numeroPedido);
       onNfeSucess(result);
