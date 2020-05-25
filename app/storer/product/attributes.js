@@ -1,80 +1,109 @@
 const EccosysStorer = require('../../eccosys/eccosys-storer.js');
 const EccosysProvider = require('../../eccosys/eccosys-provider.js');
 
-var cache;
 
-module.exports = {
+
+module.exports = class AttributesHandler {
 
   isCached(){
-    return cache != undefined;
-  },
+    return CacheAttrs.isCached();
+  }
 
-  filter(type, description){
-    this.type = type;
-    this.description = description;
+  filter(description, option){
+    this.descriptionOrTag = description;
+    this.option = option;
+
     return this;
-  },
-
-  _prepare(data){
-    cache = {};
-
-    data.forEach((each) => {
-      var items = [];
-
-      if (each._Opcoes && each._Opcoes.length == 1){
-        Object.keys(each._Opcoes[0]).forEach((key) => {
-          items.push({/*id: key*/ id: each.id, description: each._Opcoes[0][key]});
-        })
-      }
-
-      //Mudei para a própria Descrição para reduzir código
-      //cache[each.idExterno] = items;
-      cache[each.descricao] = items;
-    });
-  },
-
-  _onResult(){
-    var result = cache;
-
-    if (this.type){
-      if (this.description){
-        var arr = cache[this.type];
-        if (arr != undefined){
-          for (var i = 0; i < arr.length; i++) {
-            if (arr[i].description == this.description){
-              return arr[i];
-            }
-          }
-        }
-
-        return null;
-      }
-
-      return cache[this.type];
-    }
-
-    return result;
-  },
+  }
 
   get(){
     if (this.isCached()){
-      return this._onResult();
+      return CacheAttrs.filter(this.descriptionOrTag, this.option);
     }else{
       return undefined;
     }
-  },
-
+  }
 
   load(callback){
-    this.onResultCallback = callback;
+    CacheAttrs.load(() => {
+      if (callback) callback(this.get());
+    });
 
-    if (!cache){
-      new EccosysProvider().attributes().go((data) => {
-        this._prepare(data);
-        callback(this._onResult());
-      })
-    }else{
-      callback(this._onResult());
+    return this;
+  }
+}
+
+
+
+var CacheAttrs = {
+  cache: undefined,
+  map: undefined,
+  isChaching: false,
+  listeners: [],
+
+  isCached(){
+    return this.cache != undefined;
+  },
+
+  filter(name, option){
+    if (name){
+
+      var data = this.cache[name] || this.cache[this.map[name]];
+
+      if (option && Arr.is(data)){
+        return data.find((each) => {
+          return each.description == option;
+        });
+      }
+
+      return data;
+    }
+
+    return this.cache;
+  },
+
+  _prepare(data){
+    var _cache = {};
+    var _map = {};
+
+    data.forEach((each) => {
+      _map[each.idExterno] = each.descricao;
+      var options = each._Opcoes ? each._Opcoes[0] : null;
+
+      if (options){
+        _cache[each.descricao] = Object.keys(options).map((key) => {
+          return {id: key, idAttr: each.id, tag: each.idExterno, description: options[key]};
+        });
+      }else{
+        _cache[each.descricao] = each;
+      }
+    });
+
+    this.cache = _cache;
+    this.map = _map;
+  },
+
+  emit(){
+    this.listeners.forEach((each, i, arr) => {
+      each(this.cache);
+    });
+
+    this.listeners = [];
+  },
+
+  load(callback){
+    if (this.isCached()){
+      callback(this.cache);
+    }else {
+      this.listeners.push(callback);
+      if (!this.isChaching){
+        this.isChaching = true;
+        new EccosysProvider().attributes().go((data) => {
+          this._prepare(data);
+          this.isChaching = false;
+          this.emit();
+        });
+      }
     }
   }
 }

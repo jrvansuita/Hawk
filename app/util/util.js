@@ -1,7 +1,12 @@
 var Util = {
 
-  id(){
-    return parseInt(new Date().getTime().toString().slice(-8));
+  id(length){
+    return parseInt(new Date().getTime().toString().slice(-(length || 8)));
+  },
+
+  barcode(){
+    var code = '789' + this.id(9);
+    return code + (10 - (code.split('').reduce((s, e, i) => { return s + parseInt(e) * ((i%2==0)?1:3) },0) % 10)) % 10
   },
 
   transportName: (name, def)=>{
@@ -53,7 +58,13 @@ var Util = {
     if (_content){
       for (var i = 0; i < data.length; i++) {
         if (i % 2 == 0){
-          if (content.includes(data[i].toLowerCase())){
+          var datas = [].concat(data[i]);
+
+          var includes = datas.some((s)=>{
+            return content.includes(s.toString().toLowerCase());
+          });
+
+          if (includes){
             return data[i + addIndex];
           }
         }
@@ -232,20 +243,6 @@ var Util = {
     }else if(status == 4){
       return "gear";
     }
-
-
-  },
-
-  notIn(array, str){
-    return !this.isIn(array, str);
-  },
-
-  isIn(array, str){
-    str = str.toString().toLowerCase();
-
-    return array.some((s)=>{
-      return str == s.toString().toLowerCase();
-    });
   },
 
   ellipsis(str, max){

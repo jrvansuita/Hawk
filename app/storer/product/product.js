@@ -1,6 +1,6 @@
 const EccosysStorer = require('../../eccosys/eccosys-storer.js');
 const EccosysProvider = require('../../eccosys/eccosys-provider.js');
-const AttributesLoader = require('./attributes.js');
+const AttributesHandler = require('./attributes.js');
 const ProductBinder = require('./binder.js');
 
 module.exports = class ProductStorer{
@@ -9,57 +9,107 @@ module.exports = class ProductStorer{
     this.storer = new EccosysStorer(false);
   }
 
-  with(data){
-    this.fatherBody = ProductBinder.create(data).body();
+  async with(user, data){
+    data.user = user;
+    this.fatherBody = await ProductBinder.create(data).body();
     return this;
   }
 
-  searchAttr(type, callback){
-    AttributesLoader.filter(type).load(callback);
+  searchAttr(description, callback){
+    new AttributesHandler().filter(description).load(callback);
   }
 
   setOnFinished(callback){
-    this.onFinishListener = callback;
+    this.onFinishListener = () => {
+      console.log('Terminate');
+      callback();
+    }
     return this;
   }
 
   upsert(){
     //Father Handler
-    this._onSkuUpsert(this.fatherBody, () => {
+    this._onProductUpsert(this.fatherBody, () => {
       //Childs Handler
-      this._handleChildsUpsert();
+      this._handleChildsUpsert(process.env.IS_PRODUCTION);
     });
   }
 
-  _handleChildsUpsert(){
+  _handleChildsUpsert(isProductionMode){
     var childs = this.fatherBody.getChilds();
-    var index = -1;
 
-    if (childs && childs.length > 0){
-      var handlerFunction = (onFinished) => {
-        index++;
-        if (index == childs.length){
-          onFinished();
-        }else{
-          this._onSkuUpsert(childs[index], () => {
-            handlerFunction(onFinished);
-          });
-        }
-      }
-
-      handlerFunction(this.onFinishListener);
+    if (isProductionMode){
+      //Fastest Way
+      this._handleChildsSimultaneousUpserts(childs);
     }else{
-      this.onFinishListener();
+      this._handleChildsIncrementalUpserts(childs);
     }
   }
 
-  _onSkuUpsert(data, callback){
+  _handleChildsIncrementalUpserts(childs){
+    var incrementalUpserts = () => {
+      if (childs.length){
+        this._onChildProductUpsert(childs[0], () => {
+          childs.shift(); incrementalUpserts();
+        });
+      }else{
+        this.onFinishListener();
+      }
+    }
+
+    incrementalUpserts();
+  }
+
+  _handleChildsSimultaneousUpserts(childs){
+    var simultaneousUpserts = () => {
+      var size = childs.length;
+
+      childs.forEach((each) => {
+        this._onChildProductUpsert(each, () => {
+          if (!--size) this.onFinishListener();
+        });
+      });
+    }
+
+    simultaneousUpserts();
+  }
+
+  _onProductUpsert(data, callback){
+    console.log('Upsert ' + data.codigo);
     this.storer.product().upsert(data.id == undefined, data).go(response => this._onStoringResponseHandler(data, response, callback));
+  }
+
+  _onChildProductUpsert(_data, callback){
+    this._onBeforeUpsertChildProduct(_data, (data) => {
+      this._onProductUpsert(data, callback);
+    });
+  }
+
+  _onBeforeUpsertChildProduct(data, callback){
+    var sku = data.codigo;
+    var isNew = data.id == undefined;
+    var isChild = sku.includes('-');
+
+    if (isNew && isChild){
+      this.provider.product(sku).go((found) => {
+        if (found && found.id) {
+          data.id = found.id;
+          data.gtin = found.gtin;
+        }
+
+        callback(data);
+      });
+    }else{
+      callback(data);
+    }
   }
 
   _onStoringResponseHandler(data, response, callback){
     response = response.result || response;
+
+    console.log(response);
     if (response.success.length > 0){
+      data.id = response.success[0].id;
       this._onAttributesHandler(data, callback);
     }else{
       this.onFinishListener(response);
@@ -67,13 +117,9 @@ module.exports = class ProductStorer{
   }
 
   _onAttributesHandler(data, callback){
-    var attrs = ProductBinder.create(data).attrs()
-
-    //Ainda não ta pronto a atualização de atributos
-    AttributesLoader.load(() => {
-      this.storer.product(data.codigo).attrs().put(attrs).go((response) => {
-        callback(response);
-      });
+    new AttributesHandler().load(() => {
+      var attrs =  ProductBinder.create(data).attrs();
+      this.storer.product(data.codigo).attrs().put(attrs).go(callback);
     });
   }
 

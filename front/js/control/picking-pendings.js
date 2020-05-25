@@ -461,7 +461,7 @@ function onCreateOptionsPendingDropMenu(drop, pending){
   if (location.pathname.includes('picking')){
 
     //Com status em aberto ou resolvido
-    if (Util.isIn([0,2], pending.status)){
+    if (Arr.isIn([0,2], pending.status)){
 
       //Permitir assumir pendências
       if (Sett.get(loggedUser, 3)){

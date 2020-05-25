@@ -150,7 +150,7 @@ module.exports = {
       if (sucess){
         this.sendNfe(user, params, (nfResult)=>{
           //'Enviou o resultado via Broadcast'
-          global.io.sockets.emit(params.saleNumber, nfResult);
+          global.io.sockets.emit('packing-' + params.saleNumber, nfResult);
           var sucess = !nfResult.error || !nfResult.error.length;
 
           if (sucess){

@@ -11,6 +11,7 @@
   <script type="text/javascript" src="/util/date.js"></script>
   <script type="text/javascript" src="/util/number.js"></script>
   <script type="text/javascript" src="/util/util.js"></script>
+  <script type="text/javascript" src="/util/array.js"></script>
   <script type="text/javascript" src="/util/float.js"></script>
   <script type="text/javascript" src="/util/sett.js"></script>
   <script type="text/javascript" src="/param"></script>
@@ -40,7 +41,7 @@
     <%
     var img = '/img/icon/hawk.png';
 
-    if (!process.env.NODE_ENV){
+    if (!process.env.IS_PRODUCTION){
       img = '/img/maintenance.png';
     }
 

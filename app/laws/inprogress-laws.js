@@ -83,7 +83,7 @@ module.exports = {
       sale.pickUser = User.suppress(UsersProvider.get(sale.originalUserId));
     }
 
-    if(sale.doNotCount || (process.env.NODE_ENV === undefined)){
+    if(sale.doNotCount || (!process.env.IS_PRODUCTION)){
       callback(sale);
     }else{
       Day.sync(day, (err, doc) => {
@@ -115,7 +115,7 @@ function checkEndTime(sale, userId){
 
   //Calcula 3 segundos por item do pedido no mínimo
   var minSecs = sale.itemsQuantity * 8;
-  if ((secs < minSecs) && (process.env.NODE_ENV != undefined)){
+  if ((secs < minSecs) && (process.env.IS_PRODUCTION)){
     Err.thrw(Const.insufficient_picking_time.format(sale.numeroPedido, sale.itemsQuantity, minSecs, parseInt(secs)), userId);
   }
 }

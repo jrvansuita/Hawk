@@ -87,7 +87,7 @@
                     <td>
                       <div class="attribute-holder">
                         <label class="attribute-name">Preço</label>
-                        <label class="attribute-value"><%=Num.money(product.img ? product.img.price || product.img.sellPrice: 0)%></label>
+                        <label class="attribute-value"><%=Num.money((product.img ? product.img.price || product.img.sellPrice: 0) || Floa.floa(product.preco))%></label>
                       </div>
                     </td>
                     <%}%>
@@ -189,7 +189,7 @@
 
 
                             <div class="main-menu-dots">
-                              
+
                             </div>
                           </div>
 

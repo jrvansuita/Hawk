@@ -139,9 +139,11 @@ class Dropdown {
     }
 
     if (this.bindMousePosition){
+<<<<<<< HEAD
       //console.log(e.pageY + ' - ' + e.pageX);
+=======
+>>>>>>> e89610a81cf8ca3fccf4528c4b1167bc4948893b
       this.dropdown.css('top', e.pageY).css('left', e.pageX);
-      //this.dropdown.css('position', 'inherit');
     }
 
     if(this.onDynamicShow){

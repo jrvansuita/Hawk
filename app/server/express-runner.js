@@ -45,7 +45,7 @@ var allowedOrigins = [
   Params.storeUrl()
 ];
 
-if (!process.env.NODE_ENV){
+if (!process.env.IS_PRODUCTION){
   allowedOrigins.push('http://localhost:' + app.get('port'));
 }
 
