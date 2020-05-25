@@ -139,7 +139,7 @@ class Dropdown {
     }
 
     if (this.bindMousePosition){
-      console.log(e.pageY + ' - ' + e.pageX);
+      //console.log(e.pageY + ' - ' + e.pageX);
       this.dropdown.css('top', e.pageY).css('left', e.pageX);
       //this.dropdown.css('position', 'inherit');
     }
