@@ -106,7 +106,8 @@ class SaleWrapper{
       bairro: store.shipping_address.street.split(/\n/g)[3],
       city: store.shipping_address.city,
       state: store.shipping_address.region,
-      cep: store.shipping_address.postcode
+      cep: store.shipping_address.postcode,
+      reference: store.shipping_address.pto_referencia
     }
 
     this.billing_address = {
@@ -115,7 +116,8 @@ class SaleWrapper{
       bairro: store.billing_address.street.split(/\n/g)[3],
       city: store.billing_address.city,
       state: store.billing_address.region,
-      cep: store.billing_address.postcode
+      cep: store.billing_address.postcode,
+      reference: store.billing_address.pto_referencia
     }
 
     this.payment = {

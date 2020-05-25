@@ -73,7 +73,7 @@ module.exports = class Initializer{
 
   jobs(callback){
     //if (process.env.NODE_ENV) {
-    if (true){
+    if (Params.enableJobsOnDevMode()){
       require('../jobs/controller/pool.js').initialize(callback);
     }else{
       callback();
