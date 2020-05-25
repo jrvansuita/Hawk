@@ -41,7 +41,7 @@
     <%
     var img = '/img/icon/hawk.png';
 
-    if (!process.env.NODE_ENV){
+    if (!process.env.IS_PRODUCTION){
       img = '/img/maintenance.png';
     }
 

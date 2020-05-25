@@ -194,7 +194,7 @@
     <div class="box shadow" style="flex: 40%">
       <span class="title">Descrição Curta</span>
       <div class="flex-line">
-      <textarea class="bindable" data-bind="descricaoComplementar" rows="3"></textarea>
+        <textarea class="bindable" data-bind="descricaoComplementar" rows="3"></textarea>
       </div>
     </div>
 
@@ -230,15 +230,20 @@
   </div>
 
   <div class="row">
-    <label class="button save shadow">Salvar</label>
-    <label class="button delete shadow">Excluir</label>
+    <div class="box shadow buttons-bar" style="flex: 100%;">
 
+      <div class="loading-holder">
+        <img src="/img/loader/circle.svg" class="loading-circle"/>
+        <span class="loading-msg">Carregando</span>
+      </div>
 
+      <div class="buttons-holder">
+        <label class="button save shadow">Salvar</label>
+        <label class="button delete shadow">Excluir</label>
+      </div>
+    </div>
   </div>
 </div>
-
-
-
 
 </div>
 </body>

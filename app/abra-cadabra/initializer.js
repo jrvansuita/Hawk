@@ -35,7 +35,7 @@ module.exports = class Initializer{
 
 
   enviromentVariables(){
-    if (!process.env.NODE_ENV) {
+    if (!process.env.IS_PRODUCTION) {
       require('dotenv').config();
     }
   }
@@ -73,8 +73,7 @@ module.exports = class Initializer{
   }
 
   jobs(callback){
-    //if (process.env.NODE_ENV) {
-    if (true){
+    if (process.env.IS_PRODUCTION) {  
       require('../jobs/controller/pool.js').initialize(callback);
     }else{
       callback();

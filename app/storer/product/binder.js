@@ -1,4 +1,5 @@
-const AttributesLoader = require('./attributes.js');
+const AttributesHandler = require('./attributes.js');
+const SkuGen = require('../../bean/sku-gen.js');
 
 
 class ProductBinder{
@@ -23,22 +24,19 @@ class ProductBinder{
       {key: 'tamanho'}
     ];
 
-    if (AttributesLoader.isCached()){
-      map.forEach(each => {
-        var item = AttributesLoader.filter(each.key, this[each.key]).get();
-        result.push({id: item.idAttr || item.id, valor: item.tag ? item.id : this[each.key]});
-      });
-    }
+    var handler = new AttributesHandler()
 
-    //console.log(JSON.stringify(result));
-
+    map.forEach(each => {
+      var item = handler.filter(each.key, this[each.key]).get();
+      if(item) result.push({id: item.idAttr || item.id, valor: item.tag ? item.id : this[each.key]});
+    });
 
     return result;
   }
 
 
-  body(){
-    this.identification();
+  async body(){
+    await this.identification();
     this.defaults();
     this.attributes();
     this.prices();
@@ -46,36 +44,40 @@ class ProductBinder{
     return this;
   }
 
-
-  identification(){
+  async identification(){
     if (!this.id){
+      this.codigo = this.codigo || '';
+
       var nameConcat = [];
 
       if (this.Departamento){
         nameConcat.push(Util.ternalSame(this.Departamento, ...commonCategories));
 
-        if (this.Material){
-          nameConcat.push(Util.ternalSame(this.Material, ...commonMaterials));
+        if (this.Material)
+        nameConcat.push(Util.ternalSame(this.Material, ...commonMaterials));
 
-          if (this.Cor){
-            nameConcat.push(this.Cor);
-          }
-        }
+        if (this.Cor)
+        nameConcat.push(this.Cor);
+
+        if (this.uniqNamePart)
+        nameConcat.push(this.uniqNamePart);
+
+        if (this.Marca)
+        nameConcat.push('- ' + this.Marca.trim());
       }
 
       this.nome = nameConcat.filter(Boolean).join(' ');
-    }
-
-    if (!this.codigo && this.Marca){
-      this.nome +=  ' - ' + this.Marca;
-      this.codigo = Util.acronym(this.Marca).toUpperCase();
+      
+      if (!this.codigo.startsWith(this.acronym) && this.Marca){
+        this.acronym = Util.acronym(this.Marca).toUpperCase();
+        this.codigo = await SkuGen.go(this.acronym);
+      }
     }
 
     this.tituloPagina = this.nome;
 
-    if (this.id == undefined){
-      let user = {name : 'teste'};
-      this.obs = user.name + " | Desktop | " + this.codigo + " | " + Dat.format(new Date()) + '| Cadastro'
+    if (!this.obs && this.user && this.codigo){
+      this.obs = this.user.name + " | Desktop | " + this.codigo + " | " + Dat.format(new Date()) + '| Cadastro'
     }else{
       delete this.obs;
     }
@@ -103,6 +105,8 @@ class ProductBinder{
     this.unPorCaixa = '1';
     this.spedTipoItem = '00';
 
+
+
     if (!this.descricaoEcommerce){
       this.descricaoEcommerce = this.nome;
     }
@@ -117,6 +121,10 @@ class ProductBinder{
     //Default Attributes
     if(this.Departamento){
       this.taxonomia  = Util.ternalNext(this.Departamento, ...commonCategoryGoogleIds) || '5622';
+
+      if(!this.cf){
+        this.cf = '6111.20.00'
+      }
     }
 
     if (this.Genero){
@@ -128,14 +136,14 @@ class ProductBinder{
     this.attribute_set = 'Default';
     this.tax_class_id = 'None';
 
-    let holder = this._FichaTecnica[0];
+    let holder = this._FichaTecnica ? this._FichaTecnica[0] : null;
     this.conteudo = holder ? holder.descricaoDetalhada : this.conteudo;
     this._FichaTecnica = { descricaoDetalhada : this.conteudo };
   }
 
   attributes(){
-    if (!this['Coleção'] && AttributesLoader.isCached()){
-      var all = AttributesLoader.tag('colecao').get();
+    if (!this['Coleção'] && this.Departamento){
+      var all = new AttributesHandler().filter('colecao').get();
       if (all && all.length > 0){
         this['Coleção'] = all.slice(-1)[0].description;
       }
@@ -155,34 +163,30 @@ class ProductBinder{
   }
 
   sizing(){
-    if (this._Skus){
-      this.sizes = this._Skus.map(each => {return each.codigo.split('-').pop()});
-      var sizes = this.sizes.join(',');
+    this._Skus = this._Skus || [];
 
+    this.sizes = this._Skus.map(each => {return each.codigo.split('-').pop()});
+    var sizes = this.sizes.join(',');
 
-      this.Idade = "1-3";
-      this.age_group = 'Kids';
-      this.faixa_de_idade = 'Kids';
-      this.faixa_de_idade = 'Kids';
-
-      if (Arr.includesAll(['P', 'M', 'G'], sizes)){
-        this.Idade = "Até 1";
-        this.age_group = '3 a 12 meses';
-        this.faixa_de_idade = 'Bebe';
-      }else if (Arr.includesAll(['1', '2', '3'], sizes)){
-        this.Idade = "1-3";
-        this.age_group = '1 a 5 anos';
-        this.faixa_de_idade = 'Primeiros Passos';
-      }else if (Arr.includesAll(['4', '6', '8'], sizes)){
-        this.Idade = "4-6";
-        this.age_group = "infantil";
-        this.faixa_de_idade = 'Kids';
-      }  else if (Arr.includesAll(['10', '12'], sizes)){
-        this.Idade = "8-10";
-        this.faixa_de_idade = 'Juvenil';
-      }
+    if (sizes){
+      commonSizes.forEach((each, index) => {
+        if ((index == 0) || (Arr.includesAll(each.search || each.sizes, sizes))){
+          this.Idade = each.Idade;
+          this.age_group = each.age_group;
+          this.faixa_de_idade = each.faixa_de_idade;
+        }
+      });
+    }else if (this.faixa_de_idade){
+      commonSizes.forEach((each, index) => {
+        if ((index == 0) || (each.faixa_de_idade == this.faixa_de_idade)){
+          this.Idade = each.Idade;
+          this.age_group = each.age_group;
+          this.sizes = each.sizes;
+        }
+      });
     }
   }
+
 
   getChildBy(data){
     var child = Util.clone(this);
@@ -249,10 +253,8 @@ module.exports = ProductBinder;
 var tag = 'post-refresh-storing-product';
 
 global.io.on('connection', (socket) => {
-  socket.on(tag , (data, e) => {
-    var binder = ProductBinder.create(data).body();
-    //binder.attrs();
-    global.io.sockets.emit(tag, binder);
+  socket.on(tag , async (id, data) => {
+    global.io.sockets.emit(tag, id, await ProductBinder.create(data).body());
   });
 });
 
@@ -262,3 +264,31 @@ var commonMaterials = ['Cotton', 'Flamê', 'Jacquard', 'Jeans', 'Moletom', 'Sarj
 var commonCategoryGoogleIds = ['Vestido', '5424', ['Sapato', 'Sapatilha', 'Sandalia', 'Bota', 'Galocha', 'Coturno', 'Mocassim', 'Rasteirinha', 'Tenis', 'Chinelo' ], '187'];
 var commonAgeGroupsGoogle = ['Vestido', '5424', ['Sapato', 'Sapatilha', 'Sandalia', 'Bota', 'Galocha', 'Coturno', 'Mocassim', 'Rasteirinha', 'Tenis', 'Chinelo' ], '187'];
 var commonGender = ['Feminino', 'female', 'Masculino', 'male', 'Unissex', 'unisex'];
+
+
+var commonSizes = [{
+  //Default One
+  Idade : "1-3",
+  age_group : 'Kids',
+  faixa_de_idade : 'Kids'
+},{
+  Idade : "Até 1",
+  age_group : '3 a 12 meses',
+  sizes : ['P', 'M', 'G'],
+  faixa_de_idade : 'Bebe'
+},{
+  Idade : "1-3",
+  age_group : '1 a 5 anos',
+  sizes : ['1', '2', '3'],
+  faixa_de_idade : 'Primeiros Passos'
+},{
+  Idade : "4-6",
+  age_group : 'infantil',
+  sizes : ['4', '6', '8'],
+  faixa_de_idade : 'Kids'
+},{
+  Idade : "8-10",
+  search: ['10','12'],
+  sizes : ['10', '12', '14'],
+  faixa_de_idade : 'Juvenil'
+}];

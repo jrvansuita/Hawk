@@ -1,27 +1,24 @@
 class ChildsBuilder{
 
-  static bind(holder, items){
-    holder.find("tr:gt(0)").empty();
-    var builder = new ChildsBuilder(holder);
-
-    builder.setOnChange(function (){
-      product._Skus.forEach((each) => {
-        if (each.codigo == $(this).data('sku')){
-          each[$(this).data('tag')] = $(this).val();
-          each.active = true;
-        }
-      });
-    });
-
-    items.forEach((item) => {
-      builder.addChild(item);
-    });
-
-    return builder;
-  }
-
   constructor(holder){
     this.holder = holder;
+    this.skus = {};
+  }
+
+  loadChilds(items){
+    this.holder.find("tr:gt(0)").empty();
+
+    items.forEach((item) => {
+      this.addChild(item);
+    });
+  }
+
+  loadSizes(sku, sizes){
+    this.holder.find("tr:gt(0)").empty();
+
+    sizes.forEach((size) => {
+      this.addChild({codigo: sku + '-' + size, active: true});
+    });
   }
 
   setOnChange(listener){
@@ -29,7 +26,22 @@ class ChildsBuilder{
     return this;
   }
 
+  isEmpty(){
+    return this.currentSku == undefined;
+  }
+
+  getSkus(){
+    return Object.keys(this.skus);
+  }
+
+  getSizes(){
+    return this.getSkus().map((e) => {
+      return e.split('-').pop();
+    })
+  }
+
   addChild(item){
+
     return this.line(item.codigo)
     .label(item.codigo)
     .int('Ean', 'gtin', item.gtin || '', '0000000000000')
@@ -40,14 +52,17 @@ class ChildsBuilder{
   }
 
   removeChild(sku){
+    delete this.skus[sku];
+
     $('tr[data-sku="'+sku+'"]').fadeOut(200, function() {
-        $(this).remove();
+      $(this).remove();
     });
   }
 
   line(sku){
     this.lastLine = $('<tr>').attr('data-sku', sku);
     this.currentSku = sku;
+    this.skus[sku] = sku;
     this.holder.append(this.lastLine);
     return this;
   }

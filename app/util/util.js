@@ -1,7 +1,12 @@
 var Util = {
 
-  id(){
-    return parseInt(new Date().getTime().toString().slice(-8));
+  id(length){
+    return parseInt(new Date().getTime().toString().slice(-(length || 8)));
+  },
+
+  barcode(){
+    var code = '789' + this.id(9);
+    return code + (10 - (code.split('').reduce((s, e, i) => { return s + parseInt(e) * ((i%2==0)?1:3) },0) % 10)) % 10
   },
 
   transportName: (name, def)=>{

@@ -8,27 +8,37 @@ $(document).ready(() => {
 
   refreshBroadcast = new Broadcast('post-refresh-storing-product').onReceive(onProductRefreshed).emit(product);
   sizesBox = new SizesBox($('.sizes-box')).startCache();
+  childsBuilder = new ChildsBuilder($('.childs')).setOnChange(function (){
+    product._Skus.forEach((each) => {
+      if (each.codigo == $(this).data('sku')){
+        each[$(this).data('tag')] = $(this).val();
+        each.active = true;
+      }
+    });
+  });
 
   onBindComboBoxes();
   onBindSizeBoxListeners();
   onBindViewsListeners();
+  onInitilizeScreenControls()
   requestProductChilds();
 });
 
 function bindComboBox(el, data, limit){
-  new ComboBox(el, typeof data == 'string' ? '/stock/storer-attr?attr='+ data : data)
+  var url = typeof data == 'string' ? '/stock/storer-attr?attr='+ data : data;
+
+  new ComboBox(el, url)
   .setAutoShowOptions(true)
   .callOnChangeEventBySelecting(true)
   .setLimit(limit)
   .setOnItemBuild((item, index)=>{
-    return {text : item.description, value: item.value};
+    return {text : item.description.trim(), value: item.value};
   }).load();
 }
 
-
 function onBindViewsListeners(){
-  $('.save').click(() => { _post('/stock/storer-upsert', getData(), (data) => { console.log(data); }); });
-  $('.delete').click(() => { _post('/stock/storer-delete', getData(), (data) => { console.log(data); }) });
+  $('.save').click(() => { onStoreProduct() });
+  $('.delete').click(() => { _post('/stock/storer-delete', getData(), (data) => { onProductDeleted(data); }) });
 
   $("input[type='text']").on("click", function () {
     $(this).select();
@@ -43,7 +53,7 @@ function onBindViewsListeners(){
   });
 
   $('.size-group-button').click(function () {
-    product.ageRange = [$(this).data('val')].concat(product.ageRange).filter(Boolean);
+    product.faixa_de_idade = $(this).data('val');
     refreshBroadcast.emit(getData());
   }).keypress(function(e) {
     if(e.which == 13) $(this).click()
@@ -72,6 +82,10 @@ function onBindViewsListeners(){
   });
 }
 
+function onInitilizeScreenControls(){
+  $('.delete').toggle(product.id != undefined);
+}
+
 function onBindViewValues(){
   if (Object.keys(product).length > 0){
     $('.bindable').each((i, each) => {
@@ -86,7 +100,7 @@ function onBindViewValues(){
     });
 
     //Exceptions Handling
-    if (product.precoCusto){
+    if (product.precoCusto && product.preco){
       $('#markup').val(Floa.abs(Floa.floa(product.preco)/Floa.floa(product.precoCusto),2));
     }
   }
@@ -111,23 +125,30 @@ function getData(){
   product.markup = $('#markup').val();
   product.precoCusto = Num.moneyVal($('#cost').val());
   product.conteudo = editor.html.get();
+  product.user = loggedUser;
+
+  if (product.nome && !product.uniqNamePart){
+    product.uniqNamePart = product.nome;
+  }
 
   return product;
 }
 
 function onProductRefreshed(data){
-  console.log(data);
   product = data;
   onBindViewValues();
-  onSizesRefreshed(data);
+  onSizesRefreshed();
 }
 
 function onSizesRefreshed(data){
-  sizesBox.refresh(data.sizes);
 
-  if (data.faixa_de_idade){
+  if (product.sizes.join() != childsBuilder.getSizes().join()){
+    sizesBox.refresh(product.sizes);
+  }
+
+  if (product.faixa_de_idade){
     $('.size-group-button').removeClass('active');
-    $('.size-group-button[data-val="'+data.faixa_de_idade+'"]').addClass('active');
+    $('.size-group-button[data-val="'+product.faixa_de_idade+'"]').addClass('active');
   }
 }
 
@@ -138,7 +159,7 @@ function requestProductChilds(){
     });
 
     _get('/product-skus', {skus:skus}, (childs)=>{
-      childsBuilder = ChildsBuilder.bind($('.childs'), childs);
+      childsBuilder.loadChilds(childs);
     });
   }
 }
@@ -149,6 +170,7 @@ function onBindSizeBoxListeners(){
   }
 
   sizesBox.setOnSizeCreated((size) => {
+    console.log('Size Created: ' + size);
     var sku = getSku(size);
 
     var found = product._Skus.find(function(i){
@@ -157,23 +179,57 @@ function onBindSizeBoxListeners(){
 
     var item = {...found, codigo: getSku(size), active: true};
 
-    childsBuilder.addChild(item);
     if (!found){
+      item.gtin = Util.barcode();
       product._Skus.push(item);
     }
+
+    childsBuilder.addChild(item);
   });
 
   sizesBox.setOnSizeDeleted((size) => {
+    console.log('Size Deleted: ' + size);
     var sku = getSku(size);
 
     childsBuilder.removeChild(sku);
 
-    var item = product._Skus.find(function(i){
-      return i.codigo == sku;
+    product._Skus.forEach((item, index, arr)  => {
+      if (item.codigo == sku){
+        if (item.id){
+          item.active = false;
+        }else{
+          arr.splice(index, 1);
+        }
+      }
     });
-
-    item.active = false;
   });
+}
+
+function onStoreProduct(){
+  $('.loading-holder').show();
+  $('.loading-msg').text('Salvarando ' + product.codigo);
+
+  _post('/stock/storer-upsert', getData(), (data) => { onProductStored(data); });
+}
+
+function onProductStored(data){
+  $('.loading-holder').hide();
+  putSkuUrlParams();
+
+  if (!product.id){
+    window.location.reload();
+  }
+}
+
+function onProductDeleted(){
+
+
+}
+
+function putSkuUrlParams(){
+  if (window.history.replaceState) {
+    window.history.replaceState("Data", null, location.pathname + '?sku=' + product.codigo);
+  }
 }
 
 function getNcmOptions(){

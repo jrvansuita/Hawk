@@ -33,7 +33,7 @@ module.exports = class History extends DataAccess {
     var _userId = userId ? userId : (e.userId ? e.userId : 0);
 
     console.error(e);
-    if (process.env.NODE_ENV){
+    if (process.env.IS_PRODUCTION){
       new History(2, _userId , title ? title : 'Erro de Sistema', addtoMessage ? addtoMessage + '\n' : '' + Err.xprss(e), 'Falha').upsert();
     }
   }
