@@ -173,6 +173,10 @@ var Params = {
   activePerformanceEmailReport(){
     return this.get('active-performance-report');
   },
+
+  enableJobsOnDevMode(){
+    return this.get('enable-jobs-on-dev');
+  },
 }
 
 
