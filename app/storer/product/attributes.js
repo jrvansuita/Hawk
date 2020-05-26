@@ -67,12 +67,16 @@ var CacheAttrs = {
     var _map = {};
 
     data.forEach((each) => {
+      each.descricao = each.descricao.trim();
       _map[each.idExterno] = each.descricao;
       var options = each._Opcoes ? each._Opcoes[0] : null;
 
       if (options){
-        _cache[each.descricao] = Object.keys(options).map((key) => {
-          return {id: key, idAttr: each.id, tag: each.idExterno, description: options[key]};
+        //Remove duplicates
+        options = Object.fromEntries(Object.entries(options).map(a => {a[1] = a[1].trim(); return a.reverse()}))
+
+        _cache[each.descricao] = Object.keys(options).map((value) => {
+          return {id: options[value], idAttr: each.id, tag: each.idExterno, description: value};
         });
       }else{
         _cache[each.descricao] = each;

@@ -115,7 +115,9 @@ module.exports = class SaleStock extends DataAccess {
         },
 
         sum_stock: {
-          $sum: "$stock"
+          //$sum: "$stock"
+          //Retorna o que for maior
+          $sum: { $max : ["$stock", "$quantity"]}
         },
 
         sum_profit: {
@@ -129,7 +131,7 @@ module.exports = class SaleStock extends DataAccess {
       {
         //  perc_sold : { $sum: { $multiply: [{$divide: ["$sum_quantity", "$sum_stock"]} , 100]} },
 
-        perc_sold : { $sum: { $divide: [{$multiply:  ["$sum_quantity", 100]}, "$sum_stock"]}}
+        perc_sold : { $sum: { $divide: [{$multiply:  ["$sum_quantity", 100]}, "$sum_stock" ]}}
       }
     },
 

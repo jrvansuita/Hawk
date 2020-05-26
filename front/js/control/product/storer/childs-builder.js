@@ -2,23 +2,20 @@ class ChildsBuilder{
 
   constructor(holder){
     this.holder = holder;
-    this.skus = {};
   }
 
-  loadChilds(items){
+  clear(){
     this.holder.find("tr:gt(0)").empty();
-
-    items.forEach((item) => {
-      this.addChild(item);
-    });
   }
 
-  loadSizes(sku, sizes){
-    this.holder.find("tr:gt(0)").empty();
+  load(childs, force){
+    if (force || this.getSkus().join('') != childs.map(e => {return e.codigo}).join('')){
+      this.clear();
 
-    sizes.forEach((size) => {
-      this.addChild({codigo: sku + '-' + size, active: true});
-    });
+      childs.forEach((child) => {
+        this.addChild(child);
+      });
+    }
   }
 
   setOnChange(listener){
@@ -31,19 +28,15 @@ class ChildsBuilder{
   }
 
   getSkus(){
-    return Object.keys(this.skus);
-  }
-
-  getSizes(){
-    return this.getSkus().map((e) => {
-      return e.split('-').pop();
-    })
-  }
+    return $('.child-sku-line').map((i, each) => {
+      return $(each).text()
+    }).toArray().filter(Boolean);
+  }  
 
   addChild(item){
 
     return this.line(item.codigo)
-    .label(item.codigo)
+    .label(item.codigo, 'child-sku-line')
     .int('Ean', 'gtin', item.gtin || '', '0000000000000')
     .float('Peso', 'peso', Floa.def(item.peso) || Floa.def(item.pesoLiq), '0,000')
     .int('Largura', 'largura', Num.def(item.largura), '0,000')
@@ -52,8 +45,6 @@ class ChildsBuilder{
   }
 
   removeChild(sku){
-    delete this.skus[sku];
-
     $('tr[data-sku="'+sku+'"]').fadeOut(200, function() {
       $(this).remove();
     });
@@ -62,13 +53,12 @@ class ChildsBuilder{
   line(sku){
     this.lastLine = $('<tr>').attr('data-sku', sku);
     this.currentSku = sku;
-    this.skus[sku] = sku;
     this.holder.append(this.lastLine);
     return this;
   }
 
-  label(label){
-    return this.col($('<span>').addClass('static-label').append(label));
+  label(label, addClass=''){
+    return this.col($('<span>').addClass('static-label ' + addClass).append(label));
   }
 
   input(...params){
