@@ -169,7 +169,7 @@ class ProductBinder{
       this.markup = Floa.def(this.markup, 2.5);
       this.precoCusto = Floa.def(this.precoCusto, 0);
       this.preco = Math.trunc(this.markup * this.precoCusto) + .9;
-      this.precoDe = Math.trunc(this.preco * 1.85) + .9;
+      this.precoDe = Math.trunc(this.preco / 0.85) + .9;
       this.markup = Floa.abs(this.preco/this.precoCusto, 2);
     }else{
       this.markup = Floa.abs(this.preco/this.precoCusto, 2);
