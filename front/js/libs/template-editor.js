@@ -186,6 +186,11 @@ class TemplateEditor{
     await this.dependencies.load();
     return new Promise((resolve, reject) => {
       this.editor = new FroalaEditor(selector,  this.getDefultOptions(), () => {
+
+
+        //Remover selo Froala
+        $("p[data-f-id='pbf']").remove();
+
         resolve(this.editor);
       });
     });
