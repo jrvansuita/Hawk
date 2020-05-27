@@ -1,26 +1,32 @@
 module.exports = class SkuGen extends DataAccess {
 
-  constructor(prefix, count) {
+  constructor(key, count) {
     super();
-    this.prefix = Str.def(prefix);
+    this.key = Str.def(key);
     this.count = count || 1;
   }
 
   static getKey() {
-    return ['prefix'];
+    return ['key'];
   }
 
-  static async go(prefix){
-    return new Promise((resolver) => {
-      prefix = prefix.toUpperCase();
-      SkuGen.findOne({prefix: prefix}, (err, doc) => {
-        var count = doc && doc.count ? doc.count : 1;
-        var padding = "0000" + count;
-        resolver(prefix + padding.substr(-4));
+  static compose(prefix, suffix, count){
+    return prefix.toUpperCase() + parseInt(count) + suffix.toLowerCase();
+  }
 
-        new SkuGen(prefix, ++count).upsert();
-      });
+  static get(p, s, callback){
+    var key = (p+s).toUpperCase();
+    SkuGen.findOne({key: key}, (err, doc) => {
+      if (callback) callback(key, doc && doc.count ? doc.count : 1);
     });
   }
 
-};
+  static async go(p, s){
+    return new Promise((resolver) => {
+      SkuGen.get(p, s, (key, count) => {
+        resolver(SkuGen.compose(p, s, count));
+        new SkuGen(key, ++count).upsert();
+      });
+    });
+  }
+}

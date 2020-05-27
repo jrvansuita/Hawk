@@ -31,22 +31,14 @@ module.exports = class ProductStorer{
     //Father Handler
     this._onProductUpsert(this.fatherBody, () => {
       //Childs Handler
-      this._handleChildsUpsert(process.env.IS_PRODUCTION);
+      this._handleChildsUpserts();
     });
   }
 
-  _handleChildsUpsert(isProductionMode){
+
+  _handleChildsUpserts(childs){
     var childs = this.fatherBody.getChilds();
-
-    if (isProductionMode){
-      //Fastest Way
-      this._handleChildsSimultaneousUpserts(childs);
-    }else{
-      this._handleChildsIncrementalUpserts(childs);
-    }
-  }
-
-  _handleChildsIncrementalUpserts(childs){
+    
     var incrementalUpserts = () => {
       if (childs.length){
         this._onChildProductUpsert(childs[0], () => {
@@ -58,20 +50,6 @@ module.exports = class ProductStorer{
     }
 
     incrementalUpserts();
-  }
-
-  _handleChildsSimultaneousUpserts(childs){
-    var simultaneousUpserts = () => {
-      var size = childs.length;
-
-      childs.forEach((each) => {
-        this._onChildProductUpsert(each, () => {
-          if (!--size) this.onFinishListener();
-        });
-      });
-    }
-
-    simultaneousUpserts();
   }
 
   _onProductUpsert(data, callback){
