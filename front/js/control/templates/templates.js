@@ -33,7 +33,7 @@ $(document).ready(()=>{
   .useImageUploader()
   .useQuickInsert(true)
   .load('#editor').then((_editor) => {
-    editor = _editor;
+    window.editor = _editor;
 
     if (selected){
       editor.html.set(selected.content);

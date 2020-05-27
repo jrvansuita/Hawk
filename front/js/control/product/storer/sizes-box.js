@@ -46,6 +46,12 @@ class SizesBox{
     return this;
   }
 
+
+  setOnSizesChanged(callback){
+    this.onSizesChangedListener = callback;
+    return this;
+  }
+
   input(initSize){
     var $input = $('<span>').addClass('size-input');
     this.box.append($input);
@@ -58,6 +64,9 @@ class SizesBox{
       var size = $input.text();
 
       this._onBeforeFocusOut($input, (doSubmit) => {
+
+        if (this.onSizesChangedListener) this.onSizesChangedListener();
+
         if (doSubmit) {
           this._onSubmit($input);
         }else{

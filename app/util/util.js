@@ -219,10 +219,10 @@ var Util = {
     return 'hsl(' + shortened + ', 45%, 60%'+ (alpha ? ', ' + alpha : '') + ')';
   },
 
-  acronym: (text) =>{
+  acronym: (text, len) =>{
     var result = text.match(/[A-Z]/g).join('');
 
-    return result.length == 1 ? text.replace( /[aeiou]/g, '').trim().substr(0, 3) : result;
+    return result.length == 1 ? text.replace( /[aeiou]/g, '').trim().substr(0, len || 3) : result;
   },
 
   historyTagColor(tag){

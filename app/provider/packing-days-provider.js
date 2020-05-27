@@ -1,37 +1,23 @@
 const Day = require('../bean/day.js');
 
-module.exports = class  {
+var cache = {};
 
-  constructor() {
-
-  }
+module.exports = {
+  
+  load(from, to, callback){
+    Day.byDay('invoice', from, to, (err, data) => {
+      cache[from - to] = data;
+      if (callback) callback(data);
+    });
+  },
 
   get(from, to, cache, callback) {
-    var type = to - from;
+    cache = cache && cache[from - to];
+
     if(cache){
-      var data = chartsCached[type];
-      data ? callback(data) : getDataAndCache(from, to, type, (response) => {
-        callback(response);
-      })
+      callback(cache[from - to]);
     }else{
-      getDataControl(from, to, (data) => {
-        callback(data);
-      });
+      this.load(from, to, callback)
     }
   }
 };
-
-var chartsCached = {};
-
-function getDataAndCache(from, to, type, callback){
-  getDataControl(from, to, (data) => {
-    chartsCached[type] = data;
-    callback(data);
-  });
-}
-
-function getDataControl(from, to, callback){
-  Day.byDay('invoice', from, to, (err, data) => {
-    callback(data);
-  });
-}

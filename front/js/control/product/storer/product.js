@@ -68,7 +68,6 @@ function onBindViewsListeners(){
     }
   });
 
-
   $('#sku').keypress(function(e) {
     if(e.which == 13) window.location.href = window.location.origin + window.location.pathname + '?sku=' + $(this).val();
   });
@@ -81,8 +80,13 @@ function onBindViewsListeners(){
   new TemplateEditor()
   .useUnicodeEmoticons(true)
   .showRichButtons(false)
-  .load('.description-editor').then((_editor) => {
-    window.editor = _editor;
+  .addMiscCustomButton('insertFile', 'def-template', 'Inserir Descricao Padrão', (editor) => {
+    _get('/templates-viewer?id=89017302', {}, (r) => {
+      editor.html.set(r);
+    });
+  })
+  .load('.description-editor').then((data) => {
+    window.editor = data;
     onBindDetailsDescriptions();
   });
 }
@@ -170,6 +174,8 @@ function onBindSizeBoxListeners(){
     return product.codigo + '-' + size;
   }
 
+
+
   sizesBox.setOnSizeCreated((size) => {
     console.log('Size Created: ' + size);
     var sku = getSku(size);
@@ -178,7 +184,7 @@ function onBindSizeBoxListeners(){
       return i.codigo == sku;
     });
 
-    var item = {...found, codigo: getSku(size), active: true};
+    var item = {...found, codigo: getSku(size), active: true, altura : 2, largura : 11 , comprimento : 16};
 
     if (!found){
       item.gtin = Util.barcode();

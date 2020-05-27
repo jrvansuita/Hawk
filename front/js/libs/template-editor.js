@@ -7,6 +7,7 @@ class TemplateEditor{
     .css('froala-editor.min').js('froala-editor.min');
 
     this.buttons = {};
+    this.customButtons = [];
 
     this.showTextButtons(true);
     this.showParagraphButtons(true);
@@ -78,6 +79,33 @@ class TemplateEditor{
     return this.buttons;
   }
 
+  addMiscCustomButton(icon, name, title, callback){
+    this.customButtons.push({icon: icon, name: name, title: title, click: callback});
+    return this;
+  }
+
+  getCustomButtons(){
+    this.customButtons.forEach((eachButton) => {
+      FroalaEditor.DefineIcon(eachButton.name, {NAME: 'teste', SVG_KEY: eachButton.icon});
+      FroalaEditor.RegisterCommand(eachButton.name, {
+        title: eachButton.title,
+        focus: false,
+        undo: true,
+        refreshAfterCallback: true,
+        callback: function () {
+          if (eachButton.click)
+          eachButton.click(this);
+
+          this.events.focus();
+        }
+      });
+    });
+
+    return this.customButtons.map((e) => {
+      return e.name;
+    });
+  }
+
   getImageUploadOptions(){
     if (this.activeImageUpload){
       return {
@@ -111,6 +139,7 @@ class TemplateEditor{
 
 
   getDefultOptions(){
+
     var options = {
       fullPage: false,
       useClasses: false,
@@ -144,7 +173,9 @@ class TemplateEditor{
       options.emoticonsUseImage = false;
     }
 
-
+    if (this.customButtons.length){
+      this.buttons.moreMisc.buttons = this.buttons.moreMisc.buttons.concat(this.getCustomButtons());
+    }
 
     options = {...options,   ...this.getImageUploadOptions()}
 
@@ -153,9 +184,12 @@ class TemplateEditor{
 
   async load(selector){
     await this.dependencies.load();
-
     return new Promise((resolve, reject) => {
       this.editor = new FroalaEditor(selector,  this.getDefultOptions(), () => {
+
+
+        //Remover selo Froala
+        $("p[data-f-id='pbf']").remove();
 
         resolve(this.editor);
       });
