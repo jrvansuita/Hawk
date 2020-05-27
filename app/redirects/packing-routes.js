@@ -58,8 +58,10 @@ module.exports = class PackingRoutes extends Routes{
     this._get('/packing-days', (req, res) => {
       var from = Dat.query(req.query.from, Dat.firstDayOfMonth());
       var to = Dat.query(req.query.to, Dat.lastDayOfMonth());
+      var cache = req.query.cache ? Util.isTrueStr(req.query.cache) : true;
 
-      new PackingDaysProvider().get(from, to, (data)=>{
+      new PackingDaysProvider().get(from, to, cache,  (data)=>{
+        res.set('Cache-Control', 'public, max-age=86400');
         res.status(200).send(data);
       });
     });

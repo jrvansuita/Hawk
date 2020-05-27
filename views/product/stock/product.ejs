@@ -37,23 +37,23 @@
 
         <div class="top-image-holder">
           <%if (product.codigo){%>
-            <a href="<%=product.img && product.img.url ? product.img.url : '\john-travolta'%>" target="_blank">
+            <a href="<%=product?.img?.url ?? '\john-travolta'%>" target="_blank">
               <label id="top-sku" class="top-label"><%=product.codigo%></label>
               <label id="top-product-name" class="top-label"><%=Str.short(Util.getProductName(product.nome), 42)%></label>
             </a>
-            <%var brand = product.Marca ? product.Marca : ''%>
+            <%var brand = product?.Marca ?? ''%>
             <a href="<%=Params.storeUrl() + '/' + brand.replace(' ', '-').toLowerCase(); %>" target="_blank">
               <label id="top-brand" class="top-label sub"><%=brand%></label>
             </a>
             <%}%>
           </div>
           <div class="image-holder">
-            <img id="image" src="<%=product.img ? product.img.image : ''%>" onerror="this.src='/img/product-placeholder.png'"/>
+            <img id="image" src="<%=product?.img?.image ?? ''%>" onerror="this.src='/img/product-placeholder.png'"/>
           </div>
 
           <div class="expanding-image-modal">
             <div class="back-fixes-image shadow">
-              <img class="image-full" src="<%=product.img ? product.img.image : ''%>">
+              <img class="image-full" src="<%=product?.img?.image ?? ''%>">
             </div>
           </div>
 
@@ -87,7 +87,7 @@
                     <td>
                       <div class="attribute-holder">
                         <label class="attribute-name">Preço</label>
-                        <label class="attribute-value"><%=Num.money((product.img ? product.img.price || product.img.sellPrice: 0) || Floa.floa(product.preco))%></label>
+                        <label class="attribute-value"><%=Num.money((product?.img?.price || product?.img?.sellPrice || 0) || Floa.floa(product.preco))%></label>
                       </div>
                     </td>
                     <%}%>
