@@ -2,7 +2,7 @@ $(document).ready(()=>{
 
 
   if ($('#packing-chart-current-month').length > 0){
-    _get('/packing-days', {from: Dat.firstDayOfMonth().getTime(), to: Dat.lastDayOfMonth().getTime()}, (data)=>{
+    _get('/packing-days', {from: Dat.firstDayOfMonth().getTime(), to: Dat.lastDayOfMonth().getTime(), cache: false}, (data)=>{
       new PackingChart('packing-chart-current-month', data, loggedUser.full).load();
     });
   }
@@ -24,5 +24,4 @@ $(document).ready(()=>{
       new PackingChart('packing-chart-last-year', data, loggedUser.full, true).load();
     });
   }
-
 });
