@@ -30,9 +30,7 @@ class ComboBox{
     }
 
     select(item){
-      this.element.val(item ? (item.value || item.label) : '');
-
-      if (this.callOnChangeBySelection) this.element.trigger("change");
+      this.element.val(item ? (item.value || item.label) : '')
 
       this.selectedItem = item;
       if (this.onItemSelect && item){
@@ -90,8 +88,8 @@ class ComboBox{
       });
     }
 
-    callOnChangeEventBySelecting(b){
-      this.callOnChangeBySelection = b;
+    callOnChangeBySelectingListItem(b){
+      this._callOnChangeBySelectingListItem = b;
       return this;
     }
 
@@ -175,6 +173,8 @@ class ComboBox{
           response(results.slice(0, this.limit));
         },
         select: (event, ui)=>{
+          if (this._callOnChangeBySelectingListItem) this.element.trigger("change");
+
           this.select(ui.item);
         }
       };
