@@ -5,24 +5,15 @@
 
 <link rel="stylesheet" type="text/css" href="/front/css/layout/packing-groups.css">
 
-<%if (Object.keys(groups).length > 0){%>
   <div class="all-groups-holder">
 
-    <%if (groups.sales){%>
-      <%- include('../sale-groups/group-item', {group: groups.sales, title : 'Totais', addClazz:'span2' });  %>
-      <%}%>
+      <%- include('../sale-groups/group-item', {group: groups.sales ?? '', title : 'Totais', addClazz:'span2' });  %>
 
-      <%if (groups.transps){%>
-        <%- include('../sale-groups/group-item', {group: groups.transps, title : 'Transportadoras', addClazz:'span3' });  %>
-        <%}%>
+        <%- include('../sale-groups/group-item', {group: groups.transps ?? '', title : 'Transportadoras', addClazz:'span3' });  %>
 
-        <%if (groups.ufs){%>
-          <%- include('../sale-groups/group-item', {group: groups.ufs, title : 'Estados', showPapers:true, addClazz:'span3'});  %>
-          <%}%>
+          <%- include('../sale-groups/group-item', {group: groups.ufs ?? '' , title : 'Estados', showPapers:true, addClazz:'span3'});  %>
 
-          <%if (groups.dates){%>
-            <%- include('../sale-groups/group-item', {group: Util.orderDatesObject(groups.dates), title : 'Datas', dates: true, showPapers:true, addClazz:'span3'});  %>
-            <%}%>
+            <%- include('../sale-groups/group-item', {group: groups.dates ? Util.orderDatesObject(groups.dates) : '', title : 'Datas', dates: true, showPapers:true, addClazz:'span3'});  %>
 
 
             <div class="group-single-holder span5 shadow">
@@ -40,7 +31,7 @@
 
 
             <%if (loggedUser && loggedUser.full){%>
-              
+
               <div class="group-single-holder span4 shadow">
                 <label class="group-single-title">Este Ano</label>
                 <canvas id="packing-chart-year" height="120px"></canvas>
@@ -54,6 +45,3 @@
               <%}%>
 
             </div>
-
-
-            <%}%>
