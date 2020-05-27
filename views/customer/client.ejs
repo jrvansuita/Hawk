@@ -11,6 +11,7 @@
 
   <script type="text/javascript" src="/front/js/libs/easy-autocomplete.min.js"></script>
   <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
+  <script type="text/javascript" src="/front/js/libs/tooltip.js"></script>
   <script type="text/javascript" src="/front/js/control/customer/client.js"></script>
   <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
@@ -196,7 +197,7 @@
 
             <%client.sales.reverse().forEach((sale)=>{%>
 
-              <tr onclick="showSaleDialog(<%=sale.increment_id%>)">
+              <tr onclick="showSaleDialog(<%=sale.increment_id%>)" data-sale="<%=sale.increment_id%>">
                 <td><span class="increment-id copiable"><%=sale.increment_id%></span></td>
                 <td><span class="gray"><%=Dat.formatwTime(Dat.rollHour(new Date(sale.created_at),-3))%></span></td>
                 <td><span class=""><%=Num.int(sale.total_qty_ordered)%></span></td>

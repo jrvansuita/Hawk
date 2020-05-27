@@ -3,13 +3,18 @@
   font-size: 11px;
 }
 .all{
-  margin: 5px;
+  margin: 0px;
   border-bottom: 1px solid #c7c7c7bd;
+}
+
+.ifr{
+  width: 65%;
 }
 
 .top{
   border-bottom: 1px solid #989898;
-  /* width: 100%; */
+  width: 100%;
+  display: flex;
 }
 
 .top h1{
@@ -40,7 +45,7 @@
 }
 
 .item-description div{
-  margin-top: -27px;
+  margin-top: -11px;
 }
 
 .item-description ul{
@@ -53,7 +58,7 @@
 
 .then{
   position: relative;
-  top: 20px;
+  top: 7px;
 }
 
 .item-manufac{
@@ -76,9 +81,7 @@
   width: 121px;
 }
 
-.child-information{
-  align-self: center;
-}
+.child-information{}
 
 #barcode{
   width: 100%;
@@ -94,6 +97,6 @@ table{
   border-collapse: collapse;
   width: 100%;
   margin-left: -10px;
-  margin-top: 20px;
+  margin-top: 50px;
 }
 table tr:nth-child(even) {background-color: #e4e4e4;}

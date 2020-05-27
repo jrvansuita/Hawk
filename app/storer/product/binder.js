@@ -21,7 +21,7 @@ class ProductBinder{
       {key: 'taxonomia'}, {key: 'largura'},
       {key: 'comprimento'}, {key: 'altura'}, {key: 'size'},
       {key: 'age_group'}, {key: 'gender'}, {key: 'conteudo'},
-      {key: 'tamanho'}
+      {key: 'tamanho', key: 'visibility'}
     ];
 
     var handler = new AttributesHandler()
@@ -46,8 +46,6 @@ class ProductBinder{
 
   async identification(){
     if (!this.id){
-      this.codigo = this.codigo || '';
-
       var nameConcat = [];
 
       if (this.Departamento){
@@ -56,19 +54,22 @@ class ProductBinder{
         if (this.Material)
         nameConcat.push(Util.ternalSame(this.Material, ...commonMaterials));
 
+        if (this.postNamePart)
+        nameConcat.push(this.postNamePart);
+
         if (this.Cor)
         nameConcat.push(this.Cor);
-
-        if (this.uniqNamePart)
-        nameConcat.push(this.uniqNamePart);
 
         if (this.Marca)
         nameConcat.push('- ' + this.Marca.trim());
       }
 
       this.nome = nameConcat.filter(Boolean).join(' ');
-      
-      if (!this.codigo.startsWith(this.acronym) && this.Marca){
+
+      if (this.postSku){
+        this.postSku = this.postSku.toUpperCase();
+        this.codigo = this.postSku;
+      }else if (this.Marca && (!this.codigo || !this.codigo.startsWith(this.acronym))){
         this.acronym = Util.acronym(this.Marca).toUpperCase();
         this.codigo = await SkuGen.go(this.acronym);
       }
@@ -106,13 +107,12 @@ class ProductBinder{
     this.spedTipoItem = '00';
 
 
-
     if (!this.descricaoEcommerce){
       this.descricaoEcommerce = this.nome;
     }
 
-    if (!this.urlEcommerce){
-      this.urlEcommerce = 'testado';
+    if (this.nome){
+      this.urlEcommerce = this.nome.replace('-', '').replace(' ','-').toLocaleLowerCase();
     }
 
     //Como fazer?
@@ -135,14 +135,17 @@ class ProductBinder{
     this.country_of_manufacture = 'Brasil';
     this.attribute_set = 'Default';
     this.tax_class_id = 'None';
+    this.visibility = 'Não Visível Individualmente'; //'Catálogo, Busca';
 
-    let holder = this._FichaTecnica ? this._FichaTecnica[0] : null;
-    this.conteudo = holder ? holder.descricaoDetalhada : this.conteudo;
-    this._FichaTecnica = { descricaoDetalhada : this.conteudo };
+    if (this._FichaTecnica || this.conteudo){
+      let holder = this._FichaTecnica ? this._FichaTecnica[0] : null;
+      this.conteudo = holder ? holder.descricaoDetalhada : this.conteudo;
+      this._FichaTecnica = { descricaoDetalhada : this.conteudo };
+    }
   }
 
   attributes(){
-    if (!this['Coleção'] && this.Departamento){
+    if (this.Departamento && !this['Coleção']){
       var all = new AttributesHandler().filter('colecao').get();
       if (all && all.length > 0){
         this['Coleção'] = all.slice(-1)[0].description;
@@ -155,7 +158,7 @@ class ProductBinder{
       this.markup = Floa.def(this.markup, 2.5);
       this.precoCusto = Floa.def(this.precoCusto, 0);
       this.preco = Math.trunc(this.markup * this.precoCusto) + .9;
-      this.precoDe = Math.trunc(this.preco * 2.5) + .9;
+      this.precoDe = Math.trunc((this.preco * 0.85) * 2) + .9;
       this.markup = Floa.abs(this.preco/this.precoCusto, 2);
     }else{
       this.markup = Floa.abs(this.preco/this.precoCusto, 2);
@@ -163,89 +166,99 @@ class ProductBinder{
   }
 
   sizing(){
-    this._Skus = this._Skus || [];
+    if (this._Skus || this.postFaixaIdade){
+      this._Skus = this._Skus || [];
 
-    this.sizes = this._Skus.map(each => {return each.codigo.split('-').pop()});
-    var sizes = this.sizes.join(',');
+      this.sizes = this._Skus.map(each => {return each.codigo.split('-').pop()});
 
-    if (sizes){
-      commonSizes.forEach((each, index) => {
-        if ((index == 0) || (Arr.includesAll(each.search || each.sizes, sizes))){
-          this.Idade = each.Idade;
-          this.age_group = each.age_group;
-          this.faixa_de_idade = each.faixa_de_idade;
-        }
-      });
-    }else if (this.faixa_de_idade){
-      commonSizes.forEach((each, index) => {
-        if ((index == 0) || (each.faixa_de_idade == this.faixa_de_idade)){
-          this.Idade = each.Idade;
-          this.age_group = each.age_group;
-          this.sizes = each.sizes;
-        }
-      });
-    }
+      if (this.postFaixaIdade && this.codigo && (this.postFaixaIdade != this.faixa_de_idade)){
+        this.faixa_de_idade = this.postFaixaIdade;
+
+        commonSizes.forEach((each, index) => {
+          if ((index == 0) || (each.faixa_de_idade == this.faixa_de_idade)){
+            this.Idade = each.Idade;
+            this.age_group = each.age_group;
+            this._Skus = this._createChildSkusFromSizes(each.sizes);
+            this.sizes = each.sizes;
+          }
+        });
+      }else if (this.sizes && !this.faixa_de_idade){
+        commonSizes.forEach((each, index) => {
+          if ((index == 0) || (Arr.includesAll(each.search || each.sizes, this.sizes.join('')))){
+            this.Idade = each.Idade;
+            this.age_group = each.age_group;
+            this.faixa_de_idade = each.faixa_de_idade;
+          }
+        });
+      }
+  }
+}
+
+_createChildSkusFromSizes(sizes){
+  return !sizes ? {} : sizes.map((size, i) => {
+    return {codigo: this.codigo + '-' + size, active: true, gtin : Util.barcode(i), altura: 2, largura: 11, comprimento: 16};
+  });
+}
+
+
+getChildBy(data){
+  var child = Util.clone(this);
+  delete child._Skus;
+  delete child._Atributos;
+  delete child._Componentes;
+  delete child._Estoque;
+  delete child.img;
+  delete child.comprimento;
+  delete child.altura;
+  delete child.largura;
+  delete child.peso;
+
+  if(data.active){
+    child.idProdutoMaster = this.id;
   }
 
+  delete child.id;
 
-  getChildBy(data){
-    var child = Util.clone(this);
-    delete child._Skus;
-    delete child._Atributos;
-    delete child._Componentes;
-    delete child._Estoque;
-    delete child.img;
-    delete child.comprimento;
-    delete child.altura;
-    delete child.largura;
-    delete child.peso;
-
-    if(data.active){
-      child.idProdutoMaster = this.id;
-    }
-
-    delete child.id;
-
-    if (data.id){
-      child.id = data.id;
-    }
-
-    child.codigo = data.codigo;
-    child.gtin = data.gtin || '';
-    child.tamanho = data.codigo.split('-').pop().trim();
-    child.descricaoEcommerce = this.nome + '-' + child.tamanho;
-
-    if (data.comprimento){
-      child.comprimento = child.comprimentoReal = data.comprimento;
-    }
-
-    if (data.altura){
-      child.altura = child.alturaReal = data.altura;
-    }
-
-    if (data.largura){
-      child.largura = child.larguraReal = data.largura;
-    }
-
-    data.peso = Floa.floa(data.peso || 0);
-
-    if (data.peso){
-      child.peso = child.pesoLiq = child.pesoBruto = child.pesoReal = data.peso;
-    }
-
-    child.situacao = child.situacaoCompra = child.situacaoVenda = (data.active ? "A" : 'I');
-
-    return child;
+  if (data.id){
+    child.id = data.id;
   }
 
-  getChilds(){
-    var childs = [];
-    this._Skus.forEach((each) => {
-      childs.push(this.getChildBy(each));
-    });
+  child.codigo = data.codigo;
+  child.gtin = data.gtin || '';
+  child.tamanho = data.codigo.split('-').pop().trim();
+  child.descricaoEcommerce = this.nome + '-' + child.tamanho;
 
-    return childs.filter(Boolean);
+  if (data.comprimento){
+    child.comprimento = child.comprimentoReal = data.comprimento;
   }
+
+  if (data.altura){
+    child.altura = child.alturaReal = data.altura;
+  }
+
+  if (data.largura){
+    child.largura = child.larguraReal = data.largura;
+  }
+
+  data.peso = Floa.floa(data.peso || 0);
+
+  if (data.peso){
+    child.peso = child.pesoLiq = child.pesoBruto = child.pesoReal = data.peso;
+  }
+
+  child.situacao = child.situacaoCompra = child.situacaoVenda = (data.active ? "A" : 'I');
+
+  return child;
+}
+
+getChilds(){
+  var childs = [];
+  this._Skus.forEach((each) => {
+    childs.push(this.getChildBy(each));
+  });
+
+  return childs.filter(Boolean);
+}
 }
 
 module.exports = ProductBinder;

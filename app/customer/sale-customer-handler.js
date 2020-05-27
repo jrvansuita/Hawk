@@ -9,29 +9,20 @@ const SaleLoader = require('../loader/sale-loader.js');
 module.exports = class SaleCustomerHandler {
 
   updateSaleStatus(body, callback){
-
     new SaleLoader(body.sale).run((sale) => {
       this.saleObs = sale.observacaoInterna;
-
       this.updateSaleEccosys(body, () => {
-
         if(sale.numeroNotaFiscal){
-          this.cancelNfe(body.obs, sale.numeroNotaFiscal, (res) => {
-            if(res.sucess){
-              this._updateSaleMagento(body, (res) => {
-
-              });
-            }
-            callback(res);
+          this.cancelNfe(body.obs, sale.numeroNotaFiscal, (result) => {
+            result.sucess ? this._updateSaleMagento(body, (result) => {}) : History.notify(body.user.id, 'Status do Pedido', '{0}'.format(result.error[0]['erro']), 'Falha');
+            callback(result);
           });
         }else{
           this._updateSaleMagento(body, (res) => {
-            console.log(res);
             callback(res);
           });
         }
       });
-
     });
   }
 
@@ -39,9 +30,7 @@ module.exports = class SaleCustomerHandler {
     var body = {
       "justificativa": '[Hawk - Atendimento] - ' + obs
     }
-    new EccosysStorer().cancelNfe(body.user, numberNfe, body).go((res) => {
-      callback(res);
-    });
+    new EccosysStorer().cancelNfe(body.user, numberNfe, body).go((res) => { callback(res); });
   }
 
   _updateSaleMagento(body, callback){
@@ -63,13 +52,11 @@ module.exports = class SaleCustomerHandler {
   }
 
   updateSaleEccosys(body, callback){
-    var body = {
+    new EccosysStorer().sale().update({
       situacao: this._getEccosysSituation(body.status),
       numeroDaOrdemDeCompra: body.sale,
       observacaoInterna: this.saleObs + '\n' + Const.sale_status_update_obs.format(body.obs, Util.getSaleStatusInfo(body.status), body.user.name)
-    };
-
-    new EccosysStorer().sale().update([body]).go(() => {
+    }).go(() => {
       callback();
     });
   }

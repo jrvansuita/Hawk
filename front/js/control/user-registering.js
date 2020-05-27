@@ -215,7 +215,7 @@ function showAvatarCropper(){
       _get('/get-setts', {}, (all)=>{
         $('.settings').empty();
 
-        var groups = buildSettsGroups(all, ['Geral', 'Picking', 'Packing', 'Estoque', 'Pendências', 'Performance']);
+        var groups = buildSettsGroups(all, ['Geral', 'Picking', 'Packing', 'Estoque', 'Pendências', 'Performance', 'Horario']);
 
         for (var i = 0; i < groups.length; i++) {
           showGroup(groups[i]);

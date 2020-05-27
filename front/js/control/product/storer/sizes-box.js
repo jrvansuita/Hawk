@@ -17,12 +17,22 @@ class SizesBox{
     });
   }
 
-  refresh(sizes){
+  clear(){
+    this.box.empty();
+  }
+
+  load(sizes, force){
     if (sizes && sizes.length > 0){
-      this.box.empty();
-      sizes.forEach((size) => {
-        this.input(size);
-      });
+
+      if (force) this.clear();
+
+      if (this.getSizes().join('') != sizes.join('')){
+        this.clear();
+
+        sizes.forEach((size) => {
+          this.input(size);
+        });
+      }
     }
   }
 
@@ -57,7 +67,7 @@ class SizesBox{
     });
 
     $input.text(initSize);
-    this._onSubmit($input);
+    this._innerSubmit($input);
     this._handleSizeDropdown($input);
   }
 
@@ -94,7 +104,7 @@ class SizesBox{
   }
 
   _onRemove(input){
-    if (this.onSizeDeletedListener && this._sizeIsInTheBox(input)){
+    if (this.onSizeDeletedListener && input.text()){
       this.onSizeDeletedListener(input.text());
     }
 
@@ -106,21 +116,23 @@ class SizesBox{
   }
 
   _sizeIsInTheBox(input){
-    var sizes = this.getSizes();
+    var sizes = this.getSizes(1);
 
-    return sizes.length && input.text() && Arr.isIn(this.getSizes(), input.text());
+    return sizes.length && input.text() && Arr.isIn(sizes, input.text());
   }
 
-  getSizes(){
-    return $('.size-input').map((i, each) => {
+  getSizes(dec=0){
+    var arr = $('.size-input').map((i, each) => {
       return $(each).text()
-    }).toArray().filter(Boolean).slice(0, -1);
+    }).toArray().filter(Boolean);
+
+    return  dec ? arr.slice(0, -(dec)) : arr;
   }
+
   _handleSizeDropdown(input){
     this._handleCachedSizes(() => {
       new ComboBox(input, cachedSizes)
       .setAutoShowOptions(true)
-      .callOnChangeEventBySelecting(true)
       .setLimit(5)
       .setOnItemBuild((item, index)=>{
         return {text : item.description, value: item.value};

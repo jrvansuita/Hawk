@@ -1,4 +1,8 @@
+var errorTooltip;
+
 $(document).ready(() => {
+  errorTooltip = new Tooltip('.sale-header-dots', 'Opções');
+  errorTooltip.autoHide(3000).returnDefault(true).load()
 
   $('.sale-viewer-holder').css('border-top', 'none');
 
@@ -11,7 +15,9 @@ $(document).ready(() => {
   });
 
   $('.sale-info-coleted').dblclick(() => {
-    window.open('/shipping-order-print?id=' + data.idOrdemColeta);
+    if(data.idOrdemColeta != '' && data.idOrdemColeta != 0){
+      window.open('/shipping-order-print?id=' + data.idOrdemColeta);
+    }
   });
 
 });
@@ -55,6 +61,7 @@ function bindSaleAddressInfo(data){
   $('.sale-shipping-postal-code').text(Util.formatCEP(data.shipping_address.cep));
   $('.sale-shipping-city').text(data.shipping_address.city);
   $('.sale-shipping-uf').text(data.shipping_address.state);
+  $('.sale-shipping-reference').text(data.shipping_address.reference);
 
   $('.sale-billing-adress-street').text(data.billing_address.street);
   $('.sale-billing-adress-bairro').text(data.billing_address.bairro);
@@ -62,6 +69,8 @@ function bindSaleAddressInfo(data){
   $('.sale-billing-adress-postal-code').text(Util.formatCEP(data.billing_address.cep));
   $('.sale-billing-adress-city').text(data.billing_address.city);
   $('.sale-billing-adress-uf').text(data.billing_address.state);
+  $('.sale-billing-reference').text(data.billing_address.reference);
+
 
   //card transport
   $('.sale-shipping-transport').text(data.transport.name);
@@ -201,7 +210,6 @@ function bindSaleItens(data){
     }
     $('.sale-info-subtotal').text(Num.money(data.subtotal));
     $('.sale-info-cupom').html(data.payment.discount_desc ? data.payment.discount_desc.split(',').join('<br>') : '');
-    //  $('.sale-info-cupom').html(data.payment.coupon ? data.payment.coupon.toUpperCase() + '<br>' + data.payment.discount_desc.split(',').join('<br>') : data.payment.discount_desc);
     $('.sale-info-discount').text(Num.money(data.discount));
     $('.sale-info-weight-total').text(data.weight);
     $('.sale-info-total').text(Num.money(data.total));
@@ -298,19 +306,18 @@ function bindSaleItens(data){
     }
 
     Dropdown.on($('.transport-dots')).item('/img/transport/default.png', 'Rastreio', function(){
-      window.open(Params.trackingUrl() + data.oc);
+      window.open(Params.trackingUrlExt() + data.oc);
     }).item('/img/envelop.png', 'Enviar Rastreio por Email', function(helper){
       helper.loading(true);
 
-      //Usar aqui o url dinamico atraves os parametros
-      _post('/customer-email-tracking',{ cliente: data.client, oc: data.oc, tracking: 'https://www.boutiqueinfantil.com.br/rastreio?sale=' + data.oc, userid: loggedUser.id }, (result) => {
+      _post('/customer-email-tracking',{ cliente: data.client, oc: data.oc, tracking: Params.trackingUrlExt() + data.oc, userid: loggedUser.id }, (result) => {
         helper.finished(result);
       });
     });
 
     var drop = Dropdown.on($('.sale-header-dots'));
 
-    if($('.sale-nfe').text() != 'Sem Nota Fiscal'){
+    if(data.nf != null){
       drop.item('/img/envelop.png', 'Enviar NF', (helper) => {
         helper.loading(true);
 
@@ -318,7 +325,6 @@ function bindSaleItens(data){
           helper.finished(result);
         });
       });
-
       drop.item('/img/paper.png', 'Visualizar NF', function(){
         printNFe();
       });
@@ -326,17 +332,17 @@ function bindSaleItens(data){
 
     if(data.status != 'canceled' && data.status != 'ip_delivered'){
       drop.item('/img/gear.png', 'Alterar Status do Pedido', function(helper){
-        new SaleStatusDialog(data.status).onItemSelect((status) => {
-          new SaleStatusObsDialog('Adicionar Observação').make((text) => {
-            helper.loading();
 
-            _post('/customer-sale-status-change',{ sale: data.oc, status: status, user: loggedUser, obs: msg },(result) => {
+        new SaleStatusDialog(data.status).onItemSelect((status) => {
+          new SaleStatusObsDialog('Adicionar Observação').make((obs) => {
+            helper.loading(true);
+            _post('/customer-sale-status-change',{ sale: data.oc, status: status, user: loggedUser, obs: obs }, (result) => {
               if(result.sucess != null || result == true){
-                showMenuMsg('.sale-header-dots','Status alterado', 'sucess')
+                errorTooltip.hideDelay(3000).showSuccess('Status Alterado');
+                //showMenuMsg('.sale-header-dots','Status alterado', 'sucess');
               }else{
-                //Veriricar outra forma de mostrar o erro na tela.
-                //Ta muito feito assim
-                showMenuMsg('.sale-header-dots', result.error[0]['erro'], 'error');
+                helper.error();
+                errorTooltip.hideDelay(3000).showError('Erro ao cancelar NFe');
               }
             });
           })

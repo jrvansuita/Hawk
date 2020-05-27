@@ -200,19 +200,21 @@ module.exports = class ProductRoutes extends Routes{
       });
     });
 
-    this._get('/product-list-export', (req, res) => {
+    this._get('/product-list-export', (req, res, locals) => {
+
       ProductListProvider.load(req.session.productListQuery, null, (data, info)=>{
-        new EccosysProvider().skus(data.map((e)=>{return e.sku})).go((skus) => {
+        new EccosysProvider().skus(data.map((e)=>{return e.sku})).go((products) => {
 
           var result = {};
-          skus.forEach((each) => {
+          products.forEach((each) => {
             if (each._Skus){
               each._Skus.forEach((eachChild) => {
-                 result[eachChild.codigo] = eachChild.gtin;
+                result[eachChild.codigo] = eachChild.gtin;
               });
             }
           });
-          res.render('product/board/product-list-export', {data: data, eans:result});
+
+          res.render('product/board/product-list-export', {data: data, eans: result});
         });
       });
     });

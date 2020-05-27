@@ -194,13 +194,13 @@ $(document).ready(() => {
   });
 
   if (userSetts[11] != undefined){
-    $('.blockedDots').each((index, each) =>{
+    $('.table-sale-blocked-holder td').each((index, each) =>{
       var blockNumber = $('.table-sale-blocked-holder').data('blocknumber');
 
-    Dropdown.on(each)
+    Dropdown.on(each, false)
       .item('/img/delete.png', 'Remover', () =>{
         new BlockedPost(blockNumber).call();
-      });
+      }).bindMousePos();
     });
   }
 

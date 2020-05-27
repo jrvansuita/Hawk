@@ -112,30 +112,32 @@ function showSaleDialog(sale){
 }
 
 function bindClientResume(){
-  $('.client-resume-sales').text(client.sales.length);
+  if(client.length){
+    $('.client-resume-sales').text(client.sales.length);
 
-  var tm = client.sales.reduce((value, sale) => {
-    return value + parseFloat(sale.grand_total);
-  },0);
+    var tm = client.sales.reduce((value, sale) => {
+      return value + parseFloat(sale.grand_total);
+    },0);
 
-  $('.client-resume-ticket').text(Num.money(tm/client.sales.length));
+    $('.client-resume-ticket').text(Num.money(tm/client.sales.length));
 
-  $('.client-sale-total-value').text(Num.money(tm));
+    $('.client-sale-total-value').text(Num.money(tm));
 
-  var tp = client.sales.reduce((value, sale) =>{
-    if(sale.status != 'canceled' && sale.status != 'pending_payment'){
-      value += parseFloat(sale.grand_total);
-    }
-    return value
-  },0);
+    var tp = client.sales.reduce((value, sale) =>{
+      if(sale.status != 'canceled' && sale.status != 'pending_payment'){
+        value += parseFloat(sale.grand_total);
+      }
+      return value
+    },0);
 
-  $('.client-sale-total-paid').text(Num.money(tp));
+    $('.client-sale-total-paid').text(Num.money(tp));
 
-  var im = client.sales.reduce((value, sale) => {
-    return value + parseFloat(sale.total_item_count);
-  },0);
+    var im = client.sales.reduce((value, sale) => {
+      return value + parseFloat(sale.total_item_count);
+    },0);
 
-  $('.client-resume-itens').text(Floa.abs(im/client.sales.length,2));
+    $('.client-resume-itens').text(Floa.abs(im/client.sales.length,2));
+  }
 }
 
 
@@ -145,7 +147,6 @@ function setFocusOnSale(){
   var url_string = window.location.href;
   var url = new URL(url_string);
   var sale = url.searchParams.get("sale");
-
   if(sale != null){
     sales.each((i, el) => {
       if($(el).data('sale') == sale){

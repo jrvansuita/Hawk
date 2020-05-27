@@ -6,7 +6,6 @@ window.saleNumber = <%= saleNumber %>
 <html>
 <head>
   <link rel="stylesheet" type="text/css" href="/front/css/layout/customer/sale.css">
-  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-dropdown.css">
 
   <script type="text/javascript" src="/front/js/control/customer/sale.js"></script>
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
@@ -191,10 +190,16 @@ window.saleNumber = <%= saleNumber %>
               <td>
                 <span class="sale-card-title">CEP</span>
               </td>
+              <td class="right">
+                <span class="sale-card-title">Ponto de Ref.</span>
+              </td>
             </tr>
             <tr class="divide">
-              <td colspan="2">
+              <td>
                 <span class="sale-billing-adress-postal-code"></span>
+              </td>
+              <td class="right">
+                <span class="sale-billing-reference"></span>
               </td>
             </tr>
           </table>
@@ -252,10 +257,16 @@ window.saleNumber = <%= saleNumber %>
               <td>
                 <span class="sale-card-title">CEP</span>
               </td>
+              <td class="right">
+                <span class="sale-card-title">Ponto de Ref.</span>
+              </td>
             </tr>
             <tr class="divide">
-              <td colspan="2">
+              <td>
                 <span class="sale-shipping-postal-code"></span>
+              </td>
+              <td class="right">
+                <span class="sale-shipping-reference"></span>
               </td>
             </tr>
           </table>
@@ -381,7 +392,7 @@ window.saleNumber = <%= saleNumber %>
             </tr>
             <tr class="divide">
               <td>
-                <span class="sale-card-title">Desconto:</span>
+                <span class="sale-card-title">Descontos:</span>
               </td>
               <td>
                 <span class="sale-info-discount right"></span>

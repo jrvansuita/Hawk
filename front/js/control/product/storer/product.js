@@ -29,7 +29,6 @@ function bindComboBox(el, data, limit){
 
   new ComboBox(el, url)
   .setAutoShowOptions(true)
-  .callOnChangeEventBySelecting(true)
   .setLimit(limit)
   .setOnItemBuild((item, index)=>{
     return {text : item.description.trim(), value: item.value};
@@ -48,19 +47,25 @@ function onBindViewsListeners(){
     $(this).val(Num.money(Num.moneyVal($(this).val())));
   });
 
-  $('.bindable').change(function () {
-    product[$(this).data('bind')] = $(this).val();
-  });
 
   $('.size-group-button').click(function () {
-    product.faixa_de_idade = $(this).data('val');
+    product.postFaixaIdade= $(this).data('val');
     refreshBroadcast.emit(getData());
   }).keypress(function(e) {
     if(e.which == 13) $(this).click()
   });
 
-  $('.call-refresh').change(function () {
-    refreshBroadcast.emit(getData());
+
+  $('.bindable').blur(function () {
+    var key = $(this).data('post') || $(this).data('bind');
+    product[key] = $(this).val();
+  });
+
+  $('.call-refresh').blur(function () {
+    if ($(this).val() != $(this).data('last')){
+      $(this).data('last', $(this).val());
+      refreshBroadcast.emit(getData());
+    }
   });
 
 
@@ -127,10 +132,6 @@ function getData(){
   product.conteudo = editor.html.get();
   product.user = loggedUser;
 
-  if (product.nome && !product.uniqNamePart){
-    product.uniqNamePart = product.nome;
-  }
-
   return product;
 }
 
@@ -140,10 +141,10 @@ function onProductRefreshed(data){
   onSizesRefreshed();
 }
 
-function onSizesRefreshed(data){
-
-  if (product.sizes.join() != childsBuilder.getSizes().join()){
-    sizesBox.refresh(product.sizes);
+function onSizesRefreshed(){
+  if (product._Skus){
+    sizesBox.load(product.sizes);
+    childsBuilder.load(product._Skus);
   }
 
   if (product.faixa_de_idade){
@@ -159,7 +160,7 @@ function requestProductChilds(){
     });
 
     _get('/product-skus', {skus:skus}, (childs)=>{
-      childsBuilder.loadChilds(childs);
+      childsBuilder.load(childs);
     });
   }
 }
