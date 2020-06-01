@@ -1,10 +1,9 @@
 
 class CostsBoxBuilder extends BuildBox{
-  constructor(costs, total, profit){
+  constructor(costs, total){
     super();
     this.data = costs;
     this.total = total;
-    this.profit = profit;
 
     this.box.css('grid-column', '3 / 5');
   }
@@ -84,7 +83,7 @@ class CostsBoxBuilder extends BuildBox{
     this.currentGroup.find('.sum').text(sumCosts);
     $('#costs-sum').text(sumCosts)
 
-    var liqProfit = this.profit - totalCost;
+    var liqProfit = this.total - totalCost;
     var color = liqProfit  > 0 ? '#08ab08' : '#e60000';
 
     $('#liq-profit').text(Num.money(liqProfit)).css('color', color);
@@ -94,7 +93,7 @@ class CostsBoxBuilder extends BuildBox{
 
   showPerformance(){
     this.group('Performance', 0, 'gray min-col')
-    .info('Lucro Bruto', Num.money(this.profit))
+    .info('Faturamento', Num.money(this.total))
     .info('Custos Totais', 0, null, 'costs-sum')
     .info('Lucro Líquido', 0, null, 'liq-profit')
     .info('Margem Líquida', 0, null, 'liq-perc');
