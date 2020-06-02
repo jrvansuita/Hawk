@@ -15,7 +15,7 @@ module.exports = class Cost extends DataAccess {
   }
 
   static getQuery(date) {
-    return {id: Cost.getId()};
+    return {id: Cost.getId(Dat.lastDayOfLastMonth())};
   }
 
   static getCurrent(callback){
@@ -31,7 +31,7 @@ module.exports = class Cost extends DataAccess {
       }
     };
 
-  
+
     this.staticAccess()
     .find(query, callback);
   }

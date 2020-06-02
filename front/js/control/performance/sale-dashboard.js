@@ -143,18 +143,21 @@ function buildBoxes(results){
 
 
 function buildCostsBox(results){
-  new CostsBoxBuilder(results.data.costs, results.data.total, results.data.profit)
-  .inputGroup('Custos', Dat.monthDif(parseInt(results.query.begin), new Date()) == 0)
+
+  new CostsBoxBuilder(results.data.costs, results.data.total)
+  .inputGroup('Custos', Dat.monthDif(parseInt(results.query.begin), Dat.lastDayOfLastMonth()) == 0)
   .field('Marketing', 'marketing')
   .field('Imposto', 'tax')
   .field('Frete', 'freight')
   .field('Custo Produtos', 'productCost')
   .field('Tecnologia', 'tech')
-  .field('Folha de Pagamento', 'paperWork')
+  .field('Funcionários', 'employees')
   .field('Operacional', 'operation')
   .field('Empréstimos', 'lend')
   .field('Juros/Taxas', 'interest')
   .field('Estornos/Chargeback', 'chargeback')
+  .field('Tx. Cartão Crédito', 'creditcard')
+  .field('Tx. Boletos', 'boletos')
   .showPerformance();
 
 
