@@ -201,8 +201,12 @@ module.exports = class ProductRoutes extends Routes{
     });
 
     this._get('/product-list-export', (req, res, locals) => {
+      if(req.query.skus){
+        req.query.skus = typeof req.query.skus == 'string' ? req.query.skus.split(',') : req.query.skus;
+      }
+      var query = req.query.skus ? req.query.skus : req.session.productListQuery;
 
-      ProductListProvider.load(req.session.productListQuery, null, (data, info)=>{
+      ProductListProvider.load(query, null, (data, info)=>{
         new EccosysProvider().skus(data.map((e)=>{return e.sku})).go((products) => {
 
           var result = {};

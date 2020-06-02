@@ -338,7 +338,7 @@ function buildImgCol(path, title, addClass){
 }
 
 function buildMenuOpt(){
-  var $menuD = $('<div>').addClass('md-dots-icon');
+  var $menuD = $('<div>').addClass('menu-dots');
 
   return buildCol($menuD).css('text-align', 'center');
 }

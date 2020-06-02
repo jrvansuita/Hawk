@@ -38,6 +38,36 @@ module.exports = {
   },
 
   load(query, page, callback){
+    if(Array.isArray(query)){
+      this.loadBySkus(query, callback);
+    }else{
+      this.loadByQuery(query, page, callback);
+    }
+  },
+
+  loadBySkus(skus, callback){
+    return new Promise((resolve, reject) => {
+      var result = [];
+
+      var loadSku = (e) => {
+        var sku = skus[skus.length-1];
+        skus.pop();
+
+        if(sku){
+          Product.get(sku, (product) => {
+            result.push(product);
+            loadSku();
+          })
+        }else{
+          callback(result);
+          resolve();
+        }
+      }
+      loadSku();
+    });
+  },
+
+  loadByQuery(query, page, callback){
     if(page == null){
       Product.find(this.buildQuery(query), (err, result) => {
         callback(result);
@@ -47,10 +77,5 @@ module.exports = {
         callback(result[0].items, result[0].info[0]);
       });
     }
-
-
-
-  },
-
-
+  }
 };
