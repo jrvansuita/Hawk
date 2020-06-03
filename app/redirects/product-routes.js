@@ -206,7 +206,7 @@ module.exports = class ProductRoutes extends Routes{
       }
       var query = req.query.skus ? req.query.skus : req.session.productListQuery;
 
-      ProductListProvider.load(query, null, (data, info)=>{
+      ProductListProvider.load(query, null, (data)=>{
         new EccosysProvider().skus(data.map((e)=>{return e.sku})).go((products) => {
 
           var result = {};
