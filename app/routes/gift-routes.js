@@ -1,4 +1,4 @@
-const Routes = require('../redirects/controller/routes.js');
+const Routes = require('./_route.js');
 const GiftVault = require('../vault/gift-vault.js');
 const GiftRule = require('../bean/gift-rule.js');
 

@@ -1,4 +1,4 @@
-const Routes = require('../redirects/controller/routes.js');
+const Routes = require('./_route.js');
 const ShippingOrderProvider = require('../provider/shipping-order-provider.js');
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
 const EccosysStorer = require('../eccosys/eccosys-storer.js');

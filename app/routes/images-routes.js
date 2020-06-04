@@ -1,4 +1,4 @@
-const Routes = require('../redirects/controller/routes.js');
+const Routes = require('./_route.js');
 const ImageSaver = require('../image/image-saver.js');
 
 module.exports = class ImagesRoutes extends Routes{

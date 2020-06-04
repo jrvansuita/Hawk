@@ -6,8 +6,8 @@ var Local = {
     localStorage.setItem(tag, val);
   },
 
-  get(tag) {
-    return JSON.parse(localStorage.getItem(tag));
+  get(tag, def) {
+    return JSON.parse(localStorage.getItem(tag)) || def || {};
   },
 
   getStr(tag) {

@@ -1,28 +1,26 @@
+const MEM_TAG = 'LOCKED-VALUE';
+var lockedValues;
 var refreshBroadcast;
+var storingBroadcast;
 var childsBuilder;
 var sizesBox;
 
 $(document).ready(() => {
-  //product = Util.keepPrimitiveAttrs(product);
-  onBindViewValues();
-
-  refreshBroadcast = new Broadcast('post-refresh-storing-product').onReceive(onProductRefreshed).emit(product);
-  sizesBox = new SizesBox($('.sizes-box')).startCache();
-  childsBuilder = new ChildsBuilder($('.childs')).setOnChange(function (){
-    product._Skus.forEach((each) => {
-      if (each.codigo == $(this).data('sku')){
-        each[$(this).data('tag')] = $(this).val();
-        each.active = true;
-      }
-    });
-  });
-
-  onBindComboBoxes();
-  onBindSizeBoxListeners();
-  onBindViewsListeners();
-  onInitilizeScreenControls()
-  requestProductChilds();
+  onCreate(); onRefresh();
 });
+
+//Call one time
+function onCreate(){
+  onBindViewsListeners();
+  onBindComboBoxes();
+}
+
+//Call every new product
+function onRefresh(){
+  onInitializeLockedValues();
+  onInitilizeScreenControls();
+  requestProductChilds();
+}
 
 function bindComboBox(el, data, limit){
   var url = typeof data == 'string' ? '/stock/storer-attr?attr='+ data : data;
@@ -36,25 +34,28 @@ function bindComboBox(el, data, limit){
 }
 
 function onBindViewsListeners(){
-  $('.save').click(() => { onStoreProduct() });
-  $('.delete').click(() => { _post('/stock/storer-delete', getData(), (data) => { onProductDeleted(data); }) });
+  $('.save').click(onStoreProduct);
+  $('.delete').click(onProductDeleted);
+  $('.new').click(onNewProduct);
 
   $("input[type='text']").on("click", function () {
     $(this).select();
   });
 
-  $('.money').change(function () {
-    $(this).val(Num.money(Num.moneyVal($(this).val())));
+  $('.lockable').keypress(function(e) {
+    if(e.which == 13) toggleLockIcon($(this));
   });
 
+  $('.lockable').blur(function (){
+    toogleProductValue($(this));
+  });
 
   $('.size-group-button').click(function () {
-    product.postFaixaIdade= $(this).data('val');
+    product.postFaixaIdade = $(this).data('val');
     refreshBroadcast.emit(getData());
   }).keypress(function(e) {
     if(e.which == 13) $(this).click()
   });
-
 
   $('.bindable').blur(function () {
     var key = $(this).data('post') || $(this).data('bind');
@@ -93,6 +94,14 @@ function onBindViewsListeners(){
 
 function onInitilizeScreenControls(){
   $('.delete').toggle(product.id != undefined);
+
+  refreshBroadcast = new Broadcast('refresh-product').onReceive(onProductRefreshed).emit(product);
+  storingBroadcast = new Broadcast('storing-product').onReceive(onStoringMessageUpdate);
+
+  sizesBox = new SizesBox($('.sizes-box')).startCache();
+  childsBuilder = new ChildsBuilder($('.childs')).setDefaultOnChange();
+
+  onBindSizeBoxListeners();
 }
 
 function onBindViewValues(){
@@ -102,16 +111,13 @@ function onBindViewValues(){
       if(val){
         if($(each).hasClass('money')){
           $(each).val(Num.money(Floa.floa(val)));
+        }else if($(each).hasClass('float')){
+          $(each).val(Floa.abs(Floa.def(val, 0),2));
         }else{
           $(each).val(val);
         }
       }
     });
-
-    //Exceptions Handling
-    if (product.precoCusto && product.preco){
-      $('#markup').val(Floa.abs(Floa.floa(product.preco)/Floa.floa(product.precoCusto),2));
-    }
   }
 }
 
@@ -131,7 +137,6 @@ function onBindComboBoxes(){
 }
 
 function getData(){
-  product.markup = $('#markup').val();
   product.precoCusto = Num.moneyVal($('#cost').val());
   product.conteudo = editor.html.get();
   product.user = loggedUser;
@@ -143,6 +148,10 @@ function onProductRefreshed(data){
   product = data;
   onBindViewValues();
   onSizesRefreshed();
+
+  setTimeout(() => {
+    $('.material-input-holder>label').removeClass('no-transition');
+  },100);
 }
 
 function onSizesRefreshed(){
@@ -163,8 +172,8 @@ function requestProductChilds(){
       return e.codigo;
     });
 
-    _get('/product-skus', {skus:skus}, (childs)=>{
-      childsBuilder.load(childs);
+    _get('/product-skus', {skus:skus, order: true}, (childs)=>{
+      childsBuilder.load(childs, true);
     });
   }
 }
@@ -174,8 +183,6 @@ function onBindSizeBoxListeners(){
     return product.codigo + '-' + size;
   }
 
-
-
   sizesBox.setOnSizeCreated((size) => {
     console.log('Size Created: ' + size);
     var sku = getSku(size);
@@ -184,7 +191,7 @@ function onBindSizeBoxListeners(){
       return i.codigo == sku;
     });
 
-    var item = {...found, codigo: getSku(size), active: true, altura : 2, largura : 11 , comprimento : 16};
+    var item = {...found, codigo: getSku(size), active: true};
 
     if (!found){
       item.gtin = Util.barcode();
@@ -212,30 +219,79 @@ function onBindSizeBoxListeners(){
   });
 }
 
-function onStoreProduct(){
+function onStoringMessageUpdate(data){
   $('.loading-holder').show();
-  $('.loading-msg').text('Salvarando ' + product.codigo);
 
+  console.log(data);
+  if (data.error){
+    $('.loading-circle').attr('src', '/img/error.png');
+  }else if (!data.isLoading){
+    $('.loading-circle').attr('src', '/img/checked.png');
+  }
+
+  $('.loading-msg').text(data.msg || data.error || 'Processo Finalizado!');
+}
+
+function onStoreProduct(){
   _post('/stock/storer-upsert', getData(), (data) => { onProductStored(data); });
 }
 
 function onProductStored(data){
-  $('.loading-holder').hide();
   putSkuUrlParams();
 
-  if (!product.id){
-    window.location.reload();
-  }
+  setTimeout(() => {
+    $('.loading-holder').hide();
+    if (!product.id){
+      window.location.reload();
+    }
+  },1500);
 }
 
 function onProductDeleted(){
+  _post('/stock/storer-delete', getData(), (data) => { console.log('Deletou');});
+}
 
 
+function onNewProduct(){
+  window.location.href = location.origin + location.pathname;
 }
 
 function putSkuUrlParams(){
   if (window.history.replaceState) {
     window.history.replaceState("Data", null, location.pathname + '?sku=' + product.codigo);
+  }
+}
+
+function toogleProductValue(el){
+  var key = el.data('bind');
+  var val = el.val();
+
+  if (el.hasClass('locked') && val){
+    lockedValues[key] = val;
+  }else{
+    delete lockedValues[key];
+  }
+
+  Local.put(MEM_TAG, lockedValues);
+}
+
+function toggleLockIcon(el){
+  el.toggleClass('locked');
+  var lockIcon = el.siblings('label');
+  if (lockIcon){
+    lockIcon.toggleClass('lock-icon');
+  }
+}
+
+function onInitializeLockedValues(){
+  if (!product.id){
+    $('.material-input-holder>label').addClass('no-transition');
+
+    lockedValues = Local.get(MEM_TAG);
+    Util.forProperty(lockedValues, (val, key) => {
+      product[key] = val;
+      toggleLockIcon($('input[data-bind="' + key + '"]').val(val));
+    });
   }
 }
 

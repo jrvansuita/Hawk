@@ -1,4 +1,4 @@
-const Routes = require('../redirects/controller/routes.js');
+const Routes = require('./_route.js');
 const CustomerProvider = require('../provider/customer-provider.js');
 const CustomerSendEmailHandler = require('../customer/customer-send-email-handler.js');
 

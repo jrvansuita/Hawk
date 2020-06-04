@@ -1,7 +1,5 @@
-const Response = require('../../util/response.js');
 
-
-module.exports = class Routes {
+module.exports = class {
 
   constructor(app){
     this.app = app;
@@ -88,5 +86,53 @@ module.exports = class Routes {
   //Verifica se o caminho é uma das páginas acessiveis sem login como Login/User-registering etc
   static checkIsPathNotLogged(path){
     return Arr.isIn(global.pathNotLogged, path);
+  }
+};
+
+
+
+const History = require('../bean/history.js');
+const Err = require('../error/error.js');
+
+
+var Response = {
+
+   onTry(res, call){
+     try {
+       call();
+     } catch (e) {
+       this.error(res, e);
+     }
+   },
+
+  redirect(res){
+    return (response, error)=>{
+      this.onRedirect(res, response, error);
+    };
+  },
+
+  onRedirect(res, r, e){
+    if (e != undefined){
+      this.error(res, e);
+    }else{
+      this.sucess(res, r);
+    }
+  },
+
+  sucess(res, r){
+    if (typeof r == 'number'){
+      r = r.toString();
+    }
+
+    res.status(200).send(r);
+  },
+
+  error(res, e){
+    console.log('Printing error: ' + e.toString());
+
+    var userId = res.locals.loggedUser ? res.locals.loggedUser.id : 0;
+    History.handle(e, userId);
+
+    res.status(500).send(e.toString());
   }
 };

@@ -130,10 +130,10 @@ static paging(query, page, callback){
   });
 }
 
-static getMultiplesBySku(query, callback){
+static getBySkus(skus, callback){
   Product.find({
     "sku" : {
-      "$in" : query
+      "$in" : skus
     }}, (err, data) => {
       callback(data);
     })

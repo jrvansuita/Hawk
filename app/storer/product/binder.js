@@ -20,15 +20,20 @@ class ProductBinder{
       //Atributes keys
       {key: 'taxonomia'}, {key: 'largura'},
       {key: 'comprimento'}, {key: 'altura'}, {key: 'size'},
-      {key: 'age_group'}, {key: 'gender'}, {key: 'conteudo'},
-      {key: 'tamanho', key: 'visibility'}
+      {key: 'age_group'}, {key: 'gender'}, //{key: 'conteudo'},
+      {key: 'tamanho'}, {key: 'visibility'}
     ];
 
     var handler = new AttributesHandler()
 
     map.forEach(each => {
-      var item = handler.filter(each.key, this[each.key]).get();
-      if(item) result.push({id: item.idAttr || item.id, valor: item.tag ? item.id : this[each.key]});
+      if (this[each.key]){
+        var items = handler.filter(each.key, this[each.key]).get();
+
+        if(items) [].concat(items).forEach((eachItem) => {
+          result.push({id: eachItem.idAttr || eachItem.id, valor: eachItem.tag ? eachItem.id : this[each.key]});
+        });
+      }
     });
 
     return result;
@@ -50,12 +55,13 @@ class ProductBinder{
     if (!this.id){
       if (this.postSku && this.postSku.length > 0){
         this.codigo = this.postSku;
-      }else if (this.Marca && (!this.codigo || !this.codigo.startsWith(this.acronym))){
-
+      }else if (this.Marca && this.Cor){
         this.skuPrefix = Util.acronym(this.Marca).toUpperCase();
         this.skuSuffix = Util.acronym(this.Cor, 2).toLowerCase();
 
-        this.codigo = await SkuGen.go(this.skuPrefix, this.skuSuffix);
+        if  (!this.codigo || !this.codigo.startsWith(this.skuPrefix) || !this.codigo.endsWith(this.skuSuffix)){
+          this.codigo = await SkuGen.go(this.skuPrefix, this.skuSuffix);
+        }
       }
     }
   }
@@ -120,6 +126,9 @@ class ProductBinder{
     this.produtoAlterado = 'N'
     this.unPorCaixa = '1';
     this.spedTipoItem = '00';
+    this.altura = 2;
+    this.largura = 11;
+    this.comprimento = 16;
 
 
     if (!this.descricaoEcommerce){
@@ -165,13 +174,13 @@ class ProductBinder{
   }
 
   prices(){
-    if (this.markup){
+    if (this.id){
+      this.markup = Floa.abs(this.preco/this.precoCusto, 2);
+    }else if (this.markup){
       this.markup = Floa.def(this.markup, 2.5);
       this.precoCusto = Floa.def(this.precoCusto, 0);
       this.preco = Math.trunc(this.markup * this.precoCusto) + .9;
       this.precoDe = Math.trunc(this.preco / 0.85) + .9;
-      this.markup = Floa.abs(this.preco/this.precoCusto, 2);
-    }else{
       this.markup = Floa.abs(this.preco/this.precoCusto, 2);
     }
   }
@@ -214,7 +223,7 @@ class ProductBinder{
 
   _createChildSkusFromSizes(sizes){
     return !sizes ? {} : sizes.map((size, i) => {
-      return {codigo: this.codigo + '-' + size, active: true, gtin : Util.barcode(i), altura : 2, largura : 11 , comprimento : 16};
+      return {codigo: this.codigo + '-' + size, active: true, gtin : Util.barcode(i)};
     });
   }
 
@@ -226,10 +235,6 @@ class ProductBinder{
     delete child._Componentes;
     delete child._Estoque;
     delete child.img;
-    delete child.comprimento;
-    delete child.altura;
-    delete child.largura;
-    delete child.peso;
 
     if(data.active){
       child.idProdutoMaster = this.id;
@@ -246,17 +251,9 @@ class ProductBinder{
     child.tamanho = data.codigo.split('-').pop().trim();
     child.descricaoEcommerce = this.nome + '-' + child.tamanho;
 
-    if (data.comprimento){
-      child.comprimento = child.comprimentoReal = data.comprimento;
-    }
-
-    if (data.altura){
-      child.altura = child.alturaReal = data.altura;
-    }
-
-    if (data.largura){
-      child.largura = child.larguraReal = data.largura;
-    }
+    child.comprimentoReal = data.comprimentoReal || 0;
+    child.alturaReal = data.alturaReal || 0;
+    child.larguraReal = data.larguraReal || 0;
 
     data.peso = Floa.floa(data.peso || 0);
 
@@ -281,7 +278,7 @@ class ProductBinder{
 
 module.exports = ProductBinder;
 
-var tag = 'post-refresh-storing-product';
+var tag = 'refresh-product';
 
 global.io.on('connection', (socket) => {
   socket.on(tag , async (id, data) => {
@@ -314,14 +311,15 @@ var commonSizes = [{
   faixa_de_idade : 'Primeiros Passos',
   description: 'Bebe'
 },{
-  Idade : "4-6",
+  Idade : ["4-6", "8-10"],
   age_group : 'infantil',
+  search: ['8'],
   sizes : ['4', '6', '8'],
   faixa_de_idade : 'Kids',
   description: 'Infantil'
 },{
-  Idade : "8-10",
-  search: ['10','12'],
-  sizes : ['10', '12', '14'],
+  Idade : "12-16",
+  search: ['12'],
+  sizes : ['12', '14', '16'],
   faixa_de_idade : 'Juvenil'
 }];

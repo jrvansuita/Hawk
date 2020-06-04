@@ -260,7 +260,7 @@ textarea{
   margin-top: 5px;
 }
 
-.loading-msg{color: #4a4a4c;font-size: 16px;font-weight: 800;padding: 5px 5px;}
+.loading-msg{color: #4a4a4c;font-size: 17px;font-weight: 800;padding: 5px 5px;}
 
 .buttons-holder{
   right: 0;
@@ -270,5 +270,22 @@ textarea{
   margin-right: 18px;
 }
 .buttons-bar .button{
-    margin-left: 5px;
+  margin-left: 5px;
+}
+
+.lock-icon:after {
+  content: "";
+  display: block;
+  background: url("/img/mini-padlock.png") no-repeat;
+  width: 14px;
+  height: 14px;
+  float: right;
+  background-size: contain;
+  margin-left: 5px;
+  margin-top: -2px;
+}
+
+
+.no-transition{
+  transition: none !important;
 }

@@ -1,12 +1,17 @@
 var Util = {
 
-  id(length){
-    return parseInt(new Date().getTime().toString().slice(-(length || 8)));
+  uid(length=8){
+    return new Date().getTime().toString().slice(-length);
+  },
+
+  id(){
+    return parseInt(this.uid());
   },
 
   barcode(suffix=''){
-    var code = '789' + this.id(9-suffix.length) + suffix.toString();
-    return code + (10 - (code.split('').reduce((s, e, i) => { return s + parseInt(e) * ((i%2==0)?1:3) },0) % 10)) % 10;
+    var code = '789' + this.uid(9-suffix.toString().length) + suffix.toString();
+    var verifyCode = (10 - (code.split('').reduce((s, e, i) => { return s + parseInt(e) * ((i%2==0)?1:3) },0) % 10)) % 10;
+    return code + verifyCode.toString();
   },
 
   transportName: (name, def)=>{

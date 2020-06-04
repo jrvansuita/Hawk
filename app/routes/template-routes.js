@@ -1,11 +1,11 @@
-const Routes = require('../redirects/controller/routes.js');
+const Routes = require('./_route.js');
 const TemplateVault = require('../template/template-vault.js');
 const Templates = require('../bean/template.js');
 const TemplatesUsages = require('../template/templates-usages.js');
 const TemplateBuilder = require('../template/template-builder.js');
 const ImageSaver = require('../image/image-saver.js');
 
-module.exports = class EmailRoutes extends Routes{
+module.exports = class TemplateRoutes extends Routes{
 
   attach(){
 

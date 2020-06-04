@@ -1,4 +1,4 @@
-const Routes = require('../redirects/controller/routes.js');
+const Routes = require('./_route.js');
 
 
 module.exports = class GeneralRoutes extends Routes{

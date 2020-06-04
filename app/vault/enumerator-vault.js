@@ -1,18 +1,13 @@
 
-const Template = require('../bean/template.js');
+const Enumerator = require('../bean/enumerator.js');
 
 module.exports = class {
 
   static storeFromScreen(params, callback) {
-
-
-    var object = new Template(
+    var object = new Enumerator(
       params.name,
-      params.subject,
-      params.content,
-      params.usage,
-      null,
-      params.type
+      params.explanation,
+      params.tag
     );
 
     if (params.id){
@@ -20,14 +15,13 @@ module.exports = class {
     }
 
     if (params.id){
-      Template.findOne({id : params.id}, (err, obj)=>{
-        object.sample = obj.sample || {};
+      Enumerator.findOne({id : params.id}, (err, obj)=>{
         object.upsert((err, doc)=>{
           callback(doc ? doc.id : 0);
         });
       });
     }else{
-      Template.create(object, (err, doc)=>{
+      Enumerator.create(object, (err, doc)=>{
         callback(doc ? doc.id : 0);
       });
     }

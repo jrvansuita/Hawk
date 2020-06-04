@@ -1,4 +1,4 @@
-const Routes = require('../redirects/controller/routes.js');
+const Routes = require('./_route.js');
 const UsersProvider = require('../provider/user-provider.js');
 const MaganePoints = require('../handler/manage-points-handler.js');
 const SaleDashboardProvider = require('../provider/performance/sale-dashboard-provider.js');
@@ -58,7 +58,7 @@ module.exports = class PerformanceRoutes extends Routes{
 
 
 
-
+ 
 
       /** Sale Dashboard Performance **/
 

@@ -9,16 +9,16 @@ module.exports = class AttributesHandler {
     return CacheAttrs.isCached();
   }
 
-  filter(description, option){
+  filter(description, options){
     this.descriptionOrTag = description;
-    this.option = option;
+    this.options = options;
 
     return this;
   }
 
   get(){
     if (this.isCached()){
-      return CacheAttrs.filter(this.descriptionOrTag, this.option);
+      return CacheAttrs.filter(this.descriptionOrTag, this.options);
     }else{
       return undefined;
     }
@@ -45,14 +45,14 @@ var CacheAttrs = {
     return this.cache != undefined;
   },
 
-  filter(name, option){
+  filter(name, options){
     if (name){
 
       var data = this.cache[name] || this.cache[this.map[name]];
 
-      if (option && Arr.is(data)){
-        return data.find((each) => {
-          return each.description == option;
+      if (options && Arr.is(data)){
+        return data.filter((each) => {
+          return options.includes(each.description);
         });
       }
 

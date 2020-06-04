@@ -179,8 +179,8 @@ tr.line td{
 }
 
 .loading-circle{
-  max-width: 18px;
-  max-height: 18px;
+  max-width: 28px;
+  max-height: 28px;
   display: inline-block;
   vertical-align: middle;
   margin-right: 4px;

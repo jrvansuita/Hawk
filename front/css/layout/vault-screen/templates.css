@@ -1,0 +1,24 @@
+#editor{
+  width: -webkit-fill-available;
+  height: 83%;
+  position: relative;
+  margin: 15px 55px;
+  /* display: block; */
+  /* overflow: auto; */
+}
+
+
+.name-holder{
+  width: 40%;
+  margin-right: 30px;
+}
+
+.usage-holder{
+  width: 35%;
+}
+
+.ui-menu-item img{
+  margin-top: 10px;
+  width: 20px !important;
+  height: 20px !important;
+}

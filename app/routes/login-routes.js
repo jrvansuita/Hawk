@@ -1,4 +1,4 @@
-const Routes = require('../redirects/controller/routes.js');
+const Routes = require('./_route.js');
 const UsersProvider = require('../provider/user-provider.js');
 const Setts = require('../bean/setts.js');
 const User = require('../bean/user.js');

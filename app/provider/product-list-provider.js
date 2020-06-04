@@ -39,7 +39,7 @@ module.exports = {
 
   load(query, page, callback){
     if(Array.isArray(query)){
-      Product.getMultiplesBySku(query, (data) => {
+      Product.getBySkus(query, (data) => {
         callback(data);
       });
     }else{

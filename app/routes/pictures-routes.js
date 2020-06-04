@@ -1,4 +1,4 @@
-const Routes = require('../redirects/controller/routes.js');
+const Routes = require('./_route.js');
 const SkuPictureLoader = require('../pictures/sku-picture-loader.js');
 const SkuPic = require('../bean/sku-pic.js');
 const ClientShareHandler = require('../pictures/client-share-handler.js');

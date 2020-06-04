@@ -6,7 +6,7 @@ const ProductBinder = require('./binder.js');
 module.exports = class ProductStorer{
   constructor(){
     this.provider = new EccosysProvider();
-    this.storer = new EccosysStorer(false);
+    this.storer = new EccosysStorer();
   }
 
   async with(user, data){
@@ -21,24 +21,21 @@ module.exports = class ProductStorer{
 
   setOnFinished(callback){
     this.onFinishListener = () => {
-      console.log('Terminate');
+      this._sendBroadcastMessage(this.fatherBody);
       callback();
     }
     return this;
   }
 
   upsert(){
-    //Father Handler
     this._onProductUpsert(this.fatherBody, () => {
-      //Childs Handler
       this._handleChildsUpserts();
     });
   }
 
-
-  _handleChildsUpserts(childs){
+  _handleChildsUpserts(callback){
     var childs = this.fatherBody.getChilds();
-    
+
     var incrementalUpserts = () => {
       if (childs.length){
         this._onChildProductUpsert(childs[0], () => {
@@ -53,7 +50,7 @@ module.exports = class ProductStorer{
   }
 
   _onProductUpsert(data, callback){
-    console.log('Upsert ' + data.codigo);
+    this._sendBroadcastMessage(data, 'produto');
     this.storer.product().upsert(data.id == undefined, data).go(response => this._onStoringResponseHandler(data, response, callback));
   }
 
@@ -85,23 +82,41 @@ module.exports = class ProductStorer{
   _onStoringResponseHandler(data, response, callback){
     response = response.result || response;
 
-    console.log(response);
     if (response.success.length > 0){
       data.id = response.success[0].id;
       this._onAttributesHandler(data, callback);
     }else{
+      this._sendBroadcastMessage(null, null, response);
       this.onFinishListener(response);
     }
   }
 
   _onAttributesHandler(data, callback){
+    this._sendBroadcastMessage(data,'atributos do produto');
+
     new AttributesHandler().load(() => {
       var attrs =  ProductBinder.create(data).attrs();
-      this.storer.product(data.codigo).attrs().put(attrs).go(callback);
+
+      //Fast Callback
+      if (callback) callback();
+
+      this.storer.product(data.codigo).attrs().put(attrs).go(() => {
+          //Skip Waiting for this callback
+      });
     });
   }
 
   delete(callback){
     new EccosysStorer().product(this.fatherBody.codigo).delete().go(callback);
+  }
+
+  _sendBroadcastMessage(data, msg, error){
+    global.io.sockets.emit('storing-product', {
+      isLoading: !error && msg,
+      sku: data.codigo,
+      msg : msg ? (data.id ? 'Atualizando ' : 'Criando ') + msg + ' ' + data.codigo : null,
+      error: error,
+      success: !error && !msg
+    });
   }
 }

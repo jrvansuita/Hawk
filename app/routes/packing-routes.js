@@ -1,4 +1,4 @@
-const Routes = require('../redirects/controller/routes.js');
+const Routes = require('./_route.js');
 const PackingHandler = require('../handler/packing-handler.js');
 const PackingProvider = require('../provider/packing-provider.js');
 const Pack = require('../bean/pack.js');

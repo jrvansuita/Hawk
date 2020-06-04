@@ -1,4 +1,4 @@
-const Routes = require('../redirects/controller/routes.js');
+const Routes = require('./_route.js');
 const MockVault = require('../mockup/mockup-vault.js');
 const ProductHandler = require('../handler/product-handler.js');
 const ProductMockupProvider = require('../mockup/product-mockup-provider.js');

@@ -1,4 +1,4 @@
-const Routes = require('../redirects/controller/routes.js');
+const Routes = require('./_route.js');
 const HistoryLaws = require('../laws/history-laws.js');
 
 module.exports = class HistoryRoutes extends Routes{

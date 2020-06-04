@@ -97,7 +97,7 @@ function requestProductChilds(){
         return e.codigo;
       });
 
-      _get('/product-skus', {skus:skus}, (childs)=>{
+      _get('/product-skus', {skus:skus, order: true}, (childs)=>{
         childs.forEach((child) => {
           buildChildSku(product, child);
         });

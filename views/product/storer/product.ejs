@@ -16,7 +16,7 @@
   <script type="text/javascript" src="/front/js/libs/socket.io.slim.js"></script>
   <script type="text/javascript" src="/front/js/libs/broadcast.js"></script>
 
-
+  <script type="text/javascript" src="/util/local.js"></script>
   <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
   <script type="text/javascript" src="/front/js/libs/input-dialog.js"></script>
   <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
@@ -52,26 +52,26 @@
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input type="text" class="call-refresh bindable combobox" data-bind="Departamento" maxlength="100"  autocomplete="off" tabindex="0"  required/>
+            <input type="text" class="call-refresh bindable lockable combobox" data-bind="Departamento" maxlength="100"  autocomplete="off" tabindex="0"  required/>
             <span class="bar"></span>
             <label>Categoria</label>
           </div>
 
           <div class="material-input-holder">
-            <input type="text" class="call-refresh bindable combobox" data-bind="Material" maxlength="50"  autocomplete="off" tabindex="0" required/>
+            <input type="text" class="call-refresh bindable lockable combobox" data-bind="Material" maxlength="50"  autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>Material</label>
           </div>
 
           <div class="material-input-holder">
-            <input type="text" class="call-refresh bindable combobox" data-bind="Cor" maxlength="150" autocomplete="off" tabindex="0" required/>
+            <input type="text" class="call-refresh bindable lockable combobox" data-bind="Cor" maxlength="150" autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>Cor</label>
           </div>
 
 
           <div class="material-input-holder">
-            <input type="text" class="bindable combobox" data-bind="Coleção" maxlength="5"  autocomplete="off" tabindex="0"  required/>
+            <input type="text" class="bindable lockable combobox" data-bind="Coleção" maxlength="5"  autocomplete="off" tabindex="0"  required/>
             <span class="bar"></span>
             <label>Coleção</label>
           </div>
@@ -80,26 +80,26 @@
         <div class="flex-line">
 
           <div class="material-input-holder">
-            <input type="text" class="bindable combobox" data-bind="Genero" maxlength="30"  autocomplete="off" tabindex="0" required/>
+            <input type="text" class="bindable lockable combobox" data-bind="Genero" maxlength="30"  autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>Gênero</label>
           </div>
 
           <div class="material-input-holder">
-            <input type="text" class="bindable combobox" data-bind="Estacao" maxlength="30"  autocomplete="off" tabindex="0" required/>
+            <input type="text" class="bindable lockable combobox" data-bind="Estacao" maxlength="30"  autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>Estação</label>
           </div>
 
 
           <div class="material-input-holder">
-            <input type="text" class="bindable combobox" data-bind="Ocasiao" maxlength="30"  autocomplete="off" tabindex="0" required/>
+            <input type="text" class="bindable lockable combobox" data-bind="Ocasiao" maxlength="30"  autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>Ocasião</label>
           </div>
 
           <div class="material-input-holder">
-            <input type="text" class="bindable" data-bind="cf" maxlength="15" autocomplete="off" tabindex="0" required/>
+            <input type="text" class="bindable lockable" lockable data-bind="cf" maxlength="15" autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>NCM</label>
           </div>
@@ -118,7 +118,7 @@
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input type="text" class="bindable combobox" data-bind="Fabricante" maxlength="50" autocomplete="off" tabindex="0" required/>
+            <input type="text" class="bindable lockable combobox" data-bind="Fabricante" maxlength="50" autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>Fabricante</label>
           </div>
@@ -126,7 +126,7 @@
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input type="text" class="call-refresh bindable combobox" data-bind="Marca" maxlength="50"  autocomplete="off" tabindex="0" required/>
+            <input type="text" class="call-refresh lockable bindable combobox" data-bind="Marca" maxlength="50"  autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>Marca</label>
           </div>
@@ -144,14 +144,14 @@
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input type="text" id="cost" class="money bindable call-refresh" data-bind="precoCusto" type="text"  maxlength="50"  autocomplete="off" tabindex="0"
+            <input type="text" id="cost" class="money lockable bindable call-refresh" data-bind="precoCusto" type="text"  maxlength="13"  autocomplete="off" tabindex="0"
             value="R$ 0,00" onkeypress="return Floa.isFloatKey(event);"  required/>
             <span class="bar"></span>
             <label>Custo</label>
           </div>
 
           <div class="material-input-holder">
-            <input type="text" id="markup" class="call-refresh" maxlength="50"  autocomplete="off" tabindex="0" onkeypress="return Floa.isFloatKey(event);" required/>
+            <input type="text" id="markup" class="float lockable bindable call-refresh" data-bind="markup" maxlength="4"  autocomplete="off" tabindex="0" onkeypress="return Floa.isFloatKey(event);" required/>
             <span class="bar"></span>
             <label>Markup</label>
           </div>
@@ -238,8 +238,11 @@
       </div>
 
       <div class="buttons-holder">
+
         <label class="button save shadow">Salvar</label>
+        <label class="button new shadow">Novo</label>
         <label class="button delete shadow">Excluir</label>
+
       </div>
     </div>
   </div>

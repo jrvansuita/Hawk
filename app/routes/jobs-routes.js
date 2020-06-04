@@ -1,4 +1,4 @@
-const Routes = require('../redirects/controller/routes.js');
+const Routes = require('./_route.js');
 const Job = require('../bean/job.js');
 const JobsPool = require('../jobs/controller/pool.js');
 const JobsVault = require('../vault/job-vault.js');

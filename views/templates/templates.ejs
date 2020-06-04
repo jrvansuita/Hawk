@@ -5,7 +5,8 @@
 <%  include ../menus/main-menu %>
 <head>
   <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
-  <link rel="stylesheet" type="text/css" href="/front/css/layout/templates/templates.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/vault-screen/defaults.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/vault-screen/templates.css">
 
   <script type="text/javascript" src="/front/js/control/templates/templates.js"></script>
   <script type="text/javascript" src="/front/js/libs/template-editor.js"></script>
@@ -38,7 +39,7 @@
 
 
 
-            <div class="each-template-line <%=selected.id == each.id ? 'active' : ''%> " data-id="<%=each.id%>">
+            <div class="each-line <%=selected.id == each.id ? 'active' : ''%> " data-id="<%=each.id%>">
 
               <%if (each.usage && templateType == 'email'){%>
                 <div class="active-circle"></div>
@@ -53,7 +54,7 @@
 
                 <span><%=each.name%></span>
                 <div class="icon-dots" data-id="<%=each.id%>">
-                  
+
                 </div>
               </div>
               <%});%>
@@ -67,12 +68,12 @@
           <div class="main-panel shadow">
 
 
-            <div class="template-top">
+            <div class="main-top">
 
               <div class="row">
 
                 <div class="material-input-holder name-holder">
-                  <input type="text" id="template-name" value="<%=selected.name%>" autocomplete="off" required/>
+                  <input type="text" id="name" value="<%=selected.name%>" autocomplete="off" required/>
                   <span class="bar"></span>
                   <label>Nome do Template</label>
                 </div>
@@ -109,7 +110,7 @@
 
                 </div>
 
-                <div class="template-bottom">
+                <div class="main-bottom">
 
                   <div id="editor">
 
