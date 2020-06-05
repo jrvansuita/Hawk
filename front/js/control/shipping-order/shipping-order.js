@@ -50,7 +50,7 @@ function initMemoryHandler(removeNew){
   }
 
   MEM_TAG = 'shipping-order-' + (shippingOrder.numeroColeta || 'new');
-  memoryList = Local.get(MEM_TAG) || [];
+  memoryList = Local.get(MEM_TAG, []);
 }
 
 function clearMemory(tag){
