@@ -1,6 +1,5 @@
 const Routes = require('./_route.js');
 const UsersProvider = require('../provider/user-provider.js');
-const Setts = require('../bean/setts.js');
 const ParamVault = require('../vault/param-vault.js');
 
 module.exports = class SettingsRoutes extends Routes{
@@ -8,15 +7,7 @@ module.exports = class SettingsRoutes extends Routes{
   attach(){
     this._page('/settings', (req, res) => {
       res.render('settings/settings', {jobs: global.jobsPoll});
-
     });
-
-    this._get('/get-setts', (req, res) => {
-      Setts.findAll((err, all)=>{
-        res.status(200).send(all);
-      });
-    });
-
 
     this._page('/main-settings', (req, res) => {
       res.render('settings/main-settings');

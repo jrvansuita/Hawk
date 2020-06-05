@@ -46,13 +46,13 @@ $(document).ready(()=>{
   });
 
   $(".each-line").click(function (){
-    goToTemplate($(this).data('id'));
+    goTo($(this).data('id'));
   });
 
   openOptionsMenu();
 
   $('.add-new').click(() => {
-    goToTemplate(null);
+    goTo(null);
   });
 });
 
@@ -85,7 +85,7 @@ function save() {
   };
 
   _post('template', data , (id)=>{
-    goToTemplate(id);
+    goTo(id);
   },(error, message)=>{
     console.log(error);
   });
@@ -98,11 +98,11 @@ function openOptionsMenu(line, e){
       window.open('templates-viewer?id=' + helper.data.id, '_blank');
     })
     .item('../img/duplicate.png', 'Duplicar', (helper) => {
-      duplicateTemplate(helper.data.id);
+      duplicateItem(helper.data.id);
     })
     .item('../img/delete.png', 'Excluir', (helper) => {
       if (checkCanDelete(helper.data.id)){
-        deleteTemplate(helper.data.id);
+        deleteItem(helper.data.id);
       }
     });
   });
@@ -124,7 +124,7 @@ function checkCanDelete(id){
   return true;
 }
 
-function deleteTemplate(id){
+function deleteItem(id){
   _post('/template-delete',{id: id}, () => {
     var line = $(".each-line[data-id='"+id+"']");
     line.fadeOut(200, () => {
@@ -133,13 +133,13 @@ function deleteTemplate(id){
   });
 }
 
-function duplicateTemplate(id){
+function duplicateItem(id){
   _post('/template-duplicate',{id: id}, (data) => {
-    goToTemplate(data.id);
+    goTo(data.id);
   });
 }
 
 
-function goToTemplate(id){
+function goTo(id){
   window.location= location.pathname + (id ? '?id=' + id : '');
 }

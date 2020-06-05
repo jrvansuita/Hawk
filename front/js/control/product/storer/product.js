@@ -47,8 +47,12 @@ function onBindViewsListeners(){
   });
 
   $('.lockable').blur(function (){
-    toogleProductValue($(this));
+    toogleComboBoxValue($(this));
   });
+
+  $('.child-lockable').click(function() {
+    handleChildLockClick($(this));
+  })
 
   $('.size-group-button').click(function () {
     product.postFaixaIdade = $(this).data('val');
@@ -75,7 +79,8 @@ function onBindViewsListeners(){
 
   Dropdown.on($('.sizes-dots'))
   .item('/img/delete.png', 'Remover Todos', function(){
-    $('.sizes-box').empty();
+    sizesBox.clear();
+    childsBuilder.clear();
   });
 
   new TemplateEditor()
@@ -99,7 +104,7 @@ function onInitilizeScreenControls(){
   storingBroadcast = new Broadcast('storing-product').onReceive(onStoringMessageUpdate);
 
   sizesBox = new SizesBox($('.sizes-box')).startCache();
-  childsBuilder = new ChildsBuilder($('.childs')).setDefaultOnChange();
+  childsBuilder = new ChildsBuilder($('.childs')).setDefaultOnChange().setMemoryData(lockedValues?.screen);
 
   onBindSizeBoxListeners();
 }
@@ -132,8 +137,10 @@ function onBindComboBoxes(){
     bindComboBox($(each), $(each).data('bind'));
   });
 
-
-  bindComboBox($('input[data-bind="cf"]'),  getNcmOptions());
+  new ComboBox($('input[data-bind="cf"]'))
+  .setAutoShowOptions(true)
+  .fromEnum('NCM')
+  .load();
 }
 
 function getData(){
@@ -187,7 +194,7 @@ function onBindSizeBoxListeners(){
     console.log('Size Created: ' + size);
     var sku = getSku(size);
 
-    var found = product._Skus.find(function(i){
+    var found = product?._Skus?.find(function(i){
       return i.codigo == sku;
     });
 
@@ -195,7 +202,7 @@ function onBindSizeBoxListeners(){
 
     if (!found){
       item.gtin = Util.barcode();
-      product._Skus.push(item);
+      product._Skus = [].concat(product._Skus, item).filter(Boolean);
     }
 
     childsBuilder.addChild(item);
@@ -222,7 +229,6 @@ function onBindSizeBoxListeners(){
 function onStoringMessageUpdate(data){
   $('.loading-holder').show();
 
-  console.log(data);
   if (data.error){
     $('.loading-circle').attr('src', '/img/error.png');
   }else if (!data.isLoading){
@@ -262,23 +268,30 @@ function putSkuUrlParams(){
   }
 }
 
-function toogleProductValue(el){
+function toogleComboBoxValue(el){
   var key = el.data('bind');
   var val = el.val();
 
-  if (el.hasClass('locked') && val){
-    lockedValues[key] = val;
+  toggleLockedValue('data', key, val, el.hasClass('locked') && val);
+}
+
+function toggleLockedValue(path, key, val, toggle){
+  lockedValues[path] = lockedValues[path] || {};
+
+  if (toggle){
+    lockedValues[path][key] = val;
   }else{
-    delete lockedValues[key];
+    delete lockedValues[path][key];
   }
 
   Local.put(MEM_TAG, lockedValues);
 }
 
 function toggleLockIcon(el){
-  el.toggleClass('locked');
-  var lockIcon = el.siblings('label');
-  if (lockIcon){
+  var lockIcon = el.siblings('label')
+  el.toggleClass('locked' + (!lockIcon.length ? ' lock-icon' : ''));
+
+  if (lockIcon.length){
     lockIcon.toggleClass('lock-icon');
   }
 }
@@ -288,20 +301,29 @@ function onInitializeLockedValues(){
     $('.material-input-holder>label').addClass('no-transition');
 
     lockedValues = Local.get(MEM_TAG);
-    Util.forProperty(lockedValues, (val, key) => {
+    Util.forProperty(lockedValues.data, (val, key) => {
       product[key] = val;
       toggleLockIcon($('input[data-bind="' + key + '"]').val(val));
     });
+
+    $('.child-lockable').each((i, each) => {
+      if (lockedValues?.screen?.[$(each).data('bind')]){
+        toggleLockIcon($(each));
+      }
+    });
+
   }
 }
 
-function getNcmOptions(){
-  var ncms = [];
-  ncms.push({description: '6111.20.00 - Vestuário', value : '6111.20.00'});
-  ncms.push({description: '6402.99.90 - Calçados', value : '6402.99.90'});
-  ncms.push({description: '8715.00.00 - Carrinho de Bebê', value : '8715.00.00'});
-  ncms.push({description: '3926.90.90 - Plásticos', value : '3926.90.90'});
-  ncms.push({description: '6217.10.00 - Acessórios de Tecido', value : '6217.10.00'});
-  ncms.push({description: '4202.22.20 - Bolsas e Mochilas', value : '4202.22.20'});
-  return ncms;
+function handleChildLockClick(col){
+  var key = col.data('bind');
+  var has = !col.hasClass('locked');
+
+  toggleLockedValue('screen', key, has, has);
+
+  $('input[data-tag="'+key+'"]').each((i, each) => {
+    toggleLockedValue('screen', key + '-' + $(each).data('size'), $(each).val(), has);
+  });
+
+  toggleLockIcon(col);
 }

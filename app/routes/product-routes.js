@@ -3,7 +3,7 @@ const ProductLaws = require('../laws/product-laws.js');
 const ProductHandler = require('../handler/product-handler.js');
 const ProductDiagnostics = require('../diagnostics/product-diagnostics.js');
 const DiagnosticsProvider = require('../diagnostics/diagnostics-provider.js');
-const DiagnosticsEnum = require('../diagnostics/diagnostics-enum.js');
+//const DiagnosticsEnum = require('../diagnostics/diagnostics-enum.js');
 const ProductBoard = require('../provider/product-board-provider.js');
 const ProductListProvider = require('../provider/product-list-provider.js');
 const ProductImageProvider = require('../provider/product-image-provider.js');
@@ -80,8 +80,8 @@ module.exports = class ProductRoutes extends Routes{
 
 
     this._page('/diagnostics', (req, res) => {
-      new DiagnosticsProvider().sums((data)=>{
-        res.render('product/diagnostics/diagnostics', {sums : data, types: DiagnosticsEnum});
+      new DiagnosticsProvider().sums((data, types)=>{
+        res.render('product/diagnostics/diagnostics', {sums : data, types: types});
       });
     });
 
@@ -206,7 +206,7 @@ module.exports = class ProductRoutes extends Routes{
       }
       var query = req.query.skus ? req.query.skus : req.session.productListQuery;
 
-      ProductListProvider.load(query, null, (data, info)=>{
+      ProductListProvider.load(query, null, (data)=>{
         new EccosysProvider().skus(data.map((e)=>{return e.sku})).go((products) => {
 
           var result = {};

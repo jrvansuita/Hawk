@@ -1,7 +1,6 @@
 const Routes = require('./_route.js');
 const UsersProvider = require('../provider/user-provider.js');
 const UsersVault = require('../vault/user-vault.js');
-const Setts = require('../bean/setts.js');
 
 module.exports = class UserRoutes extends Routes{
 

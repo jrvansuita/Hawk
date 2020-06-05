@@ -7,7 +7,8 @@ module.exports = class {
     var object = new Enumerator(
       params.name,
       params.explanation,
-      params.tag
+      params.tag,
+      params.items
     );
 
     if (params.id){

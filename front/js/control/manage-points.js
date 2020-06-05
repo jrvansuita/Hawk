@@ -21,9 +21,9 @@ $(function() {
 
 function onInit(){
 
-  new ComboBox($('#type'), ["Packing", "Picking"])
-  .setAutoShowOptions()
-  .load();
+    new ComboBox($('#type'), ["Packing", "Picking"])
+    .setAutoShowOptions()
+    .load();
 
 
 

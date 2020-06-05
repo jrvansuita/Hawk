@@ -20,7 +20,7 @@ class ProductBinder{
       //Atributes keys
       {key: 'taxonomia'}, {key: 'largura'},
       {key: 'comprimento'}, {key: 'altura'}, {key: 'size'},
-      {key: 'age_group'}, {key: 'gender'}, //{key: 'conteudo'},
+      {key: 'age_group'}, {key: 'gender'},
       {key: 'tamanho'}, {key: 'visibility'}
     ];
 
@@ -130,7 +130,6 @@ class ProductBinder{
     this.largura = 11;
     this.comprimento = 16;
 
-
     if (!this.descricaoEcommerce){
       this.descricaoEcommerce = this.nome;
     }
@@ -198,7 +197,7 @@ class ProductBinder{
         this.sizeDescription = each.description || each.faixa_de_idade;
 
         if (each.sizes && createSizes){
-          this._Skus = this._createChildSkusFromSizes(each.sizes);
+          this._Skus = this.createSizes(each.sizes);
           this.sizes = each.sizes;
           this.faixa_de_idade = each.faixa_de_idade;
         }
@@ -221,9 +220,16 @@ class ProductBinder{
     }
   }
 
-  _createChildSkusFromSizes(sizes){
+  createSizes(sizes){
     return !sizes ? {} : sizes.map((size, i) => {
-      return {codigo: this.codigo + '-' + size, active: true, gtin : Util.barcode(i)};
+      return {
+        codigo: this.codigo + '-' + size, 
+        active: true,
+        gtin : Util.barcode(i),
+        largura: this.largura,
+        altura: this.altura,
+        comprimento: this.comprimento
+      };
     });
   }
 
@@ -251,9 +257,9 @@ class ProductBinder{
     child.tamanho = data.codigo.split('-').pop().trim();
     child.descricaoEcommerce = this.nome + '-' + child.tamanho;
 
-    child.comprimentoReal = data.comprimentoReal || 0;
-    child.alturaReal = data.alturaReal || 0;
-    child.larguraReal = data.larguraReal || 0;
+    child.comprimento = child.comprimentoReal = data.comprimento || 0;
+    child.altura = child.alturaReal = data.altura || 0;
+    child.largura = child.larguraReal = data.largura || 0;
 
     data.peso = Floa.floa(data.peso || 0);
 

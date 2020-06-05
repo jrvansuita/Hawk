@@ -4,6 +4,12 @@ class ChildsBuilder{
     this.holder = holder;
   }
 
+
+  setMemoryData(data){
+    this.memoryData = data;
+    return this;
+  }
+
   setDefaultOnChange(){
     return this.setOnChange(function () {
       product._Skus.forEach((each) => {
@@ -46,14 +52,13 @@ class ChildsBuilder{
   }
 
   addChild(item){
-
     return this.line(item.codigo)
     .label(item.codigo, 'child-sku-line')
     .int('Ean', 'gtin', item.gtin || '', '0000000000000')
     .float('Peso', 'peso', Floa.def(item.peso) || Floa.def(item.pesoLiq), '0,000')
-    .int('Largura', 'larguraReal', Num.def(item.larguraReal), '0,000')
-    .int('Altura', 'alturaReal', Num.def(item.alturaReal), '0,000')
-    .int('Comprimento', 'comprimentoReal', Num.def(item.comprimentoReal), '0,000');
+    .int('Largura', 'largura', Num.def(item.largura), '0,000')
+    .int('Altura', 'altura', Num.def(item.altura), '0,000')
+    .int('Comprimento', 'comprimento', Num.def(item.comprimento), '0,000');
   }
 
   removeChild(sku){
@@ -63,8 +68,10 @@ class ChildsBuilder{
   }
 
   line(sku){
-    this.lastLine = $('<tr>').attr('data-sku', sku);
     this.currentSku = sku;
+    this.currentSize = sku.split('-').pop();
+    this.lastLine = $('<tr>').attr('data-sku', this.currentSku).attr('data-size', this.currentSize);
+
     this.holder.append(this.lastLine);
     return this;
   }
@@ -101,8 +108,9 @@ class ChildsBuilder{
   _input(label, tag, value, placeholder){
     var $input = $('<input>')
     .addClass('editable-input')
-    .data('tag', tag)
+    .attr('data-tag', tag)
     .attr('data-sku', this.currentSku)
+    .attr('data-size', this.currentSize)
     .attr('size', placeholder.length + 3)
     .attr('placeholder', placeholder)
     .on("click", function () {
@@ -114,6 +122,9 @@ class ChildsBuilder{
     }else{
       $input.val(value);
     }
+
+    var memoryValue = this?.memoryData?.[tag + '-' + this.currentSize];
+    if (memoryValue) $input.val(memoryValue);
 
     if (this.onChange){
       $input.change(this.onChange).trigger('change');

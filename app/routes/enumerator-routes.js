@@ -16,6 +16,17 @@ module.exports = class EnumeratorRoutes extends Routes{
       });
     });
 
+    this._get('/enum', (req, res) =>{
+      var find = Num.def(req.query.id,0) || req.query.tag;
+
+      if (req.query.keys){
+        Enumerator.getKeyItems(find, data => { res.send(data) });
+      }else{
+        Enumerator.get(find, data => { res.send(data) });
+      }
+    });
+
+
     this._post('/enumerators', (req, res) =>{
       EnumeratorVault.storeFromScreen(req.body, (id)=>{
         res.status(200).send(id.toString());
@@ -28,11 +39,11 @@ module.exports = class EnumeratorRoutes extends Routes{
       });
     });
 
-    /*this._post('/enumerators-duplicate', (req, res) =>{
+    this._post('/enumerators-duplicate', (req, res) =>{
       Enumerator.duplicate(req.body.id, (data)=>{
         res.send(data);
       });
-    });*/
+    });
   }
 
 };

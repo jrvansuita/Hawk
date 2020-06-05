@@ -275,17 +275,20 @@ textarea{
 
 .lock-icon:after {
   content: "";
-  display: block;
+  display: inline-block;
   background: url("/img/mini-padlock.png") no-repeat;
   width: 14px;
   height: 14px;
-  float: right;
   background-size: contain;
-  margin-left: 5px;
-  margin-top: -2px;
+  vertical-align: bottom;
+  margin-left: 3px;
 }
 
 
 .no-transition{
   transition: none !important;
+}
+
+.child-lockable{
+  cursor: pointer;
 }

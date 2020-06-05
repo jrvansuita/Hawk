@@ -4,7 +4,6 @@ class ComboBox{
     this.dependencies = new FileLoader().css('jquery-ui')
     .css('combobox').js('jquery-ui.min');
 
-
     this.element = element;
     this.setLimit(5);
 
@@ -12,7 +11,7 @@ class ComboBox{
       this.objects = data;
     }else if (typeof data === "string"){
       this.path = data;
-    }else{
+    }else if (typeof data === 'object' && data !== null){
       this.objects = Object.keys(data)
       .map(key=>{
         return {val :data[key],
@@ -21,6 +20,14 @@ class ComboBox{
       }
 
       this.method = method;
+    }
+
+    fromEnum(tag){
+      this.path = '/enum?tag='+tag;
+      this.method = 'get';
+      this.enumMode = true;
+
+      return this;
     }
 
 
@@ -106,6 +113,10 @@ class ComboBox{
       return this.data;
     }
 
+    _handleEnumData(){
+      this.objects
+    }
+
     async load(callback){
       await this.dependencies.load();
 
@@ -114,8 +125,8 @@ class ComboBox{
           url: this.path,
           type: this.method || "get",
           success: (response) =>{
-            this.objects = Object.values(response);
-            this.handleData(callback);
+            this._prepareResponse(response);
+            this._handleData(callback);
           },
           error: (error, message, errorThrown) =>{
             console.log(error);
@@ -123,7 +134,7 @@ class ComboBox{
         });
       }else{
         if (this.objects.length){
-          this.handleData(callback);
+          this._handleData(callback);
         }else{
           $(this.element).val(this.disabledCaption);
           $(this.element).prop('disabled', true);
@@ -133,8 +144,19 @@ class ComboBox{
       return this;
     }
 
+    _prepareResponse(response){
+      if (this.enumMode){
+        this.objects = response.items;
+        this.setOnItemBuild((item, index)=>{
+          return {img: item.icon, text : item.description, value: item.value};
+        })
+      }else{
+        this.objects = Object.values(response);
+      }
+    }
 
-    handleData(callback){
+
+    _handleData(callback){
       this.data = [];
 
       this.objects.forEach((each, index)=>{

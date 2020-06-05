@@ -1,7 +1,7 @@
 const Routes = require('./_route.js');
 const TemplateVault = require('../template/template-vault.js');
 const Templates = require('../bean/template.js');
-const TemplatesUsages = require('../template/templates-usages.js');
+const Enum = require('../bean/enumerator');
 const TemplateBuilder = require('../template/template-builder.js');
 const ImageSaver = require('../image/image-saver.js');
 
@@ -14,7 +14,9 @@ module.exports = class TemplateRoutes extends Routes{
         return e.id == req.query.id;
       });
 
-      res.render('templates/templates', {selected: selected || {}, all: all, usages: TemplatesUsages, templateType : type});
+      Enum.getKeyItems('TEMPL-EMAIL', (usages) => {
+        res.render('templates/templates', {selected: selected || {}, all: all, usages: usages, templateType : type});  
+      });
     };
 
     this._page('/email-templates', (req, res) => {
