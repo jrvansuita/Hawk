@@ -145,6 +145,7 @@ function onProductRefreshed(data){
   product = data;
   onBindViewValues();
   onSizesRefreshed();
+  onOtherBindingRules();
 
   setTimeout(() => {
     $('.material-input-holder>label').removeClass('no-transition');
@@ -161,6 +162,10 @@ function onSizesRefreshed(){
     $('.size-group-button').removeClass('active');
     $('.size-group-button[data-arr*="'+product.selectedSizeGroup+'"]').addClass('active');
   }
+}
+
+function onOtherBindingRules(){
+  $('.discount').text(Num.percent(product.discount, true));
 }
 
 function requestProductChilds(){
@@ -237,9 +242,7 @@ function onProductStored(data){
 
   setTimeout(() => {
     $('.loading-holder').hide();
-    if (!product.id){
-      window.location.reload();
-    }
+    window.location.reload();
   },1500);
 }
 
@@ -319,27 +322,28 @@ function handleChildLockClick(col){
 
 
 function onCreateSizeGroupButtons(){
+  if (!product.id){
+    _get('/enum',{tag:'PROD-FA-SIZES'}, (data) => {
+      var buttons = data.items.reduce((o, each) => {
+        key=Str.keep(each.name);
+        o[key] = [].concat(o[key], each.name).filter(Boolean);
+        return o;
+      }, {});
 
-  _get('/enum',{tag:'PROD-FA-SIZES'}, (data) => {
-    var buttons = data.items.reduce((o, each) => {
-      key=Str.keep(each.name);
-      o[key] = [].concat(o[key], each.name).filter(Boolean);
-      return o;
-    }, {});
+      Object.keys(buttons).forEach((key) => {
+        var l = $('<label>').addClass('size-group-button').attr('data-arr', buttons[key].reverse())
+        .attr('tabindex', '0')
+        .append(key)
+        .click(function () {
+          onSizeGrupoButtonClick(this);
+        }).keypress(function(e) {
+          if(e.which == 13) $(this).click()
+        });
 
-    Object.keys(buttons).forEach((key) => {
-      var l = $('<label>').addClass('size-group-button').attr('data-arr', buttons[key].reverse())
-      .attr('tabindex', '0')
-      .append(key)
-      .click(function () {
-        onSizeGrupoButtonClick(this);
-      }).keypress(function(e) {
-        if(e.which == 13) $(this).click()
+        $('.size-group-buttons-holder').prepend(l);
       });
-
-      $('.size-group-buttons-holder').prepend(l);
-    });
-  })
+    })
+  }
 }
 
 

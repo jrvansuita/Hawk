@@ -176,20 +176,29 @@ class ProductBinder{
   }
 
   prices(){
-    if (this.id){
-      this.markup = Floa.abs(this.preco/this.precoCusto, 2);
-    }else if (this.markup){
+    //Converting String to integer
+    this.preco = Floa.def(this.preco, 0);
+    this.precoCusto = Floa.def(this.precoCusto, 0);
+    this.precoDe = Floa.def(this.precoDe, 0);
+
+    //Defining default markup or binding
+    if (!this.markup && this.preco){
+      this.markup = this.preco/this.precoCusto;
+    }else{
       this.markup = Floa.def(this.markup, 2.5);
-      this.precoCusto = Floa.def(this.precoCusto, 0);
-      this.preco = Math.trunc(this.markup * this.precoCusto) + .9;
-      this.precoDe = Math.trunc(this.preco / 0.85) + .9;
-      this.markup = Floa.abs(this.preco/this.precoCusto, 2);
     }
+
+    this.preco = Math.trunc(this.markup * this.precoCusto) + .9;
+    this.precoDe = Math.trunc(this.preco / 0.85) + .9;
+    this.markup = Floa.abs(this.preco/this.precoCusto, 2);
+
+    this.discount = Math.trunc(100 - (this.preco * 100) / this.precoDe);
   }
 
   async sizing(){
     if ((this._Skus || this.selectedSizeGroup) && this.codigo){
       var changedData = !this.faixa_de_idade || (this.selectedSizeGroup && (this.selectedSizeGroup != this.lastSelectedSizeGroup));
+      this.sizes = this?._Skus?.map(each => {return each.codigo.split('-').pop()}) || [];
 
       if (changedData){
         if (this.selectedSizeGroup){
@@ -197,14 +206,12 @@ class ProductBinder{
           var sel = await Enum.on('PROD-FA-SIZES').hunt(this.selectedSizeGroup);
           this.sizeDescription = sel.description;
           this.sizes = sel.value.split(',');
-          this._Skus = this.createSizes(this.sizes);
-        }else{
-          this.sizes = this._Skus.map(each => {return each.codigo.split('-').pop()});
+          this._Skus = this.buildSkuSizes(this.sizes);
         }
 
         var rows = (await Enum.on('PROD-TAM-ATTR').get())?.items;
         rows.forEach((each) => {
-          if (each.default || Arr.includesAll(each.name.split(','), this.sizes.join(''))){
+          if (each.default || Arr.includesAll(each.name.split(','), this.sizes.join(','))){
             this.Idade = each.value.split(',');
             this.age_group = each.icon;
             this.faixa_de_idade = each.description;
@@ -214,43 +221,7 @@ class ProductBinder{
     }
   }
 
-  _sizing(){
-    if ((this._Skus || this.selectedSizeGroup) && this.codigo){
-      this._Skus = this._Skus || [];
-
-      this.sizes = this._Skus.map(each => {return each.codigo.split('-').pop()});
-
-
-      var defSizeProperties = (each, createSizes = false) => {
-        this.Idade = each.Idade;
-        this.age_group = each.age_group;
-        this.sizeDescription = each.description || each.faixa_de_idade;
-
-        if (each.sizes && createSizes){
-          this._Skus = this.createSizes(each.sizes);
-          this.sizes = each.sizes;
-          this.faixa_de_idade = each.faixa_de_idade;
-        }
-      }
-
-      if (this.selectedSizeGroup && (this.selectedSizeGroup != this.faixa_de_idade)){
-        this.faixa_de_idade = this.selectedSizeGroup;
-
-        commonSizes.forEach((each, index) => {
-          if ((index == 0) || (each.faixa_de_idade == this.faixa_de_idade))
-          defSizeProperties(each, true);
-        });
-      }else if (this.sizes && !this.faixa_de_idade){
-        commonSizes.forEach((each, index) => {
-          if ((index == 0) || (Arr.includesAll(each.search || each.sizes, this.sizes.join(''))))
-          defSizeProperties(each);
-
-        });
-      }
-    }
-  }
-
-  createSizes(sizes){
+  buildSkuSizes(sizes){
     return !sizes ? {} : sizes.map((size, i) => {
       return {
         codigo: this.codigo + '-' + size,
@@ -310,6 +281,13 @@ class ProductBinder{
 
     return childs.filter(Boolean);
   }
+
+  getChild(prop){
+    return this?._Skus?.reduce((arr, each) => {
+      arr.push(each[prop]);
+      return arr;
+    },[]);
+  }
 }
 
 module.exports = ProductBinder;
@@ -321,41 +299,3 @@ global.io.on('connection', (socket) => {
     global.io.sockets.emit(tag, id, await ProductBinder.create(data).body());
   });
 });
-
-var commonSizes = [{
-  //Default One
-  Idade : "1-3",
-  age_group : 'Kids',
-  faixa_de_idade : 'Kids',
-},{
-  Idade : "Até 1",
-  age_group : '3 a 12 meses',
-  sizes : ['P', 'M', 'G'],
-  faixa_de_idade : 'Bebe',
-},{
-  Idade : "1-3",
-  age_group : '1 a 5 anos',
-  sizes : ['1', '2', '3'],
-  faixa_de_idade : 'Primeiros Passos',
-  description: 'Bebe'
-},{
-  Idade : ["4-6", "8-10"],
-  age_group : 'infantil',
-  search: ['8'],
-  sizes : ['4', '6', '8'],
-  faixa_de_idade : 'Kids',
-  description: 'Infantil'
-},{
-  Idade : "12-16",
-  search: ['12'],
-  sizes : ['12', '14', '16'],
-  faixa_de_idade : 'Juvenil'
-}];
-
-
-
-
-//Explicação do que fazer
-//Ao clicar num botão para gerar os tamanhos. (Criar outro campo, não usar o nome faixa de idade)
-//Olhar o enum e gerar os tamanhos pelo que está definido lá
-//Depois, criar um enum olhando pelos tamanhos criados, e colocando os valores em Idade, faixa de idade, age_group, sizeDescription(Nome do produto)

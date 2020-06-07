@@ -13,6 +13,7 @@
   display: flex;
   flex-direction: column;
   margin-right: 15px;
+  position: relative;
 }
 
 .row{
@@ -293,4 +294,9 @@ textarea{
 
 .child-lockable{
   cursor: pointer;
+}
+
+.price-title {
+  position: absolute !important;
+  right: 0;
 }
