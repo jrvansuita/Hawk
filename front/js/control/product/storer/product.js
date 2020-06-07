@@ -13,6 +13,7 @@ $(document).ready(() => {
 function onCreate(){
   onBindViewsListeners();
   onBindComboBoxes();
+  onCreateSizeGroupButtons();
 }
 
 //Call every new product
@@ -42,24 +43,20 @@ function onBindViewsListeners(){
     $(this).select();
   });
 
-  $('.lockable').keypress(function(e) {
-    if(e.which == 13) toggleLockIcon($(this));
-  });
 
-  $('.lockable').blur(function (){
-    toogleComboBoxValue($(this));
-  });
+  if (!product.id){
+    $('.lockable').keypress(function(e) {
+      if(e.which == 13) toggleLockIcon($(this));
+    });
 
-  $('.child-lockable').click(function() {
-    handleChildLockClick($(this));
-  })
+    $('.lockable').blur(function (){
+      toogleComboBoxValue($(this));
+    });
 
-  $('.size-group-button').click(function () {
-    product.postFaixaIdade = $(this).data('val');
-    refreshBroadcast.emit(getData());
-  }).keypress(function(e) {
-    if(e.which == 13) $(this).click()
-  });
+    $('.child-lockable').click(function() {
+      handleChildLockClick($(this));
+    });
+  }
 
   $('.bindable').blur(function () {
     var key = $(this).data('post') || $(this).data('bind');
@@ -80,7 +77,6 @@ function onBindViewsListeners(){
   Dropdown.on($('.sizes-dots'))
   .item('/img/delete.png', 'Remover Todos', function(){
     sizesBox.clear();
-    childsBuilder.clear();
   });
 
   new TemplateEditor()
@@ -93,7 +89,7 @@ function onBindViewsListeners(){
   })
   .load('.description-editor').then((data) => {
     window.editor = data;
-    onBindDetailsDescriptions();
+    window.editor.html.set(product.conteudo);
   });
 }
 
@@ -104,7 +100,7 @@ function onInitilizeScreenControls(){
   storingBroadcast = new Broadcast('storing-product').onReceive(onStoringMessageUpdate);
 
   sizesBox = new SizesBox($('.sizes-box')).startCache();
-  childsBuilder = new ChildsBuilder($('.childs')).setDefaultOnChange().setMemoryData(lockedValues?.screen);
+  childsBuilder = new ChildsBuilder($('.childs')).setDefaultOnChange().setMemoryData(product.id ? null : lockedValues?.screen);
 
   onBindSizeBoxListeners();
 }
@@ -123,12 +119,6 @@ function onBindViewValues(){
         }
       }
     });
-  }
-}
-
-function onBindDetailsDescriptions(){
-  if (product.conteudo){
-    if (window.editor) window.editor.html.set(product.conteudo);
   }
 }
 
@@ -167,9 +157,9 @@ function onSizesRefreshed(){
     childsBuilder.load(product._Skus);
   }
 
-  if (product.faixa_de_idade){
+  if (product.selectedSizeGroup){
     $('.size-group-button').removeClass('active');
-    $('.size-group-button[data-val="'+product.faixa_de_idade+'"]').addClass('active');
+    $('.size-group-button[data-arr*="'+product.selectedSizeGroup+'"]').addClass('active');
   }
 }
 
@@ -311,7 +301,6 @@ function onInitializeLockedValues(){
         toggleLockIcon($(each));
       }
     });
-
   }
 }
 
@@ -326,4 +315,44 @@ function handleChildLockClick(col){
   });
 
   toggleLockIcon(col);
+}
+
+
+function onCreateSizeGroupButtons(){
+
+  _get('/enum',{tag:'PROD-FA-SIZES'}, (data) => {
+    var buttons = data.items.reduce((o, each) => {
+      key=Str.keep(each.name);
+      o[key] = [].concat(o[key], each.name).filter(Boolean);
+      return o;
+    }, {});
+
+    Object.keys(buttons).forEach((key) => {
+      var l = $('<label>').addClass('size-group-button').attr('data-arr', buttons[key].reverse())
+      .attr('tabindex', '0')
+      .append(key)
+      .click(function () {
+        onSizeGrupoButtonClick(this);
+      }).keypress(function(e) {
+        if(e.which == 13) $(this).click()
+      });
+
+      $('.size-group-buttons-holder').prepend(l);
+    });
+  })
+}
+
+
+function onSizeGrupoButtonClick(button){
+  var arr = $(button).data('arr').split(',');
+  current = $(button).data('curr') || 0;
+
+  if (arr[current] != product.selectedSizeGroup){
+    sizesBox.clear();
+
+    product.selectedSizeGroup = arr[current];
+    $(button).text(arr[current]);
+    $(button).data('curr', arr.length-1 == current ? 0 : ++current);
+    refreshBroadcast.emit(getData());
+  }
 }

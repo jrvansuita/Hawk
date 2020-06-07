@@ -43,6 +43,11 @@ var Arr = {
       s =  s.toString().toLowerCase();
       return equal ? str == s : str.includes(s);
     });
+  },
+
+  matchPercent(base, ref){
+    if (!base || !ref) return 0;
+    return (base.reduce((c, b) => { return c + (ref.some(e =>  {return e == b}) ? 1 : 0) }, 0) * 100) / base.length;
   }
 
 };
