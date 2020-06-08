@@ -29,7 +29,8 @@ class Dropdown {
   }
 
   createMenuButton(){
-    var style = {"width": "15px", "margin-right": "-5px", "margin-left": "5px",  "height": "15px", "padding": "3px", "display": "inline-flex", "margin-top": "-3px"};
+    var style = {"width": "15px", "margin-right": "-5px", "margin-left": "5px",  "height": "15px", "padding": "3px", "display": "inline-flex"};
+    
 
     this.defMenuIcon = '/img/dots.png';
     this.menuIcon = $('<img>').attr('src', this.defMenuIcon).addClass('md-dots-icon').css(style);

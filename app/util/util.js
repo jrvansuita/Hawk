@@ -62,7 +62,7 @@ var Util = {
     var content = _content.trim().toLowerCase();
     if (_content){
       for (var i = 0; i < data.length; i++) {
-        if (i % 2 == 0){
+        if ((i % 2 == 0) || (addIndex == 0)){
           var datas = [].concat(data[i]);
 
           var includes = datas.some((s)=>{

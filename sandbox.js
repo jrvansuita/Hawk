@@ -2,14 +2,14 @@
 const Initilizer = require('./app/abra-cadabra/initializer.js');
 
 
-new Initilizer(__dirname, true).begin(() => {
+new Initilizer(__dirname, true).begin(async () => {
 
+  const Enum = require('./app/bean/enumerator.js');
 
-  const ProductBoardEmailHandler = require('./app/performance/product-board-email.js');
-  const ProductClone = require('./app/bean/product.js');
+  //var s = (await Enum.on('PROD-DEP-NAME')).hunt('Meia');
+  var s = await Enum.on('PROD-DEP-NAME').hunt('Meia');
+var s = await Enum.on('PROD-FA-SIZES').hunt('Bebê');
 
-  new ProductBoardEmailHandler().go((res) => {
-    console.log(res);
-  });
+  console.log(s);
 
 });

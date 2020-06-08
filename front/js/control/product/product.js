@@ -331,7 +331,7 @@ function buildTextCol(val){
 }
 
 function buildImgCol(path, title, addClass){
-  var $img = $('<img>').addClass('md-dots-icon').attr('src',path).attr('title',title);
+  var $img = $('<img>').addClass('icon').attr('src',path).attr('title',title);
 
   return buildCol($img).css('text-align', 'center');
 }

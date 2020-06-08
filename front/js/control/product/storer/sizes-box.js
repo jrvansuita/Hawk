@@ -18,7 +18,7 @@ class SizesBox{
   }
 
   clear(){
-    this.box.empty();
+    this.box.find('.size-input').trigger('click');
   }
 
   load(sizes, force){

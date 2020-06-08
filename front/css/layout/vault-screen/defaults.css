@@ -55,7 +55,6 @@
 .main-bottom{
   flex: 1;
   height: max-content;
-  position: relative;
 }
 
 .sub-title{

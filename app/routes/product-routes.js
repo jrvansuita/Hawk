@@ -216,11 +216,9 @@ module.exports = class ProductRoutes extends Routes{
 
           var result = {};
           products.forEach((each) => {
-            if (each._Skus){
-              each._Skus.forEach((eachChild) => {
-                result[eachChild.codigo] = eachChild.gtin;
-              });
-            }
+            each?._Skus?.forEach((c) => {
+              result[c.codigo] = c.gtin;
+            });
           });
 
           res.render('product/board/product-list-export', {data: data, eans: result});
