@@ -74,7 +74,12 @@ $(document).ready(()=>{
     window.open('/product-multiple-imgs?skus=' + Object.keys(selectedSkus), '_blank');
   })
   .item('/img/print.png', 'Imprimir Relatório', (helper) => {
-    window.open('/product-list-export');
+    if(Object.keys(selectedSkus).length > 0){
+      window.open('/product-list-export?skus=' + Object.keys(selectedSkus));
+    }else{
+      window.open('/product-list-export');
+    }
+
   });
 });
 

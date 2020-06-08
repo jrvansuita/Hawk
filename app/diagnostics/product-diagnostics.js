@@ -2,8 +2,6 @@ const EccosysProvider = require('../eccosys/eccosys-provider.js');
 const Fix = require('../bean/fix.js');
 const Product = require('../bean/product.js');
 
-const Enum = require('../diagnostics/diagnostics-enum.js');
-
 module.exports = class ProductDiagnostics{
   constructor(){
     this.productsAnalyzed = 0;

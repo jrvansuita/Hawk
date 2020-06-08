@@ -2,11 +2,12 @@ const EccosysStorer = require('../../eccosys/eccosys-storer.js');
 const EccosysProvider = require('../../eccosys/eccosys-provider.js');
 const AttributesHandler = require('./attributes.js');
 const ProductBinder = require('./binder.js');
+const Product = require('../../bean/product.js');
 
 module.exports = class ProductStorer{
   constructor(){
     this.provider = new EccosysProvider();
-    this.storer = new EccosysStorer(false);
+    this.storer = new EccosysStorer();
   }
 
   async with(user, data){
@@ -21,61 +22,39 @@ module.exports = class ProductStorer{
 
   setOnFinished(callback){
     this.onFinishListener = () => {
-      console.log('Terminate');
+      this._sendBroadcastMessage(this.fatherBody);
       callback();
     }
     return this;
   }
 
   upsert(){
-    //Father Handler
     this._onProductUpsert(this.fatherBody, () => {
-      //Childs Handler
-      this._handleChildsUpsert(process.env.IS_PRODUCTION);
+      this._handleChildsUpserts(() => {
+        this.onFinishListener();
+        this.syncUpsertedProduct(this.fatherBody);
+      });
     });
   }
 
-  _handleChildsUpsert(isProductionMode){
+  _handleChildsUpserts(callback){
     var childs = this.fatherBody.getChilds();
 
-    if (isProductionMode){
-      //Fastest Way
-      this._handleChildsSimultaneousUpserts(childs);
-    }else{
-      this._handleChildsIncrementalUpserts(childs);
-    }
-  }
-
-  _handleChildsIncrementalUpserts(childs){
     var incrementalUpserts = () => {
       if (childs.length){
         this._onChildProductUpsert(childs[0], () => {
           childs.shift(); incrementalUpserts();
         });
       }else{
-        this.onFinishListener();
+        callback();
       }
     }
 
     incrementalUpserts();
   }
 
-  _handleChildsSimultaneousUpserts(childs){
-    var simultaneousUpserts = () => {
-      var size = childs.length;
-
-      childs.forEach((each) => {
-        this._onChildProductUpsert(each, () => {
-          if (!--size) this.onFinishListener();
-        });
-      });
-    }
-
-    simultaneousUpserts();
-  }
-
   _onProductUpsert(data, callback){
-    console.log('Upsert ' + data.codigo);
+    this._sendBroadcastMessage(data, 'produto');
     this.storer.product().upsert(data.id == undefined, data).go(response => this._onStoringResponseHandler(data, response, callback));
   }
 
@@ -107,23 +86,71 @@ module.exports = class ProductStorer{
   _onStoringResponseHandler(data, response, callback){
     response = response.result || response;
 
-    console.log(response);
     if (response.success.length > 0){
       data.id = response.success[0].id;
       this._onAttributesHandler(data, callback);
     }else{
+      this._sendBroadcastMessage(null, null, response);
       this.onFinishListener(response);
     }
   }
 
   _onAttributesHandler(data, callback){
+    this._sendBroadcastMessage(data,'atributos do produto');
+
     new AttributesHandler().load(() => {
       var attrs =  ProductBinder.create(data).attrs();
-      this.storer.product(data.codigo).attrs().put(attrs).go(callback);
+
+      //Fast Callback
+      if (callback) callback();
+
+      this.storer.product(data.codigo).attrs().put(attrs).go(() => {
+        //Skip Waiting for this callback
+      });
+    });
+  }
+
+  syncUpsertedProduct(binder){
+    new Product(
+      binder.codigo,
+      binder.nome,
+      binder.Marca,
+      binder.urlEcommerce,
+      binder.imf,
+      binder.preco,
+      binder.precoDe,
+      binder.precoCusto,
+      binder.discount,
+      binder.Departamento,
+      binder.Genero,
+      binder.Cor,
+      0,
+      0,
+      true,
+      binder.faixa_de_idade,
+      binder['Coleção'],
+      binder.Estacao,
+      binder.Fabricante,
+      false,
+      binder.getChild('codigo').join(','),
+      binder.getChild('peso').join(',')
+    ).upsert((err, doc) => {
+      console.log(err);
+      console.log(doc);
     });
   }
 
   delete(callback){
     new EccosysStorer().product(this.fatherBody.codigo).delete().go(callback);
+  }
+
+  _sendBroadcastMessage(data, msg, error){
+    global.io.sockets.emit('storing-product', {
+      isLoading: !error && msg,
+      sku: data.codigo,
+      msg : msg ? (data.id ? 'Atualizando ' : 'Criando ') + msg + ' ' + data.codigo : null,
+      error: error,
+      success: !error && !msg
+    });
   }
 }

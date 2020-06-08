@@ -97,7 +97,7 @@ function requestProductChilds(){
         return e.codigo;
       });
 
-      _get('/product-skus', {skus:skus}, (childs)=>{
+      _get('/product-skus', {skus:skus, order: true}, (childs)=>{
         childs.forEach((child) => {
           buildChildSku(product, child);
         });
@@ -332,13 +332,13 @@ function buildTextCol(val){
 }
 
 function buildImgCol(path, title, addClass){
-  var $img = $('<img>').addClass('md-dots-icon').attr('src',path).attr('title',title);
+  var $img = $('<img>').addClass('icon').attr('src',path).attr('title',title);
 
   return buildCol($img).css('text-align', 'center');
 }
 
 function buildMenuOpt(){
-  var $menuD = $('<div>').addClass('md-dots-icon');
+  var $menuD = $('<div>').addClass('menu-dots');
 
   return buildCol($menuD).css('text-align', 'center');
 }

@@ -4,6 +4,7 @@
   "repository": "https://github.com/jrvansuita/Hawk.git",
   "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Red-tailed_Hawk.jpg/220px-Red-tailed_Hawk.jpg",
   "keywords": ["node", "express", "npm"],
-  "image": "heroku/nodejs"
+  "image": "heroku/nodejs",
+
 
 }

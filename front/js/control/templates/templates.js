@@ -33,7 +33,7 @@ $(document).ready(()=>{
   .useImageUploader()
   .useQuickInsert(true)
   .load('#editor').then((_editor) => {
-    editor = _editor;
+    window.editor = _editor;
 
     if (selected){
       editor.html.set(selected.content);
@@ -45,14 +45,14 @@ $(document).ready(()=>{
     saveClick();
   });
 
-  $(".each-template-line").click(function (){
-    goToTemplate($(this).data('id'));
+  $(".each-line").click(function (){
+    goTo($(this).data('id'));
   });
 
   openOptionsMenu();
 
   $('.add-new').click(() => {
-    goToTemplate(null);
+    goTo(null);
   });
 });
 
@@ -66,7 +66,7 @@ function saveClick(){
 
 
 function checkFields(){
-  return checkMaterialInput($('#template-name'));
+  return checkMaterialInput($('#name'));
 }
 
 
@@ -77,7 +77,7 @@ function getUsage(){
 function save() {
   var data = {
     id: selected.id,
-    name: $('#template-name').val(),
+    name: $('#name').val(),
     subject: $('#subject').val(),
     content:  editor.html.get(),
     usage: getUsage(),
@@ -85,7 +85,7 @@ function save() {
   };
 
   _post('template', data , (id)=>{
-    goToTemplate(id);
+    goTo(id);
   },(error, message)=>{
     console.log(error);
   });
@@ -98,18 +98,18 @@ function openOptionsMenu(line, e){
       window.open('templates-viewer?id=' + helper.data.id, '_blank');
     })
     .item('../img/duplicate.png', 'Duplicar', (helper) => {
-      duplicateTemplate(helper.data.id);
+      duplicateItem(helper.data.id);
     })
     .item('../img/delete.png', 'Excluir', (helper) => {
       if (checkCanDelete(helper.data.id)){
-        deleteTemplate(helper.data.id);
+        deleteItem(helper.data.id);
       }
     });
   });
 }
 
 function checkCanDelete(id){
-  var el = $(".each-template-line[data-id='"+id+"']").find('.active-circle');
+  var el = $(".each-line[data-id='"+id+"']").find('.active-circle');
 
   if (el.length){
     var tooltip = tooltips.find((e) => {
@@ -124,22 +124,22 @@ function checkCanDelete(id){
   return true;
 }
 
-function deleteTemplate(id){
+function deleteItem(id){
   _post('/template-delete',{id: id}, () => {
-    var line = $(".each-template-line[data-id='"+id+"']");
+    var line = $(".each-line[data-id='"+id+"']");
     line.fadeOut(200, () => {
       line.remove();
     })
   });
 }
 
-function duplicateTemplate(id){
+function duplicateItem(id){
   _post('/template-duplicate',{id: id}, (data) => {
-    goToTemplate(data.id);
+    goTo(data.id);
   });
 }
 
 
-function goToTemplate(id){
+function goTo(id){
   window.location= location.pathname + (id ? '?id=' + id : '');
 }

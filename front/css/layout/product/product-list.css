@@ -242,7 +242,7 @@ img.dots-glyph {
 }
 
 :checked+label:before {
-  content: url('../../img/checked.png');
+  content: url('../../../img/checked.png');
   transform: scale(0.60);
   z-index: 2;
 }
@@ -258,4 +258,8 @@ img.dots-glyph {
   color: white !important;
   padding: 6px;
   border: 0 !important;
+}
+
+.menu-dots{
+  margin: auto 5px auto auto;
 }

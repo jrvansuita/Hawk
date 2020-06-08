@@ -50,7 +50,6 @@ class StockDash extends DashboardProvider.Helper{
   }
 
   rolling(rows){
-    console.log(rows);
     this.total = 0;
     this.items = 0;
     this.cost = 0;

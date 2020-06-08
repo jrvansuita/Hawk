@@ -1,6 +1,6 @@
 
 var app = global.app;
-const Routes = require('../redirects/controller/routes.js');
+const Routes = require('../routes/_route.js');
 
 //Keep a user variable for session in all ejs
 //Redirect if no user is logged-in
@@ -61,11 +61,12 @@ routes.push('pictures-routes.js');
 routes.push('template-routes.js');
 routes.push('images-routes.js');
 routes.push('customer-routes.js');
+routes.push('enumerator-routes.js');
 
 
 // -- Run Routes -- //
 routes.forEach((r)=>{
-  var Clazz = require('../redirects/' + r);
+  var Clazz = require('../routes/' + r);
   new Clazz(app).attach();
 });
 

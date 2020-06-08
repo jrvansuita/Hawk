@@ -1,35 +1,33 @@
+const MEM_TAG = 'LOCKED-VALUE';
+var lockedValues;
 var refreshBroadcast;
+var storingBroadcast;
 var childsBuilder;
 var sizesBox;
 
 $(document).ready(() => {
-  //product = Util.keepPrimitiveAttrs(product);
-  onBindViewValues();
-
-  refreshBroadcast = new Broadcast('post-refresh-storing-product').onReceive(onProductRefreshed).emit(product);
-  sizesBox = new SizesBox($('.sizes-box')).startCache();
-  childsBuilder = new ChildsBuilder($('.childs')).setOnChange(function (){
-    product._Skus.forEach((each) => {
-      if (each.codigo == $(this).data('sku')){
-        each[$(this).data('tag')] = $(this).val();
-        each.active = true;
-      }
-    });
-  });
-
-  onBindComboBoxes();
-  onBindSizeBoxListeners();
-  onBindViewsListeners();
-  onInitilizeScreenControls()
-  requestProductChilds();
+  onCreate(); onRefresh();
 });
+
+//Call one time
+function onCreate(){
+  onBindViewsListeners();
+  onBindComboBoxes();
+  onCreateSizeGroupButtons();
+}
+
+//Call every new product
+function onRefresh(){
+  onInitializeLockedValues();
+  onInitilizeScreenControls();
+  requestProductChilds();
+}
 
 function bindComboBox(el, data, limit){
   var url = typeof data == 'string' ? '/stock/storer-attr?attr='+ data : data;
 
   new ComboBox(el, url)
   .setAutoShowOptions(true)
-  .callOnChangeEventBySelecting(true)
   .setLimit(limit)
   .setOnItemBuild((item, index)=>{
     return {text : item.description.trim(), value: item.value};
@@ -37,32 +35,40 @@ function bindComboBox(el, data, limit){
 }
 
 function onBindViewsListeners(){
-  $('.save').click(() => { onStoreProduct() });
-  $('.delete').click(() => { _post('/stock/storer-delete', getData(), (data) => { onProductDeleted(data); }) });
+  $('.save').click(onStoreProduct);
+  $('.delete').click(onProductDeleted);
+  $('.new').click(onNewProduct);
 
   $("input[type='text']").on("click", function () {
     $(this).select();
   });
 
-  $('.money').change(function () {
-    $(this).val(Num.money(Num.moneyVal($(this).val())));
+
+  if (!product.id){
+    $('.lockable').keypress(function(e) {
+      if(e.which == 13) toggleLockIcon($(this));
+    });
+
+    $('.lockable').blur(function (){
+      toogleComboBoxValue($(this));
+    });
+
+    $('.child-lockable').click(function() {
+      handleChildLockClick($(this));
+    });
+  }
+
+  $('.bindable').blur(function () {
+    var key = $(this).data('post') || $(this).data('bind');
+    product[key] = $(this).val();
   });
 
-  $('.bindable').change(function () {
-    product[$(this).data('bind')] = $(this).val();
+  $('.call-refresh').blur(function () {
+    if ($(this).val() != $(this).data('last')){
+      $(this).data('last', $(this).val());
+      refreshBroadcast.emit(getData());
+    }
   });
-
-  $('.size-group-button').click(function () {
-    product.faixa_de_idade = $(this).data('val');
-    refreshBroadcast.emit(getData());
-  }).keypress(function(e) {
-    if(e.which == 13) $(this).click()
-  });
-
-  $('.call-refresh').change(function () {
-    refreshBroadcast.emit(getData());
-  });
-
 
   $('#sku').keypress(function(e) {
     if(e.which == 13) window.location.href = window.location.origin + window.location.pathname + '?sku=' + $(this).val();
@@ -70,20 +76,33 @@ function onBindViewsListeners(){
 
   Dropdown.on($('.sizes-dots'))
   .item('/img/delete.png', 'Remover Todos', function(){
-    $('.sizes-box').empty();
+    sizesBox.clear();
   });
 
   new TemplateEditor()
   .useUnicodeEmoticons(true)
   .showRichButtons(false)
-  .load('.description-editor').then((_editor) => {
-    window.editor = _editor;
-    onBindDetailsDescriptions();
+  .addMiscCustomButton('insertFile', 'def-template', 'Inserir Descricao Padrão', (editor) => {
+    _get('/templates-viewer?id=89017302', {}, (r) => {
+      editor.html.set(r);
+    });
+  })
+  .load('.description-editor').then((data) => {
+    window.editor = data;
+    window.editor.html.set(product.conteudo);
   });
 }
 
 function onInitilizeScreenControls(){
   $('.delete').toggle(product.id != undefined);
+
+  refreshBroadcast = new Broadcast('refresh-product').onReceive(onProductRefreshed).emit(product);
+  storingBroadcast = new Broadcast('storing-product').onReceive(onStoringMessageUpdate);
+
+  sizesBox = new SizesBox($('.sizes-box')).startCache();
+  childsBuilder = new ChildsBuilder($('.childs')).setDefaultOnChange().setMemoryData(product.id ? null : lockedValues?.screen);
+
+  onBindSizeBoxListeners();
 }
 
 function onBindViewValues(){
@@ -93,22 +112,13 @@ function onBindViewValues(){
       if(val){
         if($(each).hasClass('money')){
           $(each).val(Num.money(Floa.floa(val)));
+        }else if($(each).hasClass('float')){
+          $(each).val(Floa.abs(Floa.def(val, 0),2));
         }else{
           $(each).val(val);
         }
       }
     });
-
-    //Exceptions Handling
-    if (product.precoCusto && product.preco){
-      $('#markup').val(Floa.abs(Floa.floa(product.preco)/Floa.floa(product.precoCusto),2));
-    }
-  }
-}
-
-function onBindDetailsDescriptions(){
-  if (product.conteudo){
-    if (window.editor) window.editor.html.set(product.conteudo);
   }
 }
 
@@ -117,19 +127,16 @@ function onBindComboBoxes(){
     bindComboBox($(each), $(each).data('bind'));
   });
 
-
-  bindComboBox($('input[data-bind="cf"]'),  getNcmOptions());
+  new ComboBox($('input[data-bind="cf"]'))
+  .setAutoShowOptions(true)
+  .fromEnum('NCM')
+  .load();
 }
 
 function getData(){
-  product.markup = $('#markup').val();
   product.precoCusto = Num.moneyVal($('#cost').val());
   product.conteudo = editor.html.get();
   product.user = loggedUser;
-
-  if (product.nome && !product.uniqNamePart){
-    product.uniqNamePart = product.nome;
-  }
 
   return product;
 }
@@ -138,18 +145,27 @@ function onProductRefreshed(data){
   product = data;
   onBindViewValues();
   onSizesRefreshed();
+  onOtherBindingRules();
+
+  setTimeout(() => {
+    $('.material-input-holder>label').removeClass('no-transition');
+  },100);
 }
 
-function onSizesRefreshed(data){
-
-  if (product.sizes.join() != childsBuilder.getSizes().join()){
-    sizesBox.refresh(product.sizes);
+function onSizesRefreshed(){
+  if (product._Skus){
+    sizesBox.load(product.sizes);
+    childsBuilder.load(product._Skus);
   }
 
-  if (product.faixa_de_idade){
+  if (product.selectedSizeGroup){
     $('.size-group-button').removeClass('active');
-    $('.size-group-button[data-val="'+product.faixa_de_idade+'"]').addClass('active');
+    $('.size-group-button[data-arr*="'+product.selectedSizeGroup+'"]').addClass('active');
   }
+}
+
+function onOtherBindingRules(){
+  $('.discount').text(Num.percent(product.discount, true));
 }
 
 function requestProductChilds(){
@@ -158,8 +174,8 @@ function requestProductChilds(){
       return e.codigo;
     });
 
-    _get('/product-skus', {skus:skus}, (childs)=>{
-      childsBuilder.loadChilds(childs);
+    _get('/product-skus', {skus:skus, order: true}, (childs)=>{
+      childsBuilder.load(childs, true);
     });
   }
 }
@@ -173,7 +189,7 @@ function onBindSizeBoxListeners(){
     console.log('Size Created: ' + size);
     var sku = getSku(size);
 
-    var found = product._Skus.find(function(i){
+    var found = product?._Skus?.find(function(i){
       return i.codigo == sku;
     });
 
@@ -181,7 +197,7 @@ function onBindSizeBoxListeners(){
 
     if (!found){
       item.gtin = Util.barcode();
-      product._Skus.push(item);
+      product._Skus = [].concat(product._Skus, item).filter(Boolean);
     }
 
     childsBuilder.addChild(item);
@@ -205,25 +221,38 @@ function onBindSizeBoxListeners(){
   });
 }
 
-function onStoreProduct(){
+function onStoringMessageUpdate(data){
   $('.loading-holder').show();
-  $('.loading-msg').text('Salvarando ' + product.codigo);
 
+  if (data.error){
+    $('.loading-circle').attr('src', '/img/error.png');
+  }else if (!data.isLoading){
+    $('.loading-circle').attr('src', '/img/checked.png');
+  }
+
+  $('.loading-msg').text(data.msg || data.error || 'Processo Finalizado!');
+}
+
+function onStoreProduct(){
   _post('/stock/storer-upsert', getData(), (data) => { onProductStored(data); });
 }
 
 function onProductStored(data){
-  $('.loading-holder').hide();
   putSkuUrlParams();
 
-  if (!product.id){
+  setTimeout(() => {
+    $('.loading-holder').hide();
     window.location.reload();
-  }
+  },1500);
 }
 
 function onProductDeleted(){
+  _post('/stock/storer-delete', getData(), (data) => { console.log('Deletou');});
+}
 
 
+function onNewProduct(){
+  window.location.href = location.origin + location.pathname;
 }
 
 function putSkuUrlParams(){
@@ -232,13 +261,102 @@ function putSkuUrlParams(){
   }
 }
 
-function getNcmOptions(){
-  var ncms = [];
-  ncms.push({description: '6111.20.00 - Vestuário', value : '6111.20.00'});
-  ncms.push({description: '6402.99.90 - Calçados', value : '6402.99.90'});
-  ncms.push({description: '8715.00.00 - Carrinho de Bebê', value : '8715.00.00'});
-  ncms.push({description: '3926.90.90 - Plásticos', value : '3926.90.90'});
-  ncms.push({description: '6217.10.00 - Acessórios de Tecido', value : '6217.10.00'});
-  ncms.push({description: '4202.22.20 - Bolsas e Mochilas', value : '4202.22.20'});
-  return ncms;
+function toogleComboBoxValue(el){
+  var key = el.data('bind');
+  var val = el.val();
+
+  toggleLockedValue('data', key, val, el.hasClass('locked') && val);
+}
+
+function toggleLockedValue(path, key, val, toggle){
+  lockedValues[path] = lockedValues[path] || {};
+
+  if (toggle){
+    lockedValues[path][key] = val;
+  }else{
+    delete lockedValues[path][key];
+  }
+
+  Local.put(MEM_TAG, lockedValues);
+}
+
+function toggleLockIcon(el){
+  var lockIcon = el.siblings('label')
+  el.toggleClass('locked' + (!lockIcon.length ? ' lock-icon' : ''));
+
+  if (lockIcon.length){
+    lockIcon.toggleClass('lock-icon');
+  }
+}
+
+function onInitializeLockedValues(){
+  if (!product.id){
+    $('.material-input-holder>label').addClass('no-transition');
+
+    lockedValues = Local.get(MEM_TAG);
+    Util.forProperty(lockedValues.data, (val, key) => {
+      product[key] = val;
+      toggleLockIcon($('input[data-bind="' + key + '"]').val(val));
+    });
+
+    $('.child-lockable').each((i, each) => {
+      if (lockedValues?.screen?.[$(each).data('bind')]){
+        toggleLockIcon($(each));
+      }
+    });
+  }
+}
+
+function handleChildLockClick(col){
+  var key = col.data('bind');
+  var has = !col.hasClass('locked');
+
+  toggleLockedValue('screen', key, has, has);
+
+  $('input[data-tag="'+key+'"]').each((i, each) => {
+    toggleLockedValue('screen', key + '-' + $(each).data('size'), $(each).val(), has);
+  });
+
+  toggleLockIcon(col);
+}
+
+
+function onCreateSizeGroupButtons(){
+  if (!product.id){
+    _get('/enum',{tag:'PROD-FA-SIZES'}, (data) => {
+      var buttons = data.items.reduce((o, each) => {
+        key=Str.keep(each.name);
+        o[key] = [].concat(o[key], each.name).filter(Boolean);
+        return o;
+      }, {});
+
+      Object.keys(buttons).forEach((key) => {
+        var l = $('<label>').addClass('size-group-button').attr('data-arr', buttons[key].reverse())
+        .attr('tabindex', '0')
+        .append(key)
+        .click(function () {
+          onSizeGrupoButtonClick(this);
+        }).keypress(function(e) {
+          if(e.which == 13) $(this).click()
+        });
+
+        $('.size-group-buttons-holder').prepend(l);
+      });
+    })
+  }
+}
+
+
+function onSizeGrupoButtonClick(button){
+  var arr = $(button).data('arr').split(',');
+  current = $(button).data('curr') || 0;
+
+  if (arr[current] != product.selectedSizeGroup){
+    sizesBox.clear();
+
+    product.selectedSizeGroup = arr[current];
+    $(button).text(arr[current]);
+    $(button).data('curr', arr.length-1 == current ? 0 : ++current);
+    refreshBroadcast.emit(getData());
+  }
 }

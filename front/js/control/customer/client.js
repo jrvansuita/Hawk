@@ -112,7 +112,7 @@ function showSaleDialog(sale){
 }
 
 function bindClientResume(){
-  if(client.length){
+  if(client?.sales?.length){
     $('.client-resume-sales').text(client.sales.length);
 
     var tm = client.sales.reduce((value, sale) => {

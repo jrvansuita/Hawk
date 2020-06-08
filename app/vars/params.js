@@ -150,6 +150,10 @@ var Params = {
     return this.get('tracking-url');
   },
 
+  trackingUrlExt(){
+    return this.get('tracking-url-ext');
+  },
+
   getResponseSecret(){
     return this.get('getresponse-key');
   },

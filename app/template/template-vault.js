@@ -1,7 +1,7 @@
 
 const Template = require('../bean/template.js');
 
-module.exports = class TemplateHandler {
+module.exports = class {
 
   static storeFromScreen(params, callback) {
 

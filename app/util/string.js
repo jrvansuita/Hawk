@@ -12,6 +12,10 @@ var Str = {
     return str.replace(/\n/g,' ').split(left).pop().split(right)[0];
   },
 
+  keep(v){
+    return v.replace(/[^A-zÀ-ú]+/g, '');
+  },
+
   short: function(val, max) {
     var result = val.slice(0, max);
     return result + ((result.length !== val.length) ? '...' : '');

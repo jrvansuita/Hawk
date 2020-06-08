@@ -16,7 +16,7 @@
   <script type="text/javascript" src="/front/js/libs/socket.io.slim.js"></script>
   <script type="text/javascript" src="/front/js/libs/broadcast.js"></script>
 
-
+  <script type="text/javascript" src="/util/local.js"></script>
   <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
   <script type="text/javascript" src="/front/js/libs/input-dialog.js"></script>
   <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
@@ -37,14 +37,14 @@
 
 
       <div class="box shadow image-holder" style="flex: 20%;">
-        <img src="<%=product.img && product.img.url ? product.img.image : '/img/product-placeholder.png'%>" />
+        <img src="<%=product?.img?.image || '/img/product-placeholder.png'%>"  onerror="this.src='/img/product-placeholder.png'"/>
       </div>
 
       <div class="box shadow" style="flex: 60%;">
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input type="text" class="bindable" data-bind="nome" maxlength="500" autocomplete="off" required tabindex="0"/>
+            <input type="text" class="bindable" data-bind="nome" data-post="postName" maxlength="500" autocomplete="off" required tabindex="0"/>
             <span class="bar"></span>
             <label>Nome</label>
           </div>
@@ -52,26 +52,26 @@
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input type="text" class="call-refresh bindable combobox" data-bind="Departamento" maxlength="100"  autocomplete="off" tabindex="0"  required/>
+            <input type="text" class="call-refresh bindable lockable combobox" data-bind="Departamento" maxlength="100"  autocomplete="off" tabindex="0"  required/>
             <span class="bar"></span>
             <label>Categoria</label>
           </div>
 
           <div class="material-input-holder">
-            <input type="text" class="call-refresh bindable combobox" data-bind="Material" maxlength="50"  autocomplete="off" tabindex="0" required/>
+            <input type="text" class="call-refresh bindable lockable combobox" data-bind="Material" maxlength="50"  autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>Material</label>
           </div>
 
           <div class="material-input-holder">
-            <input type="text" class="call-refresh bindable combobox" data-bind="Cor" maxlength="150" autocomplete="off" tabindex="0" required/>
+            <input type="text" class="call-refresh bindable lockable combobox" data-bind="Cor" maxlength="150" autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>Cor</label>
           </div>
 
 
           <div class="material-input-holder">
-            <input type="text" class="bindable combobox" data-bind="Coleção" maxlength="5"  autocomplete="off" tabindex="0"  required/>
+            <input type="text" class="bindable lockable combobox" data-bind="Coleção" maxlength="5"  autocomplete="off" tabindex="0"  required/>
             <span class="bar"></span>
             <label>Coleção</label>
           </div>
@@ -80,26 +80,26 @@
         <div class="flex-line">
 
           <div class="material-input-holder">
-            <input type="text" class="bindable combobox" data-bind="Genero" maxlength="30"  autocomplete="off" tabindex="0" required/>
+            <input type="text" class="bindable lockable combobox" data-bind="Genero" maxlength="30"  autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>Gênero</label>
           </div>
 
           <div class="material-input-holder">
-            <input type="text" class="bindable combobox" data-bind="Estacao" maxlength="30"  autocomplete="off" tabindex="0" required/>
+            <input type="text" class="bindable lockable combobox" data-bind="Estacao" maxlength="30"  autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>Estação</label>
           </div>
 
 
           <div class="material-input-holder">
-            <input type="text" class="bindable combobox" data-bind="Ocasiao" maxlength="30"  autocomplete="off" tabindex="0" required/>
+            <input type="text" class="bindable lockable combobox" data-bind="Ocasiao" maxlength="30"  autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>Ocasião</label>
           </div>
 
           <div class="material-input-holder">
-            <input type="text" class="bindable" data-bind="cf" maxlength="15" autocomplete="off" tabindex="0" required/>
+            <input type="text" class="bindable lockable" lockable data-bind="cf" maxlength="15" autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>NCM</label>
           </div>
@@ -110,7 +110,7 @@
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input id="sku" type="text" class="bindable" data-bind="codigo" maxlength="20" autocomplete="off" tabindex="-1" required/>
+            <input id="sku" type="text" class="bindable" data-bind="codigo" data-post="postSku" maxlength="20" autocomplete="off" tabindex="-1" required/>
             <span class="bar"></span>
             <label>SKU</label>
           </div>
@@ -118,7 +118,7 @@
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input type="text" class="bindable combobox" data-bind="Fabricante" maxlength="50" autocomplete="off" tabindex="0" required/>
+            <input type="text" class="bindable lockable combobox" data-bind="Fabricante" maxlength="50" autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>Fabricante</label>
           </div>
@@ -126,7 +126,7 @@
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input type="text" class="call-refresh bindable combobox" data-bind="Marca" maxlength="50"  autocomplete="off" tabindex="0" required/>
+            <input type="text" class="call-refresh lockable bindable combobox" data-bind="Marca" maxlength="50"  autocomplete="off" tabindex="0" required/>
             <span class="bar"></span>
             <label>Marca</label>
           </div>
@@ -140,18 +140,18 @@
     <div class="row">
 
       <div class="box shadow relative-inputs" style="flex: 10%;">
-
+        <span class="title price-title"> <span class="discount right"></span> </span>
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input type="text" id="cost" class="money bindable call-refresh" data-bind="precoCusto" type="text"  maxlength="50"  autocomplete="off" tabindex="0"
+            <input type="text" id="cost" class="money lockable bindable call-refresh" data-bind="precoCusto" type="text"  maxlength="13"  autocomplete="off" tabindex="0"
             value="R$ 0,00" onkeypress="return Floa.isFloatKey(event);"  required/>
             <span class="bar"></span>
             <label>Custo</label>
           </div>
 
           <div class="material-input-holder">
-            <input type="text" id="markup" class="call-refresh" maxlength="50"  autocomplete="off" tabindex="0" onkeypress="return Floa.isFloatKey(event);" required/>
+            <input type="text" id="markup" class="float lockable bindable call-refresh" data-bind="markup" maxlength="4"  autocomplete="off" tabindex="0" onkeypress="return Floa.isFloatKey(event);" required/>
             <span class="bar"></span>
             <label>Markup</label>
           </div>
@@ -175,11 +175,9 @@
       </div>
 
       <div class="box shadow" style="flex: 50%;">
-        <span class="title">Tamanhos<span class="right">
-          <label class="size-group-button" data-val="Bebe" tabindex="0">Bebe</label>
-          <label class="size-group-button" data-val="Primeiros Passos" tabindex="0">Prim. Passos</label>
-          <label class="size-group-button" data-val="Kids" tabindex="0">Infantil</label>
-          <label class="size-group-button" data-val="Juvenil" tabindex="0">Juvenil</label>
+        <span class="title">Tamanhos
+
+          <span class="size-group-buttons-holder right">
 
           <div class="sizes-dots"></div>
 
@@ -217,10 +215,10 @@
         <tr class="header">
           <td>SKU</td>
           <td>EAN</td>
-          <td>Peso (kg) </td>
-          <td>Largura (cm) </td>
-          <td>Altura (cm) </td>
-          <td>Comprimento (cm) </td>
+          <td class="child-lockable" data-bind="peso">Peso (kg) </td>
+          <td class="child-lockable" data-bind="largura">Largura (cm) </td>
+          <td class="child-lockable" data-bind="altura">Altura (cm) </td>
+          <td class="child-lockable" data-bind="comprimento">Comprimento (cm) </td>
         </tr>
 
       </table>
@@ -238,8 +236,11 @@
       </div>
 
       <div class="buttons-holder">
+
         <label class="button save shadow">Salvar</label>
+        <label class="button new shadow">Novo</label>
         <label class="button delete shadow">Excluir</label>
+
       </div>
     </div>
   </div>

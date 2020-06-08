@@ -1,19 +1,17 @@
 const Product = require('../bean/product.js');
 const Fix = require('../bean/fix.js');
+const Enum = require('../bean/enumerator.js');
+
+
 
 
 module.exports = class DiagnosticsProvider{
-  constructor(){
-
-  }
-
 
   groupType(data){
     var grouped = {};
 
     data.forEach((item)=>{
       var skuFather = item.sku.split('-')[0];
-
 
       if (!grouped[skuFather]){
         var isChild = item.sku.includes('-');
@@ -72,8 +70,10 @@ module.exports = class DiagnosticsProvider{
   }
 
   sums(callback){
-    Fix.sums((err, res)=>{
-      callback(res);
+    Fix.sums((err, data)=>{
+      Enum.getKeyItems('PROD-DIAG', (types) => {
+        callback(data, types);
+      });
     });
   }
 

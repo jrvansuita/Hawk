@@ -1,0 +1,96 @@
+
+<html>
+<%  include ../menus/main-menu %>
+<head>
+  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/vault-screen/defaults.css">
+  <link rel="stylesheet" type="text/css" href="/front/css/layout/vault-screen/enumerators.css">
+
+  <script type="text/javascript" src="/front/js/control/enumerators/enumerators.js"></script>
+  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+  <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
+  <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
+  <script type="text/javascript" src="/front/js/libs/tooltip.js"></script>
+</head>
+<body>
+
+  <div class="main-content">
+    <div class="panels">
+      <div class="left-panel shadow">
+
+        <label class="sub-title left">Enumeradores<img src="img/plus-gray.png" class="add-new mini-icon-button"> </label>
+
+        <div class="enumerators-holder">
+          <%
+          all.forEach((each)=>{
+            %>
+            <div class="each-line <%=selected.id == each.id ? 'active' : ''%> " data-id="<%=each.id%>">
+              <span><%=each.name%> <label><%=each.tag%></label></span>
+              <div class="icon-dots" data-id="<%=each.id%>"></div>
+            </div>
+            <%});%>
+          </div>
+        </div>
+
+        <div class="main-panel shadow">
+          <div class="main-top">
+
+            <div class="row">
+
+              <div class="material-input-holder short">
+                <input type="text" id="name" value="<%=selected.name%>" autocomplete="off" required/>
+                <span class="bar"></span>
+                <label>Nome</label>
+              </div>
+
+
+              <div class="material-input-holder short">
+                <input type="text" id="tag" value="<%=selected.tag %>" autocomplete="off" required/>
+                <span class="bar"></span>
+                <label>Tag</label>
+              </div>
+
+              <label class="button save shadow">Salvar</label>
+            </div>
+
+
+
+            <div class="row">
+              <div class="material-input-holder">
+                <input type="text" id="explanation"  value="<%=selected.explanation%>" autocomplete="off" required/>
+                <span class="bar"></span>
+                <label>Explicação</label>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="main-bottom">
+
+            <div class="enum-items-board">
+              <table class="enum-items">
+                <tr class="title">
+                  <td></td>
+                  <td>Icone</td>
+                  <td>Descrição</td>
+                  <td>Nome</td>
+                  <td>Valor</td>
+                </tr>
+              </table>
+            </div>
+
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script class="hidable-script">
+    window.selected = <%- JSON.stringify(selected || {}) %>
+    </script>
+
+
+  </body>
+  </html>

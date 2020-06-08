@@ -2,18 +2,6 @@ $(document).ready(() => {
   allDiv();
 
 });
-/*
-function itemCondition(callback){
-
-data.forEach((item) => {
-if(){
-$('.all').remove();
-}
-});
-callback(this);
-}
-
-*/
 
 function allDiv(){
   $(".child-item").each(function(){

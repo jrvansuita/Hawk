@@ -52,7 +52,8 @@
   /* z-index: 9999; */
 }
 
-.md-dots-icon{
+
+/*.md-dots-icon{
   width: 15px;
   margin-right: -5px;
   margin-left: 5px;
@@ -60,7 +61,7 @@
   padding: 3px;
   display: inline-flex;
   margin-top: -3px;
-}
+}*/
 
 .md-dots-icon:not(.greater-icon):hover {
   background-color: #dcdcdc73;

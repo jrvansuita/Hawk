@@ -9,16 +9,16 @@ module.exports = class AttributesHandler {
     return CacheAttrs.isCached();
   }
 
-  filter(description, option){
+  filter(description, options){
     this.descriptionOrTag = description;
-    this.option = option;
+    this.options = options;
 
     return this;
   }
 
   get(){
     if (this.isCached()){
-      return CacheAttrs.filter(this.descriptionOrTag, this.option);
+      return CacheAttrs.filter(this.descriptionOrTag, this.options);
     }else{
       return undefined;
     }
@@ -45,14 +45,14 @@ var CacheAttrs = {
     return this.cache != undefined;
   },
 
-  filter(name, option){
+  filter(name, options){
     if (name){
 
       var data = this.cache[name] || this.cache[this.map[name]];
 
-      if (option && Arr.is(data)){
-        return data.find((each) => {
-          return each.description == option;
+      if (options && Arr.is(data)){
+        return data.filter((each) => {
+          return options.includes(each.description);
         });
       }
 
@@ -67,12 +67,16 @@ var CacheAttrs = {
     var _map = {};
 
     data.forEach((each) => {
+      each.descricao = each.descricao.trim();
       _map[each.idExterno] = each.descricao;
       var options = each._Opcoes ? each._Opcoes[0] : null;
 
       if (options){
-        _cache[each.descricao] = Object.keys(options).map((key) => {
-          return {id: key, idAttr: each.id, tag: each.idExterno, description: options[key]};
+        //Remove duplicates
+        options = Object.fromEntries(Object.entries(options).map(a => {a[1] = a[1].trim(); return a.reverse()}))
+
+        _cache[each.descricao] = Object.keys(options).map((value) => {
+          return {id: options[value], idAttr: each.id, tag: each.idExterno, description: value};
         });
       }else{
         _cache[each.descricao] = each;

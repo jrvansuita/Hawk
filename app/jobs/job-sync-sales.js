@@ -12,6 +12,7 @@ module.exports = class JobSyncSales extends Job{
   handleEach(saleRow, next){
     new SaleKeeper(saleRow.numeroPedido)
     .setOnError((err) => {
+      console.log(err);
       this.onError(err);
     })
     .save(next);

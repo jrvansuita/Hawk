@@ -306,11 +306,11 @@ function bindSaleItens(data){
     }
 
     Dropdown.on($('.transport-dots')).item('/img/transport/default.png', 'Rastreio', function(){
-      window.open(Params.trackingUrl() + data.oc);
+      window.open(Params.trackingUrlExt() + data.oc);
     }).item('/img/envelop.png', 'Enviar Rastreio por Email', function(helper){
       helper.loading(true);
 
-      _post('/customer-email-tracking',{ cliente: data.client, oc: data.oc, tracking: Params.trackingUrl() + data.oc, userid: loggedUser.id }, (result) => {
+      _post('/customer-email-tracking',{ cliente: data.client, oc: data.oc, tracking: Params.trackingUrlExt() + data.oc, userid: loggedUser.id }, (result) => {
         helper.finished(result);
       });
     });
@@ -320,7 +320,7 @@ function bindSaleItens(data){
     if(data.nf != null){
       drop.item('/img/envelop.png', 'Enviar NF', (helper) => {
         helper.loading(true);
-        
+
         _post('/customer-email-danfe',{ cliente: data.client, oc: data.oc, nfNumber: data.nf, userid: loggedUser.id }, (result) => {
           helper.finished(result);
         });

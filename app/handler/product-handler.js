@@ -25,10 +25,15 @@ module.exports ={
     });
   },
 
-  getSkus(skus, callback){
+  getSkus(skus, idOrder, callback){
     new EccosysProvider(false).skus(skus).go((products)=>{
+      if (idOrder){
+        products.sort((a, b)=>{
+          return parseInt(a.id) - parseInt(b.id);
+        });
+      }
+
       callback(products);
-      //handleCallback(callback, products);
     });
   },
 

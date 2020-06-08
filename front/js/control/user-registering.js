@@ -78,7 +78,8 @@ $(document).ready(() => {
   });
 
 
-  new ComboBox($('#title'), ["Admnistração", "Atendimento", "Conferência", "Reposição", "Pendência", "Devolução", "Picking", "Packing"])
+  new ComboBox($('#title'))
+  .fromEnum('EMP-GROUPS')
   .setAutoShowOptions()
   .load();
 
@@ -212,94 +213,73 @@ function showAvatarCropper(){
 
   function loadSetts(){
     if (loggedUser.full){
-      _get('/get-setts', {}, (all)=>{
-        $('.settings').empty();
 
-        var groups = buildSettsGroups(all, ['Geral', 'Picking', 'Packing', 'Estoque', 'Pendências', 'Performance', 'Horario']);
+      $('.settings').empty();
 
-        for (var i = 0; i < groups.length; i++) {
-          showGroup(groups[i]);
-        }
+      _get('/enum?tag=USER-PERM',{},(data) => {
+        data = data.items.reduce((o, each) => {
+          o[each.description] = [].concat(o[each.description], each).filter(Boolean);
+          return o;
+        },{});
+
+        Object.keys(data).sort().forEach((key) => {
+          showGroup(key, data[key]);
+        });
       });
     }
   }
 
-  function buildSettsGroups(groups, titles){
-    var result = [];
-    for (var i = 0; i < titles.length; i++) {
-      result.push(buildCurrentGroup(groups, i, titles));
-    }
-    return result;
+  function showGroup(title, items){
+    var $div = $('<div>').addClass('setts-group');
+    var $title = $('<span>').addClass('setts-group-title').text(title);
+    $div.append($title);
+
+    items.forEach((each)=>{
+      $div.append(createCheckBox(each));
+    });
+
+    $('.settings').append($div);
   }
 
-  function buildCurrentGroup(groups, index, titles){
-    return {arr : getGroupSetts(index, groups),
-      title: titles[index]};
+  function createCheckboxElement(index, id, name, checked, disabled){
+    var holder = $('<label>').addClass('pure-material-checkbox').attr('title', index);
+    var input = $('<input>').attr('type', 'checkbox').attr('name', id);
+    var title = $('<span>').text(name).attr('title', index);
+
+    if (checked){
+      input.attr('checked', 'checked');
     }
 
-
-    function getGroupSetts(groupNum, arr){
-      return arr.filter((i)=>{
-        return i.group == groupNum;
-      });
+    if (disabled){
+      input.attr('disabled', 'disabled');
     }
 
+    holder.append(input, title);
 
-    function showGroup(group){
-      var $div = $('<div>').addClass('setts-group');
-      var $title = $('<span>').addClass('setts-group-title').text(group.title);
-      $div.append($title);
+    return holder;
+  }
 
-      group.arr.forEach((each)=>{
-        if (each.type == 0){
-          $div.append(createCheckBox(each));
-        }
 
-      });
+  function createCheckBox(settItem){
+    var div = $('<div>').addClass('setts-row');
+    var check = createCheckboxElement(settItem.value, 'sett-' + settItem.value, settItem.name, userSetts[settItem.value]);
 
-      $('.settings').append($div);
-    }
+    div.append(check);
 
-    function createCheckboxElement(id, name, checked, disabled){
-      var holder = $('<label>').addClass('pure-material-checkbox').attr('title', id);
-      var input = $('<input>').attr('type', 'checkbox').attr('name', id);
-      var title = $('<span>').text(name);
+    return div;
+  }
 
-      if (checked){
-        input.attr('checked', 'checked');
+
+  function loadMenuOpts(){
+
+    $('#main-menu .menu-item').each((i, each)=>{
+      var name = $(each).text().trim();
+
+      if (selectedUser.menus){
+        checked = selectedUser.menus.includes(name.toLowerCase());
       }
 
-      if (disabled){
-        input.attr('disabled', 'disabled');
-      }
+      $('.menus-opts-inner').append(createCheckboxElement(null, 'menu-' + name.toLowerCase(), name, checked || selectedUser.full, selectedUser.full));
+    });
 
-      holder.append(input, title);
-
-      return holder;
-    }
-
-
-    function createCheckBox(settItem){
-      var div = $('<div>').addClass('setts-row');
-      var check = createCheckboxElement('sett-' + settItem.id, settItem.name, userSetts[settItem.id]);
-
-      div.append(check);
-
-      return div;
-    }
-
-
-    function loadMenuOpts(){
-
-      $('#main-menu .menu-item').each((i, each)=>{
-        var name = $(each).text().trim();
-
-        if (selectedUser.menus){
-          checked = selectedUser.menus.includes(name.toLowerCase());
-        }
-
-
-        $('.menus-opts-inner').append(createCheckboxElement('menu-' + name.toLowerCase(), name, checked || selectedUser.full, selectedUser.full));
-      });
-
-    }
+  }

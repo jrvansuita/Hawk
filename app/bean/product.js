@@ -129,4 +129,13 @@ static paging(query, page, callback){
     callback(err, res);
   });
 }
+
+static getBySkus(skus, callback){
+  Product.find({
+    "sku" : {
+      "$in" : skus
+    }}, (err, data) => {
+      callback(data);
+    })
+  }
 };

@@ -38,6 +38,16 @@ module.exports = {
   },
 
   load(query, page, callback){
+    if(Array.isArray(query)){
+      Product.getBySkus(query, (data) => {
+        callback(data);
+      });
+    }else{
+      this.loadByQuery(query, page, callback);
+    }
+  },
+
+  loadByQuery(query, page, callback){
     if(page == null){
       Product.find(this.buildQuery(query), (err, result) => {
         callback(result);
@@ -47,10 +57,5 @@ module.exports = {
         callback(result[0].items, result[0].info[0]);
       });
     }
-
-
-
-  },
-
-
+  }
 };

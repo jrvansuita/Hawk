@@ -1,12 +1,17 @@
 var Util = {
 
-  id(length){
-    return parseInt(new Date().getTime().toString().slice(-(length || 8)));
+  uid(length=8){
+    return new Date().getTime().toString().slice(-length);
   },
 
-  barcode(){
-    var code = '789' + this.id(9);
-    return code + (10 - (code.split('').reduce((s, e, i) => { return s + parseInt(e) * ((i%2==0)?1:3) },0) % 10)) % 10
+  id(){
+    return parseInt(this.uid());
+  },
+
+  barcode(suffix=''){
+    var code = '789' + this.uid(9-suffix.toString().length) + suffix.toString();
+    var verifyCode = (10 - (code.split('').reduce((s, e, i) => { return s + parseInt(e) * ((i%2==0)?1:3) },0) % 10)) % 10;
+    return code + verifyCode.toString();
   },
 
   transportName: (name, def)=>{
@@ -57,7 +62,7 @@ var Util = {
     var content = _content.trim().toLowerCase();
     if (_content){
       for (var i = 0; i < data.length; i++) {
-        if (i % 2 == 0){
+        if ((i % 2 == 0) || (addIndex == 0)){
           var datas = [].concat(data[i]);
 
           var includes = datas.some((s)=>{
@@ -219,10 +224,10 @@ var Util = {
     return 'hsl(' + shortened + ', 45%, 60%'+ (alpha ? ', ' + alpha : '') + ')';
   },
 
-  acronym: (text) =>{
+  acronym: (text, len) =>{
     var result = text.match(/[A-Z]/g).join('');
 
-    return result.length == 1 ? text.replace( /[aeiou]/g, '').trim().substr(0, 3) : result;
+    return result.length == 1 ? text.replace( /[aeiou]/g, '').trim().substr(0, len || 3) : result;
   },
 
   historyTagColor(tag){
