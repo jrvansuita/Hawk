@@ -88,6 +88,7 @@ function initializeEnumItems(){
 
 function addItem(item, index, isIncludingLine){
   var tds = [];
+  tds.push(buildDef(item, 'default'));
   tds.push(buildCol(item, 'icon'));
   tds.push(buildCol(item, 'description'));
   tds.push(buildCol(item, 'name'));
@@ -108,27 +109,39 @@ function buildCol(item, key, button){
   return $('<td>').append($('<span>').addClass('item-span').append(el, button));
 }
 
+function buildDef(item, key){
+  var el = item ? $('<img>').attr('src', '/img/cloud-check.png').addClass('default-item').attr('data-key', key).css('display', item[key] ? 'block' : '') : null;
+  return $('<td>').append(el);
+}
+
 function buildButton(index, isIncludingLine){
-  var button = $('<img>').attr('src', isIncludingLine ? '/img/checked.png' :'/img/delete.png').attr('data-index', index).addClass('line-button')
+  var result;
 
   if (isIncludingLine){
-    button.click(() => {
-      var line = button.closest('tr');
+    result = $('<img>').attr('src','/img/checked.png')
+    .attr('data-index', index)
+    .addClass('line-button')
+    .click(() => {
+      var line = result.closest('tr');
       addItem(getLineItem(line));
       clearValues(line);
     });
   }else{
-    button.click(function (){
-      button.closest('tr').fadeOut(200, function() {
+    result = $('<div>').addClass('line-options');
+    Dropdown.on(result).item('/img/delete.png', 'Excluir', function(){
+      result.closest('tr').fadeOut(200, function() {
         $(this).remove();
       });
+    }).item('/img/cloud-check.png', 'Padrão', function(helper){
+      $('[data-key="default"]').hide();
+      getElement(result.closest('tr'), 'default').show();
     });
   }
 
-  return button;
+  return result;
 }
 
-var itemKeys = ['icon', 'description', 'name', 'value'];
+var itemKeys = ['default', 'icon', 'description', 'name', 'value'];
 
 
 function getCurrentItems(){
@@ -140,18 +153,19 @@ function getCurrentItems(){
 
 function getLineItem(line){
   return itemKeys.reduce((object, key) => {
-    object[key] = getInput(line, key).val();
+    var e = getElement(line, key);
+    object[key] = e.is('input') ? e.val() : e.is(':visible');
     return object;
   }, {});
 }
 
-function getInput(line, key){
-  return $(line).find('input[data-key="' + key + '"]');
+function getElement(line, key){
+  return $(line).find('[data-key="' + key + '"]');
 }
 
 function clearValues(line){
   itemKeys.forEach((key) => {
-    getInput(line, key).val('');
+    getElement(line, key).val('');
   });
 }
 

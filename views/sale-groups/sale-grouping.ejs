@@ -4,44 +4,45 @@
 
 
 <link rel="stylesheet" type="text/css" href="/front/css/layout/packing-groups.css">
+<% if(Object.keys(sale) == 0){%>
+<div class="all-groups-holder">
 
-  <div class="all-groups-holder">
+    <%- include('../sale-groups/group-item', {group: groups.sales ?? '', title : 'Totais', addClazz:'span2' });  %>
 
-      <%- include('../sale-groups/group-item', {group: groups.sales ?? '', title : 'Totais', addClazz:'span2' });  %>
+    <%- include('../sale-groups/group-item', {group: groups.transps ?? '', title : 'Transportadoras', addClazz:'span3' });  %>
 
-        <%- include('../sale-groups/group-item', {group: groups.transps ?? '', title : 'Transportadoras', addClazz:'span3' });  %>
+    <%- include('../sale-groups/group-item', {group: groups.ufs ?? '' , title : 'Estados', showPapers:true, addClazz:'span3'});  %>
 
-          <%- include('../sale-groups/group-item', {group: groups.ufs ?? '' , title : 'Estados', showPapers:true, addClazz:'span3'});  %>
-
-            <%- include('../sale-groups/group-item', {group: groups.dates ? Util.orderDatesObject(groups.dates) : '', title : 'Datas', dates: true, showPapers:true, addClazz:'span3'});  %>
-
-
-            <div class="group-single-holder span5 shadow">
-              <label class="group-single-title">Este Mês</label>
-              <canvas id="packing-chart-current-month" height="120px"></canvas>
-            </div>
-
-            <div class="group-single-holder span6 shadow">
-              <label class="group-single-title">Mês Passado</label>
-              <canvas id="packing-chart-last-month" height="120px"></canvas>
-            </div>
-
-            <div class="group-single-holder span2 shadow">
-            </div>
+    <%- include('../sale-groups/group-item', {group: groups.dates ? Util.orderDatesObject(groups.dates) : '', title : 'Datas', dates: true, showPapers:true, addClazz:'span3'});  %>
 
 
-            <%if (loggedUser && loggedUser.full){%>
+    <div class="group-single-holder span5 shadow">
+      <label class="group-single-title">Este Mês</label>
+      <canvas id="packing-chart-current-month" height="120px"></canvas>
+    </div>
 
-              <div class="group-single-holder span4 shadow">
-                <label class="group-single-title">Este Ano</label>
-                <canvas id="packing-chart-year" height="120px"></canvas>
-              </div>
+    <div class="group-single-holder span6 shadow">
+      <label class="group-single-title">Mês Passado</label>
+      <canvas id="packing-chart-last-month" height="120px"></canvas>
+    </div>
 
-              <div class="group-single-holder span4 shadow">
-                <label class="group-single-title">Ano Passado</label>
-                <canvas id="packing-chart-last-year" height="120px"></canvas>
-              </div>
+    <div class="group-single-holder span2 shadow">
+    </div>
 
-              <%}%>
 
-            </div>
+    <%if (loggedUser && loggedUser.full){%>
+
+      <div class="group-single-holder span4 shadow">
+        <label class="group-single-title">Este Ano</label>
+        <canvas id="packing-chart-year" height="120px"></canvas>
+      </div>
+
+      <div class="group-single-holder span4 shadow">
+        <label class="group-single-title">Ano Passado</label>
+        <canvas id="packing-chart-last-year" height="120px"></canvas>
+      </div>
+
+      <%}%>
+
+    </div>
+<%}%>

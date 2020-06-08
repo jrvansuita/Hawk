@@ -88,7 +88,7 @@ module.exports = class PendingRoutes extends Routes{
 
             var data = {cliente: sale.client, oc: sale.numeroDaOrdemDeCompra, voucher: voucher};
 
-            new TemplateBuilder('54766499').setData(data).build((template) => {
+            new TemplateBuilder('86142889').setData(data).build((template) => {
               res.writeHead(200, {
                 'Content-Type': 'text/html',
                 'Content-Length': template.content.length,

@@ -10,6 +10,14 @@ module.exports = class Enumerator extends DataAccess {
     this.explanation = Str.def(explanation);
     this.tag = Str.def(tag);
     this.items = items || [];
+
+    //Every Item
+    //-- icon, description, name, value, default:true||false}
+  }
+
+  setItems(items){
+    this.items = items;
+    return this;
   }
 
   static getKey() {
@@ -18,12 +26,10 @@ module.exports = class Enumerator extends DataAccess {
 
   static get(tagOrId, callback){
     if(cache[tagOrId]){
-      console.log('cache');
       callback(cache[tagOrId]);
     }else{
       this.findOne((typeof tagOrId == 'number') ? {id: tagOrId} : {tag: tagOrId}, (err, data) => {
         cache[tagOrId] = data;
-        console.log('nao');
         callback(data);
       });
     }
@@ -38,10 +44,6 @@ module.exports = class Enumerator extends DataAccess {
     });
   }
 
-  put(icon, description, name, value){
-    this.items.push({icon:icon, description:description, name: name, value: value});
-    return this;
-  }
 
   static delete(id, callback){
     this.findOne({id:id}, (err, obj)=>{
@@ -62,4 +64,28 @@ module.exports = class Enumerator extends DataAccess {
   }
 
 
+  static on(tag, useDef){
+    return {
+      async get(){
+        return new Promise((resolver) => {
+          Enumerator.get(tag, (data) => {
+            resolver(data);
+          });
+        });
+      },
+
+      async hunt(value, prop='name'){
+        return this.get(tag).then((data) => {
+          var def;
+          var r = data?.items?.find((each) => {
+            def = each.default ? each : def;
+            return each?.[prop]?.split(',')?.some((part) => {
+              return part.trim() == value.trim();
+            }) || (useDef ? def : null)
+          });
+          return r;
+        });
+      }
+    }
+  }
 };

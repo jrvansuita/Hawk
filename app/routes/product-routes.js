@@ -3,12 +3,12 @@ const ProductLaws = require('../laws/product-laws.js');
 const ProductHandler = require('../handler/product-handler.js');
 const ProductDiagnostics = require('../diagnostics/product-diagnostics.js');
 const DiagnosticsProvider = require('../diagnostics/diagnostics-provider.js');
-//const DiagnosticsEnum = require('../diagnostics/diagnostics-enum.js');
 const ProductBoard = require('../provider/product-board-provider.js');
 const ProductListProvider = require('../provider/product-list-provider.js');
 const ProductImageProvider = require('../provider/product-image-provider.js');
 const ProductStorer = require('../storer/product/product.js');
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
+const Enum = require('../bean/enumerator');
 
 module.exports = class ProductRoutes extends Routes{
 
@@ -117,7 +117,9 @@ module.exports = class ProductRoutes extends Routes{
           // 1day
           all.forEach((each) => {
             var s = each.toObject();
-            s.data=  DiagnosticsEnum[each.type];
+            Enum.getKeyItems("PROD-DIAG", (types) => {
+              s.data = types[each.type]
+            });
 
             result.push(s);
           });
@@ -129,7 +131,10 @@ module.exports = class ProductRoutes extends Routes{
 
     this._get('/fixes-dialog', (req, res) => {
       new DiagnosticsProvider().loadBySku(req.query.sku, (all, product)=>{
-        res.render('product/diagnostics/diagnostics-dialog', {data : all, product: product, types: DiagnosticsEnum});
+        Enum.getKeyItems("PROD-DIAG", (types) => {
+          res.render('product/diagnostics/diagnostics-dialog', {data : all, product: product, types: types});
+        });
+
       });
     });
 
@@ -211,11 +216,9 @@ module.exports = class ProductRoutes extends Routes{
 
           var result = {};
           products.forEach((each) => {
-            if (each._Skus){
-              each._Skus.forEach((eachChild) => {
-                result[eachChild.codigo] = eachChild.gtin;
-              });
-            }
+            each?._Skus?.forEach((c) => {
+              result[c.codigo] = c.gtin;
+            });
           });
 
           res.render('product/board/product-list-export', {data: data, eans: result});

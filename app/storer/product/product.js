@@ -2,6 +2,7 @@ const EccosysStorer = require('../../eccosys/eccosys-storer.js');
 const EccosysProvider = require('../../eccosys/eccosys-provider.js');
 const AttributesHandler = require('./attributes.js');
 const ProductBinder = require('./binder.js');
+const Product = require('../../bean/product.js');
 
 module.exports = class ProductStorer{
   constructor(){
@@ -29,7 +30,10 @@ module.exports = class ProductStorer{
 
   upsert(){
     this._onProductUpsert(this.fatherBody, () => {
-      this._handleChildsUpserts();
+      this._handleChildsUpserts(() => {
+        this.onFinishListener();
+        this.syncUpsertedProduct(this.fatherBody);
+      });
     });
   }
 
@@ -42,7 +46,7 @@ module.exports = class ProductStorer{
           childs.shift(); incrementalUpserts();
         });
       }else{
-        this.onFinishListener();
+        callback();
       }
     }
 
@@ -101,8 +105,38 @@ module.exports = class ProductStorer{
       if (callback) callback();
 
       this.storer.product(data.codigo).attrs().put(attrs).go(() => {
-          //Skip Waiting for this callback
+        //Skip Waiting for this callback
       });
+    });
+  }
+
+  syncUpsertedProduct(binder){
+    new Product(
+      binder.codigo,
+      binder.nome,
+      binder.Marca,
+      binder.urlEcommerce,
+      binder.imf,
+      binder.preco,
+      binder.precoDe,
+      binder.precoCusto,
+      binder.discount,
+      binder.Departamento,
+      binder.Genero,
+      binder.Cor,
+      0,
+      0,
+      true,
+      binder.faixa_de_idade,
+      binder['Coleção'],
+      binder.Estacao,
+      binder.Fabricante,
+      false,
+      binder.getChild('codigo').join(','),
+      binder.getChild('peso').join(',')
+    ).upsert((err, doc) => {
+      console.log(err);
+      console.log(doc);
     });
   }
 

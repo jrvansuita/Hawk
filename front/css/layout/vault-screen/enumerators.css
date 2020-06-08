@@ -16,7 +16,12 @@ table tr:nth-child(odd) {
   background-color: #f2f2f2;
 }
 
-table td:first-child{
+table td:nth-child(1){
+  max-width: 1px;
+  width: 1px;
+}
+
+table td:nth-child(2){
   width: 100px;
 }
 
@@ -82,4 +87,19 @@ table td:last-child{
   background-color: #dcdcdc73;
   cursor: pointer !important;
   border-radius: 50%;
+}
+
+
+.line-options{
+  width: 22px;
+  padding: 3px;
+  margin: 4px 15px 0px 10px;
+  height: 22px;
+}
+
+.default-item{
+  display: none;
+  padding: 3px;
+  width: 22px;
+  height: 22px;
 }

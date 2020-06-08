@@ -37,14 +37,14 @@
 
 
       <div class="box shadow image-holder" style="flex: 20%;">
-        <img src="<%=product.img && product.img.url ? product.img.image : '/img/product-placeholder.png'%>" />
+        <img src="<%=product?.img?.image || '/img/product-placeholder.png'%>"  onerror="this.src='/img/product-placeholder.png'"/>
       </div>
 
       <div class="box shadow" style="flex: 60%;">
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input type="text" class="bindable" data-bind="nome" data-post="postNamePart" maxlength="500" autocomplete="off" required tabindex="0"/>
+            <input type="text" class="bindable" data-bind="nome" data-post="postName" maxlength="500" autocomplete="off" required tabindex="0"/>
             <span class="bar"></span>
             <label>Nome</label>
           </div>
@@ -140,7 +140,7 @@
     <div class="row">
 
       <div class="box shadow relative-inputs" style="flex: 10%;">
-
+        <span class="title price-title"> <span class="discount right"></span> </span>
 
         <div class="flex-line">
           <div class="material-input-holder">
@@ -175,11 +175,9 @@
       </div>
 
       <div class="box shadow" style="flex: 50%;">
-        <span class="title">Tamanhos<span class="right">
-          <label class="size-group-button" data-val="Bebe" tabindex="0">Bebe</label>
-          <label class="size-group-button" data-val="Primeiros Passos" tabindex="0">Prim. Passos</label>
-          <label class="size-group-button" data-val="Kids" tabindex="0">Infantil</label>
-          <label class="size-group-button" data-val="Juvenil" tabindex="0">Juvenil</label>
+        <span class="title">Tamanhos
+
+          <span class="size-group-buttons-holder right">
 
           <div class="sizes-dots"></div>
 
