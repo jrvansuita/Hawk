@@ -14,7 +14,6 @@
   <script>
   window.data = <%- JSON.stringify(data)%>
   window.eans = <%- JSON.stringify(eans)%>
-  window.user = <%- JSON.stringify(user)%>
   </script>
 </head>
 <body>
@@ -34,7 +33,7 @@
 
       <%data.forEach((item)=>{%>
 
-        <tr class="all">
+        <tr class="filtered-item">
 
           <td class="item-information">
             <img class="image-export filter" src="<%=item.image%>">

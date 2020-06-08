@@ -213,8 +213,7 @@ module.exports = class ProductRoutes extends Routes{
               });
             }
           });
-          res.render('product/board/product-list-export', {data: data, eans:result, user: res.locals.loggedUser.name});
-          console.log(res);
+          res.render('product/board/product-list-export', {data: data, eans:result});
         });
       });
     });
