@@ -179,7 +179,7 @@ function getPendingPrice(pending){
 
 function validateVoucher(input){
   if(!$(input).val().toUpperCase().startsWith("PEN")){
-    onSimpleMaterialInputError($(input));
+    onInputError($(input));
     $(input).val("");
     return false;
   }

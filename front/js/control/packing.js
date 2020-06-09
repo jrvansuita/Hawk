@@ -470,7 +470,7 @@ function checkFloat(el, andThis){
 
 
   if (check){
-    onSimpleMaterialInputError(el);
+    onInputError(el);
     return false;
   }
 
@@ -479,7 +479,7 @@ function checkFloat(el, andThis){
 
 function checkInt(el){
   if (Num.def(el.val()) <= 0){
-    onSimpleMaterialInputError(el);
+    onInputError(el);
     return false;
   }
 

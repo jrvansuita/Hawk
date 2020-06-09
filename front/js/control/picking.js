@@ -300,7 +300,7 @@ function checkIsLocalFilled(shake){
       times: 4
     });
 
-    onSimpleMaterialInputError($('#pending-local'));
+    onInputError($('#pending-local'));
   }
 
   return isFilled;

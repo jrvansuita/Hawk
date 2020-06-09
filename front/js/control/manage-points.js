@@ -53,7 +53,7 @@ function onInit(){
 
 function checkField(el){
   if (!el.val()){
-    onSimpleMaterialInputError(el);
+    onInputError(el);
     return false;
   }
 
@@ -62,7 +62,7 @@ function checkField(el){
 
 function checkValIsInList(el, list){
   if (!Object.keys(list).includes(el.val())){
-    onSimpleMaterialInputError(el);
+    onInputError(el);
     return false;
   }
 
