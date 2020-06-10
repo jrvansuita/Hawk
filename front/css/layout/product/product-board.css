@@ -14,7 +14,7 @@ html,body {
 
 .left{
   flex: 0 auto;
-  overflow-y: auto;
+  overflow-y: initial;
   display: block;
 }
 
