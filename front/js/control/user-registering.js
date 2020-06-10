@@ -203,7 +203,7 @@ function showAvatarCropper(){
 
     if (user && (user.id != $('#editing').val())){
       $('#access').val('Cartão de acesso já utilizado');
-      onSimpleMaterialInputError($('#access'));
+      onInputError($('#access'));
       return false;
     }else{
       return true;

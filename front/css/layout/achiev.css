@@ -283,7 +283,7 @@ img.comming-soon {
 
 
 .rule-row{
-  display: -webkit-box;
+  display: inline-block;
   font-size: 13px;
   color: #656161;
   font-weight: 600;

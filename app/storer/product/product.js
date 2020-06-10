@@ -13,6 +13,7 @@ module.exports = class ProductStorer{
   async with(user, data){
     data.user = user;
     this.fatherBody = await ProductBinder.create(data).body();
+    this.storer.withUser(user);
     return this;
   }
 
@@ -134,10 +135,7 @@ module.exports = class ProductStorer{
       false,
       binder.getChild('codigo').join(','),
       binder.getChild('peso').join(',')
-    ).upsert((err, doc) => {
-      console.log(err);
-      console.log(doc);
-    });
+    ).upsert();
   }
 
   delete(callback){
@@ -145,7 +143,7 @@ module.exports = class ProductStorer{
   }
 
   _sendBroadcastMessage(data, msg, error){
-    global.io.sockets.emit('storing-product', {
+    global.io.sockets.emit('storing-product-'+this.fatherBody.codigo, {
       isLoading: !error && msg,
       sku: data.codigo,
       msg : msg ? (data.id ? 'Atualizando ' : 'Criando ') + msg + ' ' + data.codigo : null,

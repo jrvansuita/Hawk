@@ -21,9 +21,17 @@ function isTrueStr(val){
 }
 
 
-function onSimpleMaterialInputError(input){
+function onInputError(input){
   input.addClass("simple-material-input-error").delay(4000).queue(function(next){
     $(this).removeClass("simple-material-input-error");
+    next();
+  });
+}
+
+
+function onDivError(div){
+  div.addClass("red-wick").delay(4000).queue(function(next){
+    $(this).removeClass("red-wick");
     next();
   });
 }
@@ -32,7 +40,7 @@ function onSimpleMaterialInputError(input){
 
 function checkMaterialInput(el){
   if (!el.val()){
-    onSimpleMaterialInputError(el);
+    onInputError(el);
     return false;
   }
 
