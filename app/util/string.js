@@ -13,7 +13,7 @@ var Str = {
   },
 
   keep(v){
-    return v.replace(/[^A-zÀ-ú]+/g, '');
+    return v.replace(/[^A-zÀ-ú\s]+/g, '');
   },
 
   short: function(val, max) {
