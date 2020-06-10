@@ -181,6 +181,10 @@ var Params = {
   enableJobsOnDevMode(){
     return this.get('enable-jobs-on-dev');
   },
+
+  getEmailPaymentNotify(){
+    return this.get('recused-payment');
+  },
 }
 
 

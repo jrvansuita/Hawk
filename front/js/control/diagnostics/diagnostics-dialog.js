@@ -42,9 +42,9 @@ $(document).ready(()=>{
   .item('/img/restart.png', 'Verificar Agora', (helper)=>{
     $('.loading-circle').show();
     helper.loading();
-    _post('/check-product-diagnostic', {sku: helper.data.sku, forceFather : true},(data)=>{
-      showSkuFixesDialog(sku);
-      $('.loading-circle').hide();
+    _post('/check-product-diagnostic', {sku: helper?.data?.sku, forceFather : true},(data)=>{
+      $('.sku-fixes-modal').trigger('click');
+      showSkuFixesDialog(data.product.sku);
     });
   });
 

@@ -242,8 +242,7 @@ tr.line td{
 }
 
 .simple-material-input-error{
-  border: 2px #e25952 !important;
-  border-style: none none solid none !important;
+  border-bottom: 2px solid #e25952 !important;
 }
 
 .dotted {

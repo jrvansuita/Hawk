@@ -27,19 +27,13 @@ module.exports ={
 
   getSkus(skus, idOrder, callback){
     new EccosysProvider(false).skus(skus).go((products)=>{
-      if (idOrder){
-        products.sort((a, b)=>{
-          return parseInt(a.id) - parseInt(b.id);
-        });
-      }
-
-      callback(products);
+      idOrder ? callback(this._orderProducts(products)) : callback(products);
     });
   },
 
   getBySku(sku, father, callback){
     new EccosysProvider(false).product(father ? getFatherSku(sku) : sku ).go((product)=>{
-      handleCallback(callback, product, sku);
+        handleCallback(callback, product, sku);
     });
   },
 
@@ -204,7 +198,14 @@ module.exports ={
     Product.likeThis(typing, 150, (err, products)=>{
       callback(products);
     });
-  }
+  },
+
+  _orderProducts(products){
+    products = products.sort(function(a, b){
+      return decodeLetterSizeProduct(a.codigo.split('-')[1]) - decodeLetterSizeProduct(b.codigo.split('-')[1])
+    });
+    return products;
+  },
 
 };
 
@@ -241,4 +242,10 @@ function putAndControlDataCache(sku, product){
   }else{
     productsDataCache[sku] = {};
   }
+}
+
+function decodeLetterSizeProduct(size){
+  var sizes = ['RN', 'P', 'M', 'G', 'GG' , 'XXG'];
+  var index = sizes.indexOf(size);
+  return Num.def(index > -1 ? (index - 100) : size);
 }

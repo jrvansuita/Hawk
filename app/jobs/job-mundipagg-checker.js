@@ -4,7 +4,7 @@ const EccosysStorer = require('../eccosys/eccosys-storer.js');
 const MundiApi = require('../mundipagg/mundi-api.js');
 const History = require('../bean/history.js');
 const MagentoCalls = require('../magento/magento-calls.js');
-
+const CustomerPaymentEmail = require('../customer/payment-email/customer-payment-email.js');
 
 const TAG_ID = 'MH';
 
@@ -163,6 +163,9 @@ module.exports = class JobMundipaggChecker extends Job{
   }
 
   saleHasOverdue(sale, paymentDate, expirationDate, method, callback){
+    if(Params.getEmailPaymentNotify()){
+        new CustomerPaymentEmail().go(sale.numeroDaOrdemDeCompra, () => {});
+    }
     this.updateSale(sale, 2 /* Cancelado */,  paymentDate, expirationDate, Const.sale_was_unconfirmed_mundi, method, callback)
   }
 

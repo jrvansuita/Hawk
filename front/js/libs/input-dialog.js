@@ -82,7 +82,7 @@ setAutoFocusOnInput(value){
 checkBeforePositive(){
   if (this.isCheckEmptyInputSubmit){
     if(this.input.val().trim().length == 0){
-      onSimpleMaterialInputError(this.input);
+      onInputError(this.input);
       return false;
     }
   }else if (this.onChangeListener){

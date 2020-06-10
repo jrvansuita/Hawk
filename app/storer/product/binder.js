@@ -68,7 +68,7 @@ class ProductBinder{
 
   async descriptions(){
     if (!this.id){
-      var hasToGenerateNewName = !this.nome || (Arr.matchPercent(this?.nome?.split(' '), this?.postName?.split(' ')) < 90);
+      var hasToGenerateNewName = (this?.nome?.split(' ')?.length < 3) || (Arr.matchPercent(this?.nome?.split(' '), this?.postName?.split(' ')) < 90);
 
       if (hasToGenerateNewName){
         var nameConcat = [];
@@ -132,6 +132,7 @@ class ProductBinder{
     this.altura = 2;
     this.largura = 11;
     this.comprimento = 16;
+    this.dtCriacao = Dat.now();
 
     if (!this.descricaoEcommerce){
       this.descricaoEcommerce = this.nome;
@@ -188,11 +189,13 @@ class ProductBinder{
       this.markup = Floa.def(this.markup, 2.5);
     }
 
-    this.preco = Math.trunc(this.markup * this.precoCusto) + .9;
-    this.precoDe = Math.trunc(this.preco / 0.85) + .9;
-    this.markup = Floa.abs(this.preco/this.precoCusto, 2);
+    if (this.precoCusto){
+      this.preco = Math.trunc(this.markup * this.precoCusto) + .9;
+      this.precoDe = Math.trunc(this.preco / 0.85) + .9;
+      this.markup = Floa.abs(this.preco/this.precoCusto, 2);
 
-    this.discount = Math.trunc(100 - (this.preco * 100) / this.precoDe);
+      this.discount = Math.trunc(100 - (this.preco * 100) / this.precoDe);
+    }
   }
 
   async sizing(){

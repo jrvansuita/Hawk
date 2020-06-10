@@ -111,7 +111,6 @@ function requestProductChilds(){
 }
 
 function onFinishedLoading(){
-  sortProducts();
   addFooter();
   showOkStatus();
   checkPermissionUser();
@@ -731,21 +730,4 @@ function loadLayoutHistory(rows){
       unlock(loggedUser);
       makeMenu();
     }
-  }
-
-  function sortProducts() {
-    $('#child-skus-holder .tr-child').sort(function(a, b) {
-      return getProductLineSize(a) - getProductLineSize(b);
-    }).appendTo($('#child-skus-holder tbody'));
-  }
-
-  function getProductLineSize(el){
-    var arr = $('td:first .child-sku', el).text().split('-');
-    return decodeLetterSizeProduct(arr[arr.length-1]);
-  }
-
-  function decodeLetterSizeProduct(size){
-    var sizes = ['RN', 'P', 'M', 'G', 'GG' , 'XXG'];
-    var index = sizes.indexOf(size);
-    return Num.def(index > -1 ? (index - 100) : size);
   }
