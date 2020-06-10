@@ -43,7 +43,6 @@ function onBindViewsListeners(){
     $(this).select();
   });
 
-
   if (!product.id){
     $('.lockable').keypress(function(e) {
       if(e.which == 13) toggleLockIcon($(this));
@@ -56,6 +55,8 @@ function onBindViewsListeners(){
     $('.child-lockable').click(function() {
       handleChildLockClick($(this));
     });
+
+    $('#title-bind').click(toggleDescriptionLock);
   }
 
   $('.bindable').blur(function () {
@@ -294,6 +295,10 @@ function onInitializeLockedValues(){
     $('.material-input-holder>label').addClass('no-transition');
 
     lockedValues = Local.get(MEM_TAG);
+    if(lockedValues?.data?.['descricaoComplementar']){
+      toggleDescriptionLock();
+    }
+
     Util.forProperty(lockedValues.data, (val, key) => {
       product[key] = val;
       toggleLockIcon($('input[data-bind="' + key + '"]').val(val));
@@ -305,6 +310,11 @@ function onInitializeLockedValues(){
       }
     });
   }
+
+}
+function toggleDescriptionLock(){
+  toggleLockIcon($('.flex-line textarea'));
+  toggleLockIcon($('#title-bind'));
 }
 
 function handleChildLockClick(col){

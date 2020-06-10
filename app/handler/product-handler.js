@@ -33,7 +33,7 @@ module.exports ={
 
   getBySku(sku, father, callback){
     new EccosysProvider(false).product(father ? getFatherSku(sku) : sku ).go((product)=>{
-        handleCallback(callback, product, sku);
+      handleCallback(callback, product, sku);
     });
   },
 
@@ -108,39 +108,39 @@ module.exports ={
 
   updateStock(sku, stock, user, device, callback) {
     device = device || 'Desktop';
-    stock = parseInt(stock);
+    stock = !isNaN(parseInt(stock)) ? parseInt(stock) : 0;
 
-
-    /** Realiza a alteracao de estoque no eccosys **/
-    this.getBySku(sku, false, (product)=>{
-
-      var body = {
-        codigo: product.codigo,
-        quantidade: Math.abs(stock),
-        es: stock < 0 ? 'S' : 'E',
-        obs : device + " - " +  user.name,
-        //Manter o mesmo preço
-        custoLancamento : product.precoCusto,
-        preco: product.preco
-      };
-
-
-      new EccosysStorer().stock(product.codigo, body).go(callback);
       /** Realiza a alteracao de estoque no eccosys **/
+      this.getBySku(sku, false, (product)=>{
+
+        var body = {
+          codigo: product.codigo,
+          quantidade: Math.abs(stock),
+          es: stock < 0 ? 'S' : 'E',
+          obs : device + " - " +  user.name,
+          //Manter o mesmo preço
+          custoLancamento : product.precoCusto,
+          preco: product.preco
+        };
 
 
-      /** Realiza a alteracao de estoque no magento **/
-      if(Params.updateProductStockMagento()){
-        new MagentoCalls().productStock(product.codigo).then((data) => {
-          if (data.length == 1){
-            new MagentoCalls().updateProductStock(product.codigo, parseFloat(data[0].qty) + stock);
-          }
-        });
-      }
+        new EccosysStorer().stock(product.codigo, body).go(callback);
+        /** Realiza a alteracao de estoque no eccosys **/
 
-      /** Realiza a alteracao de estoque no magento **/
 
-    });
+        /** Realiza a alteracao de estoque no magento **/
+        if(Params.updateProductStockMagento()){
+          new MagentoCalls().productStock(product.codigo).then((data) => {
+            if (data.length == 1){
+              var stockMagento = Math.max(parseFloat(data[0].qty) + stock, 0);
+              new MagentoCalls().updateProductStock(product.codigo, stockMagento);
+            }
+          });
+        }
+
+        /** Realiza a alteracao de estoque no magento **/
+
+      });
   },
 
   updateWeight(sku, weight, user, callback){

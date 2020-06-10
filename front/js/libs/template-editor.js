@@ -137,6 +137,16 @@ class TemplateEditor{
     }
   }
 
+  _overrideDestroy(){
+    return {
+      events:{
+        'destroy': function(){
+          return;
+        }
+      }
+    }
+  }
+
 
   getDefultOptions(){
 
@@ -148,6 +158,7 @@ class TemplateEditor{
       toolbarButtons: this.buttons,
       iframe: false,
       listAdvancedTypes: true,
+      attribution: false,
 
       // Define new inline styles.
       inlineClasses: {
@@ -177,7 +188,7 @@ class TemplateEditor{
       this.buttons.moreMisc.buttons = this.buttons.moreMisc.buttons.concat(this.getCustomButtons());
     }
 
-    options = {...options,   ...this.getImageUploadOptions()}
+    options = {...options,   ...this.getImageUploadOptions(), ...this._overrideDestroy()}
 
     return options;
   }

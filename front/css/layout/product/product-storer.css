@@ -300,3 +300,10 @@ textarea{
   position: absolute !important;
   right: 0;
 }
+
+#title-bind{
+  width: fit-content;
+}
+#title-bind:hover{
+  cursor: pointer;
+}
