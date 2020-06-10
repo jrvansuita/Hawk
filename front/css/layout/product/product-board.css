@@ -14,7 +14,7 @@ html,body {
 
 .left{
   flex: 0 auto;
-  overflow-y: auto;
+  overflow-y: initial;
   display: block;
 }
 
@@ -52,7 +52,7 @@ html,body {
 }
 
 .line-title{
-  position: sticky;
+  position: initial;
   top: 0;
   z-index: 99;
   background-color: #e0dfdf;

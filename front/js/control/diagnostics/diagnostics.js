@@ -3,11 +3,18 @@
 $(document).ready(()=>{
 
   $('#sync').click(()=>{
-    showLoading();
 
-    _post('/run-product-diagnostics', {}, ()=>{
-      console.log('rodou');
-    });
+    if($('#search').val()){
+      showSkuFixesDialog($('#search').val());
+    }
+    else{
+      showLoading();
+      _post('/run-product-diagnostics', {}, ()=>{
+        console.log('rodou');
+      });
+    }
+
+
   });
 
   Dropdown.on($('.main-menu-dots'))

@@ -1,7 +1,6 @@
 const MEM_TAG = 'LOCKED-VALUE';
 var lockedValues;
 var refreshBroadcast;
-var storingBroadcast;
 var childsBuilder;
 var sizesBox;
 
@@ -89,8 +88,8 @@ function onBindViewsListeners(){
     });
   })
   .load('.description-editor').then((data) => {
+    data.html.set(product.conteudo);
     window.editor = data;
-    window.editor.html.set(product.conteudo);
   });
 }
 
@@ -98,7 +97,6 @@ function onInitilizeScreenControls(){
   $('.delete').toggle(product.id != undefined);
 
   refreshBroadcast = new Broadcast('refresh-product').onReceive(onProductRefreshed).emit(product);
-  storingBroadcast = new Broadcast('storing-product').onReceive(onStoringMessageUpdate);
 
   sizesBox = new SizesBox($('.sizes-box')).startCache();
   childsBuilder = new ChildsBuilder($('.childs')).setDefaultOnChange().setMemoryData(product.id ? null : lockedValues?.screen);
@@ -235,7 +233,33 @@ function onStoringMessageUpdate(data){
 }
 
 function onStoreProduct(){
-  _post('/stock/storer-upsert', getData(), (data) => { onProductStored(data); });
+  if (checkBeforeStore()){
+    new Broadcast('storing-product-'+product.codigo).onReceive(onStoringMessageUpdate);
+    _post('/stock/storer-upsert', getData(), (data) => { onProductStored(data) });
+  }
+}
+
+function checkBeforeStore(){
+  var isOk = true;
+
+  $('.bindable').each((i, input) => {
+    if (!$(input).val()){
+      isOk = false;
+      onInputError($(input));
+    }
+  });
+
+  if (childsBuilder.getSkus().length == 0){
+    isOk = false;
+    onDivError($('.childs').parent());
+  }
+
+  if (!editor.html.get()){
+    isOk = false;
+    onDivError($('.description-editor').parent());
+  }
+
+  return isOk;
 }
 
 function onProductStored(data){
@@ -345,7 +369,7 @@ function onCreateSizeGroupButtons(){
         .attr('tabindex', '0')
         .append(key)
         .click(function () {
-          onSizeGrupoButtonClick(this);
+          if (product.codigo) onSizeGrupoButtonClick(this);
         }).keypress(function(e) {
           if(e.which == 13) $(this).click()
         });

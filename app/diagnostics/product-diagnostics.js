@@ -81,7 +81,7 @@ module.exports = class ProductDiagnostics{
       this._storeFix(product, 'COST');
     }
 
-    if (isBrandMissing(attrBundle.names)){
+    if (isBrandMissing(product, attrBundle.names)){
       this._storeFix(product, 'BRAND');
     }
 
@@ -331,8 +331,8 @@ function isColorMissing(attrNames){
   return !attrNames.includes('Cor');
 }
 
-function isBrandMissing(attrNames){
-  return !attrNames.includes('Marca') || !attrNames.includes('Fabricante');
+function isBrandMissing(product, attrNames){
+  return !attrNames.includes('Marca') || !attrNames.includes('Fabricante') || !product.feedProduct.brand  || !product.feedProduct.manufacturer;
 }
 
 function isCostPriceMistake(product){
