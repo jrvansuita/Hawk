@@ -28,7 +28,7 @@
   flex: 0 80%;
   padding-bottom: 10px;
   display: flex;
-  position: relative;
+  position: initial;
   height: 94%;
   /* flex-wrap: wrap; */
   /* align-items: flex-start; */

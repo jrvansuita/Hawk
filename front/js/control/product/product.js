@@ -205,7 +205,7 @@ function buildChildSku(product, child){
   })
   .setOnDynamicShow(() => {
     return {1: isUnlocked()};
-  });
+  }).bindMousePos();
 
 
   $('#child-skus-holder').append($tr);

@@ -71,7 +71,9 @@ $(document).ready(()=>{
     }).show();
   })
   .item('/img/photo.png', 'Baixar Imagens', (helper) => {
-    window.open('/product-multiple-imgs?skus=' + Object.keys(selectedSkus), '_blank');
+    if(Object.keys(selectedSkus).length > 0){
+      window.open('/product-multiple-imgs?skus=' + Object.keys(selectedSkus), '_blank');
+    }
   })
   .item('/img/print.png', 'Imprimir Relatório', (helper) => {
     if(Object.keys(selectedSkus).length > 0){
@@ -243,7 +245,7 @@ function createTitle(product) {
         window.open('/diagnostics?sku=' + product.sku,'_blank');
       });
       all.forEach((item) => {
-        var alertTooltip = new Tooltip(diagIcon[0], item.data.name).load();
+        var alertTooltip = new Tooltip(diagIcon[0], item?.data?.name).load();
       });
     }
   });
