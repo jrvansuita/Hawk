@@ -60,5 +60,5 @@ module.exports = class CustomerRoutes extends Routes{
       new SaleCustomerHandler().updateSaleStatus(req.body, this._resp().redirect(res));
     });
 
-  };
+  }
 };

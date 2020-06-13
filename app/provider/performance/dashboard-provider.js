@@ -83,7 +83,7 @@ class DashboardProviderHandler{
     temp[id] = data;
     return data;
   }
-};
+}
 
 
 class DashboardProviderHelper{

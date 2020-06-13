@@ -1,7 +1,7 @@
 
 
 .main-content{
-  padding: 0px 30px;
+  padding: 0 30px;
 }
 
 .content{
@@ -59,12 +59,12 @@
 .job-active{
   width: 24px;
   height: 24px;
-  padding: 0px 0px 0px 0px;
+  padding: 0;
   margin-right: 10px;
 }
 
 .job-item td{
-  padding: 4px 0px;
+  padding: 4px 0;
 }
 
 .job-name{

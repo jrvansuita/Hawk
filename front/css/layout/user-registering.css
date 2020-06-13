@@ -1,4 +1,4 @@
-body {bottom: 0;padding: 0px;margin: 0px;height: 100%;margin-top: 30px;}
+body {bottom: 0;padding: 0;margin: 0;height: 100%;margin-top: 30px;}
 
 .user-registering{
   width: 96%;
@@ -15,7 +15,7 @@ body {bottom: 0;padding: 0px;margin: 0px;height: 100%;margin-top: 30px;}
   flex: 1;
   text-align: center;
   /* margin: auto; */
-  padding: 0px 15px;
+  padding: 0 15px;
 }
 
 #avatar{
@@ -93,7 +93,7 @@ body {bottom: 0;padding: 0px;margin: 0px;height: 100%;margin-top: 30px;}
   display: grid;
   font-size: 16px;
   height: 4px;
-  margin: 0px;
+  margin: 0;
 }
 
 .label-title{
@@ -130,9 +130,9 @@ body {bottom: 0;padding: 0px;margin: 0px;height: 100%;margin-top: 30px;}
 
 
 .search-input:hover:enabled {
-  border-radius: 0px;
+  border-radius: 0;
   border: 2px #77717161;
-  border-style: none none solid none;
+  border-style: none none solid;
 }
 
 .button{
@@ -140,7 +140,7 @@ body {bottom: 0;padding: 0px;margin: 0px;height: 100%;margin-top: 30px;}
 }
 
 .setts-group{
-  margin: 0px 16px;
+  margin: 0 16px;
   padding-bottom: 8px;
   text-align: left;
   display: block;
