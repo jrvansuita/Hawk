@@ -1,5 +1,4 @@
-=======
-# Hawk [DEV]
+# Hawk [Prod]
 
-Este é o repositório de desenvolvimento do Hawk.
-https://hawkdev.herokuapp.com
+Este é o repositorio de **PRODUÇÃO** do Hawk.
+https://hawkproject.herokuapp.com
