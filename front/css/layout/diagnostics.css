@@ -50,7 +50,7 @@ a{
 
 .ind-count{
   font-size: 16px;
-  padding: 0px 10px;
+  padding: 0 10px;
   display: -webkit-box;
   font-weight: 1000;
   color: #ada8a8;
@@ -72,7 +72,7 @@ a{
   color: #4a4a4c;
   font-size: 16px;
   font-weight: 800;
-  padding: 5px 5px;
+  padding: 5px;
 }
 
 #run{
@@ -85,11 +85,11 @@ a{
 .loading-circle{
   display: none;
   max-width: 20px;
-  margin-right: 0px;
+  margin-right: 0;
 }
 
 .start-time{
-  padding: 5px 0px;
+  padding: 5px 0;
   font-weight: 600;
   font-size: 13px;
   color: #616163;
@@ -249,7 +249,7 @@ a{
 }
 
 .badge-item .ind-icon{width: 28px;height: 28px;padding: 3px;}
-.badge-item .ind-title{word-break: break-all;width: fit-content;font-size: 14px;margin: 0;padding: 10px 0px;font-weight: 500;}
+.badge-item .ind-title{word-break: break-all;width: fit-content;font-size: 14px;margin: 0;padding: 10px 0;font-weight: 500;}
 
 .badge-item{
   padding-top: 4px;
@@ -257,7 +257,7 @@ a{
 
 .fixes-sku-badges{
   width: 100%;
-  padding: 0px 15px;
+  padding: 0 15px;
   width: -webkit-fill-available;
 }
 
@@ -287,7 +287,7 @@ a{
 .brand-title{
   font-size: 15px;
   font-weight: 500;
-  padding: 0px 5px 10px 5px;
+  padding: 0 5px 10px;
   display: block;
   color: #464141;
 }
