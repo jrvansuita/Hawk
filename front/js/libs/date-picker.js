@@ -2,7 +2,7 @@
 
 class DatePicker{
 
-  constructor(){
+  constructor(){ 
     this.binders = [];
 
     this.dependencies = new FileLoader().css('material-date-picker.min')
