@@ -40,7 +40,7 @@
 
 .flex-line{
   display: flex;
-  padding: 8px 12px 0px 12px;
+  padding: 8px 12px 0;
   height: 100%;
   position: relative;
 }
@@ -73,7 +73,7 @@
   color: #259587;
   padding-bottom: 10px;
   position: relative;
-  padding: 5px 10px 5px 10px;
+  padding: 5px 10px;
   margin-top: 8px;
 }
 
@@ -131,7 +131,7 @@
 .size-group-button{
   padding: 4px 12px;
   top: -4px;
-  margin-right: 0px;
+  margin-right: 0;
   display: inline;
   position: relative;
   margin-left: 5px;
@@ -263,7 +263,7 @@ textarea{
   margin-top: 5px;
 }
 
-.loading-msg{color: #4a4a4c;font-size: 17px;font-weight: 800;padding: 5px 5px;}
+.loading-msg{color: #4a4a4c;font-size: 17px;font-weight: 800;padding: 5px;}
 
 .buttons-holder{
   right: 0;

@@ -40,7 +40,7 @@
 
 .tag-box{
   min-height: fit-content;
-  padding: 0px 10px;
+  padding: 0 10px;
   display: none;
   min-height: 35px;
 }
@@ -145,7 +145,7 @@ img.dots-glyph {
   padding: 5px 3px 3px 5px;
   margin-bottom: 5px;
   margin-right: 3px;
-  margin-left: 0px;
+  margin-left: 0;
 }
 
 .grid-item table{
@@ -155,7 +155,7 @@ img.dots-glyph {
 }
 
 .grid-item table td{
-  padding: 6px 10px 6px 10px;
+  padding: 6px 10px;
 }
 
 tr:hover:not(.header):not(.footer){

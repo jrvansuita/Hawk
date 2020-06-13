@@ -118,7 +118,7 @@ input{
 
 .icon{
   padding: 2px;
-  margin-left: 0px;
+  margin-left: 0;
   margin-right: 6px;
   width: 35px;
   min-width: 35px;
@@ -313,7 +313,7 @@ table{
   position: absolute;
   background: #ffffff;
   width: 90%;
-  padding: 0px 6px;
+  padding: 0 6px;
   margin: 10px;
   font-size: 15px;
   cursor: pointer;
@@ -328,7 +328,7 @@ table{
 .last-product-holder{
   display: none;
   min-width: 100%;
-  margin: 0px -0px;
+  margin: 0;
 }
 .sku-header{
   display: flex;
@@ -397,14 +397,14 @@ table{
   background-color: transparent;
   border: 2px transparent;
   text-transform: uppercase;
-  border-style: none none solid none;
+  border-style: none none solid;
 }
 
 .editable-info:focus{
   color: black;
-  border-radius: 0px;
+  border-radius: 0;
   border: 2px #1c796b;
-  border-style: none none solid none;
+  border-style: none none solid;
 }
 
 

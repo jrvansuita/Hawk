@@ -19,7 +19,7 @@
 
 .grid-item {
   flex-basis: 33%;
-  padding: 15px 10px 0px 10px;
+  padding: 15px 10px 0;
   margin: 2px;
   display: -webkit-inline-box;
   min-width: 300px;
@@ -356,7 +356,7 @@ span.percent {
   margin-left: 24px;
   margin-top: -16px;
   color: white;
-  padding: 0px 1px;
+  padding: 0 1px;
   font-size: 10px;
   text-align: center;
   z-index: 9999;
