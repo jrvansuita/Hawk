@@ -19,9 +19,10 @@ Este é o repositório de desenvolvimento do Hawk.
 
 Todo commit neste branch gera uma deploy automatico em: https://hawkdev.herokuapp.com
 
- 1. Push de tag (v*) cria uma nova release. É utilizado o github action [create-release@v1](.github/workflows/tags-to-release.yml).
+ 1. Push tag cria uma nova release.
 
  - ``` git tag -a v1.0? -m "Mensagem da release"  ```
+ - ``` git push --tags ```
 
 
 
