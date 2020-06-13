@@ -41,7 +41,7 @@ function makeMenu(){
         sku: product.codigo,
         active: !active,
         user: currentUser
-      },(data)=>{
+      },()=>{
         window.location.reload();
       });
     }).setOnDynamicShow(() => {
@@ -197,7 +197,7 @@ function buildChildSku(product, child){
       active: !active,
       user: currentUser,
       forceSingle: true
-    },(data)=>{
+    },()=>{
       window.location.reload();
     });
   })
@@ -245,7 +245,7 @@ function buildStockCol(product){
 
   bindEvents($valElement, true, true);
 
-  $valElement.change(function(e, v){
+  $valElement.change(function(){
     if (currentUser){
       if ($(this).val()){
         showLoadingStatus();
@@ -259,11 +259,6 @@ function buildStockCol(product){
 
 
         _post('/product-stock',requestBody , (res)=>{
-          console.log(parseInt($(this).data('value')));
-          console.log(val);
-
-          console.log(parseInt($(this).data('value')) + val);
-
           handleInputUpdate($(this), res, parseInt($(this).data('value')) + val);
 
           var $disp = $(this).closest('tr').find('.available-stock .child-value');
@@ -287,7 +282,7 @@ function buildWeightCol(product){
 
   bindEvents($valElement, true, true);
 
-  $valElement.change(function(e, v){
+  $valElement.change(function(){
     if (currentUser){
       if ($(this).val()){
         showLoadingStatus();
@@ -329,7 +324,7 @@ function buildTextCol(val){
   return buildCol($('<label>').addClass('child-value').text(val));
 }
 
-function buildImgCol(path, title, addClass){
+function buildImgCol(path, title){
   var $img = $('<img>').addClass('icon').attr('src',path).attr('title',title);
 
   return buildCol($img).css('text-align', 'center');
@@ -574,7 +569,7 @@ function loadLayoutHistory(rows){
     }
   }
 
-  function bindEvents($el, blurOnEnter, clearOnFocus, selOnFocus){
+  function bindEvents($el, blurOnEnter, clearOnFocus){
     $el.click(function(e){
       e.stopPropagation();
     });
@@ -582,11 +577,11 @@ function loadLayoutHistory(rows){
     if (clearOnFocus){
       var lastVal = $el.val();
 
-      $el.focusin(function(e){
+      $el.focusin(function(){
         $(this).val('');
       });
 
-      $el.focusout(function(e){
+      $el.focusout(function(){
         if ($(this).val() == ''){
           $(this).val(lastVal);
         }
@@ -675,7 +670,7 @@ function loadLayoutHistory(rows){
     $(".editable-input.can-edit").attr('disabled', false);
   }
 
-  function errorLock(user){
+  function errorLock(){
     $('#lock-icon').hide().attr('src','/img/lock-error.png').fadeIn();
     $('#lock-user-id').select().focus();
   }

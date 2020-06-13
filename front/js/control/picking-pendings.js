@@ -101,9 +101,6 @@ function buildPendingItemsViews(el, pending){
 
   var last = $('<tr>').addClass('closable');
 
-  var voucherTag;
-
-
 
   last.append($('<td>').attr('colspan','2').append(getFirstBottomBarOptions(pending)));
   last.append($('<td>').addClass('middle-option-holder').attr('colspan','1').append(getPendingLocal(pending)));
