@@ -71,7 +71,7 @@ input[type=number]::-webkit-outer-spin-button {
 
 
 .label {
-  padding: 0px 3px 2px 3px;
+  padding: 0 3px 2px;
   color: gray;
   font-family: Roboto, sans-serif;
   background-color: white;
@@ -174,9 +174,9 @@ tr.line td{
 }
 
 .dense-shadow{
-  -webkit-box-shadow: 2px 2px 24px 0px rgba(0,0,0,0.75);
-  -moz-box-shadow: 2px 2px 24px 0px rgba(0,0,0,0.75);
-  box-shadow: 2px 2px 24px 0px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 2px 2px 24px 0 rgba(0,0,0,0.75);
+  -moz-box-shadow: 2px 2px 24px 0 rgba(0,0,0,0.75);
+  box-shadow: 2px 2px 24px 0 rgba(0,0,0,0.75);
 }
 
 .loading-circle{
@@ -231,14 +231,14 @@ tr.line td{
   display: block;
   background: transparent;
   border: 2px #e4e4e4;
-  border-style: none none solid none;
+  border-style: none none solid;
   transition: all .1s ease-in-out;
 }
 
 .simple-material-input:focus{
   transform: scale(1.01);
   border: 2px #1c796b;
-  border-style: none none solid none;
+  border-style: none none solid;
 }
 
 .simple-material-input-error{
@@ -269,9 +269,9 @@ tr.line td{
   position: absolute;
   width: 400px !important;
   height: 400px !important;
-  -webkit-box-shadow: 10px 10px 30px 0px rgba(50, 50, 50, 0.63);
-  -moz-box-shadow: 10px 10px 30px 0px rgba(50, 50, 50, 0.63);
-  box-shadow: 10px 10px 30px 0px rgba(50, 50, 50, 0.63);
+  -webkit-box-shadow: 10px 10px 30px 0 rgba(50, 50, 50, 0.63);
+  -moz-box-shadow: 10px 10px 30px 0 rgba(50, 50, 50, 0.63);
+  box-shadow: 10px 10px 30px 0 rgba(50, 50, 50, 0.63);
 }
 
 table{
@@ -312,10 +312,10 @@ table{
   outline: none;
   height: 26px;
   background-color: transparent;
-  border-style: none none none none;
+  border-style: none;
   transform: scale(1);
   border: 2px transparent;
-  border-style: none none solid none;
+  border-style: none none solid;
 }
 
 .editable-input:hover:enabled{
@@ -323,9 +323,9 @@ table{
 }
 
 .editable-input:focus{
-  border-radius: 0px;
+  border-radius: 0;
   border: 2px #1c796b;
-  border-style: none none solid none;
+  border-style: none none solid;
   transform: scale(1.05);
 }
 
@@ -445,7 +445,7 @@ table{
 
 .top{
   flex: 10%;
-  padding: 0px 5px;
+  padding: 0 5px;
 }
 
 .content-scroll{
