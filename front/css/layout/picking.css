@@ -157,7 +157,7 @@ table{
 .mini-avatar {
   width: 40px;
   height: 40px;
-  margin-left:0px;
+  margin-left:0;
 }
 
 .avatar-name {
@@ -226,7 +226,7 @@ table{
   font-size: 9px;
 }
 tr.row-padding td{
-  padding: 5px 0px;
+  padding: 5px 0;
 }
 
 .sku{
@@ -240,8 +240,8 @@ tr.row-padding td{
 
 .desc{
   padding-right: 4px;
-  padding-top: 0px;
-  padding-bottom: 0px;
+  padding-top: 0;
+  padding-bottom: 0;
   white-space: nowrap;
   font-size: 10px;
   margin-top: 4px;
@@ -274,7 +274,7 @@ tr.row-padding td{
 
 .block-pending{
   background-color: transparent !important;
-  padding: 0px;
+  padding: 0;
   min-width: 28px;
   margin: 7px 3px;
   width: 28px;
@@ -428,8 +428,8 @@ tr.row-padding td{
 }
 
 .inprogress-item.clickable-mini-item td:first-child {
-    padding: 0px;
-    border-spacing: 0px;
+    padding: 0;
+    border-spacing: 0;
 }
 
 .inprogress-item.pick-value{
@@ -548,8 +548,8 @@ tr.row-padding td{
   max-height: 320px;
   width: min-content;
   min-height: fit-content;
-  padding-left: 0px;
-  padding-right: 0px;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .blocked-header{
@@ -592,7 +592,7 @@ tr.row-padding td{
 .super-mini-avatar{
   width: 30px;
   height: 30px;
-  margin: 4px 0px 4px 2px;
+  margin: 4px 0 4px 2px;
   cursor: pointer;
 }
 
@@ -601,11 +601,11 @@ tr.row-padding td{
   margin-left: 21px;
   width: 13px;
   height: 13px;
-  padding: 0px;
+  padding: 0;
 }
 
 .blocked-sale-label{
-  padding: 2px 2px;
+  padding: 2px;
   display: block;
   cursor: pointer;
   color: #1C7974;
@@ -619,8 +619,8 @@ tr.row-padding td{
 
 
 .open-sale-holder{
-  padding-left: 0px;
-  padding-right: 0px;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .open-sale-holder .pick-header{
@@ -646,20 +646,20 @@ tr.row-padding td{
   outline: none;
   height: 26px;
   background-color: transparent;
-  border-style: none none none none;
+  border-style: none;
 }
 
 .sku-input:hover {
-  border-radius: 0px;
+  border-radius: 0;
   border: 2px #77717161;
-  border-style: none none solid none;
+  border-style: none none solid;
 }
 
 
 .sku-input:focus {
-  border-radius: 0px;
+  border-radius: 0;
   border: 2px #1c796b;
-  border-style: none none solid none;
+  border-style: none none solid;
 }
 
 
