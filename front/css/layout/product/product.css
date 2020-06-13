@@ -72,7 +72,7 @@
 #top-brand{
   color: #272424;
   font-size: 14px;
-  padding: 10px 10px;
+  padding: 10px;
   float: right;
   display: -webkit-box;
   cursor: pointer;
@@ -84,7 +84,7 @@
 #top-product-name{
   color: #272424;
   font-size: 14px;
-  padding: 10px 10px;
+  padding: 10px;
   cursor: pointer;
 }
 
@@ -139,7 +139,7 @@
   display: block;
   color: #302d2d;
   width: fit-content;
-  padding: 0px 1px;
+  padding: 0 1px;
   font-size: 15px;
 }
 
@@ -298,7 +298,7 @@ tr.selected td:first-child{
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   display: block;
-  border-bottom: 0px !important;
+  border-bottom: 0 !important;
   color: #989898 !important;
 }
 
@@ -306,13 +306,13 @@ tr.selected td:first-child{
   font-size: 15px;
   color: #302d2d;
   text-align: center;
-  padding: 5px 0px;
+  padding: 5px 0;
 }
 
 .label-val-title{
   font-size: 12px;
   color: #828181;
-  margin: 0px 5px;
+  margin: 0 5px;
   padding: 3px 5px;
   border-radius: 3px;
   border: solid 1px #4a494947;
@@ -324,7 +324,7 @@ tr.selected td:first-child{
 
 
 .obs{
-  padding: 0px 8px;
+  padding: 0 8px;
   line-height: 20px;
   color: #4a4949;
   line-break: auto;
@@ -389,7 +389,7 @@ table{
 }
 
 .obs td.td-child{
-  padding: 4px 4px !important;
+  padding: 4px !important;
 }
 
 .chart-label{
@@ -476,7 +476,7 @@ table{
 .icon{
   display: -webkit-box;
   width: 22px;
-  padding: 0px 6px 0px 0px;
+  padding: 0 6px 0 0;
   height: 22px;
   margin: auto;
 }
