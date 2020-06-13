@@ -23,7 +23,7 @@ $(document).ready(() => {
     }
   });
 
-  $('.print-local').click((e)=>{
+  $('.print-local').click(()=>{
     if (lastSelected){
       window.open('/product-print-locals?sku=' + lastSelected , '_blank');
     }
@@ -84,7 +84,6 @@ function imageClickOpen(){
   });
 }
 
-var skusCount = 0;
 
 function requestProductChilds(){
   requestProdutosFixes(() => {
@@ -188,10 +187,10 @@ function buildChildSku(product, child){
   var active = child.situacao == 'A';
 
   Dropdown.on($options)
-  .item('/img/barcode.png', 'Imprimir Etiqueta', (helper) =>{
+  .item('/img/barcode.png', 'Imprimir Etiqueta', () =>{
     window.open('/barcode?sku=' + child.codigo, '_blank');
   })
-  .item('/img/' + (active ? 'block' : 'checked') + '.png', active ? 'Inativar' : 'Ativar' , (helper) =>{
+  .item('/img/' + (active ? 'block' : 'checked') + '.png', active ? 'Inativar' : 'Ativar' , () =>{
     showLoadingStatus();
     _post('/product-active', {
       sku: child.codigo,

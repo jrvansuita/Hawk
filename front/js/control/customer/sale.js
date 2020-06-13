@@ -28,24 +28,6 @@ function printNFe(){
   }
 }
 
-function copyTextFromElement(id) {
-  var range = document.createRange();
-  range.selectNode(document.getElementById(id));
-  window.getSelection().removeAllRanges();
-  window.getSelection().addRange(range);
-  document.execCommand("copy");
-  window.getSelection().removeAllRanges();
-}
-
-function showMenuMsg(holder, msg, type){
-  type == 'error' ? $(holder).children().attr('src','/img/error.png') : $(holder).children().attr('src','/img/checked.png');
-
-  $(holder).append($('<span>').addClass('msg-info').text(msg).delay(4000).queue(() => {
-    $('.msg-info').remove();
-    $(holder).children().attr('src','/img/dots.png');
-  }));
-}
-
 function bindClientSaleInfo(data){
   $('.sale-client-name').text(data.client.name);
   $('.sale-client-social-code').text(data.client.socialCode);
@@ -339,7 +321,6 @@ function bindSaleItens(data){
             _post('/customer-sale-status-change',{ sale: data.oc, status: status, user: loggedUser, obs: obs }, (result) => {
               if(result.sucess != null || result == true){
                 errorTooltip.hideDelay(3000).showSuccess('Status Alterado');
-                //showMenuMsg('.sale-header-dots','Status alterado', 'sucess');
               }else{
                 helper.error();
                 errorTooltip.hideDelay(3000).showError('Erro ao cancelar NFe');
@@ -351,7 +332,7 @@ function bindSaleItens(data){
     }
   }
 
-  function bindSaleInfoViewer(data, callback){
+  function bindSaleInfoViewer(data){
 
     bindDropdowns(data);
 
