@@ -1,10 +1,9 @@
-.main-content{
+.main-content {
   margin-top: 100px;
   display: block;
   overflow-y: auto;
   padding-bottom: 40px;
 }
-
 
 .group-box {
   max-width: 600px;
@@ -14,7 +13,6 @@
   padding: 10px 15px;
   display: inline-grid;
 }
-
 
 .title-box {
   font-size: 1.2rem;
@@ -31,24 +29,22 @@
   color: #7b7575;
 }
 
-.group-explaning{
+.group-explaning {
   font-size: 0.8rem;
   font-weight: 400;
   color: #7b7575;
   white-space: pre-line;
 }
 
-.team-title{
+.team-title {
   font-size: 0.9rem;
   font-weight: 300;
 }
-
 
 .stamps-box {
   display: block;
   margin-bottom: 15px;
 }
-
 
 .stamp-circle {
   width: 8px;
@@ -60,11 +56,10 @@
   background: #4c565f;
 }
 
-.stamp-item{
+.stamp-item {
   margin-right: 8px;
   font-size: 14px;
 }
-
 
 .team-box {
   display: -webkit-box;
@@ -85,21 +80,20 @@
   position: sticky;
 }
 
-
-.concentracao{
+.concentracao {
   background: #0784f5;
 }
 
-.responsabilidade{
+.responsabilidade {
   background: #ff9f02;
 }
 
-.determinacao{
+.determinacao {
   background: #00ffa6;
 }
 
 .organizacao {
-  background: #ff0000;
+  background: #f00;
 }
 
 .agilidade {
@@ -110,16 +104,17 @@
   background: #ff00da;
 }
 
-.group-box:last-child{
+.group-box:last-child {
   margin-bottom: 150px;
 }
 
-.avatar-group{
+.avatar-group {
   margin: inherit;
   transform: scale(0.8);
   display: inline-block;
   margin-right: -15px;
 }
-.mini-avatar{
+
+.mini-avatar {
   position: relative;
 }

@@ -1,15 +1,15 @@
-a{
+a {
   outline: none;
   text-decoration: none;
 }
 
-.ind-holder{
+.ind-holder {
   max-width: 90%;
   margin: auto;
   display: block;
 }
 
-.ind-item{
+.ind-item {
   display: inline-block;
   width: fit-content;
   margin-right: 10px;
@@ -17,14 +17,14 @@ a{
   position: relative;
 }
 
-.ind-header{
+.ind-header {
   padding-top: 8px;
   height: 60px;
   min-height: fit-content;
   min-width: 20px;
 }
 
-.ind-icon{
+.ind-icon {
   /* padding: 5px; */
   width: 30px;
   margin-right: 6px;
@@ -32,10 +32,10 @@ a{
 }
 
 .ind-item * {
-  cursor:pointer !important;
+  cursor: pointer !important;
 }
 
-.ind-title{
+.ind-title {
   font-size: 14px;
   text-overflow: ellipsis;
   display: -webkit-inline-box;
@@ -47,8 +47,7 @@ a{
   margin-left: 5px;
 }
 
-
-.ind-count{
+.ind-count {
   font-size: 16px;
   padding: 0 10px;
   display: -webkit-box;
@@ -57,8 +56,7 @@ a{
   margin-bottom: 8px;
 }
 
-
-.top-controlers{
+.top-controlers {
   width: 90%;
   height: auto;
   padding: 15px 10px;
@@ -68,74 +66,75 @@ a{
   border-top: 3px solid #658ee4;
 }
 
-.errors-msg{
+.errors-msg {
   color: #4a4a4c;
   font-size: 16px;
   font-weight: 800;
   padding: 5px;
 }
 
-#run{
+#run {
   font-size: 15px;
   vertical-align: middle;
   position: relative;
   margin-top: -5px;
 }
 
-.loading-circle{
+.loading-circle {
   display: none;
   max-width: 20px;
   margin-right: 0;
 }
 
-.start-time{
+.start-time {
   padding: 5px 0;
   font-weight: 600;
   font-size: 13px;
   color: #616163;
 }
 
-.ind-rows-holder{
+.ind-rows-holder {
   max-width: 90%;
   margin: auto;
   margin-bottom: 100px;
   position: relative;
 }
 
-.row-item{
+.row-item {
   display: inline-block;
   margin-right: 12px;
   margin-bottom: 12px;
 }
 
-.row-item:hover *{
+.row-item:hover * {
   opacity: 0.9;
   cursor: pointer;
 }
 
-.ind-item:hover, .ind-item.active {
+.ind-item:hover,
+.ind-item.active {
   background-color: #f1eeee;
 }
 
-.ind-item:hover, .ind-item:hover *{
+.ind-item:hover,
+.ind-item:hover * {
   cursor: pointer;
 }
 
-
-.row-name{
+.row-name {
   display: inline-block;
   padding: 10px 8px;
   font-size: 12px;
   color: #443c3c;
 }
 
-.row-sku{
+.row-sku {
   display: inline-block;
   padding: 10px 8px;
   font-size: 13px;
 }
 
-.row-img{
+.row-img {
   display: -webkit-box;
   width: auto;
   min-height: 90px;
@@ -144,17 +143,16 @@ a{
   padding: 5px;
 }
 
-
-.subs-holder{
+.subs-holder {
   background-color: #f3f0f0;
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
 }
 
-.sku-fixes-modal{
+.sku-fixes-modal {
   position: fixed;
   width: 100%;
-  background-color: rgba(0,0,0,.6);
+  background-color: rgba(0, 0, 0, 0.6);
   height: 100%;
   left: 0;
   z-index: 999;
@@ -162,7 +160,7 @@ a{
   display: none;
 }
 
-.sku-fixes-holder{
+.sku-fixes-holder {
   margin: auto;
   width: fit-content;
   height: fit-content;
@@ -170,23 +168,22 @@ a{
   right: 0;
   top: -10%;
   bottom: 0;
-  margin: auto;
   position: fixed;
 }
 
-.fixes-main{
+.fixes-main {
   display: -webkit-box;
   min-width: 600px;
 }
 
-.fixes-left{
+.fixes-left {
   flex: 0 45%;
   padding-bottom: 10px;
   width: 450px;
   border-right: 1px solid #efe8e8;
 }
 
-.fixes-right{
+.fixes-right {
   flex: 0 55%;
   min-width: 400px;
   height: 100%;
@@ -202,7 +199,7 @@ a{
   border-top-left-radius: 5px;
 }
 
-.top-image-holder label{
+.top-image-holder label {
   color: #272424;
   cursor: pointer;
   font-size: 14px;
@@ -214,7 +211,7 @@ a{
   margin: 10px;
 }
 
-.image-holder img{
+.image-holder img {
   width: auto;
   height: auto;
   text-align: center;
@@ -224,56 +221,61 @@ a{
   max-height: 260px;
 }
 
-.sku-name{
+.sku-name {
   padding-right: 25px;
 }
 
-.sku-brand{
+.sku-brand {
   float: right;
 }
 
-.fixes-sku-list{
+.fixes-sku-list {
   /* padding-top: 10px; */
+
   /* padding-left: 10px; */
+
   /* padding-bottom: 5px; */
+
   /* border-bottom: 1px solid #efe8e8; */
+
   /* width: 100%; */
   color: #444546;
+
   /* display: -webkit-box; */
   font-weight: 800;
 }
 
-.fixes-sku-list.no-problem{
+.fixes-sku-list.no-problem {
   font-size: 14px;
   font-weight: 400;
 }
 
-.badge-item .ind-icon{width: 28px;height: 28px;padding: 3px;}
-.badge-item .ind-title{word-break: break-all;width: fit-content;font-size: 14px;margin: 0;padding: 10px 0;font-weight: 500;}
+.badge-item .ind-icon { width: 28px; height: 28px; padding: 3px; }
+.badge-item .ind-title { word-break: break-all; width: fit-content; font-size: 14px; margin: 0; padding: 10px 0; font-weight: 500; }
 
-.badge-item{
+.badge-item {
   padding-top: 4px;
 }
 
-.fixes-sku-badges{
+.fixes-sku-badges {
   width: 100%;
   padding: 0 15px;
   width: -webkit-fill-available;
 }
 
-.f-icon{
+.f-icon {
   width: 25px !important;
   height: 25px !important;
   margin-top: 3px;
 }
 
-.f-icon:hover{
+.f-icon:hover {
   cursor: pointer;
   transform: scale(1.05);
   opacity: 0.8;
 }
 
-.brand-group{
+.brand-group {
   padding-top: 15px;
   margin-top: 15px;
   border-top: 1px solid #dedddd;
@@ -284,7 +286,7 @@ a{
   display: inline-block;
 }
 
-.brand-title{
+.brand-title {
   font-size: 15px;
   font-weight: 500;
   padding: 0 5px 10px;
@@ -292,18 +294,18 @@ a{
   color: #464141;
 }
 
-.items-brand-holder{
+.items-brand-holder {
   display: -webkit-box;
   max-width: 100%;
 }
 
-.dots-glyph{
+.dots-glyph {
   float: right;
   margin-right: 5px;
   margin-left: 10px;
 }
 
-.top-sku{
+.top-sku {
   display: block;
   background: #f9f9f9;
   border-top: 1px solid #efe8e8;
@@ -312,33 +314,33 @@ a{
   border-bottom: 1px solid #efe8e8;
 }
 
-
-.menu-dots, .no-problem-menu{
+.menu-dots,
+.no-problem-menu {
   width: 30px;
   height: auto;
   float: right;
+
   /* position: relative; */
   margin-right: 10px;
 }
 
-.brand-total{
+.brand-total {
   float: right;
   color: #908888;
   font-size: 15px;
 }
 
-.main-menu-dots{display: block;float: right;}
+.main-menu-dots { display: block; float: right; }
 
 #sync {
   margin-top: -6px;
 }
 
-
-.main-menu-dots>.md-dropdown{
+.main-menu-dots > .md-dropdown {
   /* right: 200px; */
 }
 
-#search{
+#search {
   width: 200px;
   display: none;
   float: right;
@@ -347,13 +349,14 @@ a{
   font-size: 13px;
 }
 
-.description-box{
+.description-box {
   max-width: 90%;
   margin: auto;
   padding-bottom: 7px;
   padding-top: 7px;
 }
-.description{
+
+.description {
   font-size: 14px;
   color: #737373;
 }

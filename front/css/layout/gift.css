@@ -1,26 +1,35 @@
-.main-content{
+.main-content {
   max-width: fit-content;
-  width: 70%;min-width: 50%;margin: auto;height: fit-content;padding-top: 70px;padding-left: 3px;display: flex;padding-right: 3px;overflow-y: auto;}
+  width: 70%;
+  min-width: 50%;
+  margin: auto;
+  height: fit-content;
+  padding-top: 70px;
+  padding-left: 3px;
+  display: flex;
+  padding-right: 3px;
+  overflow-y: auto;
+}
 
-.show-all{
+.show-all {
   min-width: 250px;
   margin-bottom: 15px;
-  padding: 8px 0px;
+  padding: 8px 0;
   margin-right: 15px;
 }
 
-.all-rules{
+.all-rules {
   display: block;
   margin-top: 5px;
 }
 
-.each-all{
+.each-all {
   padding: 15px 22px 15px 10px;
   border-bottom: 1px solid #ececec;
   position: relative;
 }
 
-.each-all span{
+.each-all span {
   font-size: 14px;
   text-overflow: ellipsis;
   display: -webkit-inline-box;
@@ -32,34 +41,28 @@
   color: #616163;
 }
 
-
-.each-all > .icon-dots{
+.each-all > .icon-dots {
   float: right;
   margin-right: -10px;
 }
 
-
-
-.each-all:hover *{
+.each-all:hover * {
   cursor: pointer;
 }
 
-.each-all:hover{
+.each-all:hover {
   cursor: pointer;
   background-color: #e8e7e7;
 }
 
+.each-all label { font-size: 12px; display: block; font-weight: 1000; color: #ada8a8; margin-top: 4px; padding-left: 8px; }
 
-.each-all label{font-size: 12px;display: block;font-weight: 1000;color: #ada8a8;margin-top: 4px;padding-left: 8px;}
-
-
-
-
-.top{
+.top {
   padding: 5px 25px;
   margin-bottom: 25px;
 }
-.content{
+
+.content {
   padding: 35px 25px;
   flex: 1;
   margin-bottom: 10px;
@@ -69,28 +72,28 @@
 .sub-title {
   color: gray;
   font-size: 15px;
-  padding: 0px 5px;
+  padding: 0 5px;
   display: block;
   position: relative;
   width: 100%;
 }
 
-.rules-box-select{
+.rules-box-select {
   width: 100%;
   padding: 35px 15px;
 }
 
-.row{
+.row {
   width: 100%;
   display: flex;
   margin-bottom: 20px;
 }
 
-.row > *{
+.row > * {
   margin-right: 25px;
 }
 
-.msg-box{
+.msg-box {
   font-size: 13px;
   display: none;
   color: gray;
@@ -99,7 +102,7 @@
   margin-bottom: 5px;
 }
 
-.box-holder{
+.box-holder {
   min-width: 50%;
   min-height: 100px;
   display: block;
@@ -107,7 +110,7 @@
   margin-bottom: 10px;
 }
 
-.sel-box{
+.sel-box {
   width: 100%;
   min-height: 100px;
   display: block;
@@ -117,20 +120,19 @@
   border-radius: 3px;
 }
 
-.conditions-select .material-input-holder{
+.conditions-select .material-input-holder {
   margin-top: 30px !important;
 }
 
-
-.material-input-holder{
+.material-input-holder {
   margin-top: 15px !important;
 }
 
-.material-input-holder>input{
+.material-input-holder > input {
   padding: 5px 10px 10px 5px !important;
 }
 
-.toast-item{
+.toast-item {
   background-color: white;
   border-radius: 5px;
   padding: 3px  8px;
@@ -141,93 +143,87 @@
   display: inline-block;
 }
 
-.toast-item:hover{
+.toast-item:hover {
   background-color: #ff7676;
   cursor: pointer;
   color: white;
 }
 
-.icon-error{
+.icon-error {
   width: 18px;
   height: 18px;
   margin-right: 3px;
   margin-bottom: -4px;
 }
 
-
-.cond-group{
+.cond-group {
   background-color: #e0e0e0;
   padding: 4px 5px;
   margin: 3px;
   border-radius: 5px;
 }
 
-
-.cond-group .toast-item{
+.cond-group .toast-item {
   margin: 0;
   margin-right: 3px;
 }
 
-
-.cond-group .toast-item:hover{
+.cond-group .toast-item:hover {
   background-color: white;
   color: black;
 }
 
-
-.cond-group:hover{
+.cond-group:hover {
   background-color: #ff7676;
   cursor: pointer;
 }
 
-.buttons-holder{
+.buttons-holder {
   display: block;
   padding: 15px;
 }
 
-#gift-name{
+#gift-name {
   font-size: 15px !important;
   font-weight: 700;
   min-width: 250px;
 }
 
-#id{
+#id {
   display: none;
 }
 
-.check-options{
+.check-options {
   display: grid;
 }
 
-.pure-material-checkbox{
+.pure-material-checkbox {
   transform: scale(0.9);
 }
 
-.add{
+.add {
   display: inline;
   right: 0;
   position: absolute;
   padding: 3px;
 }
 
-
-.sku-input-holder{
+.sku-input-holder {
   margin-top: 35px !important;
 }
 
-.info{
-    vertical-align: middle;
-    font-size: 12px;
-    max-width: 80%;
-    display: block;
-    color: #8c8c8c;
+.info {
+  vertical-align: middle;
+  font-size: 12px;
+  max-width: 80%;
+  display: block;
+  color: #8c8c8c;
 }
 
-.info .mini-icon-button{
+.info .mini-icon-button {
   margin-bottom: -8px;
 }
 
-
-.material-input-holder>label{
+.material-input-holder > label {
   margin-top: -5px !important;
 }

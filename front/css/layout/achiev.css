@@ -6,14 +6,13 @@
   margin-right: auto;
   grid-template-columns: repeat(4, 0fr);
   grid-gap: 12px;
-
 }
 
-.label{
+.label {
   background: transparent;
 }
 
-.achivments-holder:last-child{
+.achivments-holder:last-child {
   margin-bottom: 100px;
 }
 
@@ -35,7 +34,7 @@
   margin-bottom: 40px;
 }
 
-.winner-holder:last-child{
+.winner-holder:last-child {
   margin-bottom: 10px;
 }
 
@@ -74,7 +73,7 @@
   position: relative;
 }
 
-.record-name{
+.record-name {
   color: #f8ff13 !important;
   text-shadow: 2px 2px 2px rgba(115, 103, 103, 0.64);
   font-weight: bold;
@@ -120,7 +119,7 @@
   margin-left: 4px;
 }
 
-.podium-avatar{
+.podium-avatar {
   width: 48px !important;
   height: 48px !important;
 }
@@ -134,7 +133,7 @@
   height: 25px;
 }
 
-.record-crown{
+.record-crown {
   margin-bottom: -4px;
   height: 25px;
   transform: rotate(-10deg);
@@ -150,7 +149,7 @@
   font-size: 18px;
 }
 
-.record{
+.record {
   height: 35px;
   position: sticky;
   z-index: 555;
@@ -158,39 +157,37 @@
   margin-top: -19px;
 }
 
-.podium-holder{
+.podium-holder {
   transform: scale(0.9);
   margin-top: -8px;
   position: relative;
   margin-right: 10px;
 }
 
-.linear-dots{
+.linear-dots {
   display: block;
   max-width: 150px;
 }
 
-.linear-dots > .dot-item{
+.linear-dots > .dot-item {
   display: block;
 }
 
-.linear-dots > .dot-item > .dot-value{
+.linear-dots > .dot-item > .dot-value {
   float: right;
   margin-top: 3px;
   font-weight: 800;
 }
-
 
 .champ-holder {
   margin-right: 10px;
   min-width: 155px;
 }
 
-.dot-label{
+.dot-label {
   font-size: 13px;
   font-weight: 600;
 }
-
 
 img.medal {
   position: absolute;
@@ -200,12 +197,12 @@ img.medal {
   width: 45px;
 }
 
-.avatar-holder > a{
+.avatar-holder > a {
   z-index: 23;
   position: relative;
 }
 
-img.laurel{
+img.laurel {
   margin-left: 38.5px;
   margin-top: -50px;
   z-index: 1;
@@ -222,7 +219,6 @@ img.ribbon {
   margin-left: 22px;
 }
 
-
 img.double-diamong {
   position: absolute;
   margin-top: -24px;
@@ -230,11 +226,9 @@ img.double-diamong {
   margin-left: 21.5px;
 }
 
-
-.wide{
+.wide {
   width: 100%;
 }
-
 
 img.comming-soon {
   width: 50px;
@@ -244,7 +238,7 @@ img.comming-soon {
   margin-top: 40px;
 }
 
-.comming-text{
+.comming-text {
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
@@ -253,7 +247,7 @@ img.comming-soon {
   text-align: center;
 }
 
-.rules{
+.rules {
   display: block;
   padding: 12px 18px;
   width: fit-content;
@@ -263,7 +257,7 @@ img.comming-soon {
   margin-right: auto;
 }
 
-.rule-title{
+.rule-title {
   font-size: 15px;
   color: #757575 !important;
   padding-top: 6px;
@@ -281,15 +275,13 @@ img.comming-soon {
   margin: auto;
 }
 
-
-.rule-row{
+.rule-row {
   display: inline-block;
   font-size: 13px;
   color: #656161;
   font-weight: 600;
   margin-bottom: 6px;
 }
-
 
 .rules-box {
   text-align: center;
@@ -301,7 +293,7 @@ img.comming-soon {
   margin-right: auto;
 }
 
-.winner-main-icon{
+.winner-main-icon {
   width: 65px;
   margin-left: auto;
   margin-right: auto;
@@ -309,10 +301,9 @@ img.comming-soon {
   margin-bottom: 5px;
 }
 
+.rule-icon { width: 25px; height: 25px; margin-bottom: -5px; margin-right: 3px; }
 
-.rule-icon{width: 25px;height: 25px;margin-bottom: -5px;margin-right: 3px;}
-
-.winner-box-rule{
+.winner-box-rule {
   padding-right: 5%;
   min-width: fit-content;
   padding-left: 5%;
@@ -321,21 +312,18 @@ img.comming-soon {
   border-right: 1px dashed #d8d2d2;
 }
 
-
-.winner-box-rule:last-child{
+.winner-box-rule:last-child {
   border-right: white;
 }
 
-.trophy{
+.trophy {
   margin-top: -70px;
   margin-left: 23px;
 }
 
-
 .champion {
   width: 100px;
 }
-
 
 img.dot.icon {
   width: 20px !important;
@@ -344,7 +332,6 @@ img.dot.icon {
   margin-left: -5px;
   margin-right: -3;
 }
-
 
 span.percent {
   background: #1aa922;
@@ -364,41 +351,36 @@ span.percent {
   text-shadow: 2px 2px 2px rgba(119, 111, 111, 0.77);
 }
 
-.current-month{
+.current-month {
   border-top: 4px solid #3476d2;
-  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, .20), 0 2px 3px -10px rgba(0, 0, 0, .25), 0 2px 7px 0 rgba(0, 0, 0, .23);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 2px 3px -10px rgba(0, 0, 0, 0.25), 0 2px 7px 0 rgba(0, 0, 0, 0.23);
   border-radius: 8px;
-  -webkit-box-shadow: 4px 7px 8px -5px rgba(135,127,135,1);
-  -moz-box-shadow: 4px 7px 8px -5px rgba(135,127,135,1);
-  box-shadow: 4px 7px 8px -5px rgba(135,127,135,1);
+  -webkit-box-shadow: 4px 7px 8px -5px rgba(135, 127, 135, 1);
+  -moz-box-shadow: 4px 7px 8px -5px rgba(135, 127, 135, 1);
+  box-shadow: 4px 7px 8px -5px rgba(135, 127, 135, 1);
 }
 
-
-.open-month{
+.open-month {
   border-top: 4px solid #f9a20e;
   opacity: 1;
 }
 
-.closed-month{
+.closed-month {
   border-top: 4px solid #0eca3d;
   opacity: 1;
 }
 
-.current-month .avatar-img{
+.current-month .avatar-img {
   opacity: 0.7;
 }
 
-
-
-
-.current-timer > img{
+.current-timer > img {
   margin: auto;
   width: 40px;
 }
 
-.current-timer{
+.current-timer {
   animation: leaves 0.8s ease-in-out infinite alternate;
-
   color: #6f6a6a;
   font-size: 14px;
   display: grid;
@@ -410,12 +392,12 @@ span.percent {
   margin-bottom: 15px;
 }
 
-
 @keyframes leaves {
-    0% {
-        transform: scale(0.95);
-    }
-    100% {
-        transform: scale(1.1);
-    }
+  0% {
+    transform: scale(0.95);
+  }
+
+  100% {
+    transform: scale(1.1);
+  }
 }

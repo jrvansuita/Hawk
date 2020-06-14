@@ -1,4 +1,4 @@
-.main{
+.main {
   padding-top: 95px;
   padding-bottom: 80px;
   margin-left: 25px;
@@ -8,14 +8,12 @@
   position: relative;
 }
 
-
-
-.top{
+.top {
   flex: 10%;
-  padding: 0px 5px;
+  padding: 0 5px;
 }
 
-.content-scroll{
+.content-scroll {
   margin-top: 15px;
   flex: 90%;
   overflow-y: auto;
@@ -25,10 +23,9 @@
   margin-left: -3px;
 }
 
-.content{
+.content {
   margin-bottom: 30px;
 }
-
 
 .search-box {
   padding-top: 10px;
@@ -39,37 +36,39 @@
   position: relative;
 }
 
-.selectors{
+.selectors {
   display: inline-flex;
 }
 
-.button-holders{
+.button-holders {
   right: 0;
   display: inline-table;
   position: absolute;
   margin-right: 15px;
 }
 
-.new{
+.new {
   background-color: #009586 !important;
 }
 
-.material-input-holder{
+.material-input-holder {
   width: fit-content;
   margin-left: 15px;
-  margin-top: 0px;
+  margin-top: 0;
 }
 
-.material-input-holder>input{
+.material-input-holder > input {
   font-size: 15px !important;
+
   /* padding: 25px 10px 5px 5px !important; */
 }
 
-.material-input-holder>input:focus~label, .material-input-holder>input:valid~label {
-    top: -10px !important;
+.material-input-holder > input:focus ~ label,
+.material-input-holder > input:valid ~ label {
+  top: -10px !important;
 }
 
-.icon-open{
+.icon-open {
   float: left;
   margin-left: 8px;
   margin-top: 23px;
@@ -80,47 +79,47 @@
   cursor: pointer;
 }
 
-.number{
+.number {
   font-size: 14px !important;
   font-weight: bold !important;
   padding-left: 20px !important;
 }
 
-#header{
+#header {
   display: none;
   position: sticky;
   border-top-left-radius: 4px;
 }
 
-#header td{
+#header td {
   background: #dcdcdc;
   padding: 12px 15px !important;
-  border-bottom: 0px !important;
+  border-bottom: 0 !important;
   color: #484545 !important;
   font-size: 15px;
 }
 
-#header td:first-child{
+#header td:first-child {
   border-top-left-radius: 4px;
 }
 
-#header td:last-child{
+#header td:last-child {
   border-top-right-radius: 4px;
 }
 
-.line-item td{
+.line-item td {
   padding: 5px 8px;
   font-size: 13px;
   cursor: pointer;
 }
 
-.menu-dots{
+.menu-dots {
   margin-top: 8px;
   float: right;
   margin-right: 10px;
 }
 
-.loading{
+.loading {
   float: right;
   position: absolute;
   right: 25px;
@@ -129,24 +128,23 @@
   color: gray;
 }
 
-.transp-col div{
+.transp-col div {
   display: flex;
 }
 
-.transp-col img{
+.transp-col img {
   width: 28px;
   height: 28px;
   margin-right: 10px;
   background: transparent;
 }
 
-.transp-col span{
+.transp-col span {
   display: inline-block;
   margin-top: 6px;
 }
 
-
-.open-item td:first-child{
+.open-item td:first-child {
   border-left: solid 3px #ddea00;
 }
 
@@ -157,7 +155,8 @@
 .content tr:nth-child(even) {
   background-color: #ddd6d757;
 }
-.ship-status.colected{
+
+.ship-status.colected {
   color: green;
   font-weight: bolder;
 }

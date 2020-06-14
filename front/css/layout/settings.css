@@ -1,25 +1,23 @@
 
-
-.main-content{
+.main-content {
   padding: 0 30px;
 }
 
-.content{
+.content {
   min-height: 400px;
   display: flex;
 }
 
-.header{
+.header {
   border-bottom: 1px solid rgb(217, 220, 221);
   padding: 15px 30px;
 }
 
-.header-title{
+.header-title {
   font-size: 19px;
 }
 
-
-.forms{
+.forms {
   max-width: 100%;
   min-width: 300px;
   min-height: 250px;
@@ -28,7 +26,7 @@
   margin-right: 15px;
 }
 
-.link{
+.link {
   padding: 10px 15px;
   outline: none;
   font-weight: 500;
@@ -40,15 +38,15 @@
   font-weight: 700;
 }
 
-.group-title{
+.group-title {
   font-size: 18px;
   padding: 20px 15px;
   color: rgb(40, 40, 41);
   font-weight: 600;
-  display:block;
+  display: block;
 }
 
-.job-status{
+.job-status {
   width: 32px;
   height: 32px;
   display: inline;
@@ -56,23 +54,23 @@
   vertical-align: middle;
 }
 
-.job-active{
+.job-active {
   width: 24px;
   height: 24px;
   padding: 0;
   margin-right: 10px;
 }
 
-.job-item td{
+.job-item td {
   padding: 4px 0;
 }
 
-.job-name{
+.job-name {
   font-size: 15px;
   margin-right: 10px;
 }
 
-.job-last{
+.job-last {
   font-size: 13px;
   margin-right: 5px;
 }

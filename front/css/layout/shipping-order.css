@@ -1,7 +1,5 @@
 
-
-
-.main-content{
+.main-content {
   padding-top: 100px;
   padding-left: 5px;
   padding-right: 5px;
@@ -13,7 +11,7 @@
   position: relative;
 }
 
-.header-holder{
+.header-holder {
   width: 100%;
   display: flex;
   margin-top: 5px;
@@ -21,8 +19,7 @@
   margin-bottom: 5px;
 }
 
-
-.info{
+.info {
   overflow: hidden;
   white-space: pre-wrap;
   width: auto;
@@ -31,16 +28,13 @@
   vertical-align: bottom;
 }
 
-.highlighted{
+.highlighted {
   font-size: 20px;
   font-weight: 600;
   position: relative;
 }
 
-
-
-
-.field-title{
+.field-title {
   font-size: 13px;
   padding-bottom: 3px;
   color: rgb(116, 114, 116);
@@ -49,7 +43,7 @@
   height: fit-content;
 }
 
-.field{
+.field {
   margin-bottom: 8px;
   margin-top: 8px;
   margin-left: 8px;
@@ -57,10 +51,9 @@
   display: inline-block;
 }
 
-
-.icon{
+.icon {
   padding: 2px;
-  margin-left: 0px;
+  margin-left: 0;
   margin-right: 6px;
   width: 35px;
   min-width: 35px;
@@ -74,42 +67,30 @@
   border: 0 !important;
 }
 
-
-
-
-table{
+table {
   width: 100%;
-
 }
 
-
-
-
-.shipping-order-col{
+.shipping-order-col {
   float: left;
   margin-left: 15px;
 }
 
+.itens-count-display { margin-top: 6px; }
 
-.itens-count-display{margin-top: 6px;}
-
-
-
-
-.middle-line{
+.middle-line {
   padding: 5px 10px;
   margin-top: 15px;
   display: flow-root;
   height: fit-content;
 }
 
-.middle-line-inner{
+.middle-line-inner {
   display: -webkit-box;
   width: 100%;
 }
 
-
-.left-middle-line{
+.left-middle-line {
   width: 80%;
   float: left;
   height: fit-content;
@@ -118,8 +99,7 @@ table{
   display: contents;
 }
 
-
-.right-middle-line{
+.right-middle-line {
   width: 20%;
   right: 0;
   height: fit-content;
@@ -127,16 +107,14 @@ table{
   margin-right: 10px;
 }
 
-
-
-.progress-line.inner{
+.progress-line.inner {
   background-color: #4ad44f;
   padding: 0;
   margin: 0;
   width: 0;
 }
 
-.progress-line{
+.progress-line {
   background-color: rgb(224, 224, 220);
   margin-bottom: 12px;
   height: 3px;
@@ -147,27 +125,27 @@ table{
   border-top-right-radius: 6px;
 }
 
-
-.nf-input-and-icon{
+.nf-input-and-icon {
   display: flex;
   width: fit-content;
   padding-bottom: 8px;
 }
 
-.nf-input-holder{
-   display: block;
-   height: fit-content;
-   width: fit-content;
+.nf-input-holder {
+  display: block;
+  height: fit-content;
+  width: fit-content;
 }
 
-.nf-input-icon{
+.nf-input-icon {
   display: flex;
   width: fit-content;
   padding-bottom: 8px;
 }
 
-.nf-msg{
+.nf-msg {
   position: relative;
+
   /* display: none; */
   width: fit-content;
   height: fit-content;
@@ -177,13 +155,12 @@ table{
   min-width: 100%;
 }
 
-.nf-icon{
+.nf-icon {
   width: 28px;
   height: 28px;
 }
 
-
-#nf{
+#nf {
   font-size: 16px;
   min-width: 200px;
   margin-left: 10px;
@@ -191,9 +168,7 @@ table{
   display: inline-block;
 }
 
-
-
-#progress{
+#progress {
   font-size: 15px;
   color: rgb(143, 143, 148);
   padding: 5px;
@@ -205,14 +180,14 @@ table{
   display: inline-block;
 }
 
-
-.buttons-holder{
+.buttons-holder {
   display: block;
   float: right;
+
   /* top: 0; */
 }
 
-.nfs-in-holder{
+.nfs-in-holder {
   height: fit-content;
   margin-top: 15px;
   padding-top: 2px;
@@ -220,8 +195,7 @@ table{
   margin-bottom: 200px;
 }
 
-
-.icon-open-list{
+.icon-open-list {
   float: right;
   margin-bottom: -14px;
   margin-top: -5px;
@@ -231,22 +205,21 @@ table{
   cursor: pointer;
 }
 
-.nfs-out-holder{
+.nfs-out-holder {
   margin-bottom: 150px;
   position: relative;
 }
 
-
-.bold{
+.bold {
   font-weight: 800;
   font-size: 18px !important;
-  padding: 0px 5px;
+  padding: 0 5px;
 }
 
 #nfs-in{
 }
 
-#nfs-in td{
+#nfs-in td {
   padding: 8px 12px;
   font-size: 15px;
 }
@@ -255,7 +228,7 @@ table{
   background-color: #ddd6d757;
 }
 
-.ufs-list{
+.ufs-list {
   display: block;
   font-size: 14px;
   font-weight: 900;
@@ -263,33 +236,31 @@ table{
   text-align: left;
 }
 
-.memory-line td:first-child{
+.memory-line td:first-child {
   border-left: 3px solid #009586ba;
 }
 
-.mini-icon{
+.mini-icon {
   width: 28px;
   height: 28px;
 }
 
-
-.title-closed{
+.title-closed {
   vertical-align: middle;
   position: absolute;
-  background: #ffffff;
+  background: #fff;
   width: 90%;
-  padding: 0px 6px;
+  padding: 0 6px;
   margin: 10px;
   font-size: 15px;
   cursor: pointer;
-  color: #777777;
+  color: #777;
   margin-top: -25px;
   margin-right: 40px;
   height: auto;
   z-index: 222;
   display: inline-block;
 }
-
 
 .button {
   position: relative;
@@ -299,21 +270,19 @@ table{
   float: right;
 }
 
-
-.nfe-remove{
+.nfe-remove {
   width: 22px;
   height: 22px;
   float: right;
   margin-right: 5px;
 }
 
-
-.hightlight-line{
+.hightlight-line {
   border-left: 4px solid #8181f9;
 }
 
-.allow-difal-holder{
+.allow-difal-holder {
   transform: scale(0.9);
 }
 
-.difal-states{font-size: 12px;color: gray;display: block;padding-left: 6px;margin-top: 2px;}
+.difal-states { font-size: 12px; color: gray; display: block; padding-left: 6px; margin-top: 2px; }

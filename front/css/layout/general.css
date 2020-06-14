@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   padding: 0;
   height: 100%;
   background-color: #fcfcfc;
@@ -7,13 +8,14 @@ html, body {
   overflow: hidden;
 }
 
-a{
+a {
   text-decoration: none;
   cursor: pointer;
 }
 
-
-input, span, label {
+input,
+span,
+label {
   font-family: Roboto, sans-serif;
 }
 
@@ -27,20 +29,18 @@ input, span, label {
   cursor: pointer;
 }
 
-
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-
-.button{
+.button {
   margin: 5px 1px;
   text-align: center;
   min-width: 80px;
   display: inline-block;
-  background-color: #1B6E61 !important;
+  background-color: #1b6e61 !important;
   color: white !important;
   padding: 8px 10px;
   border-radius: 5px;
@@ -49,26 +49,24 @@ input[type=number]::-webkit-outer-spin-button {
   cursor: pointer;
 }
 
-.button:hover{
+.button:hover {
   background-color: #15564c !important;
 }
 
-
-.button:focus{
-  background-color: #4CAF50!important;
-  outline:0;
+.button:focus {
+  background-color: #4caf50 !important;
+  outline: 0;
   font-weight: 800;
 }
 
-.delete-button{
+.delete-button {
   background-color: #e45355 !important;
   outline: none;
 }
 
-.delete-button:hover{
+.delete-button:hover {
   background-color: #ca5556 !important;
 }
-
 
 .label {
   padding: 0 3px 2px;
@@ -85,13 +83,14 @@ input[type=number]::-webkit-outer-spin-button {
 .main-content {
   display: block;
   margin-top: 80px;
+
   /* position: relative; */
   height: 100%;
   overflow-y: auto;
 }
 
 .shadow {
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
   border-radius: 4px;
   box-sizing: border-box;
   background-color: white;
@@ -103,7 +102,6 @@ input[type=number]::-webkit-outer-spin-button {
   border: solid 2px white;
   border-radius: 50%;
 }
-
 
 .gone {
   display: none;
@@ -117,18 +115,16 @@ input[type=number]::-webkit-outer-spin-button {
   background-color: #f3cccc !important;
 }
 
-.green-wick{
+.green-wick {
   background-color: #ccf3df !important;
 }
 
-.icon{
+.icon {
   width: 18px;
   height: 18px;
   margin-left: 8px;
   margin-right: 8px;
 }
-
-
 
 .avatar-name {
   padding: 2px 5px;
@@ -139,16 +135,17 @@ input[type=number]::-webkit-outer-spin-button {
   margin-right: auto;
   display: block;
 }
-.left{
+
+.left {
   text-align: left !important;
 }
 
-.right{
+.right {
   float: right;
 }
 
-.middle{
-text-align: center;
+.middle {
+  text-align: center;
 }
 
 .avatar-img {
@@ -164,22 +161,22 @@ text-align: center;
   display: block;
 }
 
-
-tr.line td{
+tr.line td {
   border-bottom: 1pt solid #80808033;
 }
 
-.copiable, .copiable > *  {
+.copiable,
+.copiable > * {
   cursor: copy !important;
 }
 
-.dense-shadow{
-  -webkit-box-shadow: 2px 2px 24px 0 rgba(0,0,0,0.75);
-  -moz-box-shadow: 2px 2px 24px 0 rgba(0,0,0,0.75);
-  box-shadow: 2px 2px 24px 0 rgba(0,0,0,0.75);
+.dense-shadow {
+  -webkit-box-shadow: 2px 2px 24px 0 rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 2px 2px 24px 0 rgba(0, 0, 0, 0.75);
+  box-shadow: 2px 2px 24px 0 rgba(0, 0, 0, 0.75);
 }
 
-.loading-circle{
+.loading-circle {
   max-width: 28px;
   max-height: 28px;
   display: inline-block;
@@ -188,27 +185,26 @@ tr.line td{
   opacity: 0.8;
 }
 
-.hidden{
+.hidden {
   visibility: hidden;
 }
 
-.no-scroll{
+.no-scroll {
   overflow: hidden;
 }
 
-
 @-webkit-keyframes pulsate {
-  0% { opacity: 0.0}
-  10% { opacity: .20}
-  20% { opacity: .40 }
-  30% { opacity: .60 }
-  40% { opacity: .80 }
-  50% { opacity: 1.0}
-  60% { opacity: .80}
-  70% { opacity: .60}
-  80% { opacity: .40}
-  90% { opacity: .20}
-  100% { opacity: 0.0}
+  0% { opacity: 0; }
+  10% { opacity: 0.2; }
+  20% { opacity: 0.4; }
+  30% { opacity: 0.6; }
+  40% { opacity: 0.8; }
+  50% { opacity: 1; }
+  60% { opacity: 0.8; }
+  70% { opacity: 0.6; }
+  80% { opacity: 0.4; }
+  90% { opacity: 0.2; }
+  100% { opacity: 0; }
 }
 
 .pulse {
@@ -218,13 +214,10 @@ tr.line td{
   -webkit-animation-name: pulsate;
   -webkit-animation-duration: 1s;
   -webkit-animation-timing-function: ease-in-out;
-  -webkit-animation-iteration-count: infinite
+  -webkit-animation-iteration-count: infinite;
 }
 
-
-
-
-.simple-material-input{
+.simple-material-input {
   outline: none;
   height: 26px;
   width: 100%;
@@ -232,16 +225,16 @@ tr.line td{
   background: transparent;
   border: 2px #e4e4e4;
   border-style: none none solid;
-  transition: all .1s ease-in-out;
+  transition: all 0.1s ease-in-out;
 }
 
-.simple-material-input:focus{
+.simple-material-input:focus {
   transform: scale(1.01);
   border: 2px #1c796b;
   border-style: none none solid;
 }
 
-.simple-material-input-error{
+.simple-material-input-error {
   border-bottom: 2px solid #e25952 !important;
 }
 
@@ -249,15 +242,13 @@ tr.line td{
   border-right: 1px dashed #e6e7e6;
 }
 
-.dotted-line{
+.dotted-line {
   border-bottom: 1px dashed #e6e7e6;
 }
 
-.dotted-top{
+.dotted-top {
   border-top: 1px dashed #e6e7e6;
 }
-
-
 
 .image-preview {
   width: 90px;
@@ -274,7 +265,7 @@ tr.line td{
   box-shadow: 10px 10px 30px 0 rgba(50, 50, 50, 0.63);
 }
 
-table{
+table {
   border-spacing: 0;
 }
 
@@ -298,14 +289,12 @@ table{
 }
 **/
 
-
-
-.editable-input{
+.editable-input {
   border-radius: 5px;
   margin-top: -5px;
   text-align: center;
   display: block;
-  transition: all .1s ease-in-out;
+  transition: all 0.1s ease-in-out;
   color: black;
   width: -webkit-fill-available;
   text-transform: uppercase;
@@ -318,22 +307,20 @@ table{
   border-style: none none solid;
 }
 
-.editable-input:hover:enabled{
+.editable-input:hover:enabled {
   transform: scale(1.05);
 }
 
-.editable-input:focus{
+.editable-input:focus {
   border-radius: 0;
   border: 2px #1c796b;
   border-style: none none solid;
   transform: scale(1.05);
 }
 
-.disabled{
+.disabled {
   opacity: 0.6 !important;
 }
-
-
 
 .mini-red-circle {
   margin-left: 5px;
@@ -351,23 +338,22 @@ table{
   margin-right: 5px;
 }
 
-
-.barberpole-mini-green-background{
+.barberpole-mini-green-background {
   height: 4px;
   animation: barberpole 10s linear infinite;
-  background-image: repeating-linear-gradient(     -45deg,     #4ac6a9bf,     #4ac6a9bf 0.7rem,     #ffffff 0.7rem,     #ffffff 1.3rem     );
+  background-image: repeating-linear-gradient(-45deg, #4ac6a9bf, #4ac6a9bf 0.7rem, #fff 0.7rem, #fff 1.3rem);
   background-size: 200% 200%;
 }
 
-.barberpole-color-background{
+.barberpole-color-background {
   animation: barberpole 10s linear infinite;
-  background-image: repeating-linear-gradient(     -45deg,     #7500e052,     #7500e052 1rem,     #efefef40 1rem,     #efefef40 2rem     );
+  background-image: repeating-linear-gradient(-45deg, #7500e052, #7500e052 1rem, #efefef40 1rem, #efefef40 2rem);
   background-size: 200% 200%;
 }
 
-.barberpole-gray-background{
+.barberpole-gray-background {
   animation: barberpole 10s linear infinite;
-  background-image: repeating-linear-gradient(     -45deg,     transparent,     transparent 1rem,     #cccccc33 1rem,     #cccccc33 2rem     );
+  background-image: repeating-linear-gradient(-45deg, transparent, transparent 1rem, #ccc3 1rem, #ccc3 2rem);
   background-size: 200% 200%;
 }
 
@@ -376,7 +362,6 @@ table{
     background-position: 100% 100%;
   }
 }
-
 
 .mini-icon-button:hover {
   background-color: #f3f3f3;
@@ -391,7 +376,7 @@ table{
   padding: 3px;
 }
 
-.avatar-group{
+.avatar-group {
   width: fit-content;
   margin: auto;
   margin-bottom: 5px;
@@ -399,8 +384,7 @@ table{
   position: relative;
 }
 
-
-.avatar-badge{
+.avatar-badge {
   width: 20px;
   height: 20px;
   z-index: 999 !important;
@@ -411,8 +395,7 @@ table{
   filter: drop-shadow(1px 1px 1px #222222a8);
 }
 
-
-.inactive-circle{
+.inactive-circle {
   width: 6px;
   height: 6px;
   background: red;
@@ -422,7 +405,7 @@ table{
   margin-bottom: 5px;
 }
 
-.active-circle{
+.active-circle {
   width: 6px;
   height: 6px;
   background: #02d202;
@@ -432,8 +415,7 @@ table{
   margin-bottom: 5px;
 }
 
-
-.main{
+.main {
   padding-top: 95px;
   padding-bottom: 80px;
   margin-left: 25px;
@@ -443,12 +425,12 @@ table{
   position: relative;
 }
 
-.top{
+.top {
   flex: 10%;
   padding: 0 5px;
 }
 
-.content-scroll{
+.content-scroll {
   margin-top: 15px;
   flex: 90%;
   overflow-y: auto;
@@ -458,20 +440,19 @@ table{
   margin-left: -3px;
 }
 
-.content{
+.content {
   margin-bottom: 30px;
 }
 
-
-.is-open{
+.is-open {
   transform: inherit;
 }
 
-.is-closed{
+.is-closed {
   transform: rotate(270deg);
 }
 
-.icon-open{
+.icon-open {
   float: left;
   margin-left: 8px;
   margin-top: 13px;

@@ -6,28 +6,28 @@
   cursor: default;
 }
 
-.material-input-holder>input {
+.material-input-holder > input {
   background: transparent;
   font-family: 'Roboto';
   width: -webkit-fill-available;
   min-width: 150px;
-  margin: 0px auto 0;
+  margin: 0 auto 0;
   font-size: 13px;
   z-index: -333333;
-  padding: 25px 10px 10px 0px;
+  padding: 25px 10px 10px 0;
   display: block;
   border: none;
   margin-bottom: 2px;
   border-bottom: 2px solid #e7e7e7;
 }
 
-.material-input-holder>input:focus {
+.material-input-holder > input:focus {
   outline: none;
 }
 
 /* LABEL ======================================= */
 
-.material-input-holder>label {
+.material-input-holder > label {
   color: #999;
   font-size: 15px;
   font-weight: normal;
@@ -45,7 +45,9 @@
 
 /* active state */
 
-.material-input-holder>input:focus~label, .material-input-holder>input:valid~label, .material-input-holder>input:disabled~label{
+.material-input-holder > input:focus ~ label,
+.material-input-holder > input:valid ~ label,
+.material-input-holder > input:disabled ~ label {
   top: -15px;
   font-size: 11px;
   color: #259587;
@@ -58,7 +60,8 @@
   display: block;
 }
 
-.bar:before, .bar:after {
+.bar::before,
+.bar::after {
   content: '';
   height: 2px;
   width: 0;
@@ -70,17 +73,18 @@
   -webkit-transition: 0.2s ease all;
 }
 
-.bar:before {
+.bar::before {
   left: 50%;
 }
 
-.bar:after {
+.bar::after {
   right: 50%;
 }
 
 /* active state */
 
-.material-input-holder>input:focus~.bar:before, .material-input-holder>input:focus~.bar:after {
+.material-input-holder > input:focus ~ .bar::before,
+.material-input-holder > input:focus ~ .bar::after {
   width: 50%;
 }
 

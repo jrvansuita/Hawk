@@ -1,11 +1,10 @@
 
-.short{
+.short {
   width: 40%;
   margin-right: 30px;
 }
 
-
-.enum-items-board{
+.enum-items-board {
   border-radius: 5px;
   width: 95%;
   margin: auto;
@@ -16,88 +15,87 @@ table tr:nth-child(odd) {
   background-color: #f2f2f2;
 }
 
-table td:nth-child(1){
+table td:nth-child(1) {
   max-width: 1px;
   width: 1px;
 }
 
-table td:nth-child(2){
+table td:nth-child(2) {
   width: 100px;
 }
 
-table td:last-child{
+table td:last-child {
   width: 200px;
 }
 
-
-.enum-items{
+.enum-items {
   width: -webkit-fill-available;
   margin: 0;
   margin-right: -1px;
+
   /* width: 100%; */
+
   /* table-layout: fixed; */
 }
 
-.enum-items .title td{
+.enum-items .title td {
   background-color: #dadada;
   color: #545454;
   padding: 6px 15px;
   font-size: 13px;
 }
 
-
-.enum-items td{
+.enum-items td {
   padding: 5px;
 }
 
-.enum-items td span{
+.enum-items td span {
   font-size: 15px;
   color: #313131;
   width: 100%;
-  margin: 0px 10px;
+  margin: 0 10px;
 }
 
-.simple-material-input{
+.simple-material-input {
   border-bottom: none;
   width: 100%;
 }
 
-.including td{
+.including td {
   background-color: #fffde5;
 }
 
-.including input{
+.including input {
   border-bottom: 1px dashed #8e8e8e;
   width: 100%;
   margin-right: 10px;
 }
 
-.item-span{
+.item-span {
   display: flex;
 }
 
-.line-button{
+.line-button {
   width: 22px;
   padding: 3px;
-  margin: 0px 10px;
+  margin: 0 10px;
   height: 22px;
 }
 
-.line-button:hover{
+.line-button:hover {
   background-color: #dcdcdc73;
   cursor: pointer !important;
   border-radius: 50%;
 }
 
-
-.line-options{
+.line-options {
   width: 22px;
   padding: 3px;
-  margin: 4px 15px 0px 10px;
+  margin: 4px 15px 0 10px;
   height: 22px;
 }
 
-.default-item{
+.default-item {
   display: none;
   padding: 3px;
   width: 22px;

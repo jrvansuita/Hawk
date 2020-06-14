@@ -1,5 +1,4 @@
 
-
 .countdown-holder {
   position: relative;
   margin: auto;
@@ -30,7 +29,7 @@
 
 .countdown-holder svg circle {
   stroke-dasharray: 113px;
-  stroke-dashoffset: 0px;
+  stroke-dashoffset: 0;
   stroke-linecap: round;
   stroke-width: 3px;
   stroke: #0ab1a1;
@@ -40,8 +39,9 @@
 
 @keyframes countdown {
   from {
-    stroke-dashoffset: 0px;
+    stroke-dashoffset: 0;
   }
+
   to {
     stroke-dashoffset: 113px;
   }

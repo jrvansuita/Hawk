@@ -1,9 +1,8 @@
-#show-skus{
+#show-skus {
   min-width: 100px !important;
 }
 
-
-.stock-chart-row{
+.stock-chart-row {
   height: 300px;
   max-height: 300px;
 }

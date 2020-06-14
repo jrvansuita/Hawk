@@ -1,14 +1,14 @@
-.ms-modal{
+.ms-modal {
   position: fixed;
   width: 100%;
-  background-color: rgba(0,0,0,.6);
+  background-color: rgba(0, 0, 0, 0.6);
   height: 100%;
   left: 0;
   z-index: 999;
   top: 0;
 }
 
-.ms-holder{
+.ms-holder {
   margin: auto;
   left: 0;
   position: fixed;
@@ -17,25 +17,28 @@
   bottom: 0;
   background-color: white;
   width: fit-content;
-  height:fit-content;
+  height: fit-content;
   display: block;
   border-radius: 2px;
-  padding: 0px 15px;
+  padding: 0 15px;
   padding-bottom: 12px;
-  -webkit-box-shadow: 2px 2px 24px 0px rgba(0,0,0,0.75);
-  -moz-box-shadow: 2px 2px 24px 0px rgba(0,0,0,0.75);
-  box-shadow: 2px 2px 24px 0px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 2px 2px 24px 0 rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 2px 2px 24px 0 rgba(0, 0, 0, 0.75);
+  box-shadow: 2px 2px 24px 0 rgba(0, 0, 0, 0.75);
 }
 
-.ms-items{
+.ms-items {
   display: block;
+
   /* padding: 0px; */
+
   /* margin-top: 15px; */
+
   /* margin-bottom: 0px; */
   padding-left: 0;
 }
 
-.ms-items li{
+.ms-items li {
   list-style-type: none;
   display: -webkit-box;
   width: 100%;
@@ -44,12 +47,13 @@
   cursor: pointer;
   text-decoration: none;
 }
-.ms-items li:hover{
+
+.ms-items li:hover {
   border-radius: 2px;
   background-color: #efecec;
 }
 
-.ms-title{
+.ms-title {
   /* padding-left: 10px; */
   margin-bottom: 15px;
   font-size: 14px;
@@ -59,46 +63,46 @@
   display: -webkit-box;
 }
 
-.ms-items  img {
+.ms-items img {
   cursor: pointer;
   display: -webkit-box;
   width: 25px;
   height: 25px;
-  padding: 0px 6px;
+  padding: 0 6px;
 }
 
-.ms-items  span {
+.ms-items span {
   cursor: pointer;
   display: flex;
   padding: 5px 4px;
 }
 
-.ms-items  label {
+.ms-items label {
   cursor: pointer;
   padding: 6px 2px;
-
   margin-right: 15px;
   font-size: 13px;
   color: #696666;
   font-weight: 600;
 }
 
-.ms-input{
+.ms-input {
   font-size: 15px !important;
 }
 
-.material-input-holder{
+.material-input-holder {
   /* margin-top: 55px; */
+
   /* margin-left: 10px; */
   margin-right: 100px;
   margin-bottom: 35px;
 }
 
-.ms-choices{
+.ms-choices {
   max-width: 400px;
 }
 
-.ms-choices  label {
+.ms-choices label {
   cursor: pointer;
   margin: 8px;
   margin-top: 10px;
@@ -107,33 +111,31 @@
   font-weight: 600;
 }
 
-.ms-vertical-choices{
+.ms-vertical-choices {
   display: grid;
 }
 
-.ms-buttons-holder{
+.ms-buttons-holder {
   margin-top: 5px;
   padding-top: 8px;
   border-top: solid 1px #e6e4e4;
 }
 
-.ms-button{
+.ms-button {
   color: #025f54;
   font-size: 14px;
   font-weight: 700;
   float: right;
   cursor: pointer;
-
   padding: 8px 10px;
   border-radius: 2px;
 }
 
-.ms-button:hover{
+.ms-button:hover {
   background-color: #efecec;
 }
 
-
-.ms-holder .sub-title{
+.ms-holder .sub-title {
   margin-bottom: 10px;
   font-size: 13px;
 }

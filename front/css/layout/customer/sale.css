@@ -1,10 +1,10 @@
 
-.field{
+.field {
   vertical-align: middle;
   display: inline-block;
 }
 
-.field-title{
+.field-title {
   font-size: 13px;
   padding-bottom: 3px;
   color: rgb(116, 114, 116);
@@ -12,7 +12,7 @@
   height: fit-content;
 }
 
-.info{
+.info {
   overflow: hidden;
   white-space: pre-wrap;
   width: auto;
@@ -24,13 +24,13 @@
   font-size: 15px;
 }
 
-.highlighted{
+.highlighted {
   font-size: 20px;
   font-weight: 600;
   position: relative;
 }
 
-.sale-header-holder{
+.sale-header-holder {
   padding: 10px 15px 5px;
   flex: 80;
   position: relative;
@@ -38,12 +38,12 @@
   height: -webkit-fill-available;
 }
 
-.sale-head-table{
+.sale-head-table {
   width: 98%;
   position: relative;
 }
 
-.sale-cards-holder{
+.sale-cards-holder {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
   width: auto;
@@ -54,17 +54,18 @@
   text-align: -webkit-auto;
 }
 
-.sale-card-item{
+.sale-card-item {
   padding: 15px;
   width: auto;
   min-height: 155px;
   position: relative;
 }
 
-.client-sale-itens{
+.client-sale-itens {
   width: 100%;
 }
-.sale-itens-information td{
+
+.sale-itens-information td {
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 8px;
@@ -73,11 +74,11 @@
   border-bottom: 1px solid #e4e4e4;
 }
 
-table{
+table {
   width: 100%;
 }
 
-.sale-card-title{
+.sale-card-title {
   font-size: 13px;
   display: inline;
   font-weight: 600;
@@ -85,27 +86,29 @@ table{
   vertical-align: super;
   white-space: nowrap;
 }
-.sale-itens-table .sale-card-title{
+
+.sale-itens-table .sale-card-title {
   padding-left: 10px;
   padding-top: 10px;
 }
 
-.client-sale-itens tr:nth-child(even){
+.client-sale-itens tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-.sale-table-titles td{
+.sale-table-titles td {
   padding-top: 10px;
   padding-left: 10px;
 }
-.sale-table-titles{
+
+.sale-table-titles {
   text-align: left;
   margin-left: 3;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
 }
 
-.sale-table-titles th{
+.sale-table-titles th {
   top: 0;
   padding-left: 5px;
   padding: 8px 10px;
@@ -113,45 +116,47 @@ table{
   font-size: 12px;
   border-bottom: 1px solid #e4e4e4;
 }
-.sale-itens-table{
+
+.sale-itens-table {
   height: auto;
   max-height: 100%;
 }
 
-.sale-itens-information-holder{
+.sale-itens-information-holder {
   padding-bottom: 15px;
   width: 73%;
   height: auto;
   border-radius: 4px;
 }
 
-.sale-itens-count{
+.sale-itens-count {
   padding-left: 3px;
 }
 
-.divide td{
+.divide td {
   padding-bottom: 15px;
   font-size: 13px;
 }
-.sale-information-holder{
+
+.sale-information-holder {
   height: 100%;
   display: flex;
   flex: 80;
   padding-top: 20px;
 }
 
-.sale-total-info-table{
+.sale-total-info-table {
   width: auto;
   min-height: 155px;
   margin-left: 30px;
   margin-top: 15px;
 }
 
-.sale-total-info-table th{
+.sale-total-info-table th {
   padding: 15px;
 }
 
-.sale-total-info-table td{
+.sale-total-info-table td {
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 15px;
@@ -160,18 +165,18 @@ table{
   padding-right: 25px;
 }
 
-.icon{
+.icon {
   width: 25px;
   height: 25px;
   vertical-align: sub;
   margin: 0;
 }
 
-.sale-shipping-transport{
+.sale-shipping-transport {
   vertical-align: super;
 }
 
-.menu-dots{
+.menu-dots {
   right: 0;
   margin-top: 0;
   margin-right: 10px;
@@ -179,7 +184,7 @@ table{
   position: absolute;
 }
 
-.sale-history-holder{
+.sale-history-holder {
   width: 100%;
   margin-left: 20px;
   flex: 1;
@@ -188,12 +193,12 @@ table{
   padding-bottom: 15px;
 }
 
-.sale-history-holder table{
+.sale-history-holder table {
   width: 100%;
   height: auto;
 }
 
-.sale-history-holder table td{
+.sale-history-holder table td {
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 5px;
@@ -207,15 +212,15 @@ table{
   background-color: #f2f2f2;
 }
 
-.comments-magento{
+.comments-magento {
   max-height: min-content;
 }
 
-.comments-holder{
+.comments-holder {
   overflow: auto;
 }
 
-.comments-table-title{
+.comments-table-title {
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   display: table-cell;
@@ -227,7 +232,7 @@ table{
   padding: 8px 10px;
 }
 
-.item-add{
+.item-add {
   border-width: 1.4px 1.4px 3px;
   border-style: solid;
   border-color: rgb(165, 214, 117);
@@ -242,7 +247,7 @@ table{
   text-transform: capitalize;
 }
 
-.item-removed{
+.item-removed {
   border-width: 1.4px 1.4px 3px;
   border-style: solid;
   border-color: rgb(241, 81, 81);
@@ -257,30 +262,31 @@ table{
   text-transform: capitalize;
 }
 
-.sale-dialog{
+.sale-dialog {
   display: none;
 }
 
-.comment-date{
+.comment-date {
   white-space: nowrap;
 }
 
-.sale-payment-method{
+.sale-payment-method {
   font-size: 12px;
   vertical-align: super;
   white-space: nowrap;
 }
-.sale-info-cupom{
+
+.sale-info-cupom {
   font-size: 12px;
 }
 
-.item-name{
+.item-name {
   font-size: 13px;
   color: #5f5f5f;
   cursor: grab;
 }
 
-.sale-status{
+.sale-status {
   padding: 5px;
   border-radius: 5px;
   border-width: 1.4px 1.4px 3px;
@@ -292,41 +298,42 @@ table{
   width: fit-content;
 }
 
-.total{
+.total {
   font-weight: 900;
   color: black;
   font-size: 15px;
 }
 
-.title-holder{
+.title-holder {
   margin-bottom: 7px;
 }
-.comments-holder{
+
+.comments-holder {
   height: auto;
 }
 
-.comments:hover{
-  background-color: #d8d8d8!important;
+.comments:hover {
+  background-color: #d8d8d8 !important;
 }
 
-.ecco-comments{
+.ecco-comments {
   font-size: 12px;
   color: #8e8c8a;
   padding-right: 5px;
   padding-left: 5px;
 }
 
-.magento-comments{
+.magento-comments {
   background: #fff4e04f;
 }
 
-.item-brand{
+.item-brand {
   text-align: center;
   color: gray;
-  font-size: 12px!important;
+  font-size: 12px !important;
 }
 
-.obs .title-holder{
+.obs .title-holder {
   text-align: center;
   border-bottom: 1px solid #e4e4e4;
   color: rgb(116, 114, 116);
@@ -336,27 +343,27 @@ table{
   padding: 8px 10px;
 }
 
-.obs .title-holder>span{
+.obs .title-holder > span {
   font-size: 12px;
 }
 
-.cupom-card{
+.cupom-card {
   flex: 13.7;
   height: auto;
   min-height: auto;
   margin-left: 14px;
 }
 
-.top-holder{
+.top-holder {
   display: flex;
 }
 
-.sale-total{
+.sale-total {
   background: #f2f2f2;
   border-top: 3px solid #009688;
 }
 
-.card-transport{
+.card-transport {
   border-top: 3px solid #00adff;
 }
 
@@ -364,42 +371,43 @@ table{
   border-top: 3px solid #8b00ff;
 }
 
-.sale-client{
-  border-top: 3px solid #FF9800;
+.sale-client {
+  border-top: 3px solid #ff9800;
 }
 
-.comment-title{
+.comment-title {
   color: #000000a1;
   font-weight: bold;
-  font-size: 12px!important;
+  font-size: 12px !important;
   position: relative;
 }
 
-.client-notified{
+.client-notified {
   width: 15px;
   vertical-align: bottom;
   margin-left: 5px;
 }
 
-.sale-itens-information:hover{
-  background-color: #d8d8d8!important;
+.sale-itens-information:hover {
+  background-color: #d8d8d8 !important;
 }
 
-.comments td span{
+.comments td span {
   font-size: 11px;
 }
 
-.msg-info{
+.msg-info {
   font-size: 12px;
   vertical-align: super;
   margin-left: 8px;
   color: #929191;
 }
 
-.icon-copy{
+.icon-copy {
   filter: grayscale(1);
 }
-.icon-copy:hover{
+
+.icon-copy:hover {
   transform: scale(1.2);
   cursor: pointer !important;
 }

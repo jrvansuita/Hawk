@@ -9,8 +9,7 @@
   width: 100%;
 }
 
-
-.menu-item >a{
+.menu-item > a {
   display: -webkit-box;
   width: fit-content;
   height: fit-content;
@@ -45,17 +44,16 @@
   outline: none;
 }
 
-.sub-menu-ul> .menu-item> a {
+.sub-menu-ul > .menu-item > a {
   padding: 8px !important;
 }
 
-.sub-menu-ul> .menu-item{
+.sub-menu-ul > .menu-item {
   margin-right: 25px;
   margin-left: 0;
 }
 
-
-.menu-item:hover{
+.menu-item:hover {
   background-color: #1916160d;
 }
 

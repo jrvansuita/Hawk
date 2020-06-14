@@ -1,6 +1,5 @@
 
-
-.panels{
+.panels {
   height: 90%;
   display: flex;
   max-width: 80%;
@@ -8,23 +7,23 @@
   margin: auto;
 }
 
-.main-content{
+.main-content {
   margin-top: 75px !important;
   padding-bottom: 5px;
 }
 
-.main-content{
+.main-content {
   overflow: hidden;
 }
 
-.left-panel{
+.left-panel {
   margin-left: 15px;
   margin-right: 15px;
   height: 100%;
   flex: 0 1 15%;
 }
 
-.main-panel{
+.main-panel {
   margin-right: 15px;
   flex: 0 80%;
   padding: 10px 0;
@@ -35,7 +34,7 @@
   align-items: flex-start;
 }
 
-.search-input{
+.search-input {
   font-size: 14px;
   padding: 10px 5px;
   width: -webkit-fill-available;
@@ -43,8 +42,7 @@
   display: block;
 }
 
-
-.hint{
+.hint {
   margin-left: 25px;
   font-size: 14px !important;
   color: grey;
@@ -54,13 +52,12 @@
   font-size: 11px;
 }
 
-
-.histories-list{
+.histories-list {
   display: block;
   width: -webkit-fill-available;
 }
 
-.history-main-item{
+.history-main-item {
   width: 100%;
   border-bottom: dashed 1px rgb(231, 231, 234);
   display: flex;
@@ -69,36 +66,36 @@
   height: fit-content;
 }
 
-.history-item{
+.history-item {
   width: -webkit-fill-available;
   display: flex;
 }
 
-.history-info{
+.history-info {
   width: fit-content;
   height: fit-content;
 }
 
-.history-message-holder{
+.history-message-holder {
   display: flex;
   width: 100%;
   justify-content: flex-end;
 }
 
-.avatar-img{
+.avatar-img {
   width: 35px !important;
   height: 35px !important;
 }
 
-.avatar-name{
+.avatar-name {
   font-size: 10px !important;
 }
 
-.avatar-holder{
+.avatar-holder {
   padding: 10px 15px;
 }
 
-.history-date{
+.history-date {
   padding-top: 6px;
   display: block;
   font-size: 11px;
@@ -106,7 +103,7 @@
   display: block;
 }
 
-.history-title{
+.history-title {
   display: block;
   color: #19695d;
   padding-bottom: 3px;
@@ -116,11 +113,11 @@
   white-space: nowrap;
 }
 
-.title-line{
+.title-line {
   display: -webkit-box;
 }
 
-.history-icon{
+.history-icon {
   width: 20px;
   height: 20px;
   width: 20px;
@@ -132,17 +129,16 @@
   vertical-align: middle;
 }
 
-.history-message{
+.history-message {
   text-align: right;
   font-size: 11px;
   line-break: auto;
   color: rgb(134, 134, 134);
   word-wrap: break-word;
-  white-space: pre-line
+  white-space: pre-line;
 }
 
-
-.history-tag{
+.history-tag {
   font-size: 11px;
   margin-left: 10px;
   border-width: 1px;
@@ -153,17 +149,14 @@
   background: #209a88;
   color: white;
   padding: 3px 4px;
-  transition: all .2s;
+  transition: all 0.2s;
 }
 
-
-.search-box{
+.search-box {
   padding: 15px;
 }
 
-
-
-.autocomplete-content{
+.autocomplete-content {
   margin-top: -16px !important;
   margin-left: 15px !important;
 }

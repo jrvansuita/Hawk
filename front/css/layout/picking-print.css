@@ -1,42 +1,46 @@
-body, span, div, td{
-  font-family: Helvetica,Arial,sans-serif;
+body,
+span,
+div,
+td {
+  font-family: Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 20px;
   color: #333;
 }
-body{
+
+body {
   padding: 0;
   margin: 0;
   width: 100%;
 }
 
-p{
+p {
   margin: 0;
 }
 
-span{
+span {
   font-size: 16pt;
   font-weight: bold;
   width: 1%;
   white-space: nowrap;
 }
 
-.main{
-  page-break-inside:avoid;
-  page-break-after:always;
+.main {
+  page-break-inside: avoid;
+  page-break-after: always;
 }
 
-.obs{
+.obs {
   font-size: 17pt;
   font-weight: 500;
   padding-top: 5px;
 }
 
-.obs>p{
+.obs > p {
   padding-bottom: 5px;
 }
 
-.user-name{
+.user-name {
   text-align: right;
   font-weight: 600;
   font-size: 17pt;
@@ -44,7 +48,7 @@ span{
   white-space: nowrap;
 }
 
-table{
+table {
   width: 100%;
   max-width: 100%;
   background-color: transparent;
@@ -52,67 +56,67 @@ table{
   border-spacing: 0;
 }
 
-tr{
+tr {
   border-bottom: 1px solid gray;
 }
 
-tr:nth-last-child(2){
+tr:nth-last-child(2) {
   border-bottom: 1px dashed gray;
 }
 
 tr:nth-child(even) {
   background-color: #f2f2f2;
 }
-td{
+
+td {
   padding: 6px;
 }
 
-
-.sale-number{
+.sale-number {
   font-size: 25pt;
   font-weight: bold;
   margin: 0;
   vertical-align: middle;
 }
 
-.sale-date{
+.sale-date {
   padding-top: 5px;
   font-size: 15pt;
   font-weight: bold;
 }
 
-.sale-client-name{
+.sale-client-name {
   font-size: 14pt;
   white-space: nowrap;
   font-weight: bold;
 }
 
-.sale-order{
+.sale-order {
   padding-top: 5px;
   font-size: 15pt;
   font-weight: bold;
 }
 
-.sku{
-  margin: 10px 0px;
+.sku {
+  margin: 10px 0;
   font-size: 17pt;
   display: -webkit-inline-box;
   font-weight: 800;
   padding-right: 5px;
 }
 
-.ean{
+.ean {
   font-size: 17pt;
   font-weight: 600;
 }
 
-.local{
+.local {
   font-size: 16pt;
   font-weight: 800;
   white-space: normal;
 }
 
-.qtd{
+.qtd {
   padding: 5px 10px;
   font-size: 17pt;
   vertical-align: middle;
@@ -121,36 +125,35 @@ td{
   border: 1px solid transparent;
 }
 
-.qtd-border{
+.qtd-border {
   border: 2px solid black;
 }
 
-.total-line{
+.total-line {
   background-color: transparent !important;
   border-bottom: 0;
   margin-top: 10px;
 }
 
-.total{
+.total {
   padding-top: 20px;
 }
 
-
-.col-sku{
+.col-sku {
   width: auto;
 }
 
-.col-ean{
+.col-ean {
   width: 1%;
   white-space: nowrap;
 }
 
-.col-local{
-  padding-left:  10%;
+.col-local {
+  padding-left: 10%;
   width: auto;
 }
 
-.col-qtd{
+.col-qtd {
   width: 10%;
   text-align: center;
 }

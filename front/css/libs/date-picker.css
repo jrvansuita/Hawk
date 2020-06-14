@@ -1,4 +1,5 @@
-.gj-datepicker,  .gj-datepicker > input{
+.gj-datepicker,
+.gj-datepicker > input {
   display: none;
 }
 
@@ -19,10 +20,11 @@
 }
 
 .gj-picker-md [role=footer] {
-  padding: 0px;
+  padding: 0;
 }
 
-.gj-picker-md table tr td div, .gj-picker-md table tr th div {
+.gj-picker-md table tr td div,
+.gj-picker-md table tr th div {
   width: 30px;
   height: 30px;
   line-height: 30px;
@@ -47,7 +49,7 @@
 .gj-picker-md table tr td.today div {
   color: #1c796b;
   font-weight: 1000;
-  background: #EEE;
+  background: #eee;
   border-radius: 50%;
 }
 
@@ -62,10 +64,10 @@
   margin-top: -20px;
 }
 
-/*.gj-picker.gj-picker-md.datepicker.gj-unselectable:last-child {
+/* .gj-picker.gj-picker-md.datepicker.gj-unselectable:last-child {
   margin-left: -242px !important;
   margin-top: -47px !important;
 }
 .gj-picker.gj-picker-md.datepicker.gj-unselectable:last-child>[role=footer] {
   visibility: hidden;
-}*/
+} */

@@ -1,53 +1,52 @@
-.main-content{
+.main-content {
   padding-top: 20px;
   padding-bottom: 20px;
   display: flex;
 }
 
-.users-table{
+.users-table {
   width: fit-content;
   margin: auto;
   margin-bottom: 200px;
 }
 
-
 .users-table tr:nth-child(even) {
   background-color: #ddd6d757;
 }
 
-.users-table td{
+.users-table td {
   padding: 5px 15px;
   cursor: pointer;
 }
 
-.users-table td{
+.users-table td {
   padding: 5px;
 }
 
-
-
 .inactive-row td:first-child {
-  border-left: 6px solid #EDB2B2;
-
+  border-left: 6px solid #edb2b2;
 }
 
 .active-row td:first-child {
   border-left: 6px solid #64dc9f;
 }
 
-.icon-dots{
+.icon-dots {
   margin-right: 20px;
 }
-.list-users-holder{
+
+.list-users-holder {
   display: flex;
   margin: auto;
 }
-.list-users{
+
+.list-users {
   margin-right: 20px;
   margin-left: 20px;
   position: relative;
 }
-.list-users-title{
+
+.list-users-title {
   font-size: 16px;
   color: #656565;
   font-weight: bolder;
@@ -58,7 +57,8 @@
   margin-bottom: 10px;
   position: relative;
 }
-.list-users-title-count{
+
+.list-users-title-count {
   font-size: 16px;
   color: #656565;
   font-weight: bolder;

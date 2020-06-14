@@ -1,12 +1,11 @@
 
-
-.main-table{
+.main-table {
   margin-top: 70px;
   margin-left: auto;
   margin-right: auto;
 }
 
-.box{
+.box {
   min-width: 300px;
   min-height: 300px;
   display: inline-block;
@@ -16,7 +15,7 @@
   margin-bottom: 15px;
 }
 
-.box-title{
+.box-title {
   padding: 10px 12px;
   margin-left: 3px;
   margin-top: 3px;
@@ -25,8 +24,7 @@
   display: flex;
 }
 
-
-.box-title > label{
+.box-title > label {
   font-size: 16px;
   color: #656565;
   font-weight: bolder;
@@ -37,39 +35,36 @@
   position: relative;
 }
 
-.box-title > img{
+.box-title > img {
   width: 32px;
   height: 32px;
   display: inline-block;
 }
 
-
-.box-content{
+.box-content {
   display: block;
-  padding: 0px 18px;
+  padding: 0 18px;
   position: relative;
 }
 
-
-.material-input-holder>input{
+.material-input-holder > input {
   width: -webkit-fill-available !important;
 }
 
-.material-input-holder{
+.material-input-holder {
   margin-top: 5px;
 }
 
-.pure-material-checkbox>span{
+.pure-material-checkbox > span {
   font-size: 14px;
   min-height: 30px;
 }
 
-.pure-material-checkbox{
+.pure-material-checkbox {
   padding-bottom: 5px;
   display: flex !important;
 }
 
-
-.button{
-  padding: 8px 0px;
+.button {
+  padding: 8px 0;
 }

@@ -18,15 +18,15 @@ Este é o repositório de desenvolvimento do Hawk.
 
  1. Atualizar o repositório local com as últimas alterações comitadas pelos colegas.
 
-    ``` git pull ```
+    > ``` git pull ```
 
  2. Fazer o stage e comitar todos os arquivos alterados.
 
-    ``` git commit -a -m "Minhas alterações" ```
+    > ``` git commit -a -m "Minhas alterações" ```
 
  3. Fazer o envio das alterações locais para o repositório
 
-    ``` git push ```
+    > ``` git push ```
 
 
 ## Release
@@ -35,30 +35,40 @@ Todo commit neste branch gera uma deploy automatico em:
 
  1. Push tag cria uma nova release.
 
-  ``` git tag -a v1.0? -m "Mensagem da release"  ```
+ > ``` git tag -a v1.0? -m "Mensagem da release"  ```
 
-  ``` git push --tags ```
+ > ``` git push --tags ```
 
 ----
 
 ## Dev Stack
 
-#### Style Guide
+#### Code Edit & Style
 
-- IDE VSCode
-- Eslint
-- Stylelint
-- EditorConfig
-- Prettier
+
+- [Visual Studio Code](https://code.visualstudio.com/)
+- [Eslint](eslint/eslint)
+
+ > Lint all: ```npm run linta```.
+
+ > Lint all and fix: ```npm run lintfa```.
+
+- [Stylelint](/stylelint/stylelint)
+ > Style lint all: ```npm run slinta```.
+
+ > Style lint fix all: ```npm run slintfa```.
+
+ >Fix all possible linting problems: ```npm run fix```
+
+- [EditorConfig](https://editorconfig.org/)
+- [Prettier](https://prettier.io/)
 
 
 on settings.json:
 
-```
+```json
 "javascript.suggestionActions.enabled": false,
 "html.validate.scripts": false,
-
-
 "editor.codeActionsOnSave": {
     // For ESLint
     "source.fixAll.eslint": true,
