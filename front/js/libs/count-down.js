@@ -1,8 +1,7 @@
-class Countdown{
-
-  constructor(parent, secs){
-    this.parent = parent;
-    this.secs = secs;
+class Countdown {
+  constructor (parent, secs) {
+    this.parent = parent
+    this.secs = secs
   }
 
   /*
@@ -14,54 +13,49 @@ class Countdown{
 
   */
 
-  setOnTerminate(callback){
-    this.onTerminate = callback;
-    return this;
+  setOnTerminate (callback) {
+    this.onTerminate = callback
+    return this
   }
 
-  render(){
+  render () {
+    this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
 
-    this.svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+    circle.setAttribute('cx', '20')
+    circle.setAttribute('cy', '20')
+    circle.setAttribute('r', '15')
+    circle.setAttribute('id', 'teste')
 
-    var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle.setAttribute("cx", "20");
-    circle.setAttribute("cy", "20");
-    circle.setAttribute("r", "15");
-    circle.setAttribute("id", "teste");
+    this.svg.appendChild(circle)
+    this.holder = $('<div>').addClass('countdown-holder')
+    this.number = $('<div>').addClass('countdown-number')
 
-    this.svg.appendChild(circle);
-    this.holder = $('<div>').addClass('countdown-holder');
-    this.number = $('<div>').addClass('countdown-number');
+    this.holder.append(this.number, this.svg)
 
-    this.holder.append(this.number, this.svg);
-
-    this.parent.append(this.holder);
+    this.parent.append(this.holder)
   }
 
-  remove(){
-    clearInterval(this.intervalId);
-    this.holder.remove();
+  remove () {
+    clearInterval(this.intervalId)
+    this.holder.remove()
   }
 
-  show(callback){
-    this.render();
-    this.number.text(this.secs);
+  show (callback) {
+    this.render()
+    this.number.text(this.secs)
 
-    this.intervalId = setInterval(()=>{
-      this.secs = this.secs -1;
+    this.intervalId = setInterval(() => {
+      this.secs = this.secs - 1
 
-      if (this.secs == -1){
-        this.remove();
-        if (this.onTerminate){
-          this.onTerminate();
+      if (this.secs == -1) {
+        this.remove()
+        if (this.onTerminate) {
+          this.onTerminate()
         }
-      }else{
-
-        this.number.text(this.secs);
+      } else {
+        this.number.text(this.secs)
       }
-
-    }, 1000);
-
+    }, 1000)
   }
-
 }

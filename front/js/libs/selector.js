@@ -1,39 +1,34 @@
-$(document).ready(()=>{
+$(document).ready(() => {
+  $('.inner-label').click(function () {
+    $(this).parent().click()
+  })
 
+  $('.dropdown').find('li').click(function (e) {
+    e.preventDefault()
 
-  $('.inner-label').click(function(){
-    $(this).parent().click();
-  });
+    var params = window.location.search
+    var query = $(this).data('query')
+    var value = $(this).data('value')
 
-  $('.dropdown').find('li').click(function(e){
-    e.preventDefault();
+    var queries = params.replace('?', '').split('&')
 
-   var params = window.location.search;
-   var query = $(this).data('query');
-   var value = $(this).data('value');
+    queries = queries.filter((q) => {
+      return (q.length > 0) && !q.includes(query)
+    })
 
-   var queries = params.replace('?','').split('&');
+    if (value) {
+      queries.push(query + '=' + value)
+    }
 
-   queries = queries.filter((q)=>{
-     return (q.length > 0) && !q.includes(query);
-   });
+    var queryResult = ''
 
-   if(value){
-     queries.push(query + "=" + value);
-   }
+    queries.forEach((q, i) => {
+      queryResult += (i == 0 ? '?' : '&') + q
+    })
 
-   var queryResult = '';
-
-   queries.forEach((q, i)=>{
-       queryResult+= (i == 0 ? '?' : '&') + q;
-   });
-
-   window.setTimeout(function() {
-      var url = window.location.origin + window.location.pathname;
-       window.location.href =  url + queryResult;
-   }, 100);
-  });
-
-
-
-});
+    window.setTimeout(function () {
+      var url = window.location.origin + window.location.pathname
+      window.location.href = url + queryResult
+    }, 100)
+  })
+})

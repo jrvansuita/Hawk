@@ -1,179 +1,174 @@
-const SaleLoader = require('../loader/sale-loader.js');
+const SaleLoader = require('../loader/sale-loader.js')
 
-module.exports= class SalesArrLoader {
-
-  constructor(){
-    this.loading = false;
+module.exports = class SalesArrLoader {
+  constructor () {
+    this.loading = false
   }
 
-  setSaleList(saleList){
-    if (saleList){
-      this.saleList = saleList;
-      this.initialLength = saleList.length;
-      this.staticIndex = 0;
+  setSaleList (saleList) {
+    if (saleList) {
+      this.saleList = saleList
+      this.initialLength = saleList.length
+      this.staticIndex = 0
 
-      this.createPool();
+      this.createPool()
     }
 
-    return this;
+    return this
   }
 
-  setOnError(onError){
-    this.onError = onError;
-    return this;
+  setOnError (onError) {
+    this.onError = onError
+    return this
   }
 
-  cancel(){
-    this.canceled = true;
-    this.loading = false;
-    this.saleList = [];
-    return this;
+  cancel () {
+    this.canceled = true
+    this.loading = false
+    this.saleList = []
+    return this
   }
 
-  isLoading(){
-    return this.loading;
+  isLoading () {
+    return this.loading
   }
 
-  isPreparing(){
-    return !this.loading && (this.saleList == undefined);
+  isPreparing () {
+    return !this.loading && (this.saleList == undefined)
   }
 
-  createPool(){
-    this.pool = [];
-    this.poolIndex = 0;
+  createPool () {
+    this.pool = []
+    this.poolIndex = 0
 
-    this.saleList.forEach((each)=>{
-      this.pool.push(each.numeroPedido);
-    });
+    this.saleList.forEach((each) => {
+      this.pool.push(each.numeroPedido)
+    })
   }
 
-  onLastSaleLoaded(callback){
-    this.onLastSaleLoaded = callback;
-    return this;
+  onLastSaleLoaded (callback) {
+    this.onLastSaleLoaded = callback
+    return this
   }
 
-  loadClient(callback){
-    this.loadClient = callback;
-    return this;
+  loadClient (callback) {
+    this.loadClient = callback
+    return this
   }
 
-  loadItems(callback){
-    this.loadItems = callback;
-    return this;
+  loadItems (callback) {
+    this.loadItems = callback
+    return this
   }
 
-  onEverySaleLoaded(callback){
-    this.onEverySaleLoaded = callback;
-    return this;
+  onEverySaleLoaded (callback) {
+    this.onEverySaleLoaded = callback
+    return this
   }
 
-  getSaleIndex(sale){
-    return this.saleList.findIndex(s => s.numeroPedido == (sale.numeroPedido || sale));
+  getSaleIndex (sale) {
+    return this.saleList.findIndex(s => s.numeroPedido == (sale.numeroPedido || sale))
   }
 
-  removeSale(sale){
-    this.saleList.splice(this.getSaleIndex(sale), 1);
+  removeSale (sale) {
+    this.saleList.splice(this.getSaleIndex(sale), 1)
   }
 
-  getSale(saleNumber){
-    return this.saleList[this.getSaleIndex(saleNumber)];
+  getSale (saleNumber) {
+    return this.saleList[this.getSaleIndex(saleNumber)]
   }
 
-  onFilter(callback){
-    this.onFilter = callback;
-    return this;
+  onFilter (callback) {
+    this.onFilter = callback
+    return this
   }
 
-  //Remove ou não uma sale
-  _filter(sale){
-    var removed = false;
+  // Remove ou não uma sale
+  _filter (sale) {
+    var removed = false
 
-    if (this.onFilter){
-      removed = !this.onFilter(sale);
-      if (removed){
-        this.removeSale(sale);
+    if (this.onFilter) {
+      removed = !this.onFilter(sale)
+      if (removed) {
+        this.removeSale(sale)
       }
     }
 
-    return !removed;
+    return !removed
   }
 
-  getCurrentPoolSale(){
-    return this.pool[this.poolIndex];
+  getCurrentPoolSale () {
+    return this.pool[this.poolIndex]
   }
 
-  _load(onFinished){
-    var sale = this.getSale(this.getCurrentPoolSale());
+  _load (onFinished) {
+    var sale = this.getSale(this.getCurrentPoolSale())
 
-    if (sale && !this.canceled){
-
+    if (sale && !this.canceled) {
       var saleLoader = new SaleLoader(sale)
-      .setOnError(() => {
-        this.cancel();
+        .setOnError(() => {
+          this.cancel()
 
-        if (this.onError){
-          this.onError();
-        }
-      });
+          if (this.onError) {
+            this.onError()
+          }
+        })
 
-      if (this.loadClient){
-        saleLoader.loadClient(this.loadClient);
+      if (this.loadClient) {
+        saleLoader.loadClient(this.loadClient)
       }
 
-      if (this.loadItems){
-        saleLoader.loadItems(this.loadItems);
+      if (this.loadItems) {
+        saleLoader.loadItems(this.loadItems)
       }
 
-      saleLoader.run((sale)=>{
+      saleLoader.run((sale) => {
+        this.saleList[this.getSaleIndex(sale)] = sale
 
-        this.saleList[this.getSaleIndex(sale)] = sale;
+        this._attachRunningChecker()
 
-        this._attachRunningChecker();
-
-        if (this._filter(sale) && this.onEverySaleLoaded){
-          this.onEverySaleLoaded(sale);
+        if (this._filter(sale) && this.onEverySaleLoaded) {
+          this.onEverySaleLoaded(sale)
         }
 
-        var poolLength = this.pool.length;
+        var poolLength = this.pool.length
 
-        this.poolIndex++;
-        this.staticIndex++;
-        console.log(sale.numeroPedido + ' - ' + sale.data + ' | ' + this.staticIndex + '/' + (this.initialLength));
+        this.poolIndex++
+        this.staticIndex++
+        console.log(sale.numeroPedido + ' - ' + sale.data + ' | ' + this.staticIndex + '/' + (this.initialLength))
 
         if (this.poolIndex < poolLength) {
-          this._load(onFinished);
+          this._load(onFinished)
 
-          //Pelo menos 10 pedidos já foram tratados e podem estar aparecendo
+          // Pelo menos 10 pedidos já foram tratados e podem estar aparecendo
           if (this.staticIndex == 3) {
-            onFinished();
+            onFinished()
           }
         }
-        //No Sales to pick | Or finished loading sales
-        else if (poolLength == this.poolIndex){
-          onFinished();
+        // No Sales to pick | Or finished loading sales
+        else if (poolLength == this.poolIndex) {
+          onFinished()
 
-          if (this.staticIndex > 0){
-            if (this.onLastSaleLoaded){
-              this.onLastSaleLoaded();
+          if (this.staticIndex > 0) {
+            if (this.onLastSaleLoaded) {
+              this.onLastSaleLoaded()
             }
           }
         }
-      });
+      })
     }
   }
 
-  run(onFinished){
-    this._load(onFinished);
+  run (onFinished) {
+    this._load(onFinished)
   }
 
+  _attachRunningChecker () {
+    this.loading = true
 
-  _attachRunningChecker(){
-    this.loading = true;
-
-    clearTimeout(this.loadingId);
-    this.loadingId = setTimeout(()=>{
-      this.loading = false;
-    }, 10000);
+    clearTimeout(this.loadingId)
+    this.loadingId = setTimeout(() => {
+      this.loading = false
+    }, 10000)
   }
-
-};
+}

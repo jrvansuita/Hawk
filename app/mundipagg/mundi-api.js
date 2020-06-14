@@ -1,11 +1,9 @@
-const https = require('https');
-const Err = require('../error/error.js');
-var Query = require('../util/query.js');
+const https = require('https')
+const Err = require('../error/error.js')
+var Query = require('../util/query.js')
 
-
-module.exports = class MundiApi{
-
-  options(){
+module.exports = class MundiApi {
+  options () {
     var options = {
       host: Params.mundipaggUrl(),
       timeout: 60000, // 1 minutos
@@ -13,41 +11,36 @@ module.exports = class MundiApi{
       url: 'https://' + Params.mundipaggUrl() + this.path,
       path: '/Sale/' + this.path,
       headers: {
-        'MerchantKey': Params.mundipaggSecret(),
+        MerchantKey: Params.mundipaggSecret(),
         'Content-Type': 'application/json; charset=utf-8',
-        'Accept' : 'application/json'
+        Accept: 'application/json'
       }
-    };
+    }
 
-    return options;
+    return options
   }
 
+  go (callback) {
+    var req = https.request(this.options(), function (res) {
+      var responseBody = ''
 
-  go(callback){
-    var req = https.request(this.options(), function(res) {
+      res.on('data', function (chunk) {
+        responseBody += chunk
+      })
 
-      var responseBody = '';
+      res.on('end', function () {
+        callback(JSON.parse(responseBody))
+      })
+    })
 
-      res.on('data', function(chunk) {
-        responseBody += chunk;
-      });
-
-      res.on('end', function() {
-        callback(JSON.parse(responseBody));
-      });
-
-    });
-
-    req.on('error', function(e) {
-      console.log(e);
-    });
-    req.end();
+    req.on('error', function (e) {
+      console.log(e)
+    })
+    req.end()
   }
 
-
-  sale(saleNumber){
-    this.path = 'Query/OrderReference=' + saleNumber;
-    return this;
+  sale (saleNumber) {
+    this.path = 'Query/OrderReference=' + saleNumber
+    return this
   }
-
-};
+}

@@ -1,30 +1,28 @@
 
-
-module.exports = class Err{
-  constructor(e, user) {
-    this.e = e;
-    this.type = "Err";
-    this.userId = user ? (user.id || user) : undefined;
+module.exports = class Err {
+  constructor (e, user) {
+    this.e = e
+    this.type = 'Err'
+    this.userId = user ? (user.id || user) : undefined
   }
 
-  toString(){
-    return this.e;
+  toString () {
+    return this.e
   }
 
-
-  static xprss(e){
-    if (e != undefined){
-      var message = e.toString();
-      if (e instanceof Error){
-        message += "\n" + e.stack.split('\n').slice(1, 3).join('\n');
+  static xprss (e) {
+    if (e != undefined) {
+      var message = e.toString()
+      if (e instanceof Error) {
+        message += '\n' + e.stack.split('\n').slice(1, 3).join('\n')
       }
 
-      return message;
+      return message
     }
-    return '';
+    return ''
   }
 
-  static thrw(e, user){
-    throw new Err(e, user);
+  static thrw (e, user) {
+    throw new Err(e, user)
   }
-};
+}

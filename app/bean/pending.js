@@ -1,5 +1,4 @@
 module.exports = class Pending extends DataAccess {
-
 /*
 Pending status
 0 - Open
@@ -8,22 +7,18 @@ Pending status
 3 - Assumed
 */
 
-  constructor(number, sale, local) {
-    super();
-    this.number = Str.def(number);
-    this.status = 0;
-    this.sale = sale == undefined ? {} : sale;
-    this.updateDate = Dat.now();
-    this.sendEmail = false;
-    this.local = Str.def(local ? local.toUpperCase() : "");
-    this.voucher = '';
+  constructor (number, sale, local) {
+    super()
+    this.number = Str.def(number)
+    this.status = 0
+    this.sale = sale == undefined ? {} : sale
+    this.updateDate = Dat.now()
+    this.sendEmail = false
+    this.local = Str.def(local ? local.toUpperCase() : '')
+    this.voucher = ''
   }
 
-  static getKey() {
-    return ['number'];
+  static getKey () {
+    return ['number']
   }
-
-
-
-
-};
+}

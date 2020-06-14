@@ -1,70 +1,61 @@
-const GetGoogleFonts = require('get-google-fonts');
-const fs = require('fs');
+const GetGoogleFonts = require('get-google-fonts')
+const fs = require('fs')
 
-module.exports = class{
-  constructor(fontName){
-    if (fontName){
-      this.setFonts([fontName]);
+module.exports = class {
+  constructor (fontName) {
+    if (fontName) {
+      this.setFonts([fontName])
     }
 
-    this.fontPath = './front/fonts';
-    this.googleUrl = 'https://fonts.googleapis.com/css?';
-    this.googleFonts = new GetGoogleFonts();
-    this.weights = ['400','700','900'];
+    this.fontPath = './front/fonts'
+    this.googleUrl = 'https://fonts.googleapis.com/css?'
+    this.googleFonts = new GetGoogleFonts()
+    this.weights = ['400', '700', '900']
   }
 
-  setFonts(fontsArr){
-    this.fontsArr = fontsArr;
-    return this;
+  setFonts (fontsArr) {
+    this.fontsArr = fontsArr
+    return this
   }
 
-  getUrl(){
-    return this.googleUrl + 'family=' +  this.fontsArr.map((each)=>{
+  getUrl () {
+    return this.googleUrl + 'family=' + this.fontsArr.map((each) => {
       return each.replace(' ', '+') + ':' + this.weights.join(',')
-    }).join('|');
+    }).join('|')
   }
 
-  getFontFiles(){
+  getFontFiles () {
+    var files = fs.readdirSync(this.fontPath)
 
-    var files = fs.readdirSync(this.fontPath);
+    var filtered = files.filter((each) => {
+      return this.fontsArr.some((fontName) => {
+        return each.includes(fontName.replace(' ', '_'))
+      })
+    })
 
+    filtered = filtered.map((each) => {
+      return this.fontPath + '/' + each
+    })
 
-    var filtered = files.filter((each)=>{
-      return this.fontsArr.some((fontName)=>{
-        return each.includes(fontName.replace(' ', '_'));
-      });
-    });
-
-    filtered = filtered.map((each)=>{
-      return this.fontPath + '/' + each;
-    });
-
-    return filtered;
+    return filtered
   }
 
-
-
-  load(callback){
-    var url = this.getUrl(this.fontsArr);
+  load (callback) {
+    var url = this.getUrl(this.fontsArr)
 
     this.googleFonts.download(url, {
       userAgent: 'Wget/1.18',
-      outputDir : this.fontPath,
-      template:   '{_family}-{weight}.{ext}',
-      overwriting : false
+      outputDir: this.fontPath,
+      template: '{_family}-{weight}.{ext}',
+      overwriting: false
     }).then(() => {
-
-      setTimeout(()=>{
-        if (callback){
-          callback(this.getFontFiles());
+      setTimeout(() => {
+        if (callback) {
+          callback(this.getFontFiles())
         }
-      }, 300);
-
-
+      }, 300)
     }).catch((e) => {
-      console.log(e);
-    });
+      console.log(e)
+    })
   }
-
-
 }

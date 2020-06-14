@@ -1,10 +1,9 @@
-const SaleGroups = require('../loader/sales-groups.js');
+const SaleGroups = require('../loader/sales-groups.js')
 
-module.exports={
+module.exports = {
 
-   get(){
-     return SaleGroups.get();
-   }
+  get () {
+    return SaleGroups.get()
+  }
 
-
-};
+}

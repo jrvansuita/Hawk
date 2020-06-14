@@ -1,11 +1,8 @@
 
-const Template = require('../bean/template.js');
+const Template = require('../bean/template.js')
 
 module.exports = class {
-
-  static storeFromScreen(params, callback) {
-
-
+  static storeFromScreen (params, callback) {
     var object = new Template(
       params.name,
       params.subject,
@@ -13,28 +10,23 @@ module.exports = class {
       params.usage,
       null,
       params.type
-    );
+    )
 
-    if (params.id){
-      object.id = params.id;
+    if (params.id) {
+      object.id = params.id
     }
 
-    if (params.id){
-      Template.findOne({id : params.id}, (err, obj)=>{
-        object.sample = obj.sample || {};
-        object.upsert((err, doc)=>{
-          callback(doc ? doc.id : 0);
-        });
-      });
-    }else{
-      Template.create(object, (err, doc)=>{
-        callback(doc ? doc.id : 0);
-      });
+    if (params.id) {
+      Template.findOne({ id: params.id }, (err, obj) => {
+        object.sample = obj.sample || {}
+        object.upsert((err, doc) => {
+          callback(doc ? doc.id : 0)
+        })
+      })
+    } else {
+      Template.create(object, (err, doc) => {
+        callback(doc ? doc.id : 0)
+      })
     }
-
   }
-
-
-
-
-};
+}

@@ -1,171 +1,163 @@
-var userSelector;
+var userSelector
 
-$(document).ready(()=>{
-
+$(document).ready(() => {
   new ComboBox($('#user-search'), '/profiles')
-  .setAutoShowOptions()
-  .setOnItemBuild((user, index)=>{
-    return {text : user.name, img : user.avatar};
-  })
-  .load()
-  .then((binder) => {
-    userSelector = binder;
-    onInit();
-  });
-});
+    .setAutoShowOptions()
+    .setOnItemBuild((user, index) => {
+      return { text: user.name, img: user.avatar }
+    })
+    .load()
+    .then((binder) => {
+      userSelector = binder
+      onInit()
+    })
+})
 
+function onInit () {
+  var panel = $('.main-panel')
+  var list = $('.histories-list')
 
-function onInit(){
-
-  var panel = $('.main-panel');
-  var list = $('.histories-list');
-
-  panel.unbind('scroll').bind('scroll', function() {
-    if (!stop){
+  panel.unbind('scroll').bind('scroll', function () {
+    if (!stop) {
       if ((panel.scrollTop() + panel.height()) + 100 >= list.height()) {
-        nextPage();
+        nextPage()
       }
     }
-  });
+  })
 
+  search()
 
-  search();
+  $('.search-button').click(() => {
+    search()
+  })
 
-  $('.search-button').click(()=>{
-    search();
-  });
+  $('.delete-button').click(() => {
+    _post('/history-delete', { query: getQuery() })
+  })
 
-
-  $('.delete-button').click(()=>{
-    _post('/history-delete',{ query: getQuery()});
-  });
-
-  $('.search-input').keypress(function(e){
-    if(e.which == 13){
-      $('.search-button').trigger('click');
+  $('.search-input').keypress(function (e) {
+    if (e.which == 13) {
+      $('.search-button').trigger('click')
     }
-  });
+  })
 }
 
-function initSearch(){
-  currentPage = 0;
-  stop = false;
+function initSearch () {
+  currentPage = 0
+  stop = false
 
-  $('.histories-list').empty();
+  $('.histories-list').empty()
 }
 
-function search(){
-  initSearch();
-  nextPage();
+function search () {
+  initSearch()
+  nextPage()
 }
 
-function getQuery(){
-  var query = {};
-  query.title = $('#title-search').val();
-  query.message = $('#message-search').val();
-  query.tag = $('#tag-search').val();
+function getQuery () {
+  var query = {}
+  query.title = $('#title-search').val()
+  query.message = $('#message-search').val()
+  query.tag = $('#tag-search').val()
 
-  var user = userSelector.getSelectedObject();
-  if (user){
-    query.userId = user.id;
+  var user = userSelector.getSelectedObject()
+  if (user) {
+    query.userId = user.id
   }
 
-  return query;
+  return query
 }
 
-var currentPage;
-var stop;
+var currentPage
+var stop
 
-function nextPage(){
-  var query  = getQuery();
-  currentPage++;
-  stop = true;
+function nextPage () {
+  var query = getQuery()
+  currentPage++
+  stop = true
 
-  _get("/history-page",{
+  _get('/history-page', {
     page: currentPage,
     query: query
-  }, (response)=>{
-    stop = response.length == 0;
+  }, (response) => {
+    stop = response.length == 0
 
-    if (currentPage == 1 && stop){
-      showEmptyList();
-    }else{
-      loadHistoriesItems(response);
+    if (currentPage == 1 && stop) {
+      showEmptyList()
+    } else {
+      loadHistoriesItems(response)
     }
-  },(error)=>{
-    console.log(error);
-  });
+  }, (error) => {
+    console.log(error)
+  })
 }
 
-function loadHistoriesItems(items){
-  var list = $('.histories-list');
+function loadHistoriesItems (items) {
+  var list = $('.histories-list')
 
-  items.forEach((item, index)=>{
-    list.append(getLine(item));
-  });
+  items.forEach((item, index) => {
+    list.append(getLine(item))
+  })
 }
 
-function getLine(item){
-  var $holder = $('<div>').addClass('history-item');
-  $holder.append(getAvatar(item), getMainItem(item));
+function getLine (item) {
+  var $holder = $('<div>').addClass('history-item')
+  $holder.append(getAvatar(item), getMainItem(item))
 
-  return $holder;
+  return $holder
 }
 
-function getMainItem(item){
-  var $holder = $('<div>').addClass('history-main-item');
-  $holder.append(getTitle(item), getMessage(item));
+function getMainItem (item) {
+  var $holder = $('<div>').addClass('history-main-item')
+  $holder.append(getTitle(item), getMessage(item))
 
-  return $holder;
+  return $holder
 }
 
-function getAvatar(item){
-  item.user.name = item.user.id != 404 ? item.user.name.split(" ")[0] : "Sistema";
+function getAvatar (item) {
+  item.user.name = item.user.id != 404 ? item.user.name.split(' ')[0] : 'Sistema'
 
   var $typeIcon = $('<img>').addClass('history-icon circle shadow')
-  .attr('src','img/' + Util.historyIcon(item.type) + '.png');
+    .attr('src', 'img/' + Util.historyIcon(item.type) + '.png')
 
   var $avatarImg = $('<img>').addClass('circle shadow avatar-img')
-  .attr('title', item.user.name)
-  .attr('data-src',item.user.avatar)
-  .attr('src', item.user.id == 404 ? "img/system.png" : (item.user.avatar ? item.user.avatar : 'img/avatar.png'))
-  .attr('data-userId', item.user.id);
+    .attr('title', item.user.name)
+    .attr('data-src', item.user.avatar)
+    .attr('src', item.user.id == 404 ? 'img/system.png' : (item.user.avatar ? item.user.avatar : 'img/avatar.png'))
+    .attr('data-userId', item.user.id)
 
+  var $avatarName = $('<span>').addClass('label shadow avatar-name').text(item.user.name)
 
-  var $avatarName = $('<span>').addClass('label shadow avatar-name').text(item.user.name);
+  var $holder = $('<div>').addClass('avatar-holder')
+  $holder.append($typeIcon, $avatarImg, $avatarName)
 
-  var $holder = $('<div>').addClass('avatar-holder');
-  $holder.append($typeIcon, $avatarImg, $avatarName);
-
-  return $holder;
+  return $holder
 }
 
-function getTitle(item){
-  var $date = $('<label>').addClass('history-date').text(Dat.formatwTime(new Date(item.date)));
-  var $tag = $('<label>').addClass('history-tag').css('background-color', Util.historyTagColor(item.tag)).text(item.tag);
+function getTitle (item) {
+  var $date = $('<label>').addClass('history-date').text(Dat.formatwTime(new Date(item.date)))
+  var $tag = $('<label>').addClass('history-tag').css('background-color', Util.historyTagColor(item.tag)).text(item.tag)
 
-  var $superiorLine = $('<div>').addClass('title-line');
-  $superiorLine.append($date, $tag);
+  var $superiorLine = $('<div>').addClass('title-line')
+  $superiorLine.append($date, $tag)
 
-  var $title = $('<label>').addClass('history-title').text(item.title);
+  var $title = $('<label>').addClass('history-title').text(item.title)
 
-  var $infoHolder = $('<div>').addClass('history-info');
-  $infoHolder.append($superiorLine, $title);
+  var $infoHolder = $('<div>').addClass('history-info')
+  $infoHolder.append($superiorLine, $title)
 
-  return $infoHolder;
+  return $infoHolder
 }
 
+function getMessage (item) {
+  var $title = $('<label>').addClass('history-message').text(item.message)
 
-function getMessage(item){
-  var $title = $('<label>').addClass('history-message').text(item.message);
+  var $holder = $('<div>').addClass('history-message-holder')
+  $holder.append($title)
 
-  var $holder = $('<div>').addClass('history-message-holder');
-  $holder.append($title);
-
-  return $holder;
+  return $holder
 }
 
-
-function showEmptyList(){
-  $('.histories-list').append($('<label>').addClass('hint').text('Nenhum histórico encontrado.'));
+function showEmptyList () {
+  $('.histories-list').append($('<label>').addClass('hint').text('Nenhum histórico encontrado.'))
 }

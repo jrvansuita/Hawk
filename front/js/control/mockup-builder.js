@@ -1,139 +1,132 @@
-var fontColorPicker;
-var fontShadowColorPicker;
-var discountFontColorPicker;
-var discountFontShadowColorPicker;
-var discountBackgroundColorPicker;
-var discountBackgroundShadowColorPicker;
+var fontColorPicker
+var fontShadowColorPicker
+var discountFontColorPicker
+var discountFontShadowColorPicker
+var discountBackgroundColorPicker
+var discountBackgroundShadowColorPicker
 
-var disableColor = '#e4e4e4';
+var disableColor = '#e4e4e4'
 
-$(document).ready(()=>{
-  fontColorPicker = createColorPicker('font-color', selected.fontColor);
-  fontShadowColorPicker = createColorPicker('font-shadow-color', selected.fontShadowColor);
-  discountFontColorPicker = createColorPicker('discount-font-color', selected.discountFontColor);
-  discountFontShadowColorPicker = createColorPicker('discount-font-shadow-color', selected.discountShadowColor);
-  discountBackgroundColorPicker = createColorPicker('discount-background-color', selected.discountBackground);
-  discountBackgroundShadowColorPicker = createColorPicker('discount-background-shadow-color', selected.discountBackgroundShadow);
+$(document).ready(() => {
+  fontColorPicker = createColorPicker('font-color', selected.fontColor)
+  fontShadowColorPicker = createColorPicker('font-shadow-color', selected.fontShadowColor)
+  discountFontColorPicker = createColorPicker('discount-font-color', selected.discountFontColor)
+  discountFontShadowColorPicker = createColorPicker('discount-font-shadow-color', selected.discountShadowColor)
+  discountBackgroundColorPicker = createColorPicker('discount-background-color', selected.discountBackground)
+  discountBackgroundShadowColorPicker = createColorPicker('discount-background-shadow-color', selected.discountBackgroundShadow)
 
-  $('.save-button').click(saveClick);
+  $('.save-button').click(saveClick)
 
   new ComboBox($('#font'), fontsArr)
-  .setAutoShowOptions().load();
+    .setAutoShowOptions().load()
 
   new ComboBox($('#font-discount'), fontsArr)
-  .setAutoShowOptions().load();
+    .setAutoShowOptions().load()
 
+  loadPreview()
+  updateSizeHint()
 
-  loadPreview();
-  updateSizeHint();
+  $('.mock-img-edit').click(() => {
+    $('#mock-input-file').trigger('click')
+  })
 
-  $('.mock-img-edit').click(()=>{
-    $('#mock-input-file').trigger('click');
-  });
+  $('.back-img-edit').click(() => {
+    $('#back-input-file').trigger('click')
+  })
 
-  $('.back-img-edit').click(()=>{
-    $('#back-input-file').trigger('click');
-  });
+  $('#width').change((event) => {
+    updateSizeHint()
+  })
 
-  $('#width').change((event)=>{
-    updateSizeHint();
-  });
-
-
-  $('#keep-creative-color').click(function (event){
-    if ($(this).is(":checked")){
-      discountBackgroundColorPicker.setColor(disableColor);
-      discountBackgroundColorPicker.disable();
-    }else{
-      discountBackgroundColorPicker.enable();
+  $('#keep-creative-color').click(function (event) {
+    if ($(this).is(':checked')) {
+      discountBackgroundColorPicker.setColor(disableColor)
+      discountBackgroundColorPicker.disable()
+    } else {
+      discountBackgroundColorPicker.enable()
     }
-  });
+  })
 
-  $('#mock-input-file').change(function (event){
-    loadImageResource(this, event);
-  });
+  $('#mock-input-file').change(function (event) {
+    loadImageResource(this, event)
+  })
 
-  $('#back-input-file').change(function (event){
-    loadImageResource(this, event);
-  });
+  $('#back-input-file').change(function (event) {
+    loadImageResource(this, event)
+  })
 
-  $('#search-sku').on("keyup", function(e) {
-    var key = e.which;
-    if (key == 13){
-      loadPreview();
+  $('#search-sku').on('keyup', function (e) {
+    var key = e.which
+    if (key == 13) {
+      loadPreview()
     }
-  });
+  })
 
-  $('.each-all').click(function() {
-    window.location='/mockup-builder?_id=' + $(this).data('id');
-  });
+  $('.each-all').click(function () {
+    window.location = '/mockup-builder?_id=' + $(this).data('id')
+  })
 
   $('.add-new').click(() => {
-    selected = {};
-    selected._id = '';
-    $('.settings-box').find('input').val('');
-    $('.settings-box').find('input').prop("checked", false);
+    selected = {}
+    selected._id = ''
+    $('.settings-box').find('input').val('')
+    $('.settings-box').find('input').prop('checked', false)
 
-    $('.mock-preview').css({ opacity: 0 });
+    $('.mock-preview').css({ opacity: 0 })
     $('.mock-img-select').css({ opacity: 0 })
-  });
-});
+  })
+})
 
+function loadImageResource (el, event) {
+  var selectedFile = event.target.files[0]
+  var reader = new FileReader()
+  var icon = $('.' + $(el).data('icon'))
+  var target = $('.' + $(el).data('target'))
+  var attr = $(el).data('attr')
 
-function loadImageResource(el, event){
-  var selectedFile = event.target.files[0];
-  var reader = new FileReader();
-  var icon = $('.' + $(el).data('icon'));
-  var target = $('.' + $(el).data('target'));
-  var attr = $(el).data('attr');
+  icon.attr('src', 'img/loader/circle.svg')
+  reader.onload = function (event) {
+    _postImg('/upload-base64-img', { base64: event.target.result.split(',')[1] }, (data) => {
+      selected[attr] = data.link
+      target.attr('src', event.target.result)
+      icon.attr('src', 'img/img-edit.png')
+    })
+  }
 
-  icon.attr('src', 'img/loader/circle.svg');
-  reader.onload = function(event) {
-
-    _postImg('/upload-base64-img', {base64: event.target.result.split(',')[1]},(data)=>{
-      selected[attr] = data.link;
-      target.attr('src', event.target.result);
-      icon.attr('src', 'img/img-edit.png');
-    });
-  };
-
-  reader.readAsDataURL(selectedFile);
+  reader.readAsDataURL(selectedFile)
 }
 
-
-function saveClick(){
-  if (checkFields()){
-    save();
+function saveClick () {
+  if (checkFields()) {
+    save()
   }
 }
 
+function checkFields () {
+  var c = checkMaterialInput($('#font'))
+  c = checkMaterialInput($('#width')) & c
+  c = checkMaterialInput($('#height')) & c
+  c = checkMaterialInput($('#name')) & c
 
-function checkFields(){
-  var c = checkMaterialInput($('#font'));
-  c = checkMaterialInput($('#width')) & c;
-  c = checkMaterialInput($('#height')) & c;
-  c = checkMaterialInput($('#name')) & c;
-
-  return c;
+  return c
 }
 
-var preventCache = 0;
+var preventCache = 0
 
+function loadPreview () {
+  preventCache++
+  var skuQuery = $('#search-sku').val() ? '&sku=' + $('#search-sku').val() : ''
+  var mockIdQuery = '&mockId=' + selected._id
 
-function loadPreview(){
-  preventCache++;
-  var skuQuery = $('#search-sku').val() ? '&sku=' + $('#search-sku').val() : '';
-  var mockIdQuery = '&mockId=' + selected._id;
-
-  $('.mock-preview').animate({ opacity: 0 });
+  $('.mock-preview').animate({ opacity: 0 })
   new ProductImageLoader($('.mock-preview'))
-  .setOnLoaded(()=>{
-    $('.mock-preview').animate({ opacity: 1 });
-  })
-  .src('/product-mockup?_v' + preventCache + skuQuery + mockIdQuery).put();
+    .setOnLoaded(() => {
+      $('.mock-preview').animate({ opacity: 1 })
+    })
+    .src('/product-mockup?_v' + preventCache + skuQuery + mockIdQuery).put()
 }
 
-function save() {
+function save () {
   var data = {
     _id: selected._id,
     name: $('#name').val(),
@@ -142,36 +135,35 @@ function save() {
     mockurl: selected.imgUrl,
     backurl: selected.backUrl,
     msg: $('#msg').val(),
-    fontColor : fontColorPicker.getSelectedColor().toHEXA().toString(),
-    fontShadowColor : fontShadowColorPicker.getSelectedColor().toHEXA().toString(),
+    fontColor: fontColorPicker.getSelectedColor().toHEXA().toString(),
+    fontShadowColor: fontShadowColorPicker.getSelectedColor().toHEXA().toString(),
     priceBottomMargin: $('#price-bottom-margin').val() || 0,
-    showDiscount: $('#discount-active').is(":checked"),
-    discountFontColor : discountFontColorPicker.getSelectedColor().toHEXA().toString(),
-    discountShadowColor : discountFontShadowColorPicker.getSelectedColor().toHEXA().toString(),
-    discountBackground: $('#keep-creative-color').is(":checked") ? 'none' : discountBackgroundColorPicker.getSelectedColor().toHEXA().toString(),
+    showDiscount: $('#discount-active').is(':checked'),
+    discountFontColor: discountFontColorPicker.getSelectedColor().toHEXA().toString(),
+    discountShadowColor: discountFontShadowColorPicker.getSelectedColor().toHEXA().toString(),
+    discountBackground: $('#keep-creative-color').is(':checked') ? 'none' : discountBackgroundColorPicker.getSelectedColor().toHEXA().toString(),
     discountBackgroundShadow: discountBackgroundShadowColorPicker.getSelectedColor().toHEXA().toString(),
     width: Num.def($('#width').val()),
     height: Num.def($('#height').val()),
     productTopMargin: $('#product-top-margin').val() || 0
-  };
+  }
 
-  _post('mockup-builder', data , (mockId)=>{
-    window.location= 'mockup-builder?_id=' + mockId;
-  },(error, message)=>{
-    console.log(error);
-  });
+  _post('mockup-builder', data, (mockId) => {
+    window.location = 'mockup-builder?_id=' + mockId
+  }, (error, message) => {
+    console.log(error)
+  })
 }
 
-function createColorPicker(el, defColor){
-
+function createColorPicker (el, defColor) {
   // Simple example, see optional options for more configuration.
   return Pickr.create({
     el: '.' + el,
     theme: 'nano',
     strings: {
-      save: 'Salvar',
+      save: 'Salvar'
     },
-    disabled: defColor == 'none' ? true : false,
+    disabled: defColor == 'none',
     default: defColor == 'none' ? disableColor : defColor,
     swatches: [
       'rgba(244, 67, 54, 1)',
@@ -199,13 +191,11 @@ function createColorPicker(el, defColor){
         save: true
       }
     }
-  });
+  })
 }
 
+var fontsArr = ['Varela Round', 'Verdana', 'Roboto', 'Lato', 'Fira Sans', 'Mansalva', 'Turret Road']
 
-
-var fontsArr = ["Varela Round", "Verdana", "Roboto", "Lato", "Fira Sans", "Mansalva", "Turret Road"];
-
-function updateSizeHint(){
-  $('.size-hint').text('Imagem: ' + Num.def($('#width').val()) + 'x20%');
+function updateSizeHint () {
+  $('.size-hint').text('Imagem: ' + Num.def($('#width').val()) + 'x20%')
 }

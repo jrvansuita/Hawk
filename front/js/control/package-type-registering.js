@@ -1,42 +1,37 @@
-$(document).ready(()=>{
-
-
-    new ComboBox($('#pack-name'), '/package-types')
+$(document).ready(() => {
+  new ComboBox($('#pack-name'), '/package-types')
     .setAutoShowOptions(true)
-    .setOnItemBuild((pack, index)=>{
-      return {text : pack.name};
+    .setOnItemBuild((pack, index) => {
+      return { text: pack.name }
     })
-    .setOnItemSelect((data, item)=>{
-      window.location='/packages-registering?_id='+ item._id;
-    }).load();
+    .setOnItemSelect((data, item) => {
+      window.location = '/packages-registering?_id=' + item._id
+    }).load()
 
+  $('#new').click(() => {
+    $('input').val('')
+  })
 
-    $('#new').click(()=>{
-      $('input').val('');
-    });
+  $('#save').click(() => {
+    if (checkform()) {
+      $('#pack-form').submit()
+    }
+  })
 
-      $('#save').click(()=>{
-        if (checkform()){
-          $('#pack-form').submit();
-        }
-      });
+  $('#delete').click(() => {
+    if ($('#editing-id').val().length > 0) {
+      _post('/packages-remove', { id: $('#editing-id').val() }, () => {
+        window.location = '/packages-registering'
+      })
+    }
+  })
+})
 
-      $('#delete').click(()=>{
-        if ($('#editing-id').val().length > 0){
-          _post('/packages-remove', {id: $('#editing-id').val()},()=>{
-              window.location='/packages-registering';
-            });
-        }
-      });
-});
+function checkform () {
+  var c = checkMaterialInput($('#name'))
+  c = checkMaterialInput($('#width')) & c
+  c = checkMaterialInput($('#height')) & c
+  c = checkMaterialInput($('#length')) & c
 
-
-
-function checkform(){
-  var c = checkMaterialInput($('#name'));
-  c = checkMaterialInput($('#width')) & c;
-  c = checkMaterialInput($('#height')) & c;
-  c = checkMaterialInput($('#length')) & c;
-
-  return c;
+  return c
 }

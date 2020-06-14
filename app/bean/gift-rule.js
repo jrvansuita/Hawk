@@ -1,53 +1,44 @@
 
-
-
 module.exports = class GiftRule extends DataAccess {
-
-
-  constructor(id, name, active, checkStock, expiresDate, sendEmail) {
-    super();
-    this.id = Num.def(id, 0) || Util.id();
-    this.name = Str.def(name);
-    this.active = active ? true: false;
-    this.expiresDate = Dat.def(expiresDate);
-    this.checkStock = checkStock ? true : false;
-    this.sendEmail = sendEmail ? true : false;
-    this.skus = [];
-    this.rules = [];
+  constructor (id, name, active, checkStock, expiresDate, sendEmail) {
+    super()
+    this.id = Num.def(id, 0) || Util.id()
+    this.name = Str.def(name)
+    this.active = !!active
+    this.expiresDate = Dat.def(expiresDate)
+    this.checkStock = !!checkStock
+    this.sendEmail = !!sendEmail
+    this.skus = []
+    this.rules = []
   }
 
-  addRules(rules){
-    this.rules = rules;
+  addRules (rules) {
+    this.rules = rules
   }
 
-  addSkus(skus){
-    this.skus = skus;
+  addSkus (skus) {
+    this.skus = skus
   }
 
-  static findActives(callback){
+  static findActives (callback) {
     GiftRule.find({
-      active : true,
-      expiresDate: {$gte : Dat.today().begin()}
-    }, callback);
+      active: true,
+      expiresDate: { $gte: Dat.today().begin() }
+    }, callback)
   }
 
-
-
-  static getKey() {
-    return ['id'];
+  static getKey () {
+    return ['id']
   }
 
-
-  static attrs(){
-    return attributes;
+  static attrs () {
+    return attributes
   }
 
-  static conditions(){
-    return conditions;
+  static conditions () {
+    return conditions
   }
-};
-
-
+}
 
 var attributes = {
 
@@ -56,9 +47,9 @@ var attributes = {
     key: 'situacao',
     options: {
       '-1': 'Aguardando Pagamento',
-      '0': 'Em aberto',
-      '3': 'Pronto para picking',
-      '4': 'Pagamento em análise'
+      0: 'Em aberto',
+      3: 'Pronto para picking',
+      4: 'Pagamento em análise'
     }
   },
 
@@ -112,7 +103,7 @@ var attributes = {
   PAYMENT_FORM: {
     label: 'Forma de Pagamento',
     key: 'paymentType',
-    options: {'boleto' : 'Boleto', 'creditcard': 'Cartão de Crédito'}
+    options: { boleto: 'Boleto', creditcard: 'Cartão de Crédito' }
   },
 
   INNER_OBS: {
@@ -129,58 +120,58 @@ var attributes = {
   FIRST_SALE: {
     label: 'Primeira Compra',
     key: 'primeiraCompra',
-    options: {'1' : 'Sim', '0': 'Não'}
+    options: { 1: 'Sim', 0: 'Não' }
   }
-};
+}
 
 var conditions = {
-  EQUAL:{
+  EQUAL: {
     label: 'Igual',
     match: (a, b) => {
-      return a && b && (a == b);
+      return a && b && (a == b)
     },
-    accepts:['integer', 'float']
+    accepts: ['integer', 'float']
   },
-  GREATER:{
+  GREATER: {
     label: 'Maior',
     match: (a, b) => {
-      return Floa.def(a) > Floa.def(b);
+      return Floa.def(a) > Floa.def(b)
     },
-    accepts:['integer', 'float']
+    accepts: ['integer', 'float']
   },
-  SMALLER:{
+  SMALLER: {
     label: 'Menor',
     match: (a, b) => {
-      return Floa.def(a) < Floa.def(b);
+      return Floa.def(a) < Floa.def(b)
     },
-    accepts:['integer', 'float']
+    accepts: ['integer', 'float']
   },
 
-  IS:{
+  IS: {
     label: 'É',
     match: (a, b) => {
-      return a && b && (a.toLowerCase().toString() == b.toLowerCase().toString());
+      return a && b && (a.toLowerCase().toString() == b.toLowerCase().toString())
     }
   },
 
-  NOT_IS:{
+  NOT_IS: {
     label: 'Não É',
-    match: function(a, b) {
-      return !conditions.IS.match(a, b);
+    match: function (a, b) {
+      return !conditions.IS.match(a, b)
     }
   },
 
-  CONTAINS:{
+  CONTAINS: {
     label: 'Contém',
     match: (a, b) => {
-      return a && b && (a.toLowerCase().toString().includes(b.toLowerCase().toString()));
+      return a && b && (a.toLowerCase().toString().includes(b.toLowerCase().toString()))
     }
   },
 
-  NOT_CONTAINS:{
+  NOT_CONTAINS: {
     label: 'Não Contém',
     match: function (a, b) {
-      return !conditions.CONTAINS.match(a, b);
+      return !conditions.CONTAINS.match(a, b)
     }
   }
-};
+}

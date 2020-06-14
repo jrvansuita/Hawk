@@ -1,80 +1,77 @@
-const MagentoApi = require('../magento/magento-api.js');
+const MagentoApi = require('../magento/magento-api.js')
 
-module.exports = class MagentoCalls{
-
-  constructor(){
-    this.api = new MagentoApi();
+module.exports = class MagentoCalls {
+  constructor () {
+    this.api = new MagentoApi()
   }
 
-  async onInstance(callback){
-    let apiHandler = await this.api.instance();
+  async onInstance (callback) {
+    const apiHandler = await this.api.instance()
     return new Promise((resolve, reject) => {
-      callback(apiHandler, resolve, reject);
-    });
+      callback(apiHandler, resolve, reject)
+    })
   }
 
-  onResult(resolve, reject){
-    return (err, result)=>{
-      if (err){
-        reject(err);
-      }else{
-        resolve(result);
+  onResult (resolve, reject) {
+    return (err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
       }
-    };
+    }
   }
 
-  async saleByClient(clientId){
+  async saleByClient (clientId) {
     return this.onInstance((api, resolve, reject) => {
       api.salesOrder.list({
         filters: { customer_id: clientId }
-      }, this.onResult(resolve, reject));
-    });
+      }, this.onResult(resolve, reject))
+    })
   }
 
-
-  async sale(number){
+  async sale (number) {
     return this.onInstance((api, resolve, reject) => {
-      api.salesOrder.info({orderIncrementId: number}, this.onResult(resolve, reject));
-    });
+      api.salesOrder.info({ orderIncrementId: number }, this.onResult(resolve, reject))
+    })
   }
 
-  async product(sku){
+  async product (sku) {
     return this.onInstance((api, resolve, reject) => {
-      api.catalogProduct.info({ id: sku }, this.onResult(resolve, reject));
-    });
+      api.catalogProduct.info({ id: sku }, this.onResult(resolve, reject))
+    })
   }
 
-  async productStock(sku){
+  async productStock (sku) {
     return this.onInstance((api, resolve, reject) => {
-      api.catalogInventoryStockItem.list({ products: sku }, this.onResult(resolve, reject));
-    });
+      api.catalogInventoryStockItem.list({ products: sku }, this.onResult(resolve, reject))
+    })
   }
 
-  async updateProductWeight(sku, weight){
+  async updateProductWeight (sku, weight) {
     return this.onInstance((api, resolve, reject) => {
       api.catalogProduct.update({
-        id:         sku,
-        data:       {weight: weight}
-      }, this.onResult(resolve, reject));
-    });
+        id: sku,
+        data: { weight: weight }
+      }, this.onResult(resolve, reject))
+    })
   }
 
-  async updateProductStock(sku, stock){
+  async updateProductStock (sku, stock) {
     return this.onInstance((api, resolve, reject) => {
       api.catalogInventoryStockItem.update({
         product: sku,
-        data: {qty: stock,
-          is_in_stock : stock > 0 }
-        },this.onResult(resolve, reject));
-      });
-    }
+        data: {
+          qty: stock,
+          is_in_stock: stock > 0
+        }
+      }, this.onResult(resolve, reject))
+    })
+  }
 
-    async salesOrderUpdate(data){
-      return this.onInstance((api, resolve, reject) => {
-        api.salesOrder.addComment(data, this.onResult(resolve, reject));
-      });
-    }
-
-
-
-  };
+  async salesOrderUpdate (data) {
+    return this.onInstance((api, resolve, reject) => {
+      api.salesOrder.addComment(data, this.onResult(resolve, reject))
+    })
+  }
+}

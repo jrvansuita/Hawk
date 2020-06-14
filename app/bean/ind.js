@@ -1,48 +1,42 @@
 module.exports = class Indicators {
-
-  constructor() {
-    this.groups = [];
+  constructor () {
+    this.groups = []
   }
 
-  addGroup(label) {
-    var group = new Group(label);
-    this.groups.push(group);
-    return group;
+  addGroup (label) {
+    var group = new Group(label)
+    this.groups.push(group)
+    return group
   }
 
-  getGroups() {
-    return this.groups;
+  getGroups () {
+    return this.groups
+  }
+}
+
+class Group {
+  constructor (label) {
+    this.label = label
+    this.items = []
   }
 
-};
-
-
-class Group{
-
-  constructor(label) {
-    this.label = label;
-    this.items = [];
+  addItem (label, value, color, tag) {
+    var item = new Indicator(this, label, value, color, tag)
+    this.items.push(item)
+    return item
   }
 
-  addItem(label, value, color, tag){
-    var item = new Indicator(this, label, value, color, tag);
-    this.items.push(item);
-    return item;
+  getItems () {
+    return this.items
   }
-
-  getItems(){
-    return this.items;
-  }
-
 }
 
 class Indicator {
-  constructor(parent, label, value, color, tag) {
-    this.parent = parent;
-    this.label = label;
-    this.value = value;
-    this.color = color;
-    this.tag = tag; //Not used Yet
+  constructor (parent, label, value, color, tag) {
+    this.parent = parent
+    this.label = label
+    this.value = value
+    this.color = color
+    this.tag = tag // Not used Yet
   }
-
 }
