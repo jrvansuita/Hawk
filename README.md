@@ -10,8 +10,6 @@ Este é o repositório de desenvolvimento do Hawk.
 
 ``` npm run dev ```
 
-----
-
 ## Commit
 
  1. Atualizar o repositório local com as últimas alterações comitadas pelos colegas.
@@ -37,7 +35,6 @@ Todo commit neste branch gera uma deploy automatico em:
 
      ``` git push --tags ```
 
-----
 
 ## Dev Stack
 

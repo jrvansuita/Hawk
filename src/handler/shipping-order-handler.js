@@ -1,4 +1,3 @@
-const EccosysProvider = require('../eccosys/eccosys-provider.js')
 const EccosysStorer = require('../eccosys/eccosys-storer.js')
 
 module.exports = {
