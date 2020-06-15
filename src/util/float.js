@@ -40,7 +40,7 @@ var Floa = {
   },
 
   abs (val, digits) {
-    return parseFloat(val).toFixed(digits || 2).toString().replace('.', ',')
+    return (parseFloat(val) || 0).toFixed(digits || 2).toString().replace('.', ',')
   }
 
 }

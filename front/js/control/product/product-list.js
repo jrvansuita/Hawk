@@ -128,7 +128,7 @@ function loadList () {
 }
 
 function showMessageTotals (info) {
-  if (window.loggedUser.full) {
+  if (info && window.loggedUser.full) {
     $('.totalization .stock > .value').text(window.Num.points(info.sum_quantity) + ' items')
     $('.totalization .skus > .value').text(window.Num.points(info.count))
     $('.totalization .sell > .value').text(window.Num.money(info.sum_sell / info.sum_quantity))

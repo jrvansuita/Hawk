@@ -1,8 +1,10 @@
+
 const MEM_TAG = 'LOCKED-VALUE'
 var lockedValues
 var refreshBroadcast
 var childsBuilder
 var sizesBox
+var product
 
 $(document).ready(() => {
   onCreate(); onRefresh()
@@ -165,6 +167,16 @@ function onSizesRefreshed () {
 
 function onOtherBindingRules () {
   $('.discount').text(Num.percent(product.discount, true))
+  $('.create-time').text(Dat.formatwTime(new Date(product.dtCriacao)))
+  $('.create-user').text(getCreatedUser() || loggedUser.name)
+}
+
+function getCreatedUser () {
+  var line = product?.obs?.split('\n').find((i) => {
+    return i.includes('Cadastro')
+  })
+
+  return line?.split('|')[0]
 }
 
 function requestProductChilds () {
