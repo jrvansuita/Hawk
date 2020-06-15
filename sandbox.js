@@ -1,6 +1,6 @@
-const Initilizer = require('./app/abra-cadabra/initializer.js')
+const Initilizer = require('./src/_init/initializer.js')
 
-new Initilizer(__dirname, true).begin(async () => {
+new Initilizer().setSandboxMode(false).begin().then(() => {
   // const Enum = require('./app/bean/enumerator.js')
   // var s = (await Enum.on('PROD-DEP-NAME')).hunt('Meia');
   // console.log(s)

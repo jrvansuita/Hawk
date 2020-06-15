@@ -47,20 +47,8 @@ Todo commit neste branch gera uma deploy automatico em:
 
 
 - [Visual Studio Code](https://code.visualstudio.com/)
-- [Eslint](eslint/eslint)
-
-    Lint all: ```npm run linta```.
-
-  Lint all and fix: ```npm run lintfa```.
-
-- [Stylelint](/stylelint/stylelint)
-
-  Style lint all: ```npm run slinta```.
-
-  Style lint fix all: ```npm run slintfa```.
-
- Fix all possible linting problems: ```npm run fix```
-
+- [Eslint](https://github.com/eslint/eslint) (run: ```npm run linta```, fix: ```npm run lintfa```)
+- [Stylelint](https://github.com/stylelint/stylelint) (run: ```npm run slinta```, fix: ```npm run slintfa```)
 - [EditorConfig](https://editorconfig.org/)
 - [Prettier](https://prettier.io/)
 
@@ -76,3 +64,8 @@ on settings.json:
   }
 ```
 
+PS.: Fix all possible linting problems: ```npm run fix```
+
+## Unit & Integration Tests
+
+- [Jest](https://github.com/facebook/jest) (run: ```npm test```)

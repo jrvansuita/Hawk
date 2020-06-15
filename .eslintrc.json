@@ -17,5 +17,6 @@
     "rules": {
     },
 
-    "ignorePatterns": ["*.ejs", "*.test.js"]
+    "ignorePatterns": ["*.ejs"]
+
 }
