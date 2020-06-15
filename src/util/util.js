@@ -304,11 +304,11 @@ var Util = {
   },
 
   getSaleStatusName (status) {
-    if (status == 'N') {
+    if (status === 'N') {
       return 'Picking Não Realizado'
-    } else if (status == 'A') {
+    } else if (status === 'A') {
       return 'Aguardando Faturamento'
-    } else if (status == 'S') {
+    } else if (status === 'S') {
       return 'Faturado'
     }
   },
@@ -381,7 +381,8 @@ var Util = {
   },
 
   getProductName (name, isChild) {
-    var desc = name.split('-').slice(0, isChild ? -2 : -1).join('-').trim()
+    // var desc = name.split('-').slice(0, isChild ? -2 : -1).join('-').trim()
+    var desc = name.split('-').shift().trim()
 
     return desc || ''
   },
@@ -473,7 +474,9 @@ var Util = {
   },
 
   getUrlParam: function (name) {
-    if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search)) { return decodeURIComponent(name[1]) }
+    name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search)
+
+    if (name) { return decodeURIComponent(name[1]) }
   },
 
   isTokenOk: (user) => {

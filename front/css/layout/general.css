@@ -229,7 +229,7 @@ tr.line td {
 }
 
 .simple-material-input:focus {
-  transform: scale(1.01);
+  transform: scale(1.002);
   border: 2px #1c796b;
   border-style: none none solid;
 }
