@@ -153,6 +153,7 @@ class TemplateEditor {
       iframe: false,
       listAdvancedTypes: true,
       attribution: false,
+      key: 'AV:4~?3xROKLJKYHROLDXDR@d2YYGR_Bc1A8@5@4:1B2D2F2F1?1?2A3@1C1',
 
       // Define new inline styles.
       inlineClasses: {
