@@ -128,17 +128,22 @@ function loadList () {
 }
 
 function showMessageTotals (info) {
-  var msg = 'Nenhum produto encontrado.'
+  console.log(info)
 
-  if (info) {
-    msg = Num.points(info.sum_quantity) + ' items e ' + Num.points(info.count) + ' skus'
-  }
+  $('.totalization .stock > .value').text(window.Num.points(info.sum_quantity) + ' items')
+  $('.totalization .skus > .value').text(window.Num.points(info.count))
+  $('.totalization .sell > .value').text(window.Num.money(info.sum_sell / info.sum_quantity))
+  $('.totalization .cost > .value').text(window.Num.money(info.sum_cost / info.sum_quantity))
 
-  if (loggedUser.full) {
-    msg += ' ' + Num.format(info.sum_cost, false, true) + '/' + Num.format(info.sum_sell, false, true)
-  }
+  $('.totalization .mark > .value').text(window.Floa.abs(info.sum_sell / info.sum_cost, 2))
+  $('.totalization .marg > .value').text(window.Num.percent(100 - ((info.sum_cost / info.sum_sell) * 100), 2))
 
-  $('#totals').text(msg)
+  $('.totalization .tsell > .value').text(window.Num.money(info.sum_sell))
+  $('.totalization .tcost > .value').text(window.Num.money(info.sum_cost))
+
+  $('.totalization').toggle(window.loggedUser.full)
+
+  $('#totals').text(info ? window.Num.points(info.sum_quantity) + ' items e ' + window.Num.points(info.count) + ' skus' : 'Nenhum produto encontrado.')
 }
 
 function addProductLayout (product, index) {
