@@ -77,4 +77,28 @@ module.exports = class SkuPic extends DataAccess {
       }
     })
   }
+
+  static countAll(query, callback){
+
+    SkuPic.aggregate([
+      { $match: query },
+      {
+        $facet: {
+          info: [
+            { $group: {
+              _id: '$approved',
+              count: {
+                $sum: 1
+              }
+            }
+          },
+        ],
+      },
+    },
+  ],function(err, res) {
+    if (callback)
+    callback(err, res);
+  });
+}
+
 }
