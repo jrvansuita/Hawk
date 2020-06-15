@@ -14,6 +14,9 @@
           <label class="data-quantity" title="<%=Num.points(total)%>"><%=Num.format(total)%></label>
         </div>
 
+
+
+
         <%data[attr].forEach(item=>{%>
 
           <div class="line-item clickable <%=item.balance < -50 ? 'red' : (item.balance > 50 ? 'green' : '')%>" data-attr="<%=attr%>" data-value="<%=item.title%>">
@@ -28,7 +31,7 @@
                 <label class="data-quantity" title="<%=Num.points(item.quantity)%>"><%=Num.format(item.quantity)%>
                 </label>
               </label>
-              
+
 
             </div>
             <%});%>
