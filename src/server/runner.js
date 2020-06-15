@@ -79,8 +79,8 @@ module.exports = class ServerRunner {
   static () {
     this.express.use('/img', express.static('front/img', this.getaAlowedOrigins()))
     this.express.use('/front', express.static('front', this.getaAlowedOrigins()))
-    this.express.use('/util', express.static('app/util', this.getaAlowedOrigins()))
-    this.express.use('/param', express.static('app/vars/params.js', this.getaAlowedOrigins()))
+    this.express.use('/util', express.static('src/util', this.getaAlowedOrigins()))
+    this.express.use('/param', express.static('src/vars/params.js', this.getaAlowedOrigins()))
   }
 
   run (callback) {
