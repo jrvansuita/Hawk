@@ -67,10 +67,8 @@ PS.: Fix all possible linting problems: ```npm run fix```
 
 
 
-# Como dar merge do branch dev
+# Merging branch dev->master
 
 1. Ir para o branch master ```git checkout master```
 2. Fazer o merge do branch dev -> master ```git merge dev```
 3. Juntar todos os commits a frente do dev no master ```git push```
-
-teste
