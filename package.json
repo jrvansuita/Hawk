@@ -8,8 +8,8 @@
     "dev": "nodemon app.js",
     "linta": "npx eslint .",
     "lintfa": "npx eslint --fix .",
-    "slinta": "npx stylelint '**/*.css'",
-    "slintfa": "npx stylelint '**/*.css' --fix",
+    "slinta": "npx stylelint \"**/*.css\"",
+    "slintfa": "npx stylelint \"**/*.css\" --fix",
     "fix": "npm run lintfa && npm run slintfa",
     "test": "jest --coverage --detectOpenHandles"
   },
