@@ -11,6 +11,14 @@
   border: 1px solid #dcd7d7;
 }
 
+.enum-items td {
+  padding: 5px;
+}
+
+.including td {
+  background-color: #fffde5;
+}
+
 table tr:nth-child(odd) {
   background-color: #f2f2f2;
 }
@@ -45,10 +53,6 @@ table td:last-child {
   font-size: 13px;
 }
 
-.enum-items td {
-  padding: 5px;
-}
-
 .enum-items td span {
   font-size: 15px;
   color: #313131;
@@ -59,10 +63,6 @@ table td:last-child {
 .simple-material-input {
   border-bottom: none;
   width: 100%;
-}
-
-.including td {
-  background-color: #fffde5;
 }
 
 .including input {

@@ -137,7 +137,7 @@ class TemplateEditor {
     return {
       events: {
         destroy: function () {
-
+          console.log('editor destroy')
         }
       }
     }

@@ -1,5 +1,4 @@
 const Job = require('../bean/job.js')
-const Err = require('../error/error.js')
 const JobsPool = require('../jobs/controller/pool.js')
 
 module.exports = class {
@@ -15,12 +14,12 @@ module.exports = class {
       params.tag,
       params.description,
       params.jobType,
-      params.active != undefined,
+      params.active !== undefined,
       buildRules(params),
       attachedJob ? attachedJob.lastExcecution : 0
     )
 
-    job.upsert((err, doc) => {
+    job.upsert((_err, doc) => {
       JobsPool.deattach(doc.id)
       JobsPool.attach(doc)
 
@@ -29,7 +28,7 @@ module.exports = class {
   }
 
   static delete (id) {
-    Job.findOne({ id: id }, (err, item) => {
+    Job.findOne({ id: id }, (_err, item) => {
       item.remove()
     })
   }
@@ -37,7 +36,7 @@ module.exports = class {
 
 function buildRules (params) {
   var addDayOfWeek = (day, index) => {
-    if (params[day] != undefined) {
+    if (params[day] !== undefined) {
       dayOfWeek.push(index)
     }
   }
