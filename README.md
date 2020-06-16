@@ -72,3 +72,10 @@ PS.: Fix all possible linting problems: ```npm run fix```
 1. Ir para o branch master ```git checkout master```
 2. Fazer o merge do branch dev -> master ```git merge dev```
 3. Juntar todos os commits a frente do dev no master ```git push```
+
+
+# Merge (Remote Ahead)
+
+  1. Pressionar <kbd>I</kbd>, e colocar a sua mensagem.
+  2. Pressionar <kbd>Esc</kbd>, digitar :wq e pressionar <kbd>Enter</kbd>.
+
