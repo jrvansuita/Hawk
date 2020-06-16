@@ -1,40 +1,23 @@
-
 module.exports = class ServerMidlewares {
   constructor (express) {
     this.express = express
   }
 
   attach () {
-    this.session()
+    this.defaultRoutes()
     this.wellcome()
     this.errors()
     this.routes()
   }
 
-  session () {
-    const UsersProvider = require('../provider/user-provider.js')
+  defaultRoutes () {
+    const routeStack = require('express').Router()
 
-    this.express.use(function (req, res, next) {
-      res.locals.loggedUser = {}
-      res.locals.query = req.query
-      res.locals.url = req.originalUrl
+    routeStack.use('/admin/*', this.getAdminAuthRouteRule())
+    routeStack.use('/api/*', this.getApiAuthRouteRule())
+    routeStack.use('*', this.getLoginRedirectRouteRule())
 
-      if (req.session.loggedUserID || Arr.isIn(global.pathNotLogged, req.path)) {
-        if (req.session.loggedUserID !== undefined) {
-          var user = UsersProvider.get(req.session.loggedUserID)
-
-          if (UsersProvider.checkCanLogin(user)) {
-            res.locals.loggedUser = user
-          } else {
-            req.session.loggedUserID = null
-          }
-        }
-
-        next()
-      } else {
-        res.redirect('/login')
-      }
-    })
+    this.express.use(routeStack)
   }
 
   wellcome () {
@@ -77,6 +60,48 @@ module.exports = class ServerMidlewares {
 
       new Clazz(this.express).attach()
     })
+  }
+
+  getAdminAuthRouteRule () {
+    return (req, res, next) => {
+      console.log('is admin')
+      next('router')
+    }
+  }
+
+  getApiAuthRouteRule () {
+    return (req, res, next) => {
+      console.log('is api')
+      next('router')
+    }
+  }
+
+  getLoginRedirectRouteRule () {
+    const UsersProvider = require('../provider/user-provider.js')
+
+    return (req, res, next) => {
+      console.log('is *')
+
+      res.locals.loggedUser = {}
+      res.locals.query = req.query
+      res.locals.url = req.originalUrl
+
+      if (req.session.loggedUserID || Arr.isIn(global.pathNotLogged, req.path)) {
+        if (req.session.loggedUserID !== undefined) {
+          var user = UsersProvider.get(req.session.loggedUserID)
+
+          if (UsersProvider.checkCanLogin(user)) {
+            res.locals.loggedUser = user
+          } else {
+            req.session.loggedUserID = null
+          }
+        }
+
+        next()
+      } else {
+        res.redirect('/login')
+      }
+    }
   }
 
   errors () {

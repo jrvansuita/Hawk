@@ -1,8 +1,14 @@
 {
   "name": "hawk",
   "version": "1.0.0",
-  "description": "A predatory bird",
+  "description": "A predatory beast waiting in silence...",
   "main": "app.js",
+  "apidoc": {
+    "name": "Hawk API",
+    "version": "1.0.0",
+    "title": "Hawk API",
+    "url" : "https://hawkproject.herokuapp.com/api"
+  },
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",

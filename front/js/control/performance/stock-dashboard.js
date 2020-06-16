@@ -50,6 +50,7 @@ function onHandleResult (result) {
 
 function buildBoxes (results) {
   var data = results.data
+  console.log(data)
 
   var box = new BuildBox()
     .group('Faturamento', Num.points(data.items) + (data.daysCount > 1 ? ' em ' + data.daysCount + ' dias' : ''))

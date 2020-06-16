@@ -67,7 +67,7 @@ module.exports = class PerformanceRoutes extends Routes {
     })
 
     this._post('/sales-dashboard-cost', (req, res) => {
-      Cost.put(req.body.tag, req.body.val, (err, docs) => {
+      Cost.put(req.body.tag, req.body.val, (_err, docs) => {
         this._resp().sucess(res, docs)
       })
     })
@@ -79,6 +79,36 @@ module.exports = class PerformanceRoutes extends Routes {
       res.render('performance/stock-dashboard')
     })
 
+    /**
+     * @api {post} /stock-dashboard-data Request Dashboard Data Information
+     * @apiGroup Dashboard
+     *
+     * @apiParam {String{2..200}} [value] Search for a product
+     * @apiParam {Number} [begin=today] Date starts in 1592265600000
+     * @apiParam {Number} [end=today] Date ends in 1592265600000
+     * @apiParam {Number} [showSkus=25] Number of skus to get specific data.
+     * @apiParam {Object} [attrs] An object with categorized filters
+     * @apiParamExample {json} Request-Example:
+     * {
+     *   "begin": 1592265600000
+     *   "end": 1592265600000
+     *   "showSkus": 25
+     *   "value": "coelinho"
+     *   "attrs" : {season: "Inverno", brand: "Pugg"}
+     * }
+     *
+     * @apiSuccessExample Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *   "count" :1210,
+     *   "loadSkusCount":25,
+     *   "total":1531,
+     *   "items":65,
+     *   "cost":629
+     *   ... many others
+     * }
+     */
+
     this._post('/stock-dashboard-data', (req, res) => {
       new StockDashboardProvider()
         .with(req.body).maybe(req.session.stockDashQueryId)
@@ -89,7 +119,8 @@ module.exports = class PerformanceRoutes extends Routes {
           req.session.stockDashQueryId = result.id
           this._resp().sucess(res, result)
         }).load()
-    })
+    })._api()
+
     /** Stock Dashboard Performance **/
 
     this._post('/stock-dashboard-delete', (req, res) => {
