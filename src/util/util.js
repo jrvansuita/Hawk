@@ -387,16 +387,6 @@ var Util = {
     return desc || ''
   },
 
-  getGenderIcon (gender) {
-    if (gender.toLowerCase().includes('femi')) {
-      return 'girl.png'
-    } if (gender.toLowerCase().includes('masc')) {
-      return 'boy.png'
-    } else {
-      return 'baby.png'
-    }
-  },
-
   colorVal: function (str, alpha) {
     var color = Colors[str.replace(' ', '').toLowerCase()]
 

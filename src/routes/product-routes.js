@@ -164,8 +164,10 @@ module.exports = class ProductRoutes extends Routes {
 
     this._page('/product-board', (req, res) => {
       ProductBoard.run((result) => {
-        res.render('product/board/board', {
-          data: result
+        Enum.getKeyItems('BOARD-GENDER', (genders) => {
+          res.render('product/board/board', {
+            data: result, genders: genders
+          })
         })
       })
     })
