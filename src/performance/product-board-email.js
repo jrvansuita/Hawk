@@ -6,8 +6,7 @@ module.exports = class ProductBoardEmailHandler {
     var props = ['manufacturer', 'category']
     Product.getStockBalance(100, props, (_err, inData) => {
       Product.getStockBalance(-50, props, (_err, outData) => {
-        var result = Object.assign({}, this._buildObject(inData[0], 'in_'), this._buildObject(outData[0], 'out_'))
-        this._sendIfNeeded(result)
+        this._sendIfNeeded(Object.assign({}, this._buildObject(inData, 'in_'), this._buildObject(outData, 'out_')))
       })
     })
   }
@@ -25,12 +24,7 @@ module.exports = class ProductBoardEmailHandler {
   }
 
   _sendIfNeeded (result) {
-    var count = 0
-    Object.values(result).forEach((each) => {
-      each.forEach(() => {
-        count++
-      })
-    })
+    var count = Object.values(result).reduce((c, arr) => { return c + arr.length }, 0)
     if (count > 0) this._sendEmail(result)
   }
 
