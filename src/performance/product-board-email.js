@@ -4,11 +4,9 @@ const EmailBuilder = require('../email/email-builder.js')
 module.exports = class ProductBoardEmailHandler {
   go (callback) {
     var props = ['manufacturer', 'category']
-    Product.getStockBalance(100, props, (err, inData) => {
-      Product.getStockBalance(-50, props, (err, outData) => {
-        var result = Object.assign({}, this._buildObject(inData[0], 'in_'), this._buildObject(outData[0], 'out_'))
-
-        this._sendEmail(result)
+    Product.getStockBalance(100, props, (_err, inData) => {
+      Product.getStockBalance(-50, props, (_err, outData) => {
+        this._sendIfNeeded(Object.assign({}, this._buildObject(inData, 'in_'), this._buildObject(outData, 'out_')))
       })
     })
   }
@@ -23,6 +21,11 @@ module.exports = class ProductBoardEmailHandler {
     })
 
     return arrays
+  }
+
+  _sendIfNeeded (result) {
+    var count = Object.values(result).reduce((c, arr) => { return c + arr.length }, 0)
+    if (count > 0) this._sendEmail(result)
   }
 
   _sendEmail (data) {

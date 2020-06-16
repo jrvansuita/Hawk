@@ -1,51 +1,86 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <%include ../../menus/main-menu %>
+
 <head>
-  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-checkbox.css">
-  <link rel="stylesheet" type="text/css" href="/front/css/layout/product/product-list.css">
-  <script type="text/javascript" src="/front/js/control/product/product-list.js"></script>
+    <link rel="stylesheet" type="text/css" href="/front/css/libs/material-checkbox.css">
+    <link rel="stylesheet" type="text/css" href="/front/css/layout/product/product-list.css">
+    <script type="text/javascript" src="/front/js/control/product/product-list.js"></script>
 
-  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
-  <script type="text/javascript" src="/front/js/libs/image-preview.js"></script>
-  <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
+    <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+    <script type="text/javascript" src="/front/js/libs/image-preview.js"></script>
+    <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
 
-  <script type="text/javascript" src="/front/js/control/mockup/mockup-selector.js"></script>
-  <script type="text/javascript" src="/front/js/libs/tooltip.js"></script>
+    <script type="text/javascript" src="/front/js/control/mockup/mockup-selector.js"></script>
+    <script type="text/javascript" src="/front/js/libs/tooltip.js"></script>
 
 </head>
+
 <body>
-  <%include ../../menus/stock-menu %>
-  <script>
-  window.memoryQuery = <%- JSON.stringify(locals.productListQuery ? locals.productListQuery : {}) %>
-  </script>
+    <%include ../../menus/stock-menu %>
+    <script>
+        window.memoryQuery = <%- JSON.stringify(locals.productListQuery ? locals.productListQuery : {}) %>
+    </script>
 
-  <div class="main ">
+    <div class="main ">
+        <div class="top shadow">
+            <div class="search-box">
+                <img class="icon-open is-open" title="Abrir seletor" src="/img/arrow-down.png">
+                <input type="text" id="search-input" class="simple-material-input" placeholder="Pesquisar Produtos"
+                    autocomplete="off" />
+                <label class="button shadow" id="search-button" tabindex="0">Buscar</label>
 
-    <div class="top shadow">
+                <div class="menu-dots"></div>
 
+                <label id="totals"></label>
+            </div>
 
-      <div class="search-box">
-        <img class="icon-open is-open" title="Abrir seletor" src="/img/arrow-down.png">
-        <input type="text" id="search-input"  class="simple-material-input" placeholder="Pesquisar Produtos" autocomplete="off"/>
-        <label class="button shadow" id="search-button" tabindex="0">Buscar</label>
+            <div class="tag-box">
+                <label class="pure-material-checkbox">
+                    <input type="checkbox" id="show-no-quantity"
+                        <%=locals.productListQuery && locals.productListQuery.noQuantity == 'true' ? 'checked' : '' %>>
+                    <span>Mostrar Produtos sem estoque</span>
+                </label>
 
-        <div class="menu-dots">
-          
+            </div>
         </div>
 
-        <label id="totals"></label>
-      </div>
+        <%if(locals?.loggedUser?.full){%>
+        <div class="totalization shadow">
+            <div class="col stock">
+                <span class="super">Estoque</span><span class="value"></span>
+            </div>
 
-      <div class="tag-box">
+            <div class="col skus">
+                <span class="super">Skus</span><span class="value"></span>
+            </div>
 
-        <label class="pure-material-checkbox">
-          <input type="checkbox" id="show-no-quantity" <%=locals.productListQuery && locals.productListQuery.noQuantity == 'true' ? 'checked' : '' %>>
-          <span>Mostrar Produtos sem estoque</span>
-        </label>
+            <div class="col cost">
+                <span class="super">Preço de Custo</span><span class="value"></span>
+            </div>
 
-      </div>
-    </div>
+            <div class="col sell">
+                <span class="super">Preço de Venda</span><span class="value"></span>
+            </div>
+
+            <div class="col mark">
+                <span class="super">Markup Médio</span><span class="value"></span>
+            </div>
+
+            <div class="col marg">
+                <span class="super">Margem</span><span class="value"></span>
+            </div>
+
+            <div class="col tcost">
+                <span class="super">Total de Custo</span><span class="value"></span>
+            </div>
+
+            <div class="col tsell">
+                <span class="super">Total de Venda</span><span class="value"></span>
+            </div>
+
+        </div>
+        <%}%>
 
 
     <div class="content-scroll">

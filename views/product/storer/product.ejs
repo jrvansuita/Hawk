@@ -110,7 +110,7 @@
 
         <div class="flex-line">
           <div class="material-input-holder">
-            <input id="sku" type="text" class="bindable" data-bind="codigo" data-post="postSku" maxlength="20" autocomplete="off" tabindex="-1" required/>
+            <input id="sku" type="text" class="bindable" data-bind="codigo" data-post="postSku" maxlength="20" autocomplete="off" required/>
             <span class="bar"></span>
             <label>SKU</label>
           </div>
@@ -189,7 +189,7 @@
       </div>
     </div>
 
-    <div class="box shadow" style="flex: 40%">
+    <div class="box shadow" style="flex: 40%;">
       <label class="title" id="title-bind">Descrição Curta</label>
       <div class="flex-line">
         <textarea class="bindable lockable" data-bind="descricaoComplementar" rows="3"></textarea>
@@ -200,8 +200,6 @@
 
 
   <div class="row">
-
-
     <div class="box shadow editor-holder" style="flex: 50%;">
       <span class="title">Descrição Detalhada </span>
       <div class="description-editor">
@@ -228,6 +226,22 @@
   </div>
 
   <div class="row">
+    <div class="box shadow" >
+        <span class="title">Outra Informações</span>
+        <div class="flex-line">
+            <div class="create-holder">
+                <label class="title">Usuário</label>
+                <label class="label-val create-user"></label>
+            </div>
+
+            <div class="create-holder">
+                <label class="title">Data</label>
+                <label class="label-val create-time"></label>
+            </div>
+
+        </div>
+    </div>
+
     <div class="box shadow buttons-bar" style="flex: 100%;">
 
       <div class="loading-holder">

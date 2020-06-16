@@ -1,5 +1,4 @@
 const Pack = require('../bean/pack.js')
-const Err = require('../error/error.js')
 
 module.exports = class {
   static storeFromScreen (params, callback) {
@@ -12,25 +11,25 @@ module.exports = class {
       params.stockQtd,
       params.minStockQtd,
       params.maxWeight,
-      params.lockSize == 'on')
+      params.lockSize === 'on')
 
     if (params.editingId.toString().length > 0) {
       pack._id = params.editingId
     }
 
     if (pack._id) {
-      pack.upsert((err, doc) => {
+      pack.upsert((_err, doc) => {
         callback(doc ? doc._id : 0)
       })
     } else {
-      Pack.create(pack, (err, doc) => {
+      Pack.create(pack, (_err, doc) => {
         callback(doc ? doc._id : 0)
       })
     }
   }
 
   static delete (packId) {
-    Pack.findOne({ _id: packId }, (err, pack) => {
+    Pack.findOne({ _id: packId }, (_err, pack) => {
       pack.remove()
     })
   }
@@ -40,7 +39,7 @@ module.exports = class {
       $inc: {
         stockQtd: -1
       }
-    }, (err, doc) => {
+    }, (_err, doc) => {
 
     })
   }

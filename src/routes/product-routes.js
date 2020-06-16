@@ -113,7 +113,7 @@ module.exports = class ProductRoutes extends Routes {
           // 1day
           all.forEach((each) => {
             var s = each.toObject()
-            Enum.getKeyItems('PROD-DIAG', (types) => {
+            Enum.getMap('PROD-DIAG', (types) => {
               s.data = types[each.type]
             })
 
@@ -127,7 +127,7 @@ module.exports = class ProductRoutes extends Routes {
 
     this._get('/fixes-dialog', (req, res) => {
       new DiagnosticsProvider().loadBySku(req.query.sku, (all, product) => {
-        Enum.getKeyItems('PROD-DIAG', (types) => {
+        Enum.getMap('PROD-DIAG', (types) => {
           res.render('product/diagnostics/diagnostics-dialog', { data: all, product: product, types: types })
         })
       })
@@ -163,9 +163,10 @@ module.exports = class ProductRoutes extends Routes {
     })
 
     this._page('/product-board', (req, res) => {
-      ProductBoard.run((result) => {
+      ProductBoard.run(async (result) => {
         res.render('product/board/board', {
-          data: result
+          data: result,
+          genders: (await Enum.on('BOARD-GENDER').get(true))
         })
       })
     })

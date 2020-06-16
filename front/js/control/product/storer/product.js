@@ -1,12 +1,14 @@
+
 const MEM_TAG = 'LOCKED-VALUE'
 var lockedValues
 var refreshBroadcast
 var childsBuilder
 var sizesBox
+var product
 
 $(document).ready(() => {
   onCreate(); onRefresh()
-});
+})
 
 // Call one time
 function onCreate () {
@@ -29,7 +31,7 @@ function bindComboBox (el, data, limit) {
     .setAutoShowOptions(true)
     .setLimit(limit)
     .setOnItemBuild((item, index) => {
-      return { text: item.description.trim(), value: item.value };
+      return { text: item.description.trim(), value: item.value }
     }).load()
 }
 
@@ -40,20 +42,20 @@ function onBindViewsListeners () {
 
   $("input[type='text']").on('click', function () {
     $(this).select()
-  });
+  })
 
   if (!product.id) {
     $('.lockable').keypress(function (e) {
       if (e.which == 13) toggleLockIcon($(this))
-    });
+    })
 
     $('.lockable').blur(function () {
       toogleComboBoxValue($(this))
-    });
+    })
 
     $('.child-lockable').click(function () {
       handleChildLockClick($(this))
-    });
+    })
 
     $('#title-bind').click(toggleDescriptionLock)
   }
@@ -61,7 +63,7 @@ function onBindViewsListeners () {
   $('.bindable').blur(function () {
     var key = $(this).data('post') || $(this).data('bind')
     product[key] = $(this).val()
-  });
+  })
 
   $('.call-refresh').blur(function () {
     if ($(this).val() != $(this).data('last')) {
@@ -72,12 +74,12 @@ function onBindViewsListeners () {
 
   $('#sku').keypress(function (e) {
     if (e.which == 13) window.location.href = window.location.origin + window.location.pathname + '?sku=' + $(this).val()
-  });
+  })
 
   Dropdown.on($('.sizes-dots'))
     .item('/img/delete.png', 'Remover Todos', function () {
       sizesBox.clear()
-  });
+    })
 
   new TemplateEditor()
     .useUnicodeEmoticons(true)
@@ -85,12 +87,12 @@ function onBindViewsListeners () {
     .addMiscCustomButton('insertFile', 'def-template', 'Inserir Descricao Padrão', (editor) => {
       _get('/templates-viewer?id=89017302', {}, (r) => {
         editor.html.set(r)
-    });
+      })
     })
     .load('.description-editor').then((data) => {
       data.html.set(product.conteudo)
-    window.editor = data
-  });
+      window.editor = data
+    })
 }
 
 function onInitilizeScreenControls () {
@@ -108,12 +110,12 @@ function onBindViewValues () {
   if (Object.keys(product).length > 0) {
     $('.bindable').each((i, each) => {
       var val = product[$(each).data('bind')]
-      if(val) {
+      if (val) {
         if ($(each).hasClass('money')) {
           $(each).val(Num.money(Floa.floa(val)))
-        }else if ($(each).hasClass('float')) {
+        } else if ($(each).hasClass('float')) {
           $(each).val(Floa.abs(Floa.def(val, 0), 2))
-        }else {
+        } else {
           $(each).val(val)
         }
       }
@@ -124,7 +126,7 @@ function onBindViewValues () {
 function onBindComboBoxes () {
   $('.combobox').each((i, each) => {
     bindComboBox($(each), $(each).data('bind'))
-  });
+  })
 
   new ComboBox($('input[data-bind="cf"]'))
     .setAutoShowOptions(true)
@@ -165,17 +167,27 @@ function onSizesRefreshed () {
 
 function onOtherBindingRules () {
   $('.discount').text(Num.percent(product.discount, true))
+  $('.create-time').text(Dat.formatwTime(new Date(product.dtCriacao)))
+  $('.create-user').text(getCreatedUser() || loggedUser.name)
+}
+
+function getCreatedUser () {
+  var line = product?.obs?.split('\n').find((i) => {
+    return i.includes('Cadastro')
+  })
+
+  return line?.split('|')[0]
 }
 
 function requestProductChilds () {
   if (product._Skus) {
     var skus = product._Skus.map((e) => {
       return e.codigo
-    });
+    })
 
     _get('/product-skus', { skus: skus, order: true }, (childs) => {
       childsBuilder.load(childs, true)
-    });
+    })
   }
 }
 
@@ -190,9 +202,9 @@ function onBindSizeBoxListeners () {
 
     var found = product?._Skus?.find(function (i) {
       return i.codigo == sku
-    });
+    })
 
-    var item = { ...found, codigo: getSku(size), active: true };
+    var item = { ...found, codigo: getSku(size), active: true }
 
     if (!found) {
       item.gtin = Util.barcode()
@@ -200,7 +212,7 @@ function onBindSizeBoxListeners () {
     }
 
     childsBuilder.addChild(item)
-  });
+  })
 
   sizesBox.setOnSizeDeleted((size) => {
     console.log('Size Deleted: ' + size)
@@ -212,12 +224,12 @@ function onBindSizeBoxListeners () {
       if (item.codigo == sku) {
         if (item.id) {
           item.active = false
-        }else {
+        } else {
           arr.splice(index, 1)
         }
       }
     })
-  });
+  })
 }
 
 function onStoringMessageUpdate (data) {
@@ -225,7 +237,7 @@ function onStoringMessageUpdate (data) {
 
   if (data.error) {
     $('.loading-circle').attr('src', '/img/error.png')
-  }else if (!data.isLoading) {
+  } else if (!data.isLoading) {
     $('.loading-circle').attr('src', '/img/checked.png')
   }
 
@@ -272,7 +284,7 @@ function onProductStored (data) {
 }
 
 function onProductDeleted () {
-  _post('/stock/storer-delete', getData(), (data) => { console.log('Deletou')});
+  _post('/stock/storer-delete', getData(), (data) => { console.log('Deletou') })
 }
 
 function onNewProduct () {
@@ -297,7 +309,7 @@ function toggleLockedValue (path, key, val, toggle) {
 
   if (toggle) {
     lockedValues[path][key] = val
-  }else {
+  } else {
     delete lockedValues[path][key]
   }
 
@@ -318,14 +330,14 @@ function onInitializeLockedValues () {
     $('.material-input-holder>label').addClass('no-transition')
 
     lockedValues = Local.get(MEM_TAG)
-    if(lockedValues?.data?..descricaoComplementar) {
+    if (lockedValues?.data?.descricaoComplementar) {
       toggleDescriptionLock()
     }
 
     Util.forProperty(lockedValues.data, (val, key) => {
       product[key] = val
       toggleLockIcon($('input[data-bind="' + key + '"]').val(val))
-    });
+    })
 
     $('.child-lockable').each((i, each) => {
       if (lockedValues?.screen?.[$(each).data('bind')]) {
@@ -333,7 +345,6 @@ function onInitializeLockedValues () {
       }
     })
   }
-
 }
 function toggleDescriptionLock () {
   toggleLockIcon($('.flex-line textarea'))
@@ -348,7 +359,7 @@ function handleChildLockClick (col) {
 
   $('input[data-tag="' + key + '"]').each((i, each) => {
     toggleLockedValue('screen', key + '-' + $(each).data('size'), $(each).val(), has)
-  });
+  })
 
   toggleLockIcon(col)
 }
@@ -368,12 +379,12 @@ function onCreateSizeGroupButtons () {
           .append(key)
           .click(function () {
             if (product.codigo) onSizeGrupoButtonClick(this)
-        }).keypress(function (e) {
+          }).keypress(function (e) {
             if (e.which == 13) $(this).click()
           })
 
         $('.size-group-buttons-holder').prepend(l)
-      });
+      })
     })
   }
 }

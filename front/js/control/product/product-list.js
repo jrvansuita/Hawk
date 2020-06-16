@@ -113,7 +113,7 @@ function loadList () {
         noQuantity: $('#show-no-quantity').is(':checked')
       }
     }, (result) => {
-      showAll = result.data.length == 0
+      showAll = result.data.length === 0
       loading = false
       result.data.forEach((each, index) => {
         productsListCount++
@@ -128,17 +128,22 @@ function loadList () {
 }
 
 function showMessageTotals (info) {
-  var msg = 'Nenhum produto encontrado.'
+  if (info && window.loggedUser.full) {
+    $('.totalization .stock > .value').text(window.Num.points(info.sum_quantity) + ' items')
+    $('.totalization .skus > .value').text(window.Num.points(info.count))
+    $('.totalization .sell > .value').text(window.Num.money(info.sum_sell / info.sum_quantity))
+    $('.totalization .cost > .value').text(window.Num.money(info.sum_cost / info.sum_quantity))
 
-  if (info) {
-    msg = Num.points(info.sum_quantity) + ' items e ' + Num.points(info.count) + ' skus'
+    $('.totalization .mark > .value').text(window.Floa.abs(info.sum_sell / info.sum_cost, 2))
+    $('.totalization .marg > .value').text(window.Num.percent(100 - ((info.sum_cost / info.sum_sell) * 100), 2))
+
+    $('.totalization .tsell > .value').text(window.Num.money(info.sum_sell))
+    $('.totalization .tcost > .value').text(window.Num.money(info.sum_cost))
+
+    $('.totalization').toggle(window.loggedUser.full)
   }
 
-  if (loggedUser.full) {
-    msg += ' ' + Num.format(info.sum_cost, false, true) + '/' + Num.format(info.sum_sell, false, true)
-  }
-
-  $('#totals').text(msg)
+  $('#totals').text(info ? window.Num.points(info.sum_quantity) + ' items e ' + window.Num.points(info.count) + ' skus' : 'Nenhum produto encontrado.')
 }
 
 function addProductLayout (product, index) {

@@ -1,5 +1,4 @@
 const User = require('../bean/user.js')
-const Err = require('../error/error.js')
 const UsersProvider = require('../provider/user-provider.js')
 const ImageSaver = require('../image/image-saver.js')
 
@@ -19,10 +18,10 @@ module.exports = class {
       (actual ? actual.avatar : '/img/avatar.png'),
       params.access,
       params.pass || actual.pass,
-      params.full == 'on',
-      params.active == 'on',
+      params.full === 'on',
+      params.active === 'on',
       token,
-      params.leader == 'on')
+      params.leader === 'on')
 
     // Gravando as configurações
     Object.keys(params).forEach((key) => {
@@ -41,11 +40,11 @@ module.exports = class {
 
     // Se o Usuario não tem permissão para alterar as próprias configurações
     // Todas as configs não serão setadas. Elimitar o atributo setts para não sobreescrever tudo
-    if (Object.keys(user.setts).length == 0) {
+    if (Object.keys(user.setts).length === 0) {
       delete user.setts
     }
 
-    user.upsert((err, doc) => {
+    user.upsert((_err, doc) => {
       callback(doc.id)
 
       user.id = doc.id
@@ -55,7 +54,7 @@ module.exports = class {
   }
 
   static delete (userId, callback) {
-    User.findByKey(userId, (err, user) => {
+    User.findByKey(userId, (_err, user) => {
       user.remove()
       UsersProvider.remove(userId)
       callback()
@@ -63,8 +62,8 @@ module.exports = class {
   }
 
   static active (userId, active, callback) {
-    User.upsert({ id: userId }, { active: active }, (err, user) => {
-      var user = UsersProvider.get(userId)
+    User.upsert({ id: userId }, { active: active }, (_err, user) => {
+      user = UsersProvider.get(userId)
 
       if (user) {
         user.active = active

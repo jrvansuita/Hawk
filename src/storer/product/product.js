@@ -13,7 +13,6 @@ module.exports = class ProductStorer {
   async with (user, data) {
     data.user = user
     this.fatherBody = await ProductBinder.create(data).body()
-    this.storer.withUser(user)
     return this
   }
 

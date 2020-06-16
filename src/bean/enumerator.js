@@ -27,14 +27,14 @@ module.exports = class Enumerator extends DataAccess {
     if (cache[tagOrId]) {
       callback(cache[tagOrId])
     } else {
-      this.findOne((typeof tagOrId === 'number') ? { id: tagOrId } : { tag: tagOrId }, (err, data) => {
+      this.findOne((typeof tagOrId === 'number') ? { id: tagOrId } : { tag: tagOrId }, (_err, data) => {
         cache[tagOrId] = data
         callback(data)
       })
     }
   }
 
-  static getKeyItems (tag, callback) {
+  static getMap (tag, callback) {
     this.get(tag, (data) => {
       callback(data.items.reduce((o, item) => {
         o[item.value] = item
@@ -44,7 +44,7 @@ module.exports = class Enumerator extends DataAccess {
   }
 
   static delete (id, callback) {
-    this.findOne({ id: id }, (err, obj) => {
+    this.findOne({ id: id }, (_err, obj) => {
       if (obj) { obj.remove() }
 
       callback()
@@ -52,8 +52,8 @@ module.exports = class Enumerator extends DataAccess {
   }
 
   static duplicate (id, callback) {
-    this.findOne({ id: id }, (err, obj) => {
-      new Enumerator('[Duplicado] ' + obj.name, obj.explanation, 'Nenhuma', obj.items).upsert((err, doc) => {
+    this.findOne({ id: id }, (_err, obj) => {
+      new Enumerator('[Duplicado] ' + obj.name, obj.explanation, 'Nenhuma', obj.items).upsert((_err, doc) => {
         callback(doc)
       })
     })
@@ -61,10 +61,10 @@ module.exports = class Enumerator extends DataAccess {
 
   static on (tag, useDef) {
     return {
-      async get () {
-        return new Promise((resolver) => {
-          Enumerator.get(tag, (data) => {
-            resolver(data)
+      async get (mapped) {
+        return new Promise((resolve) => {
+          Enumerator[mapped ? 'getMap' : 'get'](tag, (data) => {
+            resolve(data)
           })
         })
       },
@@ -75,7 +75,7 @@ module.exports = class Enumerator extends DataAccess {
           var r = data?.items?.find((each) => {
             def = each.default ? each : def
             return each?.[prop]?.split(',')?.some((part) => {
-              return part.trim() == value.trim()
+              return part.trim() === value.trim()
             }) || (useDef ? def : null)
           })
           return r

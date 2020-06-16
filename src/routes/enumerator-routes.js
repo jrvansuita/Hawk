@@ -18,7 +18,7 @@ module.exports = class EnumeratorRoutes extends Routes {
       var find = Num.def(req.query.id, 0) || req.query.tag
 
       if (req.query.keys) {
-        Enumerator.getKeyItems(find, data => { res.send(data) })
+        Enumerator.getMap(find, data => { res.send(data) })
       } else {
         Enumerator.get(find, data => { res.send(data) })
       }

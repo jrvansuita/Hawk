@@ -1,3 +1,5 @@
+const { fn } = require('jquery')
+
 module.exports = class Product extends DataAccess {
   constructor (sku, name, brand, url, image, price, fromPrice, cost, discount, category, gender, color, quantity, newStock, sync, age, year, season, manufacturer, visble, associates, weight) {
     super()
@@ -74,7 +76,7 @@ module.exports = class Product extends DataAccess {
   }
 
   static get (sku, callback) {
-    Product.findOne(Product.getKeyQuery(sku.split('-')[0]), (err, product) => {
+    Product.findOne(Product.getKeyQuery(sku.split('-')[0]), (_err, product) => {
       callback(product)
     })
   }
@@ -87,7 +89,11 @@ module.exports = class Product extends DataAccess {
       result[eachProp] = [{ $group: { _id: '$' + eachProp, count: { $sum: 1 }, stock: { $sum: { $abs: '$newStock' } } } }]
     })
 
-    Product.aggregate([{ $match: query }, { $facet: result }], callback)
+    Product.aggregate([{ $match: query }, { $facet: result }], (_err, data) => {
+      data = data?.[0] || {}
+
+      callback(data)
+    })
   }
 
   static paging (query, page, callback) {

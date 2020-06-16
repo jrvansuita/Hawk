@@ -102,10 +102,8 @@ class ProductBinder {
       }
     }
 
-    if (!this.obs && this.user && this.codigo) {
-      this.obs = this.user.name + ' | Desktop | ' + this.codigo + ' | ' + Dat.format(new Date()) + '| Cadastro'
-    } else {
-      delete this.obs
+    if (!this.id && this.user && this.codigo) {
+      this.obs = this.user.name + ' | Desktop | ' + this.codigo + ' | ' + Dat.format(new Date()) + ' | Cadastro'
     }
   }
 
@@ -132,7 +130,8 @@ class ProductBinder {
     this.altura = 2
     this.largura = 11
     this.comprimento = 16
-    this.dtCriacao = Dat.now()
+
+    if (!this.dtCriacao) { this.dtCriacao = Dat.now() }
 
     if (!this.descricaoEcommerce) {
       this.descricaoEcommerce = this.nome

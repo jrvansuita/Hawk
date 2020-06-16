@@ -31,7 +31,7 @@ $(document).ready(() => {
 })
 
 function makeMenu () {
-  var active = product.situacao == 'A'
+  var active = product.situacao === 'A'
 
   Dropdown.on($('.main-menu-dots'))
     .item('/img/' + (active ? 'block' : 'checked') + '.png', active ? 'Inativar' : 'Ativar', () => {

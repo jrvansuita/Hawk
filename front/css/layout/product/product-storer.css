@@ -305,3 +305,23 @@ textarea {
 #title-bind:hover {
   cursor: pointer;
 }
+
+.create-holder {
+  margin: 0;
+  margin-bottom: 15px;
+  margin-right: 10px;
+}
+
+.create-holder .title {
+  padding: 0;
+}
+
+.create-holder .label-val {
+  font-size: 14px;
+  color: rgb(93, 90, 90);
+  font-weight: 400;
+  display: block;
+  margin-top: 3px;
+  margin-right: 15px;
+  white-space: nowrap;
+}
