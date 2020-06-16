@@ -60,7 +60,7 @@ module.exports = class DiagnosticsProvider {
 
   sums (callback) {
     Fix.sums((err, data) => {
-      Enum.getKeyItems('PROD-DIAG', (types) => {
+      Enum.getMap('PROD-DIAG', (types) => {
         callback(data, types)
       })
     })
