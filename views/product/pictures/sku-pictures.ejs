@@ -78,7 +78,7 @@
           <div class="header-box">
             <img class="icon-open" src="/img/arrow-down.png" alt="Abrir">
             <label class="sub-title left">Fotos a Aprovar:</label>
-            <label class="sub-title"><%=data.find(each => {return !each._id}).count%></label>
+            <label class="sub-title"><%=data.find(each => {return !each._id})?.count%></label>
           </div>
           <div class="to-be-approved-container-holder">
             <div class="to-be-approved-images-holder">
@@ -91,7 +91,7 @@
         <div class="main-bottom dotted-top">
           <div class="fixed-info">
             <label class="sub-title">Fotos aprovadas:</label>
-            <label class="sub-title"><%=data.find((each) =>{return each._id}).count%></label>
+            <label class="sub-title"><%=data.find(each => {return each._id}).count%></label>
             <div class="search-holder">
               <div class="material-input-holder search-holder">
                 <input type="text" id="search" maxlength="50"
