@@ -1,5 +1,3 @@
-import SelectorDialog from '../../libs/selector-dialog.js'
-
 class BlockedSelector {
   constructor () {
     this.dialog = new SelectorDialog('Selecione o Motivo do Bloqueio')
