@@ -70,7 +70,7 @@ module.exports = class Enumerator extends DataAccess {
       },
 
       async hunt (value, prop = 'name') {
-        return this.get(tag).then((data) => {
+        return this.get().then((data) => {
           var def
           var r = data?.items?.find((each) => {
             def = each.default ? each : def
