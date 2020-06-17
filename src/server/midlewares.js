@@ -81,12 +81,13 @@ module.exports = class ServerMidlewares {
 
     return (req, res, next) => {
       console.log('is *')
+      console.log(req.originalUrl)
 
       res.locals.loggedUser = {}
       res.locals.query = req.query
       res.locals.url = req.originalUrl
 
-      if (req.session.loggedUserID || Arr.isIn(global.pathNotLogged, req.path)) {
+      if (req.session.loggedUserID || Arr.isIn(global.pathNotLogged, res.locals.url)) {
         if (req.session.loggedUserID !== undefined) {
           var user = UsersProvider.get(req.session.loggedUserID)
 
@@ -97,7 +98,7 @@ module.exports = class ServerMidlewares {
           }
         }
 
-        next()
+        next('router')
       } else {
         res.redirect('/login')
       }
