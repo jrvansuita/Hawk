@@ -10,25 +10,22 @@ module.exports = class LoginRoutes extends Routes {
 
     this._get('/wellcome', (req, res) => {
       res.render('login/wellcome')
-    })
+    }, true)
 
     this._post('/login', (req, res) => {
       var user
 
-      if (req.body.access == undefined) {
+      if (req.body.access === undefined) {
         req.session.loggedUserID = 0
       } else {
-        UsersProvider.checkUserExists(req.body.access)
+        UsersProvider.checkUser(req.body.access, req.body.pass)
         user = UsersProvider.get(req.body.access)
 
         // Cria um password, caso não tenha nenhum para o usuário
         if (!user.pass) {
           user.pass = req.body.pass
-          console.log(user)
           User.upsert({ id: user.id }, user)
         }
-
-        UsersProvider.checkUserPass(user, req.body.pass)
 
         UsersProvider.checkCanLogin(user, true)
 

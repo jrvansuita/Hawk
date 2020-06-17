@@ -5,7 +5,7 @@ const Enumerator = require('../bean/enumerator.js')
 module.exports = class EnumeratorRoutes extends Routes {
   attach () {
     this._page('/enumerators', (req, res) => {
-      Enumerator.findAll((err, all) => {
+      Enumerator.findAll((_err, all) => {
         var selected = all.find((e) => {
           return e.id == req.query.id
         })

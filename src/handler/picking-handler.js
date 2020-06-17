@@ -93,7 +93,7 @@ module.exports = {
   },
 
   handle (userId, callback) {
-    if (UsersProvider.checkUserExists(userId)) {
+    if (UsersProvider.checkUser(userId)) {
       // Convert from access or id
       userId = UsersProvider.get(userId).id
       if (InprogressLaws.checkUserInProgress(userId)) {

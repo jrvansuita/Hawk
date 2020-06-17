@@ -115,7 +115,7 @@ module.exports = class UsersProvider {
     return data
   }
 
-  static checkUserExists (userId) {
+  static checkUser (userId, pass) {
     var user = UsersProvider.get(userId)
 
     if (user === undefined || user.id < 1000) {
@@ -126,11 +126,7 @@ module.exports = class UsersProvider {
       Err.thrw('Usuário não está ativo.')
     }
 
-    return true
-  }
-
-  static checkUserPass (user, pass) {
-    if (user.pass !== pass) {
+    if (pass !== undefined && user.pass !== pass) {
       Err.thrw('Senha incorreta (' + pass + ') para o usuário ' + user.name)
     }
 

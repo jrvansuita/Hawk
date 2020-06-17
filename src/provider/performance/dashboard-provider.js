@@ -1,3 +1,4 @@
+const hash = require('object-hash')
 const DataAccess = require('../../mongoose/data-access.js')
 
 var temp = {}
@@ -58,25 +59,37 @@ class DashboardProviderHandler {
   load (callback) {
     if (this.onResult) {
       if (this.query.id && temp[this.query.id]) {
+        // [cache] Tenta pegar pelo ID enviado
         this.onResult(temp[this.query.id])
-      } else if ((Object.keys(this.query).length == 0) && this.sessionQueryId && temp[this.sessionQueryId]) {
+      } else if ((Object.keys(this.query).length === 0) && this.sessionQueryId && temp[this.sessionQueryId]) {
+        // [cache] Tenta pegar pelo ID em sessão
         this.onResult({ id: this.sessionQueryId })
       } else {
-        this._onLoadData((err, data) => {
-          if (err && this.onError) {
-            this.onError(err)
-          } else {
-            this.onResult(this._keepTemp(data))
-          }
-        })
+        var found = this._findByQueryHash()
+        // [cache] Tenta pegar pelo hash da query
+        if (found) {
+          this.onResult(found)
+        } else {
+          // Busca do zero as informações
+          this._onLoadData((err, data) => {
+            if (err && this.onError) {
+              this.onError(err)
+            } else {
+              this.onResult(this._keepTemp(data))
+            }
+          })
+        }
       }
     }
   }
 
-  _keepTemp (data) {
-    var id = Util.id()
-    var data = { id: id, query: this.query, data: data }
+  _findByQueryHash () {
+    return temp[hash(this.query)]
+  }
 
+  _keepTemp (data) {
+    var id = hash(this.query)
+    data = { id: id, query: this.query, data: data }
     temp[id] = data
     return data
   }
