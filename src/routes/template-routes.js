@@ -12,7 +12,7 @@ module.exports = class TemplateRoutes extends Routes {
         return e.id == req.query.id
       })
 
-      Enum.MapKeyItems('TEMPL-EMAIL', (usages) => {
+      Enum.getMap('TEMPL-EMAIL', (usages) => {
         res.render('templates/templates', { selected: selected || {}, all: all, usages: usages, templateType: type })
       })
     }
