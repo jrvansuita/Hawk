@@ -18,7 +18,7 @@ Este é o repositório de desenvolvimento do Hawk.
 
  2. Fazer o stage e comitar todos os arquivos alterados.
 
-     ``` git commit -a -m "Minhas alterações" ```
+     ``` git add -A && git commit -m "Alguma Mensagem" ```
 
  3. Fazer o envio das alterações locais para o repositório
 
