@@ -54,6 +54,34 @@ module.exports = class PerformanceRoutes extends Routes {
       res.render('performance/sales-dashboard')
     })
 
+    /**
+     * @api {post} /sales-dashboard-data Sales Information
+     * @apiGroup Performance
+     *
+     * @apiParam {String{2..200}} [value] Search for a product
+     * @apiParam {Number} [begin=today] Date starts in 1592265600000
+     * @apiParam {Number} [end=today] Date ends in 1592265600000
+     * @apiParam {Object} [attrs] An object with categorized filters
+     * @apiParamExample {json} Request-Example:
+     * {
+     *   "begin": 1592265600000
+     *   "end": 1592265600000
+     *   "value": "Transportadora Jadlog"
+     *   "attrs" : {uf: "SP", city: "Osasco", paymentType: "creditcard"}
+     * }
+     *
+     * @apiSuccessExample Success-Response:
+     * HTTP/1.1 200 OK
+     * {
+     *   "avgCost" :10.83,
+     *   "avgItems":6,
+     *   "avgSell":25,
+     *   "city":[...],
+     *   "freight":2500
+     *   "markup" : 2.3
+     *   ... many others
+     * }
+     */
     this._post('/sales-dashboard-data', (req, res) => {
       new SaleDashboardProvider()
         .with(req.body).maybe(req.session.salesDashQueryId)
@@ -64,7 +92,7 @@ module.exports = class PerformanceRoutes extends Routes {
           req.session.salesDashQueryId = result.id
           this._resp().sucess(res, result)
         }).load()
-    })
+    })._api()
 
     this._post('/sales-dashboard-cost', (req, res) => {
       Cost.put(req.body.tag, req.body.val, (_err, docs) => {
@@ -80,8 +108,8 @@ module.exports = class PerformanceRoutes extends Routes {
     })
 
     /**
-     * @api {post} /stock-dashboard-data Request Dashboard Data Information
-     * @apiGroup Dashboard
+     * @api {post} /stock-dashboard-data Stock Information
+     * @apiGroup Performance
      *
      * @apiParam {String{2..200}} [value] Search for a product
      * @apiParam {Number} [begin=today] Date starts in 1592265600000
