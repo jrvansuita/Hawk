@@ -1,6 +1,44 @@
 [
   {
     "type": "post",
+    "url": "/*",
+    "title": "Authentication",
+    "group": "Credentials",
+    "description": "<p>All api calls must have this parameters setted</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "access",
+            "description": "<p>User access ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "pass",
+            "description": "<p>User password</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "appkey",
+            "description": "<p>App Key</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/server/midlewares.js",
+    "groupTitle": "Credentials",
+    "name": "Post"
+  },
+  {
+    "type": "post",
     "url": "/stock-dashboard-data",
     "title": "Request Dashboard Data Information",
     "group": "Dashboard",

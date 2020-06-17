@@ -79,3 +79,7 @@ PS.: Fix all possible linting problems: ```npm run fix```
   1. Pressionar <kbd>I</kbd>, e colocar a sua mensagem.
   2. Pressionar <kbd>Esc</kbd>, digitar :wq e pressionar <kbd>Enter</kbd>.
 
+
+# API Docs
+
+  >Para gerar os docs de api, deve ser executado o comando ```apidoc -i src/ -o doc/```

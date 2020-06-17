@@ -1,6 +1,9 @@
+const Params = require('../vars/params.js')
+
 module.exports = class ServerMidlewares {
   constructor (express) {
     this.express = express
+    this.userLoader = require('../provider/user-provider.js')
   }
 
   attach () {
@@ -69,16 +72,32 @@ module.exports = class ServerMidlewares {
     }
   }
 
+  /**
+    * @api {post} /* Authentication
+    * @apiGroup Credentials
+    * @apiDescription All api calls must have this parameters setted
+    * @apiParam {String} access User access ID
+    * @apiParam {String} pass User password
+    * @apiParam {String} appkey App Key
+   */
+
   getApiAuthRouteRule () {
     return (req, res, next) => {
-      console.log('is api')
-      next('router')
+      try {
+        if (this.userLoader.checkUser(req.body.access, req.body.pass ?? '')) {
+          if (!Arr.isIn(Params.apiAppKeys().split(','), req.body.appkey ?? '')) {
+            Err.thrw('APIKEY')
+          }
+        }
+
+        next('router')
+      } catch {
+        res.status(401).send({ error: 'Credenciais inválidas' })
+      }
     }
   }
 
   getLoginRedirectRouteRule () {
-    const UsersProvider = require('../provider/user-provider.js')
-
     return (req, res, next) => {
       console.log('is *')
       console.log(req.originalUrl)
@@ -89,9 +108,9 @@ module.exports = class ServerMidlewares {
 
       if (req.session.loggedUserID || Arr.isIn(global.pathNotLogged, res.locals.url)) {
         if (req.session.loggedUserID !== undefined) {
-          var user = UsersProvider.get(req.session.loggedUserID)
+          var user = this.userLoader.get(req.session.loggedUserID)
 
-          if (UsersProvider.checkCanLogin(user)) {
+          if (this.userLoader.checkCanLogin(user)) {
             res.locals.loggedUser = user
           } else {
             req.session.loggedUserID = null
