@@ -80,6 +80,10 @@ PS.: Fix all possible linting problems: ```npm run fix```
   2. Pressionar <kbd>Esc</kbd>, digitar :wq e pressionar <kbd>Enter</kbd>.
 
 
-# API Docs
+# [Hawk API](hawk-api.surge.sh)
 
-  >Para gerar os docs de api, deve ser executado o comando ```apidoc -i src/ -o doc/```
+  O Hawk possui uma API própria para utilização de apps de terceiros. Essa documentação fica localizada dentro da pasta ***_apidocs***.
+  Esta pasta é gerada automaticamente pela bliblioeca [APIDOC](https://apidocjs.com/). Em resumo, é necessário enviar algumas credenciais (access, pass e appkey) para autenticação de usuário e do app para qualquer call de exposta na api. A documentação de API do Hawk é pública e fica hospedada em hawk-api.surge.sh.
+
+  1. Atualizar localmente a documentação: ```npm run apidoc```
+  2. Publicar a documentação: ```npm run apidoc-surge```
