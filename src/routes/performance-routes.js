@@ -11,7 +11,7 @@ module.exports = class PerformanceRoutes extends Routes {
       this._resp().sucess(res,
         UsersProvider.getAllUsers()
       )
-    }, true)
+    }).skipLogin()
 
     this._page('/manage-points', (req, res) => {
       if (this._checkPermissionOrGoBack(req, res, 6)) {
@@ -20,8 +20,8 @@ module.exports = class PerformanceRoutes extends Routes {
     })
 
     this._page(['/profile'], (req, res) => {
-      var from = Dat.query(req.query.from, Dat.firstDayOfMonth())
-      var to = Dat.query(req.query.to, Dat.lastDayOfMonth())
+      var from = global.Dat.query(req.query.from, Dat.firstDayOfMonth())
+      var to = global.Dat.query(req.query.to, Dat.lastDayOfMonth())
       var userId = req.query.userid || req.session.loggedUserID
 
       require('../provider/ProfilePerformanceProvider.js').onUserPerformance(

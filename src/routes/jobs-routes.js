@@ -11,7 +11,7 @@ module.exports = class JobsRoutes extends Routes {
     })
 
     this._get('/jobs-all', (req, res) => {
-      Job.findAll((err, all) => {
+      Job.findAll((_err, all) => {
         res.status(200).send(all)
       })
     })
@@ -22,7 +22,7 @@ module.exports = class JobsRoutes extends Routes {
       }
 
       if (req.query.id) {
-        Job.findOne({ id: req.query.id }, (err, item) => {
+        Job.findOne({ id: req.query.id }, (_err, item) => {
           onResult(item.toObject())
         })
       } else {

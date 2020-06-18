@@ -1,5 +1,6 @@
 const Jobs = require('../../bean/job.js')
 const schedule = require('node-schedule')
+const File = require('../../file/file.js')
 
 global.jobsPoll = []
 var availableJobs = null
@@ -16,19 +17,12 @@ module.exports = {
 
   getAvailableScripts () {
     if (!availableJobs) {
-      var extension = '.js'
-      var jobsFolder = require('path').join(__dirname, '..')
-      const dir = require('fs').readdirSync(jobsFolder)
-      var files = dir.filter(elm => elm.match(new RegExp(`.*\.(${extension})`, 'ig')))
+      availableJobs = {}
+      var file = new File(__dirname).folderBack()
 
-      var result = {}
-
-      files.forEach(e => {
-        var instance = new (require(jobsFolder + '/' + e))()
-        result[e.replace('.js', '')] = instance.getName()
+      file.getFolderFiles('.js', (fullPath, instance) => {
+        availableJobs[fullPath.replace('.js', '')] = instance.getName()
       })
-
-      availableJobs = result
     }
 
     return availableJobs

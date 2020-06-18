@@ -12,8 +12,6 @@ module.exports = class TemplateRoutes extends Routes {
         return e.id === parseInt(req.query.id)
       })
 
-      console.log(req.query.id)
-
       res.render('templates/templates', {
         selected: selected || {},
         all: all,
@@ -44,7 +42,7 @@ module.exports = class TemplateRoutes extends Routes {
         })
         res.end(template.content)
       })
-    }, true, true)
+    }).skipLogin().cors()
 
     this._post('/template', (req, res) => {
       TemplateVault.storeFromScreen(req.body, (id) => {
