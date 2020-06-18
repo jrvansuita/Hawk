@@ -43,7 +43,7 @@ module.exports = class {
   loadSettings (callback) {
     this.mockSett = {}
 
-    Mock.findOne({ _id: this.mockId }, (err, mock) => {
+    Mock.findOne({ _id: this.mockId }, (_err, mock) => {
       this.mockSett = mock
       callback()
     })

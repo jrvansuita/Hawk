@@ -6,7 +6,7 @@ module.exports = class GiftRoutes extends Routes {
   attach () {
     this._page('/gift-rules', (req, res) => {
       var render = (selected) => {
-        GiftRule.findAll((err, all) => {
+        GiftRule.findAll((_err, all) => {
           res.render('gift/gift-rules', {
             gift: selected,
             rulesAttrs: GiftRule.attrs(),
@@ -17,7 +17,7 @@ module.exports = class GiftRoutes extends Routes {
       }
 
       if (req.query.id) {
-        GiftRule.findOne({ id: req.query.id }, (err, item) => {
+        GiftRule.findOne({ id: req.query.id }, (_err, item) => {
           render(item)
         })
       } else {
@@ -32,7 +32,7 @@ module.exports = class GiftRoutes extends Routes {
     })
 
     this._get('/gift-all', (req, res) => {
-      GiftRule.findAll((err, all) => {
+      GiftRule.findAll((_err, all) => {
         res.status(200).send(all)
       })
     })

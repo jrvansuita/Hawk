@@ -29,6 +29,7 @@ function onHandleResult (result) {
 
 function buildBoxes (results) {
   var data = results.data
+  console.log(results)
 
   new BuildBox()
     .group('Geral', data.count, 'min-col')

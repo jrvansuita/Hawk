@@ -8,7 +8,7 @@ $(document).ready(() => {
       tooltips = data
     })
 
-  if (templateType == 'email') {
+  if (templateType == 'email' && Object.keys(usages).length) {
     new ComboBox($('#template-usage'), usages)
       .setAutoShowOptions()
       .setDisabledCaption('Nenhum disponível')

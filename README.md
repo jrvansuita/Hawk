@@ -18,7 +18,7 @@ Este é o repositório de desenvolvimento do Hawk.
 
  2. Fazer o stage e comitar todos os arquivos alterados.
 
-     ``` git commit -a -m "Minhas alterações" ```
+     ``` git add -A && git commit -m "Alguma Mensagem" ```
 
  3. Fazer o envio das alterações locais para o repositório
 
@@ -72,3 +72,18 @@ PS.: Fix all possible linting problems: ```npm run fix```
 1. Ir para o branch master ```git checkout master```
 2. Fazer o merge do branch dev -> master ```git merge dev```
 3. Juntar todos os commits a frente do dev no master ```git push```
+
+
+# Merge (Remote Ahead)
+
+  1. Pressionar <kbd>I</kbd>, e colocar a sua mensagem.
+  2. Pressionar <kbd>Esc</kbd>, digitar :wq e pressionar <kbd>Enter</kbd>.
+
+
+# [Hawk API](hawk-api.surge.sh)
+
+  O Hawk possui uma API própria para utilização de apps de terceiros. Essa documentação fica localizada dentro da pasta ***_apidocs***.
+  Esta pasta é gerada automaticamente pela bliblioeca [APIDOC](https://apidocjs.com/). Em resumo, é necessário enviar algumas credenciais (access, pass e appkey) para autenticação de usuário e do app para qualquer call de exposta na api. A documentação de API do Hawk é pública e fica hospedada em https://hawk-api.surge.sh.
+
+  1. Atualizar localmente a documentação: ```npm run apidoc```
+  2. Publicar a documentação: ```npm run apidoc-surge```

@@ -121,8 +121,12 @@ var Params = {
     return this.get('dev-max-sales-picking')
   },
 
-  androidAppId () {
+  androidAppKey () {
     return this.get('android-id')
+  },
+
+  apiAppKeys () {
+    return this.get('api-app-keys')
   },
 
   accessTimeRenew () {

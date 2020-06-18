@@ -1,40 +1,26 @@
+const Params = require('../vars/params.js')
 
 module.exports = class ServerMidlewares {
   constructor (express) {
     this.express = express
+    this.userLoader = require('../provider/user-provider.js')
   }
 
   attach () {
-    this.session()
+    this.defaultRoutes()
     this.wellcome()
     this.errors()
     this.routes()
   }
 
-  session () {
-    const UsersProvider = require('../provider/user-provider.js')
+  defaultRoutes () {
+    const routeStack = require('express').Router()
 
-    this.express.use(function (req, res, next) {
-      res.locals.loggedUser = {}
-      res.locals.query = req.query
-      res.locals.url = req.originalUrl
+    routeStack.use('/admin/*', this.getAdminAuthRouteRule())
+    routeStack.use('/api/*', this.getApiAuthRouteRule())
+    routeStack.use('*', this.getLoginRedirectRouteRule())
 
-      if (req.session.loggedUserID || Arr.isIn(global.pathNotLogged, req.path)) {
-        if (req.session.loggedUserID !== undefined) {
-          var user = UsersProvider.get(req.session.loggedUserID)
-
-          if (UsersProvider.checkCanLogin(user)) {
-            res.locals.loggedUser = user
-          } else {
-            req.session.loggedUserID = null
-          }
-        }
-
-        next()
-      } else {
-        res.redirect('/login')
-      }
-    })
+    this.express.use(routeStack)
   }
 
   wellcome () {
@@ -77,6 +63,62 @@ module.exports = class ServerMidlewares {
 
       new Clazz(this.express).attach()
     })
+  }
+
+  getAdminAuthRouteRule () {
+    return (req, res, next) => {
+      console.log('is admin')
+      next('router')
+    }
+  }
+
+  /**
+    * @api {post} /* Authentication
+    * @apiGroup Credentials
+    * @apiDescription All api calls must have this parameters setted
+    * @apiParam {String} access User access ID
+    * @apiParam {String} pass User password
+    * @apiParam {String} appkey App Key
+   */
+
+  getApiAuthRouteRule () {
+    return (req, res, next) => {
+      try {
+        if (this.userLoader.checkUser(req.body.access, req.body.pass ?? '')) {
+          if (!Arr.isIn(Params.apiAppKeys().split(','), req.body.appkey ?? '')) {
+            Err.thrw('APIKEY')
+          }
+        }
+
+        next('router')
+      } catch {
+        res.status(401).send({ error: 'Credenciais inválidas' })
+      }
+    }
+  }
+
+  getLoginRedirectRouteRule () {
+    return (req, res, next) => {
+      res.locals.loggedUser = {}
+      res.locals.query = req.query
+      res.locals.url = req.originalUrl
+
+      if (req.session.loggedUserID || Arr.isIn(global.pathNotLogged, req.baseUrl)) {
+        if (req.session.loggedUserID !== undefined) {
+          var user = this.userLoader.get(req.session.loggedUserID)
+
+          if (this.userLoader.checkCanLogin(user)) {
+            res.locals.loggedUser = user
+          } else {
+            req.session.loggedUserID = null
+          }
+        }
+
+        next('router')
+      } else {
+        res.redirect('/login')
+      }
+    }
   }
 
   errors () {

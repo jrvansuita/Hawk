@@ -9,8 +9,10 @@ module.exports = class PicturesRoutes extends Routes {
   attach () {
     // Tela de imagens dos clientes...
     this._get('/sku-pictures', (req, res) => {
-      res.render('product/pictures/sku-pictures')
-    })
+        SkuPic.countAll({}, (err, data) => {
+          res.render('product/pictures/sku-pictures',{data: data[0].info});
+        })
+      });
 
     // Post para criação de imagem do instagram
     this._post('/sku-picture-from-insta', (req, res) => {
