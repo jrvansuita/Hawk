@@ -106,7 +106,7 @@ module.exports = class ServerMidlewares {
 
   getPostCheckUserRouteRule () {
     return (req, res, next) => {
-      if (req.session.loggedUserID) {
+      if (req.session.loggedUserID || req.path === '/login') {
         next('router')
       } else {
         res.status(401).send({ error: 'Web Backend not logged' })
