@@ -4,6 +4,7 @@ const MaganePoints = require('../handler/manage-points-handler.js')
 const SaleDashboardProvider = require('../provider/performance/sale-dashboard-provider.js')
 const StockDashboardProvider = require('../provider/performance/stock-dashboard-provider.js')
 const Cost = require('../bean/cost.js')
+const Enum = require('../bean/enumerator.js')
 
 module.exports = class PerformanceRoutes extends Routes {
   attach () {
@@ -50,8 +51,10 @@ module.exports = class PerformanceRoutes extends Routes {
 
     /** Sale Dashboard Performance **/
 
-    this._page('/sales-dashboard', (req, res) => {
-      res.render('performance/sales-dashboard')
+    this._page('/sales-dashboard', async (req, res) => {
+      res.render('performance/sales-dashboard', {
+        paymentTypes: await Enum.on('PAY-TYPES').get(true)
+      })
     })
 
     /**
