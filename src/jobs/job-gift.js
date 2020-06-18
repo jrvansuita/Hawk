@@ -41,7 +41,7 @@ module.exports = class JobGift extends Job {
 
   loadPreparedGiftItem (rule, callback) {
     var sku = this.getAvaliableSku(rule)
-    if (!sku) {
+    if (sku) {
       if (this.preparedItems[sku]) {
         callback(this.preparedItems[sku])
       } else {
@@ -95,7 +95,7 @@ module.exports = class JobGift extends Job {
   }
 
   findRulesAndConsistencies (callback) {
-    GiftRule.findActives((err, all) => {
+    GiftRule.findActives((_err, all) => {
       this.giftRulesList = all
 
       // Coloca todos os skus com quantidade zero
