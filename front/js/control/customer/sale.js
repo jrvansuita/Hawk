@@ -68,7 +68,7 @@ function bindSaleAddressInfo (data) {
 function bindPaymentInfo (data) {
   $('.card-payment').css('border-top', '3px solid ' + setBorderOnCard(data.status))
   $('.payment-img').attr('src', getPaymentMethodImage(data.payment.method))
-  $('.sale-payment-method').text(Util.getPaymentType(data.payment.method))
+  $('.sale-payment-method').text(window.paymentTypes[data.payment.method].name)
   $('.sale-payment-total').text(Num.money(data.payment.total))
   $('.sale-payment-info').text(data.payment.desc)
   $('.sale-payment-status').addClass('info').text(data.payment.status).css('border-color', setBorderOnCard(data.status))
