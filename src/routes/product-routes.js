@@ -106,17 +106,16 @@ module.exports = class ProductRoutes extends Routes {
           this._resp().sucess(res, all)
         })
       } else {
-        new DiagnosticsProvider().findBySku(req.query.sku, (all) => {
+        new DiagnosticsProvider().findBySku(req.query.sku, async (all) => {
           res.set('Cache-Control', 'public, max-age=86400')
 
           var result = []
+          var fixesTypes = (await Enum.on('PROD-DIAG').get(true))
+
           // 1day
           all.forEach((each) => {
             var s = each.toObject()
-            Enum.getMap('PROD-DIAG', (types) => {
-              s.data = types[each.type]
-            })
-
+            s.data = fixesTypes[each.type]
             result.push(s)
           })
 
