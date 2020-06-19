@@ -1,3 +1,4 @@
+
 module.exports = class DataAccess {
   toObject () {
     delete this.__v

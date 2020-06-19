@@ -2,9 +2,20 @@ const { createCanvas, loadImage, registerFont } = require('canvas')
 const TypeFace = require('../typeface/typeface.js')
 const Mock = require('../bean/mock.js')
 
+var _settingsCache = {}
+var _productsImgCache = {}
+
 module.exports = class {
   constructor (id) {
     this.mockId = id
+  }
+
+  static clearCache () {
+    _settingsCache = {}
+  }
+
+  saveCache () {
+    _settingsCache[this.mockId] = this.mock
   }
 
   setProduct (product) {
@@ -13,23 +24,39 @@ module.exports = class {
   }
 
   setOnFinishedListener (listener) {
-    this.setOnFinishedListener = listener
+    this.setOnFinishedListener = (canvas) => {
+      this.saveCache()
+      listener(canvas)
+    }
     return this
+  }
+
+  loadImgIfNedd (url, cached, callback) {
+    var result = cached || _productsImgCache[url]
+
+    if (result) {
+      callback(result)
+    } else {
+      loadImage(url).then((image) => {
+        _productsImgCache[url] = image
+        callback(image)
+      })
+    }
   }
 
   loadImages (callback) {
     // Load the product image
-    loadImage(this._geProductImage()).then((image) => {
+    this.loadImgIfNedd(this._geProductImage(), null, (image) => {
       this.productImage = image
 
       // Load the mockup imaage
-      loadImage(this.mockSett.imgUrl).then((image) => {
-        this.mockupImage = image
+      this.loadImgIfNedd(this.mock.imgUrl, this.mock.mockupImage, (image) => {
+        this.mock.mockupImage = image
 
-        if (this.mockSett.backUrl) {
-          // Load the mockup background imaage
-          loadImage(this.mockSett.backUrl).then((image) => {
-            this.backgroundImage = image
+        if (this.mock.backUrl) {
+          // Load the mockup background image
+          this.loadImgIfNedd(this.mock.backUrl, this.mock.backgroundImage, (image) => {
+            this.mock.backgroundImage = image
 
             callback()
           })
@@ -41,12 +68,16 @@ module.exports = class {
   }
 
   loadSettings (callback) {
-    this.mockSett = {}
+    this.mock = _settingsCache[this.mockId]
 
-    Mock.findOne({ _id: this.mockId }, (err, mock) => {
-      this.mockSett = mock
+    if (this.mock) {
       callback()
-    })
+    } else {
+      Mock.findOne({ _id: this.mockId }, (_err, mock) => {
+        this.mock = Mock.normalize(mock)
+        callback()
+      })
+    }
   }
 
   _geProductImage () {
@@ -98,7 +129,7 @@ module.exports = class {
   }
 
   _getMsg () {
-    var msg = this.mockSett.msg
+    var msg = this.mock.msg
       .replace('{preco}', this._getPrice())
       .replace('{preco-de}', this._getFromPrice())
       .replace('{desconto}', this._getDiscount())
@@ -139,56 +170,59 @@ module.exports = class {
     // Circle for the discount
     this.context.beginPath()
     this.context.arc(this.canvas.width - rightMargin, topMargin, this.n(65), 0, 2 * Math.PI, false)
-    this.context.fillStyle = this.mockSett.discountBackground == 'none' ? this._getDiscountBackgroundColor() : this.mockSett.discountBackground
-    this.context.shadowColor = this.mockSett.discountBackgroundShadow
+    this.context.fillStyle = this.mock.discountBackground == 'none' ? this._getDiscountBackgroundColor() : this.mock.discountBackground
+    this.context.shadowColor = this.mock.discountBackgroundShadow
     this.context.shadowBlur = 10
     this.context.shadowOffsetX = 5
     this.context.shadowOffsetY = 5
     this.context.fill()
 
     rightMargin += this.n(this._getDiscount().length * 16)
-    this.context.font = 'bold ' + this.n(30) + 'pt ' + this.mockSett.fontNameDiscount
-    this.context.fillStyle = this.mockSett.discountFontColor
-    this.applyFontShadow(this.mockSett.discountShadowColor)
+    this.context.font = 'bold ' + this.n(30) + 'pt ' + this.mock.fontNameDiscount
+    this.context.fillStyle = this.mock.discountFontColor
+    this.applyFontShadow(this.mock.discountShadowColor)
     this.context.fillText(this._getDiscount(), this.canvas.width - rightMargin, topMargin + this.n(13))
   }
 
   renderProductPrice () {
     var leftPriceMargin = this.n(45)
 
-    this.applyFontShadow(this.mockSett.fontShadowColor)
+    this.applyFontShadow(this.mock.fontShadowColor)
 
     /* Placing the product Price */
-    this.context.font = 'bold ' + this.n(50) + 'pt ' + this.mockSett.fontName
-    this.context.fillStyle = this.mockSett.fontColor
-    var bottomPriceMargin = this.n(45 + (this.mockSett.priceBottomMargin || 0))
+    this.context.font = 'bold ' + this.n(50) + 'pt ' + this.mock.fontName
+    this.context.fillStyle = this.mock.fontColor
+    var bottomPriceMargin = this.n(45 + (this.mock.priceBottomMargin || 0))
     this.context.fillText(this._getPrice(), leftPriceMargin, this.canvas.height - bottomPriceMargin)
 
-    this.context.font = 'bold ' + this.n(20) + 'pt ' + this.mockSett.fontName
-    this.context.fillStyle = this.mockSett.fontColor
-    bottomPriceMargin = this.n(110 + (this.mockSett.priceBottomMargin || 0))
+    this.context.font = 'bold ' + this.n(20) + 'pt ' + this.mock.fontName
+    this.context.fillStyle = this.mock.fontColor
+    bottomPriceMargin = this.n(110 + (this.mock.priceBottomMargin || 0))
     this.context.fillText(this._getMsg(), leftPriceMargin + 5, this.canvas.height - bottomPriceMargin)
   }
 
   loadFont (callback) {
-    new TypeFace()
-      .setFonts([this.mockSett.fontName, this.mockSett.fontNameDiscount])
-      .load((files) => {
-        try {
-          files.forEach((file) => {
-            registerFont(file, { family: 'OpenSans', weight: 'bold' })
-          })
-        } catch (e) {
+    if (this.mock.fontsLoaded) {
+      callback()
+    } else {
+      new TypeFace()
+        .setFonts([this.mock.fontName, this.mock.fontNameDiscount])
+        .load((files) => {
+          try {
+            files.forEach((file) => {
+              registerFont(file, { family: 'OpenSans', weight: 'bold' })
+            })
+          } catch (e) {
+            console.error(e)
+          }
 
-        }
-
-        if (callback) {
+          this.mock.fontsLoaded = true
           callback()
-        }
-      })
+        })
+    }
   }
 
-  definePaddings () {
+  /* definePaddings () {
     this.padding = 0
     this.paddingTop = 0
 
@@ -208,21 +242,44 @@ module.exports = class {
     if (this.mockSett.productTopMargin) {
       this.paddingTop += this.mockSett.productTopMargin
     }
-  }
+  } */
 
   renderingImages () {
-    this.definePaddings()
+    // this.definePaddings()
 
-    if (this.backgroundImage) {
-      this.context.drawImage(this.backgroundImage, 0, 0, this.canvas.width, this.canvas.height)
+    if (this.mock.backgroundImage) {
+      // Carrega o fundo da imagem final
+      this.drawImage(this.mock.backgroundImage, 0, 0, this.canvas.width, this.canvas.height)
     }
 
-    this.context.drawImage(this.productImage, this.padding / 2, this.paddingTop, this.mockSett.width - this.padding, this.mockSett.width - this.padding)
-    this.context.drawImage(this.mockupImage, 0, this.canvas.height - this.mockupImage.height, this.canvas.width, this.mockupImage.height)
+    var prodWidth = this.mock.widthProduct - (this.mock.productImgMargins.left - this.mock.productImgMargins.right)
+    var prodHeight = this.mock.productImgMargins.square ? prodWidth : this.mock.heightProduct - (this.mock.productImgMargins.top - this.mock.productImgMargins.bottom)
+
+    // Carrega a imagem do produto
+    this.drawImage(
+      this.productImage, // Image
+      this.mock.productImgMargins.left, // Left
+      this.mock.productImgMargins.top, // Top
+      prodWidth, // Width
+      prodHeight // Height
+    )
+
+    // Carrega a imagem do mockup (Sobreposição)
+    this.drawImage(
+      this.mock.mockupImage, // Image
+      0, // Left
+      this.canvas.height - this.mock.mockupImage.height, // Top
+      this.canvas.width, // Width
+      this.mock.mockupImage.height // Height
+    )
+  }
+
+  drawImage (image, startDrawLeft, startDrawTop, width, height) {
+    this.context.drawImage(image, startDrawLeft, startDrawTop, width, height)
   }
 
   initCanvas () {
-    this.canvas = createCanvas(this.mockSett.width, this.mockSett.height)
+    this.canvas = createCanvas(this.mock.width, this.mock.height)
     this.context = this.canvas.getContext('2d')
   }
 
@@ -237,10 +294,9 @@ module.exports = class {
 
           this.renderProductPrice()
 
-          if (this.mockSett.showDiscount) {
+          if (this.mock.showDiscount) {
             this.renderDiscount()
           }
-
           if (this.setOnFinishedListener) {
             this.setOnFinishedListener(this.canvas)
           }

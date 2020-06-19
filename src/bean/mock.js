@@ -1,3 +1,5 @@
+const Str = global.Str
+
 module.exports = class MockSetting extends DataAccess {
   constructor (name, fontName, imgUrl, backUrl, msg, fontColor, fontShadowColor, priceBottomMargin, showDiscount, fontNameDiscount, discountFontColor, discountShadowColor, discountBackground, discountBackgroundShadow, width, height, widthProduct, heightProduct, productImgMargins) {
     super()
@@ -6,8 +8,6 @@ module.exports = class MockSetting extends DataAccess {
     this.msg = Str.def(msg)
     this.imgUrl = Str.def(imgUrl)
     this.backUrl = Str.def(backUrl)
-
-    this.productImgMargins = Str.def(productImgMargins)
 
     this.fontColor = Str.def(fontColor)
     this.fontShadowColor = Str.def(fontShadowColor)
@@ -25,6 +25,38 @@ module.exports = class MockSetting extends DataAccess {
 
     this.widthProduct = Num.def(widthProduct)
     this.heightProduct = Num.def(heightProduct)
+    this.productImgMargins = Str.def(productImgMargins)
+  }
+
+  static normalize (mock) {
+    mock = mock.toObject()
+
+    mock = this.splitProductMargins(mock)
+    mock = this.handleProductSize(mock)
+
+    return mock
+  }
+
+  static handleProductSize (mock) {
+    mock.widthProduct = mock.widthProduct || (mock.width - (mock.productImgMargins.right + mock.productImgMargins.left))
+    mock.heightProduct = mock.heightProduct || (mock.height - (mock.productImgMargins.top + mock.productImgMargins.bottom))
+    return mock
+  }
+
+  static splitProductMargins (mock) {
+    var getMargin = (index) => {
+      return parseInt(mock.productImgMargins?.split(',')?.[index]?.trim() || 0)
+    }
+
+    mock.productImgMargins = {
+      top: getMargin(0),
+      right: getMargin(1),
+      bottom: getMargin(2),
+      left: getMargin(3),
+      square: (mock.heightProduct - mock.widthProduct) === 0
+    }
+
+    return mock
   }
 
   static getKey () {

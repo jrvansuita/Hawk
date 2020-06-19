@@ -99,9 +99,6 @@ module.exports = class ServerMidlewares {
 
   getLoginRedirectRouteRule () {
     return (req, res, next) => {
-      console.log('is *')
-      console.log(req.originalUrl)
-
       res.locals.loggedUser = {}
       res.locals.query = req.query
       res.locals.url = req.originalUrl

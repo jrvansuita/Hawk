@@ -4,6 +4,8 @@ const ProductMockupBuilder = require('../mockup/product-mockup-builder.js')
 const File = require('../file/file.js')
 const Zip = require('../file/zip.js')
 
+var _productCache = {}
+
 module.exports = class {
   constructor (mockId, skus) {
     this.mockId = mockId
@@ -13,18 +15,23 @@ module.exports = class {
 
   loadProduct (sku) {
     return new Promise((resolve, reject) => {
-      ProductHandler.getImage(sku, (product) => {
-        if (product) {
-          new ProductUrlProvider().from(product.url).then((onlineValues) => {
-            product.online = onlineValues
+      if (_productCache[sku]) {
+        resolve(_productCache[sku])
+      } else {
+        ProductHandler.getImage(sku, (product) => {
+          if (product) {
+            new ProductUrlProvider().from(product.url).then((onlineValues) => {
+              product.online = onlineValues
+              _productCache[sku] = product
+              resolve(product)
+            }).catch(e => {
+              resolve(product)
+            })
+          } else {
             resolve(product)
-          }).catch(e => {
-            resolve(product)
-          })
-        } else {
-          resolve(product)
-        }
-      })
+          }
+        })
+      }
     })
   }
 

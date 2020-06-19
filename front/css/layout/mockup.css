@@ -46,6 +46,7 @@
   align-items: flex-start;
   width: 100%;
   margin-top: 2px;
+
   /* max-width: 60%; */
   position: relative;
 }
@@ -306,28 +307,34 @@
   right: 0;
 }
 
-.styling{
+.styling {
   display: flex;
   padding: 5px;
 }
 
-.style-img{
+.style-img {
   border-right: 2px solid #e8e8e8;
   margin-right: 16px;
+  flex: 50%;
 }
 
-.style-mockup{
+.style-mockup {
   margin-left: 2px;
+  flex: 50%;
 }
 
-.txt{
+.product-margin {
+  margin-top: 40px;
+}
+
+.txt {
   text-align: justify;
 }
 
-.marg-item span{
+.marg-item span {
   font-size: 12px;
 }
 
-.line-bottom{
-  width: 90%!important;
+.line-bottom {
+  width: 90% !important;
 }
