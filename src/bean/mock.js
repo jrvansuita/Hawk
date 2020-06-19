@@ -1,5 +1,5 @@
 module.exports = class MockSetting extends DataAccess {
-  constructor (name, fontName, imgUrl, backUrl, msg, fontColor, fontShadowColor, priceBottomMargin, showDiscount, fontNameDiscount, discountFontColor, discountShadowColor, discountBackground, discountBackgroundShadow, width, height, productTopMargin) {
+  constructor (name, fontName, imgUrl, backUrl, msg, fontColor, fontShadowColor, priceBottomMargin, showDiscount, fontNameDiscount, discountFontColor, discountShadowColor, discountBackground, discountBackgroundShadow, width, height, widthProduct, heightProduct, productImgMargins) {
     super()
     this.name = Str.def(name)
     this.fontName = Str.def(fontName)
@@ -7,7 +7,7 @@ module.exports = class MockSetting extends DataAccess {
     this.imgUrl = Str.def(imgUrl)
     this.backUrl = Str.def(backUrl)
 
-    this.productTopMargin = Num.def(productTopMargin)
+    this.productImgMargins = Str.def(productImgMargins)
 
     this.fontColor = Str.def(fontColor)
     this.fontShadowColor = Str.def(fontShadowColor)
@@ -22,6 +22,9 @@ module.exports = class MockSetting extends DataAccess {
 
     this.width = Num.def(width)
     this.height = Num.def(height)
+
+    this.widthProduct = Num.def(widthProduct)
+    this.heightProduct = Num.def(heightProduct)
   }
 
   static getKey () {

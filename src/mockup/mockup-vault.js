@@ -20,7 +20,9 @@ module.exports = class MockVault {
       params.discountBackgroundShadow,
       params.width,
       params.height,
-      params.productTopMargin
+      params.widthProduct,
+      params.heightProduct,
+      params.productImgMargins
     )
 
     if (params._id.toString().length > 0) {
