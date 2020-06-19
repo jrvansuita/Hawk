@@ -5,12 +5,14 @@ const Pack = require('../bean/pack.js')
 const PackageTypeVault = require('../vault/package-type-vault.js')
 const PackingChartBuilder = require('../builder/packing-chart-builder.js')
 const PackingDaysProvider = require('../provider/packing-days-provider.js')
+const Enum = require('../bean/enumerator.js')
 
 module.exports = class PackingRoutes extends Routes {
   attach () {
     this._page('/packing', (req, res) => {
       if (global.Sett.get(res.locals.loggedUser, 8)) {
-        var result = (sale) => {
+        var result = async (sale) => {
+          if (sale.id) sale.status = ((await Enum.on('ECCO-SALE-STATUS').get(true)))
           res.render('packing/packing.ejs', {
             sale: sale,
             groups: !sale.id ? PackingProvider.get() : {}

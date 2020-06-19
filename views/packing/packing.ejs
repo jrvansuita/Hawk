@@ -84,11 +84,11 @@
 
               <td>
                 <div class="status-holder">
-                  <img class="circle shadow icon" src="/img/<%=sale? Util.getSaleSituationIcon(parseInt(sale.situacao)) : 'alert'%>.png" />
+                  <img class="circle shadow icon" src="/img/<%=sale.status[sale.situacao].icon || 'alert'%>.png" />
 
                   <div class="field skrink">
                     <label class="field-title">Situação</label>
-                    <label class="info"><%=sale ? Util.getSaleSituationName(parseInt(sale.situacao)) : ''%></label>
+                    <label class="info"><%=sale?.status[sale.situacao].name || ''%></label>
                   </div>
                 </div>
               </td>
@@ -132,7 +132,7 @@
                 <td>
                   <div class="field">
                     <label class="field-title">Cidade</label>
-                    <label class="info"style="font-size: 12px; max-width:100px"><%=sale && sale.client ? Str.short(sale.client.cidade,20) : ''%></label>
+                    <label class="info"style="font-size: 12px; max-width: 100px;"><%=sale && sale.client ? Str.short(sale.client.cidade,20) : ''%></label>
                   </div>
                 </td>
 
@@ -154,11 +154,11 @@
 
                 <td>
                   <div class="status-holder">
-                    <img class="circle shadow icon" src="/img/<%=sale  ? Util.getSaleStatusIcon(sale.pickingRealizado): 'alert'%>.png" />
+                    <img class="circle shadow icon" src="/img/<%=sale.status[sale.pickingRealizado].icon || 'alert'%>.png" />
 
                     <div class="field skrink">
                       <label class="field-title">Status</label>
-                      <label class="info"><%=sale ? Util.getSaleStatusName(sale.pickingRealizado) : ''%></label>
+                      <label class="info"><%=sale.status[sale.pickingRealizado].name%></label>
                     </div>
                   </div>
                 </td>

@@ -259,59 +259,9 @@ var Util = {
     return name
   },
 
-  getSaleSituationName (status) {
-    switch (status) {
-      case -1:
-        return 'Aguardando pagamento'
-      case 0:
-        return 'Em aberto'
-      case 1:
-        return 'Atendido'
-      case 2:
-        return 'Cancelado'
-      case 3:
-        return 'Pronto para picking'
-      case 4:
-        return 'Pagamento em análise'
-      default:
-        return 'Não encontrado'
-    }
-  },
-
-  getSaleSituationIcon (status) {
-    switch (status) {
-      case 1:
-        return 'paper-checked'
-      case 3:
-        return 'checked'
-      default:
-        return 'alert'
-    }
-  },
-
-  getSaleStatusName (status) {
-    if (status === 'N') {
-      return 'Picking Não Realizado'
-    } else if (status === 'A') {
-      return 'Aguardando Faturamento'
-    } else if (status === 'S') {
-      return 'Faturado'
-    }
-  },
-
   formatCEP (cep) {
     cep = cep.replace(/^(\d{5})(\d)/, '$1-$2')
     return cep
-  },
-
-  getSaleStatusIcon (status) {
-    if (status == 'N') {
-      return 'alert'
-    } else if (status == 'A') {
-      return 'checked'
-    } else if (status == 'S') {
-      return 'paper-checked'
-    }
   },
 
   papersIcon (much) {
