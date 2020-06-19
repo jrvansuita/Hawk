@@ -4,40 +4,34 @@ module.exports = class {
     this.app = app
   }
 
-  _page (paths, callback, pathNotLogged) {
-    if (pathNotLogged) {
-      this.addNotLoggedNeeded(paths)
-    }
-
-    this._get(paths, (req, res, body, locals, session) => {
-      callback(req, res, body, locals, session)
+  _page (paths, callback) {
+    return this._register('get', paths, (req, ...params) => {
+      callback(req, ...params)
       req.session.lastpath = paths instanceof Array ? paths[0] : paths
     })
   }
 
-  _get (paths, callback, pathNotLogged, enableCors) {
-    if (pathNotLogged) {
-      this.addNotLoggedNeeded(paths)
-    }
-
-    this.app.get(paths, (req, res) => {
-      Response.onTry(res, () => {
-        if (enableCors) {
-          res.setHeader('Access-Control-Allow-Origin', '*')
-          res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-        }
-
-        callback(req, res, req.body, res.locals, req.session)
-      })
-    })
+  _get (...params) {
+    return this._register('get', ...params)
   }
 
-  _post (paths, callback, pathNotLogged, enableCors) {
+  _post (...params) {
+    return this._register('post', ...params)
+  }
+
+  _api (method, paths, callback) {
+    return this._register(method || this.lastMethod, [].concat(paths || this.lastPaths).map((e) => { return '/api' + e }), callback || this.lastCallBack, false, true)
+  }
+
+  _register (method, paths, callback, pathNotLogged, enableCors) {
+    method = method || this.lastMethod
+    paths = paths || this.lastPaths
+
     if (pathNotLogged) {
       this.addNotLoggedNeeded(paths)
     }
 
-    this.app.post(paths, (req, res) => {
+    this.app[method](paths, (req, res) => {
       Response.onTry(res, () => {
         if (enableCors) {
           res.setHeader('Access-Control-Allow-Origin', '*')
@@ -47,6 +41,12 @@ module.exports = class {
         callback(req, res, req.body, res.locals, req.session)
       })
     })
+
+    this.lastMethod = method
+    this.lastPaths = paths
+    this.lastCallBack = callback
+
+    return this
   }
 
   _checkPermissionOrGoBack (req, res, settNum) {
