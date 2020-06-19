@@ -7,7 +7,7 @@ module.exports = class {
       this.setFonts([fontName])
     }
 
-    this.fontPath = './front/fonts'
+    this.fontPath = './front/fonts/typefaces'
     this.googleUrl = 'https://fonts.googleapis.com/css?'
     this.googleFonts = new GetGoogleFonts()
     this.weights = ['400', '700', '900']
