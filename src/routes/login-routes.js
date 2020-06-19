@@ -6,11 +6,11 @@ module.exports = class LoginRoutes extends Routes {
   attach () {
     this._get('/login', (req, res) => {
       res.render('login/login')
-    }, true)
+    }).skipLogin()
 
     this._get('/wellcome', (req, res) => {
       res.render('login/wellcome')
-    }, true)
+    }).skipLogin()
 
     this._post('/login', (req, res) => {
       var user
@@ -38,6 +38,6 @@ module.exports = class LoginRoutes extends Routes {
         req.session = null
         res.status(200).send(null)
       }
-    }, true)
+    })
   }
 }
