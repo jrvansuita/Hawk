@@ -197,7 +197,7 @@ function bindSaleBasicInfos (data) {
   })
   $('.sale-ecco').text(data.number)
   $('.sale-nfe').text(data.nf || 'Sem Nota Fiscal')
-  $('.status').text(Util.getSaleStatusInfo(data.status)).css('border-color', Util.strToColor(data.status))
+  $('.status').text(window.saleStatus[data.status].name).css('border-color', Util.strToColor(data.status))
   $('.sale-situation').text(data.situation).css('border-color', Util.strToColor(data.situation))
   $('.sale-step').text(data.pickingStatus)
   $('.sale-date').text(data.saleDate)
@@ -228,7 +228,7 @@ function bindSaleHistory (data) {
 
     var $commentNotified = $('<img>').attr('src', '/img/checked.png').addClass('client-notified')
 
-    $commentTitle.text(Util.getSaleStatusInfo(each.status))
+    $commentTitle.text(window.saleStatus[each.status].name)
     $commentDesc.text(each.comment)
 
     if (each.is_customer_notified == 1) {
@@ -309,6 +309,7 @@ function bindDropdowns (data) {
           _post('/customer-sale-status-change', { sale: data.oc, status: status, user: loggedUser, obs: obs }, (result) => {
             if (result.sucess != null || result == true) {
               errorTooltip.hideDelay(3000).showSuccess('Status Alterado')
+              helper.loading(false)
             } else {
               helper.error()
               errorTooltip.hideDelay(3000).showError('Erro ao cancelar NFe')

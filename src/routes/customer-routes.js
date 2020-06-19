@@ -7,8 +7,8 @@ const Enum = require('../bean/enumerator.js')
 module.exports = class CustomerRoutes extends Routes {
   attach () {
     this._page('/customer-service/client', (req, res) => {
-      var redirect = (data) => {
-        res.render('customer/client', { client: data })
+      var redirect = async (data) => {
+        res.render('customer/client', { client: data, saleStatus: (await Enum.on('SALE-STATUS').get(true)) })
       }
 
       if (req.query.id) {

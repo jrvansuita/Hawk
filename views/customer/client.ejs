@@ -24,7 +24,8 @@
   <%  include ../menus/customer-menu %>
 
   <script class="hidable-script">
-  window.client = <%- JSON.stringify(client || null) %>
+    window.client = <%- JSON.stringify(client || null) %>
+    window.saleStatus = <%- JSON.stringify(saleStatus) %>
   </script>
 
   <div class="main-content">
@@ -204,7 +205,7 @@
                 <td><span class=""><%=Num.money(sale.shipping_amount)%></span></td>
                 <td><span class=""><%=Num.money(sale.discount_amount)%></span></td>
                 <td><span class="bolder"><%=Num.money(sale.grand_total)%></span></td>
-                <td><span class=""><%=Util.getSaleStatusInfo(sale.status)%></span></td>
+                <td><span class=""><%=saleStatus[sale?.status]?.name%></span></td>
                 <td><span class="gray"><%=sale.shipping_description%></span>
 
 
