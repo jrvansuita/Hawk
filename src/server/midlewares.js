@@ -1,4 +1,5 @@
 const Params = require('../vars/params.js')
+const File = require('../file/file.js')
 
 module.exports = class ServerMidlewares {
   constructor (express) {
@@ -16,9 +17,16 @@ module.exports = class ServerMidlewares {
   defaultRoutes () {
     const routeStack = require('express').Router()
 
+    // Generic Rules
+    routeStack.use('*', this.getGenericRouteRule())
+
+    // Api and Admin Rules
     routeStack.use('/admin/*', this.getAdminAuthRouteRule())
     routeStack.use('/api/*', this.getApiAuthRouteRule())
-    routeStack.use('*', this.getLoginRedirectRouteRule())
+
+    // Web Backend Rules
+    routeStack.get('*', this.getLoginRedirectRouteRule())
+    routeStack.post('*', this.getPostCheckUserRouteRule())
 
     this.express.use(routeStack)
   }
@@ -34,32 +42,12 @@ module.exports = class ServerMidlewares {
   }
 
   getRoutes () {
-    var routes = []
-    routes.push('general-routes.js')
-    routes.push('login-routes.js')
-    routes.push('jobs-routes.js')
-    routes.push('packing-routes.js')
-    routes.push('picking-routes.js')
-    routes.push('pending-routes.js')
-    routes.push('performance-routes.js')
-    routes.push('shipping-order-routes.js')
-    routes.push('history-routes.js')
-    routes.push('product-routes.js')
-    routes.push('user-routes.js')
-    routes.push('settings-routes.js')
-    routes.push('mock-routes.js')
-    routes.push('gift-routes.js')
-    routes.push('pictures-routes.js')
-    routes.push('template-routes.js')
-    routes.push('images-routes.js')
-    routes.push('customer-routes.js')
-    routes.push('enumerator-routes.js')
-    return routes
+    return new File('src/routes').getFolderFilesPaths('.js').filter((e) => { return !e.startsWith('_') })
   }
 
   routes () {
-    this.getRoutes().forEach((r) => {
-      var Clazz = require('../routes/' + r)
+    this.getRoutes().forEach((file) => {
+      var Clazz = require('../routes/' + file)
 
       new Clazz(this.express).attach()
     })
@@ -67,7 +55,6 @@ module.exports = class ServerMidlewares {
 
   getAdminAuthRouteRule () {
     return (req, res, next) => {
-      console.log('is admin')
       next('router')
     }
   }
@@ -85,8 +72,8 @@ module.exports = class ServerMidlewares {
     return (req, res, next) => {
       try {
         if (this.userLoader.checkUser(req.body.access, req.body.pass ?? '')) {
-          if (!Arr.isIn(Params.apiAppKeys().split(','), req.body.appkey ?? '')) {
-            Err.thrw('APIKEY')
+          if (!global.Arr.isIn(Params.apiAppKeys().split(','), req.body.appkey ?? '')) {
+            global.Err.thrw('APIKEY')
           }
         }
 
@@ -99,25 +86,41 @@ module.exports = class ServerMidlewares {
 
   getLoginRedirectRouteRule () {
     return (req, res, next) => {
-      res.locals.loggedUser = {}
-      res.locals.query = req.query
-      res.locals.url = req.originalUrl
+      res.locals.loggedUser = req.session.loggedUser
 
-      if (req.session.loggedUserID || Arr.isIn(global.pathNotLogged, res.locals.url)) {
-        if (req.session.loggedUserID !== undefined) {
-          var user = this.userLoader.get(req.session.loggedUserID)
+      if (!global.Arr.isIn(global.skipLoginPaths, req.path)) {
+        //        console.log('Auth')
+        req.session.loggedUser = this.userLoader.getAndKeepLogged(req.session.loggedUserID)
+        res.locals.loggedUser = req.session.loggedUser
 
-          if (this.userLoader.checkCanLogin(user)) {
-            res.locals.loggedUser = user
-          } else {
-            req.session.loggedUserID = null
-          }
+        if (!res.locals.loggedUser) {
+          req.session.loggedUserID = null
+
+          res.redirect('/login')
         }
+      }
 
+      next('router')
+    }
+  }
+
+  getPostCheckUserRouteRule () {
+    return (req, res, next) => {
+      if (req.session.loggedUserID || req.path === '/login') {
         next('router')
       } else {
-        res.redirect('/login')
+        res.status(401).send({ error: 'Web Backend not logged' })
       }
+    }
+  }
+
+  getGenericRouteRule (req, res, next) {
+    return (req, res, next) => {
+      console.log(`${req.method}: ${req.originalUrl}`)
+      res.locals.query = req.query
+      res.locals.url = req.originalUrl
+      res.locals.path = req.baseUrl || req.path
+      next()
     }
   }
 

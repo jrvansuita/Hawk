@@ -55,6 +55,11 @@ module.exports = class UsersProvider {
     return undefined
   }
 
+  static getAndKeepLogged (userId) {
+    var user = this.get(userId)
+    return user && this.checkCanLogin(user) ? user : null
+  }
+
   static checkCanLogin (user, _throw) {
     var result = user.active
 

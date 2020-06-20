@@ -1,5 +1,6 @@
 const SaleLoader = require('../loader/sale-loader.js')
 const MagentoCalls = require('../magento/magento-calls.js')
+const Enum = require('../bean/enumerator.js')
 
 module.exports = class SaleCustomerInfoBuilder {
   constructor (saleNumber) {
@@ -19,8 +20,8 @@ module.exports = class SaleCustomerInfoBuilder {
       })
   }
 
-  _handleSale () {
-    this.sale = new SaleWrapper(this.store, this.erp)
+  async _handleSale () {
+    this.sale = await new SaleWrapper().build(this.store, this.erp)
   }
 
   _handleItems () {
@@ -58,8 +59,8 @@ module.exports = class SaleCustomerInfoBuilder {
   }
 
   load (callback) {
-    this._get(() => {
-      this._handleSale()
+    this._get(async () => {
+      await this._handleSale()
       this._handleItems()
 
       if (callback) {
@@ -70,12 +71,12 @@ module.exports = class SaleCustomerInfoBuilder {
 }
 
 class SaleWrapper {
-  constructor (store, erp) {
+  async build (store, erp) {
     this.number = erp.numeroPedido
     this.oc = store.increment_id
     this.nf = erp.numeroNotaFiscal
     this.status = store.status
-    this.situation = Util.getSaleSituationName(parseInt(erp.situacao))
+    this.situation = (await Enum.on('ECCO-SALE-STATUS').hunt(erp.situacao, 'value'))?.name
     this.pickingStatus = Util.getSaleStatusName(erp.pickingRealizado)
     this.saleDate = Dat.formatwTime(Dat.rollHour(new Date(store.created_at), -3))
     this.date = store.created_at
@@ -84,7 +85,7 @@ class SaleWrapper {
     this.total = Floa.def(store.base_grand_total)
     this.coleted = erp.pedidoColetado ? 'Sim' : 'Não'
     this.idOrdemColeta = erp.nfe ? erp.nfe.idOrdemColeta : ''
-    this.weight = erp.pesoBruto ? (erp.pesoBruto < 1.000 ? erp.pesoBruto + 'g' : erp.pesoBruto + 'Kg') : (store.weight < 1.000 ? store.weight + 'g' : store.weight + 'Kg')
+    this.weight = erp.pesoBruto ? (erp.pesoBruto < 1.0 ? erp.pesoBruto + 'g' : erp.pesoBruto + 'Kg') : (store.weight < 1.0 ? store.weight + 'g' : store.weight + 'Kg')
 
     this.client = {
       name: store.customer_firstname + ' ' + store.customer_lastname,
@@ -120,7 +121,7 @@ class SaleWrapper {
       desc: store.payment.installment_description || store.payment.additional_information.mundipagg_creditcard_new_credito_parcelamento_1_1 || '1x (à vista)',
       boleto: store.payment.additional_information.BoletoUrl,
       boleto_expires: store.payment.additional_information['1_ExpirationDate'],
-      status: store.status == 'pending_payment' ? (store.payment.amount_paid ? 'Pago' : 'Pagamento Pendente') : (store.payment.amount_paid ? 'Pago' : 'Não Pago'),
+      status: store.status === 'pending_payment' ? (store.payment.amount_paid ? 'Pago' : 'Pagamento Pendente') : (store.payment.amount_paid ? 'Pago' : 'Não Pago'),
       coupon: store.coupon_code,
       discount_desc: store.discount_description
     }
@@ -128,7 +129,7 @@ class SaleWrapper {
     this.transport = {
       name: erp.transport,
       desc: store.shipping_description,
-      cost: Floa.def(store.shipping_amount) == 0 ? 'Frete Grátis' : Floa.def(store.shipping_amount),
+      cost: Floa.def(store.shipping_amount) === 0 ? 'Frete Grátis' : Floa.def(store.shipping_amount),
       tracking: erp.codigoRastreamento,
       deliveryTime: erp.deliveryTime
     }
@@ -150,7 +151,8 @@ class SaleWrapper {
     this.magentoItensQuantity = store.items.filter((each) => {
       return each.parent_item_id === null
     }).length
-  };
+    return this
+  }
 }
 
 class SaleItemWrapper {

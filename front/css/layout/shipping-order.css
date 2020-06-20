@@ -216,7 +216,8 @@ table {
   padding: 0 5px;
 }
 
-#nfs-in{
+.memory-line td:first-child {
+  border-left: 3px solid #009586ba;
 }
 
 #nfs-in td {
@@ -234,10 +235,6 @@ table {
   font-weight: 900;
   color: #171717;
   text-align: left;
-}
-
-.memory-line td:first-child {
-  border-left: 3px solid #009586ba;
 }
 
 .mini-icon {
@@ -285,4 +282,10 @@ table {
   transform: scale(0.9);
 }
 
-.difal-states { font-size: 12px; color: gray; display: block; padding-left: 6px; margin-top: 2px; }
+.difal-states {
+  font-size: 12px;
+  color: gray;
+  display: block;
+  padding-left: 6px;
+  margin-top: 2px;
+}

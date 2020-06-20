@@ -5,13 +5,14 @@ const Pack = require('../bean/pack.js')
 const PackageTypeVault = require('../vault/package-type-vault.js')
 const PackingChartBuilder = require('../builder/packing-chart-builder.js')
 const PackingDaysProvider = require('../provider/packing-days-provider.js')
-const TransportLaws = require('../laws/transport-laws.js')
+const Enum = require('../bean/enumerator.js')
 
 module.exports = class PackingRoutes extends Routes {
   attach () {
     this._page('/packing', (req, res) => {
-      if (Sett.get(res.locals.loggedUser, 8)) {
-        var result = (sale) => {
+      if (global.Sett.get(res.locals.loggedUser, 8)) {
+        var result = async (sale) => {
+          if (sale.id) sale.status = ((await Enum.on('ECCO-SALE-STATUS').get(true)))
           res.render('packing/packing.ejs', {
             sale: sale,
             groups: !sale.id ? PackingProvider.get() : {}
@@ -19,7 +20,7 @@ module.exports = class PackingRoutes extends Routes {
         }
 
         if (req.query.sale) {
-          if (Num.isEan(req.query.sale)) {
+          if (global.Num.isEan(req.query.sale)) {
             PackingHandler.findSaleFromEan(req.query.sale, (sale) => {
               result(sale)
             })
@@ -43,17 +44,17 @@ module.exports = class PackingRoutes extends Routes {
     this._get('/packing-danfe', (req, res) => {
       req.setTimeout(3600000)
       PackingHandler.loadDanfe(res, req.query.nfe)
-    }, true, true)
+    }).skipLogin().cors()
 
     this._get('/packing-transport-tag', (req, res) => {
       req.setTimeout(3600000)
       PackingHandler.loadTransportTag(res, req.query.idnfe)
     })
 
-    this._get('/packing-days', (req, res) => {
-      var from = Dat.query(req.query.from, Dat.firstDayOfMonth())
-      var to = Dat.query(req.query.to, Dat.lastDayOfMonth())
-      var cache = !!(req?.query?.cache)
+    this._post('/packing-days', (req, res) => {
+      var from = Dat.query(req.body.from, Dat.firstDayOfMonth())
+      var to = Dat.query(req.body.to, Dat.lastDayOfMonth())
+      var cache = !!(req?.body?.cache)
 
       PackingDaysProvider.get(from, to, cache, (data) => {
         if (cache) res.set('Cache-Control', 'public, max-age=86400')
@@ -100,15 +101,15 @@ module.exports = class PackingRoutes extends Routes {
     /* --  Packing Types  -- */
 
     this._get('/package-types', (req, res) => {
-      Pack.findAll((err, all) => {
+      Pack.findAll((_err, all) => {
         res.status(200).send(all)
       })
     })
 
     this._get('/packages-registering', (req, res) => {
-      Pack.findAll((err, all) => {
+      Pack.findAll((_err, all) => {
         if (req.query._id) {
-          Pack.findOne({ _id: req.query._id }, (err, pack) => {
+          Pack.findOne({ _id: req.query._id }, (_err, pack) => {
             res.render('packing/package-type-registering', { pack: pack, all: all })
           })
         } else {

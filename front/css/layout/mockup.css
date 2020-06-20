@@ -3,8 +3,8 @@
   height: fit-content;
   max-height: 85%;
   display: flex;
-  min-width: 80%;
-  max-width: 90%;
+  max-width: 95%;
+  min-width: 95%;
   width: fit-content;
   margin: auto;
 }

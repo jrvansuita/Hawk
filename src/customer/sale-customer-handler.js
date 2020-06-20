@@ -1,14 +1,15 @@
 const MagentoCalls = require('../magento/magento-calls.js')
 const EccosysStorer = require('../eccosys/eccosys-storer.js')
-const EccosysProvider = require('../eccosys/eccosys-provider.js')
 const History = require('../bean/history.js')
-
+const Enum = require('../bean/enumerator.js')
 const SaleLoader = require('../loader/sale-loader.js')
 
 module.exports = class SaleCustomerHandler {
   updateSaleStatus (body, callback) {
-    new SaleLoader(body.sale).run((sale) => {
+    new SaleLoader(body.sale).run(async (sale) => {
       this.saleObs = sale.observacaoInterna
+      this.comment = Const.sale_status_update_obs.format(body.obs, body.sale, (await Enum.on('SALE-STATUS').hunt(body.status, 'value'))?.name, body.user.name)
+
       this.updateSaleEccosys(body, () => {
         if (sale.numeroNotaFiscal) {
           this.cancelNfe(body.obs, sale.numeroNotaFiscal, (result) => {
@@ -34,7 +35,7 @@ module.exports = class SaleCustomerHandler {
   _updateSaleMagento (body, callback) {
     this.updateSaleMagento(body, (data) => {
       if (data) {
-        History.notify(body.user.id, 'Status do Pedido', 'O status do pedido {0} foi alterado para {1}'.format(body.sale, Util.getSaleStatusInfo(body.status)), 'Informação')
+        History.notify(body.user.id, 'Status do Pedido', this.comment, 'Informação')
       }
       callback(data)
     })
@@ -44,7 +45,7 @@ module.exports = class SaleCustomerHandler {
     new MagentoCalls().salesOrderUpdate({
       orderIncrementId: body.sale,
       status: body.status,
-      comment: Const.sale_status_update_obs.format(body.obs, Util.getSaleStatusInfo(body.status), body.user.name),
+      comment: this.comment,
       notify: false
     }).then(callback)
   }
@@ -53,7 +54,7 @@ module.exports = class SaleCustomerHandler {
     new EccosysStorer().sale().update({
       situacao: this._getEccosysSituation(body.status),
       numeroDaOrdemDeCompra: body.sale,
-      observacaoInterna: this.saleObs + '\n' + Const.sale_status_update_obs.format(body.obs, Util.getSaleStatusInfo(body.status), body.user.name)
+      observacaoInterna: this.saleObs + '\n' + this.comment
     }).go(() => {
       callback()
     })

@@ -4,6 +4,7 @@ const MaganePoints = require('../handler/manage-points-handler.js')
 const SaleDashboardProvider = require('../provider/performance/sale-dashboard-provider.js')
 const StockDashboardProvider = require('../provider/performance/stock-dashboard-provider.js')
 const Cost = require('../bean/cost.js')
+const Enum = require('../bean/enumerator.js')
 
 module.exports = class PerformanceRoutes extends Routes {
   attach () {
@@ -11,7 +12,7 @@ module.exports = class PerformanceRoutes extends Routes {
       this._resp().sucess(res,
         UsersProvider.getAllUsers()
       )
-    }, true)
+    }).skipLogin()
 
     this._page('/manage-points', (req, res) => {
       if (this._checkPermissionOrGoBack(req, res, 6)) {
@@ -20,8 +21,8 @@ module.exports = class PerformanceRoutes extends Routes {
     })
 
     this._page(['/profile'], (req, res) => {
-      var from = Dat.query(req.query.from, Dat.firstDayOfMonth())
-      var to = Dat.query(req.query.to, Dat.lastDayOfMonth())
+      var from = global.Dat.query(req.query.from, Dat.firstDayOfMonth())
+      var to = global.Dat.query(req.query.to, Dat.lastDayOfMonth())
       var userId = req.query.userid || req.session.loggedUserID
 
       require('../provider/ProfilePerformanceProvider.js').onUserPerformance(
@@ -50,8 +51,10 @@ module.exports = class PerformanceRoutes extends Routes {
 
     /** Sale Dashboard Performance **/
 
-    this._page('/sales-dashboard', (req, res) => {
-      res.render('performance/sales-dashboard')
+    this._page('/sales-dashboard', async (req, res) => {
+      res.render('performance/sales-dashboard', {
+        paymentTypes: await Enum.on('PAY-TYPES').get(true)
+      })
     })
 
     /**

@@ -2,12 +2,13 @@ const Routes = require('./_route.js')
 const CustomerProvider = require('../provider/customer-provider.js')
 const CustomerSendEmailHandler = require('../customer/customer-send-email-handler.js')
 const SaleCustomerHandler = require('../customer/sale-customer-handler.js')
+const Enum = require('../bean/enumerator.js')
 
 module.exports = class CustomerRoutes extends Routes {
   attach () {
     this._page('/customer-service/client', (req, res) => {
-      var redirect = (data) => {
-        res.render('customer/client', { client: data })
+      var redirect = async (data) => {
+        res.render('customer/client', { client: data, saleStatus: (await Enum.on('SALE-STATUS').get(true)) })
       }
 
       if (req.query.id) {
@@ -19,8 +20,8 @@ module.exports = class CustomerRoutes extends Routes {
       }
     })
 
-    this._get('/customer-service/sale-dialog', (req, res) => {
-      res.render('customer/sale', { saleNumber: req.query.saleNumber })
+    this._get('/customer-service/sale-dialog', async (req, res) => {
+      res.render('customer/sale', { saleNumber: req.query.saleNumber, paymentTypes: (await Enum.on('PAY-TYPES').get(true)) })
     })
 
     this._get('/customer-service/sale', (req, res) => {

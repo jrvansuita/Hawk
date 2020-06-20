@@ -9,7 +9,7 @@ module.exports = class UserRoutes extends Routes {
     this._page('/mockup-builder', (req, res) => {
       Mock.findAll((_err, all) => {
         var selected = all.find((e) => {
-          return e._id == req.query._id
+          return e._id === parseInt(req.query._id)
         })
 
         res.render('product/mockup/mockup-builder.ejs', { selected: selected || all[0], all: all })

@@ -1,3 +1,4 @@
+var _cors = {}
 
 module.exports = class {
   constructor (app) {
@@ -23,21 +24,13 @@ module.exports = class {
     return this._register(method || this.lastMethod, [].concat(paths || this.lastPaths).map((e) => { return '/api' + e }), callback || this.lastCallBack, false, true)
   }
 
-  _register (method, paths, callback, pathNotLogged, enableCors) {
+  _register (method, paths, callback) {
     method = method || this.lastMethod
     paths = paths || this.lastPaths
 
-    if (pathNotLogged) {
-      this.addNotLoggedNeeded(paths)
-    }
-
     this.app[method](paths, (req, res) => {
       Response.onTry(res, () => {
-        if (enableCors) {
-          res.setHeader('Access-Control-Allow-Origin', '*')
-          res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-        }
-
+        this._applyCors(paths, res)
         callback(req, res, req.body, res.locals, req.session)
       })
     })
@@ -49,9 +42,26 @@ module.exports = class {
     return this
   }
 
+  skipLogin () {
+    if (this.lastMethod === 'get') { global.skipLoginPaths = [].concat(global.skipLoginPaths, this.lastPaths).filter(Boolean) }
+    return this
+  }
+
+  cors () {
+    _cors[[].concat(this.lastPaths).join('')] = true
+    return this
+  }
+
+  _applyCors (paths, res) {
+    if (_cors[[].concat(paths).join('')]) {
+      res.setHeader('Access-Control-Allow-Origin', '*')
+      res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+    }
+  }
+
   _checkPermissionOrGoBack (req, res, settNum) {
     var user = res.locals.loggedUser
-    if (!Sett.get(user, settNum)) {
+    if (!global.Sett.get(user, settNum)) {
       res.redirect(req.session.lastpath)
       return false
     }
@@ -61,18 +71,6 @@ module.exports = class {
 
   _resp () {
     return Response
-  }
-
-  addNotLoggedNeeded (path) {
-    this.createNotLogged()
-
-    global.pathNotLogged.push(path)
-  }
-
-  createNotLogged () {
-    if (!global.pathNotLogged) {
-      global.pathNotLogged = []
-    }
   }
 }
 

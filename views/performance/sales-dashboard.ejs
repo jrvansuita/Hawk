@@ -18,6 +18,9 @@
 <body>
   <%include ../menus/performance-menu %>
 
+<script>
+    window.paymentTypes = <%- JSON.stringify(paymentTypes)%>
+</script>
   <div class="main">
     <div class="top shadow">
       <div class="search-box">
@@ -59,7 +62,7 @@
 
         <label class="button shadow" id="search-button" tabindex="0">Buscar</label>
 
-        
+
       </div>
 
       <div class="tag-box">

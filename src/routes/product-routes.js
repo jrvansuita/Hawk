@@ -14,21 +14,21 @@ module.exports = class ProductRoutes extends Routes {
   attach () {
     this._get('/product-image', (req, res) => {
       ProductHandler.getImage(req.query.sku, this._resp().redirect(res))
-    })
+    }).skipLogin().cors()
 
     this._get('/product-image-redirect', (req, res) => {
       ProductHandler.getImage(req.query.sku, (product) => {
         res.set('Cache-Control', 'public, max-age=86400') // 1day
         res.redirect(product && product.image ? product.image : req.query.def)
       })
-    }, true, true)
+    }).skipLogin().cors()
 
     this._get('/product-url-redirect', (req, res) => {
       ProductHandler.getImage(req.query.sku, (product) => {
         res.set('Cache-Control', 'public, max-age=86400') // 1day
         res.redirect(product && product.url ? product.url : req.query.def)
       })
-    }, true, true)
+    }).skipLogin().cors()
 
     this._get('/product-child', (req, res) => {
       ProductHandler.getBySku(req.query.sku, false, this._resp().redirect(res))
@@ -106,17 +106,16 @@ module.exports = class ProductRoutes extends Routes {
           this._resp().sucess(res, all)
         })
       } else {
-        new DiagnosticsProvider().findBySku(req.query.sku, (all) => {
+        new DiagnosticsProvider().findBySku(req.query.sku, async (all) => {
           res.set('Cache-Control', 'public, max-age=86400')
 
           var result = []
+          var fixesTypes = (await Enum.on('PROD-DIAG').get(true))
+
           // 1day
           all.forEach((each) => {
             var s = each.toObject()
-            Enum.getMap('PROD-DIAG', (types) => {
-              s.data = types[each.type]
-            })
-
+            s.data = fixesTypes[each.type]
             result.push(s)
           })
 
@@ -140,7 +139,7 @@ module.exports = class ProductRoutes extends Routes {
 
     this._post('/product-local', (req, res) => {
       ProductHandler.updateLocal(req.body.sku, req.body.local, req.body.user, req.query.device, this._resp().redirect(res))
-    }, true)
+    }).skipLogin().cors()
 
     this._post('/product-ncm', (req, res) => {
       ProductHandler.updateNCM(req.body.sku, req.body.ncm, res.locals.loggedUser, this._resp().redirect(res))
@@ -148,7 +147,7 @@ module.exports = class ProductRoutes extends Routes {
 
     this._post('/product-stock', (req, res) => {
       ProductHandler.updateStock(req.body.sku, req.body.stock, req.body.user, req.query.device, this._resp().redirect(res))
-    }, true)
+    }).skipLogin().cors()
 
     this._post('/product-weight', (req, res) => {
       ProductHandler.updateWeight(req.body.sku, req.body.weight, req.body.user, this._resp().redirect(res))

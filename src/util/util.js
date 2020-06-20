@@ -41,20 +41,6 @@ var Util = {
     return JSON.parse(JSON.stringify(object))
   },
 
-  getPaymentType (method) {
-    if (method.includes('boleto')) {
-      return 'Boleto'
-    } else if (method.includes('creditcard')) {
-      return 'Cartão de Crédito'
-    } else if (method.includes('paypal')) {
-      return 'PayPal'
-    } else if (method.includes('free')) {
-      return 'Voucher'
-    } else {
-      return 'Indefinido'
-    }
-  },
-
   ternal (_content, addIndex, data) {
     var content = _content.trim().toLowerCase()
     if (_content) {
@@ -273,84 +259,9 @@ var Util = {
     return name
   },
 
-  getSaleSituationName (status) {
-    switch (status) {
-      case -1:
-        return 'Aguardando pagamento'
-      case 0:
-        return 'Em aberto'
-      case 1:
-        return 'Atendido'
-      case 2:
-        return 'Cancelado'
-      case 3:
-        return 'Pronto para picking'
-      case 4:
-        return 'Pagamento em análise'
-      default:
-        return 'Não encontrado'
-    }
-  },
-
-  getSaleSituationIcon (status) {
-    switch (status) {
-      case 1:
-        return 'paper-checked'
-      case 3:
-        return 'checked'
-      default:
-        return 'alert'
-    }
-  },
-
-  getSaleStatusName (status) {
-    if (status === 'N') {
-      return 'Picking Não Realizado'
-    } else if (status === 'A') {
-      return 'Aguardando Faturamento'
-    } else if (status === 'S') {
-      return 'Faturado'
-    }
-  },
-
-  getSaleStatusInfo (status) {
-    switch (status) {
-      // sale status
-      case 'pending': return 'Pedido Realizado'
-      case 'processing': return 'Pagamento Confirmado'
-      case 'canceled': return 'Cancelado'
-      case 'separation': return 'Em Separação'
-      case 'pending_payment': return 'Pagamento Pendente'
-      case 'payment_review': return 'Aguardando Analise Antifraude'
-      case 'waiting_antifraud_analisys': return 'Análise do Credito'
-      case 'holded': return 'Bloqueado na Expedição'
-      case 'ip_delivered': return 'Entregue'
-      case 'ip_to_be_delivered': return 'Saiu para Entrega'
-      case 'ip_delivery_failed': return 'Entrega Falhou'
-      case 'ip_delivery_late': return 'Atraso na Entrega'
-      case 'ip_in_transit': return 'Em Trânsito'
-      case 'ip_shipped': return 'Despachado'
-      case 'awaiting': return 'Aguardando Devolução'
-      case 'devolucao_recebida': return 'Devolução Recebida'
-      case 'complete': return 'Conferência do(s) produto(s) e NF-e'
-      case 'closed': return 'Estornado'
-      case 'ip_shipped': return 'Despachado'
-    }
-  },
-
   formatCEP (cep) {
     cep = cep.replace(/^(\d{5})(\d)/, '$1-$2')
     return cep
-  },
-
-  getSaleStatusIcon (status) {
-    if (status == 'N') {
-      return 'alert'
-    } else if (status == 'A') {
-      return 'checked'
-    } else if (status == 'S') {
-      return 'paper-checked'
-    }
   },
 
   papersIcon (much) {

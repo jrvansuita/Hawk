@@ -7,13 +7,16 @@ const ImageSaver = require('../image/image-saver.js')
 
 module.exports = class TemplateRoutes extends Routes {
   attach () {
-    var templateRedirect = (req, res, all, type) => {
+    var templateRedirect = async (req, res, all, type) => {
       var selected = all.find((e) => {
-        return e.id === req.query.id
+        return e.id === parseInt(req.query.id)
       })
 
-      Enum.getMap('TEMPL-EMAIL', (usages) => {
-        res.render('templates/templates', { selected: selected || {}, all: all, usages: usages, templateType: type })
+      res.render('templates/templates', {
+        selected: selected || {},
+        all: all,
+        usages: (await Enum.on('TEMPL-EMAIL').get(true)),
+        templateType: type
       })
     }
 
@@ -39,7 +42,7 @@ module.exports = class TemplateRoutes extends Routes {
         })
         res.end(template.content)
       })
-    }, true, true)
+    }).skipLogin().cors()
 
     this._post('/template', (req, res) => {
       TemplateVault.storeFromScreen(req.body, (id) => {
