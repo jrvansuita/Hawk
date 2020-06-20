@@ -1,3 +1,4 @@
+
 var fontColorPicker
 var fontShadowColorPicker
 var discountFontColorPicker
@@ -7,6 +8,8 @@ var discountBackgroundShadowColorPicker
 
 var disableColor = '#e4e4e4'
 
+var refreshBroadcast
+
 $(document).ready(() => {
   fontColorPicker = createColorPicker('font-color', selected.fontColor)
   fontShadowColorPicker = createColorPicker('font-shadow-color', selected.fontShadowColor)
@@ -14,6 +17,8 @@ $(document).ready(() => {
   discountFontShadowColorPicker = createColorPicker('discount-font-shadow-color', selected.discountShadowColor)
   discountBackgroundColorPicker = createColorPicker('discount-background-color', selected.discountBackground)
   discountBackgroundShadowColorPicker = createColorPicker('discount-background-shadow-color', selected.discountBackgroundShadow)
+
+  refreshBroadcast = new Broadcast('refresh-mockup').onReceive(onRefreshPreview)
 
   $('.save-button').click(saveClick)
 
@@ -23,7 +28,6 @@ $(document).ready(() => {
   new ComboBox($('#font-discount'), fontsArr)
     .setAutoShowOptions().load()
 
-  loadPreview()
   updateSizeHint()
 
   $('.mock-img-edit').click(() => {
@@ -57,8 +61,8 @@ $(document).ready(() => {
 
   $('#search-sku').on('keyup', function (e) {
     var key = e.which
-    if (key == 13) {
-      loadPreview()
+    if (key === 13) {
+      callRefreshBroadcast()
     }
   })
 
@@ -72,10 +76,20 @@ $(document).ready(() => {
     $('.settings-box').find('input').val('')
     $('.settings-box').find('input').prop('checked', false)
 
-    $('.mock-preview').css({ opacity: 0 })
-    $('.mock-img-select').css({ opacity: 0 })
+    $('.mock-preview').hide()
+    $('.mock-img-select').hide()
+    $('.back-img-select').hide()
   })
+
+  setTimeout(() => {
+    callRefreshBroadcast()
+  }, 100)
 })
+
+function callRefreshBroadcast () {
+  $('.search-sku-holder > label').text('Carregando...')
+  refreshBroadcast.emit(getRefreshData())
+}
 
 function loadImageResource (el, event) {
   var selectedFile = event.target.files[0]
@@ -113,23 +127,25 @@ function checkFields () {
   return c
 }
 
-var preventCache = 0
+function onRefreshPreview (imageData) {
+  $('.search-sku-holder > label').text('Testar Produto')
 
-function loadPreview () {
-  preventCache++
-  var skuQuery = $('#search-sku').val() ? '&sku=' + $('#search-sku').val() : ''
-  var mockIdQuery = '&mockId=' + selected._id
-
-  $('.mock-preview').animate({ opacity: 0 })
-  new ProductImageLoader($('.mock-preview'))
-    .setOnLoaded(() => {
-      $('.mock-preview').animate({ opacity: 1 })
-    })
-    .src('/product-mockup?_v' + preventCache + skuQuery + mockIdQuery).put()
+  $('.mock-preview').hide(200, () => {
+    $('.mock-preview').attr('src', imageData)
+    $('.mock-preview').show(200)
+  })
 }
 
 function save () {
-  var data = {
+  _post('mockup-builder', getData(), (mockId) => {
+    window.location = 'mockup-builder?_id=' + mockId
+  }, (error, message) => {
+    console.log(error)
+  })
+}
+
+function getData () {
+  return {
     _id: selected._id,
     name: $('#name').val(),
     fontName: $('#font').val(),
@@ -151,12 +167,10 @@ function save () {
     heightProduct: Num.def($('#heightProduct').val()),
     productImgMargins: $('#product-img-margins').val() || null
   }
+}
 
-  _post('mockup-builder', data, (mockId) => {
-    window.location = 'mockup-builder?_id=' + mockId
-  }, (error, message) => {
-    console.log(error)
-  })
+function getRefreshData () {
+  return { sku: $('#search-sku').val(), params: getData() }
 }
 
 function createColorPicker (el, defColor) {
@@ -167,8 +181,8 @@ function createColorPicker (el, defColor) {
     strings: {
       save: 'Salvar'
     },
-    disabled: defColor == 'none',
-    default: defColor == 'none' ? disableColor : defColor,
+    disabled: defColor === 'none',
+    default: defColor === 'none' ? disableColor : defColor,
     swatches: [
       'rgba(244, 67, 54, 1)',
       'rgba(233, 30, 99, 0.95)',

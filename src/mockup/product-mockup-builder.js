@@ -5,9 +5,15 @@ const Mock = require('../bean/mock.js')
 var _settingsCache = {}
 var _productsImgCache = {}
 
-module.exports = class {
-  constructor (id) {
+module.exports = class ProductMockupBuilder {
+  setMockupId (id) {
     this.mockId = id
+    return this
+  }
+
+  setMockup (mock) {
+    this.mock = Mock.normalize(mock)
+    return this
   }
 
   static clearCache () {
@@ -68,13 +74,13 @@ module.exports = class {
   }
 
   loadSettings (callback) {
-    this.mock = _settingsCache[this.mockId]
+    if (!this.mock) this.mock = _settingsCache[this.mockId]
 
     if (this.mock) {
       callback()
     } else {
       Mock.findOne({ _id: this.mockId }, (_err, mock) => {
-        this.mock = Mock.normalize(mock)
+        this.setMockup(mock)
         callback()
       })
     }

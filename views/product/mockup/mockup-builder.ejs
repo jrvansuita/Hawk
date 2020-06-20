@@ -18,7 +18,8 @@
     <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
 
     <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
-
+    <script type="text/javascript" src="/front/js/libs/socket.io.slim.js"></script>
+    <script type="text/javascript" src="front/js/libs/broadcast.js"></script>
     <script type="text/javascript" src="front/js/libs/product-image-loader.js"></script>
 </head>
 
@@ -246,10 +247,14 @@
 
             <div class="main-panel shadow">
 
-                <span class="sub-title">
-                    <input id="search-sku" class="simple-material-input" type="text" placeholder="Código do Produto" />
-                    Previsão
-                </span>
+
+                    <div class="material-input-holder search-sku-holder">
+                        <input type="text" id="search-sku" maxlength="30" autocomplete="off"/>
+                        <span class="bar"></span>
+
+                        <label>Testar Produto </label>
+                    </div>
+
 
 
                 <img class="mock-preview">

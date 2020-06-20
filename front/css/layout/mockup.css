@@ -168,8 +168,9 @@
   position: relative;
   height: auto;
   max-height: 100%;
-  opacity: 0;
-  margin: auto;
+  margin-top: 50px;
+  margin-left: auto;
+  margin-right: auto;
   background: #737373;
   display: block;
 }
@@ -221,7 +222,8 @@
 
 #search-sku {
   width: 130px;
-  float: left;
+
+  /* float: left; */
   font-size: 13px;
 }
 
@@ -337,4 +339,16 @@
 
 .line-bottom {
   width: 90% !important;
+}
+
+.search-sku-holder {
+  /* position: absolute !important; */
+  top: 30px;
+  left: 15px;
+  width: 200px !important;
+}
+
+.loading-circle {
+  display: none;
+  max-width: 22px;
 }

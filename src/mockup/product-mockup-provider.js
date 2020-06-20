@@ -3,14 +3,24 @@ const ProductUrlProvider = require('../provider/product-url-provider.js')
 const ProductMockupBuilder = require('../mockup/product-mockup-builder.js')
 const File = require('../file/file.js')
 const Zip = require('../file/zip.js')
+const Mock = require('../bean/mock.js')
 
 var _productCache = {}
 
-module.exports = class {
-  constructor (mockId, skus) {
-    this.mockId = mockId
+class ProductMockupProvider {
+  constructor (skus) {
     this.skus = skus
     this.folder = './front/_mockups/'
+  }
+
+  with (mockData) {
+    if (typeof mockData === 'object') {
+      this.mock = mockData
+    } else {
+      this.mockId = mockData
+    }
+
+    return this
   }
 
   loadProduct (sku) {
@@ -39,8 +49,11 @@ module.exports = class {
     return new Promise((resolve, reject) => {
       this.loadProduct(sku)
         .then((product) => {
-          new ProductMockupBuilder(this.mockId)
-            .setProduct(product)
+          var builder = new ProductMockupBuilder()
+
+          if (this.mockId) { builder.setMockupId(this.mockId) } else if (this.mock) { builder.setMockup(this.mock) }
+
+          builder.setProduct(product)
             .setOnFinishedListener((canva) => {
               resolve(canva)
             })
@@ -98,3 +111,15 @@ module.exports = class {
     }
   }
 }
+
+module.exports = ProductMockupProvider
+
+var tag = 'refresh-mockup'
+
+global.io.on('connection', (socket) => {
+  socket.on(tag, async (id, data) => {
+    new ProductMockupProvider(data.sku).with(Mock.from(data.params)).load().then(canvas => {
+      global.io.sockets.emit(tag, id, canvas.toDataURL('image/jpeg'))
+    })
+  })
+})
