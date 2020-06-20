@@ -104,9 +104,11 @@ function saveClick () {
 
 function checkFields () {
   var c = checkMaterialInput($('#font'))
-  c = checkMaterialInput($('#width')) & c
-  c = checkMaterialInput($('#height')) & c
+  c = checkMaterialInput($('#widthMock')) & c
+  c = checkMaterialInput($('#heightMock')) & c
   c = checkMaterialInput($('#name')) & c
+  c = checkMaterialInput($('#widthProduct')) & c
+  c = checkMaterialInput($('#heightProduct')) & c
 
   return c
 }
@@ -143,9 +145,11 @@ function save () {
     discountShadowColor: discountFontShadowColorPicker.getSelectedColor().toHEXA().toString(),
     discountBackground: $('#keep-creative-color').is(':checked') ? 'none' : discountBackgroundColorPicker.getSelectedColor().toHEXA().toString(),
     discountBackgroundShadow: discountBackgroundShadowColorPicker.getSelectedColor().toHEXA().toString(),
-    width: Num.def($('#width').val()),
-    height: Num.def($('#height').val()),
-    productTopMargin: $('#product-top-margin').val() || 0
+    width: Num.def($('#widthMock').val()),
+    height: Num.def($('#heightMock').val()),
+    widthProduct: Num.def($('#widthProduct').val()),
+    heightProduct: Num.def($('#heightProduct').val()),
+    productImgMargins: $('#product-img-margins').val() || null
   }
 
   _post('mockup-builder', data, (mockId) => {

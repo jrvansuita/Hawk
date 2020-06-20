@@ -2,11 +2,9 @@
 const cheerio = require('cheerio')
 const https = require('https')
 
+var cache = {}
+
 module.exports = class {
-  constructor () {
-
-  }
-
   parse (data) {
     return new Promise((resolve, reject) => {
       const $ = cheerio.load(data)
@@ -45,8 +43,14 @@ module.exports = class {
   }
 
   async from (url) {
-    const data = await this.get(url)
-    const parsed = await this.parse(data)
-    return parsed
+    if (cache[url]) {
+      return Promise.resolve(cache[url])
+    } else {
+      const data = await this.get(url)
+      const parsed = await this.parse(data)
+
+      cache[url] = parsed
+      return parsed
+    }
   }
 }

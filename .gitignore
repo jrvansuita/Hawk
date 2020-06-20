@@ -4,3 +4,5 @@ node_modules/
 .vscode/
 _tests/coverage
 _apidocs/
+front/_mockups
+front/fonts/typefaces
