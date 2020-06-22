@@ -13,41 +13,46 @@
 
 
   <style>
-  .big{
+  .big {
     font-weight: 800;
     font-size: 22px;
   }
 
-  .bold{
+  .bold {
     font-weight: 800;
     font-size: 18px;
   }
 
-  td, span{
-    font-size:15px;
+  td,
+  span {
+    font-size: 15px;
     font-weight: 500;
     font-family: sans-serif;
   }
 
-  .top{
+  .top {
     padding-bottom: 17px;
     border-bottom: 1px solid #989898;
   }
 
-  .holder{
-    padding: 10px 0px;
+  .holder {
+    padding: 10px 0;
     width: 100%;
   }
 
+  table tr {
+    page-break-inside: avoid;
+  }
 
   tr:nth-child(even) {
     background-color: #f2f2f2;
   }
-  td{
+
+  td {
     padding: 12px 5px;
   }
 
-  table{
+  table {
     width: 100%;
     max-width: 100%;
     background-color: transparent;
@@ -55,19 +60,18 @@
     border-spacing: 0;
   }
 
-  .transp img{
+  .transp img {
     width: 30px;
     height: 30px;
     margin-bottom: -10px;
-
   }
 
-  .vol-inc{
+  .vol-inc {
     border: 2px solid black;
     padding: 4px 6px;
   }
 
-  .bkg-row td{
+  .bkg-row td {
     font-size: 17px;
     font-weight: bold;
     background-color: #e2e2e2;
@@ -100,7 +104,7 @@
         <p>Data da Impressão: <%=Dat.formatwTime(new Date())%></p>
 
       </td>
-      <td style="text-align: right">
+      <td style="text-align: right;">
         <p>Minuta de Despacho [Usuário: <%=shippingOrder.usuario_criacao%>]</p>
         <p class="bold"><%=volTotal + ' Volumes'%></p>
       </td>
