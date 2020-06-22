@@ -58,11 +58,16 @@ module.exports = class JobMundipaggChecker extends Job {
 
   handleSale (sale, nextSale) {
     if (this.saleChecked(sale)) {
-      new MundiApi().sale(sale.numeroDaOrdemDeCompra).go((data) => {
-        if (!this.handleBoleto(sale, data, nextSale)) {
-          this.handleCreditCard(sale, data, nextSale)
-        }
-      })
+      new MundiApi()
+        .sale(sale.numeroDaOrdemDeCompra)
+        .onError((e) => {
+          this.onError(e)
+        })
+        .go((data) => {
+          if (!this.handleBoleto(sale, data, nextSale)) {
+            this.handleCreditCard(sale, data, nextSale)
+          }
+        })
     } else {
       nextSale()
     }

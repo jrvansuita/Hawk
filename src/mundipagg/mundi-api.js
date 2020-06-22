@@ -20,21 +20,30 @@ module.exports = class MundiApi {
     return options
   }
 
+  onError (callback) {
+    this.onError = callback
+    return this
+  }
+
   go (callback) {
-    var req = https.request(this.options(), function (res) {
+    var req = https.request(this.options(), (res) => {
       var responseBody = ''
 
       res.on('data', function (chunk) {
         responseBody += chunk
       })
 
-      res.on('end', function () {
-        callback(JSON.parse(responseBody))
+      res.on('end', () => {
+        try {
+          callback(JSON.parse(responseBody))
+        } catch (e) {
+          if (this.onError) this.onError(e)
+        }
       })
     })
 
     req.on('error', function (e) {
-      console.log(e)
+      if (this.onError) this.onError(e)
     })
     req.end()
   }
