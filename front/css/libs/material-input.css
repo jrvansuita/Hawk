@@ -32,7 +32,7 @@
   font-size: 15px;
   font-weight: normal;
   position: absolute;
-  pointer-events: none;
+  pointer-events: visible;
   margin-top: 18px;
   width: fit-content;
   top: 10px;

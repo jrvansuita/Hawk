@@ -87,7 +87,8 @@ $(document).ready(() => {
 })
 
 function callRefreshBroadcast () {
-  $('.search-sku-holder > label').text('Carregando...')
+  var $loadd = $('<img>').attr('src', '/img/loader/circle.svg').css({ width: '30px', zIndex: '9999', verticalAlign: 'middle', marginTop: '-5px' })
+  $('.search-sku-holder > label').text('Carregando...').append($loadd)
   refreshBroadcast.emit(getRefreshData())
 }
 
@@ -128,7 +129,12 @@ function checkFields () {
 }
 
 function onRefreshPreview (imageData) {
-  $('.search-sku-holder > label').text('Testar Produto')
+  var $img = $('<img>').attr('src', '/img/refresh.png').addClass('freshProduct').css({ cursor: 'pointer', width: '30px', zIndex: '9999', verticalAlign: 'middle', marginTop: '-5px' })
+  $('.search-sku-holder > label').text('Testar Produto').append($img)
+
+  $('.freshProduct').click(() => {
+    callRefreshBroadcast()
+  })
 
   $('.mock-preview').hide(200, () => {
     $('.mock-preview').attr('src', imageData)
