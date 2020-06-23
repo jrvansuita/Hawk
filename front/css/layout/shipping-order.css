@@ -76,7 +76,11 @@ table {
   margin-left: 15px;
 }
 
-.itens-count-display { margin-top: 6px; }
+.shipping-order-number {
+  display: inline;
+}
+
+.itens-count-display { margin-top: 6px; display: contents; }
 
 .middle-line {
   padding: 5px 10px;
@@ -91,7 +95,7 @@ table {
 }
 
 .left-middle-line {
-  width: 80%;
+  width: 60%;
   float: left;
   height: fit-content;
   padding-bottom: 4px;
@@ -100,7 +104,7 @@ table {
 }
 
 .right-middle-line {
-  width: 20%;
+  width: 40%;
   right: 0;
   height: fit-content;
   position: absolute;

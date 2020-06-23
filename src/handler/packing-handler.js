@@ -1,7 +1,5 @@
 const DoneLaws = require('../laws/done-laws.js')
-const PickingLaws = require('../laws/picking-laws.js')
 const SaleLoader = require('../loader/sale-loader.js')
-const BlockLaws = require('../laws/block-laws.js')
 const InprogressLaws = require('../laws/inprogress-laws.js')
 const PendingLaws = require('../laws/pending-laws.js')
 const Err = require('../error/error.js')
@@ -190,7 +188,7 @@ function onFinalPackingShoot (saleNumber, user, callback) {
     .save((sale) => {
       var day = Day.packing(user.id, Dat.today(), sale)
 
-      Day.sync(day, (err, doc) => {
+      Day.sync(day, () => {
         callback(day, sale)
       })
     })

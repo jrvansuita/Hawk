@@ -196,7 +196,7 @@ module.exports = class JobMundipaggChecker extends Job {
   updateMagentoSale (sale, status, msg, callback) {
     var body = {
       orderIncrementId: sale.numeroDaOrdemDeCompra,
-      status: status == 0 ? 'processing' : 'canceled',
+      status: status === 0 ? 'processing' : 'canceled',
       comment: '[Hawk]: ' + msg,
       notify: true
     }

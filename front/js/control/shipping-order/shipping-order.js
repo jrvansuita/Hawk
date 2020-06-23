@@ -15,6 +15,11 @@ $(document).ready(() => {
     }
   })
 
+  $('#clear').click(() => {
+    clearMemory()
+    window.location = location.pathname
+  })
+
   $('.icon-open-list').click(function (e) {
     var tableId = $(this).data('table')
 
@@ -63,8 +68,10 @@ function onInit () {
 
   if (shippingOrder.numeroColeta) {
     $('#save').show()
+    $('#clear').hide()
   } else {
     $('#save').hide()
+    $('#clear').show()
   }
 }
 
@@ -131,7 +138,6 @@ function addLines (nfes) {
   }
 
   $('.nfs-in-holder').show()
-  $('#nf').focus()
 }
 
 function buildLine (each) {
@@ -181,7 +187,7 @@ function createIcon (iconPath) {
 }
 
 function getAllNfs () {
-  return memoryList.concat(shippingOrder._NotasFiscais || [])
+  return memoryList.concat(shippingOrder.id ? shippingOrder._NotasFiscais : [])
 }
 
 function refreshHeader () {
@@ -191,7 +197,7 @@ function refreshHeader () {
   var ufs = {}
 
   getAllNfs().forEach((e) => {
-    vols += parseFloat(e.qtdVolumes)
+    vols += parseInt(e.qtdVolumes)
     val += parseFloat(e.totalFaturado)
     wei += parseFloat(e.pesoTransportadora)
     ufs[e.uf] = ''
@@ -286,12 +292,14 @@ function onInsertNewNfeOnShippingOrder (nfe) {
   addOnMemory(object)
   addLines([object])
   showMsg(null, 'checked', false)
-  beepSucess()
+  window.beepSucess()
   refreshHeader()
 
   if (!shippingOrder.numeroColeta) {
     createNewShippingOrder(nfe)
   }
+
+  $('#nf').focus()
 }
 
 function saveMemory () {
@@ -369,6 +377,7 @@ var isLoadingNewShippingOrder = false
 
 function createNewShippingOrder (firstNfe) {
   if (!isLoadingNewShippingOrder) {
+    $('#nf').attr('disabled', true)
     isLoadingNewShippingOrder = true
     onShippingOrderIsInMemory(firstNfe)
 
@@ -380,6 +389,7 @@ function createNewShippingOrder (firstNfe) {
       shippingOrder = data
       isLoadingNewShippingOrder = false
       onShippingOrderStored()
+      $('#nf').attr('disabled', false)
     }, (err) => {
       showMsg(err.responseText, 'error', true)
     })
