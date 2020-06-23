@@ -12,10 +12,12 @@ module.exports = class PackingRoutes extends Routes {
     this._page('/packing', (req, res) => {
       if (global.Sett.get(res.locals.loggedUser, 8)) {
         var result = async (sale) => {
+          var icons = (await Enum.on('PAPERS-ICONS').get(true))
+
           if (sale.id) sale.status = ((await Enum.on('ECCO-SALE-STATUS').get(true)))
           res.render('packing/packing.ejs', {
             sale: sale,
-            groups: !sale.id ? PackingProvider.get() : {}
+            groups: { icons: icons, ...(!sale.id ? PackingProvider.get() : {}) }
           })
         }
 
