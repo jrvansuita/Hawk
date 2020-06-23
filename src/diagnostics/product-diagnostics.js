@@ -31,10 +31,12 @@ module.exports = class ProductDiagnostics {
     } else if (isMoreThanXDaysRegistered(product, 3)) {
       if (!hasSales(stocks, 7)) {
         if (hasStock(product, true)) {
+          if (!isVisible(product)) {
+            this._storeFix(product, 'NOT_VISIBLE')
+          }
+
           if (!isAssociated(product)) {
             this._storeFix(product, 'ASSOCIATED')
-          } else if (!isVisible(product)) {
-            this._storeFix(product, 'NOT_VISIBLE')
           } else if (isMoreThanXDaysRegistered(product, 25)) {
             this._storeFix(product, 'SALE')
           }
@@ -355,10 +357,8 @@ function isNcmProblem (product) {
 
 function isVisible (product) {
   if (product.feedProduct) {
-    if (product.feedProduct.visible == false) {
-      if (hasStock(product, true)) {
-        return false
-      }
+    if (product.feedProduct.visible !== true) {
+      return false
     }
   }
 
