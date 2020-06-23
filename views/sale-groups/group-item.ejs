@@ -5,12 +5,16 @@
     <div class="group-single-item-holder" data-key="<%=each%>">
 
       <%
+
       var iconPath;
 
       if (group[each].icon){
         iconPath = group[each].icon;
       }else if (typeof showPapers !== 'undefined'){
-        iconPath = Util.papersIcon(group[each].value);
+          iconPath = Object.keys(groups.icons).reduce((acc, key) => {
+            var arr = key.split('-')
+            return acc + (group[each].value >= parseInt(arr[0]) && group[each].value <= parseInt(arr[1]) ? groups.icons[key].icon : '')
+          }, '')
       }
       %>
 
