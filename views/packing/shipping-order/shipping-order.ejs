@@ -38,7 +38,8 @@
           <td>
             <div class="field shipping-order-col">
               <label class="field-title">Ordem de Coleta</label>
-              <label class="info highlighted shipping-order-number"><%=shippingOrder.numeroColeta ? '#' + shippingOrder.numeroColeta : '#0000'%>  <span class="field-title itens-count-display"> </span></label>
+              <label class="info highlighted shipping-order-number"><%=shippingOrder.numeroColeta ? '#' + shippingOrder.numeroColeta : '#0000'%> </label>
+              <label class="field-title itens-count-display"> </label>
             </div>
           </td>
 
@@ -134,7 +135,7 @@
             <div class="nf-input-holder">
               <div class="nf-input-and-icon">
                 <img class="circle shadow icon"  id="nf-icon" class="nf-icon" src="/img/scan-barcode.png" />
-                <input type="text" id="nf"  class="simple-material-input%>" placeholder="Nota Fiscal"   onkeypress="return Num.isNumberKey(event);" autofocus required/>
+                <input type="text" id="nf"  class="simple-material-input%>" placeholder="Nota Fiscal"   onkeypress="return Num.isNumberKey(event);" required/>
                 <span id="progress"></span>
               </div>
               <label class="nf-msg"></label>

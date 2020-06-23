@@ -16,7 +16,7 @@ $(document).ready(() => {
   })
 
   $('#clear').click(() => {
-    clearMemory(true)
+    clearMemory()
     window.location = location.pathname
   })
 
@@ -138,7 +138,6 @@ function addLines (nfes) {
   }
 
   $('.nfs-in-holder').show()
-  $('#nf').focus()
 }
 
 function buildLine (each) {
@@ -188,7 +187,7 @@ function createIcon (iconPath) {
 }
 
 function getAllNfs () {
-  return memoryList.concat(shippingOrder._NotasFiscais || [])
+  return memoryList.concat(shippingOrder.id ? shippingOrder._NotasFiscais : [])
 }
 
 function refreshHeader () {
@@ -198,7 +197,7 @@ function refreshHeader () {
   var ufs = {}
 
   getAllNfs().forEach((e) => {
-    vols += parseFloat(e.qtdVolumes)
+    vols += parseInt(e.qtdVolumes)
     val += parseFloat(e.totalFaturado)
     wei += parseFloat(e.pesoTransportadora)
     ufs[e.uf] = ''
@@ -293,12 +292,14 @@ function onInsertNewNfeOnShippingOrder (nfe) {
   addOnMemory(object)
   addLines([object])
   showMsg(null, 'checked', false)
-  beepSucess()
+  window.beepSucess()
   refreshHeader()
 
   if (!shippingOrder.numeroColeta) {
     createNewShippingOrder(nfe)
   }
+
+  $('#nf').focus()
 }
 
 function saveMemory () {
