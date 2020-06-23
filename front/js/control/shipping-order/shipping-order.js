@@ -377,6 +377,7 @@ var isLoadingNewShippingOrder = false
 
 function createNewShippingOrder (firstNfe) {
   if (!isLoadingNewShippingOrder) {
+    $('#nf').attr('disabled', true)
     isLoadingNewShippingOrder = true
     onShippingOrderIsInMemory(firstNfe)
 
@@ -388,6 +389,7 @@ function createNewShippingOrder (firstNfe) {
       shippingOrder = data
       isLoadingNewShippingOrder = false
       onShippingOrderStored()
+      $('#nf').attr('disabled', false)
     }, (err) => {
       showMsg(err.responseText, 'error', true)
     })
