@@ -63,9 +63,8 @@ class ProductMockupProvider {
   }
 
   _canvasToFile (sku, canvas, callback) {
-    new File()
+    new File(this.folder)
       .setName(sku + '.png')
-      .setFolder(this.folder)
       .fromCanvas(canvas)
       .save(callback)
   }

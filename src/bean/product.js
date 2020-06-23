@@ -92,7 +92,7 @@ module.exports = class Product extends DataAccess {
     Product.aggregate([{ $match: query }, { $facet: result }], (_err, data) => {
       data = data?.[0] || {}
 
-      callback(data)
+      callback(_err, data)
     })
   }
 
