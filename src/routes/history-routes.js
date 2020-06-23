@@ -1,10 +1,11 @@
 const Routes = require('./_route.js')
 const HistoryLaws = require('../laws/history-laws.js')
+const Enum = require('../bean/enumerator.js')
 
 module.exports = class HistoryRoutes extends Routes {
   attach () {
-    this._page('/history', (req, res) => {
-      res.render('history/history', { tag: req.query.tag })
+    this._page('/history', async (req, res) => {
+      res.render('history/history', { tag: req.query.tag, icons: (await Enum.on('HISTORY-ICONS').get(true)) })
     })
 
     this._get('/history-page', (req, res) => {

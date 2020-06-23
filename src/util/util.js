@@ -219,18 +219,6 @@ var Util = {
     }
   },
 
-  historyIcon (status) {
-    if (status == 1) {
-      return 'alert'
-    } else if (status == 2) {
-      return 'error'
-    } else if (status == 3) {
-      return 'notification'
-    } else if (status == 4) {
-      return 'gear'
-    }
-  },
-
   ellipsis (str, max) {
     if (str.length > max + 3) {
       return str.substring(0, max) + '...'
