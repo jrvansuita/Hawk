@@ -15,6 +15,11 @@ $(document).ready(() => {
     }
   })
 
+  $('#clear').click(() => {
+    clearMemory(true)
+    window.location = location.pathname
+  })
+
   $('.icon-open-list').click(function (e) {
     var tableId = $(this).data('table')
 
@@ -63,8 +68,10 @@ function onInit () {
 
   if (shippingOrder.numeroColeta) {
     $('#save').show()
+    $('#clear').hide()
   } else {
     $('#save').hide()
+    $('#clear').show()
   }
 }
 
