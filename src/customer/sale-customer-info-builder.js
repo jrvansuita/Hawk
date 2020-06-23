@@ -77,7 +77,7 @@ class SaleWrapper {
     this.nf = erp.numeroNotaFiscal
     this.status = store.status
     this.situation = (await Enum.on('ECCO-SALE-STATUS').hunt(erp.situacao, 'value'))?.name
-    this.pickingStatus = Util.getSaleStatusName(erp.pickingRealizado)
+    this.pickingStatus = (await Enum.on('ECCO-SALE-STATUS').hunt(erp.pickingRealizado, 'value'))?.name
     this.saleDate = Dat.formatwTime(Dat.rollHour(new Date(store.created_at), -3))
     this.date = store.created_at
     this.subtotal = Floa.def(store.base_subtotal)
