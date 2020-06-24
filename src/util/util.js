@@ -274,12 +274,6 @@ var Util = {
     return desc || ''
   },
 
-  colorVal: function (str, alpha) {
-    var color = Colors[str.replace(' ', '').toLowerCase()]
-
-    return color ? '#' + color + (alpha || '') : undefined
-  },
-
   colorBrightness (color) {
     // Variables for red, green, blue values
     var r, g, b, hsp
@@ -360,31 +354,6 @@ var Util = {
     return user.token && (user.token.length > 100)
   }
 
-}
-
-var Colors = {
-  vermelho: 'f33a26',
-  azul: '4984f9',
-  azulmarinho: '072586',
-  amarelo: 'fde300',
-  verde: '2ed268',
-  rosa: 'ff89ee',
-  pink: 'ce50a1',
-  salmao: 'f99a84',
-  offwhite: 'fbf7f5',
-  branco: 'ffffff',
-  cinza: '979798',
-  laranja: 'e69939',
-  preto: '4a4646',
-  roxo: 'aa6bc7',
-  bordo: '964242',
-  royal: '4a49a7',
-  marrom: '8c6751',
-  bege: 'e0cebc',
-  lilas: 'a79bd8',
-  jeans: '8699b3',
-  dourado: 'deb647',
-  vinho: '904366'
 }
 
 if (typeof module !== 'undefined') { module.exports = Util }
