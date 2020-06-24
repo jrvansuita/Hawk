@@ -194,9 +194,10 @@ module.exports = class ProductRoutes extends Routes {
       this._resp().sucess(res)
     })
 
-    this._page('/product-list', (req, res) => {
+    this._page('/product-list', async (req, res) => {
       res.locals.productListQuery = req.body.query || req.session.productListQuery
-      res.render('product/board/product-list')
+
+      res.render('product/board/product-list', { colors: (await Enum.on('COLOR-LIST').get()) })
     })
 
     this._post('/product-list', (req, res) => {

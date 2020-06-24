@@ -337,13 +337,14 @@ function applyTagColor (tag) {
   if (attr) {
     var color
 
-    if (attr == 'color') {
-      color = Util.colorVal(value)
-
-      if (!color || Util.colorBrightness(color) > 230) {
-        return tag
+    Colors.items.forEach((each) => {
+      if (attr == 'color' && each.name == value) {
+        color = each.value
+        if (!color || Util.colorBrightness(color) > 230) {
+          return tag
+        }
       }
-    }
+    })
 
     if (color) {
       weakColor = color + '07'
