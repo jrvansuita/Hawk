@@ -144,7 +144,7 @@ function buildBoxes (results) {
 
       var subDblClick = (e) => {
         e.stopPropagation()
-        window.open('/product?sku=' + each.name, '_blank')
+        window.open('/stock/product?sku=' + each.name, '_blank')
       }
 
       box.img('/product-image-redirect?sku=' + each.name, each.items, each.stock, each.name, 'copiable', Math.trunc(each.score), click, null, subDblClick, scoreStyling(each))

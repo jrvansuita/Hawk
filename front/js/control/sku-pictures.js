@@ -128,7 +128,7 @@ function loadImagesHolder (listHolder, each) {
         window.open('/product-url-redirect?sku=' + sku)
       })
       $skusHolder.append(createSingleTag(sku)).dblclick(() => {
-        window.open('/product?sku=' + sku)
+        window.open('/stock/product?sku=' + sku)
       })
       applyTagColor($skusHolder.children('span'))
     }

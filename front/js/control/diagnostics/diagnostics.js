@@ -145,7 +145,7 @@ function buildSingleRow (holder, row) {
 
   $subsHolder.dblclick((e) => {
     e.stopPropagation()
-    window.open('/product?sku=' + row.sku, '_blank')
+    window.open('/stock/product?sku=' + row.sku, '_blank')
   })
 
   var $div = $('<div>').addClass('row-item shadow').attr('data-sku', row.sku).append($img, $subsHolder)

@@ -220,7 +220,7 @@ function createTitle (product) {
 
   var sku = $('<span>').text(product.sku).addClass('sku copiable').dblclick(function () {
     window.open(
-      '/product?sku=' + $(this).text(),
+      '/stock/product?sku=' + $(this).text(),
       '_blank' // <- This is what makes it open in a new window.
     )
   })
