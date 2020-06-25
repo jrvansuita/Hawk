@@ -14,14 +14,9 @@ module.exports = class EnumeratorRoutes extends Routes {
       })
     })
 
-    this._get('/enum', (req, res) => {
+    this._get('/enum', async (req, res) => {
       var find = Num.def(req.query.id, 0) || req.query.tag
-
-      if (req.query.keys) {
-        Enumerator.getMap(find, data => { res.send(data) })
-      } else {
-        Enumerator.get(find, data => { res.send(data) })
-      }
+      res.send((await Enumerator.on(find).get(!!req.query.keys)))
     })
 
     this._post('/enumerators', (req, res) => {

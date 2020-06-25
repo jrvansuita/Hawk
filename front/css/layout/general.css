@@ -462,3 +462,14 @@ table {
   min-width: 23px;
   cursor: pointer;
 }
+
+
+/* created by vonmesch to be used in enumerators */
+.left-panel::-webkit-scrollbar {
+    width: 6px;
+    background: rgb(245, 237, 237);
+}
+
+ .left-panel::-webkit-scrollbar-thumb {
+    background: #dad7d7;
+}

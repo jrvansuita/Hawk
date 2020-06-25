@@ -188,7 +188,7 @@ function buildProductFirstCol (item, slim, pending) {
     .attr('placeholder', item.codigo)
     .dblclick(() => {
       window.open(
-        '/product?sku=' + item.codigo,
+        '/stock/product?sku=' + item.codigo,
         '_blank' // <- This is what makes it open in a new window.
       )
     })

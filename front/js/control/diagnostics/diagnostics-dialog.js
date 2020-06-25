@@ -32,7 +32,7 @@ $(document).ready(() => {
 
   $('.fixes-sku-list.copiable').dblclick(function (e) {
     e.stopPropagation()
-    window.open('/product?sku=' + $(this).text(), '_blank')
+    window.open('/stock/product?sku=' + $(this).text(), '_blank')
   })
 
   Dropdown.on($('.no-problem-menu'))

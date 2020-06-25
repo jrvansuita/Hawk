@@ -220,7 +220,7 @@ function createTitle (product) {
 
   var sku = $('<span>').text(product.sku).addClass('sku copiable').dblclick(function () {
     window.open(
-      '/product?sku=' + $(this).text(),
+      '/stock/product?sku=' + $(this).text(),
       '_blank' // <- This is what makes it open in a new window.
     )
   })
@@ -337,13 +337,14 @@ function applyTagColor (tag) {
   if (attr) {
     var color
 
-    if (attr == 'color') {
-      color = Util.colorVal(value)
-
-      if (!color || Util.colorBrightness(color) > 230) {
-        return tag
+    Colors.items.forEach((each) => {
+      if (attr == 'color' && each.name == value) {
+        color = each.value
+        if (!color || Util.colorBrightness(color) > 230) {
+          return tag
+        }
       }
-    }
+    })
 
     if (color) {
       weakColor = color + '07'

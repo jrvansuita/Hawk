@@ -12,6 +12,8 @@ const Enum = require('../bean/enumerator')
 
 module.exports = class ProductRoutes extends Routes {
   attach () {
+    /* ---- Redirects ---- */
+
     this._get('/product-image', (req, res) => {
       ProductHandler.getImage(req.query.sku, this._resp().redirect(res))
     }).skipLogin().cors()
@@ -30,6 +32,8 @@ module.exports = class ProductRoutes extends Routes {
       })
     }).skipLogin().cors()
 
+    /* ---- Get Product ---- */
+
     this._get('/product-child', (req, res) => {
       ProductHandler.getBySku(req.query.sku, false, this._resp().redirect(res))
     })
@@ -46,7 +50,17 @@ module.exports = class ProductRoutes extends Routes {
       ProductHandler.searchAutoComplete(req.query.typing, this._resp().redirect(res))
     })
 
-    this._page('/product', (req, res) => {
+    this._get('/product-child', (req, res) => {
+      ProductHandler.getBySku(req.query.sku, false, this._resp().redirect(res))
+    })
+
+    this._get('/product', (req, res) => {
+      ProductLaws.get(req.query.sku || req.query.ean, false, this._resp().redirect(res))
+    })._api()
+
+    /* ---- Render ---- */
+
+    this._page('/stock/product', (req, res) => {
       var skuOrEan = req.query.sku || req.query.ean
 
       ProductLaws.load(skuOrEan, (result) => {
@@ -125,10 +139,8 @@ module.exports = class ProductRoutes extends Routes {
     })
 
     this._get('/fixes-dialog', (req, res) => {
-      new DiagnosticsProvider().loadBySku(req.query.sku, (all, product) => {
-        Enum.getMap('PROD-DIAG', (types) => {
-          res.render('product/diagnostics/diagnostics-dialog', { data: all, product: product, types: types })
-        })
+      new DiagnosticsProvider().loadBySku(req.query.sku, async (all, product) => {
+        res.render('product/diagnostics/diagnostics-dialog', { data: all, product: product, types: (await Enum.on('PROD-DIAG').get(true)) })
       })
     })
 
@@ -138,16 +150,16 @@ module.exports = class ProductRoutes extends Routes {
     })
 
     this._post('/product-local', (req, res) => {
-      ProductHandler.updateLocal(req.body.sku, req.body.local, req.body.user, req.query.device, this._resp().redirect(res))
-    }).skipLogin().cors()
+      ProductHandler.updateLocal(req.body.sku, req.body.local, req.body.user, req.query.device || req.headers.device, this._resp().redirect(res))
+    })._api()
+
+    this._post('/product-stock', (req, res) => {
+      ProductHandler.updateStock(req.body.sku, req.body.stock, req.body.user, req.query.device || req.headers.device, this._resp().redirect(res))
+    })._api()
 
     this._post('/product-ncm', (req, res) => {
       ProductHandler.updateNCM(req.body.sku, req.body.ncm, res.locals.loggedUser, this._resp().redirect(res))
     })
-
-    this._post('/product-stock', (req, res) => {
-      ProductHandler.updateStock(req.body.sku, req.body.stock, req.body.user, req.query.device, this._resp().redirect(res))
-    }).skipLogin().cors()
 
     this._post('/product-weight', (req, res) => {
       ProductHandler.updateWeight(req.body.sku, req.body.weight, req.body.user, this._resp().redirect(res))
@@ -180,9 +192,10 @@ module.exports = class ProductRoutes extends Routes {
       this._resp().sucess(res)
     })
 
-    this._page('/product-list', (req, res) => {
+    this._page('/product-list', async (req, res) => {
       res.locals.productListQuery = req.body.query || req.session.productListQuery
-      res.render('product/board/product-list')
+
+      res.render('product/board/product-list', { colors: (await Enum.on('COLOR-LIST').get()) })
     })
 
     this._post('/product-list', (req, res) => {

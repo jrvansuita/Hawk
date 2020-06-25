@@ -20,6 +20,7 @@
     <%include ../../menus/stock-menu %>
     <script>
         window.memoryQuery = <%- JSON.stringify(locals.productListQuery ? locals.productListQuery : {}) %>
+        window.Colors = <%- JSON.stringify(colors) %>
     </script>
 
     <div class="main ">

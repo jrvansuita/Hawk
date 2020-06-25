@@ -97,7 +97,7 @@ $(document).ready(() => {
 
   $(".blocked-sale-label[data-reason='994']").dblclick(function () {
     window.open(
-      '/product?sku=' + $(this).text(),
+      '/stock/product?sku=' + $(this).text(),
       '_blank' // <- This is what makes it open in a new window.
     )
   })

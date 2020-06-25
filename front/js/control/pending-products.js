@@ -1,7 +1,7 @@
 $(document).ready(() => {
   $('.sku.copiable').dblclick(function () {
     window.open(
-      '/product?sku=' + $(this).text(),
+      '/stock/product?sku=' + $(this).text(),
       '_blank' // <- This is what makes it open in a new window.
     )
   })
@@ -33,7 +33,7 @@ $(document).ready(() => {
     if (!$(each).data('father')) {
       drop.item('/img/print.png', 'Localizações', (helper) => {
         console.log(helper)
-        window.open('/product-print-locals?sku=' + helper.data.sku, '_blank')
+        window.open('/stock/product-print-locals?sku=' + helper.data.sku, '_blank')
       })
     }
 

@@ -38,6 +38,6 @@ module.exports = class LoginRoutes extends Routes {
         req.session = null
         res.status(200).send(null)
       }
-    })
+    })._api()
   }
 }

@@ -6,19 +6,25 @@ module.exports = {
 
   load (eanOrSku, callback) {
     if (eanOrSku) {
-      ProductHandler.get(eanOrSku, true, (product) => {
-        if (product) {
-          handleAttrs(product, callback)
-        } else {
-          callback({
-            selected: eanOrSku,
-            error: 'Nenhum produto com o(s) código(s) informado(s) foi encontrado.'
-          })
-        }
-      })
+      this.get(eanOrSku, true, callback)
     } else {
+      // eslint-disable-next-line standard/no-callback-literal
       callback({})
     }
+  },
+
+  get (eanOrSku, father, callback) {
+    ProductHandler.get(eanOrSku, father, (product) => {
+      if (product) {
+        handleAttrs(product, callback)
+      } else {
+        // eslint-disable-next-line standard/no-callback-literal
+        callback({
+          selected: eanOrSku,
+          error: 'Nenhum produto com o(s) código(s) informado(s) foi encontrado.'
+        })
+      }
+    })
   },
 
   updateLocal (sku, newLocal, user, callback) {
