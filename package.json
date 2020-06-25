@@ -13,7 +13,8 @@
     "fix": "npm run lintfa && npm run slintfa",
     "test": "jest --coverage --detectOpenHandles",
     "apidoc": "apidoc -i src/ -o _apidocs/",
-    "apidoc-surge": "surge -p ./_apidocs/ -d hawk-api.surge.sh"
+    "apidoc-surge": "surge -p ./_apidocs/ -d hawk-api.surge.sh",
+    "co" : "git add -A && git commit -m"
   },
   "engines": {
     "node": "14.x"
