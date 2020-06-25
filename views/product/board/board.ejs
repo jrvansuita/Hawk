@@ -18,6 +18,7 @@
 
   <script>
   window.data = <%- JSON.stringify(data || null) %>
+  window.colors = <%- JSON.stringify(colors || null) %>
   </script>
 
   <div class="main">
@@ -120,7 +121,7 @@
             <%data.color.forEach(item=>{%>
 
               <div class="box-item clickable" data-attr="color" data-value="<%=item.title%>">
-                <label class="color-circle cl-<%=item.title.replace(/\s/g, '')%>" title="<%=Str.capitalize(item.title)%>"></label>
+                <label class="color-circle cl-<%=item.title.replace(/\s/g, '')%>" title="<%=Str.capitalize(item.title)%>" style="background-image: <%=colors[item.title]?.description%>; background-color: <%=colors[item.title]?.description%>;"></label>
 
                 <div class="box-item-text">
                   <label class="data-title" title="<%=Num.points(item.quantity)%>"><%=Num.format(item.quantity)%></label>
