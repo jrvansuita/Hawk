@@ -65,7 +65,7 @@ module.exports = class PerformanceRoutes extends Routes {
      * @apiParam {Number} [begin=today] Date starts in 1592265600000
      * @apiParam {Number} [end=today] Date ends in 1592265600000
      * @apiParam {Object} [attrs] An object with categorized filters
-     * @apiParamExample {json} Request-Example:
+     * @apiParamExample {json} Body-Example:
      * {
      *   "begin": 1592265600000
      *   "end": 1592265600000
@@ -119,7 +119,7 @@ module.exports = class PerformanceRoutes extends Routes {
      * @apiParam {Number} [end=today] Date ends in 1592265600000
      * @apiParam {Number} [showSkus=25] Number of skus to get specific data.
      * @apiParam {Object} [attrs] An object with categorized filters
-     * @apiParamExample {json} Request-Example:
+     * @apiParamExample {json} Body-Example:
      * {
      *   "begin": 1592265600000
      *   "end": 1592265600000

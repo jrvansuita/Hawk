@@ -1,4 +1,5 @@
 var _cors = {}
+global._apiWrites = {}
 
 module.exports = class {
   constructor (app) {
@@ -20,7 +21,15 @@ module.exports = class {
     return this._register('post', ...params)
   }
 
-  _api (method, paths, callback) {
+  _api (...params) {
+    this._apiWrite(...params)
+  }
+
+  _apiWrite (...params) {
+    return this._apiRead(...params).writeAccess()
+  }
+
+  _apiRead (method, paths, callback) {
     return this._register(method || this.lastMethod, [].concat(paths || this.lastPaths).map((e) => { return '/api' + e }), callback || this.lastCallBack, false, true)
   }
 
@@ -44,6 +53,11 @@ module.exports = class {
 
   skipLogin () {
     if (this.lastMethod === 'get') { global.skipLoginPaths = [].concat(global.skipLoginPaths, this.lastPaths).filter(Boolean) }
+    return this
+  }
+
+  writeAccess () {
+    global._apiWrites[[].concat(this.lastPaths).join('')] = true
     return this
   }
 
@@ -93,7 +107,7 @@ var Response = {
   },
 
   onRedirect (res, r, e) {
-    if (e != undefined) {
+    if (e !== undefined) {
       this.error(res, e)
     } else {
       this.sucess(res, r)

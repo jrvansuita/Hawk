@@ -149,9 +149,47 @@ module.exports = class ProductRoutes extends Routes {
       res.status(200).send('Ok')
     })
 
+    /**
+     * @api {post} /product-local Stock Localization
+     * @apiGroup Product
+     * @apiParam {String} device Mobile or Desktop
+     * @apiParam {String} sku Product SKU
+     * @apiParam {String} local New product localization
+     * @apiParam {User} user Logged User entity
+     * @apiParamExample Body-Example:
+     *     {
+     *       "sku": "CB318az-P",
+     *       "local": "12.18-1"
+     *       "user" : {...}
+     *     }
+     * @apiParamExample Header-Example:
+     *     {
+     *       "device": "Mobile"
+     *     }
+     */
+
     this._post('/product-local', (req, res) => {
       ProductHandler.updateLocal(req.body.sku, req.body.local, req.body.user, req.query.device || req.headers.device, this._resp().redirect(res))
     })._api()
+
+    /**
+     * @api {post} /product-stock Stock Quantity
+     * @apiGroup Product
+     * @apiParam {String} device Mobile or Desktop
+     * @apiParam {String} sku Product SKU
+     * @apiParam {Integer} stock New product stock quantity
+     * @apiParam {User} user Logged User entity
+     * @apiParamExample Body-Example:
+     *     {
+     *       "sku": "CB318az-P",
+     *       "stock": 25
+     *       "user" : {...}
+     *     }
+     * @apiParamExample Header-Example:
+     *     {
+     *       "device": "Mobile"
+     *     }
+     */
 
     this._post('/product-stock', (req, res) => {
       ProductHandler.updateStock(req.body.sku, req.body.stock, req.body.user, req.query.device || req.headers.device, this._resp().redirect(res))

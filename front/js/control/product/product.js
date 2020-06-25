@@ -398,7 +398,7 @@ function loadObsHistory (child) {
 
       var $tr = $('<tr>').append(buildTextCol(date),
         buildTextCol(user),
-        buildImgCol(platf.includes('Mobile') ? 'img/smartphone.png' : 'img/pc.png', platf),
+        buildImgCol(platf.includes('Mobile') ? '/img/smartphone.png' : '/img/pc.png', platf),
         buildTextCol(type || 'Localização'),
         buildTextCol(data))
 
@@ -483,7 +483,7 @@ function loadLayoutHistory (rows) {
     var $tr = $('<tr>').append(
       buildTextCol(Dat.format(new Date(i.data))),
       buildTextCol(user),
-      buildImgCol(isMobile ? 'img/smartphone.png' : 'img/pc.png', isMobile ? 'Mobile' : 'Desktop'),
+      buildImgCol(isMobile ? '/img/smartphone.png' : '/img/pc.png', isMobile ? 'Mobile' : 'Desktop'),
       buildTextCol(parseInt(i.quantidade)).addClass('stock-val'),
       buildTextCol(obs))
 

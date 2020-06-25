@@ -1,5 +1,6 @@
 const Params = require('../vars/params.js')
 const File = require('../file/file.js')
+const buffer = require('buffer/').Buffer
 
 module.exports = class ServerMidlewares {
   constructor (express) {
@@ -77,9 +78,7 @@ module.exports = class ServerMidlewares {
         req.headers.device = req.headers.device || 'api'
 
         if (this.userLoader.checkUser(req.headers.access, req.headers.pass ?? '')) {
-          if (!global.Arr.isIn(Params.apiAppKeys(), req.headers.appkey ?? '')) {
-            global.Err.thrw('APIKEY')
-          }
+          this._checkApiKeyCall(req)
         }
 
         next('router')
@@ -138,5 +137,22 @@ module.exports = class ServerMidlewares {
         History.error(err)
       }
     })
+  }
+
+  _checkApiKeyCall (req) {
+    var appKey = global.Arr.find(Params.apiAppKeys(), req.headers.appkey)
+
+    if (appKey) {
+      if (req.method !== 'GET') {
+        if (global._apiWrites[req.baseUrl]) {
+          var type = buffer.from(appKey, 'base64')?.toString('ascii')?.split('-')?.pop()
+          if (!type.includes('W')) {
+            global.Err.thrw('No Write Permission')
+          }
+        }
+      }
+    } else {
+      global.Err.thrw('APIKEY not found')
+    }
   }
 }

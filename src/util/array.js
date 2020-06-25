@@ -8,6 +8,12 @@ var Arr = {
     return !this.isIn(array, str)
   },
 
+  find (array, str, compareFunc) {
+    return array.find((s) => {
+      return compareFunc ? compareFunc() : str === s
+    })
+  },
+
   isIn (array, str) {
     return this.matchAny(array, str)
   },
