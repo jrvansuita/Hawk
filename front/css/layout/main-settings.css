@@ -1,4 +1,3 @@
-
 .main-table {
   margin-top: 70px;
   margin-left: auto;
@@ -67,4 +66,72 @@
 
 .button {
   padding: 8px 0;
+}
+
+.box-content-api-holder {
+  border-radius: 5px;
+  border: 1px solid #dcd7d7;
+  width: 95%;
+  margin: auto;
+  padding: 0;
+}
+
+.box-content-api {
+  display: flex;
+  padding: 0 18px;
+  position: relative;
+}
+
+.box-content-api .material-input-holder {
+  margin-right: 10px;
+}
+
+.api-item {
+  margin-right: 10px;
+}
+
+.api-item:hover {
+  cursor: pointer;
+}
+
+.save {
+  height: fit-content;
+}
+
+#api-permission {
+  max-width: 30px;
+}
+
+.table-api {
+  width: 100%;
+}
+
+.table-api tr:nth-child(odd) {
+  background-color: #f2f2f2;
+}
+
+.table-api td {
+  padding: 5px;
+}
+
+.menu-dots {
+  padding-left: 20px;
+  margin: auto;
+  margin-right: 0;
+}
+
+.item-span {
+  display: flex;
+  font-size: 13px;
+  width: 100%;
+}
+
+.title td {
+  background-color: #dadada;
+  color: #545454;
+  font-size: 13px;
+}
+
+.table-api td:nth-child(1) {
+  width: 100px;
 }

@@ -5,11 +5,14 @@
 <head>
 
 
-  <link rel="stylesheet" type="text/css" href="/front/css/layout/main-settings.css">
-  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
-  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-checkbox.css">
-  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
-  <script type="text/javascript" src="/front/js/control/main-settings.js"></script>
+    <link rel="stylesheet" type="text/css" href="/front/css/layout/main-settings.css">
+    <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
+    <link rel="stylesheet" type="text/css" href="/front/css/libs/material-checkbox.css">
+    <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+    <script type="text/javascript" src="/front/js/control/main-settings.js"></script>
+    <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
+    <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
+
 
 
 </head>
@@ -18,330 +21,310 @@
 <body>
 
 
-  <table class="main-table">
-    <tr>
-      <td>
-        <div class="box shadow">
-          <span class="box-title">
-            <img src="img/website.png">
-            <label>Ecommerce</label>
-          </span>
+    <table class="main-table">
+        <tr>
+            <td>
+                <div class="box shadow">
+                    <span class="box-title">
+                        <img src="img/website.png">
+                        <label>Ecommerce</label>
+                    </span>
 
-          <div class="box-content">
-            <div class="material-input-holder">
-              <input type="text" id="store-url" maxlength="50"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Endereço da Loja</label>
-            </div>
+                    <div class="box-content">
+                        <div class="material-input-holder">
+                            <input type="text" id="store-url" maxlength="50" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>Endereço da Loja</label>
+                        </div>
 
-            <div class="material-input-holder">
-              <input type="text" id="store-feed-url" maxlength="250"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Caminho Feed XML</label>
-            </div>
+                        <div class="material-input-holder">
+                            <input type="text" id="store-feed-url" maxlength="250" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>Caminho Feed XML</label>
+                        </div>
 
-            <div class="material-input-holder">
-              <input type="text" id="tracking-url" maxlength="250"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Url de Rastreio Interno</label>
-            </div>
+                        <div class="material-input-holder">
+                            <input type="text" id="tracking-url" maxlength="250" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>Url de Rastreio Interno</label>
+                        </div>
 
-            <div class="material-input-holder">
-              <input type="text" id="tracking-url-ext" maxlength="250"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Url de Rastreio</label>
-            </div>
+                        <div class="material-input-holder">
+                            <input type="text" id="tracking-url-ext" maxlength="250" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>Url de Rastreio</label>
+                        </div>
 
-          </div>
-        </div>
-      </td>
+                    </div>
+                </div>
+            </td>
 
-      <td>
-        <div class="box shadow">
-          <span class="box-title">
-            <img src="img/magento.png">
-            <label>Magento</label>
-          </span>
+            <td>
+                <div class="box shadow">
+                    <span class="box-title">
+                        <img src="img/magento.png">
+                        <label>Magento</label>
+                    </span>
 
-          <div class="box-content">
-            <div class="material-input-holder">
-              <input type="text" id="magento-url" maxlength="150"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Endereço do Admin</label>
-            </div>
+                    <div class="box-content">
+                        <div class="material-input-holder">
+                            <input type="text" id="magento-url" maxlength="150" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>Endereço do Admin</label>
+                        </div>
 
 
-            <div class="material-input-holder">
-              <input type="text" id="xmlrpc-path" maxlength="40"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Caminho XMLRPC</label>
-            </div>
+                        <div class="material-input-holder">
+                            <input type="text" id="xmlrpc-path" maxlength="40" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>Caminho XMLRPC</label>
+                        </div>
 
-            <div class="material-input-holder">
-              <input type="text" id="magento-login" maxlength="50"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Login</label>
-            </div>
+                        <div class="material-input-holder">
+                            <input type="text" id="magento-login" maxlength="50" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>Login</label>
+                        </div>
 
-            <div class="material-input-holder">
-              <input type="text" id="magento-pass" maxlength="50"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Senha</label>
-            </div>
+                        <div class="material-input-holder">
+                            <input type="text" id="magento-pass" maxlength="50" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>Senha</label>
+                        </div>
 
-          </div>
-        </div>
-      </td>
+                    </div>
+                </div>
+            </td>
 
-      <td>
-        <div class="box shadow">
-          <span class="box-title">
-            <img src="img/eccosys.png">
-            <label>Eccosys</label>
-          </span>
+            <td>
+                <div class="box shadow">
+                    <span class="box-title">
+                        <img src="img/eccosys.png">
+                        <label>Eccosys</label>
+                    </span>
 
-          <div class="box-content">
-            <div class="material-input-holder">
-              <input type="text" id="eccosys-url" maxlength="200"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Endereço</label>
-            </div>
+                    <div class="box-content">
+                        <div class="material-input-holder">
+                            <input type="text" id="eccosys-url" maxlength="200" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>Endereço</label>
+                        </div>
 
 
-            <div class="material-input-holder">
-              <input type="text" id="eccosys-api" maxlength="200"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Chave de API</label>
-            </div>
+                        <div class="material-input-holder">
+                            <input type="text" id="eccosys-api" maxlength="200" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>Chave de API</label>
+                        </div>
 
-            <div class="material-input-holder">
-              <input type="text" id="eccosys-secret" maxlength="200"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Segredo</label>
-            </div>
+                        <div class="material-input-holder">
+                            <input type="text" id="eccosys-secret" maxlength="200" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>Segredo</label>
+                        </div>
 
-            <div class="material-input-holder">
-              <input type="text" id="eccosys-api-down-email" maxlength="250"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Email de Reporte de API</label>
-            </div>
+                        <div class="material-input-holder">
+                            <input type="text" id="eccosys-api-down-email" maxlength="250" autocomplete="off"
+                                required />
+                            <span class="bar"></span>
+                            <label>Email de Reporte de API</label>
+                        </div>
 
-          </div>
-        </div>
-      </td>
+                    </div>
+                </div>
+            </td>
 
-      <td>
-        <div class="box shadow">
-          <span class="box-title">
-            <img src="img/envelop.png">
-            <label>Email</label>
-          </span>
+            <td>
+                <div class="box shadow">
+                    <span class="box-title">
+                        <img src="img/envelop.png">
+                        <label>Email</label>
+                    </span>
 
-          <div class="box-content">
-            <div class="material-input-holder">
-              <input type="text" id="email-name" maxlength="200"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Nome E-mail</label>
-            </div>
+                    <div class="box-content">
+                        <div class="material-input-holder">
+                            <input type="text" id="email-name" maxlength="200" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>Nome E-mail</label>
+                        </div>
 
 
-            <div class="material-input-holder">
-              <input type="text" id="email" maxlength="200"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>E-mail</label>
-            </div>
+                        <div class="material-input-holder">
+                            <input type="text" id="email" maxlength="200" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>E-mail</label>
+                        </div>
 
-            <div class="material-input-holder">
-              <input type="text" id="email-pass" maxlength="50"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Senha</label>
-            </div>
+                        <div class="material-input-holder">
+                            <input type="text" id="email-pass" maxlength="50" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>Senha</label>
+                        </div>
 
-            <div class="material-input-holder">
-              <input type="text" id="email-reply" maxlength="200"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>E-mail Resposta</label>
-            </div>
+                        <div class="material-input-holder">
+                            <input type="text" id="email-reply" maxlength="200" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>E-mail Resposta</label>
+                        </div>
 
 
-          </div>
-        </div>
-      </td>
+                    </div>
+                </div>
+            </td>
 
 
-      <td>
-        <div class="box shadow">
-          <span class="box-title">
-            <img src="img/getresponse.png">
-            <label>GetResponse</label>
-          </span>
+            <td>
+                <div class="box shadow">
+                    <span class="box-title">
+                        <img src="img/getresponse.png">
+                        <label>GetResponse</label>
+                    </span>
 
-          <div class="box-content">
-            <div class="material-input-holder">
-              <input type="text" id="getresponse-key" maxlength="50"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Chave de API</label>
-            </div>
+                    <div class="box-content">
+                        <div class="material-input-holder">
+                            <input type="text" id="getresponse-key" maxlength="50" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>Chave de API</label>
+                        </div>
 
-            <div class="material-input-holder">
-              <input type="text" id="getresponse-domain" maxlength="50"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Domínio</label>
-            </div>
+                        <div class="material-input-holder">
+                            <input type="text" id="getresponse-domain" maxlength="50" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>Domínio</label>
+                        </div>
 
-            <div class="material-input-holder">
-              <input type="text" id="getresponse-base-id" maxlength="50"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>ID da Base</label>
-            </div>
+                        <div class="material-input-holder">
+                            <input type="text" id="getresponse-base-id" maxlength="50" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>ID da Base</label>
+                        </div>
 
-            <label class="pure-material-checkbox">
-              <input type="checkbox" id="getresponse-checkbox" name="get-check" maxlength="50"
-              autocomplete="off" required/>
+                        <label class="pure-material-checkbox">
+                            <input type="checkbox" id="getresponse-checkbox" name="get-check" maxlength="50"
+                                autocomplete="off" required />
 
-              <span>Enviar emails para a base</span>
-            </label>
-          </div>
-        </div>
-      </td>
+                            <span>Enviar emails para a base</span>
+                        </label>
+                    </div>
+                </div>
+            </td>
 
-    </tr>
+        </tr>
 
-    <tr>
-      <td>
-        <div class="box shadow">
-          <span class="box-title">
-            <img src="img/mundipagg.png">
-            <label>Mundipagg</label>
-          </span>
+        <tr>
+            <td>
+                <div class="box shadow">
+                    <span class="box-title">
+                        <img src="img/mundipagg.png">
+                        <label>Mundipagg</label>
+                    </span>
 
-          <div class="box-content">
+                    <div class="box-content">
 
-            <div class="material-input-holder">
-              <input type="text" id="mundipagg-url" maxlength="200"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Endereço</label>
-            </div>
+                        <div class="material-input-holder">
+                            <input type="text" id="mundipagg-url" maxlength="200" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>Endereço</label>
+                        </div>
 
 
-            <div class="material-input-holder">
-              <input type="text" id="mundipagg-secret" maxlength="200"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Segredo</label>
-            </div>
+                        <div class="material-input-holder">
+                            <input type="text" id="mundipagg-secret" maxlength="200" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>Segredo</label>
+                        </div>
 
-            <label class="pure-material-checkbox">
-              <input type="checkbox" id="recused-payment" name="get-check" maxlength="50"
-              autocomplete="off" required/>
+                        <label class="pure-material-checkbox">
+                            <input type="checkbox" id="recused-payment" name="get-check" maxlength="50"
+                                autocomplete="off" required />
 
-              <span>Enviar e-mails de cancelamento</span>
-            </label>
-
-
-          </div>
-        </div>
-      </td>
-
-      <td>
-        <div class="box shadow">
-          <span class="box-title">
-            <img src="img/imgur.png">
-            <label>Imgur</label>
-          </span>
-
-          <div class="box-content">
-            <div class="material-input-holder">
-              <input type="text" id="imgur-id" maxlength="50"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Identificação</label>
-            </div>
+                            <span>Enviar e-mails de cancelamento</span>
+                        </label>
 
 
-            <div class="material-input-holder">
-              <input type="text" id="imgur-email" maxlength="100"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>E-mail</label>
-            </div>
+                    </div>
+                </div>
+            </td>
 
-            <div class="material-input-holder">
-              <input type="text" id="imgur-pass" maxlength="100"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Senha</label>
-            </div>
+            <td>
+                <div class="box shadow">
+                    <span class="box-title">
+                        <img src="img/imgur.png">
+                        <label>Imgur</label>
+                    </span>
 
-          </div>
-        </div>
-      </td>
-
-
-
-      <td>
-        <div class="box shadow">
-          <span class="box-title">
-            <img src="img/android.png">
-            <label>Hawk Android</label>
-          </span>
-
-          <div class="box-content">
-            <div class="material-input-holder">
-              <input type="text" id="android-id" maxlength="50"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Identificação</label>
-            </div>
+                    <div class="box-content">
+                        <div class="material-input-holder">
+                            <input type="text" id="imgur-id" maxlength="50" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>Identificação</label>
+                        </div>
 
 
-          </div>
-        </div>
-      </td>
+                        <div class="material-input-holder">
+                            <input type="text" id="imgur-email" maxlength="100" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>E-mail</label>
+                        </div>
 
-      <td>
-        <div class="box shadow">
-          <span class="box-title">
-            <img src="img/icon/hawk.png">
-            <label>Hawk API</label>
-          </span>
+                        <div class="material-input-holder">
+                            <input type="text" id="imgur-pass" maxlength="100" autocomplete="off" required />
+                            <span class="bar"></span>
+                            <label>Senha</label>
+                        </div>
 
-          <div class="box-content">
-            <div class="material-input-holder">
-              <input type="text" id="api-app-keys" maxlength="50"
-              autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>App Keys (,)</label>
-            </div>
+                    </div>
+                </div>
+            </td>
+            <!--BOX API KEYS-->
+            <td colspan="2">
+                <div class="box shadow">
+                    <span class="box-title">
+                        <img src="img/icon/hawk.png">
+                        <label>Hawk API</label>
+                    </span>
+                    <div>
+                        <div class="box-content-api api-holder">
+                            <span class="material-input-holder">
+                                <input type="text" id="api-user" class="locked" maxlength="50" autocomplete="off" required />
+                                <span class="bar"></span>
+                                <label>Usuário</label>
+                            </span>
+                            <span class="material-input-holder">
+                                <input type="text" id="api-key" class="locked" maxlength="50" autocomplete="off" required />
+                                <span class="bar"></span>
+                                <label>Chave</label>
+                            </span>
+                            <span class="material-input-holder">
+                                <input type="text" id="api-permission" class="locked" maxlength="50" autocomplete="off" required />
+                                <span class="bar"></span>
+                                <label>Permissão</label>
+                            </span>
+                            <label class="button save shadow">Salvar</label>
+                        </div>
 
-          </div>
-        </div>
-      </td>
+                    </div>
 
-      <td></td>
-    </tr>
-  </table>
+                    <div class="box-content-api-holder">
+                        <table class="table-api">
+                            <tr class="title">
+                                <td>Usuário</td>
+                                <td>Chave</td>
+                                <td>Permissão</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </td>
+            <!--BOX API KEYS-->
+
+            <td>
+
+            </td>
+        </tr>
+    </table>
 
 
 </body>
+
 </html>
