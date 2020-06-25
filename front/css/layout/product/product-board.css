@@ -145,7 +145,7 @@ body {
   background-color: #989898;
   display: -webkit-box;
 }
-
+/*
 .cl-offwhite {
   background-image: linear-gradient(124.1deg, #fffedb 12.3%, #fffef1 65.2%);
 }
@@ -246,7 +246,7 @@ body {
 .cl-bege {
   background-image: linear-gradient(124.1deg, #f3c59d 12.3%, #f5e2d2 65.2%);
 }
-
+*/
 .count-label {
   background-color: #f1f1f1;
   border-radius: 5px;

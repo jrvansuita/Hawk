@@ -177,7 +177,8 @@ module.exports = class ProductRoutes extends Routes {
       ProductBoard.run(async (result) => {
         res.render('product/board/board', {
           data: result,
-          genders: (await Enum.on('BOARD-GENDER').get(true))
+          genders: (await Enum.on('BOARD-GENDER').get(true)),
+          colors: (await Enum.on('COLOR-LIST').mapBy('name').get(true))
         })
       })
     })
