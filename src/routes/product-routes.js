@@ -139,10 +139,8 @@ module.exports = class ProductRoutes extends Routes {
     })
 
     this._get('/fixes-dialog', (req, res) => {
-      new DiagnosticsProvider().loadBySku(req.query.sku, (all, product) => {
-        Enum.getMap('PROD-DIAG', (types) => {
-          res.render('product/diagnostics/diagnostics-dialog', { data: all, product: product, types: types })
-        })
+      new DiagnosticsProvider().loadBySku(req.query.sku, async (all, product) => {
+        res.render('product/diagnostics/diagnostics-dialog', { data: all, product: product, types: (await Enum.on('PROD-DIAG').get(true)) })
       })
     })
 

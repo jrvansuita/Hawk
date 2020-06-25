@@ -4,14 +4,18 @@ var cache = {}
 module.exports = class Enumerator extends DataAccess {
   constructor (name, explanation, tag, items) {
     super()
-    this.id = Util.id()
-    this.name = Str.def(name)
-    this.explanation = Str.def(explanation)
-    this.tag = Str.def(tag)
+    this.id = global.Util.id()
+    this.name = global.Str.def(name)
+    this.explanation = global.Str.def(explanation)
+    this.tag = global.Str.def(tag)
     this.items = items || []
 
     // Every Item
     // -- icon, description, name, value, default:true||false}
+  }
+
+  static getKey () {
+    return ['id']
   }
 
   setItems (items) {
@@ -19,27 +23,30 @@ module.exports = class Enumerator extends DataAccess {
     return this
   }
 
-  static getKey () {
-    return ['id']
+  mapBy (mapProp) {
+    this.mapProp = mapProp
+    return this
   }
 
-  static get (tagOrId, callback) {
-    if (cache[tagOrId]) {
-      callback(cache[tagOrId])
-    } else {
-      this.findOne((typeof tagOrId === 'number') ? { id: tagOrId } : { tag: tagOrId }, (_err, data) => {
-        cache[tagOrId] = data
-        callback(data)
-      })
-    }
+  async _get () {
+    return new Promise((resolve, reject) => {
+      if (cache[this.tag]) {
+        resolve(cache[this.tag])
+      } else {
+        Enumerator.findOne({ tag: this.tag }, (_err, data) => {
+          cache[this.tag] = data
+          resolve(cache[this.tag])
+        })
+      }
+    })
   }
 
-  static getMap (tag, callback) {
-    this.get(tag, (data) => {
-      callback(data.items.reduce((o, item) => {
-        o[item.value] = item
+  async _getMap () {
+    return this.get().then((data) => {
+      return data?.items?.reduce((o, item) => {
+        o[item[this.mapProp || 'value']] = item
         return o
-      }, {}))
+      }, {})
     })
   }
 
@@ -60,27 +67,26 @@ module.exports = class Enumerator extends DataAccess {
   }
 
   static on (tag, useDef) {
-    return {
-      async get (mapped) {
-        return new Promise((resolve) => {
-          Enumerator[mapped ? 'getMap' : 'get'](tag, (data) => {
-            resolve(data)
-          })
-        })
-      },
+    var e = new Enumerator()
+    e.tag = tag
+    e.useDef = useDef
+    return e
+  }
 
-      async hunt (value, prop = 'name') {
-        return this.get().then((data) => {
-          var def
-          var r = data?.items?.find((each) => {
-            def = each.default ? each : def
-            return each?.[prop]?.split(',')?.some((part) => {
-              return part.trim() === value.trim()
-            }) || (useDef ? def : null)
-          })
-          return r
-        })
-      }
-    }
+  async get (mapped) {
+    return mapped ? this._getMap() : this._get()
+  }
+
+  async hunt (value, prop = 'name') {
+    return this.get().then((data) => {
+      var def
+      var r = data?.items?.find((each) => {
+        def = each.default ? each : def
+        return each?.[prop]?.split(',')?.some((part) => {
+          return part.trim() === value.trim()
+        }) || (this.useDef ? def : null)
+      })
+      return r
+    })
   }
 }

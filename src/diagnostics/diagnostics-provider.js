@@ -46,23 +46,21 @@ module.exports = class DiagnosticsProvider {
 
   loadBySku (sku, callback) {
     Product.get(sku, (product) => {
-      Fix.findBySku(sku, (err, all) => {
+      Fix.findBySku(sku, (_err, all) => {
         callback(this.groupSku(all), product)
       })
     })
   }
 
   findBySku (sku, callback) {
-    Fix.findBySku(sku, (err, data) => {
+    Fix.findBySku(sku, (_err, data) => {
       callback(data)
     })
   }
 
   sums (callback) {
-    Fix.sums((err, data) => {
-      Enum.getMap('PROD-DIAG', (types) => {
-        callback(data, types)
-      })
+    Fix.sums(async (_err, data) => {
+      callback(data, (await Enum.on('PROD-DIAG').get(true)))
     })
   }
 }
