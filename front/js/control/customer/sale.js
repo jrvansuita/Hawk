@@ -133,7 +133,7 @@ function bindSaleItens (data) {
 
     // item sku
     var $itemSkuHolder = $('<td>').addClass('item-sku-holder copiable').text(item.sku).dblclick(() => {
-      window.open('/product?sku=' + $itemSkuHolder.text())
+      window.open('/stock/product?sku=' + $itemSkuHolder.text())
     })
 
     // item name

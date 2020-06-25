@@ -7,27 +7,10 @@ module.exports = class UserRoutes extends Routes {
     this._get('/user', (req, res) => {
       var user = UsersProvider.get(req.query.userId)
 
-      if (req.query.device && req.query.appId) {
-        // Is Mobile
-        if (req.query.appId === Params.androidAppKey()) {
-          if (user && (user.pass == req.query.pass)) {
-            if (UsersProvider.checkCanLogin(user)) {
-              this._resp().sucess(res, user)
-            } else {
-              this._resp().sucess(res, null)
-            }
-          } else {
-            this._resp().error(res, 'Tentativa de login no Hawk App ' + req.query.userId + ' não encontrado')
-          }
-        } else {
-          this._resp().error(res, 'Tentativa de captura de usuário de dispositivo indefinido - ' + req.query.userId)
-        }
+      if (user) {
+        this._resp().sucess(res, user)
       } else {
-        if (user) {
-          this._resp().sucess(res, user)
-        } else {
-          this._resp().error(res, 'Usuário ' + req.query.userId + ' não encontrado' + '\nUser Session Id: ' + req.session.loggedUserID + '\n' + new Error().stack)
-        }
+        this._resp().error(res, 'Usuário ' + req.query.userId + ' não encontrado' + '\nUser Session Id: ' + req.session.loggedUserID + '\n' + new Error().stack)
       }
     }).skipLogin()
 

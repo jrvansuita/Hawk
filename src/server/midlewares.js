@@ -63,16 +63,21 @@ module.exports = class ServerMidlewares {
     * @api {post} /* Authentication
     * @apiGroup Credentials
     * @apiDescription All api calls must have this parameters setted
-    * @apiParam {String} access User access ID
-    * @apiParam {String} pass User password
-    * @apiParam {String} appkey App Key
-   */
+    * @apiHeaderExample {json} Header-Example:
+    *  {
+    *   "access": "User Access ID"
+    *   "pass": "User Password"
+    *   "appkey": "App Key"
+    * }
+ */
 
   getApiAuthRouteRule () {
     return (req, res, next) => {
       try {
-        if (this.userLoader.checkUser(req.body.access, req.body.pass ?? '')) {
-          if (!global.Arr.isIn(Params.apiAppKeys().split(','), req.body.appkey ?? '')) {
+        req.headers.device = req.headers.device || 'api'
+
+        if (this.userLoader.checkUser(req.headers.access, req.headers.pass ?? '')) {
+          if (!global.Arr.isIn(Params.apiAppKeys(), req.headers.appkey ?? '')) {
             global.Err.thrw('APIKEY')
           }
         }
