@@ -56,7 +56,7 @@ module.exports = class ProductRoutes extends Routes {
 
     this._get('/product', (req, res) => {
       ProductLaws.get(req.query.sku || req.query.ean, false, this._resp().redirect(res))
-    })._api()
+    })._apiRead()
 
     /* ---- Render ---- */
 
@@ -136,7 +136,7 @@ module.exports = class ProductRoutes extends Routes {
           this._resp().sucess(res, result)
         })
       }
-    })
+    })._apiRead()
 
     this._get('/fixes-dialog', (req, res) => {
       new DiagnosticsProvider().loadBySku(req.query.sku, async (all, product) => {
