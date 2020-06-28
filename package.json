@@ -4,18 +4,27 @@
   "description": "A predatory beast waiting in silence...",
   "main": "app.js",
   "scripts": {
+    "---APP---": "...",
     "start": "node app.js",
     "dev": "nodemon app.js",
+
+    "---ESLINT---": "...",
     "linta": "npx eslint .",
     "lintfa": "npx eslint --fix .",
+
+    "---STYLELINT---": "...",
     "slinta": "npx stylelint \"**/*.css\"",
     "slintfa": "npx stylelint \"**/*.css\" --fix",
     "fix": "npm run lintfa && npm run slintfa",
+
+    "---JEST---": "...",
     "test": "jest --coverage --detectOpenHandles",
+
+    "---APIDOCS---": "...",
     "apidoc": "apidoc -i src/ -o _apidocs/",
     "apidoc-surge": "surge -p ./_apidocs/ -d hawk-api.surge.sh",
 
-
+    "---GIT---": "...",
     "git": "git add . && git commit -m",
     "postgit": "git push --all"
   },
