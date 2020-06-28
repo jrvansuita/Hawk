@@ -6,14 +6,14 @@ describe('app initialization', () => {
   }, 100000)
 })
 
-// describe('external apis', () => {
-//   const MundiApi = require('../../src/mundipagg/mundi-api.js')
+describe('External APIs', () => {
+  const MundiApi = require('../../src/mundipagg/mundi-api.js')
 
-//   it('should connet with Mundipagg', () => {
-//     new MundiApi().sale('121043161').go((data) => {
-//       console.log(data)
-
-//       expect(data).toBeDefined()
-//     })
-//   })
-// })
+  test('Mundipagg API', done => {
+    new MundiApi().sale('121043161').onError((e) => {
+      done.fail(new Error(e))
+    }).go((data) => {
+      done()
+    })
+  })
+})
