@@ -14,12 +14,15 @@
     "test": "jest --coverage --detectOpenHandles",
     "apidoc": "apidoc -i src/ -o _apidocs/",
     "apidoc-surge": "surge -p ./_apidocs/ -d hawk-api.surge.sh",
-    "co" : "git add -A && git commit -m $msg && git pull"
+
+
+    "git": "git add . && git commit -m",
+    "postgit": "git push --all"
   },
   "engines": {
     "node": "14.x"
   },
-  "author": "Jr",
+  "author": "Jr.",
   "license": "ISC",
   "repository": {
     "type": "git",
