@@ -352,3 +352,9 @@
   display: none;
   max-width: 22px;
 }
+
+.refresh-product {
+  margin-top: 10px;
+  position: absolute;
+  margin-left: 190px;
+}
