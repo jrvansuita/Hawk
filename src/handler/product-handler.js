@@ -119,8 +119,8 @@ module.exports = {
         preco: product.preco
       }
 
-      new EccosysStorer().stock(product.codigo, body).go(callback)
       /** Realiza a alteracao de estoque no eccosys **/
+      new EccosysStorer().stock(product.codigo, body).go(callback)
 
       /** Realiza a alteracao de estoque no magento **/
       if (global.Params.updateProductStockMagento()) {
@@ -128,6 +128,9 @@ module.exports = {
           if (data.length === 1) {
             var stockMagento = Math.max(parseFloat(data[0].qty) + stock, 0)
             new MagentoCalls().updateProductStock(product.codigo, stockMagento)
+
+            /** Realiza a alteracao no Mongodb **/
+            Product.upsert({ sku: product.codigo }, { quantity: stockMagento })
           }
         })
       }
@@ -185,7 +188,7 @@ module.exports = {
   },
 
   searchAutoComplete (typing, callback) {
-    Product.likeThis(typing, 150, (err, products) => {
+    Product.likeThis(typing, 150, (_err, products) => {
       callback(products)
     })
   },

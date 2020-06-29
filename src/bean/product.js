@@ -13,10 +13,10 @@ module.exports = class Product extends DataAccess {
     this.cost = Floa.def(cost)
     this.discount = Floa.def(discount)
 
-    this.brand = Str.def(brand)
+    this.brand = Str.def(brand).trim()
     this.category = Str.def(category)
-    this.gender = Str.def(gender)
-    this.color = Str.def(color)
+    this.gender = Str.def(gender).trim()
+    this.color = Str.def(color).trim()
     this.quantity = Num.def(quantity)
     this.newStock = Num.def(newStock)
     this.sync = !!sync
@@ -24,7 +24,7 @@ module.exports = class Product extends DataAccess {
     this.age = Str.def(age)
     this.year = Str.def(year)
     this.season = Str.def(season)
-    this.manufacturer = Str.def(manufacturer)
+    this.manufacturer = Str.def(manufacturer).trim()
     this.weight = Str.def(weight)
 
     this.visible = !!visble
@@ -144,7 +144,7 @@ module.exports = class Product extends DataAccess {
       sku: {
         $in: skus
       }
-    }, (err, data) => {
+    }, (_err, data) => {
       callback(data)
     })
   }

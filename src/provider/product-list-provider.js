@@ -12,7 +12,7 @@ module.exports = {
         // Os attrs abaixo podem ter vários valores separadas por vírgula
         // Para todos os outros atributos, tem que ser exatamente o valor para buscar
         if (!['category', 'age'].includes(key)) {
-          seachValue = '^' + value + '$'
+          seachValue = '^' + value // + '$'
         }
 
         attrs[key] = {
@@ -22,12 +22,14 @@ module.exports = {
       }
     }
 
-    if (query.noQuantity == 'false') {
+    if (query.noQuantity === 'false') {
       // Acima de 0
       attrs.quantity = { $gt: 0 }
     }
 
     var result = Object.assign(Product.likeQuery(query.value), attrs)
+
+    // console.log(result)
 
     return result
   },
@@ -44,11 +46,11 @@ module.exports = {
 
   loadByQuery (query, page, callback) {
     if (page == null) {
-      Product.find(this.buildQuery(query), (err, result) => {
+      Product.find(this.buildQuery(query), (_err, result) => {
         callback(result)
       })
     } else {
-      Product.paging(this.buildQuery(query), page, (err, result) => {
+      Product.paging(this.buildQuery(query), page, (_err, result) => {
         callback(result[0].items, result[0].info[0])
       })
     }
