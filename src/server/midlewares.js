@@ -121,7 +121,7 @@ module.exports = class ServerMidlewares {
 
   getGenericRouteRule (req, res, next) {
     return (req, res, next) => {
-      console.log(`${req.method}: ${req.originalUrl}`)
+      // console.log(`${req.method}: ${req.originalUrl}`)
       res.locals.query = req.query
       res.locals.url = req.originalUrl
       res.locals.path = req.baseUrl || req.path
