@@ -98,11 +98,11 @@ module.exports = class ProductRoutes extends Routes {
 
     this._post('/check-product-diagnostic', (req, res) => {
       new ProductDiagnostics().resync(req.body.sku, req.body.forceFather, () => {
-        new DiagnosticsProvider().loadBySku(req.body.sku, (all, product) => {
+        new DiagnosticsProvider().groupped(true).loadTypes(true).loadBySku(req.body.sku, (all, product) => {
           res.status(200).send({ data: all, product: product })
         })
       })
-    })
+    })._api()
 
     this._post('/run-product-diagnostics', (req, res) => {
       if (req.body.refresh) {
@@ -115,25 +115,15 @@ module.exports = class ProductRoutes extends Routes {
     })
 
     this._get('/product-fixes', (req, res) => {
+      var provider = new DiagnosticsProvider().groupped(req.query.groupped).loadTypes(req.query.loadTypes)
+
       if (req.query.type) {
-        new DiagnosticsProvider().loadByType(req.query.type, (all) => {
+        provider.loadByType(req.query.type, (all) => {
           this._resp().sucess(res, all)
         })
       } else {
-        new DiagnosticsProvider().findBySku(req.query.sku, async (all) => {
-          res.set('Cache-Control', 'public, max-age=86400')
-
-          var result = []
-          var fixesTypes = (await Enum.on('PROD-DIAG').get(true))
-
-          // 1day
-          all.forEach((each) => {
-            var s = each.toObject()
-            s.data = fixesTypes[each.type]
-            result.push(s)
-          })
-
-          this._resp().sucess(res, result)
+        provider.findBySku(req.query.sku, async (data) => {
+          this._resp().sucess(res, data)
         })
       }
     })._apiRead()

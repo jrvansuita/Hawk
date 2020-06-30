@@ -5,7 +5,7 @@ $(document).ready(() => {
 
     _post('/check-product-diagnostic', { sku: sku }, (data) => {
       var type = $(this).data('type')
-      var obj = data.data.find((item) => { return item.sku == sku })
+      var obj = data.data.find((item) => { return item.sku === sku })
 
       var fixed = !obj || !obj.fixes.includes(type)
 
