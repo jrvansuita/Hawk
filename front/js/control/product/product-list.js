@@ -227,13 +227,13 @@ function createTitle (product) {
 
   var diagIcon = $('<img>').addClass('diag-alert').attr('src', 'img/alert.png')
 
-  _get('/product-fixes', { sku: product.sku }, (all) => {
+  _get('/product-fixes', { sku: product.sku, groupped: true }, (all) => {
     if (all.length > 0) {
       diagIcon.fadeIn()
       diagIcon.click(() => {
         window.open('/diagnostics?sku=' + product.sku, '_blank')
       })
-      var fixTooltip = new Tooltip(diagIcon[0], all[0].data.name).load()
+      var fixTooltip = new Tooltip(diagIcon[0], all[0].fixes[0].name).load()
     }
   })
   var div = $('<div>').addClass('title-holder').append(sku, name, diagIcon)

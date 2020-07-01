@@ -193,7 +193,7 @@ module.exports = class ProductDiagnostics {
   }
 
   _resyncStoredSkus (brandName, type) {
-    var handler = (err, docs) => {
+    var handler = (_err, docs) => {
       var skus = [...new Set(docs.map(i => i.sku))]
 
       this._checkRangeSku(skus, 0, () => {

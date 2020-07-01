@@ -98,8 +98,8 @@ module.exports = class ProductRoutes extends Routes {
 
     this._post('/check-product-diagnostic', (req, res) => {
       new ProductDiagnostics().resync(req.body.sku, req.body.forceFather, () => {
-        new DiagnosticsProvider().groupped(true).loadTypes(true).loadBySku(req.body.sku, (all, product) => {
-          res.status(200).send({ data: all, product: product })
+        new DiagnosticsProvider().groupped(true).loadBySku(req.body.sku, (all, product) => {
+          res.status(200).send(all)
         })
       })
     })._api()
@@ -115,7 +115,7 @@ module.exports = class ProductRoutes extends Routes {
     })
 
     this._get('/product-fixes', (req, res) => {
-      var provider = new DiagnosticsProvider().groupped(req.query.groupped).loadTypes(req.query.loadTypes)
+      var provider = new DiagnosticsProvider().groupped(req.query.groupped)
 
       if (req.query.type) {
         provider.loadByType(req.query.type, (all) => {
@@ -129,8 +129,8 @@ module.exports = class ProductRoutes extends Routes {
     })._apiRead()
 
     this._get('/fixes-dialog', (req, res) => {
-      new DiagnosticsProvider().loadBySku(req.query.sku, async (all, product) => {
-        res.render('product/diagnostics/diagnostics-dialog', { data: all, product: product, types: (await Enum.on('PROD-DIAG').get(true)) })
+      new DiagnosticsProvider().groupped(true).loadBySku(req.query.sku, (all, product) => {
+        res.render('product/diagnostics/diagnostics-dialog', { data: all, product: product })
       })
     })
 

@@ -35,7 +35,6 @@
     <div class="fixes-right">
 
       <%if (data.length == 0){%>
-
         <div class="top-sku">
           <label class="fixes-sku-list no-problem">Nenhum Problema Encontrado</label>
           <div class="no-problem-menu" data-sku="<%=(product ? product.sku : '') || ((data.length > 0) ? data[0].sku : '')%>">
@@ -59,15 +58,12 @@
 
 
               <div class="fixes-sku-badges">
-
                 <%item.fixes.forEach(type=>{%>
 
                   <div class="badge-item">
-                    <%var enumType = types[type]%>
-                    <img class="ind-icon" src="img/<%=enumType ? enumType.icon : 'question-mark'%>.png"/>
-                    <label class="ind-title"><%=enumType ? enumType.name : 'Não encontrado'%></label>
-
-                    <img class="right f-icon fix" src="img/restart.png" data-sku="<%=item.sku%>" data-type="<%=type%>"/>
+                    <img class="ind-icon" src="img/<%=type.icon ? type.icon : 'question-mark'%>.png"/>
+                    <label class="ind-title"><%=type ? type.name : 'Não encontrado'%></label>
+                    <img class="right f-icon fix" src="img/restart.png" data-sku="<%=item.sku%>" data-type="<%=type.value%>"/>
                   </div>
 
                   <%});%>

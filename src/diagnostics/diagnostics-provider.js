@@ -40,49 +40,37 @@ module.exports = class DiagnosticsProvider {
     })
   }
 
-  _groupSku (data) {
+  async _groupFixesType (data) {
     var grouped = {}
+    var fixesTypes = (await Enum.on('PROD-DIAG').get(true))
 
     data.forEach((item) => {
       if (!grouped[item.sku]) {
-        grouped[item.sku] = { sku: item.sku, fixes: [item.type] }
+        grouped[item.sku] = { sku: item.sku, fixes: [fixesTypes[item.type]] }
       } else {
-        grouped[item.sku].fixes.push(item.type)
+        grouped[item.sku].fixes.push(fixesTypes[item.type])
       }
     })
 
     return Object.values(grouped)
   }
 
-  async _loadTypes (data) {
-    var result = []
-    var fixesTypes = (await Enum.on('PROD-DIAG').get(true))
-    data.forEach((each) => {
-      var s = each.toObject()
-      s.data = fixesTypes[each.type]
-      result.push(s)
-    })
-
-    return result
-  }
-
-  prepare (data) {
-    if (this.doLoadTypes) { data = this._loadTypes(data) }
-    if (this.doGroups) { data = this._groupSku(data) }
+  async prepare (data) {
+    if (this.doGroups) { data = await this._groupFixesType(data) }
     return data
   }
 
   loadBySku (sku, callback) {
     Product.get(sku, (product) => {
-      Fix.findBySku(sku, (_err, data) => {
-        callback(this.prepare(data), product)
+      Fix.findBySku(sku, async (_err, data) => {
+        callback((await this.prepare(data)), product)
       })
     })
   }
 
   findBySku (sku, callback) {
-    Fix.findBySku(sku, (_err, data) => {
-      callback(this.prepare(data))
+    Fix.findBySku(sku, async (_err, data) => {
+      callback((await this.prepare(data)))
     })
   }
 

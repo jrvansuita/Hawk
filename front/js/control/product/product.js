@@ -65,7 +65,7 @@ function findCurrentProduct () {
 }
 
 function requestProdutosFixes (callback) {
-  _get('/product-fixes', { sku: product.codigo }, (all) => {
+  _get('/product-fixes', { sku: product.codigo, groupped: true }, (all) => {
     window.fixes = all
     callback(this)
   })
@@ -334,7 +334,7 @@ function buildSkuCol (product) {
         $err.click(() => {
           window.open('/diagnostics?sku=' + product.codigo, '_blank')
         })
-        var alertTooltip = new Tooltip($err[0], item.data.name).load()
+        var alertTooltip = new Tooltip($err[0], item.fixes[0].name).load()
         $div.append($err)
       }
     })
