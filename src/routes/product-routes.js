@@ -96,6 +96,28 @@ module.exports = class ProductRoutes extends Routes {
       })
     })
 
+    /**
+     * @api {post} /check-product-diagnostic Check Product Fixes
+     * @apiGroup Product
+     * @apiParam {String} sku Product SKU
+     * @apiParam {Boolean} forceFather Force to check only the childs of product
+     * @apiParamExample Body-Example:
+     *    [
+     *     {
+     *       "sku": "22645im-6",
+     *       "fixes": [
+     *            {
+     *              "default": false,
+     *               "icon": "price",
+     *               "description": "Preço de venda não informado ou preço de custo incorreto.",
+     *               "name": "Preço de Venda ou Custo Incorreto",
+     *                "value": "COST"
+     *             }
+     *        ]
+     *    }
+     *  ]
+     */
+
     this._post('/check-product-diagnostic', (req, res) => {
       new ProductDiagnostics().resync(req.body.sku, req.body.forceFather, () => {
         new DiagnosticsProvider().groupped(true).loadBySku(req.body.sku, (all, product) => {
@@ -113,6 +135,24 @@ module.exports = class ProductRoutes extends Routes {
 
       res.status(200).send('Ok')
     })
+
+    /**
+     * @api {get} /product-fixes Product Fixes
+     * @apiGroup Product
+     * @apiParam {String} sku Product SKU
+     * @apiParam {String} type Product Fix Type
+     * @apiParamExample Body-Example:
+     *    [
+     *       {
+     *      "_id": "5efcd598b82d882870c9ab03",
+     *      "sku": "22645im-6",
+     *      "type": "COST",
+     *      "__v": 0,
+     *      "date": "2020-07-01T18:27:36.233Z",
+     *      "name": "Conjunto Quick And Fast Dog Infantil Marinho - Elian-6"
+     *       }
+     *    ]
+     */
 
     this._get('/product-fixes', (req, res) => {
       var provider = new DiagnosticsProvider().groupped(req.query.groupped)
