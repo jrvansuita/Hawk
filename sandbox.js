@@ -8,11 +8,9 @@ new Initilizer().setSandboxMode(true).begin().then(async () => {
 
   // console.log(s)
 
-  const MundiApi = require('./src/mundipagg/mundi-api.js')
+  const SaleLoader = require('./src/loader/sale-loader.js')
 
-  new MundiApi().sales().onError((e) => {
-    console.log(e)
-  }).go((data) => {
-    console.log(data)
+  new SaleLoader('121048805').run((sale) => {
+    console.log(sale)
   })
 })
