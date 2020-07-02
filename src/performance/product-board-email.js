@@ -27,14 +27,11 @@ module.exports = class ProductBoardEmailHandler {
   }
 
   _sendEmail (data) {
-    console.log(data)
-
     new EmailBuilder()
       .template('STOCK')
       .to(Params.performanceEmailsReport())
       .setData(data)
       .send(() => {
-
       })
   }
 }
