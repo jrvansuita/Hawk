@@ -57,9 +57,13 @@ $(document).ready(() => {
   Dropdown.on($('.menu-dots'))
     .item('/img/copy.png', 'Copiar Skus', (helper) => {
       var val = ''
-      $('.sku.copiable').each(function () {
-        val += '\n' + $(this).text()
-      })
+      if (Object.keys(selectedSkus).length > 0) {
+        Object.keys(selectedSkus).forEach((item) => { val += '\n' + item })
+      } else {
+        $('.sku.copiable').each(function () {
+          val += '\n' + $(this).text()
+        })
+      }
 
       Util.copySeleted(val)
     })
