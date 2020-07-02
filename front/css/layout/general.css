@@ -441,7 +441,7 @@ table {
 }
 
 .content {
-  margin-bottom: 30px;
+  margin-bottom: 130px;
 }
 
 .is-open {
@@ -466,10 +466,10 @@ table {
 
 /* created by vonmesch to be used in enumerators */
 .left-panel::-webkit-scrollbar {
-    width: 6px;
-    background: rgb(245, 237, 237);
+  width: 6px;
+  background: rgb(245, 237, 237);
 }
 
- .left-panel::-webkit-scrollbar-thumb {
-    background: #dad7d7;
+.left-panel::-webkit-scrollbar-thumb {
+  background: #dad7d7;
 }
