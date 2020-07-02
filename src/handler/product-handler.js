@@ -15,12 +15,13 @@ module.exports = {
 
   getByEan (ean, callback) {
     new EccosysProvider().product(ean).go((eanProduct) => {
-      if (!eanProduct) {
-        handleCallback(callback, eanProduct, ean)
-      } else {
-        this.getBySku(getFatherSku(eanProduct.codigo), true, (product) => {
-          handleCallback(callback, product, ean)
+      if (eanProduct) {
+        this.getSkus(getFatherSku(eanProduct.codigo), true, (data) => {
+          eanProduct._Skus = data[0]._Skus
+          handleCallback(callback, eanProduct, ean)
         })
+      } else {
+        handleCallback(callback, eanProduct, ean)
       }
     })
   },

@@ -13,13 +13,11 @@ module.exports = class ProductBoardEmailHandler {
 
   _buildObject (data, type) {
     var arrays = {}
-
     Util.forProperty(data, (each, key) => {
       arrays[type + key] = each.sort((a, b) => {
         return b.stock - a.stock
       })
     })
-
     return arrays
   }
 
@@ -29,6 +27,8 @@ module.exports = class ProductBoardEmailHandler {
   }
 
   _sendEmail (data) {
+    console.log(data)
+
     new EmailBuilder()
       .template('STOCK')
       .to(Params.performanceEmailsReport())

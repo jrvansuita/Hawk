@@ -88,6 +88,7 @@ module.exports = class Product extends DataAccess {
     props.forEach((eachProp) => {
       result[eachProp] = [{ $group: { _id: '$' + eachProp, count: { $sum: 1 }, stock: { $sum: { $abs: '$newStock' } } } }]
     })
+    result.total = [{ $group: { _id: null, stock: { $sum: { $abs: '$newStock' } } } }]
 
     Product.aggregate([{ $match: query }, { $facet: result }], (_err, data) => {
       data = data?.[0] || {}
