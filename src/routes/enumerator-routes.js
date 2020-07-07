@@ -14,10 +14,16 @@ module.exports = class EnumeratorRoutes extends Routes {
       })
     })
 
+    /**
+     * @api {get} /enum Enumerator
+     * @apiGroup Enumerator
+     * @apiParam {String} tag Enumerator tag
+     * @apiParam {String} [keys] true if want to get it mapped
+     */
+
     this._get('/enum', async (req, res) => {
-      var find = Num.def(req.query.id, 0) || req.query.tag
-      res.send((await Enumerator.on(find).get(!!req.query.keys)))
-    })
+      res.send((await Enumerator.on(req.query.tag).get(!!req.query.keys)))
+    })._apiRead()
 
     this._post('/enumerators', (req, res) => {
       EnumeratorVault.storeFromScreen(req.body, (id) => {
