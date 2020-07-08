@@ -1,9 +1,10 @@
 
 class FileLoader {
-  constructor () {
+  constructor (tagId) {
     this.path = '/front/?/libs/'
     this.cssList = []
     this.jsList = []
+    this.tagId = tagId
   }
 
   _buildPaths (arr, type) {
@@ -20,13 +21,20 @@ class FileLoader {
   }
 
   _loadScript (filePath, callback) {
-    if (this._isScriptLoaded(filePath)) {
-      console.timeLog('loadado')
+    var id = filePath.replace(new RegExp('/', 'g'), '-')
+    var script
 
-      setTimeout(callback, 500)
+    if (this._isScriptLoaded(filePath)) {
+      script = document.getElementById(id)
+      var stackCallbacks = script.onload
+
+      script.onload = () => {
+        if (stackCallbacks) stackCallbacks()
+        callback()
+      }
     } else {
-      console.timeLog('criado ')
-      var script = document.createElement('script')
+      script = document.createElement('script')
+      script.id = id
       script.onload = callback
       script.src = filePath
       document.head.appendChild(script)

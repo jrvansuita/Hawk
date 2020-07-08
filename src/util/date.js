@@ -10,7 +10,7 @@ var Dat = {
     }
   },
 
-  formatwTime (date) {
+  formatwTime (date = new Date()) {
     if (date) {
       var formated = fmt(date)
       return formated.day + '/' + formated.month + '/' + formated.year.slice(2, 4) + ' ' + formated.hour + ':' + formated.min
