@@ -2,7 +2,6 @@ class RangeSlider {
   constructor (holder) {
     this.dependencies = new FileLoader(holder[0].classList[0]).css('jquery-ui').js('jquery-ui.min').css('range-slider')
     this.holder = holder
-    this.checkBeforeBuildRange()
   }
 
   setRange (min, max) {
@@ -34,12 +33,6 @@ class RangeSlider {
   loadValuesFromMemory (values) {
     this.fromMemory = values
     return this
-  }
-
-  checkBeforeBuildRange () {
-    if (this.holder.hasClass('range-slider-holder')) {
-      this.holder.empty()
-    }
   }
 
   _setValues (values) {
@@ -81,7 +74,6 @@ class RangeSlider {
     this._setOptions()
 
     this.holder.append(this.title, this.rangeDiv, this.minText, this.maxText)
-    console.log('criado ' + this.holder[0].classList)
   }
 
   async build () {

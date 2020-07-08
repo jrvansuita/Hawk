@@ -5,7 +5,7 @@ var selectedSkus = {}
 var showAll = false
 
 function loadFromMemory () {
-  window.memoryQuery.filters = {}
+  window.memoryQuery.filters = window.memoryQuery.filters || {}
   if (window.memoryQuery.value) {
     $('#search-input').val(window.memoryQuery.value)
   }
@@ -425,7 +425,7 @@ function bindRangeSlider (data) {
     .setPrefix('R$')
     .loadValuesFromMemory(window.memoryQuery?.filters?.price)
     .setOnSlideStop((val) => {
-      window.memoryQuery.filters = val
+      window.memoryQuery.filters.price = val
     })
     .build()
 }
