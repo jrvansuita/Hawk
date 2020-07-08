@@ -22,11 +22,16 @@ module.exports = {
       }
     }
 
-    if (query.noQuantity == 'false') {
+    if (query.noQuantity === 'false') {
       // Acima de 0
       attrs.quantity = { $gt: 0 }
     }
 
+    if (query?.filters) {
+      Object.keys(query.filters).forEach((key) => {
+        attrs[key] = { $gte: Floa.def(query.filters[key][0]), $lte: Floa.def(query.filters[key][1]) }
+      })
+    }
     var result = Object.assign(Product.likeQuery(query.value), attrs)
 
     return result
@@ -44,11 +49,11 @@ module.exports = {
 
   loadByQuery (query, page, callback) {
     if (page == null) {
-      Product.find(this.buildQuery(query), (err, result) => {
+      Product.find(this.buildQuery(query), (_err, result) => {
         callback(result)
       })
     } else {
-      Product.paging(this.buildQuery(query), page, (err, result) => {
+      Product.paging(this.buildQuery(query), page, (_err, result) => {
         callback(result[0].items, result[0].info[0])
       })
     }

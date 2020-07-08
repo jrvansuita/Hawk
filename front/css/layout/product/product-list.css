@@ -25,7 +25,6 @@
 .tag-box {
   min-height: fit-content;
   padding: 0 10px;
-  display: none;
   min-height: 35px;
 }
 
@@ -153,7 +152,6 @@
 
 .pure-material-checkbox {
   float: right;
-  margin-right: -20px;
   transform: scale(0.85);
 }
 
@@ -271,4 +269,17 @@ img.dots-glyph {
   display: block;
   margin-top: 3px;
   margin-right: 25px;
+}
+
+.tag-box-holder {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.tag-box {
+  margin-right: auto;
+}
+
+.filters-holder {
+  display: flex;
 }

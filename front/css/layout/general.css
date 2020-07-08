@@ -417,12 +417,12 @@ table {
 
 .main {
   padding-top: 95px;
-  padding-bottom: 80px;
   margin-left: 25px;
   margin-right: 25px;
   display: flex;
   flex-direction: column;
   position: relative;
+  max-height: -webkit-fill-available;
 }
 
 .top {
@@ -441,7 +441,7 @@ table {
 }
 
 .content {
-  margin-bottom: 30px;
+  margin-bottom: 15px;
 }
 
 .is-open {

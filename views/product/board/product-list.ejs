@@ -13,6 +13,7 @@
 
     <script type="text/javascript" src="/front/js/control/mockup/mockup-selector.js"></script>
     <script type="text/javascript" src="/front/js/libs/tooltip.js"></script>
+    <script type="text/javascript" src="/front/js/libs/range-slider.js"></script>
 
 </head>
 
@@ -20,7 +21,7 @@
     <%include ../../menus/stock-menu %>
     <script>
         window.memoryQuery = <%- JSON.stringify(locals.productListQuery ? locals.productListQuery : {}) %>
-        window.Colors = <%- JSON.stringify(colors) %>
+            window.Colors = <%- JSON.stringify(colors) %>
     </script>
 
     <div class="main ">
@@ -36,13 +37,19 @@
                 <label id="totals"></label>
             </div>
 
-            <div class="tag-box">
-                <label class="pure-material-checkbox">
-                    <input type="checkbox" id="show-no-quantity"
-                        <%=locals.productListQuery && locals.productListQuery.noQuantity == 'true' ? 'checked' : '' %>>
-                    <span>Mostrar Produtos sem estoque</span>
-                </label>
+            <div class="tag-box-holder">
+                <div class="tag-box"></div>
 
+                <div class="filters-holder">
+                    <div class="cost-filter" data-attr="cost"></div>
+                    <div class="price-filter" data-attr="price"></div>
+
+                    <label class="pure-material-checkbox">
+                        <input type="checkbox" id="show-no-quantity"
+                            <%=locals.productListQuery && locals.productListQuery.noQuantity == 'true' ? 'checked' : '' %>>
+                            <span>Mostrar Produtos sem estoque</span>
+                    </label>
+                </div>
             </div>
         </div>
 

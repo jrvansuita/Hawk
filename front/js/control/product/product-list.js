@@ -3,6 +3,7 @@ var loading = false
 var productsListCount = 0
 var selectedSkus = {}
 var showAll = false
+var rangeCreated = false
 
 function loadFromMemory () {
   if (memoryQuery.value) {
@@ -18,19 +19,18 @@ function loadFromMemory () {
         selectAndPlaceTag(Str.capitalize(each), attr)
       })
     })
-  } else {
-    toggleTagBox(true)
   }
 }
 
 $(document).ready(() => {
   loadFromMemory()
-
+  // bindRageSlider()
   loadList()
   bindScrollLoad()
+  toggleTagBox()
 
   $('#search-input').on('keyup', function (e) {
-    if (e.which == 13) {
+    if (e.which === 13) {
       $('#search-button').trigger('click')
     }
   })
@@ -45,7 +45,7 @@ $(document).ready(() => {
   })
 
   $('.button').on('keyup', function (e) {
-    if (e.which == 13) {
+    if (e.which === 13) {
       $(this).click()
     }
   })
@@ -110,7 +110,8 @@ function loadList () {
       query: {
         value: $('#search-input').val(),
         attrs: getAttrsTags(),
-        noQuantity: $('#show-no-quantity').is(':checked')
+        noQuantity: $('#show-no-quantity').is(':checked'),
+        filters: getFilters() ?? memoryQuery?.filters
       }
     }, (result) => {
       showAll = result.data.length === 0
@@ -120,8 +121,9 @@ function loadList () {
         addProductLayout(each, index)
       })
 
+      window.data = result
       showMessageTotals(result.info)
-
+      bindRageSlider(result.info)
       bindCopiable()
     })
   }
@@ -233,7 +235,7 @@ function createTitle (product) {
       diagIcon.click(() => {
         window.open('/diagnostics?sku=' + product.sku, '_blank')
       })
-      var fixTooltip = new Tooltip(diagIcon[0], all[0].data.name).load()
+      new Tooltip(diagIcon[0], all[0].data.name).load()
     }
   })
   var div = $('<div>').addClass('title-holder').append(sku, name, diagIcon)
@@ -318,7 +320,7 @@ function selectAndPlaceTag (value, attr) {
 
     $('.tag-box').append(tag)
 
-    if (!$('.tag-box').is(':visible')) {
+    if (!$('.tag-box-holder').is(':visible')) {
       toggleTagBox(true)
     }
   }
@@ -378,12 +380,50 @@ function getAttrsTags () {
   return attrs
 }
 
+function getFilters () {
+  var filters = {}
+
+  $('.range-slider-holder').each(function () {
+    var attr = $(this).data('attr')
+    var min = $(this).attr('data-min')
+    var max = $(this).attr('data-max')
+
+    filters[attr] = [min, max]
+  })
+  if (Object.keys(filters).length) return filters
+  return undefined
+}
+
 function toggleTagBox (forceOpen) {
   if ($('.icon-open').hasClass('is-closed') || forceOpen) {
     $('.icon-open').addClass('is-open').removeClass('is-closed')
-    $('.tag-box').show()
+    $('.tag-box-holder').show()
   } else {
     $('.icon-open').removeClass('is-open').addClass('is-closed')
-    $('.tag-box').hide()
+    $('.tag-box-holder').hide()
   }
+}
+
+function bindRageSlider (data) {
+  new RangeSlider($('.cost-filter'))
+    .setRange(data.smaller_cost, data.gretter_cost)
+    // .setRange(0, 70)
+    .setTitle('Filtrar por Custo')
+    .setPrefix('R$')
+    .loadValuesFromMemory(window.memoryQuery?.filters?.cost)
+    .setOnSlideStop((val) => {
+      window.memoryQuery.filters.cost = val
+    })
+    .build()
+
+  new RangeSlider($('.price-filter'))
+    .setRange(data.smaller_sell, data.gretter_sell)
+    // .setRange(0, 200)
+    .setTitle('Filtrar por Preço')
+    .setPrefix('R$')
+    .loadValuesFromMemory(window.memoryQuery?.filters?.price)
+    .setOnSlideStop((val) => {
+      window.memoryQuery.filters.prices = val
+    })
+    .build()
 }

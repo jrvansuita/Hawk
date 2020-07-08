@@ -114,21 +114,16 @@ module.exports = class Product extends DataAccess {
             {
               $group: {
                 _id: null,
-                count: {
-                  $sum: 1
-                },
-                sum_quantity: {
-                  $sum: '$quantity'
-                },
+                count: { $sum: 1 },
 
-                sum_cost: {
-                  $sum: { $multiply: ['$quantity', '$cost'] }
-                },
+                gretter_sell: { $max: '$price' },
+                smaller_sell: { $min: '$price' },
+                gretter_cost: { $max: '$cost' },
+                smaller_cost: { $min: '$cost' },
 
-                sum_sell: {
-                  $sum: { $multiply: ['$quantity', '$price'] }
-                }
-
+                sum_quantity: { $sum: '$quantity' },
+                sum_cost: { $sum: { $multiply: ['$quantity', '$cost'] } },
+                sum_sell: { $sum: { $multiply: ['$quantity', '$price'] } }
               }
             }
           ]
@@ -144,7 +139,7 @@ module.exports = class Product extends DataAccess {
       sku: {
         $in: skus
       }
-    }, (err, data) => {
+    }, (_err, data) => {
       callback(data)
     })
   }
