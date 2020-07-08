@@ -239,11 +239,7 @@ function createTitle (product) {
       diagIcon.click(() => {
         window.open('/diagnostics?sku=' + product.sku, '_blank')
       })
-<<<<<<< HEAD
       new Tooltip(diagIcon[0], all[0].data.name).load()
-=======
-      var fixTooltip = new Tooltip(diagIcon[0], all[0].fixes[0].name).load()
->>>>>>> 00a171bd2f971d9b1f4bbca9e99f286e82a5be35
     }
   })
   var div = $('<div>').addClass('title-holder').append(sku, name, diagIcon)
