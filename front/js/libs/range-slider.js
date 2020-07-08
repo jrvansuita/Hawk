@@ -81,6 +81,7 @@ class RangeSlider {
     this._setOptions()
 
     this.holder.append(this.title, this.rangeDiv, this.minText, this.maxText)
+    console.log('criado ' + this.holder[0].classList)
   }
 
   async build () {

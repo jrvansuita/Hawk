@@ -3,16 +3,16 @@ var loading = false
 var productsListCount = 0
 var selectedSkus = {}
 var showAll = false
-var rangeCreated = false
 
 function loadFromMemory () {
-  if (memoryQuery.value) {
-    $('#search-input').val(memoryQuery.value)
+  window.memoryQuery.filters = {}
+  if (window.memoryQuery.value) {
+    $('#search-input').val(window.memoryQuery.value)
   }
 
-  if (memoryQuery.attrs) {
-    Object.keys(memoryQuery.attrs).forEach((key) => {
-      var value = memoryQuery.attrs[key]
+  if (window.memoryQuery.attrs) {
+    Object.keys(window.memoryQuery.attrs).forEach((key) => {
+      var value = window.memoryQuery.attrs[key]
       var attr = key
 
       value.split('|').forEach((each) => {
@@ -24,7 +24,6 @@ function loadFromMemory () {
 
 $(document).ready(() => {
   loadFromMemory()
-  // bindRageSlider()
   loadList()
   bindScrollLoad()
   toggleTagBox()
@@ -115,7 +114,7 @@ function loadList () {
         value: $('#search-input').val(),
         attrs: getAttrsTags(),
         noQuantity: $('#show-no-quantity').is(':checked'),
-        filters: getFilters() ?? memoryQuery?.filters
+        filters: !$('.icon-open').hasClass('is-closed') ? (getFilters() ?? memoryQuery?.filters) : {}
       }
     }, (result) => {
       showAll = result.data.length === 0
@@ -127,7 +126,7 @@ function loadList () {
 
       window.data = result
       showMessageTotals(result.info)
-      bindRageSlider(result.info)
+      bindRangeSlider(result.info)
       bindCopiable()
     })
   }
@@ -239,7 +238,7 @@ function createTitle (product) {
       diagIcon.click(() => {
         window.open('/diagnostics?sku=' + product.sku, '_blank')
       })
-      new Tooltip(diagIcon[0], all[0].data.name).load()
+      new Tooltip(diagIcon[0], all[0].fixes[0].name).load()
     }
   })
   var div = $('<div>').addClass('title-holder').append(sku, name, diagIcon)
@@ -395,6 +394,7 @@ function getFilters () {
     filters[attr] = [min, max]
   })
   if (Object.keys(filters).length) return filters
+
   return undefined
 }
 
@@ -408,10 +408,9 @@ function toggleTagBox (forceOpen) {
   }
 }
 
-function bindRageSlider (data) {
+function bindRangeSlider (data) {
   new RangeSlider($('.cost-filter'))
     .setRange(data.smaller_cost, data.gretter_cost)
-    // .setRange(0, 70)
     .setTitle('Filtrar por Custo')
     .setPrefix('R$')
     .loadValuesFromMemory(window.memoryQuery?.filters?.cost)
@@ -422,12 +421,11 @@ function bindRageSlider (data) {
 
   new RangeSlider($('.price-filter'))
     .setRange(data.smaller_sell, data.gretter_sell)
-    // .setRange(0, 200)
     .setTitle('Filtrar por Preço')
     .setPrefix('R$')
     .loadValuesFromMemory(window.memoryQuery?.filters?.price)
     .setOnSlideStop((val) => {
-      window.memoryQuery.filters.prices = val
+      window.memoryQuery.filters = val
     })
     .build()
 }

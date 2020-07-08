@@ -21,8 +21,11 @@ class FileLoader {
 
   _loadScript (filePath, callback) {
     if (this._isScriptLoaded(filePath)) {
+      console.timeLog('loadado')
+
       setTimeout(callback, 500)
     } else {
+      console.timeLog('criado ')
       var script = document.createElement('script')
       script.onload = callback
       script.src = filePath
@@ -34,7 +37,7 @@ class FileLoader {
     var load = (scripts, callback) => {
       var progress = 0
       var _getScript = () => {
-        if (progress == scripts.length) { return callback() }
+        if (progress === scripts.length) { return callback() }
 
         this._loadScript(scripts[progress], () => {
           progress++
