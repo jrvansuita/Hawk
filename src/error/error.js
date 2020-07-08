@@ -11,10 +11,10 @@ module.exports = class Err {
   }
 
   static xprss (e) {
-    if (e != undefined) {
+    if (e) {
       var message = e.toString()
       if (e instanceof Error) {
-        message += '\n' + e.stack.split('\n').slice(1, 3).join('\n')
+        message += '\n' + e.stack.split('\n').slice(1, 5).join('\n')
       }
 
       return message

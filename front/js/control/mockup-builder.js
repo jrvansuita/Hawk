@@ -76,7 +76,6 @@ $(document).ready(() => {
     $('.settings-box').find('input').val('')
     $('.settings-box').find('input').prop('checked', false)
 
-    $('.mock-preview').hide()
     $('.mock-img-select').hide()
     $('.back-img-select').hide()
   })
@@ -87,8 +86,8 @@ $(document).ready(() => {
 })
 
 function callRefreshBroadcast () {
-  var $loadd = $('<img>').attr('src', '/img/loader/circle.svg').css({ width: '30px', zIndex: '9999', verticalAlign: 'middle', marginTop: '-5px' })
-  $('.search-sku-holder > label').text('Carregando...').append($loadd)
+  $('.refresh-product').attr('src', '/img/loader/circle.svg')
+  $('.search-sku-holder > label').text('Carregando...')
   refreshBroadcast.emit(getRefreshData())
 }
 
@@ -129,17 +128,14 @@ function checkFields () {
 }
 
 function onRefreshPreview (imageData) {
-  var $img = $('<img>').attr('src', '/img/refresh.png').addClass('freshProduct').css({ cursor: 'pointer', width: '30px', zIndex: '9999', verticalAlign: 'middle', marginTop: '-5px' })
-  $('.search-sku-holder > label').text('Testar Produto').append($img)
-
-  $('.freshProduct').click(() => {
+  $('.refresh-product').attr('src', '/img/refresh.png')
+  $('.search-sku-holder > label').text('Testar Produto')
+  $('.refresh-product').click(() => {
     callRefreshBroadcast()
   })
 
-  $('.mock-preview').hide(200, () => {
-    $('.mock-preview').attr('src', imageData)
-    $('.mock-preview').show(200)
-  })
+  $('.mock-preview').attr('src', imageData)
+  $('.mock-preview').show()
 }
 
 function save () {

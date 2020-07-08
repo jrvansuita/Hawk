@@ -193,7 +193,7 @@ module.exports = class ProductDiagnostics {
   }
 
   _resyncStoredSkus (brandName, type) {
-    var handler = (err, docs) => {
+    var handler = (_err, docs) => {
       var skus = [...new Set(docs.map(i => i.sku))]
 
       this._checkRangeSku(skus, 0, () => {
@@ -308,14 +308,20 @@ function isColorMissing (attrNames) {
 }
 
 function isBrandMissing (product, attrNames) {
-  return !attrNames.includes('Marca') || !attrNames.includes('Fabricante') || !product.feedProduct.brand || !product.feedProduct.manufacturer
+  var check = !attrNames.includes('Marca') || !attrNames.includes('Fabricante')
+
+  if (product.feedProduct) {
+    check = check || !product.feedProduct.brand || !product.feedProduct.manufacturer
+  }
+
+  return check
 }
 
 function isCostPriceMistake (product) {
   var cost = parseFloat(product.precoCusto)
   var price = parseFloat(product.preco)
 
-  return (cost == 0) || (price / cost < 1.2)
+  return (cost === 0) || (price / cost < 1.2)
 }
 
 function isDepartmentMissing (attrNames) {

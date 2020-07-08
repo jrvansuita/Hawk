@@ -57,9 +57,13 @@ $(document).ready(() => {
   Dropdown.on($('.menu-dots'))
     .item('/img/copy.png', 'Copiar Skus', (helper) => {
       var val = ''
-      $('.sku.copiable').each(function () {
-        val += '\n' + $(this).text()
-      })
+      if (Object.keys(selectedSkus).length > 0) {
+        Object.keys(selectedSkus).forEach((item) => { val += '\n' + item })
+      } else {
+        $('.sku.copiable').each(function () {
+          val += '\n' + $(this).text()
+        })
+      }
 
       Util.copySeleted(val)
     })
@@ -229,13 +233,17 @@ function createTitle (product) {
 
   var diagIcon = $('<img>').addClass('diag-alert').attr('src', 'img/alert.png')
 
-  _get('/product-fixes', { sku: product.sku }, (all) => {
+  _get('/product-fixes', { sku: product.sku, groupped: true }, (all) => {
     if (all.length > 0) {
       diagIcon.fadeIn()
       diagIcon.click(() => {
         window.open('/diagnostics?sku=' + product.sku, '_blank')
       })
+<<<<<<< HEAD
       new Tooltip(diagIcon[0], all[0].data.name).load()
+=======
+      var fixTooltip = new Tooltip(diagIcon[0], all[0].fixes[0].name).load()
+>>>>>>> 00a171bd2f971d9b1f4bbca9e99f286e82a5be35
     }
   })
   var div = $('<div>').addClass('title-holder').append(sku, name, diagIcon)

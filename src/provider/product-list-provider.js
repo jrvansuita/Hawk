@@ -12,7 +12,7 @@ module.exports = {
         // Os attrs abaixo podem ter vários valores separadas por vírgula
         // Para todos os outros atributos, tem que ser exatamente o valor para buscar
         if (!['category', 'age'].includes(key)) {
-          seachValue = '^' + value + '$'
+          seachValue = '^' + value // + '$'
         }
 
         attrs[key] = {
@@ -33,6 +33,8 @@ module.exports = {
       })
     }
     var result = Object.assign(Product.likeQuery(query.value), attrs)
+
+    // console.log(result)
 
     return result
   },

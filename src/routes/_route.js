@@ -107,7 +107,7 @@ var Response = {
   },
 
   onRedirect (res, r, e) {
-    if (e !== undefined) {
+    if (e) {
       this.error(res, e)
     } else {
       this.sucess(res, r)
@@ -123,11 +123,9 @@ var Response = {
   },
 
   error (res, e) {
-    console.log('Printing error: ' + e.toString())
-
     var userId = res.locals.loggedUser ? res.locals.loggedUser.id : 0
     History.handle(e, userId)
 
-    res.status(500).send(e.toString())
+    res.status(500).send(e?.toString())
   }
 }

@@ -3,6 +3,16 @@ const Fix = require('../bean/fix.js')
 const Enum = require('../bean/enumerator.js')
 
 module.exports = class DiagnosticsProvider {
+  groupped (s) {
+    this.doGroups = s
+    return this
+  }
+
+  loadTypes (s) {
+    this.doLoadTypes = s
+    return this
+  }
+
   groupType (data) {
     var grouped = {}
 
@@ -25,36 +35,42 @@ module.exports = class DiagnosticsProvider {
   }
 
   loadByType (type, callback) {
-    Fix.findByType(type, (err, all) => {
+    Fix.findByType(type, (_err, all) => {
       callback(this.groupType(all))
     })
   }
 
-  groupSku (data) {
+  async _groupFixesType (data) {
     var grouped = {}
+    var fixesTypes = (await Enum.on('PROD-DIAG').get(true))
 
     data.forEach((item) => {
       if (!grouped[item.sku]) {
-        grouped[item.sku] = { sku: item.sku, fixes: [item.type] }
+        grouped[item.sku] = { sku: item.sku, fixes: [fixesTypes[item.type]] }
       } else {
-        grouped[item.sku].fixes.push(item.type)
+        grouped[item.sku].fixes.push(fixesTypes[item.type])
       }
     })
 
     return Object.values(grouped)
   }
 
+  async prepare (data) {
+    if (this.doGroups) { data = await this._groupFixesType(data) }
+    return data
+  }
+
   loadBySku (sku, callback) {
     Product.get(sku, (product) => {
-      Fix.findBySku(sku, (_err, all) => {
-        callback(this.groupSku(all), product)
+      Fix.findBySku(sku, async (_err, data) => {
+        callback((await this.prepare(data)), product)
       })
     })
   }
 
   findBySku (sku, callback) {
-    Fix.findBySku(sku, (_err, data) => {
-      callback(data)
+    Fix.findBySku(sku, async (_err, data) => {
+      callback((await this.prepare(data)))
     })
   }
 

@@ -65,7 +65,7 @@ function findCurrentProduct () {
 }
 
 function requestProdutosFixes (callback) {
-  _get('/product-fixes', { sku: product.codigo }, (all) => {
+  _get('/product-fixes', { sku: product.codigo, groupped: true }, (all) => {
     window.fixes = all
     callback(this)
   })
@@ -330,11 +330,11 @@ function buildSkuCol (product) {
   if (fixes) {
     fixes.forEach((item) => {
       if (product.codigo == item.sku && !$div.find('img').length) {
-        var $err = $('<img>').addClass('diag-alert').attr('src', 'img/alert.png').show()
+        var $err = $('<img>').addClass('diag-alert').attr('src', '/img/alert.png').show()
         $err.click(() => {
           window.open('/diagnostics?sku=' + product.codigo, '_blank')
         })
-        var alertTooltip = new Tooltip($err[0], item.data.name).load()
+        new Tooltip($err[0], item.fixes[0].name).load()
         $div.append($err)
       }
     })

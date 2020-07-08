@@ -65,7 +65,7 @@ function buildBoxes (results) {
   var box = new BuildBox()
     .group('Pagamentos', data.paymentType.length)
   data.paymentType.forEach((each) => {
-    box.square(window.paymentTypes[each.name].name, each.count, Num.percent(each.count * 100 / data.count, true), Num.format(each.total), 'paymentType', each.name, data.paymentType[0].count)
+    box.square(window.paymentTypes?.[each.name]?.name, each.count, Num.percent(each.count * 100 / data.count, true), Num.format(each.total), 'paymentType', each.name, data.paymentType[0].count)
   })
 
   box.group('Cupons', data.coupom.length, 'gray coupom-box').hidableItems(16)

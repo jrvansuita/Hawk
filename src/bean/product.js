@@ -13,10 +13,10 @@ module.exports = class Product extends DataAccess {
     this.cost = Floa.def(cost)
     this.discount = Floa.def(discount)
 
-    this.brand = Str.def(brand)
+    this.brand = Str.def(brand).trim()
     this.category = Str.def(category)
-    this.gender = Str.def(gender)
-    this.color = Str.def(color)
+    this.gender = Str.def(gender).trim()
+    this.color = Str.def(color).trim()
     this.quantity = Num.def(quantity)
     this.newStock = Num.def(newStock)
     this.sync = !!sync
@@ -24,7 +24,7 @@ module.exports = class Product extends DataAccess {
     this.age = Str.def(age)
     this.year = Str.def(year)
     this.season = Str.def(season)
-    this.manufacturer = Str.def(manufacturer)
+    this.manufacturer = Str.def(manufacturer).trim()
     this.weight = Str.def(weight)
 
     this.visible = !!visble
@@ -88,6 +88,7 @@ module.exports = class Product extends DataAccess {
     props.forEach((eachProp) => {
       result[eachProp] = [{ $group: { _id: '$' + eachProp, count: { $sum: 1 }, stock: { $sum: { $abs: '$newStock' } } } }]
     })
+    result.total = [{ $group: { _id: null, stock: { $sum: { $abs: '$newStock' } } } }]
 
     Product.aggregate([{ $match: query }, { $facet: result }], (_err, data) => {
       data = data?.[0] || {}

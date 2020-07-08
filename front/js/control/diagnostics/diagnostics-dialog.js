@@ -5,9 +5,9 @@ $(document).ready(() => {
 
     _post('/check-product-diagnostic', { sku: sku }, (data) => {
       var type = $(this).data('type')
-      var obj = data.data.find((item) => { return item.sku == sku })
+      var obj = data.find((item) => { return item.sku === sku })
 
-      var fixed = !obj || !obj.fixes.includes(type)
+      var fixed = !obj || !obj.fixes.map((fix) => { return fix.name.includes(type) })
 
       if (fixed) {
         $(this).attr('src', 'img/checked.png')
@@ -19,7 +19,7 @@ $(document).ready(() => {
 
       // $('.menu-dots .dots-glyph').attr('src', 'img/dots.png');
 
-      if ($('.f-icon.fix').length == 0) {
+      if ($('.f-icon.fix').length === 0) {
         $('.sku-fixes-modal').delay(500).fadeOut(400, () => {
           $('.sku-fixes-modal').trigger('click')
           $(".row-item[data-sku='" + sku.split('-')[0] + "']").fadeOut(600)
@@ -41,7 +41,7 @@ $(document).ready(() => {
       helper.loading()
       _post('/check-product-diagnostic', { sku: helper?.data?.sku, forceFather: true }, (data) => {
         $('.sku-fixes-modal').trigger('click')
-        showSkuFixesDialog(data.product.sku)
+        showSkuFixesDialog(helper.data.sku)
       })
     })
 

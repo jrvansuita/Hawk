@@ -56,7 +56,7 @@ module.exports = class ProductRoutes extends Routes {
 
     this._get('/product', (req, res) => {
       ProductLaws.get(req.query.sku || req.query.ean, false, this._resp().redirect(res))
-    })._api()
+    })._apiRead()
 
     /* ---- Render ---- */
 
@@ -96,13 +96,35 @@ module.exports = class ProductRoutes extends Routes {
       })
     })
 
+    /**
+     * @api {post} /check-product-diagnostic Check Product Fixes
+     * @apiGroup Product
+     * @apiParam {String} sku Product SKU
+     * @apiParam {Boolean} forceFather Force to check only the childs of product
+     * @apiParamExample Body-Example:
+     *    [
+     *     {
+     *       "sku": "22645im-6",
+     *       "fixes": [
+     *            {
+     *              "default": false,
+     *               "icon": "price",
+     *               "description": "Preço de venda não informado ou preço de custo incorreto.",
+     *               "name": "Preço de Venda ou Custo Incorreto",
+     *                "value": "COST"
+     *             }
+     *        ]
+     *    }
+     *  ]
+     */
+
     this._post('/check-product-diagnostic', (req, res) => {
       new ProductDiagnostics().resync(req.body.sku, req.body.forceFather, () => {
-        new DiagnosticsProvider().loadBySku(req.body.sku, (all, product) => {
-          res.status(200).send({ data: all, product: product })
+        new DiagnosticsProvider().groupped(true).loadBySku(req.body.sku, (all, product) => {
+          res.status(200).send(all)
         })
       })
-    })
+    })._api()
 
     this._post('/run-product-diagnostics', (req, res) => {
       if (req.body.refresh) {
@@ -114,33 +136,41 @@ module.exports = class ProductRoutes extends Routes {
       res.status(200).send('Ok')
     })
 
+    /**
+     * @api {get} /product-fixes Product Fixes
+     * @apiGroup Product
+     * @apiParam {String} sku Product SKU
+     * @apiParam {String} type Product Fix Type
+     * @apiParamExample Body-Example:
+     *    [
+     *       {
+     *      "_id": "5efcd598b82d882870c9ab03",
+     *      "sku": "22645im-6",
+     *      "type": "COST",
+     *      "__v": 0,
+     *      "date": "2020-07-01T18:27:36.233Z",
+     *      "name": "Conjunto Quick And Fast Dog Infantil Marinho - Elian-6"
+     *       }
+     *    ]
+     */
+
     this._get('/product-fixes', (req, res) => {
+      var provider = new DiagnosticsProvider().groupped(req.query.groupped)
+
       if (req.query.type) {
-        new DiagnosticsProvider().loadByType(req.query.type, (all) => {
+        provider.loadByType(req.query.type, (all) => {
           this._resp().sucess(res, all)
         })
       } else {
-        new DiagnosticsProvider().findBySku(req.query.sku, async (all) => {
-          res.set('Cache-Control', 'public, max-age=86400')
-
-          var result = []
-          var fixesTypes = (await Enum.on('PROD-DIAG').get(true))
-
-          // 1day
-          all.forEach((each) => {
-            var s = each.toObject()
-            s.data = fixesTypes[each.type]
-            result.push(s)
-          })
-
-          this._resp().sucess(res, result)
+        provider.findBySku(req.query.sku, async (data) => {
+          this._resp().sucess(res, data)
         })
       }
-    })
+    })._apiRead()
 
     this._get('/fixes-dialog', (req, res) => {
-      new DiagnosticsProvider().loadBySku(req.query.sku, async (all, product) => {
-        res.render('product/diagnostics/diagnostics-dialog', { data: all, product: product, types: (await Enum.on('PROD-DIAG').get(true)) })
+      new DiagnosticsProvider().groupped(true).loadBySku(req.query.sku, (all, product) => {
+        res.render('product/diagnostics/diagnostics-dialog', { data: all, product: product })
       })
     })
 
