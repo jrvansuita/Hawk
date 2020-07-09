@@ -120,13 +120,13 @@ function showAvatarCropper () {
   $('.avatar-holder').width(300).height(300)
 
   $('.avatar-crop-ok').click(() => {
-    var resultParams = {
+    var r = {
       type: 'base64',
       size: { width: 100, height: 100 },
       format: 'png'
     }
 
-    croppie.result(resultParams).then(function (base64Image) {
+    croppie.result(r).then(function (base64Image) {
       $('.avatar-img').attr('src', base64Image)
       _postImg('/upload-user-avatar', { userId: $('#editing').val(), avatar: base64Image.split(',')[1] }, (url) => {
         selectedUser.avatar = url

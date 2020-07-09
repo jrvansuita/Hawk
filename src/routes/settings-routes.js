@@ -9,15 +9,15 @@ module.exports = class SettingsRoutes extends Routes {
     })
 
     this._page('/main-settings', (req, res) => {
-      res.render('settings/main-settings')
+      res.render('settings/main-settings', { fullparams: global.Params.bundle(), teste: 'veio' })
     })
 
     this._page('/api-settings', (req, res) => {
-      res.render('settings/api-settings')
+      res.render('settings/api-settings', { fullparams: global.Params.bundle() })
     })
 
     this._page('/social-settings', (req, res) => {
-      res.render('settings/social-settings')
+      res.render('settings/social-settings', { fullparams: global.Params.bundle() })
     })
 
     this._post('/put-main-param', (req, res) => {

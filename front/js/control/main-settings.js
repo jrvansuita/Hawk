@@ -49,11 +49,11 @@ $(document).ready(() => {
 })
 
 function loadTextVal (el) {
-  $(el).val(window._params[$(el).attr('id')])
+  $(el).val(window._fullparams[$(el).attr('id')])
 }
 
 function loadCheckboxVal (el) {
-  $(el).prop('checked', window._params[$(el).attr('id')])
+  $(el).prop('checked', window._fullparams[$(el).attr('id')])
 }
 
 function onPutString () {
@@ -79,7 +79,7 @@ function saveApiKey () {
   key = btoa(key)
 
   var index = $('.api-holder').attr('index')
-  var apiKeys = window._params['api-app-keys']
+  var apiKeys = window._fullparams['api-app-keys']
 
   index ? (apiKeys[index] = key) : apiKeys.push(key)
 
@@ -90,7 +90,7 @@ function saveApiKey () {
 function buildApiItemList () {
   var $table = $('.table-api')
 
-  window._params['api-app-keys'].forEach((key) => {
+  window._fullparams['api-app-keys'].forEach((key) => {
     var $line = $('<tr>').addClass('api-item')
     key = atob(key)
     key.split('-').forEach((e, index) => {
@@ -107,7 +107,7 @@ function buildApiItemList () {
 
 function editApiItem (item) {
   var index = $(item).index() - 1
-  var arr = atob(window._params['api-app-keys'][index]).split('-')
+  var arr = atob(window._fullparams['api-app-keys'][index]).split('-')
 
   $('#api-user').val(arr[0])
   $('#api-key').val(atob(arr[1]))
@@ -117,24 +117,26 @@ function editApiItem (item) {
 }
 
 function onInit () {
-  new ComboBox($('#api-permission'))
-    .fromEnum('API-PERM')
-    .setAutoShowOptions()
-    .setOnItemSelect((item, index) => {
-      $('#api-permission').val(item.value)
-    })
-    .load()
+  if ($('#api-permission').length) {
+    new ComboBox($('#api-permission'))
+      .fromEnum('API-PERM')
+      .setAutoShowOptions()
+      .setOnItemSelect((item, index) => {
+        $('#api-permission').val(item.value)
+      })
+      .load()
 
-  $('.menu-dots').each((index, each) => {
-    Dropdown.on(each).item('/img/delete.png', 'Excluir', (helper) => {
-      removeApiItem($(helper.parent).closest('tr'))
+    $('.menu-dots').each((index, each) => {
+      Dropdown.on(each).item('/img/delete.png', 'Excluir', (helper) => {
+        removeApiItem($(helper.parent).closest('tr'))
+      })
     })
-  })
+  }
 }
 
 function removeApiItem (item) {
   var index = $(item).index() - 1
-  window._params['api-app-keys'].splice(index, 1)
-  putParam('api-app-keys', window._params['api-app-keys'])
+  window._fullparams['api-app-keys'].splice(index, 1)
+  putParam('api-app-keys', window._fullparams['api-app-keys'])
   $(item).fadeOut()
 }
