@@ -401,6 +401,8 @@ table {
 
 .icon-copy {
   filter: grayscale(1);
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .icon-copy:hover {

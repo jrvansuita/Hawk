@@ -97,12 +97,13 @@ function buildApiItemList () {
       index++
       var $item = $('<td>')
       var $span = $('<span>').addClass('item-span')
-      index === 2 ? $span.text(btoa(key)) : $span.text(e)
+      index === 2 ? $span.text(btoa(key)).addClass('copiable') : $span.text(e)
       $table.append($line.append($item.append($span)))
     })
     var $menu = $('<div>').addClass('menu-dots')
     $('.api-item td span').last().append($menu)
   })
+  bindCopiable()
 }
 
 function editApiItem (item) {

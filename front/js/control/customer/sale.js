@@ -19,6 +19,11 @@ $(document).ready(() => {
       window.open('/shipping-order-print?id=' + data.idOrdemColeta)
     }
   })
+
+  $('.icon-copy').click(function () {
+    Util.selectContent($(this).parent()[0])
+    Util.copySeleted()
+  })
 })
 
 function printNFe () {
