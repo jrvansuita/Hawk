@@ -26,6 +26,7 @@
   <script class="hidable-script">
   <%var shippingOrder = shippingOrder || {} %>
   window.shippingOrder = <%- JSON.stringify(shippingOrder) %>
+  window.transports = <%- JSON.stringify(transports) %>
   </script>
 
 
@@ -72,7 +73,7 @@
               var statusIcon = icon[(shippingOrder.situacao || 'null')] || 'question-mark';
 
               %>
-              <img class="circle shadow icon" src="/img/<%=statusIcon%>.png" onerror="this.src='/img/transport/question-mark.png'" />
+              <img class="circle shadow icon" src="/img/<%=statusIcon%>.png" onerror="this.src='/img/question-mark.png'" />
 
               <div class="field skrink">
                 <label class="field-title">Situação</label>
@@ -80,10 +81,9 @@
               </div>
             </div>
           </td>
-
           <td>
             <div class="status-holder transport-holder">
-              <img class="circle shadow icon" src="/img/<%=shippingOrder ?  'transport/' + Util.transportName(shippingOrder.transportador).toLowerCase() : 'default'%>.png" onerror="this.src='/img/transport/default.png'" />
+              <img class="circle shadow icon" src="<%= shippingOrder ? transports[Util.transportName(shippingOrder.transportador).toLowerCase()]?.icon : transports.default.icon%>" onerror="this.src='<%=transports.default.icon%>'" />
 
               <div class="field skrink">
                 <label class="field-title">Transportadora</label>

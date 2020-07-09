@@ -18,8 +18,9 @@
       }
       %>
 
-      <%if (iconPath){ %>
-        <img class="icon"  src="/img/<%=iconPath.toLowerCase()%>.png" />
+      <%if (iconPath){
+          if(title !== 'Transportadoras') iconPath = '/img/' + iconPath.toLowerCase() + '.png'%>
+        <img class="icon"  src="<%=iconPath%>" />
       <%}%>
 
 

@@ -6,3 +6,5 @@ _tests/coverage
 _apidocs/
 front/_mockups
 front/fonts/typefaces
+front/.DS_Store
+front/img/.DS_Store

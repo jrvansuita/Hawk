@@ -30,10 +30,10 @@ $(document).ready(() => {
     window.open('/packing/shipping-order')
   })
 
-  new ComboBox($('#transport'), transportList)
+  new ComboBox($('#transport'), transportList.transp)
     .setAutoShowOptions()
     .setOnItemBuild((data, index) => {
-      return { text: data.val, img: '../img/transport/' + data.val.toLocaleLowerCase() + '.png' }
+      return { text: data.val, img: window.transportList.icons[data.val.toLocaleLowerCase()]?.icon }
     })
     .load(() => {
       if (memoryQuery.transport) {
@@ -178,7 +178,7 @@ function addItemLayout (item, index) {
 
   var transpHolder = $('<div>')
   var transpName = Util.transportName(item.transportador, 'Não Encontrado')
-  var transpIcon = $('<img>').attr('src', '../img/transport/' + transpName.toLocaleLowerCase() + '.png')
+  var transpIcon = $('<img>').attr('src', window.transportList.icons[transpName.toLocaleLowerCase()].icon)
   transpName = $('<span>').append(transpName)
 
   tds.push($('<td>').addClass('transp-col').append(transpHolder.append(transpIcon, transpName)))
@@ -200,7 +200,7 @@ function addItemLayout (item, index) {
           $(this).remove()
         })
       })
-      .item('../img/transport/default.png', 'Coletado', (helper) => {
+      .item(window.transportList.icons.default.icon, 'Coletado', (helper) => {
         _post('/shipping-order-colected', { id: helper.data.id }, () => {
           var s = $(each.closest('tr')).find('.ship-status')
           s.text('Coletado').addClass('colected')

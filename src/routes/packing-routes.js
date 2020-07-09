@@ -17,7 +17,7 @@ module.exports = class PackingRoutes extends Routes {
           if (sale.id) sale.status = ((await Enum.on('ECCO-SALE-STATUS').get(true)))
           res.render('packing/packing.ejs', {
             sale: sale,
-            groups: { icons: icons, ...(!sale.id ? PackingProvider.get() : {}) }
+            groups: { icons: icons, ...(!sale.id ? await PackingProvider.get() : {}) }
           })
         }
 

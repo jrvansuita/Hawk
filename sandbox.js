@@ -1,16 +1,12 @@
 const Initilizer = require('./src/_init/initializer.js')
 
 new Initilizer().setSandboxMode(true).begin().then(async () => {
-  const Enum = require('./src/bean/enumerator.js')
-  // var object = (await Enum.on('COLOR-LIST').mapBy('name').get(true))
+  // const Enum = require('./src/bean/enumerator.js')
+  const ProductBoard = require('./src/performance/product-board-email.js')
 
-  // var s = (await Enum.on('SALE-STATUS').hunt('ip_shipped', 'value'))
+  // var s = (await Enum.on('TRANSPORT-IMGS').mapBy('value').get(true))
 
-  // console.log(s)
-
-  const SaleLoader = require('./src/loader/sale-loader.js')
-
-  new SaleLoader('121048805').run((sale) => {
-    console.log(sale)
+  new ProductBoard().go((data) => {
+    console.log(data)
   })
 })

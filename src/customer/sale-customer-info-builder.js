@@ -55,7 +55,7 @@ module.exports = class SaleCustomerInfoBuilder {
   }
 
   _getProvisorio () {
-    return { erp: Util.removeNullElements(this.erp), store: Util.removeNullElements(this.store) }
+    return { erp: global.Util.removeNullElements(this.erp), store: global.Util.removeNullElements(this.store) }
   }
 
   load (callback) {
@@ -78,11 +78,11 @@ class SaleWrapper {
     this.status = store.status
     this.situation = (await Enum.on('ECCO-SALE-STATUS').hunt(erp.situacao, 'value'))?.name
     this.pickingStatus = (await Enum.on('ECCO-SALE-STATUS').hunt(erp.pickingRealizado, 'value'))?.name
-    this.saleDate = Dat.formatwTime(Dat.rollHour(new Date(store.created_at), -3))
+    this.saleDate = global.Dat.formatwTime(global.Dat.rollHour(new Date(store.created_at), -3))
     this.date = store.created_at
-    this.subtotal = Floa.def(store.base_subtotal)
-    this.discount = Floa.def(store.discount_amount)
-    this.total = Floa.def(store.base_grand_total)
+    this.subtotal = global.Floa.def(store.base_subtotal)
+    this.discount = global.Floa.def(store.discount_amount)
+    this.total = global.Floa.def(store.base_grand_total)
     this.coleted = erp.pedidoColetado ? 'Sim' : 'Não'
     this.idOrdemColeta = erp.nfe ? erp.nfe.idOrdemColeta : ''
     this.weight = erp.pesoBruto ? (erp.pesoBruto < 1.0 ? erp.pesoBruto + 'g' : erp.pesoBruto + 'Kg') : (store.weight < 1.0 ? store.weight + 'g' : store.weight + 'Kg')
@@ -90,7 +90,7 @@ class SaleWrapper {
     this.client = {
       name: store.customer_firstname + ' ' + store.customer_lastname,
       socialCode: store.customer_taxvat,
-      dateOfBirth: Dat.format(new Date(store.customer_dob)),
+      dateOfBirth: global.Dat.format(new Date(store.customer_dob)),
       email: store.customer_email,
       tel: store.billing_address.telephone
     }
@@ -125,25 +125,25 @@ class SaleWrapper {
       coupon: store.coupon_code,
       discount_desc: store.discount_description
     }
-
     this.transport = {
       name: erp.transport,
+      transportIcon: (await Enum.on('TRANSPORT-IMGS').hunt(erp.transport.toLowerCase(), 'value'))?.icon,
       desc: store.shipping_description,
-      cost: Floa.def(store.shipping_amount) === 0 ? 'Frete Grátis' : Floa.def(store.shipping_amount),
+      cost: global.Floa.def(store.shipping_amount) === 0 ? 'Frete Grátis' : global.Floa.def(store.shipping_amount),
       tracking: erp.codigoRastreamento,
       deliveryTime: erp.deliveryTime
     }
 
     this.comments = {
       store: store.status_history.filter((each) => {
-        return (each.comment != null && each.comment != '[Intelipost Webhook] - ' && each.comment != '[ERP - ECCOSYS] - ')
+        return (each.comment != null && each.comment !== '[Intelipost Webhook] - ' && each.comment !== '[ERP - ECCOSYS] - ')
       }),
       erp: erp.observacaoInterna
     }
 
     var count = 0
     erp.items.forEach((i) => {
-      count += Floa.def(i.quantidade)
+      count += global.Floa.def(i.quantidade)
     })
     this.totalPecas = count
 
@@ -159,11 +159,11 @@ class SaleItemWrapper {
   constructor (item) {
     this.sku = item.codigo || item.sku
     this.name = item.descricao || item.name
-    this.price = Floa.def(item.valor || item.price)
-    this.discount = Floa.def(item.discount_amount || item.desconto_adm)
-    this.total = Floa.def((item.price - (item.discount_amount / item.quantidade || item.discount_amount / item.qty_ordered)) || item.valor)
-    this.quantity = Num.def(item.quantidade || item.qty_ordered)
-    this.weight = Floa.def(item.weight) < 1.000 ? Floa.def(item.weight) + 'g' : Floa.def(item.weight) + 'Kg'
+    this.price = global.Floa.def(item.valor || item.price)
+    this.discount = global.Floa.def(item.discount_amount || item.desconto_adm)
+    this.total = global.Floa.def((item.price - (item.discount_amount / item.quantidade || item.discount_amount / item.qty_ordered)) || item.valor)
+    this.quantity = global.Num.def(item.quantidade || item.qty_ordered)
+    this.weight = global.Floa.def(item.weight) < 1.000 ? global.Floa.def(item.weight) + 'g' : global.Floa.def(item.weight) + 'Kg'
     this.changed = item.observacao ? item.observacao.includes('changed') : false
     this.store = item.store === true
     this.erp = item.erp === true

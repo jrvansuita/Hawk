@@ -4,17 +4,20 @@ const PickingLaws = require('../laws/picking-laws.js')
 const BlockLaws = require('../laws/block-laws.js')
 const InprogressLaws = require('../laws/inprogress-laws.js')
 const PendingLaws = require('../laws/pending-laws.js')
+const TransportLaws = require('../laws/transport-laws.js')
 
 global.salesGroups = {}
 var fullList
 
 module.exports = {
 
-  get () {
+  async get () {
     global.salesGroups = {}
     fullList = []
 
     this.registryHeaders()
+
+    this.transpIcons = await TransportLaws.getIcons()
 
     for (var i = 0; i < fullList.length; i++) {
       this.registry(fullList[i])
@@ -33,7 +36,7 @@ module.exports = {
 
   registry (sale) {
     this.group('sales', 'Todos os Pedidos', 'all-papers')
-    this.group('transps', sale.transport, 'transport/' + sale.transport)
+    this.group('transps', sale.transport, this.transpIcons[sale?.transport?.toLowerCase()]?.icon)
 
     if (sale.client) {
       this.group('ufs', sale.client.uf)

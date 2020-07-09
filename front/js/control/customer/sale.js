@@ -53,7 +53,7 @@ function bindSaleAddressInfo (data) {
 
   // card transport
   $('.sale-shipping-transport').text(data.transport.name)
-  $('#transport-img').attr('src', '/img/transport/' + data.transport.name.toLocaleLowerCase() + '.png')
+  $('#transport-img').attr('src', data.transport.transportIcon)
   $('.sale-shipping-transport-description').html(data.transport.desc + '<br>' + data.transport.tracking)
   $('.sale-shipping-transport-delivery').html(Dat.format(new Date(addDaysToDate(data.date, data.transport.deliveryTime))))
   $('.sale-info-coleted').text(data.coleted).css('border-color', setBorderOnCard(data.coleted))
@@ -276,7 +276,7 @@ function bindDropdowns (data) {
     }
   }
 
-  Dropdown.on($('.transport-dots')).item('/img/transport/default.png', 'Rastreio', function () {
+  Dropdown.on($('.transport-dots')).item('/img/truck.png', 'Rastreio', function () {
     window.open(Params.trackingUrlExt() + data.oc)
   }).item('/img/envelop.png', 'Enviar Rastreio por Email', function (helper) {
     helper.loading(true)

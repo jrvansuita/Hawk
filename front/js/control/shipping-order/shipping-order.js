@@ -368,7 +368,7 @@ function onShippingOrderIsInMemory (nfe) {
   if (!shippingOrder.numeroColeta) {
     var name = Util.transportName(nfe.transportador, 'none')
 
-    $('.transport-holder .icon').attr('src', '/img/transport/' + name + '.png')
+    $('.transport-holder .icon').attr('src', window.transports[name.toLowerCase()]?.icon)
     $('.transport-holder .info').text(name)
   }
 }

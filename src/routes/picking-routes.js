@@ -11,6 +11,7 @@ const DoneLaws = require('../laws/done-laws.js')
 const PickingHandler = require('../handler/picking-handler.js')
 const PickingSalePrint = require('../print/picking-sale-print.js')
 const UsersProvider = require('../provider/user-provider.js')
+const Enum = require('../bean/enumerator.js')
 
 module.exports = class PickingRoutes extends Routes {
   attach () {
@@ -59,7 +60,7 @@ module.exports = class PickingRoutes extends Routes {
       TransportLaws.select(req.query.transp)
       UfLaws.select(req.query.uf)
 
-      PickingHandler.init(() => {
+      PickingHandler.init(async () => {
         var pickingSales = PickingHandler.getPickingSales()
 
         if (!res.headersSent) {
@@ -71,6 +72,7 @@ module.exports = class PickingRoutes extends Routes {
 
             transportList: TransportLaws.getObject(),
             selectedTransps: TransportLaws.getSelecteds(),
+            transportIcons: (await Enum.on('TRANSPORT-IMGS').get(true)),
 
             ufList: UfLaws.getObject(),
             selectedUfs: UfLaws.getSelecteds(),

@@ -1,3 +1,5 @@
+const Enum = require('../bean/enumerator.js')
+
 global.transportList = {}
 
 global.selectedTransps = undefined
@@ -36,6 +38,10 @@ module.exports = {
 
   getObject () {
     return global.transportList
+  },
+
+  async getIcons () {
+    return (await Enum.on('TRANSPORT-IMGS').get(true))
   }
 
 }

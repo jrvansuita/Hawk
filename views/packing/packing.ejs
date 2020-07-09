@@ -95,8 +95,7 @@
 
               <td>
                 <div class="status-holder">
-                  <img class="circle shadow icon" src="/img/<%=sale ?  'transport/' + sale.transport.toLowerCase() : 'question-mark'%>.png" onerror="this.src='/img/transport/default.png'" />
-
+                  <img class="circle shadow icon" src=" <%=groups.transports[sale.transport.toLowerCase()]?.icon || groups.transports.default.icon%>" onerror="this.src='<%=groups.transports.default.icon%>" />
                   <div class="field skrink">
                     <label class="field-title">Transportadora</label>
                     <label class="info"><%=sale ? sale.transport : ''%></label>

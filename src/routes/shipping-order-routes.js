@@ -3,13 +3,16 @@ const ShippingOrderProvider = require('../provider/shipping-order-provider.js')
 const EccosysProvider = require('../eccosys/eccosys-provider.js')
 const EccosysStorer = require('../eccosys/eccosys-storer.js')
 const TransportLaws = require('../laws/transport-laws.js')
-const TemplateBuilder = require('../template/template-builder.js')
+const Enum = require('../bean/enumerator.js')
 
 module.exports = class ShippingOrderRoutes extends Routes {
   attach () {
-    this._page('/packing/shipping-order-list', (req, res) => {
+    this._page('/packing/shipping-order-list', async (req, res) => {
       res.locals.shippingListQuery = req.session.shippingListQuery
-      res.render('packing/shipping-order/shipping-order-list', { transportList: TransportLaws.getObject() })
+      var transportList = {}
+      transportList.transp = TransportLaws.getObject()
+      transportList.icons = (await Enum.on('TRANSPORT-IMGS').get(true))
+      res.render('packing/shipping-order/shipping-order-list', { transportList: transportList })
     })
 
     this._get('/shipping-order-list-page', (req, res) => {
@@ -19,19 +22,20 @@ module.exports = class ShippingOrderRoutes extends Routes {
       })
     })
 
-    this._get('/packing/shipping-order', (req, res) => {
+    this._get('/packing/shipping-order', async (req, res) => {
+      var transports = (await Enum.on('TRANSPORT-IMGS').get(true))
       if (req.query.number || req.query.id) {
-        ShippingOrderProvider.get(req.query, (data) => {
-          res.render('packing/shipping-order/shipping-order', { shippingOrder: data })
+        ShippingOrderProvider.get(req.query, async (data) => {
+          res.render('packing/shipping-order/shipping-order', { shippingOrder: data, transports: transports })
         })
       } else {
-        res.render('packing/shipping-order/shipping-order', { shippingOrder: null })
+        res.render('packing/shipping-order/shipping-order', { shippingOrder: null, transports: transports })
       }
     })
 
     this._get('/shipping-order-print', (req, res) => {
-      ShippingOrderProvider.get(req.query, (data) => {
-        res.render('packing/shipping-order/shipping-order-print', { shippingOrder: data })
+      ShippingOrderProvider.get(req.query, async (data) => {
+        res.render('packing/shipping-order/shipping-order-print', { shippingOrder: data, transports: (await Enum.on('TRANSPORT-IMGS').get(true)) })
       })
     })
 

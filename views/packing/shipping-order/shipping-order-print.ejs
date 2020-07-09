@@ -97,9 +97,8 @@
 
       <td><iframe frameborder='0' src="templates-viewer?id=84155975" width="100%" scrolling="no"></iframe></td>
       <td>
-
         <p class="big">Coleta: <%=shippingOrder.numeroColeta%></p>
-        <p class="transp"> <img src="img/transport/<%=Util.transportName(shippingOrder.transportador).toLowerCase()%>.png"/> <%=shippingOrder.transportador%></p>
+        <p class="transp"> <img src="<%=transports[Util.transportName(shippingOrder.transportador).toLowerCase()].icon%>"/> <%=shippingOrder.transportador%></p>
         <p>Data da Ordem: <%=Dat.format(new Date(shippingOrder.data))%></p>
         <p>Data da Impressão: <%=Dat.formatwTime(new Date())%></p>
 
