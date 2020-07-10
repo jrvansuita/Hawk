@@ -149,8 +149,6 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .avatar-img {
-  margin-left: auto;
-  margin-right: auto;
   display: block;
   margin-left: 10px;
   margin-right: 10px;
@@ -251,8 +249,6 @@ tr.line td {
 }
 
 .image-preview {
-  width: 90px;
-  height: 90px;
   border: 2px solid #dfdddf;
   border-radius: 10px;
   z-index: 100000;
@@ -269,26 +265,6 @@ table {
   border-spacing: 0;
 }
 
-
-/**
-.dots-glyph{
-  width: 15px;
-  margin-right: -5px;
-  margin-left: 5px;
-  height: 15px;
-  padding: 3px;
-  display: inline-flex;
-  margin-top: -3px;
-}
-
-.dots-glyph:hover {
-  background-color: #dcdcdc73;
-  transform: scale(1.2);
-  cursor: pointer !important;
-  border-radius: 50%;
-}
-**/
-
 .editable-input {
   border-radius: 5px;
   margin-top: -5px;
@@ -301,20 +277,19 @@ table {
   outline: none;
   height: 26px;
   background-color: transparent;
-  border-style: none;
   transform: scale(1);
   border: 2px transparent;
   border-style: none none solid;
-}
-
-.editable-input:hover:enabled {
-  transform: scale(1.05);
 }
 
 .editable-input:focus {
   border-radius: 0;
   border: 2px #1c796b;
   border-style: none none solid;
+  transform: scale(1.05);
+}
+
+.editable-input:hover:enabled {
   transform: scale(1.05);
 }
 
@@ -363,17 +338,17 @@ table {
   }
 }
 
+.mini-icon-button {
+  width: 24px;
+  height: 24px;
+  padding: 3px;
+}
+
 .mini-icon-button:hover {
   background-color: #f3f3f3;
   transform: scale(1.1);
   cursor: pointer;
   border-radius: 50%;
-}
-
-.mini-icon-button {
-  width: 24px;
-  height: 24px;
-  padding: 3px;
 }
 
 .avatar-group {
@@ -462,7 +437,6 @@ table {
   min-width: 23px;
   cursor: pointer;
 }
-
 
 /* created by vonmesch to be used in enumerators */
 .left-panel::-webkit-scrollbar {
