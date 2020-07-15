@@ -120,8 +120,8 @@ function loadList () {
       showAll = result.data.length === 0
       loading = false
       result.data.forEach((each, index) => {
+        addProductLayout(each, productsListCount)
         productsListCount++
-        addProductLayout(each, index)
       })
 
       window.data = result
@@ -172,7 +172,7 @@ function createImgProduct (product, index) {
     .addClass('thumb')
     .attr('onerror', "this.src='img/product-placeholder.png'")
 
-  var counter = $('<label>').addClass('counter-circle').append(productsListCount)
+  var counter = $('<label>').addClass('counter-circle').append((productsListCount + 1))
 
   new ImagePreview(img).hover((self) => {
     _get('/product-image', { sku: product.sku }, (product) => {
