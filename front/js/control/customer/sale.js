@@ -21,7 +21,7 @@ $(document).ready(() => {
   })
 
   $('.icon-copy').click(function () {
-    Util.selectContent($(this).parent()[0])
+    Util.selectContent($(this).next().next()[0])
     Util.copySeleted()
   })
 })
