@@ -36,6 +36,8 @@ module.exports = class SaleLoader {
 
           this.sale.paymentType = arr[0] ? arr[0].replace('mundipagg_', '') : this.sale.paymentType
           this.sale.coupom = arr[1] ? arr[1].toUpperCase() : ''
+        } else if (eachLine.includes('Custo do Frete:')) {
+          this.sale.frete = Floa.floa(eachLine.split(':')[1]) || Floa.floa(this.sale.frete)
         }
       })
     }

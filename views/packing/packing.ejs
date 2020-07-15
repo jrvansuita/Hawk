@@ -81,21 +81,21 @@
                 </div>
               </td>
 
-
               <td>
                 <div class="status-holder">
-                  <img class="circle shadow icon" src="/img/<%=sale.status[sale.situacao].icon || 'alert'%>.png" />
-
+                  <img class="circle shadow icon" src="/img/<%=saleStatus[sale.situacao]?.icon || 'alert'%>.png" />
                   <div class="field skrink">
                     <label class="field-title">Situação</label>
-                    <label class="info"><%=sale?.status[sale.situacao].name || ''%></label>
+                    <label class="info"><%=saleStatus[sale.situacao].name || ''%></label>
                   </div>
                 </div>
               </td>
 
               <td>
                 <div class="status-holder">
-                  <img class="circle shadow icon" src=" <%=groups.transports[sale.transport.toLowerCase()]?.icon || groups.transports.default.icon%>" onerror="this.src='<%=groups.transports.default.icon%>" />
+<img class="circle shadow icon"
+    src="<%=groups?.transports[sale?.transport?.toLowerCase()]?.icon || groups.transports.default.icon%>"
+    onerror="this.src='<%=groups.transports.default.icon%>" />
                   <div class="field skrink">
                     <label class="field-title">Transportadora</label>
                     <label class="info"><%=sale ? sale.transport : ''%></label>
@@ -153,11 +153,11 @@
 
                 <td>
                   <div class="status-holder">
-                    <img class="circle shadow icon" src="/img/<%=sale.status[sale.pickingRealizado].icon || 'alert'%>.png" />
+                    <img class="circle shadow icon" src="/img/<%=saleStatus[sale.pickingRealizado].icon || 'alert'%>.png" />
 
                     <div class="field skrink">
                       <label class="field-title">Status</label>
-                      <label class="info"><%=sale.status[sale.pickingRealizado].name%></label>
+                      <label class="info"><%=saleStatus[sale.pickingRealizado].name%></label>
                     </div>
                   </div>
                 </td>

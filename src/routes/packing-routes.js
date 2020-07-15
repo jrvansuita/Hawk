@@ -13,11 +13,11 @@ module.exports = class PackingRoutes extends Routes {
       if (global.Sett.get(res.locals.loggedUser, 8)) {
         var result = async (sale) => {
           var icons = (await Enum.on('PAPERS-ICONS').get(true))
-
-          if (sale.id) sale.status = ((await Enum.on('ECCO-SALE-STATUS').get(true)))
+          var transps = (await Enum.on('TRANSPORT-IMGS').get(true))
           res.render('packing/packing.ejs', {
             sale: sale,
-            groups: { icons: icons, ...(!sale.id ? await PackingProvider.get() : {}) }
+            saleStatus: sale.id ? (await Enum.on('ECCO-SALE-STATUS').get(true)) : {},
+            groups: { icons: icons, transports: transps, ...(!sale.id ? await PackingProvider.get() : {}) }
           })
         }
 
