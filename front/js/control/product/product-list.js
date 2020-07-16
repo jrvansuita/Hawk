@@ -114,7 +114,7 @@ function loadList () {
         value: $('#search-input').val(),
         attrs: getAttrsTags(),
         noQuantity: $('#show-no-quantity').is(':checked'),
-        filters: !$('.icon-open').hasClass('is-closed') ? (getFilters() ?? memoryQuery?.filters) : {}
+        filters: !$('.icon-open').hasClass('is-closed') ? getFilters() : {}
       }
     }, (result) => {
       showAll = result.data.length === 0
@@ -125,8 +125,8 @@ function loadList () {
       })
 
       window.data = result
-      showMessageTotals(result.info)
       bindRangeSlider(result.info)
+      showMessageTotals(result.info)
       bindCopiable()
     })
   }
@@ -413,7 +413,6 @@ function bindRangeSlider (data) {
     .setRange(data.smaller_cost, data.gretter_cost)
     .setTitle('Filtrar por Custo')
     .setPrefix('R$')
-    .loadValuesFromMemory(window.memoryQuery?.filters?.cost)
     .setOnSlideStop((val) => {
       window.memoryQuery.filters.cost = val
     })
@@ -423,7 +422,6 @@ function bindRangeSlider (data) {
     .setRange(data.smaller_sell, data.gretter_sell)
     .setTitle('Filtrar por Preço')
     .setPrefix('R$')
-    .loadValuesFromMemory(window.memoryQuery?.filters?.price)
     .setOnSlideStop((val) => {
       window.memoryQuery.filters.price = val
     })

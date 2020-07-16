@@ -6,7 +6,7 @@ class RangeSlider {
 
   setRange (min, max) {
     this.min = parseInt(min)
-    this.max = parseInt(max)
+    this.max = Math.round(max)
     return this
   }
 
@@ -66,6 +66,7 @@ class RangeSlider {
   }
 
   _build () {
+    this._hide()
     this.minText = $('<span>').addClass('range-val min-value')
     this.maxText = $('<span>').addClass('range-val max-value')
     this.rangeDiv = $('<div>').addClass('range-slider')
@@ -74,6 +75,11 @@ class RangeSlider {
     this._setOptions()
 
     this.holder.append(this.title, this.rangeDiv, this.minText, this.maxText)
+  }
+
+  _hide () {
+    $(this.rangeDiv).slider('destroy')
+    this.holder.empty()
   }
 
   async build () {
