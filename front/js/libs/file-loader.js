@@ -26,10 +26,15 @@ class FileLoader {
 
     if (this._isScriptLoaded(filePath)) {
       script = document.getElementById(id)
-      var stackCallbacks = script.onload
+      if (script) {
+        script.id = id
+        var stackCallbacks = script.onload
 
-      script.onload = () => {
-        if (stackCallbacks) stackCallbacks()
+        script.onload = () => {
+          if (stackCallbacks) stackCallbacks()
+          callback()
+        }
+      } else {
         callback()
       }
     } else {
