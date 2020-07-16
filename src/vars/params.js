@@ -151,14 +151,6 @@ var __ParamsHandler = {
       return this.get('work-time-range').split('-')
     },
 
-    difalUfs () {
-      return this.get('difal-ufs')
-    },
-
-    activeDifalControlOC () {
-      return this.get('active-difal-oc')
-    },
-
     trackingUrl () {
       return this.get('tracking-url')
     },
@@ -209,6 +201,13 @@ var __ParamsHandler = {
 
     timeBlockPending () {
       return this.get('time-block-pending')
+    },
+
+    activeDifalControlOC () {
+      return this.get('active-difal-oc')
+    },
+    difalUfs () {
+      return this.get('difal-ufs')
     }
   }
 
