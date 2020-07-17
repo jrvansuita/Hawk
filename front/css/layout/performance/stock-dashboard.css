@@ -6,3 +6,19 @@
   height: 300px;
   max-height: 300px;
 }
+
+.arrow-order {
+  width: 16px;
+  height: 16px;
+}
+
+.arrow-order:hover {
+  cursor: pointer;
+  background-color: #dcdcdc73;
+  transition: all 0.1s ease-in-out;
+  border-radius: 50%;
+}
+
+.arrow-asc {
+  transform: rotate(180deg);
+}

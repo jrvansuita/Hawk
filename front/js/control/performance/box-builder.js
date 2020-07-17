@@ -174,4 +174,9 @@ class BuildBox {
       this.currentGroup.append(hide)
     }
   }
+
+  specialClass (clazz) {
+    this.box.addClass(clazz)
+    return this
+  }
 }

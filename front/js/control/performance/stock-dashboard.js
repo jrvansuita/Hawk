@@ -50,6 +50,7 @@ function onHandleResult (result) {
 
 function buildBoxes (results) {
   var data = results.data
+  window.data = results.data
   console.log(data)
 
   var box = new BuildBox()
@@ -124,35 +125,7 @@ function buildBoxes (results) {
     box.square(each.name, each.items, Num.percent(each.items * 100 / data.items, true), Num.format(each.total), 'brand', each.name, data.brand[0].items)
   })
 
-  if (data.sku) {
-    var scoreStyling = (each) => {
-      return ($score) => {
-        var color = each.score > 10 ? '#09c164' : (each.score >= 6 ? '#0eb7a6' : false)
-        if (color) return $score.css('background', color).css('transform', 'scale(1)')
-        if (each.score <= 4) {
-          $score.hide()
-        }
-      }
-    }
-
-    var box = new BuildBox('1/5')
-      .group('Produtos', data.sku.length)
-    data.sku.forEach((each) => {
-      var click = () => {
-        window.open('/product-url-redirect?sku=' + each.name, '_blank')
-      }
-
-      var subDblClick = (e) => {
-        e.stopPropagation()
-        window.open('/stock/product?sku=' + each.name, '_blank')
-      }
-
-      box.img('/product-image-redirect?sku=' + each.name, each.items, each.stock, each.name, 'copiable', Math.trunc(each.score), click, null, subDblClick, scoreStyling(each))
-        .get()
-        .data('sku', each.name)
-        .data('manufacturer', each.manufacturer)
-    })
-  }
+  buildSkusBox(data)
 
   coloringData()
   tagsHandler.bind()
@@ -176,4 +149,39 @@ function bindTooltipManufacturer () {
     new Tooltip(this, $(this).data('manufacturer'))
       .autoHide(10000).load()
   })
+}
+
+function buildSkusBox (data) {
+  var skus = data.sku.reverse()
+
+  if (data.sku) {
+    var scoreStyling = (each) => {
+      return ($score) => {
+        var color = each.score > 10 ? '#09c164' : (each.score >= 6 ? '#0eb7a6' : false)
+        if (color) return $score.css('background', color).css('transform', 'scale(1)')
+        if (each.score <= 4) {
+          $score.hide()
+        }
+      }
+    }
+
+    var box = new BuildBox('1/5')
+      .specialClass('skus-grid')
+      .group('Produtos', data.sku.length)
+    skus.forEach((each) => {
+      var click = () => {
+        window.open('/product-url-redirect?sku=' + each.name, '_blank')
+      }
+
+      var subDblClick = (e) => {
+        e.stopPropagation()
+        window.open('/stock/product?sku=' + each.name, '_blank')
+      }
+
+      box.img('/product-image-redirect?sku=' + each.name, each.items, each.stock, each.name, 'copiable', Math.trunc(each.score), click, null, subDblClick, scoreStyling(each))
+        .get()
+        .data('sku', each.name)
+        .data('manufacturer', each.manufacturer)
+    })
+  }
 }
