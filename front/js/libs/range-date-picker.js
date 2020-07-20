@@ -26,6 +26,22 @@ class RangeDatePicker {
     return this
   }
 
+  getDates () {
+    return { from: new Date(this.from).getTime(), to: new Date(this.to).getTime() }
+  }
+
+  setDates (from, to) {
+    this.from = new Date(parseInt(from))
+    this.to = new Date(parseInt(to))
+    return this
+  }
+
+  setPos (leftPicker = -180, rightPicker = -50) {
+    this.leftPickerPos = leftPicker
+    this.rightPickerPos = rightPicker
+    return this
+  }
+
   _setDates (from, to) {
     this.from = from
     this.to = to
@@ -60,11 +76,6 @@ class RangeDatePicker {
     if (this.menuOptions) this._createMenuOptions()
 
     this._arrowsDate()
-  }
-
-  setDates (from, to) {
-    this.from = typeof from === 'number' ? new Date(parseInt(from)) : from
-    this.to = typeof to === 'number' ? new Date(parseInt(to)) : to
   }
 
   _setOptionsForInput (title, dateValue) {
@@ -117,7 +128,7 @@ class RangeDatePicker {
     this._build()
 
     new DatePicker()
-      .left(-180)
+      .left(this.leftPickerPos)
       .showButtons(false)
       .holder(this.beginHolder, true)
       .setOnSelect((s, date) => {
@@ -134,7 +145,7 @@ class RangeDatePicker {
       })
 
     new DatePicker()
-      .left(-50)
+      .left(this.rightPickerPos)
       .holder(this.endHolder, true)
       .setOnChange((s, date) => {
         this.to = date

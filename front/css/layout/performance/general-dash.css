@@ -320,28 +320,10 @@ table .header td:last-child > .right {
   margin: auto;
 }
 
-.date-arrow {
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-  padding: 2px;
+.sub-high {
+  font-size: 13px;
+  font-weight: 900;
 }
-
-.date-arrow:hover {
-  background-color: #dcdcdc73;
-  transform: scale(1.2);
-  transition: all 0.1s ease-in-out;
-  cursor: pointer !important;
-  border-radius: 50%;
-}
-
-.date-menu-dots {
-  position: absolute;
-  right: 5px;
-  bottom: 10px;
-}
-
-.sub-high { font-size: 13px; font-weight: 900; }
 
 .box-img-sub .super {
   font-size: 13px;

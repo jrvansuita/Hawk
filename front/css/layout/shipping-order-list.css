@@ -42,7 +42,7 @@
 
 .button-holders {
   right: 0;
-  display: inline-table;
+  display: inline-flex;
   position: absolute;
   margin-right: 15px;
 }

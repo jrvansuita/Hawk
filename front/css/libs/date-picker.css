@@ -66,12 +66,28 @@
 
 .date-picker {
   display: flex;
+  position: relative;
 }
 
 .date-menu-dots {
   position: absolute;
-  right: 5px;
-  bottom: 10px;
+  right: 7px;
+  bottom: 13px;
+}
+
+.date-arrow {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  padding: 2px;
+}
+
+.date-arrow:hover {
+  background-color: #dcdcdc73;
+  transform: scale(1.2);
+  transition: all 0.1s ease-in-out;
+  cursor: pointer !important;
+  border-radius: 50%;
 }
 
 /* .gj-picker.gj-picker-md.datepicker.gj-unselectable:last-child {

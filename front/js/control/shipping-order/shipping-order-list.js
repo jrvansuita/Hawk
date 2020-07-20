@@ -1,7 +1,6 @@
 var situationPicker
 
-var dateBeginPicker = null
-var dateEndPicker = null
+var rangeDatepicker = null
 
 var page = -1
 var loading = false
@@ -53,43 +52,15 @@ $(document).ready(() => {
       }
     })
 
-  dateBeginPicker = new DatePicker()
+  rangeDatepicker = new RangeDatePicker()
 
-  dateBeginPicker.holder('.date-begin-holder', true)
-    .setOnChange((formatedDate, date) => {
-      $('#date-begin').val(formatedDate)
-      $('#date-begin').data('date', date)
-    })
-    .load().then(() => {
-      if (memoryQuery.begin) {
-        var date = new Date(parseInt(memoryQuery.begin))
-      } else {
-        var date = Dat.rollDay(null, -8)
-      }
+  rangeDatepicker.holder('.date-filter-holder')
+    .setTitles('Data de Início', 'Data de Fim')
+    .setPos(-70, -30)
+    .setDates(memoryQuery?.begin, memoryQuery?.end)
+    .load()
 
-      dateBeginPicker.setSelected(date)
-      $('#date-begin').val(Dat.format(date))
-    })
-
-  dateEndPicker = new DatePicker()
-
-  dateEndPicker.holder('.date-end-holder', true)
-    .setOnChange((formatedDate, date) => {
-      $('#date-end').val(formatedDate)
-      $('#date-end').data('date', date)
-    })
-    .load().then(() => {
-      if (memoryQuery.end) {
-        var date = new Date(parseInt(memoryQuery.end))
-      } else {
-        var date = new Date()
-      }
-
-      dateEndPicker.setSelected(date)
-      $('#date-end').val(Dat.format(date))
-      initialize()
-    })
-
+  initialize()
   $('#transport, #user, #situation').on('keyup', function (e) {
     if (e.which == 13) {
       $('#search-button').trigger('click')
@@ -101,14 +72,6 @@ $(document).ready(() => {
     showAll = false
     $('.content').find('tr:gt(0)').empty()
     loadList()
-  })
-
-  $('#date-end').focusin(() => {
-    dateBeginPicker.picker.datepicker('close')
-  })
-
-  $('#date-begin').focusin(() => {
-    dateEndPicker.picker.datepicker('close')
   })
 })
 
@@ -132,8 +95,7 @@ function loadList () {
     $('#header').hide()
 
     var s = $('#situation').val() ? situationPicker.getSelectedItem() : ''
-    var begin = dateBeginPicker.getSelected()
-    var end = dateEndPicker.getSelected()
+    var datesRange = rangeDatepicker.getDates()
 
     var query = {
       page: page,
@@ -141,8 +103,8 @@ function loadList () {
         transport: $('#transport').val(),
         situation: s ? s.id : undefined,
         user: $('#user').val(),
-        begin: begin && $('#date-begin').val() ? begin.getTime() : undefined,
-        end: end && $('#date-end').val() ? end.getTime() : undefined
+        begin: datesRange.from,
+        end: datesRange.to
       }
     }
 
