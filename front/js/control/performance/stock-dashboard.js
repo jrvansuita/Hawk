@@ -25,8 +25,8 @@ function onSearchData (id) {
 
 function getQueryData () {
   return {
-    begin: getDateVal('date-begin', dateBeginPicker),
-    end: getDateVal('date-end', dateEndPicker),
+    begin: $('#date-begin').data('begin'),
+    end: $('#date-end').data('end'),
     value: $('#search-input').val().trim(),
     attrs: tagsHandler.get(),
     showSkus: parseInt($('#show-skus').val())
@@ -36,7 +36,7 @@ function getQueryData () {
 function onHandleResult (result) {
   loadingPattern(false)
   setAttrsAndValue(result.query.value, result.query.attrs)
-  setDates(result.query.begin, result.query.end)
+  rangeDatePicker.setDates(result.query.begin, result.query.end)
   setUrlId(result.id)
 
   $('#show-skus').val(result.query.showSkus || 25)

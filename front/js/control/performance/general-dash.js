@@ -1,34 +1,17 @@
-var dateBeginPicker = null
-var dateEndPicker = null
+var rangeDatePicker = null
 var tagsHandler
 
 $(document).ready(() => {
   var queryId = new URLSearchParams(location.search).get('id')
   tagsHandler = new TagsHandler()
 
-  dateBeginPicker = new DatePicker()
-
-  dateBeginPicker.holder('.date-begin-holder', true)
-    .setOnChange((formatedDate, date) => {
-      $('#date-begin').val(formatedDate)
-      dateEquilizer(true, date, dateEndPicker.getSelected())
-    })
-    .load()
-
-  dateEndPicker = new DatePicker()
-
-  dateEndPicker.holder('.date-end-holder', true)
-    .setOnChange((formatedDate, date) => {
-      $('#date-end').val(formatedDate)
-      dateEquilizer(false, dateBeginPicker.getSelected(), date)
-    })
-    .load().then(() => {
+  rangeDatePicker = new RangeDatePicker()
+  rangeDatePicker.holder('.date-filter-holder')
+    .setTitles('Data de Início', 'Data de Fim').load().then(() => {
       if (!queryId) {
         onSearchData()
       }
     })
-
-  bindDateUtils()
 
   $('#search-input').on('keyup', function (e) {
     if (e.which == 13) {
@@ -83,25 +66,6 @@ function loadingPattern (isLoading) {
   }
 }
 
-function setDates (begin, end, delay) {
-  begin = typeof begin === 'number' ? new Date(parseInt(begin)) : begin
-  end = typeof end === 'number' ? new Date(parseInt(end)) : end
-
-  $('#date-begin').val(Dat.format(begin))
-  $('#date-end').val(Dat.format(end))
-
-  var changePicker = () => {
-    dateBeginPicker.setSelected(begin)
-    dateEndPicker.setSelected(end)
-  }
-
-  if (delay <= 0) {
-    changePicker()
-  } else {
-    setTimeout(changePicker, delay || 500)
-  }
-}
-
 function setUrlId (id) {
   if (window.history.replaceState) {
     window.history.replaceState('Data', null, location.pathname + '?id=' + id)
@@ -111,48 +75,4 @@ function setUrlId (id) {
 function setAttrsAndValue (value, attrs) {
   tagsHandler.placeAll(attrs)
   $('#search-input').val(value)
-}
-
-function getDateVal (id, dateEl) {
-  return dateEl.getSelected() && $('#' + id).val() ? dateEl.getSelected().getTime() : undefined
-}
-
-function dateEquilizer (tog, begin, end) {
-  if (begin && end) {
-    if (tog && begin.getTime() > end.getTime()) {
-      setDates(begin, begin, 0)
-    } else if (!tog && end.getTime() < begin.getTime()) {
-      setDates(end, end, 0)
-    }
-  }
-}
-
-function bindDateUtils () {
-  $('.left-arrow').click(() => {
-    setDates(Dat.rollDay(dateBeginPicker.getSelected(), -1), Dat.rollDay(dateEndPicker.getSelected(), -1), 0)
-  })
-
-  $('.right-arrow').click(() => {
-    setDates(Dat.rollDay(dateBeginPicker.getSelected(), 1), Dat.rollDay(dateEndPicker.getSelected(), 1), 0)
-  })
-
-  Dropdown.on($('.date-menu-dots'))
-    .item(null, 'Hoje', () => {
-      setDates(Dat.today(), Dat.today(), 0)
-    })
-    .item(null, 'Ontem', () => {
-      setDates(Dat.yesterday(), Dat.yesterday(), 0)
-    })
-    .item(null, 'Essa Semana', () => {
-      setDates(Dat.firstDayCurrentWeek(), Dat.lastDayCurrentWeek(), 0)
-    })
-    .item(null, 'Última Semana', () => {
-      setDates(Dat.firstDayLastWeek(), Dat.lastDayLastWeek(), 0)
-    })
-    .item(null, 'Este Mês', () => {
-      setDates(Dat.firstDayOfMonth(), Dat.lastDayOfMonth(), 0)
-    })
-    .item(null, 'Último Mês', () => {
-      setDates(Dat.firstDayOfLastMonth(), Dat.lastDayOfLastMonth(), 0)
-    })
 }

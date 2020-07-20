@@ -64,6 +64,16 @@
   margin-top: -20px;
 }
 
+.date-picker {
+  display: flex;
+}
+
+.date-menu-dots {
+  position: absolute;
+  right: 5px;
+  bottom: 10px;
+}
+
 /* .gj-picker.gj-picker-md.datepicker.gj-unselectable:last-child {
   margin-left: -242px !important;
   margin-top: -47px !important;

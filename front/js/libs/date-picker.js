@@ -79,6 +79,11 @@ class DatePicker {
     return this
   }
 
+  setOnOpen (callback) {
+    this.onOpen = callback
+    return this
+  }
+
   setSelected (date) {
     date = new Date(date)
     this.getPickerBox().attr('selectedday', Dat.api(date, true))
@@ -122,8 +127,11 @@ class DatePicker {
           this.onSelect(this.getDate(), this.getSelected())
         }
       },
-      open: () => {
+      open: (e) => {
         this.adjustPicker()
+        if (this.onOpen) {
+          this.onOpen()
+        }
       },
       close: (e) => {
         if (this.onClose) {

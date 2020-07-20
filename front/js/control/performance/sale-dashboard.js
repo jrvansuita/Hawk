@@ -6,8 +6,8 @@ function onSearchData (id) {
     _post('/sales-dashboard-data', { id: id }, onHandleResult)
   } else {
     _post('/sales-dashboard-data', {
-      begin: getDateVal('date-begin', dateBeginPicker),
-      end: getDateVal('date-end', dateEndPicker),
+      begin: $('#date-begin').data('begin'),
+      end: $('#date-end').data('end'),
       value: $('#search-input').val().trim(),
       attrs: tagsHandler.get()
     }, onHandleResult)
@@ -17,8 +17,7 @@ function onSearchData (id) {
 function onHandleResult (result) {
   loadingPattern(false)
   setAttrsAndValue(result.query.value, result.query.attrs)
-  setDates(result.query.begin, result.query.end)
-
+  rangeDatePicker.setDates(result.query.begin, result.query.end)
   setUrlId(result.id)
   if (result.data.count) {
     buildBoxes(result)
