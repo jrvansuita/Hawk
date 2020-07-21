@@ -7,7 +7,10 @@ $(document).ready(() => {
 
   rangeDatePicker = new RangeDatePicker()
   rangeDatePicker.holder('.date-filter-holder')
-    .setTitles('Data de Início', 'Data de Fim').load().then(() => {
+    .setTitles('Data de Início', 'Data de Fim')
+    .setPos()
+    .load()
+    .then(() => {
       if (!queryId) {
         onSearchData()
       }

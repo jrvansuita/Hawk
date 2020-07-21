@@ -38,12 +38,12 @@ class RangeDatePicker {
   }
 
   setDates (from, to) {
-    this.from = new Date(parseInt(from))
-    this.to = new Date(parseInt(to))
+    this.from = from ? new Date(parseInt(from)) : new Date()
+    this.to = to ? new Date(parseInt(to)) : new Date()
     return this
   }
 
-  setPos (leftPicker = -180, rightPicker = -50) {
+  setPos (leftPicker = -185, rightPicker = -50) {
     this.leftPickerPos = leftPicker
     this.rightPickerPos = rightPicker
     return this

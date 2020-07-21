@@ -38,13 +38,17 @@
 
 .selectors {
   display: inline-flex;
+  flex: 1;
 }
 
 .button-holders {
-  right: 0;
   display: inline-flex;
-  position: absolute;
   margin-right: 15px;
+  margin-left: 15px;
+}
+
+.button-holders > label {
+  height: 30px;
 }
 
 .new {
