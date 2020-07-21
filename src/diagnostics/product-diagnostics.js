@@ -72,8 +72,10 @@ module.exports = class ProductDiagnostics {
       this._storeFix(product, 'COST')
     }
 
-    if (isBrandMissing(product, attrBundle.names)) {
-      this._storeFix(product, 'BRAND')
+    if(product?.feedProduct ==! undefined && product?.feedProduct?.quantity > 0){
+        if (isBrandMissing(product, attrBundle.names)) {
+            this._storeFix(product, 'BRAND')
+          }
     }
 
     if (isColorMissing(attrBundle.names)) {
