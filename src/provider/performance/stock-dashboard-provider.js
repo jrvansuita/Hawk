@@ -28,16 +28,17 @@ module.exports = class StockDashboardProvider extends DashboardProvider.Handler 
   }
 
   _onParseData (rows, chart, daysCount) {
-    return { ...new StockDash(rows, this.query.showSkus), ...{ chart: chart } }
+    return { ...new StockDash(rows, this.query.showSkus, this.query.order), ...{ chart: chart } }
   }
 }
 
 class StockDash extends DashboardProvider.Helper {
-  constructor (rows, loadSkusCount) {
+  constructor (rows, loadSkusCount, order) {
     super()
     this.count = rows.length
     this.arrs = {}
-    this.loadSkusCount = loadSkusCount == undefined ? 25 : loadSkusCount
+    this.loadSkusCount = loadSkusCount === undefined ? 25 : loadSkusCount
+    this.order = order
 
     this.rolling(rows)
     this.finals()
@@ -100,6 +101,7 @@ class StockDash extends DashboardProvider.Helper {
     })
 
     if (this.sku) {
+      if (this.order === 'asc') this.sku.reverse()
       this.skusCount = this.sku.length
       this.sku.splice(this.loadSkusCount)
     }

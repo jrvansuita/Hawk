@@ -39,13 +39,6 @@ $(document).ready(() => {
   if (queryId) {
     onSearchData(queryId)
   }
-
-  $('.arrow-order').click(function () {
-    $(this).toggleClass('arrow-asc')
-    $('.skus-grid').remove()
-    buildSkusBox(window.data)
-    bindTooltipManufacturer()
-  })
 })
 
 function coloringData () {
