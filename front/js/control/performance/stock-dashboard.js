@@ -195,7 +195,7 @@ function toggleOrderInfo (order) {
 
   if (order === 'asc') $('.arrow-order').addClass('arrow-asc')
 
-  var msg = order === 'asc' ? 'Ascendente' : 'Descendente'
+  var msg = order === 'asc' ? 'Crescente' : 'Decrescente'
 
   new Tooltip('.arrow-order', msg).autoHide(10000).load()
 }
