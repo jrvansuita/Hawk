@@ -5,8 +5,15 @@ class RangeDatePicker {
     this.dependencies = new FileLoader().js('date-picker').js('dropdown').css('dropdown').css('material-input')
   }
 
-  holder (holder) {
+  holder (holder, bindOnClick) {
     this.holderEl = $(holder)
+
+    if (bindOnClick) {
+      this.holderEl.click(() => {
+        this.fromPicker.open()
+      })
+    }
+
     return this
   }
 
@@ -21,8 +28,8 @@ class RangeDatePicker {
     return this
   }
 
-  menuOptions (val = true) {
-    this.menuOptions = val
+  menuOptions (showMenu = true) {
+    this.menuOptions = showMenu
     return this
   }
 
@@ -39,6 +46,16 @@ class RangeDatePicker {
   setPos (leftPicker = -180, rightPicker = -50) {
     this.leftPickerPos = leftPicker
     this.rightPickerPos = rightPicker
+    return this
+  }
+
+  showInputs (showInputs = true) {
+    this.showInputs = showInputs
+    return this
+  }
+
+  showArrows (showArrows = true) {
+    this.showArrows = showArrows
     return this
   }
 
@@ -73,9 +90,16 @@ class RangeDatePicker {
 
     this.holderEl.append(this.beginHolder, this.endHolder)
 
+    if (!this.showInputs) {
+      $(this.dateInputBegin).hide()
+      $(this.dateInputEnd).hide()
+      this.beginHolder.removeClass('material-input-holder')
+      this.endHolder.removeClass('material-input-holder')
+    }
+
     if (this.menuOptions) this._createMenuOptions()
 
-    this._arrowsDate()
+    if (this.showArrows) this._arrowsDate()
   }
 
   _setOptionsForInput (title, dateValue) {

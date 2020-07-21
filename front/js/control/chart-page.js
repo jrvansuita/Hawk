@@ -8,7 +8,11 @@ $(document).ready(function () {
   var rangeDatePicker
 
   new RangeDatePicker()
-    .holder('.datepicker', true)
+    .holder('.chart-date-holder', true)
+    .showInputs(false)
+    .menuOptions(false)
+    .showArrows(false)
+    .setPos(-315, -90)
     .setOnRangeChange((from, to) => {
       reloadPage(from, to)
     })

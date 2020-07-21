@@ -2,8 +2,10 @@
   <label class="chart-title"><%=chart.title%></label>
 
   <%var showCalendar = typeof showCalendarFilter !== 'undefined' && !this.calendarAlreadySpawned;%>
+<div class="chart-date-holder">
+<label class="chart-label <%= showCalendar ? 'datepicker': ''%>"> <%=chart.label%></label>
+</div>
 
-  <label class="chart-label <%= showCalendar ? 'datepicker': ''%>">   <%=chart.label%></label>
 
   <%this.calendarAlreadySpawned = showCalendar;%>
 </div>
