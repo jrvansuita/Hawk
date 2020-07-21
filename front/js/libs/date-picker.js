@@ -4,8 +4,8 @@ class DatePicker {
   constructor () {
     this.binders = []
 
-    this.dependencies = new FileLoader().css('material-date-picker.min')
-      .css('date-picker').js('material-date-picker.min')
+    this.dependencies = new FileLoader().css('date-picker').css('material-date-picker.min')
+      .js('material-date-picker.min')
 
     this.showButtons(true)
       .left(0)

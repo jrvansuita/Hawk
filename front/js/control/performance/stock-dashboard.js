@@ -5,6 +5,10 @@ $(document).ready(() => {
       $('#search-button').trigger('click')
     }
   })
+  $('.arrow-order').click(function () {
+    $(this).toggleClass('arrow-asc')
+    $(this).data('order', $(this).data('order') === 'asc' ? 'desc' : 'asc')
+  })
 
   /* MaterialDropdown.fromClick($('.menu-dots')).addItem('/img/delete.png', 'Excluir', function(e){
     _post('/stock-dashboard-delete', getQueryData(), (data) => {
@@ -29,13 +33,15 @@ function getQueryData () {
     end: $('#date-end').data('end'),
     value: $('#search-input').val().trim(),
     attrs: tagsHandler.get(),
-    showSkus: parseInt($('#show-skus').val())
+    showSkus: parseInt($('#show-skus').val()),
+    order: $('.arrow-order').data('order')
   }
 }
 
 function onHandleResult (result) {
   loadingPattern(false)
   setAttrsAndValue(result.query.value, result.query.attrs)
+  toggleOrderInfo(result.query.order)
   rangeDatePicker.setDates(result.query.begin, result.query.end)
   setUrlId(result.id)
 
@@ -152,8 +158,6 @@ function bindTooltipManufacturer () {
 }
 
 function buildSkusBox (data) {
-  var skus = data.sku.reverse()
-
   if (data.sku) {
     var scoreStyling = (each) => {
       return ($score) => {
@@ -168,7 +172,7 @@ function buildSkusBox (data) {
     var box = new BuildBox('1/5')
       .specialClass('skus-grid')
       .group('Produtos', data.sku.length)
-    skus.forEach((each) => {
+    data.sku.forEach((each) => {
       var click = () => {
         window.open('/product-url-redirect?sku=' + each.name, '_blank')
       }
@@ -184,4 +188,14 @@ function buildSkusBox (data) {
         .data('manufacturer', each.manufacturer)
     })
   }
+}
+
+function toggleOrderInfo (order) {
+  $('.arrow-order').data('order', order)
+
+  if (order === 'asc') $('.arrow-order').addClass('arrow-asc')
+
+  var msg = order === 'asc' ? 'Crescente' : 'Decrescente'
+
+  new Tooltip('.arrow-order', msg).autoHide(10000).load()
 }

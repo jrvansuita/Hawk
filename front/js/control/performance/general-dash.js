@@ -7,7 +7,10 @@ $(document).ready(() => {
 
   rangeDatePicker = new RangeDatePicker()
   rangeDatePicker.holder('.date-filter-holder')
-    .setTitles('Data de Início', 'Data de Fim').load().then(() => {
+    .setTitles('Data de Início', 'Data de Fim')
+    .setPos()
+    .load()
+    .then(() => {
       if (!queryId) {
         onSearchData()
       }
@@ -36,13 +39,6 @@ $(document).ready(() => {
   if (queryId) {
     onSearchData(queryId)
   }
-
-  $('.arrow-order').click(function () {
-    $(this).toggleClass('arrow-asc')
-    $('.skus-grid').remove()
-    buildSkusBox(window.data)
-    bindTooltipManufacturer()
-  })
 })
 
 function coloringData () {
