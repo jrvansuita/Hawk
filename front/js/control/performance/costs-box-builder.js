@@ -1,5 +1,5 @@
 
-class CostsBoxBuilder extends BuildBox {
+class CostsBoxBuilder extends BoxBuilder {
   constructor (costs, total) {
     super()
     this.data = costs
@@ -93,6 +93,7 @@ class CostsBoxBuilder extends BuildBox {
       .info('Custos Totais', 0, null, 'costs-sum')
       .info('Lucro Líquido', 0, null, 'liq-profit')
       .info('Margem Líquida', 0, null, 'liq-perc')
+      .build()
 
     this._refreshTotalInfos()
   }

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%include ../../menus/main-menu %>
+<head>
+    <link rel="stylesheet" href="/front/css/layout/product/board/product-board.css">
+    <link rel="stylesheet" type="text/css" href="/front/css/layout/dashboard/general-dash.css">
+    <link rel="stylesheet" href="/front/css/layout/general.css">
+    <link rel="stylesheet" href="/front/css/libs/material-input.css">
+    <script src="/front/js/libs/box-builder.js"></script>
+    <script src="/front/js/libs/request-helper.js"></script>
+    <script src="/front/js/libs/tags-handler.js"></script>
+    <script type="text/javascript" src="/front/js/control/dashboard/general-dash.js"></script>
+    <script src="/front/js/libs/tooltip.js"></script>
+    <script src="/front/js/control/product/board/product-board.js"></script>
+    <script src="/front/js/libs/range-slider.js"></script>
+
+</head>
+<body>
+<%include ../../menus/stock-menu %>
+
+<div class="main">
+    <div class="top shadow">
+        <div class="search-box">
+            <img class="icon-open is-closed" title="Abrir seletor" src="/img/arrow-down.png">
+            <input type="text" id="search-input" value="<%=query.value%>" class="simple-material-input"
+                placeholder="Pesquisar Produtos" autocomplete="off" />
+
+               <div class="selectors">
+                    <div class="material-input-holder">
+                        <input type="text" id="show-skus" value="25" onkeypress="return Num.isNumberKey(event);" required>
+                        <span class="bar"></span>
+                        <label>Mostrar Produtos</label>
+                    </div>
+
+
+               </div>
+            <div class="button-area">
+                <div class="search-holder">
+                    <label class="button shadow" id="search-button" tabindex="0">Buscar</label>
+                </div>
+            </div>
+        </div>
+        <div class="tag-box-holder">
+            <div class="tag-box"></div>
+            <div class="filters-holder">
+                <div class="cost-range-filter" data-attr="cost"></div>
+                <div class="price-range-filter" data-attr="price"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="content-scroll">
+        <div class="content-grid"></div>
+    </div>
+</div>
+</body>
+</html>

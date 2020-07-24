@@ -1,0 +1,21 @@
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  position: relative;
+  grid-gap: 15px;
+  max-width: 100%;
+  margin-bottom: 50px;
+}
+
+.filters-holder {
+  display: flex;
+}
+
+.tag-box-holder {
+  display: flex;
+}
+
+.tag-box {
+  width: 58%;
+  display: flex !important;
+}

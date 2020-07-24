@@ -1,20 +1,10 @@
-var rangeDatePicker = null
+
 var tagsHandler
+var queryId = null
 
 $(document).ready(() => {
-  var queryId = new URLSearchParams(location.search).get('id')
+  queryId = new URLSearchParams(location.search).get('id')
   tagsHandler = new TagsHandler()
-
-  rangeDatePicker = new RangeDatePicker()
-  rangeDatePicker.holder('.date-filter-holder')
-    .setTitles('Data de Início', 'Data de Fim')
-    .setPos()
-    .load()
-    .then(() => {
-      if (!queryId) {
-        onSearchData()
-      }
-    })
 
   $('#search-input').on('keyup', function (e) {
     if (e.which == 13) {
@@ -27,27 +17,19 @@ $(document).ready(() => {
   })
 
   $('.button').on('keyup', function (e) {
-    if (e.which == 13) {
+    if (e.which === 13) {
       $(this).click()
     }
   })
 
-  $('.icon-open').click(() => {
-    tagsHandler.toggleTagBox()
-  })
+  //   $('.icon-open').click(() => {
+  //     tagsHandler.toggleTagBox()
+  //   })
 
   if (queryId) {
     onSearchData(queryId)
   }
 })
-
-function coloringData () {
-  $('.coloring-data').each((i, each) => {
-    var perc = $(each).data('cur') / $(each).data('max')
-    perc = perc < 0.1 ? 0.1 : perc
-    $(each).css('background-color', 'rgba(211, 211, 211, x)'.replace('x', perc))
-  })
-}
 
 function loadingPattern (isLoading) {
   if (isLoading) {

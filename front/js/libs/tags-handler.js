@@ -21,7 +21,7 @@ class TagsHandler {
   place (value, attr) {
     var find = $('.tag-box').find("[data-attr='" + attr + "'][data-value='" + value + "']")
 
-    if (find.length == 0) {
+    if (find.length === 0) {
       var tag = this.create(value, attr)
       $('.tag-box').append(tag)
 
@@ -34,19 +34,17 @@ class TagsHandler {
   }
 
   create (value, attr) {
-    if (value) {
-      var tag = $('<label>').addClass('tag').append(value)
-        .attr('data-value', value)
-        .attr('data-attr', attr || '')
+    var tag = $('<label>').addClass('tag').append(value || 'Indefinido')
+      .attr('data-value', value)
+      .attr('data-attr', attr || '')
 
-      this.coloring(tag)
-      tag.click(function () {
-        $(this).remove()
-        $('#search-button').focus()
-      })
+    this.coloring(tag)
+    tag.click(function () {
+      $(this).remove()
+      $('#search-button').focus()
+    })
 
-      return tag
-    }
+    return tag
   }
 
   coloring (tag) {

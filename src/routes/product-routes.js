@@ -3,12 +3,12 @@ const ProductLaws = require('../laws/product-laws.js')
 const ProductHandler = require('../handler/product-handler.js')
 const ProductDiagnostics = require('../diagnostics/product-diagnostics.js')
 const DiagnosticsProvider = require('../diagnostics/diagnostics-provider.js')
-const ProductBoard = require('../provider/product-board-provider.js')
 const ProductListProvider = require('../provider/product-list-provider.js')
 const ProductImageProvider = require('../provider/product-image-provider.js')
 const ProductStorer = require('../storer/product/product.js')
 const EccosysProvider = require('../eccosys/eccosys-provider.js')
 const Enum = require('../bean/enumerator')
+const ProductBoardProvider = require('../provider/board/product-board-provider.js')
 
 module.exports = class ProductRoutes extends Routes {
   attach () {
@@ -241,25 +241,25 @@ module.exports = class ProductRoutes extends Routes {
       })
     })
 
-    this._page('/product-board', (req, res) => {
-      ProductBoard.run(async (result) => {
-        res.render('product/board/board', {
-          data: result,
-          genders: (await Enum.on('BOARD-GENDER').get(true)),
-          colors: (await Enum.on('COLOR-LIST').mapBy('name').get(true))
-        })
-      })
-    })
+    // this._page('/product-board', (req, res) => {
+    //   ProductBoard.run(async (result) => {
+    //     res.render('product/board/board', {
+    //       data: result,
+    //       genders: (await Enum.on('BOARD-GENDER').get(true)),
+    //       colors: (await Enum.on('COLOR-LIST').mapBy('name').get(true))
+    //     })
+    //   })
+    // })
 
-    this._post('/product-board-reset', (req, res) => {
-      const JobProducts = require('../jobs/job-feed-xml-product.js')
-      new JobProducts()
-        .doWork().then(() => {
-          ProductBoard.reset()
-        })
+    // this._post('/product-board-reset', (req, res) => {
+    //   const JobProducts = require('../jobs/job-feed-xml-product.js')
+    //   new JobProducts()
+    //     .doWork().then(() => {
+    //       ProductBoard.reset()
+    //     })
 
-      this._resp().sucess(res)
-    })
+    //   this._resp().sucess(res)
+    // })
 
     this._page('/product-list', async (req, res) => {
       res.locals.productListQuery = req.body.query || req.session.productListQuery
@@ -337,5 +337,23 @@ module.exports = class ProductRoutes extends Routes {
     this._get('/stock/storer-attr', (req, res) => {
       new ProductStorer().searchAttr(req.query.attr, this._resp().redirect(res))
     })
+
+    /** --------------  Product Board -------------- **/
+    this._page('/stock/product-board', (req, res) => {
+      res.render('product/board/product-board')
+    })
+
+    this._post('/product-board-data', (req, res) => {
+      new ProductBoardProvider()
+        .with(req.body).maybe(req.session.productBoardQueryId)
+        .setOnError((err) => {
+          this._resp().error(res, err)
+        })
+        .setOnResult((result) => {
+          req.session.productBoardQueryId = result.id
+          this._resp().sucess(res, result)
+        }).load()
+    })
+  /** --------------  Product Board -------------- **/
   }
 }

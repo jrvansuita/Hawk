@@ -9,13 +9,14 @@ class DashboardProviderHandler {
     return this
   }
 
-  with (query) {
+  with (query, initializeDates) {
     this.query = query
 
     // Initializing
-    this.query.begin = query.begin ? query.begin : Dat.today().begin().getTime()
-    this.query.end = query.end ? query.end : Dat.today().end().getTime()
-
+    if (initializeDates) {
+      this.query.begin = query.begin ? query.begin : Dat.today().begin().getTime()
+      this.query.end = query.end ? query.end : Dat.today().end().getTime()
+    }
     return this
   }
 
@@ -26,7 +27,17 @@ class DashboardProviderHandler {
   getDataQuery () {
     var and = []
 
-    and.push(DataAccess.range('date', this.query.begin, this.query.end, true))
+    if (this.query.begin) {
+      and.push(DataAccess.range('date', this.query.begin, this.query.end, true))
+    } else {
+      and.push({ quantity: { $gt: 0 } })
+    }
+
+    if (this.query.filters) {
+      Object.keys(this.query.filters).forEach((key) => {
+        and.push({ [key]: { $gte: Floa.def(this.query.filters[key][0]), $lte: Floa.def(this.query.filters[key][1]) } })
+      })
+    }
 
     if (this.query.value && this.query.value.length) {
       and.push(DataAccess.or(this._getSearchQueryFields(), this.query.value))
@@ -34,7 +45,7 @@ class DashboardProviderHandler {
 
     if (this.query.attrs) {
       Object.keys(this.query.attrs).forEach((key) => {
-        and.push(DataAccess.or(key, this.query.attrs[key].split('|')))
+        and.push(DataAccess.or(key, this.query.attrs[key].toString().split('|')))
       })
     }
 

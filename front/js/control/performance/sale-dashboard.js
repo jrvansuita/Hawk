@@ -1,4 +1,17 @@
 
+$(document).ready(() => {
+  rangeDatePicker = new RangeDatePicker()
+  rangeDatePicker.holder('.date-filter-holder')
+    .setTitles('Data de Início', 'Data de Fim')
+    .setPos()
+    .load()
+    .then(() => {
+      if (!queryId) {
+        onSearchData()
+      }
+    })
+})
+
 function onSearchData (id) {
   loadingPattern(true)
 
@@ -30,7 +43,7 @@ function buildBoxes (results) {
   var data = results.data
   console.log(results)
 
-  new BuildBox()
+  new BoxBuilder()
     .group('Geral', data.count, 'min-col')
     .info('Valor Faturado', Num.money(data.total), 'high-val')
     .info('Desconto', Num.money(data.discount), 'high-val')
@@ -48,20 +61,23 @@ function buildBoxes (results) {
     .info('Markup', Floa.abs(data.markup, 3))
     .info('Med. Venda', Num.money(data.avgSell))
     .info('Med. Pedido', Floa.abs(data.avgItems, 3))
+    .build()
 
-  var box = new BuildBox()
+  var box = new BoxBuilder()
     .group('Estados', data.uf.length)
   data.uf.forEach((each) => {
     box.square(each.name, each.count, Num.percent(each.count * 100 / data.count, true), Num.format(each.total), 'uf', each.name, data.uf[0].count)
   })
+  box.build()
 
-  var box = new BuildBox()
+  var box = new BoxBuilder()
     .group('Cidades', data.city.length)
   data.city.forEach((each) => {
     box.square(each.name, each.count, Num.format(each.total), null, 'city', each.name, data.city[0].count)
   })
+  box.build()
 
-  var box = new BuildBox()
+  var box = new BoxBuilder()
     .group('Pagamentos', data.paymentType.length)
   data.paymentType.forEach((each) => {
     box.square(window.paymentTypes?.[each.name]?.name, each.count, Num.percent(each.count * 100 / data.count, true), Num.format(each.total), 'paymentType', each.name, data.paymentType[0].count)
@@ -71,8 +87,9 @@ function buildBoxes (results) {
   data.coupom.forEach((each) => {
     box.toast(each.name, each.count, 'coupom', 'coupom')
   })
+  box.build()
 
-  var table = new BuildBox().table()
+  var table = new BoxBuilder().table()
     .row('header')
     .col('')
     .col('Pedidos', 'high-val')
@@ -120,8 +137,9 @@ function buildBoxes (results) {
     .col(Num.percent((data.freight * 100) / data.total))
     .col(Num.format(data.transportSummary.totalValue), 'min-val')
 
-  coloringData()
-  tagsHandler.bind()
+  table.build().then(() => {
+    tagsHandler.bind()
+  })
 
   if (loggedUser.full) {
     buildCostsBox(results)
