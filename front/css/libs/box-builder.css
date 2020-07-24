@@ -194,6 +194,8 @@ table .header td:last-child > .right {
 
 .top-circle-value > span {
   margin: auto;
+  padding: 2px;
+  box-sizing: 1;
 }
 
 .red-back {
