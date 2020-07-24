@@ -1,4 +1,4 @@
-const UserType = require('./enums/user-type.ts')
+const UserType = require('./enums/user-type')
 
 /* eslint-disable no-undef */
 module.exports = class User extends DataAccess {

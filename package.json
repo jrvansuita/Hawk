@@ -3,15 +3,9 @@
   "version": "1.0.0",
   "description": "A predatory beast waiting in silence...",
   "main": "app.js",
-  
-  
   "scripts": {
-    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
-    "build": "tsc",
     "---APP---": "...",
-    "prestart": "npm run build",
     "start": "node app.js",
-    "predev": "npm run build",
     "dev": "nodemon app.js",
     "---ESLINT---": "...",
     "linta": "npx eslint .",
@@ -60,8 +54,7 @@
     "node-schedule": "^1.3.2",
     "nodemailer": "^4.7.0",
     "object-hash": "^2.0.3",
-    "socket.io": "^2.3.0",
-    "typescript": "^3.9.7"
+    "socket.io": "^2.3.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.0",
