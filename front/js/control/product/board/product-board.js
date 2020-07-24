@@ -1,8 +1,9 @@
 var costRangeFilter = null
 var priceRangeFilter = null
 $(document).ready(() => {
-  // buildRangeSlider()
   if (!queryId) onSearchData()
+
+  $('.tag-box-holder').hide()
 
   $('.icon-open').click(function () {
     if ($(this).hasClass('is-open')) {
@@ -15,11 +16,11 @@ $(document).ready(() => {
   })
 })
 
-function buildRangeSlider () {
+function buildRangeSlider (data) {
   new RangeSlider($('.cost-range-filter'))
     .setTitle('Preço de custo')
     .setPrefix('R$')
-    .setRange(0, 150)
+    .setRange(data.smallestCost, data.gretterCost)
     .setOnSlideStop((range) => {
       costRangeFilter = range
     })
@@ -28,7 +29,7 @@ function buildRangeSlider () {
   new RangeSlider($('.price-range-filter'))
     .setTitle('Preço de Venda')
     .setPrefix('R$')
-    .setRange(0, 150)
+    .setRange(data.smallestPrice, data.gretterPrice)
     .setOnSlideStop((range) => {
       priceRangeFilter = range
     })
@@ -49,7 +50,7 @@ function getQueryData () {
     value: $('#search-input').val().trim(),
     attrs: tagsHandler.get(),
     showSkus: parseInt($('#show-skus').val()),
-    filters: getFilters()
+    filters: $('.icon-open').hasClass('is-open') ? getFilters() : {}
   }
 }
 
@@ -75,6 +76,7 @@ function handleResult (data) {
   setUrlId(data.id)
   data = data.data
 
+  buildRangeSlider(data)
   buildBoxes(data)
 }
 

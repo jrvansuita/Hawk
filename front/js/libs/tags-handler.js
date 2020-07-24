@@ -10,7 +10,7 @@ class TagsHandler {
     $('.tag-box').find('.tag').remove()
     if (attr) {
       Object.keys(attr).forEach((key) => {
-        var values = attr[key].split('|')
+        var values = attr[key].toString().split('|')
         values.forEach((eachValue) => {
           this.place(eachValue, key)
         })
@@ -35,7 +35,7 @@ class TagsHandler {
 
   create (value, attr) {
     var tag = $('<label>').addClass('tag').append(value || 'Indefinido')
-      .attr('data-value', value)
+      .attr('data-value', value.toString())
       .attr('data-attr', attr || '')
 
     this.coloring(tag)
@@ -64,6 +64,8 @@ class TagsHandler {
   }
 
   toggleTagBox (forceOpen) {
+    if($('.tag-box-holder').length) $('.tag-box-holder').show()
+    
     if ($('.icon-open').hasClass('is-closed') || forceOpen) {
       $('.icon-open').addClass('is-open').removeClass('is-closed')
       $('.tag-box').show()

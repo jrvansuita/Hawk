@@ -25,6 +25,11 @@ class ProductBoardHelper extends DashboardProvider.Helper {
     this.skusCount = data.length
     this.arrs = {}
 
+    this.smallestCost = data[0].cost
+    this.gretterCost = data[0].cost
+    this.smallestPrice = data[0].price
+    this.gretterPrice = data[0].price
+
     data.forEach((each) => {
       each.total = each.quantity
       this.total += each.quantity
@@ -37,6 +42,8 @@ class ProductBoardHelper extends DashboardProvider.Helper {
       this.handleArr(each, 'gender', this.handleCustom)
       this.handleArr(each, 'year', this.handleCustom)
       this.handleArr(each, 'sku', this.handleCustomSku)
+
+      this.handleCustomTotals(each)
     })
 
     Object.keys(this.arrs).forEach((name) => {
@@ -50,6 +57,14 @@ class ProductBoardHelper extends DashboardProvider.Helper {
     }
 
     delete this.arrs
+    return this
+  }
+
+  handleCustomTotals (item) {
+    if (item.cost < this.smallestCost) this.smallestCost = item.cost
+    if (item.cost > this.gretterCost) this.gretterCost = item.cost
+    if (item.price < this.smallestPrice) this.smallestPrice = item.price
+    if (item.price > this.gretterPrice) this.gretterPrice = item.price
     return this
   }
 
