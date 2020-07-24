@@ -33,7 +33,7 @@ module.exports = class ServerMidlewares {
   }
 
   wellcome() {
-    this.express.get(['/'], (req, res) => {
+    this.express.get('/', (req, res) => {
       if (req.session.lastpath && req.session.lastpath !== '/') {
         res.redirect(req.session.lastpath)
       } else {
@@ -58,6 +58,7 @@ module.exports = class ServerMidlewares {
 
   getMarketAuthRouteRule() {
     return (req, res, next) => {
+      console.log('Market')
       next('router')
     }
   }
@@ -123,7 +124,17 @@ module.exports = class ServerMidlewares {
 
   getGenericRouteRule(req, res, next) {
     return (req, res, next) => {
-      // console.log(`${req.method}: ${req.originalUrl}`)
+      if (!process.env.IS_PRODUCTION) {
+        console.log(`${req.method}: ${req.originalUrl}`)
+      }
+
+      var app = this.express
+      app._router.stack.forEach(function (r) {
+        if (r.route && r.route.path) {
+          console.log(r.route.stack[0].method + ': ' + r.route.path)
+        }
+      })
+
       res.locals.query = req.query
       res.locals.url = req.originalUrl
       res.locals.path = req.baseUrl || req.path

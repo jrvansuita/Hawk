@@ -6,7 +6,11 @@ const TemplateBuilder = require('../template/template-builder.js')
 const ImageSaver = require('../image/image-saver.js')
 
 module.exports = class TemplateRoutes extends Routes {
-  attach () {
+  mainPath() {
+    return '/templates'
+  }
+
+  attach() {
     var templateRedirect = async (req, res, all, type) => {
       var selected = all.find((e) => {
         return e.id === parseInt(req.query.id)
@@ -15,54 +19,56 @@ module.exports = class TemplateRoutes extends Routes {
       res.render('templates/templates', {
         selected: selected || {},
         all: all,
-        usages: (await Enum.on('TEMPL-EMAIL').get(true)),
-        templateType: type
+        usages: await Enum.on('TEMPL-EMAIL').get(true),
+        templateType: type,
       })
     }
 
-    this._page('/email-templates', (req, res) => {
+    this._page('/email', (req, res) => {
       Templates.getAllEmails((_err, all) => {
         templateRedirect(req, res, all, 'email')
       })
     })
 
-    this._page('/block-templates', (req, res) => {
+    this._page('/block', (req, res) => {
       Templates.getAllBlocks((_err, all) => {
         templateRedirect(req, res, all, 'block')
       })
     })
 
-    this._get('/templates-viewer', (req, res) => {
+    this._get('/viewer', (req, res) => {
       Templates.refresh(req.query.id)
 
       new TemplateBuilder(req.query.id).useSampleData().build((template) => {
         res.writeHead(200, {
           'Content-Type': 'text/html',
-          'Content-Length': template.content.length
+          'Content-Length': template.content.length,
         })
         res.end(template.content)
       })
-    }).skipLogin().cors()
+    })
+      .skipLogin()
+      .cors()
 
-    this._post('/template', (req, res) => {
+    this._post('', (req, res) => {
       TemplateVault.storeFromScreen(req.body, (id) => {
         res.status(200).send(id.toString())
       })
     })
 
-    this._post('/template-delete', (req, res) => {
+    this._post('/delete', (req, res) => {
       Templates.delete(req.body.id, () => {
         res.sendStatus(200)
       })
     })
 
-    this._post('/template-duplicate', (req, res) => {
+    this._post('/duplicate', (req, res) => {
       Templates.duplicate(req.body.id, (data) => {
         res.send(data)
       })
     })
 
-    this._post('/template-img-uploader', (req, res) => {
+    this._post('/img-uploader', (req, res) => {
       new ImageSaver()
         .setBase64Image(req.files.file.data.toString('base64'))
         .setOnSuccess((data) => {

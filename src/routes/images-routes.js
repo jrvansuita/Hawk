@@ -2,8 +2,12 @@ const Routes = require('./_route.js')
 const ImageSaver = require('../image/image-saver.js')
 
 module.exports = class ImagesRoutes extends Routes {
-  attach () {
-    this._post('/upload-base64-img', (req, res) => {
+  mainPath() {
+    return '/image'
+  }
+
+  attach() {
+    this._post('/upload-base64', (req, res) => {
       new ImageSaver()
         .setBase64Image(req.body.base64)
         .setOnSuccess((data) => {
