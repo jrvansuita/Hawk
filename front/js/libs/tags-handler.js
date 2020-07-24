@@ -10,7 +10,7 @@ class TagsHandler {
     $('.tag-box').find('.tag').remove()
     if (attr) {
       Object.keys(attr).forEach((key) => {
-        var values = attr[key].split('|')
+        var values = attr[key].toString().split('|')
         values.forEach((eachValue) => {
           this.place(eachValue, key)
         })
@@ -21,7 +21,7 @@ class TagsHandler {
   place (value, attr) {
     var find = $('.tag-box').find("[data-attr='" + attr + "'][data-value='" + value + "']")
 
-    if (find.length == 0) {
+    if (find.length === 0) {
       var tag = this.create(value, attr)
       $('.tag-box').append(tag)
 
@@ -34,19 +34,17 @@ class TagsHandler {
   }
 
   create (value, attr) {
-    if (value) {
-      var tag = $('<label>').addClass('tag').append(value)
-        .attr('data-value', value)
-        .attr('data-attr', attr || '')
+    var tag = $('<label>').addClass('tag').append(value || 'Indefinido')
+      .attr('data-value', value.toString())
+      .attr('data-attr', attr || '')
 
-      this.coloring(tag)
-      tag.click(function () {
-        $(this).remove()
-        $('#search-button').focus()
-      })
+    this.coloring(tag)
+    tag.click(function () {
+      $(this).remove()
+      $('#search-button').focus()
+    })
 
-      return tag
-    }
+    return tag
   }
 
   coloring (tag) {
@@ -66,6 +64,8 @@ class TagsHandler {
   }
 
   toggleTagBox (forceOpen) {
+    if($('.tag-box-holder').length) $('.tag-box-holder').show()
+    
     if ($('.icon-open').hasClass('is-closed') || forceOpen) {
       $('.icon-open').addClass('is-open').removeClass('is-closed')
       $('.tag-box').show()

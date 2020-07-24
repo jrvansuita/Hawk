@@ -1,8 +1,8 @@
-
-class BuildBox {
+class BoxBuilder {
   constructor (gridSpan) {
     this.box = $('<div>').addClass('grid-item shadow')
-    $('.content-grid').append(this.box)
+
+    this.dependencies = new FileLoader().css('box-builder')
 
     if (gridSpan) {
       this.box.css('grid-column', gridSpan)
@@ -39,16 +39,20 @@ class BuildBox {
     }
   }
 
-  info (label, value, clazz = '', id = '') {
+  info (label, value, clazz = '', id = '', icon) {
     var col = $('<div>').addClass('col')
+    var colContent = $('<div>').addClass('col-content')
     this.currentGroup.append(col)
     var val = $('<span>').addClass('value ' + clazz).append(value)
 
     if (id) {
       val.attr('id', id)
     }
-
-    col.append($('<span>').addClass('super').append(label), val)
+    if (icon) {
+      colContent.append($('<div>').append($('<img>').addClass('icon-col').attr('src', '/img/' + icon + '.png')))
+    }
+    colContent.append($('<div>').append($('<span>').addClass('super').append(label), val))
+    col.append(colContent)
 
     this.lastItem = col
 
@@ -67,30 +71,37 @@ class BuildBox {
     return this
   }
 
-  square (label, right, sub, value = '', attr, attrVal, max, subHigh, subValLevel) {
+  square (label, right, sub, value = '', attr, attrVal, max, subHigh, subValLevel, topCircleVal) {
     var col = $('<div>').addClass('col coloring-data').data('max', max).data('cur', right)
 
     if (attr) {
-      col.addClass('taggable').data('attr', attr).data('value', attrVal)
+      col.addClass('taggable').data('attr', attr).data('value', attrVal !== 'Indefinido' ? attrVal : '')
     }
 
     this.currentGroup.append(col)
 
-    col.append($('<span>').addClass('super').append(label, $('<span>').addClass('right').append(Num.points(right))))
+    col.append($('<span>').addClass('super').append(label, $('<span>').addClass('right').append(Num.format(right))))
 
     var subLeft = $('<label>').addClass(subHigh ? 'sub-high' : '').append(sub)
 
     var subVal = $('<span>').addClass('right min-val').append(value)
     col.append($('<span>').addClass('value min-val').append(subLeft, subVal))
 
-    if (subValLevel != undefined) {
+    if (subValLevel !== undefined) {
       subVal.toggleClass(subValLevel > 0 ? 'green-val' : (subValLevel < 0 ? 'red-val' : ''))
+    }
+
+    if (topCircleVal) {
+      var topDiv = $('<div>').addClass('top-circle-value').addClass(topCircleVal < 0 ? 'red-back' : 'green-back')
+      var topValue = $('<span>').append(Num.format(Math.abs(topCircleVal)))
+      col.css({ paddingRight: '10px', marginRight: '10px' }).append(topDiv.append(topValue))
     }
 
     this.checkHidableItems()
 
     this.lastItem = col
 
+    this._coloringData()
     return this
   }
 
@@ -175,8 +186,21 @@ class BuildBox {
     }
   }
 
+  _coloringData () {
+    if (this.lastItem.hasClass('coloring-data')) {
+      var perc = this.lastItem.data('cur') / this.lastItem.data('max')
+      perc = perc < 0.1 ? 0.1 : perc
+      this.lastItem.css('background-color', 'rgba(211, 211, 211, x)'.replace('x', perc))
+    }
+  }
+
   specialClass (clazz) {
     this.box.addClass(clazz)
     return this
+  }
+
+  async build () {
+    await this.dependencies.load()
+    $('.content-grid').append(this.box)
   }
 }

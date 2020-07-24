@@ -1,6 +1,6 @@
 class RangeSlider {
   constructor (holder) {
-    this.dependencies = new FileLoader(holder[0].classList[0]).css('jquery-ui').js('jquery-ui.min').css('range-slider')
+    this.dependencies = new FileLoader().css('jquery-ui').js('jquery-ui.min').css('range-slider')
     this.holder = holder
   }
 

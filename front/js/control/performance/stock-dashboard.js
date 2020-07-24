@@ -1,5 +1,21 @@
+var rangeDatePicker = null
 
 $(document).ready(() => {
+  rangeDatePicker = new RangeDatePicker()
+  rangeDatePicker.holder('.date-filter-holder')
+    .setTitles('Data de Início', 'Data de Fim')
+    .setPos()
+    .load()
+    .then(() => {
+      if (!queryId) {
+        onSearchData()
+      }
+    })
+
+  if (queryId) {
+    onSearchData(queryId)
+  }
+
   $('#show-skus').on('keyup', function (e) {
     if (e.which == 13) {
       $('#search-button').trigger('click')
@@ -59,7 +75,7 @@ function buildBoxes (results) {
   window.data = results.data
   console.log(data)
 
-  var box = new BuildBox()
+  var box = new BoxBuilder()
     .group('Faturamento', Num.points(data.items) + (data.daysCount > 1 ? ' em ' + data.daysCount + ' dias' : ''))
     .info('Valor', Num.money(data.total), 'high-val')
     .info('Ticket', Num.money(data.tkm))
@@ -74,6 +90,7 @@ function buildBoxes (results) {
     .info('Ticket', Num.money(data.tkmCost))
     .info('Margem Bruta', Num.percent((data.profit * 100) / data.total), data.profit ? 'green-val' : 'red-val')
     .info('Lucro Bruto', Num.money(data.profit), data.profit ? 'green-val' : 'red-val')
+  box.build()
 
   if (data.chart && (data.chart.length > 1)) {
     var row = box.group(null, null, 'gray').get()
@@ -84,7 +101,7 @@ function buildBoxes (results) {
       .load()
   }
 
-  var box = new BuildBox()
+  var box = new BoxBuilder()
     .group('Estações', data.season.length)
   data.season.forEach((each) => {
     box.square(each.name, each.items, Num.percent(each.items * 100 / data.items, true), Num.format(each.total), 'season', each.name, data.season[0].items)
@@ -94,6 +111,7 @@ function buildBoxes (results) {
   data.gender.forEach((each) => {
     box.square(each.name, each.items, Num.percent(each.items * 100 / data.items, true), Num.format(each.total), 'gender', each.name, data.gender[0].items)
   })
+  box.build()
 
   if (data.chart && (data.chart.length > 1)) {
     var row = box.group(null, null, 'gray').get()
@@ -104,11 +122,12 @@ function buildBoxes (results) {
       .load()
   }
 
-  var box = new BuildBox('3/5')
+  var box = new BoxBuilder('3/5')
     .group('Categorias', data.category.length).hidableItems(15)
   data.category.forEach((each) => {
     box.square(each.name, each.items, Num.percent(each.items * 100 / data.items, true), Num.format(each.total), 'category', each.name, data.category[0].items)
   })
+  box.build()
 
   if (data.size && data.size.length) {
     box.group('Tamanhos', data.size.length, 'gray').hidableItems(10)
@@ -117,27 +136,29 @@ function buildBoxes (results) {
     })
   }
 
-  var box = new BuildBox('1/3')
+  var box = new BoxBuilder('1/3')
     .group('Fabricantes', data.manufacturer.length).hidableItems(20)
   data.manufacturer.forEach((each) => {
     var markup = each.total / each.cost
     var subLevel = (markup > 2.19 ? 1 : (markup < 1.8 ? -1 : 0))
     box.square(each.name, each.items, Floa.abs(each.sumScore / each.count, 2), Floa.abs(markup, 2), 'manufacturer', each.name, data.manufacturer[0].items, true, subLevel)
   })
+  box.build()
 
-  var box = new BuildBox('3/5')
+  var box = new BoxBuilder('3/5')
     .group('Marcas', data.brand.length).hidableItems(15)
   data.brand.forEach((each) => {
     box.square(each.name, each.items, Num.percent(each.items * 100 / data.items, true), Num.format(each.total), 'brand', each.name, data.brand[0].items)
   })
+  box.build()
 
   buildSkusBox(data)
-
-  coloringData()
-  tagsHandler.bind()
   bindImagePreview()
-  bindTooltipManufacturer()
   bindCopiable()
+
+  setTimeout(() => {
+    tagsHandler.bind()
+  }, 400)
 }
 
 function bindImagePreview () {
@@ -169,7 +190,7 @@ function buildSkusBox (data) {
       }
     }
 
-    var box = new BuildBox('1/5')
+    var box = new BoxBuilder('1/5')
       .specialClass('skus-grid')
       .group('Produtos', data.sku.length)
     data.sku.forEach((each) => {
@@ -186,6 +207,9 @@ function buildSkusBox (data) {
         .get()
         .data('sku', each.name)
         .data('manufacturer', each.manufacturer)
+    })
+    box.build().then(() => {
+      bindTooltipManufacturer()
     })
   }
 }

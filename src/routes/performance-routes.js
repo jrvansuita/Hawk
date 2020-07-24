@@ -87,7 +87,7 @@ module.exports = class PerformanceRoutes extends Routes {
      */
     this._post('/sales-dashboard-data', (req, res) => {
       new SaleDashboardProvider()
-        .with(req.body).maybe(req.session.salesDashQueryId)
+        .with(req.body, true).maybe(req.session.salesDashQueryId)
         .setOnError((err) => {
           this._resp().error(res, err)
         })
@@ -142,7 +142,7 @@ module.exports = class PerformanceRoutes extends Routes {
 
     this._post('/stock-dashboard-data', (req, res) => {
       new StockDashboardProvider()
-        .with(req.body).maybe(req.session.stockDashQueryId)
+        .with(req.body, true).maybe(req.session.stockDashQueryId)
         .setOnError((err) => {
           this._resp().error(res, err)
         })
