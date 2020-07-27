@@ -34,14 +34,14 @@ module.exports = class {
   }
 
   _apiRead(method, path, callback) {
-    return this._register(method || this.lastMethod, '/api', path, callback || this.lastCallBack, false, true)
+    return this._register(method || this.lastMethod, '/api', path || this.lastPath, callback || this.lastCallBack, false, true)
   }
 
-  _register(method, preffix, path, callback) {
+  _register(method, prefix, path, callback) {
     method = method || this.lastMethod
-    path = preffix + this.mainPath() + (path || '') || this.lastPath
+    const fullpath = prefix + this.mainPath() + (path || '') || this.lastPath
 
-    this.app[method](path, (req, res) => {
+    this.app[method](fullpath, (req, res) => {
       Response.onTry(res, () => {
         this._applyCors(path, res)
         callback(req, res, req.body, res.locals, req.session)
@@ -132,5 +132,5 @@ var Response = {
     History.handle(e, userId)
 
     res.status(500).send(e?.toString())
-  },
+  }
 }
