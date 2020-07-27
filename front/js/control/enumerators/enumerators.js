@@ -28,7 +28,7 @@ function openOptionsMenu (line, e) {
 }
 
 function deleteItem (id) {
-  _post('/enumerators-delete', { id: id }, () => {
+  _post('/enum/delete', { id: id }, () => {
     var line = $(".each-line[data-id='" + id + "']")
     line.fadeOut(200, () => {
       line.remove()
@@ -38,7 +38,7 @@ function deleteItem (id) {
 }
 
 function duplicateItem (id) {
-  _post('/enumerators-duplicate', { id: id }, (data) => {
+  _post('/enum/duplicate', { id: id }, (data) => {
     goTo(data.id)
   })
 }
@@ -62,7 +62,7 @@ function save () {
     items: getCurrentItems()
   }
 
-  _post('/enumerators', data, (id) => {
+  _post('/enum/enumerators', data, (id) => {
     goTo(id)
   }, (error, message) => {
     console.log(error)

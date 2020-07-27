@@ -13,7 +13,7 @@ module.exports = class PackingRoutes extends Routes {
   }
 
   attach() {
-    this._page('/packing', (req, res) => {
+    this._page('', (req, res) => {
       if (global.Sett.get(res.locals.loggedUser, 8)) {
         var result = async (sale) => {
           var icons = await Enum.on('PAPERS-ICONS').get(true)
@@ -21,7 +21,7 @@ module.exports = class PackingRoutes extends Routes {
           res.render('packing/packing.ejs', {
             sale: sale,
             saleStatus: sale.id ? await Enum.on('ECCO-SALE-STATUS').get(true) : {},
-            groups: { icons: icons, transports: transps, ...(!sale.id ? await PackingProvider.get() : {}) },
+            groups: { icons: icons, transports: transps, ...(!sale.id ? await PackingProvider.get() : {}) }
           })
         }
 
@@ -76,7 +76,7 @@ module.exports = class PackingRoutes extends Routes {
       PackingChartBuilder.buildOverview(res.locals.loggedUser.full, (charts) => {
         res.render('packing/packing-chart', {
           charts: charts,
-          page: req.originalUrl,
+          page: req.originalUrl
         })
       })
     })
@@ -89,7 +89,7 @@ module.exports = class PackingRoutes extends Routes {
         res.render('packing/packing-chart', {
           charts: charts,
           page: req.originalUrl,
-          showCalendarFilter: true,
+          showCalendarFilter: true
         })
       })
     })
@@ -98,7 +98,7 @@ module.exports = class PackingRoutes extends Routes {
       var builder = new (require('../builder/packing-records-builder.js'))()
       builder.init(res.locals.loggedUser.full, (data) => {
         res.render('packing/packing-records', {
-          data: data,
+          data: data
         })
       })
 

@@ -67,7 +67,7 @@ $(document).ready(() => {
   })
 
   $('.each-all').click(function () {
-    window.location = '/mockup-builder?_id=' + $(this).data('id')
+    window.location = '/mockup/builder?_id=' + $(this).data('id')
   })
 
   $('.add-new').click(() => {
@@ -100,7 +100,7 @@ function loadImageResource (el, event) {
 
   icon.attr('src', 'img/loader/circle.svg')
   reader.onload = function (event) {
-    _postImg('/upload-base64-img', { base64: event.target.result.split(',')[1] }, (data) => {
+    _postImg('/image/upload-base64', { base64: event.target.result.split(',')[1] }, (data) => {
       selected[attr] = data.link
       target.attr('src', event.target.result)
       icon.attr('src', 'img/img-edit.png')

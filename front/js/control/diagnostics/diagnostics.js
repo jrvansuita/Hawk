@@ -5,7 +5,7 @@ $(document).ready(() => {
       showSkuFixesDialog($('#search').val())
     } else {
       showLoading()
-      _post('/run-product-diagnostics', {}, () => {
+      _post('/diagnostics/run', {}, () => {
         console.log('rodou')
       })
     }
@@ -23,7 +23,7 @@ $(document).ready(() => {
     .item('/img/restart.png', 'Atualizar Problemas', (helper) => {
       showLoading()
 
-      _post('/run-product-diagnostics', { refresh: true }, () => {
+      _post('/diagnostics/run', { refresh: true }, () => {
         console.log('rodou')
       })
     })
@@ -44,7 +44,7 @@ $(document).ready(() => {
 
     $('.ind-rows-holder').empty()
     $('.description').text(types[$(this).data('type')].description)
-    _get('/product-fixes', { type: $(this).data('type') }, (all) => {
+    _get('/diagnostics/fixes', { type: $(this).data('type') }, (all) => {
       buildIndRows(all)
     })
   })
@@ -109,7 +109,7 @@ function buildIndRows (rows) {
       .item('/img/restart.png', 'Atualizar Marca', (helper) => {
         showLoading('Carregando produtos...')
         var type = $('.ind-item.active').data('type')
-        _post('/run-product-diagnostics', { refresh: true, brand: brand, type: type }, () => {
+        _post('/diagnostics/run', { refresh: true, brand: brand, type: type }, () => {
           console.log('rodou')
         })
       })
@@ -136,7 +136,7 @@ function buildIndRows (rows) {
 }
 
 function buildSingleRow (holder, row) {
-  var $img = $('<img>').addClass('row-img').attr('src', '/product-image-redirect?sku=' + row.sku).attr('onerror', "this.src='img/product-placeholder.png'")
+  var $img = $('<img>').addClass('row-img').attr('src', '/product/image-redirect?sku=' + row.sku).attr('onerror', "this.src='img/product-placeholder.png'")
 
   var $name = $('<label>').addClass('row-name').text(row.brand)
   var $sku = $('<label>').addClass('row-sku copiable').text(' ' + row.sku)
@@ -145,7 +145,7 @@ function buildSingleRow (holder, row) {
 
   $subsHolder.dblclick((e) => {
     e.stopPropagation()
-    window.open('/stock/product?sku=' + row.sku, '_blank')
+    window.open('/product/page?sku=' + row.sku, '_blank')
   })
 
   var $div = $('<div>').addClass('row-item shadow').attr('data-sku', row.sku).append($img, $subsHolder)
@@ -179,7 +179,7 @@ function showSkuFixesDialog (sku) {
     e.stopPropagation()
   })
 
-  $('.sku-fixes-holder').load('/fixes-dialog?sku=' + sku, () => {
+  $('.sku-fixes-holder').load('/diagnostics/fixes-dialog?sku=' + sku, () => {
     bindCopiable()
   })
 }

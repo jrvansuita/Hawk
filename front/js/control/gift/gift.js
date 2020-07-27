@@ -7,13 +7,13 @@ $(document).ready(() => {
     }
   })
 
-  new ComboBox($('#gift-name'), '/gift-all')
+  new ComboBox($('#gift-name'), '/gift/all')
     .setAutoShowOptions(true)
     .setOnItemBuild((item, index) => {
       return { text: item.name }
     })
     .setOnItemSelect((data, item) => {
-      window.location = '/gift-rules?id=' + item.id
+      window.location = '/gift/rules?id=' + item.id
     }).load()
 
   expiresDatePicker = new DatePicker()
@@ -79,7 +79,7 @@ $(document).ready(() => {
   })
 
   $('.each-all').click(function () {
-    window.location = '/gift-rules?id=' + $(this).data('id')
+    window.location = '/gift/rules?id=' + $(this).data('id')
   })
 
   if (selectedGift) {
@@ -103,7 +103,7 @@ function getSelectedSkus () {
 
 function handleProduct (sku) {
   if (Arr.notIn(getSelectedSkus(), sku)) {
-    _get('/product-child', { sku: sku }, (p) => {
+    _get('/product/child', { sku: sku }, (p) => {
       if (!p) {
         showSkuError('Produto não encontrado!')
       } else if ((p._Estoque.estoqueDisponivel == 0) && $('#checkstock').is(':checked')) {
@@ -224,7 +224,7 @@ function saveGiftRule () {
   }
 
   if (c) {
-    _post('/gift-rules', {
+    _post('/gift/rules', {
       id: $('#id').val(),
       name: $('#gift-name').val(),
       expires: expiresDatePicker.getSelected().getTime(),
@@ -234,7 +234,7 @@ function saveGiftRule () {
       skus: getSelectedSkus(),
       rules: getSelectedAttrs()
     }, (doc) => {
-      window.location = '/gift-rules?id=' + doc.id
+      window.location = '/gift/rules?id=' + doc.id
     })
   }
 }
@@ -243,8 +243,8 @@ function deleteGiftRule (id) {
   id = id || $('#id').val()
 
   if (id) {
-    _post('/gift-delete', { id: id }, () => {
-      window.location = '/gift-rules'
+    _post('/gift/delete', { id: id }, () => {
+      window.location = '/gift/rules'
     })
   }
 }

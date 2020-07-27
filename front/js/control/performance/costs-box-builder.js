@@ -62,7 +62,7 @@ class CostsBoxBuilder extends BoxBuilder {
     $input.change(() => {
       var val = Num.moneyVal($input.val())
 
-      _post('/sales-dashboard-cost', { tag: $input.attr('id'), val: val }, (e) => {
+      _post('/performance/sales-dashboard-cost', { tag: $input.attr('id'), val: val }, (e) => {
         this._format($input, val)
       })
     })

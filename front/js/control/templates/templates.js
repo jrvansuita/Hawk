@@ -117,7 +117,7 @@ function checkCanDelete (id) {
 }
 
 function deleteItem (id) {
-  _post('/template-delete', { id: id }, () => {
+  _post('/templates/delete', { id: id }, () => {
     var line = $(".each-line[data-id='" + id + "']")
     line.fadeOut(200, () => {
       line.remove()
@@ -126,7 +126,7 @@ function deleteItem (id) {
 }
 
 function duplicateItem (id) {
-  _post('/template-duplicate', { id: id }, (data) => {
+  _post('/templates/duplicate', { id: id }, (data) => {
     goTo(data.id)
   })
 }

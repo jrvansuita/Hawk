@@ -1,7 +1,7 @@
 var userSelector
 
 $(document).ready(() => {
-  new ComboBox($('#user-search'), '/profiles')
+  new ComboBox($('#user-search'), '/performance/profiles')
     .setAutoShowOptions()
     .setOnItemBuild((user, index) => {
       return { text: user.name, img: user.avatar }
@@ -32,7 +32,7 @@ function onInit () {
   })
 
   $('.delete-button').click(() => {
-    _post('/history-delete', { query: getQuery() })
+    _post('/history/delete', { query: getQuery() })
   })
 
   $('.search-input').keypress(function (e) {
@@ -76,7 +76,7 @@ function nextPage () {
   currentPage++
   stop = true
 
-  _get('/history-page', {
+  _get('/history/page', {
     page: currentPage,
     query: query
   }, (response) => {

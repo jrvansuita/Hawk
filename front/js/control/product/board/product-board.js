@@ -39,9 +39,9 @@ function buildRangeSlider (data) {
 function onSearchData (id) {
   loadingPattern(true)
   if (id) {
-    _post('/product-board-data', { id: id }, handleResult)
+    _post('/stock/board-data', { id: id }, handleResult)
   } else {
-    _post('/product-board-data', getQueryData(), handleResult)
+    _post('/stock/board-data', getQueryData(), handleResult)
   }
 }
 
@@ -163,9 +163,9 @@ function buildProductsBox (data) {
 
   data.sku.forEach((each) => {
     var click = () => {
-      window.open('/stock/product?sku=' + each.name, '_blank')
+      window.open('/product/page?sku=' + each.name, '_blank')
     }
-    box.img('/product-image-redirect?sku=' + each.name, Num.format(each.total), null, each.name, 'copiable', null, click).get().data('manufacturer', each.manufacturer)
+    box.img('/product/image-redirect?sku=' + each.name, Num.format(each.total), null, each.name, 'copiable', null, click).get().data('manufacturer', each.manufacturer)
   })
   box.build().then(() => {
     bindTooltipManufacturer()

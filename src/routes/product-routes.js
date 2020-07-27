@@ -93,7 +93,7 @@ module.exports = class ProductRoutes extends Routes {
     })._api()
 
     /**
-                 * @api {post} /product-stock Stock Quantity
+                 * @api {post} /product/stock Stock Quantity
                  * @apiGroup Product
                  * @apiParam {String} device Mobile or Desktop
                  * @apiParam {String} sku Product SKU

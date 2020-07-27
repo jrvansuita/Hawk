@@ -23,7 +23,7 @@
 
           <div class="icon-holder">
             <img class="circle shadow" src="img/box.png%>" />
-            <input type="text" id="editing-id" name="editingId" value="<%=pack ? pack._id : ''%>" style="display:none">
+            <input type="text" id="editing-id" name="editingId" value="<%=pack ? pack._id : ''%>" style="display: none;">
           </div>
           <div class="header-name">
             <input type="text" class="simple-material-input search-input" value="<%=pack ? pack.name : ''%>" id="pack-name" placeholder="Selecione o Pacote" autocomplete="off"/>
@@ -166,7 +166,7 @@
                 <tr class="<%=each.stockQtd < each.minStockQtd ? 'warn-stock' : '' %>">
 
                   <td>
-                    <a href="/packages-registering?_id=<%=each.id%>">
+                    <a href="/packing/packages/registering?_id=<%=each.id%>">
                       <%=each.name%>
                     </a>
                   </td>

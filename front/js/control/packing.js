@@ -229,7 +229,7 @@ function buildProductLine (saleItem, data) {
   }
 
   cols.push(createProductVal(saleItem.codigo).addClass('copiable').dblclick(() => {
-    window.open('/stock/product?sku=' + saleItem.codigo, '_blank')
+    window.open('/product/page?sku=' + saleItem.codigo, '_blank')
   }))
   cols.push(createProductVal(saleItem.gtin))
   cols.push(createNcmInput(saleItem.ncm, saleItem.codigo))
@@ -338,15 +338,15 @@ function loadProductsOutTable () {
 
 function addListeners () {
   $('#print-nfe').click(() => {
-    window.open('/packing-danfe?nfe=' + sale.numeroNotaFiscal, '_blank')
+    window.open('/packing/danfe?nfe=' + sale.numeroNotaFiscal, '_blank')
   })
 
   $('#print-transport-tag').click(() => {
-    window.open('/packing-transport-tag?idnfe=' + sale.idNotaFiscalRef, '_blank')
+    window.open('/packing/transport-tag?idnfe=' + sale.idNotaFiscalRef, '_blank')
   })
 
   $('#print-voucher').click(() => {
-    window.open('/pending-voucher-print?sale=' + sale.numeroPedido, '_blank')
+    window.open('/pending/voucher-print?sale=' + sale.numeroPedido, '_blank')
   })
 
   bindCopiable()
@@ -376,7 +376,7 @@ function addListeners () {
 
 function addHoverProductImage (holder, sku) {
   new ImagePreview(holder).hover((self) => {
-    _get('/product-image', { sku: sku }, (product) => {
+    _get('/product/image', { sku: sku }, (product) => {
       self.show(product.image)
     })
   })
@@ -389,7 +389,7 @@ function showLastProduct (saleItem) {
 
   new ProductImageLoader($('#last-product-img'))
     .withAnim()
-    .src('/product-image-redirect?sku=' + saleItem.codigo).put()
+    .src('/product/image-redirect?sku=' + saleItem.codigo).put()
 
   $('#last-product-sku').text(saleItem.codigo)
 }
@@ -399,7 +399,7 @@ var packingTypeCombo
 function loadPackagesTypes () {
   var lastWeight = 0
 
-  new ComboBox($('#sale-package-type'), '/package-types')
+  new ComboBox($('#sale-package-type'), '/packing/packages/types')
     .setAutoShowOptions(true)
     .setOnItemBuild((pack) => {
       return { text: pack.name }
@@ -616,7 +616,7 @@ function onEditNcm (e) {
       ncm: $(this).val().trim()
     }
     showMainInputTitle('Atualizando NCM...', '/loader/circle.svg', '#a46af1')
-    _post('/product-ncm', requestBody, (res) => {
+    _post('/product/ncm', requestBody, (res) => {
       showMainInputTitle('NCM Atualizado', 'checked.png')
       showMessage('')
     })
@@ -657,7 +657,7 @@ function onMissingItemsClick () {
   handleMissingItemsMsg(true)
   $('.missing-items-msg-holder').remove()
 
-  _post('/balance-packing-to-picking',
+  _post('/performance/balance-packing-to-picking',
     {
       points: sale.itemsQuantity - itemsChecked,
       picker: sale.pickUser,

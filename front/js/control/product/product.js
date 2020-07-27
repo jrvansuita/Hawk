@@ -25,7 +25,7 @@ $(document).ready(() => {
 
   $('.print-local').click(() => {
     if (lastSelected) {
-      window.open('/product-print-locals?sku=' + lastSelected, '_blank')
+      window.open('/product/print-locals?sku=' + lastSelected, '_blank')
     }
   })
 })
@@ -36,7 +36,7 @@ function makeMenu () {
   Dropdown.on($('.main-menu-dots'))
     .item('/img/' + (active ? 'block' : 'checked') + '.png', active ? 'Inativar' : 'Ativar', () => {
       showLoadingStatus()
-      _post('/product-active', {
+      _post('/product/active', {
         sku: product.codigo,
         active: !active,
         user: currentUser
@@ -65,7 +65,7 @@ function findCurrentProduct () {
 }
 
 function requestProdutosFixes (callback) {
-  _get('/product-fixes', { sku: product.codigo, groupped: true }, (all) => {
+  _get('/diagnostics/fixes', { sku: product.codigo, groupped: true }, (all) => {
     window.fixes = all
     callback(this)
   })
@@ -91,7 +91,7 @@ function requestProductChilds () {
         return e.codigo
       })
 
-      _get('/product-skus', { skus: skus, order: true }, (childs) => {
+      _get('/product/skus', { skus: skus, order: true }, (childs) => {
         childs.forEach((child) => {
           buildChildSku(product, child)
         })
@@ -177,11 +177,11 @@ function buildChildSku (product, child) {
 
   Dropdown.on($options)
     .item('/img/barcode.png', 'Imprimir Etiqueta', () => {
-      window.open('/barcode?sku=' + child.codigo, '_blank')
+      window.open('/product/barcode?sku=' + child.codigo, '_blank')
     })
     .item('/img/' + (active ? 'block' : 'checked') + '.png', active ? 'Inativar' : 'Ativar', () => {
       showLoadingStatus()
-      _post('/product-active', {
+      _post('/product/active', {
         sku: child.codigo,
         active: !active,
         user: currentUser,
@@ -213,7 +213,7 @@ function buildLocalCol (product) {
           user: currentUser
         }
 
-        _post('/product-local', requestBody, (res) => {
+        _post('/product/local', requestBody, (res) => {
           handleInputUpdate($(this), res, $(this).val())
         })
       }
@@ -242,7 +242,7 @@ function buildStockCol (product) {
           user: currentUser
         }
 
-        _post('/product-stock', requestBody, (res) => {
+        _post('/product/stock', requestBody, (res) => {
           handleInputUpdate($(this), res, parseInt($(this).data('value')) + val)
 
           var $disp = $(this).closest('tr').find('.available-stock .child-value')
@@ -275,7 +275,7 @@ function buildWeightCol (product) {
           user: currentUser
         }
 
-        _post('/product-weight', requestBody, (res) => {
+        _post('/product/weight', requestBody, (res) => {
           handleInputUpdate($(this), res, val)
         })
       }
@@ -416,7 +416,7 @@ var stockRowsHistoryMemory = {}
 
 function getStockRowsGrouped (childSku, callback) {
   if (!stockRowsHistoryMemory[childSku]) {
-    _get('/product-stock-history', { sku: childSku }, (rows) => {
+    _get('/product/stock-history', { sku: childSku }, (rows) => {
       stockRowsHistoryMemory[childSku] = groupStockRows(rows)
       callback(stockRowsHistoryMemory[childSku])
     })
@@ -647,7 +647,7 @@ function prepareAutoComplete () {
   var options = {
 
     url: function (phrase) {
-      return '/product-search-autocomplete?typing=' + phrase
+      return '/product/search-autocomplete?typing=' + phrase
     },
 
     getValue: function (element) {

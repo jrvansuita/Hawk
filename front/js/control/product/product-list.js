@@ -73,14 +73,14 @@ $(document).ready(() => {
     })
     .item('/img/photo.png', 'Baixar Imagens', (helper) => {
       if (Object.keys(selectedSkus).length > 0) {
-        window.open('/product-multiple-imgs?skus=' + Object.keys(selectedSkus), '_blank')
+        window.open('/stock/multiple-imgs?skus=' + Object.keys(selectedSkus), '_blank')
       }
     })
     .item('/img/print.png', 'Imprimir Relatório', (helper) => {
       if (Object.keys(selectedSkus).length > 0) {
-        window.open('/product-list-export?skus=' + Object.keys(selectedSkus))
+        window.open('/stock/list-export?skus=' + Object.keys(selectedSkus))
       } else {
-        window.open('/product-list-export')
+        window.open('/stock/list-export')
       }
     })
 })
@@ -108,7 +108,7 @@ function loadList () {
     page++
     loading = true
 
-    _get('/product-list-page', {
+    _get('/stock/list-page', {
       page: page,
       query: {
         value: $('#search-input').val(),
@@ -175,7 +175,7 @@ function createImgProduct (product, index) {
   var counter = $('<label>').addClass('counter-circle').append((productsListCount + 1))
 
   new ImagePreview(img).hover((self) => {
-    _get('/product-image', { sku: product.sku }, (product) => {
+    _get('/product/image', { sku: product.sku }, (product) => {
       self.show(product.image)
     })
   })
@@ -225,14 +225,14 @@ function createTitle (product) {
 
   var sku = $('<span>').text(product.sku).addClass('sku copiable').dblclick(function () {
     window.open(
-      '/stock/product?sku=' + $(this).text(),
+      '/product/page?sku=' + $(this).text(),
       '_blank' // <- This is what makes it open in a new window.
     )
   })
 
   var diagIcon = $('<img>').addClass('diag-alert').attr('src', 'img/alert.png')
 
-  _get('/product-fixes', { sku: product.sku, groupped: true }, (all) => {
+  _get('/diagnostics/fixes', { sku: product.sku, groupped: true }, (all) => {
     if (all.length > 0) {
       diagIcon.fadeIn()
       diagIcon.click(() => {

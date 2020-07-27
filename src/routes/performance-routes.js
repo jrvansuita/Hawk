@@ -33,7 +33,7 @@ module.exports = class PerformanceRoutes extends Routes {
           charts: charts,
           indicators: indicators,
           showCalendarFilter: true,
-          hideEmptyCharts: true,
+          hideEmptyCharts: true
         })
       })
     })
@@ -50,12 +50,12 @@ module.exports = class PerformanceRoutes extends Routes {
 
     this._page('/sales-dashboard', async (req, res) => {
       res.render('performance/sales-dashboard', {
-        paymentTypes: await Enum.on('PAY-TYPES').get(true),
+        paymentTypes: await Enum.on('PAY-TYPES').get(true)
       })
     })
 
     /**
-     * @api {post} /sales-dashboard-data Sales Information
+     * @api {post} /performance/sales-dashboard-data Sales Information
      * @apiGroup Performance
      *
      * @apiParam {String{2..200}} [value] Search for a product
@@ -110,7 +110,7 @@ module.exports = class PerformanceRoutes extends Routes {
     })
 
     /**
-     * @api {post} /stock-dashboard-data Stock Information
+     * @api {post} /performance/stock-dashboard-data Stock Information
      * @apiGroup Performance
      *
      * @apiParam {String{2..200}} [value] Search for a product

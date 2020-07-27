@@ -16,7 +16,7 @@ $(document).ready(() => {
 
   $('.sale-info-coleted').dblclick(() => {
     if (data.idOrdemColeta != '' && data.idOrdemColeta != 0) {
-      window.open('/shipping-order-print?id=' + data.idOrdemColeta)
+      window.open('/shipping-order/print?id=' + data.idOrdemColeta)
     }
   })
 
@@ -138,13 +138,13 @@ function bindSaleItens (data) {
 
     // item sku
     var $itemSkuHolder = $('<td>').addClass('item-sku-holder copiable').text(item.sku).dblclick(() => {
-      window.open('/stock/product?sku=' + $itemSkuHolder.text())
+      window.open('/product/page?sku=' + $itemSkuHolder.text())
     })
 
     // item name
     var $itemNameHolder = $('<td>').addClass('sale-item-infos')
     var $itemName = $('<span>').addClass('item-name').dblclick(() => {
-      window.open('/product-url-redirect?sku=' + $itemSkuHolder.text())
+      window.open('/product/url-redirect?sku=' + $itemSkuHolder.text())
     })
     var $itemBrand = $('<td>').addClass('item-brand')
 
@@ -249,7 +249,7 @@ function bindSaleHistory (data) {
 
 function hoverProductImage (holder, sku) {
   new ImagePreview(holder).hover((self) => {
-    _get('/product-image', { sku: sku }, (product) => {
+    _get('/product/image', { sku: sku }, (product) => {
       self.show(product.image)
     })
   })
@@ -274,7 +274,7 @@ function bindDropdowns (data) {
       dropdown.item('/img/envelop.png', 'Enviar Boleto por Email', function (helper) {
         helper.loading(true)
 
-        _post('/customer-email-boleto', { cliente: data.client, oc: data.oc, linkBoleto: data.payment.boleto, userid: loggedUser.id }, (result) => {
+        _post('/customer-service/email-boleto', { cliente: data.client, oc: data.oc, linkBoleto: data.payment.boleto, userid: loggedUser.id }, (result) => {
           helper.finished(result)
         })
       })
@@ -286,7 +286,7 @@ function bindDropdowns (data) {
   }).item('/img/envelop.png', 'Enviar Rastreio por Email', function (helper) {
     helper.loading(true)
 
-    _post('/customer-email-tracking', { cliente: data.client, oc: data.oc, tracking: Params.trackingUrlExt() + data.oc, userid: loggedUser.id }, (result) => {
+    _post('/customer-service/email-tracking', { cliente: data.client, oc: data.oc, tracking: Params.trackingUrlExt() + data.oc, userid: loggedUser.id }, (result) => {
       helper.finished(result)
     })
   })
@@ -297,7 +297,7 @@ function bindDropdowns (data) {
     drop.item('/img/envelop.png', 'Enviar NF', (helper) => {
       helper.loading(true)
 
-      _post('/customer-email-danfe', { cliente: data.client, oc: data.oc, nfNumber: data.nf, userid: loggedUser.id }, (result) => {
+      _post('/customer-service/email-danfe', { cliente: data.client, oc: data.oc, nfNumber: data.nf, userid: loggedUser.id }, (result) => {
         helper.finished(result)
       })
     })
@@ -311,7 +311,7 @@ function bindDropdowns (data) {
       new SaleStatusDialog(data.status).onItemSelect((status) => {
         new SaleStatusObsDialog('Adicionar Observação').make((obs) => {
           helper.loading(true)
-          _post('/customer-sale-status-change', { sale: data.oc, status: status, user: loggedUser, obs: obs }, (result) => {
+          _post('/customer-service/sale-status-change', { sale: data.oc, status: status, user: loggedUser, obs: obs }, (result) => {
             if (result.sucess != null || result == true) {
               errorTooltip.hideDelay(3000).showSuccess('Status Alterado')
               helper.loading(false)

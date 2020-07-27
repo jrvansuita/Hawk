@@ -85,7 +85,7 @@ function onBindViewsListeners () {
     .useUnicodeEmoticons(true)
     .showRichButtons(false)
     .addMiscCustomButton('insertFile', 'def-template', 'Inserir Descricao Padrão', (editor) => {
-      _get('/templates-viewer?id=89017302', {}, (r) => {
+      _get('/templates/viewer?id=89017302', {}, (r) => {
         editor.html.set(r)
       })
     })
@@ -185,7 +185,7 @@ function requestProductChilds () {
       return e.codigo
     })
 
-    _get('/product-skus', { skus: skus, order: true }, (childs) => {
+    _get('/product/skus', { skus: skus, order: true }, (childs) => {
       childsBuilder.load(childs, true)
     })
   }

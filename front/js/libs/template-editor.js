@@ -106,7 +106,7 @@ class TemplateEditor {
     if (this.activeImageUpload) {
       return {
         imageUploadParam: 'file',
-        imageUploadURL: '/template-img-uploader',
+        imageUploadURL: '/templates/img-uploader',
         imageUploadMethod: 'POST',
         imageMaxSize: 5 * 1024 * 1024,
         imageAllowedTypes: ['jpeg', 'jpg', 'png'],

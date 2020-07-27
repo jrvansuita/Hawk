@@ -23,7 +23,7 @@ module.exports = class PickingRoutes extends Routes {
       var builder = new (require('../builder/picking-records-builder.js'))()
       builder.init(res.locals.loggedUser.full, (data) => {
         res.render('picking/picking-records', {
-          data: data,
+          data: data
         })
       })
 
@@ -34,7 +34,7 @@ module.exports = class PickingRoutes extends Routes {
       require('../builder/picking-chart-builder.js').buildOverview(res.locals.loggedUser.full, function (charts) {
         res.render('picking/picking-chart', {
           charts: charts,
-          page: req.originalUrl,
+          page: req.originalUrl
         })
       })
     })
@@ -47,7 +47,7 @@ module.exports = class PickingRoutes extends Routes {
         res.render('picking/picking-chart', {
           charts: charts,
           page: req.originalUrl,
-          showCalendarFilter: true,
+          showCalendarFilter: true
         })
       })
     })
@@ -93,7 +93,7 @@ module.exports = class PickingRoutes extends Routes {
             blockedSalesCount: BlockHandler.getBlockedSalesCount(),
 
             openSalesCount: PickingHandler.getOpenSalesCount(),
-            isBusy: PickingHandler.isBusy(),
+            isBusy: PickingHandler.isBusy()
           })
         }
       })
@@ -143,7 +143,7 @@ module.exports = class PickingRoutes extends Routes {
 
         selectedTransps: TransportLaws.getSelecteds(),
         selectedUfs: UfLaws.getSelecteds(),
-        selectedFilters: PickingFilterLaws.getSelecteds(),
+        selectedFilters: PickingFilterLaws.getSelecteds()
       })
     })
   }

@@ -36,11 +36,11 @@ var __ParamsHandler = {
   /** Bellow Functions are visible only on backend **/
   _private: {
     productImageUrl (sku) {
-      return this.productionUrl() + '/product-image-redirect?sku=' + sku
+      return this.productionUrl() + '/product/image-redirect?sku=' + sku
     },
 
     productUrl (sku) {
-      return this.productionUrl() + '/product-url-redirect?sku=' + sku
+      return this.productionUrl() + '/product/url-redirect?sku=' + sku
     },
 
     productionUrl () {

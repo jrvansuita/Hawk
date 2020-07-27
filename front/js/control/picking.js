@@ -54,7 +54,7 @@ $(document).ready(() => {
           $('#user-id').select()
         }
 
-        _get('/picking-sale', {
+        _get('/picking/sale', {
           userid: code
         },
         onSucess,
@@ -97,7 +97,7 @@ $(document).ready(() => {
 
   $(".blocked-sale-label[data-reason='994']").dblclick(function () {
     window.open(
-      '/stock/product?sku=' + $(this).text(),
+      '/product/page?sku=' + $(this).text(),
       '_blank' // <- This is what makes it open in a new window.
     )
   })
@@ -105,13 +105,13 @@ $(document).ready(() => {
   Dropdown.on($('.upcoming-dots'))
     .item('/img/restart.png', 'Recarregar', (helper) => {
       helper.loading()
-      _post('/picking-reload', { ref: 'picking' }, (data) => {
+      _post('/picking/reload', { ref: 'picking' }, (data) => {
         window.location.reload()
       })
     })
     .item('/img/back.png', 'Separar Novamente', (helper) => {
       helper.loading()
-      _post('/picking-reload', { ref: 'picking', ignoreDone: true }, (data) => {
+      _post('/picking/reload', { ref: 'picking', ignoreDone: true }, (data) => {
         window.location.reload()
       })
     })
@@ -172,7 +172,7 @@ $(document).ready(() => {
 
   $('.pending-button').click(function () {
     if (checkIsLocalFilled(true)) {
-      _post('/start-pending', {
+      _post('/pending/start', {
         pendingSale: selectedPendingSale,
         local: $('#pending-local').val()
       },
@@ -228,7 +228,7 @@ function getInProgressSale (number) {
 }
 
 function doneSaleRestart (saleNumber) {
-  _post('/picking-done-restart', {
+  _post('/picking/done-restart', {
     sale: saleNumber
   }, null, (error) => {
     cardTooltip.showError(error.responseText)
@@ -291,7 +291,7 @@ function checkIsLocalFilled (shake) {
 }
 
 function openPrintPickingSale (sale, userId) {
-  var url = '/print-picking-sale?userId=[U]&saleNumber=[S]'
+  var url = '/picking/print-sale?userId=[U]&saleNumber=[S]'
 
   if (userId) {
     url = url.replace('[U]', userId.toString().trim()).replace('[S]', sale)

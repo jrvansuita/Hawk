@@ -3,7 +3,7 @@ $(document).ready(() => {
     $(this).attr('src', 'img/loader/circle.svg')
     var sku = $(this).data('sku')
 
-    _post('/check-product-diagnostic', { sku: sku }, (data) => {
+    _post('/diagnostics/check', { sku: sku }, (data) => {
       var type = $(this).data('type')
       var obj = data.find((item) => { return item.sku === sku })
 
@@ -32,14 +32,14 @@ $(document).ready(() => {
 
   $('.fixes-sku-list.copiable').dblclick(function (e) {
     e.stopPropagation()
-    window.open('/stock/product?sku=' + $(this).text(), '_blank')
+    window.open('/product/page?sku=' + $(this).text(), '_blank')
   })
 
   Dropdown.on($('.no-problem-menu'))
     .item('/img/restart.png', 'Verificar Agora', (helper) => {
       $('.loading-circle').show()
       helper.loading()
-      _post('/check-product-diagnostic', { sku: helper?.data?.sku, forceFather: true }, (data) => {
+      _post('/diagnostics/check', { sku: helper?.data?.sku, forceFather: true }, (data) => {
         $('.sku-fixes-modal').trigger('click')
         showSkuFixesDialog(helper.data.sku)
       })
@@ -56,18 +56,18 @@ $(document).ready(() => {
     })
     .item('/img/delete.png', 'Remover', (helper) => {
       helper.loading()
-      _post('/product-diagnostic-remove', { sku: helper.data.sku }, (data) => {
+      _post('/diagnostics/remove', { sku: helper.data.sku }, (data) => {
         done(helper.data.sku)
       })
     })
     .item('/img/block.png', 'Inativar', (helper) => {
       helper.loading()
 
-      _post('/product-diagnostic-remove', { sku: helper.data.sku }, (data) => {
+      _post('/diagnostics/remove', { sku: helper.data.sku }, (data) => {
         done(helper.data.sku)
       })
 
-      _post('/product-active', {
+      _post('/product/active', {
         sku: helper.data.sku,
         active: false,
         user: loggedUser

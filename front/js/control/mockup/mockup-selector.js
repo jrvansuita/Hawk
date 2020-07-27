@@ -10,7 +10,7 @@ class MockupSelector {
   }
 
   _createOptions (callback) {
-    _get('/get-all-mockups', null, (all) => {
+    _get('/mockup/get-all', null, (all) => {
       this.options = all
       all.forEach((each, index) => {
         this.dialog.addItem('img/mockup.png', each.name + ' ' + each.width + 'x' + each.height, each._id)

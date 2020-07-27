@@ -69,7 +69,7 @@ function onPutBoolean (el) {
 }
 
 function putParam (id, value) {
-  _post('/put-main-param', { name: id || 'none', val: value }, () => {
+  _post('/settings/put-param', { name: id || 'none', val: value }, () => {
     console.log('[Put]: ' + id + ' - ' + value)
   })
 }

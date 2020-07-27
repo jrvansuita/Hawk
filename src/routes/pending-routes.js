@@ -14,7 +14,7 @@ module.exports = class PendingRoutes extends Routes {
   }
 
   attach() {
-    this._page('/pending', (req, res) => {
+    this._page('', (req, res) => {
       if (this._checkPermissionOrGoBack(req, res, 2)) {
         PendingHandler.load(false, (list) => {
           res.render('pending/pending', { pendingSales: list })
@@ -37,7 +37,7 @@ module.exports = class PendingRoutes extends Routes {
         res.render('pending/print-list', {
           list: list,
           products: products,
-          status: req.query.status,
+          status: req.query.status
         })
       })
     })
@@ -78,7 +78,7 @@ module.exports = class PendingRoutes extends Routes {
             new TemplateBuilder('86142889').setData(data).build((template) => {
               res.writeHead(200, {
                 'Content-Type': 'text/html',
-                'Content-Length': template.content.length,
+                'Content-Length': template.content.length
               })
               res.end(template.content)
             })

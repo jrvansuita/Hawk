@@ -2,7 +2,7 @@
   <nav class="sub-menu-nav">
     <ul class="sub-menu-ul">
       <li class="menu-item">
-        <a href="/profile">
+        <a href="/performance/profile">
           <div class="menu-button title">
             Perfil
           </div>
@@ -10,7 +10,7 @@
       </li>
 
       <li class="menu-item">
-        <a href="/team-board">
+        <a href="/user/team-board">
           <div class="menu-button title">
             Grupo
           </div>
@@ -19,7 +19,7 @@
 
       <%if (Sett.get(locals.loggedUser,6)){%>
         <li class="menu-item " >
-          <a href="/manage-points">
+          <a href="/performance/manage-points">
             <div class="menu-button title">
               Gerenciar Pontos
             </div>
@@ -29,7 +29,7 @@
 
         <%if (Sett.get(locals.loggedUser,18) ){%>
           <li class="menu-item" >
-            <a href="/sales-dashboard">
+            <a href="/performance/sales-dashboard">
               <div class="menu-button title">
                 Pedidos
               </div>
@@ -39,7 +39,7 @@
 
           <%if (Sett.get(locals.loggedUser,17 )){%>
           <li class="menu-item" >
-            <a href="/stock-dashboard">
+            <a href="/performance/stock-dashboard">
               <div class="menu-button title">
                 Produtos
               </div>

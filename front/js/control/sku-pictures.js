@@ -29,11 +29,11 @@ $(document).ready(() => {
 })
 
 function startToBeApprovedList (sku) {
-  controlImagesList($('.to-be-approved-container-holder'), $('.to-be-approved-images-holder'), '/get-sku-pictures-page-to-approve')
+  controlImagesList($('.to-be-approved-container-holder'), $('.to-be-approved-images-holder'), '/pictures/get-page-to-approve')
 }
 
 function startApprovedSearch (sku) {
-  controlImagesList($('.approved-container-holder'), $('.approved-images-holder'), '/get-sku-pictures-page', sku ? { sku: sku } : {})
+  controlImagesList($('.approved-container-holder'), $('.approved-images-holder'), '/pictures/get-page', sku ? { sku: sku } : {})
 }
 
 function controlImagesList (pane, list, path, query) {
@@ -86,7 +86,7 @@ function bindScrollLoadImages (isLoading, pane, list, onLoadNextPage) {
 }
 
 function onApproveImageClick (holder, _id, approved) {
-  _post('/sku-pictures-approve', { _id: _id, approved: approved }, (data) => {
+  _post('/pictures/approve', { _id: _id, approved: approved }, (data) => {
     holderRemove(holder)
   })
 }
@@ -98,7 +98,7 @@ function holderRemove (holder) {
 }
 
 function deleteImage (holder, _id) {
-  _post('/sku-picture-delete', { _id: _id }, (data) => {
+  _post('/pictures/delete', { _id: _id }, (data) => {
     holderRemove(holder)
   })
 }
@@ -124,11 +124,11 @@ function loadImagesHolder (listHolder, each) {
 
   skusArr.forEach((sku) => {
     if (sku != '') {
-      $previewImg.append($('<img>').addClass('preview-image').attr('src', '/product-image-redirect?sku=' + sku)).click(() => {
-        window.open('/product-url-redirect?sku=' + sku)
+      $previewImg.append($('<img>').addClass('preview-image').attr('src', '/product/image-redirect?sku=' + sku)).click(() => {
+        window.open('/product/url-redirect?sku=' + sku)
       })
       $skusHolder.append(createSingleTag(sku)).dblclick(() => {
-        window.open('/stock/product?sku=' + sku)
+        window.open('/product/page?sku=' + sku)
       })
       applyTagColor($skusHolder.children('span'))
     }
@@ -173,7 +173,7 @@ function getSelectedSkus () {
 
 function handleProduct (sku) {
   if (Arr.notIn(getSelectedSkus(), sku)) {
-    _get('/product-child', { sku: sku }, (p) => {
+    _get('/product/child', { sku: sku }, (p) => {
       if (!p) {
         showSkuError('Produto não encontrado!')
       } else {
@@ -243,7 +243,7 @@ function saveClick () {
 }
 
 function savePictureToDatabase () {
-  _post('/sku-picture-from-insta', {
+  _post('/pictures/from-insta', {
     instaPost: getInstaId(), skus: getSelectedSkus().join(',')
   }, (data) => {
     console.log('veio' + data)
@@ -257,7 +257,7 @@ function savePicClick () {
     if ($('#insta-post').val().slice(-1) == '/') {
       var url = $('#insta-post').val().slice(0, -1)
     }
-    _post('/check-if-picture-exists', { url: url || $('#insta-post').val() }, (data) => {
+    _post('/pictures/check-exists', { url: url || $('#insta-post').val() }, (data) => {
       if (data) {
         checkMaterialInput($('#insta-post'))
         console.log('Imagem já existe!')

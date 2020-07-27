@@ -37,9 +37,9 @@ function onSearchData (id) {
   loadingPattern(true)
 
   if (id) {
-    _post('/stock-dashboard-data', { id: id }, onHandleResult)
+    _post('/performance/stock-dashboard-data', { id: id }, onHandleResult)
   } else {
-    _post('/stock-dashboard-data', getQueryData(), onHandleResult)
+    _post('/performance/stock-dashboard-data', getQueryData(), onHandleResult)
   }
 }
 
@@ -164,7 +164,7 @@ function buildBoxes (results) {
 function bindImagePreview () {
   $('.box-img').each(function (e) {
     new ImagePreview($(this)).delay(700).hover((self) => {
-      _get('/product-image', { sku: $(this).parent().data('sku') }, (product) => {
+      _get('/product/image', { sku: $(this).parent().data('sku') }, (product) => {
         self.show(product.image)
       })
     })
@@ -195,15 +195,15 @@ function buildSkusBox (data) {
       .group('Produtos', data.sku.length)
     data.sku.forEach((each) => {
       var click = () => {
-        window.open('/product-url-redirect?sku=' + each.name, '_blank')
+        window.open('/product/url-redirect?sku=' + each.name, '_blank')
       }
 
       var subDblClick = (e) => {
         e.stopPropagation()
-        window.open('/stock/product?sku=' + each.name, '_blank')
+        window.open('/product/page?sku=' + each.name, '_blank')
       }
 
-      box.img('/product-image-redirect?sku=' + each.name, each.items, each.stock, each.name, 'copiable', Math.trunc(each.score), click, null, subDblClick, scoreStyling(each))
+      box.img('/product/image-redirect?sku=' + each.name, each.items, each.stock, each.name, 'copiable', Math.trunc(each.score), click, null, subDblClick, scoreStyling(each))
         .get()
         .data('sku', each.name)
         .data('manufacturer', each.manufacturer)

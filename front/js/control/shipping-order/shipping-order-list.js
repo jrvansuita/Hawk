@@ -26,7 +26,7 @@ $(document).ready(() => {
     })
 
   $('#start-new').click(() => {
-    window.open('/packing/shipping-order')
+    window.open('/shipping-order')
   })
 
   new ComboBox($('#transport'), transportList.transp)
@@ -40,7 +40,7 @@ $(document).ready(() => {
       }
     })
 
-  new ComboBox($('#user'), '/profiles')
+  new ComboBox($('#user'), '/performance/profiles')
     .setAutoShowOptions()
     .setOnItemBuild((user, index) => {
       return { text: user.name, img: user.avatar }
@@ -108,7 +108,7 @@ function loadList () {
       }
     }
 
-    _get('/shipping-order-list-page', query, (result) => {
+    _get('/shipping-order/list-page', query, (result) => {
       loading = false
       $('.loading').hide()
       showAll = result.length == 0
@@ -155,7 +155,7 @@ function addItemLayout (item, index) {
   dots.each((index, each) => {
     Dropdown.on(each)
       .item('../img/print.png', 'Imprimir', (helper) => {
-        window.open('/shipping-order-print?number=' + helper.data.number, '_blank')
+        window.open('/shipping-order/print?number=' + helper.data.number, '_blank')
       })
       .item('../img/delete.png', 'Excluir', (helper) => {
         $(each.closest('tr')).fadeOut(300, () => {
@@ -163,7 +163,7 @@ function addItemLayout (item, index) {
         })
       })
       .item(window.transportList.icons.default.icon, 'Coletado', (helper) => {
-        _post('/shipping-order-colected', { id: helper.data.id }, () => {
+        _post('/shipping-order/colected', { id: helper.data.id }, () => {
           var s = $(each.closest('tr')).find('.ship-status')
           s.text('Coletado').addClass('colected')
           each.closest('tr').removeClass('open-item').addClass('colected-item')
@@ -174,7 +174,7 @@ function addItemLayout (item, index) {
   tds.push($('<td>').append(dots))
 
   var line = $('<tr>').addClass('line-item').append(tds).click(() => {
-    window.open('/packing/shipping-order?number=' + item.numeroColeta, '_blank')
+    window.open('/shipping-order?number=' + item.numeroColeta, '_blank')
   })
 
   applyBackgroundColor(item.situacao, line)

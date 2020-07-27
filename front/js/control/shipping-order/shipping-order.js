@@ -216,7 +216,7 @@ function handleNfeInclusion (nfNumber) {
   if (Num.isInt(nfNumber)) {
     $('#nf').val('')
 
-    _get('/nfe', { number: nfNumber }, (nfe) => {
+    _get('/shipping-order/nfe', { number: nfNumber }, (nfe) => {
       if (onCheckNfeParameters(nfNumber, nfe)) {
         onInsertNewNfeOnShippingOrder(nfe)
       }
@@ -357,7 +357,7 @@ function saveShippingOrder () {
       return e.id
     }).filter(Boolean)
 
-    _post('/shipping-order-save', { nfs: idsNfes, id: shippingOrder.id }, () => {
+    _post('/shipping-order/save', { nfs: idsNfes, id: shippingOrder.id }, () => {
       clearMemory()
       window.location = 'shipping-order?number=' + shippingOrder.numeroColeta
     })
@@ -385,7 +385,7 @@ function createNewShippingOrder (firstNfe) {
     shippingOrder._NotasFiscais = [firstNfe.numero]
     shippingOrder.data = Dat.api(new Date(), false, true)
 
-    _post('/shipping-order-new', { data: shippingOrder }, (data) => {
+    _post('/shipping-order/new', { data: shippingOrder }, (data) => {
       shippingOrder = data
       isLoadingNewShippingOrder = false
       onShippingOrderStored()

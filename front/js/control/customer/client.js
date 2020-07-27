@@ -31,7 +31,7 @@ function prepareAutoComplete () {
   var options = {
 
     url: function (phrase) {
-      return '/customer-search-autocomplete?typing=' + phrase
+      return '/customer-service/autocomplete?typing=' + phrase
     },
 
     getValue: function (element) {

@@ -27,7 +27,7 @@ $(document).ready(() => {
       Dropdown.on(el)
         .item('/img/print.png', 'Imprimir Listagem', () => {
           window.open(
-            '/pending-print-list?status=' + ($(el).hasClass('menu-red-top') ? 0 : ($(el).hasClass('menu-orange-top') ? 1 : 2)),
+            '/pending/print?status=' + ($(el).hasClass('menu-red-top') ? 0 : ($(el).hasClass('menu-orange-top') ? 1 : 2)),
             '_blank' // <- This is what makes it open in a new window.
           )
         }).bindMousePos()
@@ -188,7 +188,7 @@ function buildProductFirstCol (item, slim, pending) {
     .attr('placeholder', item.codigo)
     .dblclick(() => {
       window.open(
-        '/stock/product?sku=' + item.codigo,
+        '/product/page?sku=' + item.codigo,
         '_blank' // <- This is what makes it open in a new window.
       )
     })
@@ -245,7 +245,7 @@ function buildProductFirstCol (item, slim, pending) {
     })
   } else {
     new ImagePreview(first).hover((self) => {
-      _get('/product-image', { sku: item.codigo }, (product) => {
+      _get('/product/image', { sku: item.codigo }, (product) => {
         self.show(product.image)
       })
     })
@@ -322,20 +322,20 @@ function loadPendingSaleItems (el, pending) {
 }
 
 function updatePendingStatus (pending) {
-  execute('/pending-status', pending, () => {
+  execute('/pending/status', pending, () => {
     window.location.reload()
   })
 }
 
 function restartPendingSale (pending) {
-  execute('/pending-restart', pending, () => {
+  execute('/pending/restart', pending, () => {
     window.location.reload()
   })
 }
 
 function assumePendingSale (pending, removePoints) {
   pending.removePoints = removePoints
-  execute('/pending-assume', pending, () => {
+  execute('/pending/assume', pending, () => {
     window.location.reload()
   })
 }
@@ -388,11 +388,11 @@ function getBlockedLabel (pending) {
 }
 
 function handlSwapProductSale (saleNumber, targerSku, swapSku, quantity, onSucess, onError) {
-  _get('/product-child', { sku: swapSku }, (product) => {
+  _get('/product/child', { sku: swapSku }, (product) => {
     if (product.error) {
       onError(product.error)
     } else {
-      _post('/pending-swap-items',
+      _post('/pending/swap-items',
         {
           saleNumber: saleNumber,
           targetSku: targerSku,
@@ -493,7 +493,7 @@ function createVoucherPendingMenuOption (drop, pending) {
           return validateVoucher(input)
         })
         .onPositiveButton('Enviar', (text) => {
-          _post('/pending-send-voucher', {
+          _post('/pending/send-voucher', {
             pending: pending,
             voucher: text,
             totalValue: pendingPrice

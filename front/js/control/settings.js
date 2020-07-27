@@ -5,7 +5,7 @@ $(document).ready(() => {
 
     if (active || loggedUser.full) {
       drop.item('/img/play.png', 'Executar', (helper) => {
-        _post('  /job-run-force', { id: helper.data.id })
+        _post('/job-run-force', { id: helper.data.id })
       })
     }
     drop.item('/img/gear.png', 'Editar', (helper) => {

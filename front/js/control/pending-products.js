@@ -1,7 +1,7 @@
 $(document).ready(() => {
   $('.sku.copiable').dblclick(function () {
     window.open(
-      '/stock/product?sku=' + $(this).text(),
+      '/product/page?sku=' + $(this).text(),
       '_blank' // <- This is what makes it open in a new window.
     )
   })
@@ -33,7 +33,7 @@ $(document).ready(() => {
     if (!$(each).data('father')) {
       drop.item('/img/print.png', 'Localizações', (helper) => {
         console.log(helper)
-        window.open('/stock/product-print-locals?sku=' + helper.data.sku, '_blank')
+        window.open('/product/print-locals?sku=' + helper.data.sku, '_blank')
       })
     }
 
@@ -47,7 +47,7 @@ $(document).ready(() => {
 
   $('.prod-img').each(function (e) {
     new ImagePreview($(this)).hover((self) => {
-      _get('/product-image', { sku: $(this).data('sku') }, (product) => {
+      _get('/product/image', { sku: $(this).data('sku') }, (product) => {
         self.show(product.image)
       })
     })

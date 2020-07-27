@@ -3,14 +3,14 @@ var userSelector
 var passPlaceHolder = 'Impossível Decifrar'
 
 $(document).ready(() => {
-  new ComboBox($('#user-search'), '/profiles')
+  new ComboBox($('#user-search'), '/performance/profiles')
     .setAutoShowOptions()
     .setOnItemBuild((user, index) => {
       return { text: user.name, img: user.avatar }
     })
     .setOnItemSelect((item, user) => {
       window.location =
-    '/user-registering?userId=' + user.id
+    '/user/registering?userId=' + user.id
     })
     .load().then(binder => userSelector = binder)
 
@@ -38,12 +38,12 @@ $(document).ready(() => {
   $('#delete').click(() => {
     if ($('#id').val().length > 0) {
       $.ajax({
-        url: '/user-delete',
+        url: '/user/delete',
         type: 'post',
         data: { id: $('#id').val() },
         success: (response) => {
           window.location =
-          '/user-registering'
+          '/user/registering'
         },
         error: (error, message, errorThrown) => {
           console.log(error)
@@ -128,7 +128,7 @@ function showAvatarCropper () {
 
     croppie.result(r).then(function (base64Image) {
       $('.avatar-img').attr('src', base64Image)
-      _postImg('/upload-user-avatar', { userId: $('#editing').val(), avatar: base64Image.split(',')[1] }, (url) => {
+      _postImg('/user/avatar', { userId: $('#editing').val(), avatar: base64Image.split(',')[1] }, (url) => {
         selectedUser.avatar = url
         $('#avatar-input-file').val(url)
       })

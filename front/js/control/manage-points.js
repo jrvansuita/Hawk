@@ -2,7 +2,7 @@
 var userSelector
 
 $(function () {
-  new ComboBox($('#user'), '/profiles')
+  new ComboBox($('#user'), '/performance/profiles')
     .setAutoShowOptions()
     .setOnItemBuild((user, index) => {
       return { text: user.name, img: user.avatar }
@@ -39,7 +39,7 @@ function onInit () {
         type: $('#type').val()
       }
 
-      _post('/points', { data: data }, (e) => {
+      _post('/performance/points', { data: data }, (e) => {
         window.location.href = '/history'
       })
     }

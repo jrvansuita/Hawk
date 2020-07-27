@@ -16,9 +16,9 @@ function onSearchData (id) {
   loadingPattern(true)
 
   if (id) {
-    _post('/sales-dashboard-data', { id: id }, onHandleResult)
+    _post('/performance/sales-dashboard-data', { id: id }, onHandleResult)
   } else {
-    _post('/sales-dashboard-data', {
+    _post('/performance/sales-dashboard-data', {
       begin: $('#date-begin').data('begin'),
       end: $('#date-end').data('end'),
       value: $('#search-input').val().trim(),
