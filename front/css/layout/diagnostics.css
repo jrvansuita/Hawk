@@ -126,6 +126,7 @@ a {
   padding: 10px 8px;
   font-size: 12px;
   color: #443c3c;
+  word-break:;
 }
 
 .row-sku {

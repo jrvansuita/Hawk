@@ -80,6 +80,10 @@ $(document).ready(() => {
 
   loadSetts()
 
+  new ComboBox($('#office'), ['Funcionário', 'Fornecedor'])
+    .setAutoShowOptions()
+    .load()
+
   $('.avatar-img, .edit-image').hover(() => {
     if ($('#editing').val() > 0) {
       $('.avatar-img').css('opacity', '0.8')
@@ -160,12 +164,15 @@ function clearForm () {
   $('#title-label').text('')
   $('input[type="checkbox"]').prop('checked', false)
   $('#avatar-user-registering').attr('src', 'img/avatar.png')
+  $('#email').val('')
+  $('#office').val('')
 }
 
 function checkform () {
   var c = checkMaterialInput($('#title'))
   c = checkMaterialInput($('#name')) & c
   c = checkMaterialInput($('#access')) & c
+  c = checkMaterialInput($('#office')) & c
 
   if ($('#access').val()) {
     c = testUniqueAccess() & c
@@ -173,6 +180,10 @@ function checkform () {
 
   if ($('#pass').val() == passPlaceHolder) {
     $('#pass').val(selectedUser.pass)
+  }
+
+  if ($('#office').val()) {
+    c = testUniqueAccess() & c
   }
 
   return c

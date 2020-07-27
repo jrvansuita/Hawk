@@ -12,7 +12,8 @@ module.exports = class {
       token = actual && actual.token ? actual.token : ''
     }
 
-    var user = new User(parseInt(params.id),
+    var user = new User(
+      parseInt(params.id),
       params.name,
       params.sector,
       (actual ? actual.avatar : '/img/avatar.png'),
@@ -21,7 +22,10 @@ module.exports = class {
       params.full === 'on',
       params.active === 'on',
       token,
-      params.leader === 'on')
+      params.leader === 'on',
+      params.office,
+      null,
+      params.email)
 
     // Gravando as configurações
     Object.keys(params).forEach((key) => {
