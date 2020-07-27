@@ -354,6 +354,12 @@ module.exports = class ProductRoutes extends Routes {
           this._resp().sucess(res, result)
         }).load()
     })
-  /** --------------  Product Board -------------- **/
+    /** --------------  Product Board -------------- **/
+
+    /** --------------  Product Panel -------------- **/
+    this._page('/stock/product-panel', (req, res) => {
+      res.render('product/panel/product-panel')
+    })
+  /** --------------  Product Panel -------------- **/
   }
 }

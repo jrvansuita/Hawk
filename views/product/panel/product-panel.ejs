@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<%include ../../menus/main-menu %>
+
+<head>
+    <link rel="stylesheet" href="/front/css/layout/product/panel/product-panel.css">
+    <link rel="stylesheet" href="/front/css/libs/material-input.css">
+
+</head>
+
+<body>
+    <%include ../../menus/stock-menu %>
+
+
+
+
+
+    <div class="main">
+        <div class="top shadow">
+            <div class="search-box">
+                <img class="icon-open is-closed" title="Abrir seletor" src="/img/arrow-down.png">
+                <input type="text" id="search-input" value="<%=query.value%>" class="simple-material-input"
+                    placeholder="Pesquisar (Numero Pedido, Fornecedor, Marca, Estação, Coleção)" autocomplete="off" />
+
+
+
+                <div class="selectors">
+                    <div class="date-filters-holder"></div>
+                </div>
+                <div class="button-area">
+                    <div class="new-holder">
+                        <label class="button shadow" id="new-button" tabindex="0">Novo</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="columns"></div>
+
+
+        </div>
+    </div>
+
+    <div class="modal-holder">
+            <div class="form-modal-holder">
+                <form>
+                    <div class="input-holder">
+                        <div class="material-input-holder">
+                            <input type="text" id="" required>
+                            <span class="bar"></span>
+                            <label>Número do Pedido</label>
+                        </div>
+                        <div class="material-input-holder">
+                            <input type="text" id="" required>
+
+                            <span class="bar"></span>
+                            <label>Fabricante</label>
+                        </div>
+                    </div>
+                    <div class="input-holder">
+                        <div class="material-input-holder">
+                            <input type="text" id="" required>
+                            <span class="bar"></span>
+                            <label>Marca</label>
+                        </div>
+                        <div class="material-input-holder">
+                            <input type="text" id="" required>
+                            <span class="bar"></span>
+                            <label>Ano</label>
+                        </div>
+                    </div>
+                    <div class="input-holder">
+                        <label class="button shadow" id="" tabindex="0">Criar pedido</label>
+                    </div>
+
+                </form>
+            </div>
+    </div>
+
+</body>

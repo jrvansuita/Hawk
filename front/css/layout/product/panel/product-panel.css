@@ -1,0 +1,14 @@
+.search-box {
+  display: flex;
+}
+
+.form-modal-holder {
+  width: 500px;
+  margin: auto;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.input-holder {
+  display: flex;
+}
