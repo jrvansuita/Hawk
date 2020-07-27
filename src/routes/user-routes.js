@@ -3,8 +3,12 @@ const UsersProvider = require('../provider/user-provider.js')
 const UsersVault = require('../vault/user-vault.js')
 
 module.exports = class UserRoutes extends Routes {
-  attach () {
-    this._get('/user', (req, res) => {
+  mainPath() {
+    return '/user'
+  }
+
+  attach() {
+    this._get('', (req, res) => {
       var user = UsersProvider.get(req.query.userId)
 
       if (user) {
@@ -14,10 +18,10 @@ module.exports = class UserRoutes extends Routes {
       }
     }).skipLogin()
 
-    this._page('/user-registering', (req, res) => {
+    this._page('/registering', (req, res) => {
       var user = UsersProvider.get(req.session.loggedUserID)
 
-      if (!user || (req.query.userId && (user.full || (user.id === req.query.userId)))) {
+      if (!user || (req.query.userId && (user.full || user.id === req.query.userId))) {
         user = UsersProvider.get(req.query.userId)
       }
 
@@ -28,29 +32,29 @@ module.exports = class UserRoutes extends Routes {
       res.render('performance/team-board', { data: UsersProvider.getByGroup() })
     })
 
-    this._page('/users-listing', (req, res) => {
+    this._page('/listing', (req, res) => {
       res.render('user/users-listing', { users: UsersProvider.getAllUsers() })
     })
 
-    this._post('/user-active', (req, res) => {
+    this._post('/active', (req, res) => {
       UsersVault.active(req.body.userId, req.body.active, () => {
         res.status(200).send('OK')
       })
     })
 
-    this._post('/user-registering', (req, res) => {
+    this._post('/registering', (req, res) => {
       UsersVault.storeFromScreen(req.body, (userId) => {
         res.redirect('/user-registering?userId=' + userId)
       })
     })
 
-    this._post('/user-delete', (req, res) => {
+    this._post('/delete', (req, res) => {
       UsersVault.delete(req.body.id, () => {
         res.status(200).send('Ok')
       })
     })
 
-    this._post('/upload-user-avatar', (req, res) => {
+    this._post('/avatar', (req, res) => {
       UsersVault.changeImage(req.body.userId, req.body.avatar, (url) => {
         res.status(200).send(url)
       })

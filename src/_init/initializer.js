@@ -2,18 +2,18 @@ const ServerRunner = require('../server/runner.js')
 const ServerMidlewares = require('../server/midlewares.js')
 
 module.exports = class Initializer {
-  setSandboxMode (y) {
+  setSandboxMode(y) {
     this.sandboxMode = y
     return this
   }
 
-  setJestMode (y) {
+  setJestMode(y) {
     this.jestMode = y
     return this
   }
 
-  begin () {
-    return new Promise(resolve => {
+  begin() {
+    return new Promise((resolve) => {
       this.enviromentVariables()
       this.globalVariables()
       this.mongoose()
@@ -37,11 +37,11 @@ module.exports = class Initializer {
     })
   }
 
-  globalVariables () {
+  globalVariables() {
     global.eccoConnErrors = 0
   }
 
-  enviromentVariables () {
+  enviromentVariables() {
     if (!process.env.IS_PRODUCTION) {
       require('dotenv').config()
     }
@@ -49,19 +49,19 @@ module.exports = class Initializer {
     return this
   }
 
-  mongoose () {
+  mongoose() {
     require('../mongoose/mongoose.js')
   }
 
-  loadParams (callback) {
+  loadParams(callback) {
     require('../vault/param-vault.js').init(callback)
   }
 
-  loadUsers (callback) {
+  loadUsers(callback) {
     require('../provider/user-provider.js').loadAllUsers(callback)
   }
 
-  utilities () {
+  utilities() {
     global.Util = require('../util/util.js')
     global.Arr = require('../util/array.js')
     global.Num = require('../util/number.js')
@@ -77,13 +77,13 @@ module.exports = class Initializer {
     return this
   }
 
-  expressServer () {
+  expressServer() {
     new ServerRunner(!this.jestMode).build().run((server) => {
       new ServerMidlewares(server).attach()
     })
   }
 
-  jobs (callback) {
+  jobs(callback) {
     if (global.Params.enableJobsOnDevMode() || process.env.IS_PRODUCTION) {
       require('../jobs/controller/pool.js').initialize(callback)
     } else {

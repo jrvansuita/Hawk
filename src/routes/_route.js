@@ -2,78 +2,84 @@ var _cors = {}
 global._apiWrites = {}
 
 module.exports = class {
-  constructor (app) {
+  constructor(app) {
     this.app = app
   }
 
-  _page (paths, callback) {
-    return this._register('get', paths, (req, ...params) => {
+  mainPath() {
+    return ''
+  }
+
+  _page(path, callback) {
+    return this._register('get', '', path, (req, ...params) => {
       callback(req, ...params)
-      req.session.lastpath = paths instanceof Array ? paths[0] : paths
+      req.session.lastPath = path
     })
   }
 
-  _get (...params) {
-    return this._register('get', ...params)
+  _get(...params) {
+    return this._register('get', '', ...params)
   }
 
-  _post (...params) {
-    return this._register('post', ...params)
+  _post(...params) {
+    return this._register('post', '', ...params)
   }
 
-  _api (...params) {
+  _api(...params) {
     this._apiWrite(...params)
   }
 
-  _apiWrite (...params) {
+  _apiWrite(...params) {
     return this._apiRead(...params).writeAccess()
   }
 
-  _apiRead (method, paths, callback) {
-    return this._register(method || this.lastMethod, [].concat(paths || this.lastPaths).map((e) => { return '/api' + e }), callback || this.lastCallBack, false, true)
+  _apiRead(method, path, callback) {
+    return this._register(method || this.lastMethod, '/api', path, callback || this.lastCallBack, false, true)
   }
 
-  _register (method, paths, callback) {
+  _register(method, preffix, path, callback) {
     method = method || this.lastMethod
-    paths = paths || this.lastPaths
+    path = preffix + this.mainPath() + (path || '') || this.lastPath
 
-    this.app[method](paths, (req, res) => {
+    this.app[method](path, (req, res) => {
       Response.onTry(res, () => {
-        this._applyCors(paths, res)
+        this._applyCors(path, res)
         callback(req, res, req.body, res.locals, req.session)
       })
     })
 
     this.lastMethod = method
-    this.lastPaths = paths
+    this.lastPath = path
     this.lastCallBack = callback
 
     return this
   }
 
-  skipLogin () {
-    if (this.lastMethod === 'get') { global.skipLoginPaths = [].concat(global.skipLoginPaths, this.lastPaths).filter(Boolean) }
+  skipLogin() {
+    if (this.lastMethod === 'get') {
+      global.skipLoginPaths = [].concat(global.skipLoginPaths, this.lastPath).filter(Boolean)
+    }
     return this
   }
 
-  writeAccess () {
-    global._apiWrites[[].concat(this.lastPaths).join('')] = true
+  writeAccess() {
+    global._apiWrites[[].concat(this.lastPath).join('')] = true
     return this
   }
 
-  cors () {
-    _cors[[].concat(this.lastPaths).join('')] = true
+  cors() {
+    _cors[[].concat(this.lastPath).join('')] = true
     return this
   }
 
-  _applyCors (paths, res) {
+  _applyCors(paths, res) {
     if (_cors[[].concat(paths).join('')]) {
       res.setHeader('Access-Control-Allow-Origin', '*')
       res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
     }
   }
 
-  _checkPermissionOrGoBack (req, res, settNum) {
+  _checkPermissionOrGoBack(req, res, settNum) {
     var user = res.locals.loggedUser
     if (!global.Sett.get(user, settNum)) {
       res.redirect(req.session.lastpath)
@@ -83,7 +89,7 @@ module.exports = class {
     return true
   }
 
-  _resp () {
+  _resp() {
     return Response
   }
 }
@@ -91,8 +97,7 @@ module.exports = class {
 const History = require('../bean/history.js')
 
 var Response = {
-
-  onTry (res, call) {
+  onTry(res, call) {
     try {
       call()
     } catch (e) {
@@ -100,13 +105,13 @@ var Response = {
     }
   },
 
-  redirect (res) {
+  redirect(res) {
     return (response, error) => {
       this.onRedirect(res, response, error)
     }
   },
 
-  onRedirect (res, r, e) {
+  onRedirect(res, r, e) {
     if (e) {
       this.error(res, e)
     } else {
@@ -114,7 +119,7 @@ var Response = {
     }
   },
 
-  sucess (res, r) {
+  sucess(res, r) {
     if (typeof r === 'number') {
       r = r.toString()
     }
@@ -122,10 +127,10 @@ var Response = {
     res.status(200).send(r)
   },
 
-  error (res, e) {
+  error(res, e) {
     var userId = res.locals.loggedUser ? res.locals.loggedUser.id : 0
     History.handle(e, userId)
 
     res.status(500).send(e?.toString())
-  }
+  },
 }

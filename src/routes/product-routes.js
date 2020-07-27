@@ -1,66 +1,64 @@
 const Routes = require('./_route.js')
 const ProductLaws = require('../laws/product-laws.js')
 const ProductHandler = require('../handler/product-handler.js')
-const ProductDiagnostics = require('../diagnostics/product-diagnostics.js')
-const DiagnosticsProvider = require('../diagnostics/diagnostics-provider.js')
-const ProductListProvider = require('../provider/product-list-provider.js')
-const ProductImageProvider = require('../provider/product-image-provider.js')
-const ProductStorer = require('../storer/product/product.js')
-const EccosysProvider = require('../eccosys/eccosys-provider.js')
-const Enum = require('../bean/enumerator')
-const ProductBoardProvider = require('../provider/board/product-board-provider.js')
 
 module.exports = class ProductRoutes extends Routes {
-  attach () {
+  mainPath() {
+    return '/product'
+  }
+
+  attach() {
     /* ---- Redirects ---- */
 
-    this._get('/product-image', (req, res) => {
+    this._get('/image', (req, res) => {
       ProductHandler.getImage(req.query.sku, this._resp().redirect(res))
-    }).skipLogin().cors()
+    })
+      .skipLogin()
+      .cors()
 
-    this._get('/product-image-redirect', (req, res) => {
+    this._get('/image-redirect', (req, res) => {
       ProductHandler.getImage(req.query.sku, (product) => {
         res.set('Cache-Control', 'public, max-age=86400') // 1day
         res.redirect(product && product.image ? product.image : req.query.def)
       })
-    }).skipLogin().cors()
+    })
+      .skipLogin()
+      .cors()
 
-    this._get('/product-url-redirect', (req, res) => {
+    this._get('/url-redirect', (req, res) => {
       ProductHandler.getImage(req.query.sku, (product) => {
         res.set('Cache-Control', 'public, max-age=86400') // 1day
         res.redirect(product && product.url ? product.url : req.query.def)
       })
-    }).skipLogin().cors()
+    })
+      .skipLogin()
+      .cors()
 
     /* ---- Get Product ---- */
 
-    this._get('/product-child', (req, res) => {
+    this._get('/child', (req, res) => {
       ProductHandler.getBySku(req.query.sku, false, this._resp().redirect(res))
     })
 
-    this._get('/product-skus', (req, res) => {
+    this._get('/skus', (req, res) => {
       ProductHandler.getSkus(req.query.skus, req.query.order, this._resp().redirect(res))
     })
 
-    this._get('/product-stock-history', (req, res) => {
+    this._get('/stock-history', (req, res) => {
       ProductHandler.getStockHistory(req.query.sku, this._resp().redirect(res))
     })
 
-    this._get('/product-search-autocomplete', (req, res) => {
+    this._get('/search-autocomplete', (req, res) => {
       ProductHandler.searchAutoComplete(req.query.typing, this._resp().redirect(res))
     })
 
-    this._get('/product-child', (req, res) => {
-      ProductHandler.getBySku(req.query.sku, false, this._resp().redirect(res))
-    })
-
-    this._get('/product', (req, res) => {
+    this._get('', (req, res) => {
       ProductLaws.get(req.query.sku || req.query.ean, false, this._resp().redirect(res))
     })._apiRead()
 
     /* ---- Render ---- */
 
-    this._page('/stock/product', (req, res) => {
+    this._page('/page', (req, res) => {
       var skuOrEan = req.query.sku || req.query.ean
 
       ProductLaws.load(skuOrEan, (result) => {
@@ -70,7 +68,7 @@ module.exports = class ProductRoutes extends Routes {
       })
     })
 
-    this._get('/product-print-locals', (req, res) => {
+    this._get('/print-locals', (req, res) => {
       if (req.query.product) {
         res.render('product/printing/local-list', { product: req.query.product })
       } else {
@@ -82,7 +80,7 @@ module.exports = class ProductRoutes extends Routes {
       }
     })
 
-    this._post('/product-active', (req, res) => {
+    this._post('/active', (req, res) => {
       if (req.body.forceSingle) {
         ProductHandler.activeSingle(req.body.sku, req.body.active, req.body.user, this._resp().redirect(res))
       } else {
@@ -90,146 +88,38 @@ module.exports = class ProductRoutes extends Routes {
       }
     })
 
-    this._page('/diagnostics', (req, res) => {
-      new DiagnosticsProvider().sums((data, types) => {
-        res.render('product/diagnostics/diagnostics', { sums: data, types: types })
-      })
-    })
-
-    /**
-     * @api {post} /check-product-diagnostic Check Product Fixes
-     * @apiGroup Product
-     * @apiParam {String} sku Product SKU
-     * @apiParam {Boolean} forceFather Force to check only the childs of product
-     * @apiParamExample Body-Example:
-     *    [
-     *     {
-     *       "sku": "22645im-6",
-     *       "fixes": [
-     *            {
-     *              "default": false,
-     *               "icon": "price",
-     *               "description": "Preço de venda não informado ou preço de custo incorreto.",
-     *               "name": "Preço de Venda ou Custo Incorreto",
-     *                "value": "COST"
-     *             }
-     *        ]
-     *    }
-     *  ]
-     */
-
-    this._post('/check-product-diagnostic', (req, res) => {
-      new ProductDiagnostics().resync(req.body.sku, req.body.forceFather, () => {
-        new DiagnosticsProvider().groupped(true).loadBySku(req.body.sku, (all, product) => {
-          res.status(200).send(all)
-        })
-      })
-    })._api()
-
-    this._post('/run-product-diagnostics', (req, res) => {
-      if (req.body.refresh) {
-        new ProductDiagnostics().refresh(req.body.brand, req.body.type)
-      } else {
-        new ProductDiagnostics().sync()
-      }
-
-      res.status(200).send('Ok')
-    })
-
-    /**
-     * @api {get} /product-fixes Product Fixes
-     * @apiGroup Product
-     * @apiParam {String} sku Product SKU
-     * @apiParam {String} type Product Fix Type
-     * @apiParamExample Body-Example:
-     *    [
-     *       {
-     *      "_id": "5efcd598b82d882870c9ab03",
-     *      "sku": "22645im-6",
-     *      "type": "COST",
-     *      "__v": 0,
-     *      "date": "2020-07-01T18:27:36.233Z",
-     *      "name": "Conjunto Quick And Fast Dog Infantil Marinho - Elian-6"
-     *       }
-     *    ]
-     */
-
-    this._get('/product-fixes', (req, res) => {
-      var provider = new DiagnosticsProvider().groupped(req.query.groupped)
-
-      if (req.query.type) {
-        provider.loadByType(req.query.type, (all) => {
-          this._resp().sucess(res, all)
-        })
-      } else {
-        provider.findBySku(req.query.sku, async (data) => {
-          this._resp().sucess(res, data)
-        })
-      }
-    })._apiRead()
-
-    this._get('/fixes-dialog', (req, res) => {
-      new DiagnosticsProvider().groupped(true).loadBySku(req.query.sku, (all, product) => {
-        res.render('product/diagnostics/diagnostics-dialog', { data: all, product: product })
-      })
-    })
-
-    this._post('/product-diagnostic-remove', (req, res) => {
-      new ProductDiagnostics().remove(req.body.sku)
-      res.status(200).send('Ok')
-    })
-
-    /**
-     * @api {post} /product-local Stock Localization
-     * @apiGroup Product
-     * @apiParam {String} device Mobile or Desktop
-     * @apiParam {String} sku Product SKU
-     * @apiParam {String} local New product localization
-     * @apiParam {User} user Logged User entity
-     * @apiParamExample Body-Example:
-     *     {
-     *       "sku": "CB318az-P",
-     *       "local": "12.18-1"
-     *       "user" : {...}
-     *     }
-     * @apiParamExample Header-Example:
-     *     {
-     *       "device": "Mobile"
-     *     }
-     */
-
-    this._post('/product-local', (req, res) => {
+    this._post('/local', (req, res) => {
       ProductHandler.updateLocal(req.body.sku, req.body.local, req.body.user, req.query.device || req.headers.device, this._resp().redirect(res))
     })._api()
 
     /**
-     * @api {post} /product-stock Stock Quantity
-     * @apiGroup Product
-     * @apiParam {String} device Mobile or Desktop
-     * @apiParam {String} sku Product SKU
-     * @apiParam {Integer} stock New product stock quantity
-     * @apiParam {User} user Logged User entity
-     * @apiParamExample Body-Example:
-     *     {
-     *       "sku": "CB318az-P",
-     *       "stock": 25
-     *       "user" : {...}
-     *     }
-     * @apiParamExample Header-Example:
-     *     {
-     *       "device": "Mobile"
-     *     }
-     */
+                 * @api {post} /product-stock Stock Quantity
+                 * @apiGroup Product
+                 * @apiParam {String} device Mobile or Desktop
+                 * @apiParam {String} sku Product SKU
+                 * @apiParam {Integer} stock New product stock quantity
+                 * @apiParam {User} user Logged User entity
+                 * @apiParamExample Body-Example:
+                 *     {
+                 *       "sku": "CB318az-P",
+                 *       "stock": 25
+                 *       "user" : {...}
+                 *     }
+                 * @apiParamExample Header-Example:
+                 *     {
+                 *       "device": "Mobile"
+                 *     }
+                 */
 
-    this._post('/product-stock', (req, res) => {
+    this._post('/stock', (req, res) => {
       ProductHandler.updateStock(req.body.sku, req.body.stock, req.body.user, req.query.device || req.headers.device, this._resp().redirect(res))
     })._api()
 
-    this._post('/product-ncm', (req, res) => {
+    this._post('/ncm', (req, res) => {
       ProductHandler.updateNCM(req.body.sku, req.body.ncm, res.locals.loggedUser, this._resp().redirect(res))
     })
 
-    this._post('/product-weight', (req, res) => {
+    this._post('/weight', (req, res) => {
       ProductHandler.updateWeight(req.body.sku, req.body.weight, req.body.user, this._resp().redirect(res))
     })
 
@@ -240,126 +130,5 @@ module.exports = class ProductRoutes extends Routes {
         })
       })
     })
-
-    // this._page('/product-board', (req, res) => {
-    //   ProductBoard.run(async (result) => {
-    //     res.render('product/board/board', {
-    //       data: result,
-    //       genders: (await Enum.on('BOARD-GENDER').get(true)),
-    //       colors: (await Enum.on('COLOR-LIST').mapBy('name').get(true))
-    //     })
-    //   })
-    // })
-
-    // this._post('/product-board-reset', (req, res) => {
-    //   const JobProducts = require('../jobs/job-feed-xml-product.js')
-    //   new JobProducts()
-    //     .doWork().then(() => {
-    //       ProductBoard.reset()
-    //     })
-
-    //   this._resp().sucess(res)
-    // })
-
-    this._page('/product-list', async (req, res) => {
-      res.locals.productListQuery = req.body.query || req.session.productListQuery
-
-      res.render('product/board/product-list', { colors: (await Enum.on('COLOR-LIST').get()) })
-    })
-
-    this._post('/product-list', (req, res) => {
-      req.session.productListQuery = req.body.query
-      this._resp().sucess(res)
-    })
-
-    this._get('/product-list-page', (req, res) => {
-      req.session.productListQuery = req.query.query
-      ProductListProvider.load(req.query.query, req.query.page, (data, info) => {
-        this._resp().sucess(res, { data, info })
-      })
-    })
-
-    this._get('/product-list-export', (req, res, locals) => {
-      if (req.query.skus) {
-        req.query.skus = typeof req.query.skus === 'string' ? req.query.skus.split(',') : req.query.skus
-      }
-      var query = req.query.skus ? req.query.skus : req.session.productListQuery
-
-      ProductListProvider.load(query, null, (data) => {
-        new EccosysProvider().skus(data.map((e) => { return e.sku })).go((products) => {
-          var result = {}
-          products.forEach((each) => {
-            each?._Skus?.forEach((c) => {
-              result[c.codigo] = c.gtin
-            })
-          })
-
-          res.render('product/board/product-list-export', { data: data, eans: result })
-        })
-      })
-    })
-
-    this._get('/product-multiple-imgs', (req, res) => {
-      const fs = require('fs')
-
-      req.query.skus = typeof req.query.skus === 'string' ? req.query.skus.split(',') : req.query.skus
-
-      new ProductImageProvider(req.query.skus).load().then((zipFilePath) => {
-        res.setHeader('Content-disposition', 'attachment; filename=imagens.zip')
-        res.setHeader('Content-type', 'application/zip')
-
-        var filestream = fs.createReadStream(zipFilePath)
-        filestream.pipe(res)
-      })
-    })
-
-    /** --------------  Product Storer -------------- **/
-
-    this._page('/stock/storer', (req, res) => {
-      var skuOrEan = req.query.sku || req.query.ean
-
-      ProductLaws.load(skuOrEan, (result) => {
-        res.render('product/storer/product', {
-          product: result
-        })
-      })
-    })
-
-    this._post('/stock/storer-upsert', async (req, res) => {
-      var storer = await new ProductStorer().with(res.locals.loggedUser, req.body)
-      storer.setOnFinished(this._resp().redirect(res)).upsert()
-    })
-
-    this._post('/stock/storer-delete', (req, res) => {
-      new ProductStorer().with(req.body).delete(this._resp().redirect(res))
-    })
-
-    this._get('/stock/storer-attr', (req, res) => {
-      new ProductStorer().searchAttr(req.query.attr, this._resp().redirect(res))
-    })
-
-    /** --------------  Product Board -------------- **/
-    this._page('/stock/product-board', (req, res) => {
-      res.render('product/board/product-board')
-    })
-
-    this._post('/product-board-data', (req, res) => {
-      new ProductBoardProvider()
-        .with(req.body).maybe(req.session.productBoardQueryId)
-        .setOnError((err) => {
-          this._resp().error(res, err)
-        })
-        .setOnResult((result) => {
-          req.session.productBoardQueryId = result.id
-          this._resp().sucess(res, result)
-        }).load()
-    })
-    /** --------------  Product Board -------------- **/
-
-    /** --------------  Product Panel -------------- **/
-    this._page('/stock/product-panel', (req, res) => {
-      res.render('product/panel/product-panel')
-    })
-  /** --------------  Product Panel -------------- **/
   }
 }

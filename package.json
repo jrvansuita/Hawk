@@ -33,7 +33,6 @@
     "url": "https://github.com/jrvansuita/Hawk.git"
   },
   "dependencies": {
-
     "archiver": "^3.1.1",
     "bcrypt": "^3.0.8",
     "body-parser": "^1.19.0",
@@ -56,12 +55,10 @@
     "nodemailer": "^4.7.0",
     "object-hash": "^2.0.3",
     "socket.io": "^2.3.0"
-
   },
   "devDependencies": {
-    "apidoc": "^0.23.0",
-    "surge": "^0.21.5",
     "@types/jest": "^26.0.0",
+    "apidoc": "^0.23.0",
     "eslint": "^7.3.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.21.2",
@@ -71,6 +68,8 @@
     "jest": "^26.0.1",
     "nodemon": "^2.0.4",
     "stylelint": "^13.6.1",
-    "stylelint-config-standard": "^20.0.0"
+    "stylelint-config-standard": "^20.0.0",
+    "surge": "^0.21.5",
+    "tslint": "^6.1.2"
   }
 }

@@ -8,16 +8,20 @@ const PackingDaysProvider = require('../provider/packing-days-provider.js')
 const Enum = require('../bean/enumerator.js')
 
 module.exports = class PackingRoutes extends Routes {
-  attach () {
+  mainPath() {
+    return '/packing'
+  }
+
+  attach() {
     this._page('/packing', (req, res) => {
       if (global.Sett.get(res.locals.loggedUser, 8)) {
         var result = async (sale) => {
-          var icons = (await Enum.on('PAPERS-ICONS').get(true))
-          var transps = (await Enum.on('TRANSPORT-IMGS').get(true))
+          var icons = await Enum.on('PAPERS-ICONS').get(true)
+          var transps = await Enum.on('TRANSPORT-IMGS').get(true)
           res.render('packing/packing.ejs', {
             sale: sale,
-            saleStatus: sale.id ? (await Enum.on('ECCO-SALE-STATUS').get(true)) : {},
-            groups: { icons: icons, transports: transps, ...(!sale.id ? await PackingProvider.get() : {}) }
+            saleStatus: sale.id ? await Enum.on('ECCO-SALE-STATUS').get(true) : {},
+            groups: { icons: icons, transports: transps, ...(!sale.id ? await PackingProvider.get() : {}) },
           })
         }
 
@@ -39,24 +43,26 @@ module.exports = class PackingRoutes extends Routes {
       }
     })
 
-    this._post('/packing-done', (req, res) => {
+    this._post('/done', (req, res) => {
       PackingHandler.done(req.body, res.locals.loggedUser, this._resp().redirect(res))
     })
 
-    this._get('/packing-danfe', (req, res) => {
+    this._get('/danfe', (req, res) => {
       req.setTimeout(3600000)
       PackingHandler.loadDanfe(res, req.query.nfe)
-    }).skipLogin().cors()
+    })
+      .skipLogin()
+      .cors()
 
-    this._get('/packing-transport-tag', (req, res) => {
+    this._get('/transport-tag', (req, res) => {
       req.setTimeout(3600000)
       PackingHandler.loadTransportTag(res, req.query.idnfe)
     })
 
-    this._post('/packing-days', (req, res) => {
+    this._post('/days', (req, res) => {
       var from = Dat.query(req.body.from, Dat.firstDayOfMonth())
       var to = Dat.query(req.body.to, Dat.lastDayOfMonth())
-      var cache = !!(req?.body?.cache)
+      var cache = !!req?.body?.cache
 
       PackingDaysProvider.get(from, to, cache, (data) => {
         if (cache) res.set('Cache-Control', 'public, max-age=86400')
@@ -66,16 +72,16 @@ module.exports = class PackingRoutes extends Routes {
 
     /** * End Packing Screen ****/
 
-    this._page('/packing/overview', (req, res) => {
+    this._page('/overview', (req, res) => {
       PackingChartBuilder.buildOverview(res.locals.loggedUser.full, (charts) => {
         res.render('packing/packing-chart', {
           charts: charts,
-          page: req.originalUrl
+          page: req.originalUrl,
         })
       })
     })
 
-    this._page('/packing/by-date', (req, res) => {
+    this._page('/by-date', (req, res) => {
       var from = Dat.query(req.query.from, Dat.firstDayOfMonth())
       var to = Dat.query(req.query.to, Dat.lastDayOfMonth())
 
@@ -83,32 +89,31 @@ module.exports = class PackingRoutes extends Routes {
         res.render('packing/packing-chart', {
           charts: charts,
           page: req.originalUrl,
-          showCalendarFilter: true
+          showCalendarFilter: true,
         })
       })
     })
 
-    this._page('/packing/records', (req, res) => {
+    this._page('/records', (req, res) => {
       var builder = new (require('../builder/packing-records-builder.js'))()
-      builder.init(res.locals.loggedUser.full,
-        (data) => {
-          res.render('packing/packing-records', {
-            data: data
-          })
+      builder.init(res.locals.loggedUser.full, (data) => {
+        res.render('packing/packing-records', {
+          data: data,
         })
+      })
 
       builder.build()
     })
 
     /* --  Packing Types  -- */
 
-    this._get('/package-types', (req, res) => {
+    this._get('/packages/types', (req, res) => {
       Pack.findAll((_err, all) => {
         res.status(200).send(all)
       })
     })
 
-    this._get('/packages-registering', (req, res) => {
+    this._get('/packages/registering', (req, res) => {
       Pack.findAll((_err, all) => {
         if (req.query._id) {
           Pack.findOne({ _id: req.query._id }, (_err, pack) => {
@@ -120,13 +125,13 @@ module.exports = class PackingRoutes extends Routes {
       })
     })
 
-    this._post('/packages-registering', (req, res) => {
+    this._post('/packages/registering', (req, res) => {
       PackageTypeVault.storeFromScreen(req.body, (packId) => {
         res.redirect('/packages-registering?_id=' + packId)
       })
     })
 
-    this._post('/packages-remove', (req, res) => {
+    this._post('/packages/remove', (req, res) => {
       PackageTypeVault.delete(req.body.id)
       res.status(200).send('Ok')
     })

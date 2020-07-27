@@ -14,28 +14,32 @@ const UsersProvider = require('../provider/user-provider.js')
 const Enum = require('../bean/enumerator.js')
 
 module.exports = class PickingRoutes extends Routes {
-  attach () {
-    this._page('/picking/records', (req, res) => {
+  mainPath() {
+    return '/picking'
+  }
+
+  attach() {
+    this._page('/records', (req, res) => {
       var builder = new (require('../builder/picking-records-builder.js'))()
       builder.init(res.locals.loggedUser.full, (data) => {
         res.render('picking/picking-records', {
-          data: data
+          data: data,
         })
       })
 
       builder.build()
     })
 
-    this._page('/picking/overview', (req, res) => {
+    this._page('/overview', (req, res) => {
       require('../builder/picking-chart-builder.js').buildOverview(res.locals.loggedUser.full, function (charts) {
         res.render('picking/picking-chart', {
           charts: charts,
-          page: req.originalUrl
+          page: req.originalUrl,
         })
       })
     })
 
-    this._page('/picking/by-date', (req, res) => {
+    this._page('/by-date', (req, res) => {
       var from = global.Dat.query(req.query.from, Dat.firstDayOfMonth())
       var to = global.Dat.query(req.query.to, Dat.lastDayOfMonth())
 
@@ -43,18 +47,18 @@ module.exports = class PickingRoutes extends Routes {
         res.render('picking/picking-chart', {
           charts: charts,
           page: req.originalUrl,
-          showCalendarFilter: true
+          showCalendarFilter: true,
         })
       })
     })
 
-    this._post('/picking-reload', (req, res) => {
+    this._post('/reload', (req, res) => {
       PickingHandler.reloadPickingList(req.session.loggedUserID, req.body.ignoreDone, (result) => {
         this._resp().sucess(res, result)
       })
     })
 
-    this._page('/picking', (req, res) => {
+    this._page('', (req, res) => {
       PickingSorterLaws.select(req.query.sort)
       PickingFilterLaws.select(req.query.filters)
       TransportLaws.select(req.query.transp)
@@ -72,7 +76,7 @@ module.exports = class PickingRoutes extends Routes {
 
             transportList: TransportLaws.getObject(),
             selectedTransps: TransportLaws.getSelecteds(),
-            transportIcons: (await Enum.on('TRANSPORT-IMGS').get(true)),
+            transportIcons: await Enum.on('TRANSPORT-IMGS').get(true),
 
             ufList: UfLaws.getObject(),
             selectedUfs: UfLaws.getSelecteds(),
@@ -89,21 +93,21 @@ module.exports = class PickingRoutes extends Routes {
             blockedSalesCount: BlockHandler.getBlockedSalesCount(),
 
             openSalesCount: PickingHandler.getOpenSalesCount(),
-            isBusy: PickingHandler.isBusy()
+            isBusy: PickingHandler.isBusy(),
           })
         }
       })
     })
 
-    this._get('/picking-sale', (req, res) => {
+    this._get('/sale', (req, res) => {
       PickingHandler.handle(req.query.userid, this._resp().redirect(res))
     })
 
-    this._post(['/picking/toggle-block'], (req, res) => {
+    this._post('/toggle-block', (req, res) => {
       BlockHandler.toggle(req.body.blockNumber, req.session.loggedUserID, req.body.reasonTag, this._resp().redirect(res))
     })
 
-    this._post(['/picking/block-pending'], (req, res) => {
+    this._post('/block-pending', (req, res) => {
       // var userId = req.body.userId ? req.body.userId : req.session.loggedUserID;
       // Sempre o responsavel vai ser o usuario logado.
       var userId = req.session.loggedUserID
@@ -114,19 +118,21 @@ module.exports = class PickingRoutes extends Routes {
       })
     })
 
-    this._post('/picking-done-restart', (req, res, body, locals, session) => {
+    this._post('/done-restart', (req, res, body, locals, session) => {
       PickingHandler.restart(req.session.loggedUserID, req.body.sale, this._resp().redirect(res))
     })
 
-    this._get('/print-picking-sale', (req, res, body, locals, session) => {
-      new PickingSalePrint(req.query.saleNumber).setOnFinish((shell) => {
-        shell.setUser(UsersProvider.get(req.query.userId))
+    this._get('/print-sale', (req, res, body, locals, session) => {
+      new PickingSalePrint(req.query.saleNumber)
+        .setOnFinish((shell) => {
+          shell.setUser(UsersProvider.get(req.query.userId))
 
-        res.render('picking/picking-print', { sale: shell })
-      }).load()
+          res.render('picking/picking-print', { sale: shell })
+        })
+        .load()
     })
 
-    this._get('/picking-line', (req, res, body, locals, session) => {
+    this._get('/line', (req, res, body, locals, session) => {
       const PickingLaws = require('../laws/picking-laws.js')
       const BlockLaws = require('../laws/block-laws.js')
 
@@ -137,8 +143,7 @@ module.exports = class PickingRoutes extends Routes {
 
         selectedTransps: TransportLaws.getSelecteds(),
         selectedUfs: UfLaws.getSelecteds(),
-        selectedFilters: PickingFilterLaws.getSelecteds()
-
+        selectedFilters: PickingFilterLaws.getSelecteds(),
       })
     })
   }
