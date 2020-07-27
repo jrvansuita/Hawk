@@ -38,7 +38,7 @@
 
 
 
-    <form class="user-registering shadow" name="user-registering" action="user-registering" method="post" id="user-registering">
+    <form class="user-registering shadow" name="user-registering" action="/user/registering" method="post" id="user-registering">
 
       <div class="header">
 
@@ -46,7 +46,7 @@
 
         <div class="avatar-holder">
           <img class="circle shadow avatar-img" id="avatar-user-registering" src="<%=user ? user.avatar : 'img/avatar.png'%>" title="System" />
-          <input type="text" id="editing" value="<%=user ? user.id : -1%>" style="display:none"/>
+          <input type="text" id="editing" value="<%=user ? user.id : -1%>" style="display: none;"/>
           <label class="edit-image"> Editar </label>
           <img src="img/checked.png" class="dots-glyph avatar-crop-ok">
 
@@ -67,8 +67,13 @@
             <div class="left-panel">
               <div class="oderner">
                 <input type="text" id="name" class="input-val simple-material-input" placeholder="Nome" name="name" value="<%=user ? user.name : ''%>" autocomplete="off" maxlength="30"/>
+
+                 <input type="text" id="email" class="input-val simple-material-input" placeholder="E-mail" name="email" value="<%=user ? user.email : ''%>" onkeypress=""  autocomplete="off"/>
+
                 <input type="text" id="title"  class="input-val simple-material-input"placeholder="Grupo" name="sector" value="<%=user ? user.title : ''%>" autocomplete="off"/>
                 <input type="text" id="avatar" class="input-val simple-material-input" placeholder="Avatar" name="avatar" value="<%=user ? user.avatar : ''%>" autocomplete="off"/>
+                
+                <input type="text" id="office"  class="input-val simple-material-input"placeholder="Cargo" name="office" value="<%=user ? user.office : ''%>" autocomplete="off"/>
 
 
 

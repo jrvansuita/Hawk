@@ -8,60 +8,26 @@ $(document).ready(() => {
   })
 
   $('.forget').click(() => {
-    $('.sub-title').hide()
-    $('.sign-up').hide()
-    $('.login-form').css('animation', '0.1s ease-in-out .1s 1 normal both running login-form')
-    $('.material-input-holder').empty()
     forgetPass()
-  })
-
-  $('.sign-up').click(() => {
-    successRegister()
   })
 })
 
 function forgetPass () {
+  $('.sub-title').hide()
+  $('.login-form').css('animation', '0.3s ease-in-out .3s 1 normal both running login-form')
+  $('.material-input-holder').empty()
+
   var putE = $('<input>')
   var panS = $('<span>').addClass('bar')
   var abeL = $('<label>').text('insira seu e-mail').attr('type', 'text')
 
-  $('.material-one').append(putE, panS, abeL).hide().fadeIn(700)
+  $('.material-one').append(putE, panS, abeL).hide().fadeIn(800)
 
   $('.forget').hide()
 
   var send = $('<span>').text('Receber Senha').addClass('forgot-pass').css('cursor', 'pointer')
 
-  $('.login-els').append(send).hide().fadeIn(2000)
-}
-
-function acessRegister(holder, label, type) {
-  var $put = $('<input>').attr('type', type)
-  var $pan = $('<span>').addClass('bar')
-  var $label = $('<label>').text(label)
-
-  holder.append($put, $pan, $label).hide().fadeIn(3000)
-}
-
-function successRegister() {
-  $('.sub-title').hide()
-  $('.forget').hide()
-  $('.login-form').css('animation', '0.1s ease-in-out .1s 1 normal both running login-form')
-  $('.material-input-holder').empty()
-  acessRegister($('.material-one'), 'E-mail', 'text')
-  acessRegister($('.material-two'), 'Senha', 'password')
-  acessRegister($('.material-three'), 'Confirmar Senha', 'password')
-
-  $('.sign-up').hide()
-
-  var acess = $('<span>').text('Cadastrar').addClass('register').css('cursor', 'pointer')
-  $('.login-els').append(acess)
-
-  acess.click(() => {
-    $('.material-input-holder').empty()
-    var sucessReg = $('<span>').text('Seu cadastro foi efetuado com sucesso e está em análise, em breve seu acesso será liberado.').addClass('sucess-end')
-    $('.material-one').append(sucessReg)
-    acess.hide()
-  })
+  $('.login-els').append(send).hide().fadeIn(3000)
 }
 
 function isNum (v) {

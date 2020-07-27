@@ -29,6 +29,7 @@ body {
   display: grid;
   padding: 40px;
   margin: auto;
+  margin-top: 15px;
 }
 
 #logo {
@@ -62,111 +63,95 @@ body {
 
 .sub-title {
   position: absolute;
-  top: 270px;
+  top: 280px;
   left: 0;
   right: 0;
   margin: auto;
-  color: #4ad2bc;
+  color: #92919bd9;
   text-shadow: 2px 2px 5px #d1eae6;
   font-size: 18px;
   font-weight: bold;
 }
 
-.forgot-pass,
-.register {
+.forgot-pass {
   font-size: 16px;
-  word-spacing: -1px;
   display: block;
-  margin-top: 30px;
+  margin-top: 15px;
   color: #929292;
   border: 2px solid #ececec;
   border-radius: 12px;
   background: #ecececad;
-  padding: 4px;
+  padding: 8px;
 }
 
 .forgot-pass:hover {
-  border: 2px solid #009587;
+  border: 2px solid #f97c80;
   border-radius: 12px;
   background: #fff;
-  color: #1c796a;
+  color: #f97c80;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
-}
-
-.register:hover {
-  border: 2px solid #ff8f92;
-  border-radius: 12px;
-  background: #fff;
-  color: #ff8f92;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
-}
-
-.sucess-end {
-  text-align: center;
-  display: block;
-  color: #029587;
-  line-height: 1.4;
-  position: initial;
 }
 
 @-webkit-keyframes login-form {
   0% {
-    transform: rotateY(0);
+    transform: rotateY(0deg);
   }
 
   5%,
   10%,
   15% {
-    transform: rotateY(90deg);
+    transform: rotateY(45deg);
   }
 
   20%,
   25%,
   30% {
+    transform: rotateY(90deg);
+  }
+
+  35%,
+  40%,
+  45% {
     transform: rotateY(180deg);
   }
 
-  40%,
-  50%,
-  55% {
-    transform: rotateY(270deg);
-  }
-
-  60%,
   65%,
-  75%,
+  75%,,
+  85%,
+  95%,
   100% {
-    transform: rotateY(360deg);
+    transform: rotateY(0deg);
   }
 }
 
 @keyframes login-form {
   0% {
-    transform: rotateY(0);
+    transform: rotateY(0deg);
   }
 
   5%,
   10%,
   15% {
-    transform: rotateY(90deg);
+    transform: rotateY(45deg);
   }
 
   20%,
   25%,
   30% {
+    transform: rotateY(90deg);
+  }
+
+  35%,
+  40%,
+  45% {
     transform: rotateY(180deg);
   }
 
-  40%,
-  50%,
-  55% {
-    transform: rotateY(270deg);
-  }
-
-  60%,
   65%,
   75%,
+  85%,
+  95%,
   100% {
-    transform: rotateY(360deg);
+    transform: rotateY(0deg);
   }
 }

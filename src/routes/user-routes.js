@@ -44,7 +44,7 @@ module.exports = class UserRoutes extends Routes {
 
     this._post('/registering', (req, res) => {
       UsersVault.storeFromScreen(req.body, (userId) => {
-        res.redirect('/user-registering?userId=' + userId)
+        res.redirect('/user/registering?userId=' + userId)
       })
     })
 
