@@ -1,75 +1,74 @@
-const Job = require('../jobs/controller/job.js')
+const Job = require('../jobs/controller/job.js');
 
-const FeedXml = require('../feedxml/feed-xml.js')
-const Product = require('../bean/product.js')
-const ProductBoardEmailHandler = require('../performance/product-board-email.js')
+const FeedXml = require('../feedxml/feed-xml.js');
+const Product = require('../bean/product.js');
+const ProductBoardEmailHandler = require('../performance/product-board-email.js');
 
 module.exports = class JobFeedXmlProducts extends Job {
-  getName () {
-    return 'Atualização de Produtos'
+  getName() {
+    return 'Atualização de Produtos';
   }
 
-  doWork () {
+  doWork() {
     return new Promise((resolve, reject) => {
       // define todos como sync = false
       Product.updateAll({}, { sync: false }, () => {
         this._handleAllSkus(() => {
           this._updateNonSyncProducts(() => {
-            resolve()
-          })
-        })
-      })
-    })
+            resolve();
+          });
+        });
+      });
+    });
   }
 
-  _handleAllSkus (callback) {
-    FeedXml.get((xml) => {
+  _handleAllSkus(callback) {
+    FeedXml.get(xml => {
       if (xml) {
-        var current = -1
-        var items = xml.feed.item
+        var current = -1;
+        var items = xml.feed.item;
 
-        var innerHandleAllSkus = (onFinished) => {
-          current++
+        var innerHandleAllSkus = onFinished => {
+          current++;
 
           if (current == items.length) {
-            onFinished()
+            onFinished();
           } else {
             this._handleEachSku(items[current], () => {
-              innerHandleAllSkus(onFinished)
-            })
+              innerHandleAllSkus(onFinished);
+            });
           }
-        }
+        };
 
-        innerHandleAllSkus(callback)
+        innerHandleAllSkus(callback);
       } else {
-        callback()
+        callback();
       }
-    })
+    });
   }
 
-  _handleEachSku (data, callback) {
-    var product = this.getXmlItemLoaded(data)
-
-    if (product.sku.includes('-')) {
-      if (callback) {
-        callback()
-      }
+  _handleEachSku(data, callback) {
+    if (FeedXml.val(data, 'sku').includes('-')) {
+      //É produto filho, não faz nada com ele
+      //Produtos filhos nem deveriam estar no feed
+      callback();
     } else {
-      Product.get(product.sku, (responseProduct) => {
-        product.newStock = (product.quantity - (responseProduct ? responseProduct.quantity : product.quantity))
-        product.sync = true
+      var product = this.getXmlItemLoaded(data);
+      Product.get(product.sku, responseProduct => {
+        product.newStock = product.quantity - (responseProduct ? responseProduct.quantity : product.quantity);
+        product.sync = true;
 
-        product.upsert()
+        product.upsert();
 
         if (callback) {
-          callback()
+          callback();
         }
-      })
+      });
     }
   }
 
-  getXmlItemLoaded (item) {
-    var sku = FeedXml.val(item, 'sku')
+  getXmlItemLoaded(item) {
+    var sku = FeedXml.val(item, 'sku');
 
     return new Product(
       sku,
@@ -94,15 +93,15 @@ module.exports = class JobFeedXmlProducts extends Job {
       FeedXml.val(item, 'visible').includes('true'),
       FeedXml.val(item, 'associates'),
       FeedXml.val(item, 'child_weight') || FeedXml.val(item, 'weight')
-    )
+    );
   }
 
-  _updateNonSyncProducts (callback) {
+  _updateNonSyncProducts(callback) {
     Product.updateAll({ sync: false }, { newStock: 0, quantity: 0 }, (_err, doc) => {
       if (global.Params.activePerformanceEmailReport()) {
-        new ProductBoardEmailHandler().go(() => {})
+        new ProductBoardEmailHandler().go(() => {});
       }
-      callback()
-    })
+      callback();
+    });
   }
-}
+};

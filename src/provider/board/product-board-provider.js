@@ -23,15 +23,15 @@ class ProductBoardHelper extends DashboardProvider.Helper {
 
   prepare(data) {
     this.total = 0;
-    this.skusCount = data.length;
+    this.skusCount = data?.length;
     this.arrs = {};
 
     this.smallestCost = data?.[0]?.cost ?? 0;
-    this.gretterCost = data?.[0]?.cost ?? 0;
+    this.greaterCost = data?.[0]?.cost ?? 0;
     this.smallestPrice = data?.[0]?.price ?? 0;
-    this.gretterPrice = data?.[0]?.price ?? 0;
+    this.greaterPrice = data?.[0]?.price ?? 0;
 
-    data.forEach(each => {
+    data?.forEach(each => {
       each.total = each.quantity;
       this.total += each.quantity;
 
@@ -63,9 +63,9 @@ class ProductBoardHelper extends DashboardProvider.Helper {
 
   handleCustomTotals(item) {
     if (item.cost < this.smallestCost) this.smallestCost = item.cost;
-    if (item.cost > this.gretterCost) this.gretterCost = item.cost;
+    if (item.cost > this.greaterCost) this.greaterCost = item.cost;
     if (item.price < this.smallestPrice) this.smallestPrice = item.price;
-    if (item.price > this.gretterPrice) this.gretterPrice = item.price;
+    if (item.price > this.greaterPrice) this.greaterPrice = item.price;
     return this;
   }
 
