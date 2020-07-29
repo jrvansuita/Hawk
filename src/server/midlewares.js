@@ -10,7 +10,7 @@ module.exports = class ServerMidlewares {
 
   attach() {
     this.defaultRoutes();
-    this.wellcome();
+    this.welcome();
     this.errors();
     this.routes();
   }
@@ -32,12 +32,12 @@ module.exports = class ServerMidlewares {
     this.express.use(routeStack);
   }
 
-  wellcome() {
+  welcome() {
     this.express.get('/', (req, res) => {
       if (req.session.lastpath && req.session.lastpath !== '/') {
         res.redirect(req.session.lastpath);
       } else {
-        res.redirect('/wellcome');
+        res.redirect('/login/welcome');
       }
     });
   }
@@ -113,7 +113,8 @@ module.exports = class ServerMidlewares {
 
   getPostCheckUserRouteRule() {
     return (req, res, next) => {
-      if (req.session.loggedUserID || req.path === '/login') {
+      console.warn(req.path);
+      if (req.session.loggedUserID || req.path.includes('/login')) {
         res.locals.loggedUser = req.session.loggedUser;
         next('router');
       } else {
