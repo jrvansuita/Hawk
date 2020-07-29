@@ -170,7 +170,7 @@ function createImgProduct (product, index) {
   var img = $('<img>')
     .attr('src', product.image)
     .addClass('thumb')
-    .attr('onerror', "this.src='img/product-placeholder.png'")
+    .attr('onerror', "this.src='/img/product-placeholder.png'")
 
   var counter = $('<label>').addClass('counter-circle').append((productsListCount + 1))
 
@@ -230,7 +230,7 @@ function createTitle (product) {
     )
   })
 
-  var diagIcon = $('<img>').addClass('diag-alert').attr('src', 'img/alert.png')
+  var diagIcon = $('<img>').addClass('diag-alert').attr('src', '/img/alert.png')
 
   _get('/diagnostics/fixes', { sku: product.sku, groupped: true }, (all) => {
     if (all.length > 0) {

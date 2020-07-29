@@ -80,9 +80,17 @@ $(document).ready(() => {
 
   loadSetts()
 
-  new ComboBox($('#office'), ['Funcionário', 'Fornecedor'])
+  new ComboBox($('#office'))
+    .fromEnum('TYPE-FUNC')
     .setAutoShowOptions()
+    .setOnItemSelect((item, index) => {
+      $('#office').val(item.value)
+    })
     .load()
+
+  // new ComboBox($('#office'), ['Funcionário', 'Fornecedor'])
+  //   .setAutoShowOptions()
+  //   .load()
 
   $('.avatar-img, .edit-image').hover(() => {
     if ($('#editing').val() > 0) {
@@ -163,7 +171,7 @@ function clearForm () {
   $('#token').val('')
   $('#title-label').text('')
   $('input[type="checkbox"]').prop('checked', false)
-  $('#avatar-user-registering').attr('src', 'img/avatar.png')
+  $('#avatar-user-registering').attr('src', '/img/avatar.png')
   $('#email').val('')
   $('#office').val('')
 }
@@ -172,7 +180,7 @@ function checkform () {
   var c = checkMaterialInput($('#title'))
   c = checkMaterialInput($('#name')) & c
   c = checkMaterialInput($('#access')) & c
-  c = checkMaterialInput($('#office')) & c
+  c = checkMaterialInput($('#email')) & c
 
   if ($('#access').val()) {
     c = testUniqueAccess() & c
@@ -182,7 +190,7 @@ function checkform () {
     $('#pass').val(selectedUser.pass)
   }
 
-  if ($('#office').val()) {
+  if ($('#email').val()) {
     c = testUniqueAccess() & c
   }
 

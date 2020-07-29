@@ -44,7 +44,7 @@
           <% error = Util.isTokenOk(locals.loggedUser) ? error: Const.no_token; %>
 
 
-          <img class="mini-icon" src="<%=error ? 'img/error.png' : 'img/checked.png'%>" />
+          <img class="mini-icon" src="<%=error ? '/img/error.png' : '/img/checked.png'%>" />
           <span class="main-msg">
             <%=error || 'Inicie o faturamento de um novo pedido'%>
           </span>
@@ -113,7 +113,7 @@
                   <div class="client-title-holder">
                     <label class="field-title">Cliente</label>
                     <%if (sale && (sale.primeiraCompra == '1')){%>
-                      <img class="mini-alert first-sale-icon <%= !sale.nfe ? 'blink_me' : ''%>" src="img/one.png" title="Primeira Compra">
+                      <img class="mini-alert first-sale-icon <%= !sale.nfe ? 'blink_me' : ''%>" src="/img/one.png" title="Primeira Compra">
                       <%}%>
                     </div>
 
@@ -167,7 +167,7 @@
                   <%
                   if (sale.pickUser != undefined){%>
                     <div class="status-holder">
-                      <img class="circle shadow icon" src="<%=sale.pickUser.id == 404 ? 'img/system.png' : sale.pickUser.avatar %>" title="<%=sale.pickUser.name%>" />
+                      <img class="circle shadow icon" src="<%=sale.pickUser.id == 404 ? '/img/system.png' : sale.pickUser.avatar %>" title="<%=sale.pickUser.name%>" />
 
                       <div class="field skrink">
                         <label class="field-title">Usuário Picking</label>

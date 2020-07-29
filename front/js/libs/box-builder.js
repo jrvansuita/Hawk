@@ -110,7 +110,7 @@ class BoxBuilder {
 
     this.currentGroup.append(col)
 
-    var img = $('<img>').attr('src', path).attr('onerror', "this.src='img/product-placeholder.png'").addClass('box-img')
+    var img = $('<img>').attr('src', path).attr('onerror', "this.src='/img/product-placeholder.png'").addClass('box-img')
     col.append(img)
 
     if (barLabel) {

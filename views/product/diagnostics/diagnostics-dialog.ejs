@@ -61,9 +61,9 @@
                 <%item.fixes.forEach(type=>{%>
 
                   <div class="badge-item">
-                    <img class="ind-icon" src="img/<%=type.icon ? type.icon : 'question-mark'%>.png"/>
+                    <img class="ind-icon" src="/img/<%=type.icon ? type.icon : 'question-mark'%>.png"/>
                     <label class="ind-title"><%=type ? type.name : 'Não encontrado'%></label>
-                    <img class="right f-icon fix" src="img/restart.png" data-sku="<%=item.sku%>" data-type="<%=type.value%>"/>
+                    <img class="right f-icon fix" src="/img/restart.png" data-sku="<%=item.sku%>" data-type="<%=type.value%>"/>
                   </div>
 
                   <%});%>

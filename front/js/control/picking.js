@@ -166,7 +166,7 @@ $(document).ready(() => {
   $('.blocked-reason').each(function (index, item) {
     var reason = $(this).data('reason')
     reason = new BlockedSelector().get(reason)
-    $(this).attr('src', reason.icon ? reason.icon : 'img/question-mark.png')
+    $(this).attr('src', reason.icon ? reason.icon : '/img/question-mark.png')
       .attr('title', reason.label ? reason.label : 'Indefinido')
   })
 
@@ -303,7 +303,7 @@ function openPrintPickingSale (sale, userId) {
 }
 
 function startListeningRFID () {
-  $('.rfid-card').attr('src', 'img/rfid-listening.gif')
+  $('.rfid-card').attr('src', '/img/rfid-listening.gif')
   $('#user-id').select()
 
   if (!$('#user-id').is(':focus')) {
@@ -312,5 +312,5 @@ function startListeningRFID () {
 }
 
 function stopListeningRFID () {
-  $('.rfid-card').attr('src', 'img/rfid-wait.png')
+  $('.rfid-card').attr('src', '/img/rfid-wait.png')
 }

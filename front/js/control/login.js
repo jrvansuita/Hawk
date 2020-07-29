@@ -7,6 +7,10 @@ $(document).ready(() => {
     }
   })
 
+  $('.signin').click(() => {
+    if (isEverythingRight(false)) { login() }
+  })
+
   $('.forget').click(() => {
     forgetPass()
   })
@@ -17,7 +21,7 @@ function forgetPass () {
   $('.login-form').css('animation', '0.3s ease-in-out .3s 1 normal both running login-form')
   $('.material-input-holder').empty()
 
-  var putE = $('<input>')
+  var putE = $('<input>').val('').addClass('email-pass')
   var panS = $('<span>').addClass('bar')
   var abeL = $('<label>').text('insira seu e-mail').attr('type', 'text')
 
@@ -27,6 +31,9 @@ function forgetPass () {
 
   var send = $('<span>').text('Receber Senha').addClass('forgot-pass').css('cursor', 'pointer')
 
+  send.click(() => {
+    resetPass()
+  })
   $('.login-els').append(send).hide().fadeIn(3000)
 }
 
@@ -60,6 +67,23 @@ function login (code) {
     data: {
       access: $('#user-access').val(),
       pass: $('#user-pass').val()
+    },
+    success: function (response) {
+      onSucess()
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      $('.error').text(jqXHR.responseText).css('display', 'block').fadeIn().delay(2000).fadeOut()
+      onError()
+    }
+  })
+}
+
+function resetPass () {
+  $.ajax({
+    url: '/reset-password',
+    type: 'post',
+    data: {
+      email: $('.email-pass').val()
     },
     success: function (response) {
       onSucess()

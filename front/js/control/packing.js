@@ -206,7 +206,7 @@ function createProductsTable (holder, id, data) {
     .data('table', id)
     .attr('title', data.title)
     .data('title', data.title)
-    .attr('src', 'img/arrow-up.png')
+    .attr('src', '/img/arrow-up.png')
 
   cols.push($('<td>').append('Código'))
   cols.push($('<td>').append('EAN'))
@@ -250,7 +250,7 @@ function buildProductLine (saleItem, data) {
 
   var $giftIcon = null
   if (saleItem.itemBonificacao == 'S') {
-    $giftIcon = createProductVal($('<img>').addClass('mini-item-icon').attr('src', 'img/gift.png'))
+    $giftIcon = createProductVal($('<img>').addClass('mini-item-icon').attr('src', '/img/gift.png'))
   }
 
   cols.push(createProductVal(fmtQtd(saleItem, data.table == 'in'), true).addClass('qtd'))
@@ -281,7 +281,7 @@ function createProductVal (val, center) {
 }
 
 function createProductIcon (iconPath) {
-  return $('<td>').append($('<img>').attr('src', 'img/' + iconPath + '.png').addClass('product-icon'))
+  return $('<td>').append($('<img>').attr('src', '/img/' + iconPath + '.png').addClass('product-icon'))
 }
 
 function fmtQtd (saleItem, useDif) {
@@ -304,10 +304,10 @@ function createNcmInput (ncm, sku) {
 }
 
 function showProductMsg (msg, icon) {
-  $('#product-ean-icon').attr('src', 'img/' + icon + '.png').hide().show()
+  $('#product-ean-icon').attr('src', '/img/' + icon + '.png').hide().show()
   $('#product-ean').val('')
   showMessage(msg, true, () => {
-    $('#product-ean-icon').attr('src', 'img/scan-barcode.png').show()
+    $('#product-ean-icon').attr('src', '/img/scan-barcode.png').show()
   })
 }
 
@@ -355,7 +355,7 @@ function addListeners () {
     var tableId = $(this).data('table')
 
     if (!$(this).hasClass('closed')) {
-      $(this).addClass('closed').attr('src', 'img/arrow-down.png').hide().fadeIn()
+      $(this).addClass('closed').attr('src', '/img/arrow-down.png').hide().fadeIn()
       $('#' + tableId + ' > tbody > tr').not(':first').hide()
 
       var title = $('<span>').addClass('title-product-closed ' + tableId).text($(this).data('title')).click(() => {
@@ -365,7 +365,7 @@ function addListeners () {
       $('#' + tableId).parent().append(title)
     } else {
       $('.title-product-closed.' + tableId).remove()
-      $(this).removeClass('closed').attr('src', 'img/arrow-up.png').hide().fadeIn()
+      $(this).removeClass('closed').attr('src', '/img/arrow-up.png').hide().fadeIn()
       $('#' + tableId + ' > tbody  > tr').not(':first').show()
     }
 
@@ -579,7 +579,7 @@ function showNfePrintControls (triggerClick) {
 
 function showMainInputTitle (title, icon, lineColor) {
   $('.progress-line.inner').width('100%').css('background', lineColor || '#4ad44f')
-  $('#product-ean-icon').attr('src', 'img/' + icon)
+  $('#product-ean-icon').attr('src', '/img/' + icon)
   $('#product-ean').attr('disabled', true).val(title).addClass('picking-over')
   $('#itens-progress').hide()
 }

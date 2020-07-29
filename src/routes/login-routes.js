@@ -1,6 +1,7 @@
 const Routes = require('./_route.js')
 const UsersProvider = require('../provider/user-provider.js')
 const User = require('../bean/user.js')
+const CustomerPasswordEmail = require('../customer/password-email/password-forget-email.js')
 
 module.exports = class LoginRoutes extends Routes {
   attach () {
@@ -39,5 +40,11 @@ module.exports = class LoginRoutes extends Routes {
         res.status(200).send(null)
       }
     })._api()
+
+    this._post('/reset-password', (req, res) => {
+      new CustomerPasswordEmail().go(req.body.email, () => {
+
+      })
+    }).cors()
   }
 }
