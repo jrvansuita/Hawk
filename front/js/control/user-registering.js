@@ -84,7 +84,10 @@ $(document).ready(() => {
     .fromEnum('TYPE-FUNC')
     .setAutoShowOptions()
     .setOnItemSelect((item, index) => {
-      $('#office').val(item.value)
+      console.log(item)
+      $('#office').val(() => {
+        return { text: item.label, value: item.value }
+      })
     })
     .load()
 
