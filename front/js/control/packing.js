@@ -477,7 +477,7 @@ function postPackingDone () {
   showMainInputTitle('Atualizando Pedido...', '/loader/circle.svg', '#7eb5f1')
   $('.editable-infos-holder>input').prop('disabled', true)
 
-  _post('packing-done', {
+  _post('packing/done', {
     saleNumber: sale.numeroPedido,
     oc: sale.numeroDaOrdemDeCompra,
     liqWeigth: Floa.def($('#sale-liq').val()),

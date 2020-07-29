@@ -28,7 +28,7 @@ $(document).ready(() => {
 
 function printNFe () {
   if ($('.sale-nfe').text() != 'Sem Nota Fiscal') {
-    window.open('/packing-danfe?nfe=' + $('.sale-nfe').text())
+    window.open('/packing/danfe?nfe=' + $('.sale-nfe').text())
   }
 }
 
