@@ -113,7 +113,6 @@ module.exports = class ServerMidlewares {
 
   getPostCheckUserRouteRule() {
     return (req, res, next) => {
-      console.warn(req.path);
       if (req.session.loggedUserID || req.path.includes('/login')) {
         res.locals.loggedUser = req.session.loggedUser;
         next('router');

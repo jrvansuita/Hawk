@@ -20,7 +20,7 @@ function buildRangeSlider(data) {
   new RangeSlider($('.cost-range-filter'))
     .setTitle('Preço de custo')
     .setPrefix('R$')
-    .setRange(data.smallestCost, data.gretterCost)
+    .setRange(data.smallestCost, data.greaterCost)
     .setOnSlideStop(range => {
       costRangeFilter = range;
     })
@@ -29,7 +29,7 @@ function buildRangeSlider(data) {
   new RangeSlider($('.price-range-filter'))
     .setTitle('Preço de Venda')
     .setPrefix('R$')
-    .setRange(data.smallestPrice, data.gretterPrice)
+    .setRange(data.smallestPrice, data.greaterPrice)
     .setOnSlideStop(range => {
       priceRangeFilter = range;
     })
@@ -98,7 +98,7 @@ function buildTotalBox(data) {
   var box = new BoxBuilder();
   box
     .group('Total Geral', null, 'min-col')
-    .info('Itens', Num.format(data.total), null, null, 'chart')
+    .info('Itens', Num.format(data.total), 'high-val', null, 'chart')
     .info('Skus', Num.format(data.skusCount), null, null, 'box')
     .info('Categorias', data.category.length, null, null, 'category')
     .info('Marcas', data.brand.length, null, null, 'tags')
@@ -243,8 +243,23 @@ function buildProductsBox(data) {
       window.open('/product/url-redirect?sku=' + each.name, '_blank');
     };
 
+    var subDblClick = e => {
+      e.stopPropagation();
+      window.open('/product/page?sku=' + each.name, '_blank');
+    };
+
     box
-      .img('/product/image-redirect?sku=' + each.name, Num.format(each.total), null, each.name, 'copiable', null, click)
+      .img(
+        '/product/image-redirect?sku=' + each.name,
+        Num.format(each.total),
+        null,
+        each.name,
+        'copiable',
+        null,
+        click,
+        null,
+        subDblClick
+      )
       .get()
       .data('sku', each.name)
       .data('manufacturer', each.manufacturer);
