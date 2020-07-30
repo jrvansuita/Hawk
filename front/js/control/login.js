@@ -3,7 +3,15 @@ $(document).ready(() => {
 
   $('#user-pass').on('keyup', function (e) {
     if (e.which == 13) {
-      if (isEverythingRight(false)) { login() }
+      if (isEverythingRight(false)) {
+        login()
+      }
+    }
+  })
+
+  $('.signin').click(() => {
+    if (isEverythingRight(false)) {
+      login()
     }
   })
 
@@ -12,33 +20,48 @@ $(document).ready(() => {
   })
 })
 
-function forgetPass () {
+function forgetPass() {
   $('.sub-title').hide()
   $('.login-form').css('animation', '0.3s ease-in-out .3s 1 normal both running login-form')
   $('.material-input-holder').empty()
 
-  var putE = $('<input>')
+  var putE = $('<input>').val('').addClass('email-pass')
   var panS = $('<span>').addClass('bar')
   var abeL = $('<label>').text('insira seu e-mail').attr('type', 'text')
 
   $('.material-one').append(putE, panS, abeL).hide().fadeIn(800)
 
-  $('.forget').hide()
+  $('.forget, .signin').hide()
 
   var send = $('<span>').text('Receber Senha').addClass('forgot-pass').css('cursor', 'pointer')
 
+  send.click(() => {
+    resetPass()
+    send.hide()
+    $('.material-input-holder').empty()
+
+    $('.material-one').append(
+      $('<span>').html('E-mail enviado com sucesso!').addClass('email').css('color', '#51847c')
+    )
+    $('.material-one').append(
+      $('<span>').html('Se houver um cadastro nesse e-mail receberá em instantes o acesso para o Painel.').addClass('email').css('color', '#6b6b6b')
+    )
+  })
   $('.login-els').append(send).hide().fadeIn(3000)
 }
 
-function isNum (v) {
+function isNum(v) {
   return /^\d+$/.test(v)
 }
 
-function onError () {
-  $('.img-holder').addClass('red').delay(600).queue(function (next) {
-    $(this).removeClass('red')
-    next()
-  })
+function onError() {
+  $('.img-holder')
+    .addClass('red')
+    .delay(600)
+    .queue(function (next) {
+      $(this).removeClass('red')
+      next()
+    })
 
   $('#user-access').val('')
   $('#user-pass').val('')
@@ -49,11 +72,11 @@ function onError () {
   })
 }
 
-function onSucess () {
+function onSucess() {
   location.href = '/'
 }
 
-function login (code) {
+function login(code) {
   $.ajax({
     url: '/login',
     type: 'post',
@@ -71,8 +94,25 @@ function login (code) {
   })
 }
 
-function isEverythingRight (doError) {
-  var ok = ($('#user-access').val().length >= 9 && isNum($('#user-access').val()))
+function resetPass() {
+  $.ajax({
+    url: '/login/reset-password',
+    type: 'post',
+    data: {
+      email: $('.email-pass').val()
+    },
+    success: function (response) {
+      onSucess()
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      $('.error').text(jqXHR.responseText).css('display', 'block').fadeIn().delay(2000).fadeOut()
+      onError()
+    }
+  })
+}
+
+function isEverythingRight(doError) {
+  var ok = $('#user-access').val().length >= 9 && isNum($('#user-access').val())
 
   ok = ok && $('#user-pass').val().length > 5
 

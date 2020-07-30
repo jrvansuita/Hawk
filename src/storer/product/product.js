@@ -5,12 +5,12 @@ const ProductBinder = require('./binder.js')
 const Product = require('../../bean/product.js')
 
 module.exports = class ProductStorer {
-  constructor () {
+  constructor() {
     this.provider = new EccosysProvider()
     this.storer = new EccosysStorer()
   }
 
-  async with (user, data) {
+  async with(user, data) {
     data.user = user
     this.fatherBody = await ProductBinder.create(data).body()
     return this
@@ -20,7 +20,7 @@ module.exports = class ProductStorer {
     new AttributesHandler().filter(description).load(callback)
   }
 
-  setOnFinished (callback) {
+  setOnFinished(callback) {
     this.onFinishListener = () => {
       this._sendBroadcastMessage(this.fatherBody)
       callback()
@@ -28,7 +28,7 @@ module.exports = class ProductStorer {
     return this
   }
 
-  upsert () {
+  upsert() {
     this._onProductUpsert(this.fatherBody, () => {
       this._handleChildsUpserts(() => {
         this.onFinishListener()
@@ -37,13 +37,14 @@ module.exports = class ProductStorer {
     })
   }
 
-  _handleChildsUpserts (callback) {
+  _handleChildsUpserts(callback) {
     var childs = this.fatherBody.getChilds()
 
     var incrementalUpserts = () => {
       if (childs.length) {
         this._onChildProductUpsert(childs[0], () => {
-          childs.shift(); incrementalUpserts()
+          childs.shift()
+          incrementalUpserts()
         })
       } else {
         callback()
@@ -53,24 +54,27 @@ module.exports = class ProductStorer {
     incrementalUpserts()
   }
 
-  _onProductUpsert (data, callback) {
+  _onProductUpsert(data, callback) {
     this._sendBroadcastMessage(data, 'produto')
-    this.storer.product().upsert(data.id == undefined, data).go(response => this._onStoringResponseHandler(data, response, callback))
+    this.storer
+      .product()
+      .upsert(data.id == undefined, data)
+      .go(response => this._onStoringResponseHandler(data, response, callback))
   }
 
-  _onChildProductUpsert (_data, callback) {
-    this._onBeforeUpsertChildProduct(_data, (data) => {
+  _onChildProductUpsert(_data, callback) {
+    this._onBeforeUpsertChildProduct(_data, data => {
       this._onProductUpsert(data, callback)
     })
   }
 
-  _onBeforeUpsertChildProduct (data, callback) {
+  _onBeforeUpsertChildProduct(data, callback) {
     var sku = data.codigo
     var isNew = data.id == undefined
     var isChild = sku.includes('-')
 
     if (isNew && isChild) {
-      this.provider.product(sku).go((found) => {
+      this.provider.product(sku).go(found => {
         if (found && found.id) {
           data.id = found.id
           data.gtin = found.gtin
@@ -83,7 +87,7 @@ module.exports = class ProductStorer {
     }
   }
 
-  _onStoringResponseHandler (data, response, callback) {
+  _onStoringResponseHandler(data, response, callback) {
     response = response.result || response
 
     if (response.success.length > 0) {
@@ -95,7 +99,7 @@ module.exports = class ProductStorer {
     }
   }
 
-  _onAttributesHandler (data, callback) {
+  _onAttributesHandler(data, callback) {
     this._sendBroadcastMessage(data, 'atributos do produto')
 
     new AttributesHandler().load(() => {
@@ -104,19 +108,23 @@ module.exports = class ProductStorer {
       // Fast Callback
       if (callback) callback()
 
-      this.storer.product(data.codigo).attrs().put(attrs).go(() => {
-        // Skip Waiting for this callback
-      })
+      this.storer
+        .product(data.codigo)
+        .attrs()
+        .put(attrs)
+        .go(() => {
+          // Skip Waiting for this callback
+        })
     })
   }
 
-  syncUpsertedProduct (binder) {
+  syncUpsertedProduct(binder) {
     new Product(
       binder.codigo,
       binder.nome,
       binder.Marca,
       binder.urlEcommerce,
-      binder.imf,
+      binder.img,
       binder.preco,
       binder.precoDe,
       binder.precoCusto,
@@ -137,11 +145,11 @@ module.exports = class ProductStorer {
     ).upsert()
   }
 
-  delete (callback) {
+  delete(callback) {
     new EccosysStorer().product(this.fatherBody.codigo).delete().go(callback)
   }
 
-  _sendBroadcastMessage (data, msg, error) {
+  _sendBroadcastMessage(data, msg, error) {
     global.io.sockets.emit('storing-product-' + this.fatherBody.codigo, {
       isLoading: !error && msg,
       sku: data.codigo,

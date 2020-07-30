@@ -45,10 +45,10 @@
 
 
         <div class="avatar-holder">
-          <img class="circle shadow avatar-img" id="avatar-user-registering" src="<%=user ? user.avatar : 'img/avatar.png'%>" title="System" />
+          <img class="circle shadow avatar-img" id="avatar-user-registering" src="<%=user ? user.avatar : '/img/avatar.png'%>" title="System" />
           <input type="text" id="editing" value="<%=user ? user.id : -1%>" style="display: none;"/>
           <label class="edit-image"> Editar </label>
-          <img src="img/checked.png" class="dots-glyph avatar-crop-ok">
+          <img src="/img/checked.png" class="dots-glyph avatar-crop-ok">
 
         </div>
         <div class="header-name">
@@ -73,7 +73,7 @@
                 <input type="text" id="title"  class="input-val simple-material-input"placeholder="Grupo" name="sector" value="<%=user ? user.title : ''%>" autocomplete="off"/>
                 <input type="text" id="avatar" class="input-val simple-material-input" placeholder="Avatar" name="avatar" value="<%=user ? user.avatar : ''%>" autocomplete="off"/>
                 
-                <input type="text" id="office"  class="input-val simple-material-input"placeholder="Cargo" name="office" value="<%=user ? user.office : ''%>" autocomplete="off"/>
+                <input type="text" id="manufac"  class="input-val simple-material-input"placeholder="Fabricante" name="manufacturer" value="<%=user ? user.manufacturer : ''%>" autocomplete="off"/>
 
 
 
@@ -91,6 +91,8 @@
                 <%if (loggedUser.id == user.id || loggedUser.full){%>
                 <input type="password" id="pass" class="input-val simple-material-input" placeholder="Senha" name="pass"  autocomplete="off" title="Senha"/>
                 <%}%>
+
+                <input type="text" id="office"  class="input-val simple-material-input"placeholder="Tipo de Usuário" name="office" value="<%=user ? user.type : ''%>" autocomplete="off"/>
               </div>
             </div>
 

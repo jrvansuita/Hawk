@@ -1,18 +1,23 @@
 const Routes = require('./_route.js')
 const UsersProvider = require('../provider/user-provider.js')
 const User = require('../bean/user.js')
+const CustomerPasswordEmail = require('../customer/password-email/password-forget-email.js')
 
 module.exports = class LoginRoutes extends Routes {
-  attach () {
-    this._get('/login', (req, res) => {
+  mainPath() {
+    return '/login'
+  }
+
+  attach() {
+    this._get('', (req, res) => {
       res.render('login/login')
     }).skipLogin()
 
-    this._get('/wellcome', (req, res) => {
-      res.render('login/wellcome')
+    this._get('/welcome', (req, res) => {
+      res.render('login/welcome')
     }).skipLogin()
 
-    this._post('/login', (req, res) => {
+    this._post('', (req, res) => {
       var user
 
       if (req.body.access === undefined) {
@@ -39,5 +44,9 @@ module.exports = class LoginRoutes extends Routes {
         res.status(200).send(null)
       }
     })._api()
+
+    this._post('/reset-password', (req, res) => {
+      new CustomerPasswordEmail().go(req.body.email, () => {})
+    }).skipLogin()
   }
 }

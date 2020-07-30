@@ -1,6 +1,6 @@
 $(document).ready(() => {
   $('.f-icon').click(function (e) {
-    $(this).attr('src', 'img/loader/circle.svg')
+    $(this).attr('src', '/img/loader/circle.svg')
     var sku = $(this).data('sku')
 
     _post('/diagnostics/check', { sku: sku }, (data) => {
@@ -10,11 +10,11 @@ $(document).ready(() => {
       var fixed = !obj || !obj.fixes.map((fix) => { return fix.name.includes(type) })
 
       if (fixed) {
-        $(this).attr('src', 'img/checked.png')
+        $(this).attr('src', '/img/checked.png')
         $(this).unbind('click')
         $(this).removeClass('fix').addClass('fixed')
       } else {
-        $(this).attr('src', 'img/restart-error.png')
+        $(this).attr('src', '/img/restart-error.png')
       }
 
       // $('.menu-dots .dots-glyph').attr('src', 'img/dots.png');

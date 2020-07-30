@@ -38,7 +38,7 @@ class ProductImageLoader {
     }
 
     newImg.onerror = () => {
-      var placeholderPath = this.placeholderPath ? this.placeholderPath : 'img/product-placeholder.png'
+      var placeholderPath = this.placeholderPath ? this.placeholderPath : '/img/product-placeholder.png'
 
       this.imgElement.attr('src', placeholderPath)
 

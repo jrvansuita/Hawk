@@ -118,12 +118,12 @@ function getAvatar (item) {
   item.user.name = item.user.id != 404 ? item.user.name.split(' ')[0] : 'Sistema'
 
   var $typeIcon = $('<img>').addClass('history-icon circle shadow')
-    .attr('src', 'img/' + window?.icons[item.type]?.icon + '.png')
+    .attr('src', '/img/' + window?.icons[item.type]?.icon + '.png')
 
   var $avatarImg = $('<img>').addClass('circle shadow avatar-img')
     .attr('title', item.user.name)
     .attr('data-src', item.user.avatar)
-    .attr('src', item.user.id == 404 ? 'img/system.png' : (item.user.avatar ? item.user.avatar : 'img/avatar.png'))
+    .attr('src', item.user.id == 404 ? '/img/system.png' : (item.user.avatar ? item.user.avatar : '/img/avatar.png'))
     .attr('data-userId', item.user.id)
 
   var $avatarName = $('<span>').addClass('label shadow avatar-name').text(item.user.name)

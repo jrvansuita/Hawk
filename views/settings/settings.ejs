@@ -25,7 +25,7 @@
         <td>
           <div class="forms shadow">
             <label class="group-title">Configurações</label>
-            <a class="link" href="/main-settings">Gerais</a>
+            <a class="link" href="/settings/main">Gerais</a>
             <a class="link" href="/settings/social">Contato & Social</a>
             <a class="link" href="/settings/api">Integrações</a>
           </div>
@@ -68,7 +68,7 @@
             <table>
               <%jobs.forEach((job)=>{%>
                 <tr class="job-item">
-                  <td><img class="job-active" src="img/<%=job.active ? (job.running ? 'checked-running' : 'checked') : 'block'%>.png"></td>
+                  <td><img class="job-active" src="/img/<%=job.active ? (job.running ? 'checked-running' : 'checked') : 'block'%>.png"></td>
                   <td><span class="job-name"><%=job.description%></span></td>
                   <td><span class="job-last"><%=Dat.formatwTime(new Date(job.lastExcecution) || new Date())%></span></td>
                   <td> <span class="job-item-menu" data-id="<%=job.id%>" data-tag="<%=job.tag%>" data-active="<%=job.active%>"> </span></td>

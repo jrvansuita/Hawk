@@ -37,7 +37,7 @@
 
         <div class="top-image-holder">
           <%if (product.codigo){%>
-            <a href="<%=product?.img?.url ?? '\john-travolta'%>" target="_blank">
+            <a href="<%=product?.img?.url ?? '../john-travolta'%>" target="_blank">
               <label id="top-sku" class="top-label"><%=product.codigo%></label>
               <label id="top-product-name" class="top-label"><%=Str.short(Util.getProductName(product.nome), 42)%></label>
             </a>

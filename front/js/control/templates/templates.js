@@ -13,7 +13,7 @@ $(document).ready(() => {
       .setAutoShowOptions()
       .setDisabledCaption('Nenhum disponível')
       .setOnItemBuild((o, index) => {
-        return { text: o.val.name, img: 'img/' + o.val.icon + '.png' }
+        return { text: o.val.name, img: '/img/' + o.val.icon + '.png' }
       })
       .load().then((binder) => {
         usagesSelector = binder
@@ -76,7 +76,7 @@ function save () {
     type: templateType
   }
 
-  _post('template', data, (id) => {
+  _post('/templates', data, (id) => {
     goTo(id)
   }, (error, message) => {
     console.log(error)

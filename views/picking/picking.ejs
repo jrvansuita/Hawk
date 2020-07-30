@@ -63,14 +63,14 @@
             <div class="filters-card-top shadow">
               <div class="line-selector" id="select-transp">
                 <label>Transportes</label>
-                <img src="img/arrow-right.png"/>
+                <img src="/img/arrow-right.png"/>
 
                 <span><%=Util.printList(selectedTransps, 'all', 'Todos', 1)%></span>
               </div>
 
               <div class="line-br"></div>
             </div>
-            <img id="card-tooltip" class="rfid-card" src="img/rfid-listening.gif" title="Passe o cartão">
+            <img id="card-tooltip" class="rfid-card" src="/img/rfid-listening.gif" title="Passe o cartão">
             <input type="text" id="user-id" class="simple-material-input" placeholder="Código de Acesso" />
           </div>
 
@@ -81,7 +81,7 @@
 
             <div class="line-selector" id="select-uf">
               <label>Estados</label>
-              <img src="img/arrow-right.png"/>
+              <img src="/img/arrow-right.png"/>
               <span><%=Util.printList(selectedUfs, 'all', 'Todos', 5)%></span>
             </div>
 
@@ -89,14 +89,14 @@
 
               <div class="line-selector" id="more-options">
                 <label>Mais Filtros</label>
-                <img src="img/arrow-right.png"/>
+                <img src="/img/arrow-right.png"/>
 
                 <span><%=selectedFilters.length%></span>
               </div>
 
               <div class="line-selector" id="sort-options">
                 <label>Ordenação</label>
-                <img src="img/arrow-right.png"/>
+                <img src="/img/arrow-right.png"/>
                 <span><%=sorterList[sortSelected]%></span>
               </div>
               <%}%>
@@ -196,7 +196,7 @@
                                 <td>
                                   <%var userName = (blocked.user.name ? blocked.user.name.split(" ")[0] : 'Desconhecido') %>
 
-                                  <img class="circle shadow avatar-img super-mini-avatar <%=blockingClass%>" data-id="<%=blocked.user.id%>" src="<%=blocked.user.id == 404 ? 'img/system.png' : blocked.user.avatar %>" title="<%=userName%>" onerror="this.src='/img/avatar.png'" />
+                                  <img class="circle shadow avatar-img super-mini-avatar <%=blockingClass%>" data-id="<%=blocked.user.id%>" src="<%=blocked.user.id == 404 ? '/img/system.png' : blocked.user.avatar %>" title="<%=userName%>" onerror="this.src='/img/avatar.png'" />
                                   <%if (blocked.reasonTag){%>
                                     <img class="blocked-reason" data-reason="<%=blocked.reasonTag%>" />
                                     <%}%>

@@ -98,12 +98,12 @@ function loadImageResource (el, event) {
   var target = $('.' + $(el).data('target'))
   var attr = $(el).data('attr')
 
-  icon.attr('src', 'img/loader/circle.svg')
+  icon.attr('src', '/img/loader/circle.svg')
   reader.onload = function (event) {
     _postImg('/image/upload-base64', { base64: event.target.result.split(',')[1] }, (data) => {
       selected[attr] = data.link
       target.attr('src', event.target.result)
-      icon.attr('src', 'img/img-edit.png')
+      icon.attr('src', '/img/img-edit.png')
     })
   }
 
