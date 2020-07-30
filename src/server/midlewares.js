@@ -128,7 +128,7 @@ module.exports = class ServerMidlewares {
         console.log(`${req.method}: ${req.originalUrl}`);
       }
 
-      //=this.printAllRoutes();
+      //this.printAllRoutes();
 
       res.locals.query = req.query;
       res.locals.url = req.originalUrl;
