@@ -19,10 +19,13 @@ class ProductBoardHelper extends DashboardProvider.Helper {
     super();
     this.loadSkusCount = loadSkusCount || 25;
     this.prepare(data);
+    this.finals();
   }
 
   prepare(data) {
+    this.value = 0;
     this.total = 0;
+    this.cost = 0;
     this.skusCount = data?.length;
     this.arrs = {};
 
@@ -33,7 +36,12 @@ class ProductBoardHelper extends DashboardProvider.Helper {
 
     data?.forEach(each => {
       each.total = each.quantity;
-      this.total += each.quantity;
+      this.total += each.total;
+
+      each.value = each.quantity * each.price;
+      this.value += each.value;
+
+      this.cost += each.quantity * each.cost;
 
       this.handleArr(each, 'season', this.handleCustom);
       this.handleArr(each, 'category', this.handleCustom);
@@ -59,6 +67,13 @@ class ProductBoardHelper extends DashboardProvider.Helper {
 
     delete this.arrs;
     return this;
+  }
+
+  finals() {
+    this.tkm = this.value / this.total;
+    this.tkmCost = this.cost / this.total;
+    this.profit = this.value - this.cost;
+    this.markup = this.value / this.cost;
   }
 
   handleCustomTotals(item) {
