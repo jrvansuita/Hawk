@@ -7,6 +7,10 @@ const EccosysProvider = require('../eccosys/eccosys-provider.js')
 const Enum = require('../bean/enumerator')
 const ProductBoardProvider = require('../provider/board/product-board-provider.js')
 
+const StockOrderVault = require('../vault/stock-order-vault')
+const StockOrderProvider = require('../provider/stock-order-provider')
+const StockOrderHandler = require('../handler/stock-order-handler.js')
+
 module.exports = class ProductRoutes extends Routes {
   mainPath() {
     return '/stock'
@@ -78,7 +82,7 @@ module.exports = class ProductRoutes extends Routes {
 
       ProductLaws.load(skuOrEan, (result) => {
         res.render('product/storer/product', {
-          product: result,
+          product: result
         })
       })
     })
@@ -115,5 +119,37 @@ module.exports = class ProductRoutes extends Routes {
         .load()
     })
     /** --------------  Product Board -------------- **/
+
+    this._get('/panel', (req, res) => {
+      new StockOrderProvider().getAll((orders) => {
+        res.render('product/panel/product-panel', { orders: orders })
+      })
+    })
+
+    this._post('/new-order', (req, res) => {
+      req.body.user = req.session.loggedUser
+
+      StockOrderVault.storeFromScreen(req.body, (order) => {
+        res.redirect('/stock/panel')
+      })
+    })
+
+    this._get('/stock-order-attr', (req, res) => {
+      new StockOrderProvider().searchAttr(req.query.attr, this._resp().redirect(res))
+    })
+
+    this._post('/delete-order', (req, res) => {
+      StockOrderVault.delete(req.body.number, this._resp().redirect(res))
+    })
+
+    this._post('/update-order-status', (req, res) => {
+      new StockOrderHandler().updateStatus(req.body.orderId, req.session.loggedUser, this._resp().redirect(res))
+    })
+
+    this._get('/get-orders', (req, res) => {
+      new StockOrderProvider().search(req.query.value, (data) => {
+        this._resp().sucess(res, data)
+      })
+    })
   }
 }

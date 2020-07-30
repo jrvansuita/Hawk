@@ -1,4 +1,4 @@
-const AttributesHandler = require('./attributes.js')
+const AttributesHandler = require('../../handler/attributes-handler')
 const SkuGen = require('../../bean/sku-gen.js')
 const Enum = require('../../bean/enumerator.js')
 

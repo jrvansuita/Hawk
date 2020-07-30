@@ -1,6 +1,6 @@
 const EccosysStorer = require('../../eccosys/eccosys-storer.js')
 const EccosysProvider = require('../../eccosys/eccosys-provider.js')
-const AttributesHandler = require('./attributes.js')
+const AttributesHandler = require('../../handler/attributes-handler')
 const ProductBinder = require('./binder.js')
 const Product = require('../../bean/product.js')
 
@@ -16,7 +16,7 @@ module.exports = class ProductStorer {
     return this
   }
 
-  searchAttr (description, callback) {
+  searchAttr(description, callback) {
     new AttributesHandler().filter(description).load(callback)
   }
 

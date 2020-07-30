@@ -83,10 +83,9 @@ input[type=number]::-webkit-outer-spin-button {
 .main-content {
   display: block;
   margin-top: 80px;
-
-  /* position: relative; */
+  position: relative;
   height: 100%;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 .shadow {

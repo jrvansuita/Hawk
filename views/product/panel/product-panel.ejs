@@ -5,9 +5,18 @@
 <head>
     <link rel="stylesheet" href="/front/css/layout/product/panel/product-panel.css">
     <link rel="stylesheet" href="/front/css/libs/material-input.css">
+    <script src="/front//js/libs/combobox.js"></script>
+    <script src="/front/js/libs/date-picker.js"></script>
+    <script src="/front/js/libs/dropdown.js"></script>
+    <script src="/front/js/libs/request-helper.js"></script>
+
+
+    <script src="/front/js/control/product/panel/product-panel.js"></script>
 
 </head>
-
+<script>
+    window.orders = <%- JSON.stringify(orders) %>
+</script>
 <body>
     <%include ../../menus/stock-menu %>
 
@@ -15,7 +24,7 @@
 
 
 
-    <div class="main">
+    <div class="main-content">
         <div class="top shadow">
             <div class="search-box">
                 <img class="icon-open is-closed" title="Abrir seletor" src="/img/arrow-down.png">
@@ -28,52 +37,98 @@
                     <div class="date-filters-holder"></div>
                 </div>
                 <div class="button-area">
+                    <div class="search-holder">
+                        <label class="button shadow" id="search-button" tabindex="0">Buscar</label>
+                    </div>
                     <div class="new-holder">
                         <label class="button shadow" id="new-button" tabindex="0">Novo</label>
                     </div>
                 </div>
             </div>
-
-            <div class="columns"></div>
-
-
         </div>
-    </div>
-
-    <div class="modal-holder">
-            <div class="form-modal-holder">
-                <form>
-                    <div class="input-holder">
-                        <div class="material-input-holder">
-                            <input type="text" id="" required>
-                            <span class="bar"></span>
-                            <label>Número do Pedido</label>
+            <div class="columns">
+                <div class="left-holder">
+                    <div class="col">
+                        <div class="col-content shadow red-top">
+                            <div class="col-header">
+                                <span class="label header-title">A Receber</span>
+                                <span class="orders-qtd"></span>
+                            </div>
+                            <div class="awaiting-col col-box">
+                                <div class="list-content">
+                                    <span class="hint">Nenhum pedido para recebimento</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="material-input-holder">
-                            <input type="text" id="" required>
-
-                            <span class="bar"></span>
-                            <label>Fabricante</label>
+                        
+                    </div>
+                    <div class="col">
+                        <div class="col-content shadow yellow-top">
+                            <div class="col-header">
+                                <span class="label header-title">Em Andamento</span>
+                                <span class="orders-qtd"></span>
+                            </div>
+                            <div class="in-progress-col col-box">
+                                <div class="list-content">
+                                    <span class="hint">Nenhum pedido em andamento</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="input-holder">
-                        <div class="material-input-holder">
-                            <input type="text" id="" required>
-                            <span class="bar"></span>
-                            <label>Marca</label>
-                        </div>
-                        <div class="material-input-holder">
-                            <input type="text" id="" required>
-                            <span class="bar"></span>
-                            <label>Ano</label>
-                        </div>
-                    </div>
-                    <div class="input-holder">
-                        <label class="button shadow" id="" tabindex="0">Criar pedido</label>
-                    </div>
-
-                </form>
+                </div>
             </div>
+        </div>
+
+            <div class="modal-holder" style="display: none;">
+                <div class="form-modal-holder shadow">
+                    <div>
+                        <label class="cad-title">Cadastrar novo pedido</label>
+                    </div>
+                    <form action="/stock/new-order" id="new-stock-order" method="POST">
+                       <div class="form-content">
+                            <div class="input-holder">
+                                <div class="material-input-holder">
+                                    <input type="text" id="number" name="number" required autocomplete="off">
+                                    <span class="bar"></span>
+                                    <label>Número do Pedido</label>
+                                </div>
+                                <div class="material-input-holder">
+                                    <input class="input-combo" data-attr="Fabricante"  type="text" id="manufacturer" name="manufacturer" required autocomplete="off">
+                                    
+                                    <span class="bar"></span>
+                                    <label>Fabricante</label>
+                                </div>
+                                <div class="material-input-holder">
+                                    <input class="input-combo" type="text" id="brand" data-attr="Marca" name="brand" required autocomplete="off">
+                                    <span class="bar"></span>
+                                    <label>Marca</label>
+                                </div>
+                            </div>
+                            <div class="input-holder">
+                                <div class="material-input-holder">
+                                    <input class="input-combo" data-attr="Coleção" type="text" id="year" name="year" required autocomplete="off">
+                                    <span class="bar"></span>
+                                    <label>Ano</label>
+                                </div>
+                                <div class="material-input-holder">
+                                    <input class="input-combo" data-attr="Estacao" type="text" id="season" name="season" required autocomplete="off">
+                                    <span class="bar"></span>
+                                    <label>Estação</label>
+                                </div>
+                                <div class="material-input-holder">
+                                    <input type="text" id="date-picker" name="date" id="date" required autocomplete="off">
+                                    <span class="bar"></span>
+                                    <label>Data de Entrega</label>
+                                </div>
+                            </div>
+                            <div class="input-holder">
+                                <label class="button shadow" id="save" tabindex="0">Criar pedido</label>
+                            </div>
+                       </div>
+                    </form>
+                </div>
     </div>
+
+
 
 </body>

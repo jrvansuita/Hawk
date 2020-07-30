@@ -1,19 +1,19 @@
 // const EccosysStorer = require('../../eccosys/eccosys-storer.js')
-const EccosysProvider = require('../../eccosys/eccosys-provider.js')
+const EccosysProvider = require('../eccosys/eccosys-provider.js')
 
 module.exports = class AttributesHandler {
-  isCached () {
+  isCached() {
     return CacheAttrs.isCached()
   }
 
-  filter (description, options) {
+  filter(description, options) {
     this.descriptionOrTag = description
     this.options = options
 
     return this
   }
 
-  get () {
+  get() {
     if (this.isCached()) {
       return CacheAttrs.filter(this.descriptionOrTag, this.options)
     } else {
@@ -21,7 +21,7 @@ module.exports = class AttributesHandler {
     }
   }
 
-  load (callback) {
+  load(callback) {
     CacheAttrs.load(() => {
       if (callback) callback(this.get())
     })
@@ -36,11 +36,11 @@ var CacheAttrs = {
   isChaching: false,
   listeners: [],
 
-  isCached () {
+  isCached() {
     return this.cache != undefined
   },
 
-  filter (name, options) {
+  filter(name, options) {
     if (name) {
       var data = this.cache[name] || this.cache[this.map[name]]
 
@@ -56,7 +56,7 @@ var CacheAttrs = {
     return this.cache
   },
 
-  _prepare (data) {
+  _prepare(data) {
     var _cache = {}
     var _map = {}
 
@@ -81,7 +81,7 @@ var CacheAttrs = {
     this.map = _map
   },
 
-  emit () {
+  emit() {
     this.listeners.forEach((each, i, arr) => {
       each(this.cache)
     })
@@ -89,7 +89,7 @@ var CacheAttrs = {
     this.listeners = []
   },
 
-  load (callback) {
+  load(callback) {
     if (this.isCached()) {
       callback(this.cache)
     } else {
