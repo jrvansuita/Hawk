@@ -1,0 +1,47 @@
+.info-value {
+  color: gray;
+  width: fit-content;
+  display: inline-block;
+  padding: 3px 1px;
+  font-size: 11px;
+  cursor: default;
+}
+
+.green-title {
+  color: #1c796b;
+  font-size: 13px;
+}
+
+.mini-avatar {
+  width: 40px;
+  height: 40px;
+  margin-left: 0;
+}
+
+.mini-red-circle {
+  width: fit-content;
+  border-radius: 15px;
+  padding: 3px;
+  font-size: 9px;
+  line-height: 10px;
+  text-align: center;
+  color: white;
+}
+
+.clickable-mini-item:hover {
+  cursor: pointer;
+  border-radius: 4px;
+  background-color: #f3f3f3;
+}
+
+.awaiting {
+  border-left: 3px solid #f16d6f;
+}
+
+.in-progress {
+  border-left: 3px solid #f1d26a;
+}
+
+.finished {
+  border-left: 3px solid #4ac6aa;
+}

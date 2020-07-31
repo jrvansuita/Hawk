@@ -91,20 +91,6 @@ table {
   margin-bottom: 5px;
 }
 
-.pick-value {
-  color: gray;
-  width: fit-content;
-  display: inline-block;
-  padding: 3px 1px;
-  font-size: 11px;
-  cursor: default;
-}
-
-.green-title {
-  color: #1c796b;
-  font-size: 13px;
-}
-
 .header-count {
   vertical-align: top;
   margin: auto;
@@ -146,12 +132,6 @@ table {
   vertical-align: middle;
   padding: 3px;
   display: inline-block;
-}
-
-.mini-avatar {
-  width: 40px;
-  height: 40px;
-  margin-left: 0;
 }
 
 .avatar-name {
@@ -334,18 +314,6 @@ tr.row-padding td {
   border-left: 3px solid #6aabf1;
 }
 
-.not-solved {
-  border-left: 3px solid #f16d6f;
-}
-
-.solved {
-  border-left: 3px solid #4ac6aa;
-}
-
-.solving {
-  border-left: 3px solid #f1d26a;
-}
-
 .blue-top {
   border-top: 3px solid #6aabf1;
 }
@@ -418,7 +386,7 @@ tr.row-padding td {
   border-spacing: 0;
 }
 
-.inprogress-item.pick-value {
+.inprogress-item.info-value {
   padding: 0 !important;
 }
 
@@ -432,16 +400,6 @@ tr.row-padding td {
 
 .pending-inner:hover {
   overflow-y: overlay;
-}
-
-.mini-red-circle {
-  width: fit-content;
-  border-radius: 15px;
-  padding: 3px;
-  font-size: 9px;
-  line-height: 10px;
-  text-align: center;
-  color: white;
 }
 
 .table-sale-blocked-holder .mini-red-circle {

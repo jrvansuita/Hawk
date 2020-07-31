@@ -1,14 +1,12 @@
 var datePicker = null
 $(document).ready(() => {
+  console.log(orders)
   $('#save').click(() => {
     if (checkFormBeforeSave()) $('#new-stock-order').submit()
   })
 
   $('#new-button').click(() => {
     showModal()
-  })
-  $('#search-button').click(() => {
-    searchOrder()
   })
 
   $('#search-input').on('keyup', function (e) {
@@ -26,6 +24,13 @@ $(document).ready(() => {
     var attr = $(el).data('attr')
     bindComboBox($(el), attr)
   })
+
+  dataPicker = new RangeDatePicker()
+
+  dataPicker.holder('.date-filters-holder', false)
+    .setTitles('Data de Início', 'Data de Fim')
+    .setPos(-72, 0)
+    .load()
 })
 
 function showModal() {
@@ -45,33 +50,31 @@ function createOrdersList(parent, orders, showAvatar) {
   if (orders.length) {
     parent.empty()
     orders.forEach((each) => {
-      var table = $('<table>')
-      var holder = $('<div>').addClass('shadow order-item').data({ number: each.number, status: each.status, id: each._id })
+      var table = $('<table>').attr('width', '100%')
+      var holder = $('<div>').addClass('shadow order-item clickable-mini-item').data({ id: each.id, status: each.status })
 
       if (each.status === 0) holder.addClass('awaiting')
       else holder.addClass('in-progress')
 
       // infos
-      var number = $('<span>').text(each.number).addClass('label-number')
-      var season = $('<label>').text(each.season).addClass('label-season')
-      var brand = $('<label>').text(each.brand).addClass('label-brand')
-      var manufacturer = $('<label>').text(each.manufacturer).addClass('label-manufacturer')
-      var date = $('<label>').text(each.date).addClass('label-date')
-      var userImg = $('<img>').attr('src', each.user.avatar).addClass('avatar')
+      var number = $('<span>').text(each.number).addClass('info-value green-title')
+      var season = $('<label>').text(each.season).addClass('mini-red-circle right')
+      var brand = $('<label>').text(each.brand).addClass('info-value')
+      var manufacturer = $('<label>').text(Str.short(each.manufacturer, 10)).addClass('info-value')
+      var date = $('<label>').text(each.date).addClass('info-value')
+      var userImg = $('<img>').attr('src', each.user.avatar).addClass('mini-avatar shadow circle')
 
-      var trOne = $('<tr>').append($('<td>').append(season))
+      var trOne = $('<tr>').append($('<td>').append(number), $('<td>').append(brand), $('<td>').append(season))
 
       if (showAvatar) {
         var tdAvatar = $('<td>')
-        tdAvatar.attr('rowspan', '4').append(userImg).addClass('avatar-holder')
+        tdAvatar.attr('rowspan', '2').append(userImg)
         trOne.prepend(tdAvatar)
       }
 
-      var trTwo = $('<tr>').append($('<td>').append(manufacturer))
-      var trThree = $('<tr>').append($('<td>').append(brand), $('<td>').append(number).addClass('right'))
-      var trFour = $('<tr>').append($('<td>').append(date))
+      var trTwo = $('<tr>').append($('<td>').append(manufacturer), $('<td>').append(date))
 
-      holder.append(table.append(trOne, trTwo, trThree, trFour))
+      holder.append(table.append(trOne, trTwo))
       parent.append(holder)
     })
   }
@@ -110,12 +113,23 @@ function bindDropdown() {
     })
     if ($(each).data('status') === 0) {
       drop.item('/img/checked.png', 'Assumir', (helper) => {
-        console.log(helper.parent.data('id'))
-        _post('/stock/update-order-status', { orderId: helper.parent.data('number') }, (_err, res) => {
+        _post('/stock/update-order-status', { orderId: helper.parent.data('id') }, (_err, res) => {
           window.location.reload()
         })
       })
     }
+
+    if ($(each).data('status') === 1) {
+      drop.item('/img/checked.png', 'Finalizar', (helper) => {
+        _post('/stock/update-order-status', { orderId: helper.parent.data('id') }, (_err, res) => {
+          window.location.reload()
+        })
+      })
+    }
+  })
+
+  $('td .menu-dots').each((index, each) => {
+    var drop = Dropdown.on(each)
   })
 }
 

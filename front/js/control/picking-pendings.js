@@ -70,9 +70,9 @@ function buildPendingItemsViews (el, pending) {
   var table = el.find('table')
   var row = $('<tr>').addClass('dotted-line closable')
 
-  row.append($('<td>').attr('colspan', '2').append($('<span>').addClass('pick-value').append('Produto').css('padding-top', '20px')))
-  row.append($('<td>').append($('<span>').addClass('pick-value center').append('Quant.')))
-  row.append($('<td>').append($('<span>').addClass('pick-value').css('float', 'right').append('Preço')))
+  row.append($('<td>').attr('colspan', '2').append($('<span>').addClass('info-value').append('Produto').css('padding-top', '20px')))
+  row.append($('<td>').append($('<span>').addClass('info-value center').append('Quant.')))
+  row.append($('<td>').append($('<span>').addClass('info-value').css('float', 'right').append('Preço')))
   table.append(row)
 
   pending.sale.items.forEach(function (item) {
@@ -129,7 +129,7 @@ function bindMenuOptions (el, pending) {
 function getFirstBottomBarOptions (pending) {
   var div = $('<div>')
 
-  var span = $('<span>').addClass('pick-value small-font last-update').append('Última alteração: ' + (pending.updateDate ? Dat.formatwTime(new Date(pending.updateDate)) : ''))
+  var span = $('<span>').addClass('info-value small-font last-update').append('Última alteração: ' + (pending.updateDate ? Dat.formatwTime(new Date(pending.updateDate)) : ''))
   div.append(span)
 
   if (isTrueStr(pending.sendEmail)) {
@@ -181,7 +181,7 @@ function buildProductFirstCol (item, slim, pending) {
     sku = $('<label>')
   }
 
-  sku.addClass('pick-value sku ' + (isSwapableSku ? 'sku-input' : 'copiable'))
+  sku.addClass('info-value sku ' + (isSwapableSku ? 'sku-input' : 'copiable'))
     .val(item.codigo)
     .text(item.codigo)
     .attr('data-sku', item.codigo)
@@ -200,7 +200,7 @@ function buildProductFirstCol (item, slim, pending) {
     e.stopPropagation()
   })
 
-  var gtin = $('<span>').addClass('pick-value right').text(item.gtin.slice(9, item.gtin.length))
+  var gtin = $('<span>').addClass('info-value right').text(item.gtin.slice(9, item.gtin.length))
 
   if (item.changed || item.observacao.includes('changed')) {
     addTagLabel('Trocado', gtin)
@@ -212,9 +212,9 @@ function buildProductFirstCol (item, slim, pending) {
 
   if (!slim) {
     div = $('<div>').addClass('nobreak')
-    var descHolder = $('<label>').addClass('pick-value desc no-wrap').text(Util.ellipsis(Util.getProductName(item.descricao, true), 25))
+    var descHolder = $('<label>').addClass('info-value desc no-wrap').text(Util.ellipsis(Util.getProductName(item.descricao, true), 25))
     div.append(descHolder)
-    var brand = $('<span>').addClass('pick-value right').text(Util.getProductBrand(item.descricao, true))
+    var brand = $('<span>').addClass('info-value right').text(Util.getProductBrand(item.descricao, true))
     div.append(brand)
 
     first.append(div)
@@ -256,7 +256,7 @@ function buildProductFirstCol (item, slim, pending) {
 
 function buildProductSecondCol (item, slim) {
   var second = $('<div>')
-  second.append($('<span>').addClass('pick-value center').text(parseInt(item.quantidade)))
+  second.append($('<span>').addClass('info-value center').text(parseInt(item.quantidade)))
 
   if (slim) {
     var minQuantity = 1
@@ -281,7 +281,7 @@ function buildProductSecondCol (item, slim) {
 }
 
 function buildProductThirdCol (item) {
-  return $('<span>').addClass('pick-value no-wrap').text(Num.money(item.valor))
+  return $('<span>').addClass('info-value no-wrap').text(Num.money(item.valor))
 }
 
 var pendingCount

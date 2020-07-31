@@ -33,7 +33,7 @@ class InputDialog {
     var $subTitle
 
     if (this.subTitle) {
-      $subTitle = $('<span>').addClass('pick-value no-wrap sub-title').html(this.subTitle)
+      $subTitle = $('<span>').addClass('info-value no-wrap sub-title').html(this.subTitle)
     }
 
     if (this.setFocusOnInputField) {
