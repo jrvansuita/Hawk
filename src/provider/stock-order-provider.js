@@ -31,9 +31,13 @@ module.exports = class StockOrderProvider {
   }
 
   search(query, callback) {
-    StockOrder.find(this.getDataQuery(query), (_err, docs) => {
-      callback(this._filterOrders(docs))
-    })
+    if (query.page) {
+      this.getOrdersPages(query, query.page, query.limit, callback)
+    } else {
+      StockOrder.find(this.getDataQuery(query), (_err, docs) => {
+        callback(this._filterOrders(docs))
+      })
+    }
   }
 
   getDataQuery(query) {
@@ -47,10 +51,12 @@ module.exports = class StockOrderProvider {
       and.push(DataAccess.or(this._getSearchQueryFields(), query.value))
     }
 
-    if (query.status) {
-      and.push({ status: parseInt(query.status) })
-    }
-
     return { $and: and }
+  }
+
+  getOrdersPages(query, page, limit, callback) {
+    StockOrder.paginate({ status: query.status }, page, '-date', parseInt(limit), (_err, data) => {
+      callback(this._filterOrders(data))
+    })
   }
 }

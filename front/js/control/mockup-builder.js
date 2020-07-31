@@ -139,8 +139,8 @@ function onRefreshPreview (imageData) {
 }
 
 function save () {
-  _post('mockup-builder', getData(), (mockId) => {
-    window.location = 'mockup-builder?_id=' + mockId
+  _post('/mockup/builder', getData(), (mockId) => {
+    window.location = 'builder?_id=' + mockId
   }, (error, message) => {
     console.log(error)
   })

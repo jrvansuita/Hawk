@@ -17,46 +17,4 @@ module.exports = class StockOrder extends DataAccess {
   static getKey () {
     return ['id']
   }
-
-  // static likeQuery(value) {
-  //   if (!value) {
-  //     return {}
-  //   }
-
-  //   return {
-  //     $or: [
-  //       {
-  //         number: {
-  //           $regex: value,
-  //           $options: 'i'
-  //         }
-  //       },
-
-  //       {
-  //         manufacturer: {
-  //           $regex: value,
-  //           $options: 'i'
-  //         }
-  //       },
-  //       {
-  //         brand: {
-  //           $regex: value,
-  //           $options: 'i'
-  //         }
-  //       },
-  //       {
-  //         season: {
-  //           $regex: value,
-  //           $options: 'i'
-  //         }
-  //       },
-  //       {
-  //         year: {
-  //           $regex: value,
-  //           $options: 'i'
-  //         }
-  //       }
-  //     ]
-  //   }
-  // }
 }

@@ -1,4 +1,7 @@
 var datePicker = null
+var page = 0
+var loading = false
+var showAll = false
 $(document).ready(() => {
   console.log(orders)
 
@@ -16,7 +19,8 @@ $(document).ready(() => {
 
   placeOrders(window.orders)
 
-  bindFinishedDropdown()
+  getFinishedOrders()
+  bindScrollLoad()
 
   dataPicker = new RangeDatePicker()
 
@@ -103,15 +107,13 @@ function bindOrdersDropdown() {
   })
 }
 
-function bindFinishedDropdown() {
-  $('td .menu-dots').each((index, each) => {
-    var drop = Dropdown.on(each)
+function bindFinishedDropdown(el) {
+  var drop = Dropdown.on(el)
 
-    drop.item('/img/delete.png', 'Excluir', (helper) => {
-      console.log(helper)
-      _post('/stock/delete-order', { orderId: helper.data.id }, (_err, res) => {
-        window.location.reload()
-      })
+  drop.item('/img/delete.png', 'Excluir', (helper) => {
+    console.log(helper)
+    _post('/stock/delete-order', { orderId: helper.data.id }, (_err, res) => {
+      window.location.reload()
     })
   })
 }
@@ -152,7 +154,43 @@ function calculateDelivery(date) {
 }
 
 function getFinishedOrders() {
-  _get('/stock/get-orders', { status: 2 }, (data) => {
-    console.log(data)
+  if (!showAll) {
+    page++
+    loading = true
+
+    _get('/stock/get-orders', { status: 2, page: page, limit: 20 }, (data) => {
+      showAll = data.finished.length === 0
+      console.log(showAll)
+      loading = false
+      createFinishedTable(data.finished)
+    })
+  }
+}
+
+function createFinishedTable(data) {
+  data.forEach((each) => {
+    var trLine = $('<tr>').addClass('line-order')
+    var date = $('<td>').text(Dat.format(new Date(each.date)))
+    var number = $('<td>').text(each.number)
+    var manufacturer = $('<td>').text(each.manufacturer)
+    var brand = $('<td>').text(each.manufacturer)
+    var user = $('<td>').text(each.user.name)
+    var menuHolder = $('<div>').addClass('menu-dots')
+    var menu = $('<td>').append(menuHolder)
+    trLine.append(date, number, manufacturer, brand, user, menu)
+
+    $('.content-table').append(trLine)
+    bindFinishedDropdown(menuHolder)
+  })
+}
+
+function bindScrollLoad() {
+  var $pane = $('.right-holder')
+  var $list = $('.content-scroll')
+
+  $list.unbind('scroll').bind('scroll', function () {
+    if ($pane.scrollTop() + $pane.height() + 1000 >= $list.height() && !loading) {
+      getFinishedOrders()
+    }
   })
 }
