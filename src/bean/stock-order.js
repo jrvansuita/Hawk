@@ -1,8 +1,9 @@
 const DataAccess = require('../mongoose/data-access')
 
 module.exports = class StockOrder extends DataAccess {
-  constructor (user, number, manufacturer, brand, season, year, date) {
+  constructor (id, user, number, manufacturer, brand, season, year, date) {
     super()
+    this.id = id || Util.id()
     this.status = 0
     this.user = user || {}
     this.date = Str.def(date)
@@ -14,7 +15,7 @@ module.exports = class StockOrder extends DataAccess {
   }
 
   static getKey () {
-    return ['number']
+    return ['id']
   }
 
   static likeQuery(value) {
@@ -45,6 +46,12 @@ module.exports = class StockOrder extends DataAccess {
         },
         {
           season: {
+            $regex: value,
+            $options: 'i'
+          }
+        },
+        {
+          year: {
             $regex: value,
             $options: 'i'
           }
