@@ -91,10 +91,11 @@ $(document).ready(() => {
     })
     .load()
 
-  new ComboBox($('#manufac'), '/user/manufacturer')
+  new ComboBox($('#manufac'), '/stock/storer-attr?attr=Fabricante')
     .setAutoShowOptions()
     .setOnItemBuild((item, index) => {
-      return { text: item.description.trim(), value: item.value }
+      console.log(item)
+      return { text: item.description, value: item.value }
     })
     .setOnItemSelect((item, index) => {
       $('#manufac').val(item.value)
@@ -135,29 +136,11 @@ $(document).ready(() => {
   loadMenuOpts()
 
   $('#pass').val(passPlaceHolder)
-
-  $('.refresh-manufac').click(() => {
-    refreshManufacturer
-  })
 })
 
-function callRefreshManufacturer() {
-  $('.refresh-manufac').attr('src', '/img/loader/circle.svg')
-  locationRefresh()
-}
-
-function refreshManufacturer() {
-  $('.refresh-manufac').attr('src', '/img/refresh.png')
-  $('.refresh-manufac').click(() => {
-    callRefreshManufacturer()
-  })
-}
-
-function locationRefresh() {
-  window.location = '/user/manufacturer'
-
-  location.refresh()
-}
+// function callRefreshManufacturer(){
+// destruir combobox e recaregar novamente
+// }
 
 function showAvatarCropper () {
   $('.avatar-holder').width(300).height(300)
