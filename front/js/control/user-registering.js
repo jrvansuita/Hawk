@@ -2,6 +2,8 @@
 var userSelector
 var passPlaceHolder = 'Impossível Decifrar'
 
+var refreshManufac
+
 $(document).ready(() => {
   new ComboBox($('#user-search'), '/performance/profiles')
     .setAutoShowOptions()
@@ -84,16 +86,20 @@ $(document).ready(() => {
     .fromEnum('TYPE-FUNC')
     .setAutoShowOptions()
     .setOnItemSelect((item, index) => {
-      console.log(item)
-      $('#office').val(() => {
-        return { text: item.label, value: item.value }
-      })
+      $('#office').val(item.value)
+      $('#type').val(item.data.name)
     })
     .load()
 
-  // new ComboBox($('#office'), ['Funcionário', 'Fornecedor'])
-  //   .setAutoShowOptions()
-  //   .load()
+  new ComboBox($('#manufac'), '/user/manufacturer')
+    .setAutoShowOptions()
+    .setOnItemBuild((item, index) => {
+      return { text: item.description.trim(), value: item.value }
+    })
+    .setOnItemSelect((item, index) => {
+      $('#manufac').val(item.value)
+    })
+    .load()
 
   $('.avatar-img, .edit-image').hover(() => {
     if ($('#editing').val() > 0) {
@@ -129,7 +135,29 @@ $(document).ready(() => {
   loadMenuOpts()
 
   $('#pass').val(passPlaceHolder)
+
+  $('.refresh-manufac').click(() => {
+    refreshManufacturer
+  })
 })
+
+function callRefreshManufacturer() {
+  $('.refresh-manufac').attr('src', '/img/loader/circle.svg')
+  locationRefresh()
+}
+
+function refreshManufacturer() {
+  $('.refresh-manufac').attr('src', '/img/refresh.png')
+  $('.refresh-manufac').click(() => {
+    callRefreshManufacturer()
+  })
+}
+
+function locationRefresh() {
+  window.location = '/user/manufacturer'
+
+  location.refresh()
+}
 
 function showAvatarCropper () {
   $('.avatar-holder').width(300).height(300)

@@ -110,10 +110,13 @@ function buildTotalBox(data) {
     .info('Categorias', data.category.length, null, null, 'category')
     .info('Marcas', data.brand.length, null, null, 'tags')
     .info('Cores', data.color.length, null, null, 'color')
-    .group('Custo de Estoque', null, 'gray min-col')
-    .info('Valor', Num.money(data.cost), 'high-val')
-    .info('Ticket', Num.money(data.tkmCost));
-  //.info('Markup', Floa.abs(data.markup, 2));
+    .group('Custo de Estoque', null, 'gray')
+    .info('Valor', Num.format(data.cost))
+    .info('Ticket', Num.money(data.tkmCost))
+    .info('Un. Venda', Num.money(data.value / data.total))
+    .info('Markup', Floa.abs(data.markup, 2))
+    .info('Venda', Num.format(data.value));
+
   console.log(data);
 
   box.build();

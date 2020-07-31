@@ -74,7 +74,7 @@
                 <input type="text" id="avatar" class="input-val simple-material-input" placeholder="Avatar" name="avatar" value="<%=user ? user.avatar : ''%>" autocomplete="off"/>
                 
                 <input type="text" id="manufac"  class="input-val simple-material-input"placeholder="Fabricante" name="manufacturer" value="<%=user ? user.manufacturer : ''%>" autocomplete="off"/>
-
+                <img src="/front/img/refresh.png" class="mini-icon-button refresh-manufac" alt="">
 
 
 
@@ -92,7 +92,9 @@
                 <input type="password" id="pass" class="input-val simple-material-input" placeholder="Senha" name="pass"  autocomplete="off" title="Senha"/>
                 <%}%>
 
-                <input type="text" id="office"  class="input-val simple-material-input"placeholder="Tipo de Usuário" name="office" value="<%=user ? user.type : ''%>" autocomplete="off"/>
+                <input type="number" id="type"  class="input-val simple-material-input" placeholder="Tipo de Usuário" name="type" value="<%=user ? user.type : ''%>" autocomplete="off"/ style="display: none;">
+                <input type="text" id="office"  class="input-val simple-material-input" placeholder="Tipo de Usuário" name="office" value="<%=user ? user.office : ''%>" autocomplete="off"/>
+                
               </div>
             </div>
 

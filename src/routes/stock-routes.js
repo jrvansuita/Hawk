@@ -41,17 +41,17 @@ module.exports = class ProductRoutes extends Routes {
       }
       var query = req.query.skus ? req.query.skus : req.session.productListQuery
 
-      ProductListProvider.load(query, null, (data) => {
+      ProductListProvider.load(query, null, data => {
         new EccosysProvider()
           .skus(
-            data.map((e) => {
+            data.map(e => {
               return e.sku
             })
           )
-          .go((products) => {
+          .go(products => {
             var result = {}
-            products.forEach((each) => {
-              each?._Skus?.forEach((c) => {
+            products.forEach(each => {
+              each?._Skus?.forEach(c => {
                 result[c.codigo] = c.gtin
               })
             })
@@ -66,7 +66,7 @@ module.exports = class ProductRoutes extends Routes {
 
       req.query.skus = typeof req.query.skus === 'string' ? req.query.skus.split(',') : req.query.skus
 
-      new ProductImageProvider(req.query.skus).load().then((zipFilePath) => {
+      new ProductImageProvider(req.query.skus).load().then(zipFilePath => {
         res.setHeader('Content-disposition', 'attachment; filename=imagens.zip')
         res.setHeader('Content-type', 'application/zip')
 
@@ -80,7 +80,7 @@ module.exports = class ProductRoutes extends Routes {
     this._page('/storer', (req, res) => {
       var skuOrEan = req.query.sku || req.query.ean
 
-      ProductLaws.load(skuOrEan, (result) => {
+      ProductLaws.load(skuOrEan, result => {
         res.render('product/storer/product', {
           product: result
         })
@@ -97,7 +97,7 @@ module.exports = class ProductRoutes extends Routes {
     })
 
     this._get('/storer-attr', (req, res) => {
-      new ProductStorer().searchAttr(req.query.attr, this._resp().redirect(res))
+      new ProductStorer().searchAttr(req.query.attr, this._resp().redirect(res), req.query.useCache)
     })
 
     /** --------------  Product Board -------------- **/
@@ -109,10 +109,10 @@ module.exports = class ProductRoutes extends Routes {
       new ProductBoardProvider()
         .with(req.body)
         .maybe(req.session.productBoardQueryId)
-        .setOnError((err) => {
+        .setOnError(err => {
           this._resp().error(res, err)
         })
-        .setOnResult((result) => {
+        .setOnResult(result => {
           req.session.productBoardQueryId = result.id
           this._resp().sucess(res, result)
         })
@@ -121,7 +121,7 @@ module.exports = class ProductRoutes extends Routes {
     /** --------------  Product Board -------------- **/
 
     this._get('/panel', (req, res) => {
-      new StockOrderProvider().getAll((orders) => {
+      new StockOrderProvider().getAll(orders => {
         res.render('product/panel/product-panel', { orders: orders })
       })
     })
@@ -129,7 +129,7 @@ module.exports = class ProductRoutes extends Routes {
     this._post('/new-order', (req, res) => {
       req.body.user = req.session.loggedUser
 
-      StockOrderVault.storeFromScreen(req.body, (order) => {
+      StockOrderVault.storeFromScreen(req.body, order => {
         res.redirect('/stock/panel')
       })
     })
@@ -148,7 +148,6 @@ module.exports = class ProductRoutes extends Routes {
 
     this._get('/get-orders', (req, res) => {
       new StockOrderProvider().search(req.query, (data) => {
-        console.log(data)
         this._resp().sucess(res, data)
       })
     })
