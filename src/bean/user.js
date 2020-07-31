@@ -2,7 +2,7 @@ const UserType = require('./enums/user-type')
 
 /* eslint-disable no-undef */
 module.exports = class User extends DataAccess {
-  constructor(id, name, title, avatar, access, pass, isFull, isActive, token, isLeader, type, manufacturer, email) {
+  constructor(id, name, title, avatar, access, pass, isFull, isActive, token, isLeader, type, office, manufacturer, email) {
     super()
     this.id = Num.def(id, 0) || Util.id()
     this.name = Str.def(name, 'Desconhecido')
@@ -18,6 +18,7 @@ module.exports = class User extends DataAccess {
     this.menus = []
     this.email = Str.def(email)
     this.type = Num.def(type, UserType.EMPLOYEE) // UserType.EMPLOYEE
+    this.office = Str.def(office)
     this.manufacturer = Str.def(manufacturer) // Guarda o nome do fornecedor associado
   }
 

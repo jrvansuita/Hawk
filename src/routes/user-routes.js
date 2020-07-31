@@ -1,6 +1,7 @@
 const Routes = require('./_route.js')
 const UsersProvider = require('../provider/user-provider.js')
 const UsersVault = require('../vault/user-vault.js')
+const AttributesHandler = require('../handler/attributes-handler.js')
 
 module.exports = class UserRoutes extends Routes {
   mainPath() {
@@ -58,6 +59,10 @@ module.exports = class UserRoutes extends Routes {
       UsersVault.changeImage(req.body.userId, req.body.avatar, (url) => {
         res.status(200).send(url)
       })
+    })
+
+    this._get('/manufacturer', (req, res) => {
+      new AttributesHandler().filter('Fabricante').load(this._resp().redirect(res))
     })
   }
 }
