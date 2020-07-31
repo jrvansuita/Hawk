@@ -63,12 +63,11 @@ body {
 
 .sub-title {
   position: absolute;
-  top: 280px;
+  top: 200px;
   left: 0;
   right: 0;
   margin: auto;
   color: #92919bd9;
-
   /* text-shadow: 2px 2px 5px #d1eae6; */
   font-size: 18px;
   font-weight: bold;
