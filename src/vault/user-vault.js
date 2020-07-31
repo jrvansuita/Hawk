@@ -23,8 +23,9 @@ module.exports = class {
       params.active === 'on',
       token,
       params.leader === 'on',
+      params.type,
       params.office,
-      null,
+      params.manufacturer,
       params.email)
 
     // Gravando as configurações
