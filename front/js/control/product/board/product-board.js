@@ -82,10 +82,17 @@ function handleResult(data) {
 function buildBoxes(data) {
   if (data.total > 0) {
     buildTotalBox(data);
+
     buildSeasonBox(data);
     buildCategoryBox(data);
+
+    buildYearsBox(data);
+    buildGenderBox(data);
+    buildColorsBox(data);
+
     buildManufacturerBox(data);
     buildBrandBox(data);
+
     buildProductsBox(data);
   }
 
@@ -97,27 +104,36 @@ function buildBoxes(data) {
 function buildTotalBox(data) {
   var box = new BoxBuilder();
   box
-    .group('Total Geral', null, 'min-col')
-    .info('Itens', Num.format(data.total), 'high-val', null, 'chart')
-    .info('Skus', Num.format(data.skusCount), null, null, 'box')
+    .group('Estoque Total', null, 'min-col')
+    .info('Itens', Num.points(data.total), 'high-val', null, 'chart')
+    .info('Skus', Num.points(data.skusCount), null, null, 'box')
     .info('Categorias', data.category.length, null, null, 'category')
     .info('Marcas', data.brand.length, null, null, 'tags')
-    .info('Cores', data.color.length, null, null, 'color');
+    .info('Cores', data.color.length, null, null, 'color')
+    .group('Custo de Estoque', null, 'gray min-col')
+    .info('Valor', Num.money(data.cost), 'high-val')
+    .info('Ticket', Num.money(data.tkmCost));
+  //.info('Markup', Floa.abs(data.markup, 2));
+  console.log(data);
 
-  box.group('Ano', data.year.length, 'gray');
+  box.build();
+}
+
+function buildYearsBox(data) {
+  var box = new BoxBuilder();
+  box.group('Coleções', data.year.length, '');
   data.year.forEach(each => {
-    box.square(
-      each.name,
-      each.total,
-      Num.percent((each.total * 100) / data.total, true),
-      Num.format(each.count),
-      'year',
-      each.name,
-      data.year[0].total,
-      null,
-      null,
-      each.balance
-    );
+    box.square(each.name, each.total, Num.percent((each.total * 100) / data.total, true), Num.format(each.count), 'year', each.name, data.year[0].total, null, null, each.balance);
+  });
+  box.build();
+}
+
+function buildGenderBox(data) {
+  var box = new BoxBuilder();
+
+  box.group('Gêneros', data.gender.length, '');
+  data.gender.forEach(each => {
+    box.square(Str.capitalize(each.name), each.total, Num.percent((each.total * 100) / data.total, true), Num.format(each.count), 'gender', each.name, data.gender[0].total, null, null, each.balance);
   });
   box.build();
 }
@@ -127,35 +143,9 @@ function buildSeasonBox(data) {
 
   box.group('Estações', data.season.length);
   data.season.forEach(each => {
-    box.square(
-      Str.capitalize(each.name),
-      each.total,
-      Num.percent((each.total * 100) / data.total, true),
-      Num.format(each.count),
-      'season',
-      each.name,
-      data.season[0].total,
-      null,
-      null,
-      each.balance
-    );
+    box.square(Str.capitalize(each.name), each.total, Num.percent((each.total * 100) / data.total, true), Num.format(each.count), 'season', each.name, data.season[0].total, null, null, each.balance);
   });
 
-  box.group('Gêneros', data.gender.length, 'gray');
-  data.gender.forEach(each => {
-    box.square(
-      Str.capitalize(each.name),
-      each.total,
-      Num.percent((each.total * 100) / data.total, true),
-      Num.format(each.count),
-      'gender',
-      each.name,
-      data.gender[0].total,
-      null,
-      null,
-      each.balance
-    );
-  });
   box.build();
 }
 
@@ -163,33 +153,18 @@ function buildCategoryBox(data) {
   var box = new BoxBuilder('3/5').group('Categorias', data.category.length).hidableItems(15);
 
   data.category.forEach(each => {
-    box.square(
-      Str.capitalize(each.name),
-      each.total,
-      Num.percent((each.total * 100) / data.total, true),
-      Num.format(each.count),
-      'category',
-      each.name,
-      data.category[0].total,
-      null,
-      null,
-      each.balance
-    );
+    box.square(Str.capitalize(each.name), each.total, Num.percent((each.total * 100) / data.total, true), Num.format(each.count), 'category', each.name, data.category[0].total, null, null, each.balance);
   });
+
+  box.build();
+}
+
+function buildColorsBox(data) {
+  var box = new BoxBuilder('3/5');
+
   box.group('Cores', data.color.length).hidableItems(15);
   data.color.forEach(each => {
-    box.square(
-      Str.capitalize(each.name),
-      each.total,
-      Num.percent((each.total * 100) / data.total, true),
-      Num.format(each.count),
-      'color',
-      each.name,
-      data.color[0].total,
-      null,
-      null,
-      each.balance
-    );
+    box.square(Str.capitalize(each.name), each.total, Num.percent((each.total * 100) / data.total, true), Num.format(each.count), 'color', each.name, data.color[0].total, null, null, each.balance);
   });
 
   box.build();
@@ -199,18 +174,7 @@ function buildManufacturerBox(data) {
   var box = new BoxBuilder('1/3').group('Fabricante', data.manufacturer.length).hidableItems(15);
 
   data.manufacturer.forEach(each => {
-    box.square(
-      Str.capitalize(each.name),
-      each.total,
-      Num.percent((each.total * 100) / data.total, true),
-      Num.format(each.count),
-      'manufacturer',
-      each.name,
-      data.manufacturer[0].total,
-      null,
-      null,
-      each.balance
-    );
+    box.square(Str.capitalize(each.name), each.total, Num.percent((each.total * 100) / data.total, true), Num.format(each.count), 'manufacturer', each.name, data.manufacturer[0].total, null, null, each.balance);
   });
   box.build();
 }
@@ -219,18 +183,7 @@ function buildBrandBox(data) {
   var box = new BoxBuilder('3/5').group('Marcas', data.brand.length).hidableItems(15);
 
   data.brand.forEach(each => {
-    box.square(
-      Str.capitalize(each.name),
-      each.total,
-      Num.percent((each.total * 100) / data.total, true),
-      Num.format(each.count),
-      'brand',
-      each.name,
-      data.brand[0].total,
-      null,
-      null,
-      each.balance
-    );
+    box.square(Str.capitalize(each.name), each.total, Num.percent((each.total * 100) / data.total, true), Num.format(each.count), 'brand', each.name, data.brand[0].total, null, null, each.balance);
   });
   box.build();
 }
@@ -249,17 +202,7 @@ function buildProductsBox(data) {
     };
 
     box
-      .img(
-        '/product/image-redirect?sku=' + each.name,
-        Num.format(each.total),
-        null,
-        each.name,
-        'copiable',
-        null,
-        click,
-        null,
-        subDblClick
-      )
+      .img('/product/image-redirect?sku=' + each.name, Num.format(each.total), null, each.name, 'copiable', null, click, null, subDblClick)
       .get()
       .data('sku', each.name)
       .data('manufacturer', each.manufacturer);

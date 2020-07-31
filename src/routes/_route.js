@@ -40,7 +40,9 @@ module.exports = class {
   _register(method, prefix, path, callback) {
     method = method || this.lastMethod;
 
-    path = this.mainPath() + (path || '');
+    if (!prefix) {
+      path = this.mainPath() + (path || '');
+    }
 
     const fullPath = prefix + path || this.lastPath;
 
@@ -85,7 +87,7 @@ module.exports = class {
   _checkPermissionOrGoBack(req, res, settNum) {
     var user = res.locals.loggedUser;
     if (!global.Sett.get(user, settNum)) {
-      res.redirect(req.session.lastpath);
+      res.redirect(req.session.lastPath);
       return false;
     }
 

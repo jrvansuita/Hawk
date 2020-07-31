@@ -1,67 +1,73 @@
-
 module.exports = class Fix extends DataAccess {
-  constructor (sku, name, type) {
-    super()
-    this.sku = Str.def(sku)
-    this.name = Str.def(name)
-    this.type = Str.def(type)
-    this.date = new Date()
+  constructor(sku, name, type, brand, manufacturer) {
+    super();
+    this.sku = Str.def(sku);
+    this.name = Str.def(name);
+    this.type = Str.def(type);
+    this.date = new Date();
+    this.brand = Str.def(brand);
+    this.manufacturer = Str.def(manufacturer);
   }
 
-  static findByType (type, callback) {
-    Fix.find({ type: type }, callback)
+  static findByType(type, callback) {
+    Fix.find({ type: type }, callback);
   }
 
-  static findBySku (sku, callback) {
-    var regexp = new RegExp('^' + sku)
-    Fix.find({ sku: regexp }, callback)
+  static findBySku(sku, callback) {
+    var regexp = new RegExp('^' + sku);
+    Fix.find({ sku: regexp }, callback);
   }
 
-  static findByBrand (brandName, type, callback) {
+  static findByBrand(brandName, type, callback) {
     var query = {
       name: {
         $regex: brandName,
-        $options: 'i'
-      }
-    }
+        $options: 'i',
+      },
+    };
 
     if (type > -1) {
-      query.type = type
+      query.type = type;
     }
 
-    Fix.find(query, callback)
+    Fix.find(query, callback);
   }
 
-  static put (product, type) {
-    new Fix(product.codigo, product.nome, type).upsert()
+  static put(product, type) {
+    new Fix(product.codigo, product.nome, type, product.Marca, product.Fabricante).upsert();
   }
 
-  static getKey () {
-    return ['sku', 'type']
+  static getKey() {
+    return ['sku', 'type'];
   }
 
-  static removeSkuAll (sku) {
-    sku = sku.split('-')[0]
+  static removeSkuAll(sku) {
+    sku = sku.split('-')[0];
 
-    var regexp = new RegExp('^' + sku)
+    var regexp = new RegExp('^' + sku);
 
-    this.staticAccess().deleteMany({ sku: regexp }, (err) => {
-    })
+    this.staticAccess().deleteMany({ sku: regexp }, err => {});
   }
 
-  static sums (callback) {
-    Fix.aggregate([{
-      $group: {
-        _id: {
-          type: '$type'
+  static sums(callback) {
+    Fix.aggregate(
+      [
+        {
+          $group: {
+            _id: {
+              type: '$type',
+            },
+            sum_count: {
+              $sum: 1,
+            },
+          },
         },
-        sum_count: {
-          $sum: 1
+      ],
+      function (err, res) {
+        if (callback) {
+          callback(err, res);
         }
       }
-    }],
-    function (err, res) {
-      if (callback) { callback(err, res) }
-    })
+    );
   }
-}
+};
