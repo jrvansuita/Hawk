@@ -1,112 +1,112 @@
-const EccosysStorer = require('../../eccosys/eccosys-storer.js')
-const EccosysProvider = require('../../eccosys/eccosys-provider.js')
-const AttributesHandler = require('../../handler/attributes-handler')
-const ProductBinder = require('./binder.js')
-const Product = require('../../bean/product.js')
+const EccosysStorer = require('../../eccosys/eccosys-storer.js');
+const EccosysProvider = require('../../eccosys/eccosys-provider.js');
+const AttributesHandler = require('../../handler/attributes-handler');
+const ProductBinder = require('./binder.js');
+const Product = require('../../bean/product.js');
 
 module.exports = class ProductStorer {
   constructor() {
-    this.provider = new EccosysProvider()
-    this.storer = new EccosysStorer()
+    this.provider = new EccosysProvider();
+    this.storer = new EccosysStorer();
   }
 
   async with(user, data) {
-    data.user = user
-    this.fatherBody = await ProductBinder.create(data).body()
-    return this
+    data.user = user;
+    this.fatherBody = await ProductBinder.create(data).body();
+    return this;
   }
 
-  searchAttr(description, callback) {
-    new AttributesHandler().filter(description).load(callback)
+  searchAttr(description, callback, useCache = true) {
+    new AttributesHandler().filter(description).load(callback, !useCache);
   }
 
   setOnFinished(callback) {
     this.onFinishListener = () => {
-      this._sendBroadcastMessage(this.fatherBody)
-      callback()
-    }
-    return this
+      this._sendBroadcastMessage(this.fatherBody);
+      callback();
+    };
+    return this;
   }
 
   upsert() {
     this._onProductUpsert(this.fatherBody, () => {
       this._handleChildsUpserts(() => {
-        this.onFinishListener()
-        this.syncUpsertedProduct(this.fatherBody)
-      })
-    })
+        this.onFinishListener();
+        this.syncUpsertedProduct(this.fatherBody);
+      });
+    });
   }
 
   _handleChildsUpserts(callback) {
-    var childs = this.fatherBody.getChilds()
+    var childs = this.fatherBody.getChilds();
 
     var incrementalUpserts = () => {
       if (childs.length) {
         this._onChildProductUpsert(childs[0], () => {
-          childs.shift()
-          incrementalUpserts()
-        })
+          childs.shift();
+          incrementalUpserts();
+        });
       } else {
-        callback()
+        callback();
       }
-    }
+    };
 
-    incrementalUpserts()
+    incrementalUpserts();
   }
 
   _onProductUpsert(data, callback) {
-    this._sendBroadcastMessage(data, 'produto')
+    this._sendBroadcastMessage(data, 'produto');
     this.storer
       .product()
       .upsert(data.id == undefined, data)
-      .go(response => this._onStoringResponseHandler(data, response, callback))
+      .go(response => this._onStoringResponseHandler(data, response, callback));
   }
 
   _onChildProductUpsert(_data, callback) {
     this._onBeforeUpsertChildProduct(_data, data => {
-      this._onProductUpsert(data, callback)
-    })
+      this._onProductUpsert(data, callback);
+    });
   }
 
   _onBeforeUpsertChildProduct(data, callback) {
-    var sku = data.codigo
-    var isNew = data.id == undefined
-    var isChild = sku.includes('-')
+    var sku = data.codigo;
+    var isNew = data.id == undefined;
+    var isChild = sku.includes('-');
 
     if (isNew && isChild) {
       this.provider.product(sku).go(found => {
         if (found && found.id) {
-          data.id = found.id
-          data.gtin = found.gtin
+          data.id = found.id;
+          data.gtin = found.gtin;
         }
 
-        callback(data)
-      })
+        callback(data);
+      });
     } else {
-      callback(data)
+      callback(data);
     }
   }
 
   _onStoringResponseHandler(data, response, callback) {
-    response = response.result || response
+    response = response.result || response;
 
     if (response.success.length > 0) {
-      data.id = response.success[0].id
-      this._onAttributesHandler(data, callback)
+      data.id = response.success[0].id;
+      this._onAttributesHandler(data, callback);
     } else {
-      this._sendBroadcastMessage(null, null, response)
-      this.onFinishListener(response)
+      this._sendBroadcastMessage(null, null, response);
+      this.onFinishListener(response);
     }
   }
 
   _onAttributesHandler(data, callback) {
-    this._sendBroadcastMessage(data, 'atributos do produto')
+    this._sendBroadcastMessage(data, 'atributos do produto');
 
     new AttributesHandler().load(() => {
-      var attrs = ProductBinder.create(data).attrs()
+      var attrs = ProductBinder.create(data).attrs();
 
       // Fast Callback
-      if (callback) callback()
+      if (callback) callback();
 
       this.storer
         .product(data.codigo)
@@ -114,8 +114,8 @@ module.exports = class ProductStorer {
         .put(attrs)
         .go(() => {
           // Skip Waiting for this callback
-        })
-    })
+        });
+    });
   }
 
   syncUpsertedProduct(binder) {
@@ -142,11 +142,11 @@ module.exports = class ProductStorer {
       false,
       binder.getChild('codigo').join(','),
       binder.getChild('peso').join(',')
-    ).upsert()
+    ).upsert();
   }
 
   delete(callback) {
-    new EccosysStorer().product(this.fatherBody.codigo).delete().go(callback)
+    new EccosysStorer().product(this.fatherBody.codigo).delete().go(callback);
   }
 
   _sendBroadcastMessage(data, msg, error) {
@@ -155,7 +155,7 @@ module.exports = class ProductStorer {
       sku: data.codigo,
       msg: msg ? (data.id ? 'Atualizando ' : 'Criando ') + msg + ' ' + data.codigo : null,
       error: error,
-      success: !error && !msg
-    })
+      success: !error && !msg,
+    });
   }
-}
+};
