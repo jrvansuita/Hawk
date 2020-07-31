@@ -156,3 +156,7 @@ table {
 .content-table tr:nth-child(even) {
   background-color: #ddd6d757;
 }
+
+.table-orders tr td {
+  width: 45px;
+}

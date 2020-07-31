@@ -1,7 +1,12 @@
 const StockOrder = require('../bean/stock-order')
 const AttributesHandler = require('../handler/attributes-handler')
+const DataAccess = require('../mongoose/data-access.js')
 
 module.exports = class StockOrderProvider {
+  _getSearchQueryFields() {
+    return ['number', 'season', 'manufacturer', 'brand']
+  }
+
   get(query, callback) {
     StockOrder.find(query, callback)
   }
@@ -16,7 +21,7 @@ module.exports = class StockOrderProvider {
     new AttributesHandler().filter(description).load(callback)
   }
 
-  _filterOrders(orders, callback) {
+  _filterOrders(orders) {
     var result = {}
     result.awaiting = orders.filter((e) => { if (e.status === 0) return e })
     result.processing = orders.filter((e) => { if (e.status === 1) return e })
@@ -26,8 +31,26 @@ module.exports = class StockOrderProvider {
   }
 
   search(query, callback) {
-    StockOrder.find(StockOrder.likeQuery(query), (_err, doc) => {
-      callback(this._filterOrders(doc))
+    StockOrder.find(this.getDataQuery(query), (_err, docs) => {
+      callback(this._filterOrders(docs))
     })
+  }
+
+  getDataQuery(query) {
+    var and = []
+
+    if (query.begin && query.end) {
+      and.push(DataAccess.range('date', query.begin, query.end, true))
+    }
+
+    if (query.value && query.value.length) {
+      and.push(DataAccess.or(this._getSearchQueryFields(), query.value))
+    }
+
+    if (query.status) {
+      and.push({ status: parseInt(query.status) })
+    }
+
+    return { $and: and }
   }
 }

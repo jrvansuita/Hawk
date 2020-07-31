@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/front/css/layout/card.css">
 
     <script src="/front//js/libs/combobox.js"></script>
-    <script src="/front/js/libs/date-picker.js"></script>
+
     <script src="/front/js/libs/dropdown.js"></script>
     <script src="/front/js/libs/request-helper.js"></script>
     <script src="/front/js/libs/range-date-picker.js"></script>
@@ -86,12 +86,12 @@
                                 </tr>
                                 <%orders.finished.forEach((each)=>{%>
                                     <tr class="line-order">
-                                        <td><%=each.date%></td>
+                                        <td><%=Dat.format(new Date(each.date))%></td>
                                         <td><%=each.number%></td>
                                         <td><%=each.manufacturer%></td>
                                         <td><%=each.brand%></td>
                                         <td><%=each.user.name%></td>
-                                        <td><div class="menu-dots"></div></td>
+                                        <td><div class="menu-dots" data-id="<%=each.id%>"></div></td>
                                     </tr>
                                 <%})%>
                             </table>

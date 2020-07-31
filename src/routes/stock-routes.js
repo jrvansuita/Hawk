@@ -139,7 +139,7 @@ module.exports = class ProductRoutes extends Routes {
     })
 
     this._post('/delete-order', (req, res) => {
-      StockOrderVault.delete(req.body.number, this._resp().redirect(res))
+      StockOrderVault.delete(req.body.orderId, this._resp().redirect(res))
     })
 
     this._post('/update-order-status', (req, res) => {
@@ -147,7 +147,8 @@ module.exports = class ProductRoutes extends Routes {
     })
 
     this._get('/get-orders', (req, res) => {
-      new StockOrderProvider().search(req.query.value, (data) => {
+      new StockOrderProvider().search(req.query, (data) => {
+        console.log(data)
         this._resp().sucess(res, data)
       })
     })
