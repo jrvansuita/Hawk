@@ -19,6 +19,7 @@
 
 .columns {
   display: flex;
+  height: 70%;
 }
 
 .columns > .left-holder {
@@ -131,22 +132,28 @@ table {
   flex: 1;
   margin-right: 15px;
   margin-left: 15px;
-  height: fit-content;
+  height: auto;
+  max-height: 80%;
 }
 
-.table-header td {
+.table-header th {
   background: #dcdcdc;
   padding: 12px 15px !important;
   border-bottom: 0 !important;
   color: #484545 !important;
   font-size: 15px;
   width: auto;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
 .line-order td {
   padding: 5px 8px;
   font-size: 13px;
   cursor: pointer;
+  text-align: center;
 }
 
 .table-header td:first-child {
@@ -155,4 +162,18 @@ table {
 
 .content-table tr:nth-child(even) {
   background-color: #ddd6d757;
+}
+
+.table-orders tr td {
+  width: 45px;
+}
+
+.content-scroll {
+  /* overflow-x: unset; */
+  margin-top: 0px;
+  padding-top: 0px;
+}
+
+.content-table {
+  height: 100%;
 }

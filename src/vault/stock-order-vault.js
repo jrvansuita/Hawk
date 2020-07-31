@@ -4,7 +4,7 @@ module.exports = class {
   static storeFromScreen(params, callback) {
     params.user = { name: params.user.name, avatar: params.user.avatar, id: params.user.id }
 
-    var order = new StockOrder(params.id, params.user, params.number, params.manufacturer, params.brand, params.season, params.year, params.date)
+    var order = new StockOrder(params.id, params.user, params.number, params.manufacturer, params.brand, params.season, params.year, new Date(params.date))
 
     order.upsert((_err, doc) => {
       callback(doc)
@@ -12,6 +12,7 @@ module.exports = class {
   }
 
   static delete(orderId, callback) {
+    console.log(orderId)
     StockOrder.findByKey(orderId, (_err, order) => {
       order.remove()
       callback()

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/front/css/layout/card.css">
 
     <script src="/front//js/libs/combobox.js"></script>
-    <script src="/front/js/libs/date-picker.js"></script>
+
     <script src="/front/js/libs/dropdown.js"></script>
     <script src="/front/js/libs/request-helper.js"></script>
     <script src="/front/js/libs/range-date-picker.js"></script>
@@ -74,26 +74,16 @@
                     </div>
                 </div>
                 <div class="right-holder shadow">
-                        <div>
+                        <div class="content-scroll">
                             <table class="content-table" width="100%">
                                 <tr class="table-header">
-                                    <td>Data</td>
-                                    <td>Número</td>
-                                    <td>Fornecedor</td>
-                                    <td>Marca</td>
-                                    <td>Usuário</td>
-                                    <td></td>
+                                    <th>Data</th>
+                                    <th>Número</th>
+                                    <th>Fornecedor</th>
+                                    <th>Marca</th>
+                                    <th>Usuário</th>
+                                    <th></th>
                                 </tr>
-                                <%orders.finished.forEach((each)=>{%>
-                                    <tr class="line-order">
-                                        <td><%=each.date%></td>
-                                        <td><%=each.number%></td>
-                                        <td><%=each.manufacturer%></td>
-                                        <td><%=each.brand%></td>
-                                        <td><%=each.user.name%></td>
-                                        <td><div class="menu-dots"></div></td>
-                                    </tr>
-                                <%})%>
                             </table>
                         </div>
                 </div>
