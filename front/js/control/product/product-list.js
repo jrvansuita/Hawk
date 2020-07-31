@@ -71,7 +71,7 @@ $(document).ready(() => {
     .item('/img/mockup.png', 'Gerar Mockups', helper => {
       new MockupSelector()
         .onSelect(id => {
-          window.open('/build-multiple-mockups?skus=' + Object.keys(selectedSkus) + '&mockId=' + id, '_blank');
+          window.open('/mockup/build-multiple?skus=' + Object.keys(selectedSkus) + '&mockId=' + id, '_blank');
         })
         .show();
     })
