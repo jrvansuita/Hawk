@@ -1,0 +1,56 @@
+
+    <link rel="stylesheet" href="/front/css/layout/product/panel/stock-order-modal.css">
+    <link rel="stylesheet" href="/front/css/libs/material-input.css">
+
+    <div class="form-modal-holder shadow">
+        <div>
+            <label class="register-title">Agendar novo Pedido</label>
+        </div>
+        <form action="/stock/new-order" id="new-stock-order" method="POST">
+            <div class="form-content">
+                <div class="input-holder">
+                    <div class="material-input-holder">
+                        <input type="text" id="number" name="number" required autocomplete="off">
+                        <span class="bar"></span>
+                        <label>Número do Pedido</label>
+                    </div>
+                    <div class="material-input-holder">
+                        <input class="input-combo" data-attr="Fabricante" type="text" id="manufacturer"
+                            name="manufacturer" required autocomplete="off">
+
+                        <span class="bar"></span>
+                        <label>Fabricante</label>
+                    </div>
+                    <div class="material-input-holder">
+                        <input class="input-combo" type="text" id="brand" data-attr="Marca" name="brand" required
+                            autocomplete="off">
+                        <span class="bar"></span>
+                        <label>Marca</label>
+                    </div>
+                </div>
+                <div class="input-holder">
+                    <div class="material-input-holder">
+                        <input data-attr="Coleção" type="text" id="year" name="year" required
+                            autocomplete="off" value="<%=new Date().getFullYear()%>" disabled>
+                        <span class="bar"></span>
+                        <label>Coleção</label>
+                    </div>
+                    <div class="material-input-holder">
+                        <input class="input-combo" data-attr="Estacao" type="text" id="season" name="season" required
+                            autocomplete="off">
+                        <span class="bar"></span>
+                        <label>Estação</label>
+                    </div>
+                    <div class="material-input-holder">
+                        <input type="text" id="date-picker" name="date" id="date" required autocomplete="off">
+                        <span class="bar"></span>
+                        <label>Data de Entrega</label>
+                    </div>
+                </div>
+                <div class="input-holder">
+                    <img class="mini-img" src="/img/attach.png" alt="Incluir Anexo">
+                    <label class="button shadow" id="save" tabindex="0">Agendar pedido</label>
+                </div>
+            </div>
+        </form>
+    </div>

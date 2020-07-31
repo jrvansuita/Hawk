@@ -3,6 +3,7 @@
 
 <head>
   <link rel="stylesheet" type="text/css" href="/front/css/layout/picking.css">
+  <link rel="stylesheet" href="/front/css/layout/card.css">
   <script type="text/javascript" src="/front/js/control/picking-pendings.js"></script>
     <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
     <script type="text/javascript" src="/front/js/libs/image-preview.js"></script>
@@ -49,7 +50,7 @@
   %>
 
 
-  <div class="main-content no-scroll" style="padding-top:15px; display:flex">
+  <div class="main-content no-scroll" style="padding-top: 15px; display: flex;">
     <% if (locals.url.includes('pending')){%>
       <% pendingSales = open;
          var label = 'Não Atendido';

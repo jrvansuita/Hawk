@@ -1,0 +1,29 @@
+.register-title {
+  padding: 0 3px 2px;
+  color: #6b6767;
+  font-family: Roboto, sans-serif;
+  padding-left: 15px;
+}
+
+.form-modal-holder {
+  width: 800px;
+  height: min-content;
+  position: fixed;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  padding-bottom: 70px;
+}
+
+.input-holder {
+  display: flex;
+  position: relative;
+}
+
+.mini-img {
+  width: 30px;
+  cursor: pointer;
+}
