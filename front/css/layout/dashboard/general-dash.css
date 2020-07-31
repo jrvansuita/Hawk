@@ -10,6 +10,7 @@
 #search-button {
   flex: auto;
   height: fit-content;
+  margin-right: 10px;
 }
 
 .content-grid {
@@ -166,6 +167,8 @@ img.dots-glyph {
   display: block;
   width: 100%;
   height: auto;
+  margin: auto;
+  margin-top: 13px;
 }
 
 .arrows-holder {
