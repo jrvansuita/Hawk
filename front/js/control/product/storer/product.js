@@ -261,20 +261,34 @@ function checkBeforeStore() {
   var isOk = true;
 
   $('.bindable').each((i, input) => {
-    if (!$(input).val()) {
+    var checked = !!$(input).val();
+
+    if (checked && $(input).hasClass('ui-autocomplete-input')) {
+      checked = $(input)
+        ?.autocomplete('instance')
+        ?.options?.data?.some((each) => {
+          return each.value === $(input).val();
+        });
+    }
+
+    if (!checked) {
       isOk = false;
-      onInputError($(input));
+      window.onInputError($(input));
     }
   });
 
-  if (childsBuilder.getSkus().length == 0) {
+  if (product.precoCusto === 0) {
+    window.onInputError($('#cost'));
+  }
+
+  if (childsBuilder.getSkus().length === 0) {
     isOk = false;
-    onDivError($('.childs').parent());
+    window.onDivError($('.childs').parent());
   }
 
   if (!window.editor.html.get()) {
     isOk = false;
-    onDivError($('.description-editor').parent());
+    window.onDivError($('.description-editor').parent());
   }
 
   return isOk;

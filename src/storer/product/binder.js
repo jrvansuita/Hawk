@@ -247,9 +247,11 @@ class ProductBinder {
       var currentCharacteristics = [this.Material, this.Departamento, this.Cor, this.sizeDescription, this.Marca, this.Fabricante, this.Ocasiao].filter(Boolean);
 
       if (currentCharacteristics.length) {
-        var higherProbabilityMatch = await Enum.on('AUTO-OBS-CAD-PROD', true).best(currentCharacteristics);
+        var higherProbabilityMatch = await Enum.on('AUTO-DESC-CAD-PROD', true).best(currentCharacteristics);
         var template = await new TemplateBuilder(higherProbabilityMatch?.value).useSampleData().get();
         this.conteudo = template.content;
+
+        this.descricaoComplementar = (await Enum.on('AUTO-DESC-C-CAD-PROD', true).best(currentCharacteristics)).description;
       }
     }
 

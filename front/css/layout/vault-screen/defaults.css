@@ -21,7 +21,8 @@
   margin-right: 15px;
   height: 100%;
   min-width: 240px;
-  position: relative;
+
+  /* position: relative; */
   overflow-y: overlay;
 }
 
@@ -75,7 +76,11 @@
   top: 35px;
 }
 
-.each-line { padding: 15px 22px 15px 10px; border-bottom: 1px solid #ececec; z-index: 2; }
+.each-line {
+  padding: 15px 22px 15px 10px;
+  border-bottom: 1px solid #ececec;
+  z-index: 2;
+}
 
 .each-line:hover,
 .active {
@@ -83,7 +88,15 @@
   cursor: pointer;
 }
 
-.each-line > span { color: #636363; font-size: 14px; width: 90%; white-space: nowrap; display: inline-block; overflow: hidden; text-overflow: ellipsis; }
+.each-line > span {
+  color: #636363;
+  font-size: 14px;
+  width: 90%;
+  white-space: nowrap;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 .each-line > .icon-dots {
   float: right;
