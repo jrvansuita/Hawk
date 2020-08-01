@@ -45,7 +45,7 @@ module.exports = class Enumerator extends DataAccess {
   }
 
   async _getMap() {
-    return this.get().then(data => {
+    return this.get().then((data) => {
       return data?.items?.reduce((o, item) => {
         o[item[this.mapProp || 'value']] = item;
         return o;
@@ -82,18 +82,41 @@ module.exports = class Enumerator extends DataAccess {
     return mapped ? this._getMap() : this._get();
   }
 
+  // Find a matching for given value basing of enum.items
   async hunt(value, prop = 'name') {
-    return this.get().then(data => {
+    return this.get().then((data) => {
       var def;
-      var r = data?.items?.find(each => {
+      var r = data?.items?.find((each) => {
         def = each.default ? each : def;
         return (
-          each?.[prop]?.split(',')?.some(part => {
+          each?.[prop]?.split(',')?.some((part) => {
             return part.trim() === value.trim();
           }) || (this.useDef ? def : null)
         );
       });
       return r;
+    });
+  }
+
+  // Find the best match for given array basing of enum.items
+  async best(arrValue, prop = 'name') {
+    return this.get().then((data) => {
+      var def;
+      var r = data?.items?.reduce(
+        (result, each) => {
+          def = each.default ? each : def;
+
+          var cns = each?.[prop]?.split(',')?.map((s) => s.trim());
+          var compare = Arr.matchCompare(cns, arrValue);
+
+          compare.item = each;
+
+          return compare.matches >= result.matches && compare.waste <= result.waste ? compare : result;
+        },
+        { matches: 0, waste: 100 }
+      );
+
+      return r.item || (this.useDef ? def : null);
     });
   }
 };

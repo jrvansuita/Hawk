@@ -84,14 +84,16 @@ function onBindViewsListeners() {
   new TemplateEditor()
     .useUnicodeEmoticons(true)
     .showRichButtons(false)
-    .addMiscCustomButton('insertFile', 'def-template', 'Inserir Descricao Padrão', editor => {
-      _get('/templates/viewer?id=89017302', {}, r => {
-        editor.html.set(r);
+    .addMiscCustomButton('insertFile', 'def-template', 'Inserir Descricao Padrão', (editor) => {
+      _get('/templates/viewer?id=89017302', {}, (r) => {
+        window.editor.html.set(r);
       });
     })
     .load('.description-editor')
-    .then(data => {
-      data.html.set(product.conteudo);
+    .then((data) => {
+      if (data.html.get() === '') {
+        data.html.set(product.conteudo);
+      }
       window.editor = data;
     });
 }
@@ -134,7 +136,7 @@ function onBindComboBoxes() {
 
 function getData() {
   product.precoCusto = Num.moneyVal($('#cost').val());
-  product.conteudo = editor.html.get();
+  product.conteudo = window.editor.html.get();
   product.user = loggedUser;
 
   return product;
@@ -142,6 +144,7 @@ function getData() {
 
 function onProductRefreshed(data) {
   product = data;
+
   onBindViewValues();
   onSizesRefreshed();
   onOtherBindingRules();
@@ -164,13 +167,16 @@ function onSizesRefreshed() {
 }
 
 function onOtherBindingRules() {
+  if (window.editor) {
+    window.editor.html.set(product.conteudo);
+  }
   $('.discount').text(Num.percent(product.discount, true));
   $('.create-time').text(Dat.formatwTime(new Date(product.dtCriacao)));
   $('.create-user').text(getCreatedUser() || loggedUser.name);
 }
 
 function getCreatedUser() {
-  var line = product?.obs?.split('\n').find(i => {
+  var line = product?.obs?.split('\n').find((i) => {
     return i.includes('Cadastro');
   });
 
@@ -179,22 +185,22 @@ function getCreatedUser() {
 
 function requestProductChilds() {
   if (product._Skus) {
-    var skus = product._Skus.map(e => {
+    var skus = product._Skus.map((e) => {
       return e.codigo;
     });
 
-    _get('/product/skus', { skus: skus, order: true }, childs => {
+    _get('/product/skus', { skus: skus, order: true }, (childs) => {
       childsBuilder.load(childs, true);
     });
   }
 }
 
 function onBindSizeBoxListeners() {
-  var getSku = size => {
+  var getSku = (size) => {
     return product.codigo + '-' + size;
   };
 
-  sizesBox.setOnSizeCreated(size => {
+  sizesBox.setOnSizeCreated((size) => {
     console.log('Size Created: ' + size);
     var sku = getSku(size);
 
@@ -212,7 +218,7 @@ function onBindSizeBoxListeners() {
     childsBuilder.addChild(item);
   });
 
-  sizesBox.setOnSizeDeleted(size => {
+  sizesBox.setOnSizeDeleted((size) => {
     console.log('Size Deleted: ' + size);
     var sku = getSku(size);
 
@@ -245,7 +251,7 @@ function onStoringMessageUpdate(data) {
 function onStoreProduct() {
   if (checkBeforeStore()) {
     new Broadcast('storing-product-' + product.codigo).onReceive(onStoringMessageUpdate);
-    _post('/stock/storer-upsert', getData(), data => {
+    _post('/stock/storer-upsert', getData(), (data) => {
       onProductStored(data);
     });
   }
@@ -266,7 +272,7 @@ function checkBeforeStore() {
     onDivError($('.childs').parent());
   }
 
-  if (!editor.html.get()) {
+  if (!window.editor.html.get()) {
     isOk = false;
     onDivError($('.description-editor').parent());
   }
@@ -284,7 +290,7 @@ function onProductStored(data) {
 }
 
 function onProductDeleted() {
-  _post('/stock/storer-delete', getData(), data => {
+  _post('/stock/storer-delete', getData(), (data) => {
     console.log('Deletou');
   });
 }
@@ -368,14 +374,14 @@ function handleChildLockClick(col) {
 
 function onCreateSizeGroupButtons() {
   if (!product.id) {
-    _get('/enum', { tag: 'PROD-FA-SIZES' }, data => {
+    _get('/enum', { tag: 'PROD-FA-SIZES' }, (data) => {
       var buttons = data.items.reduce((o, each) => {
         key = Str.keep(each.name);
         o[key] = [].concat(o[key], each.name).filter(Boolean);
         return o;
       }, {});
 
-      Object.keys(buttons).forEach(key => {
+      Object.keys(buttons).forEach((key) => {
         var l = $('<label>')
           .addClass('size-group-button')
           .attr('data-arr', buttons[key].reverse())
