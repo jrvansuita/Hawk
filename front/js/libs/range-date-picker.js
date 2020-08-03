@@ -39,8 +39,8 @@ class RangeDatePicker {
   }
 
   setDates(from, to) {
-    this.from = from ? new Date(parseInt(from)) : new Date();
-    this.to = to ? new Date(parseInt(to)) : new Date();
+    this.from = from ? new Date(from) : new Date();
+    this.to = to ? new Date(to) : new Date();
     return this;
   }
 
@@ -101,6 +101,8 @@ class RangeDatePicker {
     if (this.menuOptions) this._createMenuOptions();
 
     if (this.showArrows) this._arrowsDate();
+
+    this._setDates(this.from, this.to)
   }
 
   _setOptionsForInput(title, dateValue) {

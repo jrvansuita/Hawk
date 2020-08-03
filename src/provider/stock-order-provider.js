@@ -23,9 +23,9 @@ module.exports = class StockOrderProvider {
 
   _filterOrders(orders) {
     var result = {}
-    result.awaiting = orders.filter((e) => { if (e.status === 0) return e })
-    result.processing = orders.filter((e) => { if (e.status === 1) return e })
-    result.finished = orders.filter((e) => { if (e.status === 2) return e })
+    result.awaiting = orders?.filter((e) => { if (e.status === 0) return e })
+    result.processing = orders?.filter((e) => { if (e.status === 1) return e })
+    result.finished = orders?.filter((e) => { if (e.status === 2) return e })
 
     return result
   }

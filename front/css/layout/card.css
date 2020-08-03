@@ -5,6 +5,7 @@
   padding: 3px 1px;
   font-size: 11px;
   cursor: default;
+  white-space: nowrap;
 }
 
 .green-title {

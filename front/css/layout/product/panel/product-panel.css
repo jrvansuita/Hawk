@@ -132,8 +132,9 @@ table {
   flex: 1;
   margin-right: 15px;
   margin-left: 15px;
-  height: auto;
   max-height: 80%;
+  overflow: auto;
+  height: fit-content;
 }
 
 .table-header th {
@@ -170,8 +171,8 @@ table {
 
 .content-scroll {
   /* overflow-x: unset; */
-  margin-top: 0px;
-  padding-top: 0px;
+  margin-top: 0;
+  padding-top: 0;
 }
 
 .content-table {

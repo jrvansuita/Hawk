@@ -27,6 +27,7 @@ $(document).ready(() => {
   dataPicker.holder('.date-filters-holder', false)
     .setTitles('Data de Início', 'Data de Fim')
     .setPos(-72, 0)
+    .setDates(Dat.firstDayOfMonth(), Dat.lastDayOfMonth())
     .load()
 })
 
@@ -111,7 +112,6 @@ function bindFinishedDropdown(el) {
   var drop = Dropdown.on(el)
 
   drop.item('/img/delete.png', 'Excluir', (helper) => {
-    console.log(helper)
     _post('/stock/delete-order', { orderId: helper.data.id }, (_err, res) => {
       window.location.reload()
     })
@@ -175,7 +175,7 @@ function createFinishedTable(data) {
     var manufacturer = $('<td>').text(each.manufacturer)
     var brand = $('<td>').text(each.manufacturer)
     var user = $('<td>').text(each.user.name)
-    var menuHolder = $('<div>').addClass('menu-dots')
+    var menuHolder = $('<div>').addClass('menu-dots').data('id', each.id)
     var menu = $('<td>').append(menuHolder)
     trLine.append(date, number, manufacturer, brand, user, menu)
 
