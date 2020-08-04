@@ -128,12 +128,20 @@ $(document).ready(() => {
 
   createCombo()
 
-  $('.refresh-manufac').click(callRefreshManufacturer())
+  $('.refresh-manufac').click(() => {
+    callRefreshManufacturer()
+    $('.refresh-manufac').attr('src', '/img/loader/circle.svg')
+  })
 })
 
 function callRefreshManufacturer() {
   comboManufacturer.destroy()
+
   createCombo()
+
+  setTimeout(() => {
+    $('.refresh-manufac').attr('src', '/img/loader/refresh.svg')
+  }, 8000)
 }
 
 function createCombo() {
@@ -141,7 +149,6 @@ function createCombo() {
 
   comboManufacturer.setAutoShowOptions()
     .setOnItemBuild((item, index) => {
-      // console.log(item)
       return { text: item.description, value: item.value }
     })
     .setOnItemSelect((item, index) => {

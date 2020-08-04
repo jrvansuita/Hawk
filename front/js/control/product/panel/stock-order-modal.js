@@ -8,6 +8,10 @@ $(document).ready(() => {
     bindComboBox($(el), attr)
   })
 
+  $('#upload').click(function () {
+    $('#input-upload').click()
+  })
+
   bindDatePicker()
 })
 
@@ -38,4 +42,8 @@ function bindDatePicker() {
       $('#date-hidden').val(date)
     })
     .load()
+}
+
+function uploadAttach() {
+  var selectedFile = document.getElementById('input-upload').files[0];
 }
