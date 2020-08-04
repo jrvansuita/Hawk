@@ -129,9 +129,11 @@ module.exports = class ProductRoutes extends Routes {
     this._post('/new-order', (req, res) => {
       req.body.user = req.session.loggedUser;
 
-      StockOrderVault.storeFromScreen(req.body, order => {
-        res.redirect('/stock/panel');
-      });
+      console.log(req.files);
+
+      // StockOrderVault.storeFromScreen(req.body, order => {
+      //   res.redirect('/stock/panel');
+      // });
     });
 
     this._get('/stock-order-attr', (req, res) => {
