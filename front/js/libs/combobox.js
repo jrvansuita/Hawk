@@ -219,4 +219,11 @@ class ComboBox {
 
     return $('<li>').append($('<div>').append(img, $('<span>').text(item.label)));
   }
+
+  destroy() {
+      this.data = []
+      this.method = null
+
+      console.log('Combo destroy');
+  }
 }
