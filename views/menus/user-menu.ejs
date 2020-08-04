@@ -1,26 +1,21 @@
-<div class="sub-menu">
-  <nav class="sub-menu-nav">
-    <ul class="sub-menu-ul">
+<nav class="sub-menu-nav">
+  <ul class="sub-menu-ul">
+    <li class="menu-item">
+      <a href="/user/registeringuserId=<%=loggedUser ? loggedUser.id: ''%>">
+        <div class="menu-button title">
+          <span class="menu-label">Cadastro</span>
+        </div>
+      </a>
+    </li>
 
-
-      <li class="menu-item " >
-        <a href="/user/registeringuserId=<%=loggedUser ? loggedUser.id: ''%>">
-          <div class="menu-button title">
-            Cadastro
-          </div>
-        </a>
-      </li>
-
-      <%if (loggedUser.full){%>
-        <li class="menu-item " >
-          <a href="/user/listing">
-            <div class="menu-button title">
-              Listagem
-            </div>
-          </a>
-        </li>
-        <%}%>
-
-      </ul>
-    </nav>
-  </div>
+    <%if (loggedUser.full){%>
+    <li class="menu-item">
+      <a href="/user/listing">
+        <div class="menu-button title">
+          <span class="menu-label">Listagem</span>
+        </div>
+      </a>
+    </li>
+    <%}%>
+  </ul>
+</nav>

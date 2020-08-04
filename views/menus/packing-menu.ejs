@@ -1,60 +1,56 @@
-<div class="sub-menu">
+<div>
   <nav class="sub-menu-nav">
     <ul class="sub-menu-ul">
       <%if (Sett.get(locals.loggedUser,8)){%>
-        <li class="menu-item" >
-          <a href="/packing">
-            <div class="menu-button title">
-              Em Aberto
-            </div>
-          </a>
-        </li>
-        <%}%>
+      <li class="menu-item">
+        <a href="/packing">
+          <div class="menu-button title">
+            <span class="menu-label">Em Aberto</span>
+          </div>
+        </a>
+      </li>
+      <%}%>
 
-        <li class="menu-item " >
-          <a href="/shipping-order/list">
-            <div class="menu-button title">
-              Ordem de Coleta
-            </div>
-          </a>
-        </li>
+      <li class="menu-item">
+        <a href="/shipping-order/list">
+          <div class="menu-button title">
+            <span class="menu-label">Ordem de Coleta</span>
+          </div>
+        </a>
+      </li>
 
-        <li class="menu-item " >
-          <a href="/packing/overview">
-            <div class="menu-button title">
-              Geral
-            </div>
-          </a>
-        </li>
-        <li class="menu-item " >
-          <a href="/packing/by-date">
-            <div class="menu-button title">
-              Por Data
-            </div>
-          </a>
-        </li>
-        <li class="menu-item " >
-          <a href="/packing/records">
-            <div class="menu-button title">
-              Recordes
-            </div>
-          </a>
-        </li>
-      </ul>
-    </nav>
+      <li class="menu-item">
+        <a href="/packing/overview">
+          <div class="menu-button title">
+            <span class="menu-label">Geral</span>
+          </div>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="/packing/by-date">
+          <div class="menu-button title">
+            <span class="menu-label">Por Data</span>
+          </div>
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="/packing/records">
+          <div class="menu-button title">
+            <span class="menu-label">Recordes</span>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </nav>
 
-    <div class="subtitles">
+  <div class="subtitles">
+    <% if (typeof subtitlesArr != "undefined") subtitlesArr.forEach(function(bar){ %>
 
-      <%
-      if (typeof subtitlesArr != "undefined")
-      subtitlesArr.forEach(function(bar){ %>
-
-        <div class="subtitle-item">
-          <div class="subtitle-color circle shadow" style="background-color: #<%=bar.barColor%>;"> </div>
-          <label class="subtitle-label"> <%=bar.name%> </label>
-        </div>
-
-        <% }); %>
-
-      </div>
+    <div class="subtitle-item">
+      <div class="subtitle-color circle shadow" style="background-color: #<%=bar.barColor%>;"></div>
+      <label class="subtitle-label"> <%=bar.name%> </label>
     </div>
+
+    <% }); %>
+  </div>
+</div>

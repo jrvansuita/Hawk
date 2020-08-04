@@ -1,68 +1,62 @@
+<nav class="sub-menu-nav">
+  <ul class="sub-menu-ul">
+    <li class="menu-item">
+      <a href="/stock/product-board">
+        <div class="menu-button title">
+          <span class="menu-label">Geral</span>
+        </div>
+      </a>
+    </li>
+    <li class="menu-item">
+      <a href="/stock/list">
+        <div class="menu-button title">
+          <span class="menu-label">Listagem</span>
+        </div>
+      </a>
+    </li>
 
+    <%if (Sett.get(locals.loggedUser,19)){%>
+    <li class="menu-item">
+      <a href="/stock/panel">
+        <div class="menu-button title">
+          <span class="menu-label">Painel</span>
+        </div>
+      </a>
+    </li>
 
-<div class="sub-menu">
-  <nav class="sub-menu-nav">
-    <ul class="sub-menu-ul">
+    <li class="menu-item">
+      <a href="/stock/storer">
+        <div class="menu-button title">
+          <span class="menu-label">Cadastro</span>
+        </div>
+      </a>
+    </li>
 
-      <li class="menu-item" >
-        <a href="/stock/product-board">
-          <div class="menu-button title">
-            Geral
-          </div>
-        </a>
-      </li>
-      <li class="menu-item" >
-        <a href="/stock/list">
-          <div class="menu-button title">
-            Listagem
-          </div>
-        </a>
-      </li>
+    <%}%>
 
-      <%if (Sett.get(locals.loggedUser,19)){%>
-        <li class="menu-item" >
-          <a href="/stock/panel">
-            <div class="menu-button title">
-              Painel
-            </div>
-          </a>
-        </li>
+    <li class="menu-item" sub-menu="stock-menu">
+      <a href="/product/page">
+        <div class="menu-button title">
+          <span class="menu-label">Produto</span>
+        </div>
+      </a>
+    </li>
 
-        <li class="menu-item" >
-          <a href="/stock/storer">
-            <div class="menu-button title">
-              Cadastro
-            </div>
-          </a>
-        </li>
-
-        <%}%>
-
-        <li class="menu-item" >
-          <a href="/product/page">
-            <div class="menu-button title">
-              Produto
-            </div>
-          </a>
-        </li>
-
-        <%if (Sett.get(locals.loggedUser,13)){%>
-          <li class="menu-item" >
-            <a href="/diagnostics">
-              <div class="menu-button title">
-                Diagnóstico
-              </div>
-            </a>
-          </li>
-          <%}%>
-<li class="menu-item">
-  <a href="/scheduling">
-    <div class="menu-button title">
-      Agendamento
-    </div>
-  </a>
-</li>
-
-        </ul>
-      </nav>
-    </div>
+    <%if (Sett.get(locals.loggedUser,13)){%>
+    <li class="menu-item">
+      <a href="/diagnostics">
+        <div class="menu-button title">
+          <span class="menu-label">Diagnóstico</span>
+        </div>
+      </a>
+    </li>
+    <%}%>
+    <li class="menu-item">
+      <a href="/scheduling">
+        <div class="menu-button title">
+          <span class="menu-label">Agendamento</span>
+        </div>
+      </a>
+    </li>
+  </ul>
+</nav>
