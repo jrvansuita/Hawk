@@ -189,6 +189,18 @@ var __ParamsHandler = {
 
     getEmailPaymentNotify () {
       return this.get('recused-payment')
+    },
+
+    getGDriveToken() {
+      return this.get('gdrive-token')
+    },
+
+    getGDriveCredentials() {
+      return this.get('gdrive-credentials')
+    },
+
+    getGDriveFolder() {
+      return this.get('gdrive-folder')
     }
   },
 
