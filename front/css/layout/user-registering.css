@@ -251,6 +251,19 @@ body { bottom: 0; padding: 0; margin: 0; height: 100%; margin-top: 30px; }
 
 .refresh-manufac {
   position: absolute;
-  top: 212px;
-  left: 235px;
+  top: 322px;
+  left: 228px;
+}
+
+.icon-dots {
+  justify-content: space-between;
+  text-align: right;
+  flex: 1;
+}
+
+.md-dropdown {
+  float: right;
+  position: relative;
+  top: 15px;
+  right: 175px;
 }
