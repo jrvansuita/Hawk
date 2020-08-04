@@ -2,7 +2,7 @@
 var userSelector
 var passPlaceHolder = 'Impossível Decifrar'
 
-var refreshManufac
+var comboManufaturer
 
 $(document).ready(() => {
   new ComboBox($('#user-search'), '/performance/profiles')
@@ -91,17 +91,6 @@ $(document).ready(() => {
     })
     .load()
 
-  new ComboBox($('#manufac'), '/stock/storer-attr?attr=Fabricante')
-    .setAutoShowOptions()
-    .setOnItemBuild((item, index) => {
-      console.log(item)
-      return { text: item.description, value: item.value }
-    })
-    .setOnItemSelect((item, index) => {
-      $('#manufac').val(item.value)
-    })
-    .load()
-
   $('.avatar-img, .edit-image').hover(() => {
     if ($('#editing').val() > 0) {
       $('.avatar-img').css('opacity', '0.8')
@@ -136,12 +125,37 @@ $(document).ready(() => {
   loadMenuOpts()
 
   $('#pass').val(passPlaceHolder)
+
+  createCombo()
+
+  $('.refresh-manufac').click(() => {
+    callRefreshManufacturer()
+    $('.refresh-manufac').attr('src', '/img/loader/circle.svg')
+  })
 })
 
-// function callRefreshManufacturer(){
-// destruir combobox e recaregar novamente
-// }
+function callRefreshManufacturer() {
+  comboManufacturer.destroy()
 
+  createCombo()
+
+  setTimeout(() => {
+    $('.refresh-manufac').attr('src', '/img/loader/refresh.svg')
+  }, 8000)
+}
+
+function createCombo() {
+  comboManufacturer = new ComboBox($('#manufac'), '/stock/storer-attr?attr=Fabricante')
+
+  comboManufacturer.setAutoShowOptions()
+    .setOnItemBuild((item, index) => {
+      return { text: item.description, value: item.value }
+    })
+    .setOnItemSelect((item, index) => {
+      $('#manufac').val(item.value)
+    })
+    .load()
+}
 function showAvatarCropper () {
   $('.avatar-holder').width(300).height(300)
 

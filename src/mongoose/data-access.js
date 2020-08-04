@@ -220,7 +220,8 @@ module.exports = class DataAccess {
           condition[eachField] = { $in: [null, ''] };
         } else {
           condition[eachField] = {
-            $regex: eachValue,
+            $regex: scapeRegCharts(eachValue),
+
             $options: 'i',
           };
         }
@@ -308,3 +309,7 @@ module.exports = class DataAccess {
     });
   }
 };
+
+function scapeRegCharts(str) {
+  return str.replace('[', '\\[').replace(']', '\\]');
+}
