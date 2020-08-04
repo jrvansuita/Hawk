@@ -6,6 +6,7 @@ $(document).ready(() => {
     .holder('.date-filter-holder')
     .setTitles('Data de Início', 'Data de Fim')
     .setPos()
+    .setToday()
     .load()
     .then(() => {
       if (!queryId) {
@@ -84,42 +85,18 @@ function buildBoxes(results) {
 
   var box = new BoxBuilder().group('Estações', data.season.length);
   data.season.forEach(each => {
-    box.square(
-      each.name,
-      each.items,
-      Num.percent((each.items * 100) / data.items, true),
-      Num.format(each.total),
-      'season',
-      each.name,
-      data.season[0].items
-    );
+    box.square(each.name, each.items, Num.percent((each.items * 100) / data.items, true), Num.format(each.total), 'season', each.name, data.season[0].items);
   });
 
   box.group('Gêneros', data.gender.length, 'gray');
   data.gender.forEach(each => {
-    box.square(
-      each.name,
-      each.items,
-      Num.percent((each.items * 100) / data.items, true),
-      Num.format(each.total),
-      'gender',
-      each.name,
-      data.gender[0].items
-    );
+    box.square(each.name, each.items, Num.percent((each.items * 100) / data.items, true), Num.format(each.total), 'gender', each.name, data.gender[0].items);
   });
   box.build();
 
   var box = new BoxBuilder('3/5').group('Categorias', data.category.length).hidableItems(15);
   data.category.forEach(each => {
-    box.square(
-      each.name,
-      each.items,
-      Num.percent((each.items * 100) / data.items, true),
-      Num.format(each.total),
-      'category',
-      each.name,
-      data.category[0].items
-    );
+    box.square(each.name, each.items, Num.percent((each.items * 100) / data.items, true), Num.format(each.total), 'category', each.name, data.category[0].items);
   });
   box.build();
 
@@ -135,21 +112,13 @@ function buildBoxes(results) {
 
     var row = box.get();
 
-    new StockDashChart(row, data.chart)
-      .field({ label: 'Receita', tag: 'sum_total', color: '#3e55ff' })
-      .field({ label: 'Lucro', tag: 'sum_profit', color: '#03c184' })
-      .field({ label: 'Custo', tag: 'sum_cost', color: '#f98929' })
-      .load();
+    new StockDashChart(row, data.chart).field({ label: 'Receita', tag: 'sum_total', color: '#3e55ff' }).field({ label: 'Lucro', tag: 'sum_profit', color: '#03c184' }).field({ label: 'Custo', tag: 'sum_cost', color: '#f98929' }).load();
 
     box.build();
 
     var box = new BoxBuilder().group('Estoque do Período', Num.points(data.sumStock)).group(null, null, 'gray');
     var row = box.get();
-    new StockDashChart(row, data.chart)
-      .field({ label: 'Disponibilidade', tag: 'sum_stock', color: '#03c184' })
-      .field({ label: 'Estoque Faturado', tag: 'sum_quantity', color: '#996ef4' })
-      .field({ label: 'Faturado (%)', tag: 'perc_sold', color: '#25d4f3' })
-      .load();
+    new StockDashChart(row, data.chart).field({ label: 'Disponibilidade', tag: 'sum_stock', color: '#03c184' }).field({ label: 'Estoque Faturado', tag: 'sum_quantity', color: '#996ef4' }).field({ label: 'Faturado (%)', tag: 'perc_sold', color: '#25d4f3' }).load();
 
     box.build();
   }
@@ -158,31 +127,13 @@ function buildBoxes(results) {
   data.manufacturer.forEach(each => {
     var markup = each.total / each.cost;
     var subLevel = markup > 2.19 ? 1 : markup < 1.8 ? -1 : 0;
-    box.square(
-      each.name,
-      each.items,
-      Floa.abs(each.sumScore / each.count, 2),
-      Floa.abs(markup, 2),
-      'manufacturer',
-      each.name,
-      data.manufacturer[0].items,
-      true,
-      subLevel
-    );
+    box.square(each.name, each.items, Floa.abs(each.sumScore / each.count, 2), Floa.abs(markup, 2), 'manufacturer', each.name, data.manufacturer[0].items, true, subLevel);
   });
   box.build();
 
   var box = new BoxBuilder('3/5').group('Marcas', data.brand.length).hidableItems(15);
   data.brand.forEach(each => {
-    box.square(
-      each.name,
-      each.items,
-      Num.percent((each.items * 100) / data.items, true),
-      Num.format(each.total),
-      'brand',
-      each.name,
-      data.brand[0].items
-    );
+    box.square(each.name, each.items, Num.percent((each.items * 100) / data.items, true), Num.format(each.total), 'brand', each.name, data.brand[0].items);
   });
   box.build();
 
@@ -234,25 +185,27 @@ function buildSkusBox(data) {
       };
 
       box
-        .img(
-          '/product/image-redirect?sku=' + each.name,
-          each.items,
-          each.stock,
-          each.name,
-          'copiable',
-          Math.trunc(each.score),
-          click,
-          null,
-          subDblClick,
-          scoreStyling(each)
-        )
+        .img('/product/image-redirect?sku=' + each.name, each.items, each.stock, each.name, 'copiable', Math.trunc(each.score), click, null, subDblClick, scoreStyling(each))
         .get()
         .data('sku', each.name)
         .data('manufacturer', each.manufacturer);
     });
+
+    var more = data.skusCount - data.sku.length;
+
+    if (more) {
+      box
+        .moreImg(data.skusCount - data.sku.length, 'Ver Mais', () => {
+          $('#show-skus').val(data.skusCount);
+          $('#search-button').trigger('click');
+        })
+        .get()
+        .data('manufacturer', 'Ver Mais');
+    }
+
     box.build().then(() => {
       bindImagePreview();
-      bindCopiable();
+      bindCopyable();
       bindTooltipManufacturer();
     });
   }

@@ -174,6 +174,28 @@ class BoxBuilder {
     return this;
   }
 
+  moreImg(moreCount, label, click) {
+    var col = $('<div>').addClass('col box-img-col');
+    this.currentGroup.append(col);
+
+    var img = $('<img>').attr('src', '/img/gray-plus.png').attr('onerror', "this.src='/img/product-placeholder.png'").addClass('box-more-img box-img');
+    var count = $('<label>')
+      .addClass('more-label-count')
+      .append(moreCount > 99 ? '+99' : moreCount);
+    col.append(img, count);
+
+    var label = $('<label>').addClass('more-label').append(label);
+
+    var $sub = $('<div>').addClass('more-sub box-img-sub').append(label);
+
+    col.append($sub);
+    col.click(click);
+
+    this.lastItem = col;
+
+    return this;
+  }
+
   table() {
     var table = $('<table>').addClass('list');
     this.box.append(table);

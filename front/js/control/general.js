@@ -1,49 +1,55 @@
 $(document).ready(() => {
-  bindCopiable()
+  bindCopyable();
 
   $('img.avatar-img').error(function () {
-    $(this).unbind('error').attr('src', '/img/avatar.png')
-  })
+    $(this).unbind('error').attr('src', '/img/avatar.png');
+  });
 
   setTimeout(() => {
-    $('.hidable-script').remove()
-  }, 100)
-})
+    $('.hidable-script').remove();
+  }, 100);
+});
 
-function isTrueStr (val) {
-  return val == true || val == 'true'
+function isTrueStr(val) {
+  return val == true || val == 'true';
 }
 
-function onInputError (input) {
-  input.addClass('simple-material-input-error').delay(4000).queue(function (next) {
-    $(this).removeClass('simple-material-input-error')
-    next()
-  })
+function onInputError(input) {
+  input
+    .addClass('simple-material-input-error')
+    .delay(4000)
+    .queue(function (next) {
+      $(this).removeClass('simple-material-input-error');
+      next();
+    });
 }
 
-function onDivError (div) {
-  div.addClass('red-wick').delay(4000).queue(function (next) {
-    $(this).removeClass('red-wick')
-    next()
-  })
+function onDivError(div) {
+  div
+    .addClass('red-wick')
+    .delay(4000)
+    .queue(function (next) {
+      $(this).removeClass('red-wick');
+      next();
+    });
 }
 
-function checkMaterialInput (el) {
+function checkMaterialInput(el) {
   if (!el.val()) {
-    onInputError(el)
-    return false
+    onInputError(el);
+    return false;
   }
 
-  return true
+  return true;
 }
 
-function bindCopiable () {
+function bindCopyable() {
   var event = function (e) {
-    Util.selectContent(this)
-    Util.copySeleted()
-    $(this).select()
-    e.stopPropagation()
-  }
+    Util.selectContent(this);
+    Util.copySeleted();
+    $(this).select();
+    e.stopPropagation();
+  };
 
-  $('.copiable').off('click', event).on('click', event)
+  $('.copiable').off('click', event).on('click', event);
 }

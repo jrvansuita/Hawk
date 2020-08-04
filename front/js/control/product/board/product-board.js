@@ -9,6 +9,10 @@ $(document).ready(() => {
     if ($(this).hasClass('is-open')) {
       $(this).removeClass('is-open').addClass('is-closed');
       $('.tag-box-holder').hide();
+
+      costRangeFilter = null;
+      priceRangeFilter = null;
+      tagsHandler.clear();
     } else {
       $(this).addClass('is-open').removeClass('is-closed');
       $('.tag-box-holder').show();
@@ -16,7 +20,19 @@ $(document).ready(() => {
   });
 });
 
-function buildRangeSlider(data) {
+function openBarWhenPricesFiltersAreOn(areOn) {
+  if (areOn && !$('.icon-open').hasClass('is-open')) {
+    $(this).addClass('is-open').removeClass('is-closed');
+    $('.tag-box-holder').show();
+  }
+}
+
+function buildRangeSlider({ data, query }) {
+  if (query?.filters?.cost) {
+    openBarWhenPricesFiltersAreOn(true);
+    costRangeFilter = query.filters.cost;
+  }
+
   new RangeSlider($('.cost-range-filter'))
     .setTitle('Preço de custo')
     .setPrefix('R$')
@@ -25,6 +41,11 @@ function buildRangeSlider(data) {
       costRangeFilter = range;
     })
     .build();
+
+  if (query?.filters?.price) {
+    openBarWhenPricesFiltersAreOn(true);
+    priceRangeFilter = query.filters.price;
+  }
 
   new RangeSlider($('.price-range-filter'))
     .setTitle('Preço de Venda')
@@ -46,37 +67,45 @@ function onSearchData(id) {
 }
 
 function getQueryData() {
-  return {
+  var result = {
     value: $('#search-input').val().trim(),
     attrs: tagsHandler.get(),
     showSkus: parseInt($('#show-skus').val()),
-    filters: $('.icon-open').hasClass('is-open') ? getFilters() : {},
   };
+
+  if (priceRangeFilter != null) {
+    result['filters'] = { price: priceRangeFilter, ...result['filters'] };
+  }
+
+  if (costRangeFilter != null) {
+    result['filters'] = { cost: costRangeFilter, ...result['filters'] };
+  }
+
+  return result;
 }
 
-function getFilters() {
-  var filters = {};
+// function getFilters() {
+//   var filters = {};
 
-  $('.range-slider-holder').each(function () {
-    var attr = $(this).data('attr');
-    var min = $(this).attr('data-min');
-    var max = $(this).attr('data-max');
+//   $('.range-slider-holder').each(function () {
+//     var attr = $(this).data('attr');
+//     var min = $(this).attr('data-min');
+//     var max = $(this).attr('data-max');
 
-    filters[attr] = [min, max];
-  });
-  if (Object.keys(filters).length) return filters;
+//     filters[attr] = [min, max];
+//   });
+//   if (Object.keys(filters).length) return filters;
 
-  return undefined;
-}
+//   return undefined;
+// }
 
 function handleResult(data) {
   loadingPattern(false);
   setAttrsAndValue(data.query.value, data.query.attrs);
   setUrlId(data.id);
-  data = data.data;
 
   buildRangeSlider(data);
-  buildBoxes(data);
+  buildBoxes(data.data);
 }
 
 function buildBoxes(data) {
@@ -116,8 +145,6 @@ function buildTotalBox(data) {
     .info('Un. Venda', Num.money(data.value / data.total))
     .info('Markup', Floa.abs(data.markup, 2))
     .info('Venda', Num.format(data.value));
-
-  console.log(data);
 
   box.build();
 }
@@ -210,9 +237,22 @@ function buildProductsBox(data) {
       .data('sku', each.name)
       .data('manufacturer', each.manufacturer);
   });
+
+  var more = data.skusCount - data.sku.length;
+
+  if (more) {
+    box
+      .moreImg(data.skusCount - data.sku.length, 'Ver Mais', () => {
+        $('#show-skus').val(data.skusCount);
+        $('#search-button').trigger('click');
+      })
+      .get()
+      .data('manufacturer', 'Ver Mais');
+  }
+
   box.build().then(() => {
     bindImagePreview();
-    bindCopiable();
+    bindCopyable();
     bindTooltipManufacturer();
   });
 }
