@@ -4,7 +4,12 @@ class ComboBox {
 
     this.element = element;
     this.setLimit(5);
+    this.setData(data);
 
+    this.method = method;
+  }
+
+  setData(data) {
     if (data instanceof Array) {
       this.objects = data;
     } else if (typeof data === 'string') {
@@ -17,8 +22,6 @@ class ComboBox {
         };
       });
     }
-
-    this.method = method;
   }
 
   fromEnum(tag) {
@@ -221,7 +224,9 @@ class ComboBox {
   }
 
   destroy() {
-      this.data = []
-      this.method = null
+    this.data = [];
+    this.method = null;
+
+    console.log('Combo destroy');
   }
 }

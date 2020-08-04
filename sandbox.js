@@ -4,39 +4,16 @@ new Initilizer()
   .setSandboxMode(true)
   .begin()
   .then(async () => {
-    // const Enum = require('./src/bean/enumerator.js')
-    // const ProductBoard = require('./src/performance/product-board-email.js')
+    const GDrive = require('./src/gdrive/gdrive-api')
 
-    // var s = (await Enum.on('TRANSPORT-IMGS').mapBy('value').get(true))
+    var filePath = '/Users/admin/Downloads/Pasta Sem Título/CB701li.png';
 
-    // new ProductBoard().go((data) => {
-    //   console.log(data)
+    new GDrive().download('1b2WcHMPe6XgEU0etyh6jAywhMnqM1RBF')
+
+    // new GDrive().setMedia('TesteUP', filePath, 'image/png').upload((id) => {
+    //   console.log(id);
     // })
 
-    const Product = require('./src/bean/product.js');
-
-    Product.removeAll(
-      {
-        sku: {
-          $regex: '-',
-          $options: 'i',
-        },
-      },
-      (err, docs) => {
-        console.log(err, docs);
-      }
-    );
-
-    Product.staticAccess()
-      .find({
-        sku: {
-          $regex: '-',
-          $options: 'i',
-        },
-      })
-      .limit(100)
-      .exec((err, data) => {
-        console.log(err);
-        console.log(data);
-      });
+    // console.log(Params.getGDriveCredentials());
+    // console.log(Params.getGDriveToken());
   });
