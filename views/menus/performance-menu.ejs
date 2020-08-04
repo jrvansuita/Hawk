@@ -1,52 +1,45 @@
-<div class="sub-menu">
-  <nav class="sub-menu-nav">
-    <ul class="sub-menu-ul">
-      <li class="menu-item">
-        <a href="/performance/profile">
-          <div class="menu-button title">
-            Perfil
-          </div>
-        </a>
-      </li>
+<nav class="sub-menu-nav">
+  <ul class="sub-menu-ul">
+    <li class="menu-item">
+      <a href="/performance/profile">
+        <div class="menu-button title">
+          <span class="menu-label">Perfil</span>
+        </div>
+      </a>
+    </li>
 
-      <li class="menu-item">
-        <a href="/user/team-board">
-          <div class="menu-button title">
-            Grupo
-          </div>
-        </a>
-      </li>
+    <li class="menu-item">
+      <a href="/user/team-board">
+        <div class="menu-button title">
+          <span class="menu-label">Grupo</span>
+        </div>
+      </a>
+    </li>
 
-      <%if (Sett.get(locals.loggedUser,6)){%>
-        <li class="menu-item " >
-          <a href="/performance/manage-points">
-            <div class="menu-button title">
-              Gerenciar Pontos
-            </div>
-          </a>
-        </li>
-        <%}%>
-
-        <%if (Sett.get(locals.loggedUser,18) ){%>
-          <li class="menu-item" >
-            <a href="/performance/sales-dashboard">
-              <div class="menu-button title">
-                Pedidos
-              </div>
-            </a>
-          </li>
-          <%}%>
-
-          <%if (Sett.get(locals.loggedUser,17 )){%>
-          <li class="menu-item" >
-            <a href="/performance/stock-dashboard">
-              <div class="menu-button title">
-                Produtos
-              </div>
-            </a>
-          </li>
-          <%}%>
-
-        </ul>
-      </nav>
-    </div>
+    <%if (Sett.get(locals.loggedUser,6)){%>
+    <li class="menu-item">
+      <a href="/performance/manage-points">
+        <div class="menu-button title">
+          <span class="menu-label">Gerenciar Pontos</span>
+        </div>
+      </a>
+    </li>
+    <%}%> <%if (Sett.get(locals.loggedUser,18) ){%>
+    <li class="menu-item">
+      <a href="/performance/sales-dashboard">
+        <div class="menu-button title">
+          <span class="menu-label">Pedidos</span>
+        </div>
+      </a>
+    </li>
+    <%}%> <%if (Sett.get(locals.loggedUser,17 )){%>
+    <li class="menu-item">
+      <a href="/performance/stock-dashboard">
+        <div class="menu-button title">
+          <span class="menu-label">Produtos</span>
+        </div>
+      </a>
+    </li>
+    <%}%>
+  </ul>
+</nav>
