@@ -17,6 +17,7 @@ class TemplateEditor {
     this.onBlurListener = onBlur;
     return this;
   }
+
   useImageUploader() {
     this.activeImageUpload = true;
     return this;
@@ -159,7 +160,7 @@ class TemplateEditor {
     return { events: { ...defaultEvents, ...imgEvents } };
   }
 
-  getDefultOptions() {
+  getDefaultOptions() {
     var options = {
       fullPage: false,
       useClasses: false,
@@ -210,7 +211,7 @@ class TemplateEditor {
   async load(selector) {
     await this.dependencies.load();
     return new Promise((resolve, reject) => {
-      this.editor = new FroalaEditor(selector, this.getDefultOptions(), () => {
+      this.editor = new FroalaEditor(selector, this.getDefaultOptions(), () => {
         // Remover selo Froala
         $("p[data-f-id='pbf']").remove();
 

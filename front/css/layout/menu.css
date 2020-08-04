@@ -36,6 +36,16 @@
   -webkit-padding-start: 0;
 }
 
+.menu-button {
+  position: relative !important;
+  cursor: pointer;
+}
+
+.menu-label {
+  color: #dfdfdf;
+  padding-bottom: 3px;
+}
+
 .menu-item {
   cursor: pointer;
   border-radius: 2px;
@@ -55,6 +65,15 @@
 
 .menu-item:hover {
   background-color: #1916160d;
+}
+
+.menu-item .active {
+  background-color: #1916160d;
+}
+
+.active.menu-item .menu-label {
+  color: white;
+  border-bottom: 2px solid white;
 }
 
 .sub-menu {
