@@ -244,7 +244,7 @@ class ProductBinder {
         this.conteudo = this._FichaTecnica?.[0]?.descricaoDetalhada;
       }
     } else {
-      var currentCharacteristics = [this.Material, this.Departamento, this.Cor, this.sizeDescription, this.Marca, this.Fabricante, this.Ocasiao].filter(Boolean);
+      var currentCharacteristics = [this.Material, this.Departamento, this.Cor, this.sizeDescription, this.Marca, this.Fabricante, this.Ocasiao, this.Genero, this.Estacao].filter(Boolean);
 
       if (currentCharacteristics.length) {
         var higherProbabilityMatch = await Enum.on('AUTO-DESC-CAD-PROD', true).best(currentCharacteristics);
