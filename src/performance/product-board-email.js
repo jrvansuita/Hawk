@@ -5,7 +5,7 @@ module.exports = class ProductBoardEmailHandler {
   go (callback) {
     var props = ['manufacturer', 'category']
     Product.getStockBalance(100, props, (_err, inData) => {
-      Product.getStockBalance(-50, props, (_err, outData) => {
+      Product.getStockBalance(-5, props, (_err, outData) => {
         this._sendIfNeeded(Object.assign({}, this._buildObject(inData, 'in_'), this._buildObject(outData, 'out_')))
       })
     })
