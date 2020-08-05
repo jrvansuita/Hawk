@@ -14,9 +14,9 @@ class Dropdown {
     return drop
   }
 
-  constructor (holder, createDots = true) {
+  constructor (holder, createDots = true, notVisible = false) {
     this.holder = holder
-
+    this.notVisible = notVisible
     if (createDots) {
       this.createMenuButton()
     }
@@ -27,7 +27,7 @@ class Dropdown {
   }
 
   createMenuButton () {
-    var style = { width: '15px', 'margin-right': '-5px', 'margin-left': '5px', height: '15px', padding: '3px', display: 'inline-flex' }
+    var style = { width: '15px', marginRight: '-5px', marginLeft: '5px', height: '15px', padding: '3px', display: 'inline-flex' }
 
     this.defMenuIcon = '/img/dots.png'
     this.menuIcon = $('<img>').attr('src', this.defMenuIcon).addClass('md-dots-icon').css(style)
@@ -39,6 +39,10 @@ class Dropdown {
     this.list = $('<ul>')
     this.dropdown.append(this.list)
     $(this.holder).append(this.dropdown)
+    // still not visible on some windows
+    if (this.notVisible == true) {
+      this.dropdown.css('left', '-155px')
+    }
   }
 
   onBindMouseOver () {

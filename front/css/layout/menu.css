@@ -1,4 +1,4 @@
-#main-menu {
+.main-menu-nav {
   background-color: #00796b;
   display: flex;
   box-shadow: rgba(0, 0, 0, 0.12) 0 1px 6px, rgba(0, 0, 0, 0.12) 0 1px 4px;
@@ -28,7 +28,7 @@
   padding-right: 10px;
 }
 
-#nav {
+.main-menu-ul {
   margin: 0;
   padding-right: 0;
   display: flex;
@@ -39,11 +39,14 @@
 .menu-button {
   position: relative !important;
   cursor: pointer;
+  transition: all 0.1s ease-in-out;
+  outline: 0;
 }
 
 .menu-label {
   color: #dfdfdf;
   padding-bottom: 3px;
+  transition: all 0.1s ease-in-out;
 }
 
 .menu-item {
@@ -52,6 +55,7 @@
   font-size: 14px;
   text-decoration: none;
   outline: none;
+  transition: all 0.1s ease-in-out;
 }
 
 .sub-menu-ul > .menu-item > a {
@@ -59,24 +63,23 @@
 }
 
 .sub-menu-ul > .menu-item {
-  margin-right: 25px;
+  padding: 0 10px;
   margin-left: 0;
 }
 
+/* On Menu Active */
+.active-menu.menu-item,
 .menu-item:hover {
-  background-color: #1916160d;
+  background-color: #00000014;
 }
 
-.menu-item .active {
-  background-color: #1916160d;
-}
-
-.active.menu-item .menu-label {
+.active-menu.menu-item .menu-label,
+.menu-item:hover .menu-label {
   color: white;
-  border-bottom: 2px solid white;
+  border-bottom: 2px solid #fff;
 }
 
-.sub-menu {
+.sub-menu-nav {
   position: fixed;
   width: 100%;
   top: 50px;
@@ -84,10 +87,6 @@
   z-index: 2;
   display: flex;
   background-color: #009587;
-}
-
-.sub-menu-nav {
-  padding-left: 70px;
 }
 
 .sub-menu-ul {

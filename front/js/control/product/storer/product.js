@@ -5,9 +5,12 @@ var childsBuilder;
 var sizesBox;
 var product;
 
+var comboRefresh
+
 $(document).ready(() => {
   onCreate();
   onRefresh();
+  refreshManufacturerList()
 });
 
 // Call one time
@@ -24,16 +27,41 @@ function onRefresh() {
   requestProductChilds();
 }
 
+function refreshManufacturerList() {
+  Dropdown.on('.manufacturer-dots', true, true)
+  .item('/img/loader/refresh.svg', 'Recarregar Fabricantes', (helper) => {
+    var $fatherManufac = $('.manufacturer-dots').parent()
+    var $ImgRefresh = $('<img>').attr('src', '/img/loader/circle.svg').addClass('mini-icon-button')
+    $fatherManufac.append($ImgRefresh.addClass('refresh-manufac'))
+
+    callManufacturerRestorer()
+  }).onMouseLeave()
+}
+
+function callManufacturerRestorer() {
+  comboRefresh.setData('')
+  onBindComboBoxes()
+
+  setTimeout(() => {
+    $('.refresh-manufac').attr('src', '/img/checked.png').fadeOut(3000)
+  }, 2000)
+}
+
 function bindComboBox(el, data, limit) {
   var url = typeof data === 'string' ? '/stock/storer-attr?attr=' + data : data;
 
-  new ComboBox(el, url)
-    .setAutoShowOptions(true)
+  comboRefresh = new ComboBox(el, url)
+
+    comboRefresh.setAutoShowOptions(true)
     .setLimit(limit)
     .setOnItemBuild((item, index) => {
       return { text: item.description.trim(), value: item.value };
     })
     .load();
+
+    setTimeout(() => {
+      $('.refresh-manufac').remove()
+    }, 5000)
 }
 
 function onBindViewsListeners() {
@@ -135,7 +163,8 @@ function onBindComboBoxes() {
     bindComboBox($(each), $(each).data('bind'));
   });
 
-  new ComboBox($('input[data-bind="cf"]')).setAutoShowOptions(true).fromEnum('NCM').load();
+  comboRefresh = new ComboBox($('input[data-bind="cf"]'))
+  comboRefresh.setAutoShowOptions(true).fromEnum('NCM').load();
 }
 
 function getData() {

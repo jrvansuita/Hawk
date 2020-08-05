@@ -1,179 +1,141 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-<head>
-  <%  include ../../menus/main-menu %>
-  <meta charset="utf-8">
+  <head>
+    <% include ../../menus/main-menu %>
+    <meta charset="utf-8" />
 
-  <link rel="stylesheet" type="text/css" href="/front/css/layout/shipping-order.css">
-  <script type="text/javascript" src="/front/js/control/shipping-order/shipping-order.js"></script>
-  <script type="text/javascript" src="/util/local.js"></script>
-  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
-  <script type="text/javascript" src="/front/js/libs/beep.js"></script>
-  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-checkbox.css">
+    <link rel="stylesheet" type="text/css" href="/front/css/layout/shipping-order.css" />
+    <script type="text/javascript" src="/front/js/control/shipping-order/shipping-order.js"></script>
 
+    <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+    <script type="text/javascript" src="/front/js/libs/beep.js"></script>
+    <link rel="stylesheet" type="text/css" href="/front/css/libs/material-checkbox.css" />
+  </head>
+  <body>
+    <% include ../../menus/packing-menu %> <% var situationsArr = {0: 'Em Aberto', 1:'Coletado', 2 : 'Enviado'}; var icon = {'null': 'plus', 0: 'checked', 1: 'transport/default'}; %>
 
+    <script class="hidable-script">
+      <%var shippingOrder = shippingOrder || {} %>
+      window.shippingOrder = <%- JSON.stringify(shippingOrder) %>
+      window.transports = <%- JSON.stringify(transports) %>
+    </script>
 
-</head>
-<body>
-  <%  include ../../menus/packing-menu %>
-
-  <%
-  var situationsArr = {0: 'Em Aberto', 1:'Coletado', 2 : 'Enviado'};
-  var icon = {'null': 'plus', 0:  'checked', 1: 'transport/default'};
-
-  %>
-
-  <script class="hidable-script">
-  <%var shippingOrder = shippingOrder || {} %>
-  window.shippingOrder = <%- JSON.stringify(shippingOrder) %>
-  window.transports = <%- JSON.stringify(transports) %>
-  </script>
-
-
-
-  <div class="main-content">
-
-    <div class="header-holder shadow">
-      <table >
-        <tr>
-          <td>
-            <div class="field shipping-order-col">
-              <label class="field-title">Ordem de Coleta</label>
-              <label class="info highlighted shipping-order-number"><%=shippingOrder.numeroColeta ? '#' + shippingOrder.numeroColeta : '#0000'%> </label>
-              <label class="field-title itens-count-display"> </label>
-            </div>
-          </td>
-
-          <td>
-            <div class="field">
-              <label class="field-title">Estados</label>
-              <label class="ufs-list">Nenhum</label>
-            </div>
-          </td>
-
-          <td>
-            <div class="field">
-              <label class="field-title">Data</label>
-              <label class="info"><%=shippingOrder.data ? Dat.format(new Date(shippingOrder.data)) : Dat.format(new Date())%></label>
-            </div>
-          </td>
-
-          <td>
-            <div class="status-holder">
-              <div class="field skrink">
-                <label class="field-title">Usuário</label>
-                <label class="info"><%=shippingOrder.usuario_criacao || (loggedUser ? loggedUser.name : '---')%></label>
+    <div class="main-content">
+      <div class="header-holder shadow">
+        <table>
+          <tr>
+            <td>
+              <div class="field shipping-order-col">
+                <label class="field-title">Ordem de Coleta</label>
+                <label class="info highlighted shipping-order-number"><%=shippingOrder.numeroColeta ? '#' + shippingOrder.numeroColeta : '#0000'%> </label>
+                <label class="field-title itens-count-display"> </label>
               </div>
-            </div>
-          </td>
+            </td>
 
-          <td>
-            <div class="status-holder">
-              <%
-              var statusIcon = icon[(shippingOrder.situacao || 'null')] || 'question-mark';
-
-              %>
-              <img class="circle shadow icon" src="/img/<%=statusIcon%>.png" onerror="this.src='/img/question-mark.png'" />
-
-              <div class="field skrink">
-                <label class="field-title">Situação</label>
-                <label class="info"><%=(shippingOrder.situacao == undefined) ?  'Iniciando' : situationsArr[parseInt(shippingOrder.situacao)] %></label>
+            <td>
+              <div class="field">
+                <label class="field-title">Estados</label>
+                <label class="ufs-list">Nenhum</label>
               </div>
-            </div>
-          </td>
-          <td>
-            <div class="status-holder transport-holder">
-              <img class="circle shadow icon" src="<%= shippingOrder ? transports[Util.transportName(shippingOrder.transportador).toLowerCase()]?.icon : transports.default.icon%>" onerror="this.src='<%=transports.default.icon%>'" />
+            </td>
 
-              <div class="field skrink">
-                <label class="field-title">Transportadora</label>
-                <label class="info"><%=shippingOrder ? Util.transportName(shippingOrder.transportador, 'Não definida') : ''%></label>
+            <td>
+              <div class="field">
+                <label class="field-title">Data</label>
+                <label class="info"><%=shippingOrder.data ? Dat.format(new Date(shippingOrder.data)) : Dat.format(new Date())%></label>
               </div>
-            </div>
-          </td>
+            </td>
 
-          <td>
-            <div class="status-holder">
-              <div class="field skrink">
-                <label class="field-title">Peso</label>
-                <label class="info wei-val">0,000 kg</label>
+            <td>
+              <div class="status-holder">
+                <div class="field skrink">
+                  <label class="field-title">Usuário</label>
+                  <label class="info"><%=shippingOrder.usuario_criacao || (loggedUser ? loggedUser.name : '---')%></label>
+                </div>
               </div>
-            </div>
-          </td>
+            </td>
 
-          <td>
-            <div class="status-holder">
-              <div class="field skrink">
-                <label class="field-title">Valor</label>
-                <label class="info total-val">R$ 0,00</label>
+            <td>
+              <div class="status-holder">
+                <% var statusIcon = icon[(shippingOrder.situacao || 'null')] || 'question-mark'; %>
+                <img class="circle shadow icon" src="/img/<%=statusIcon%>.png" onerror="this.src='/img/question-mark.png'" />
+
+                <div class="field skrink">
+                  <label class="field-title">Situação</label>
+                  <label class="info"><%=(shippingOrder.situacao == undefined) ? 'Iniciando' : situationsArr[parseInt(shippingOrder.situacao)] %></label>
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>
-      </table>
+            </td>
+            <td>
+              <div class="status-holder transport-holder">
+                <img class="circle shadow icon" src="<%= shippingOrder ? transports[Util.transportName(shippingOrder.transportador).toLowerCase()]?.icon : transports.default.icon%>" onerror="this.src='<%=transports.default.icon%>'" />
 
-    </div>
+                <div class="field skrink">
+                  <label class="field-title">Transportadora</label>
+                  <label class="info"><%=shippingOrder ? Util.transportName(shippingOrder.transportador, 'Não definida') : ''%></label>
+                </div>
+              </div>
+            </td>
 
+            <td>
+              <div class="status-holder">
+                <div class="field skrink">
+                  <label class="field-title">Peso</label>
+                  <label class="info wei-val">0,000 kg</label>
+                </div>
+              </div>
+            </td>
 
+            <td>
+              <div class="status-holder">
+                <div class="field skrink">
+                  <label class="field-title">Valor</label>
+                  <label class="info total-val">R$ 0,00</label>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
 
-
-
-
-
-
-
-
-    <%if (shippingOrder.situacao == 0 || shippingOrder.situacao == undefined ){%>
+      <%if (shippingOrder.situacao == 0 || shippingOrder.situacao == undefined ){%>
       <div class="middle-line shadow">
-        <div class="progress-line"> <div class="progress-line inner"> </div></div>
+        <div class="progress-line"><div class="progress-line inner"></div></div>
 
         <div class="middle-line-inner">
-
           <div class="left-middle-line">
-
-
             <div class="nf-input-holder">
               <div class="nf-input-and-icon">
-                <img class="circle shadow icon"  id="nf-icon" class="nf-icon" src="/img/scan-barcode.png" />
-                <input type="text" id="nf"  class="simple-material-input%>" placeholder="Nota Fiscal"   onkeypress="return Num.isNumberKey(event);" required/>
+                <img class="circle shadow icon" id="nf-icon" class="nf-icon" src="/img/scan-barcode.png" />
+                <input type="text" id="nf" class="simple-material-input%>" placeholder="Nota Fiscal" onkeypress="return Num.isNumberKey(event);" required />
                 <span id="progress"></span>
               </div>
               <label class="nf-msg"></label>
             </div>
 
-
             <%if (Params.activeDifalControlOC()){%>
-              <div class="difal-holder">
-                <label class="pure-material-checkbox allow-difal-holder">
-                  <input type="checkbox" id="allow-difal">
-                  <span>Permitir Difal</span>
-                </label>
-                <label class="difal-states"><%=Params.difalUfs()%></label>
-              </div>
-              <%}%>
-
-
+            <div class="difal-holder">
+              <label class="pure-material-checkbox allow-difal-holder">
+                <input type="checkbox" id="allow-difal" />
+                <span>Permitir Difal</span>
+              </label>
+              <label class="difal-states"><%=Params.difalUfs()%></label>
             </div>
-
-            <div class="right-middle-line">
-              <div class="buttons-holder">
-                <label class="button shadow" id="clear" tabindex="0">Recomeçar</label>
-                <label class="button shadow" id="save" tabindex="0">Salvar</label>
-              </div>
-            </div>
-
-
+            <%}%>
           </div>
 
+          <div class="right-middle-line">
+            <div class="buttons-holder">
+              <label class="button shadow" id="clear" tabindex="0">Recomeçar</label>
+              <label class="button shadow" id="save" tabindex="0">Salvar</label>
+            </div>
+          </div>
         </div>
-
-        <%}%>
-
-
-
-        <div class="nfs-in-holder nfs-table-holder shadow"></div>
-
       </div>
 
-    </body>
-    </html>
+      <%}%>
+
+      <div class="nfs-in-holder nfs-table-holder shadow"></div>
+    </div>
+  </body>
+</html>
