@@ -1,5 +1,7 @@
 class MenuController {
   constructor() {
+    this.initialDefaultHref = '/product/page';
+
     this.mainMenu = $('.main-menu-nav');
     this.subMenu = $('.sub-menu-nav');
     this.previewSubMenu = null;
@@ -90,9 +92,9 @@ class MenuController {
   }
 
   markMenuItemAsSelected(getTag, menu) {
-    var hrefPath = Local.getStr(getTag());
+    var hrefPath = Local.getStr(getTag()) || this.initialDefaultHref;
 
-    let selected = menu.find('a[href*="' + hrefPath + '"]').parent('li');
+    const selected = menu.find('a[href*="' + hrefPath + '"]').parent('li');
     selected.addClass('active-menu');
     return selected;
   }
