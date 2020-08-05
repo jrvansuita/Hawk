@@ -325,3 +325,16 @@ textarea {
   margin-right: 15px;
   white-space: nowrap;
 }
+
+.manufacturer-dots {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 99999999999999;
+}
+
+.refresh-manufac {
+  position: absolute;
+  bottom: 105px;
+  right: 20px;
+}

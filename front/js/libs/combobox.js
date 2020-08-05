@@ -226,7 +226,5 @@ class ComboBox {
   destroy() {
     this.data = [];
     this.method = null;
-
-    console.log('Combo destroy');
   }
 }
