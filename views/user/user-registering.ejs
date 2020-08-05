@@ -11,6 +11,8 @@
   <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
 
   <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
+  <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
+
 
   <script type="text/javascript" src="/front/js/libs/croppie.js"></script>
   <link rel="stylesheet" type="text/css" href="/front/css/libs/croppie.css">
@@ -39,7 +41,7 @@
 
 
     <form class="user-registering shadow" name="user-registering" action="/user/registering" method="post" id="user-registering">
-
+      
       <div class="header">
 
 
@@ -56,6 +58,9 @@
           <span class="label-title" id="title-label"><%=user ? user.title : 'Indefinido'%></span>
         </div>
 
+        <div class="icon-dots">
+
+        </div>
 
       </div>
 
@@ -74,7 +79,7 @@
                 <input type="text" id="avatar" class="input-val simple-material-input" placeholder="Avatar" name="avatar" value="<%=user ? user.avatar : ''%>" autocomplete="off"/>
                 
                 <input type="text" id="manufac"  class="input-val simple-material-input"placeholder="Fabricante" name="manufacturer" value="<%=user ? user.manufacturer : ''%>" autocomplete="off"/>
-                <img src="/front/img/refresh.png" class="mini-icon-button refresh-manufac" alt="">
+                
 
 
 

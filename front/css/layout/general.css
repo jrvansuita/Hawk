@@ -24,13 +24,8 @@ label {
   font-family: Roboto, sans-serif;
 }
 
-.menu-button {
-  position: relative !important;
-  cursor: pointer;
-}
-
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
@@ -83,7 +78,7 @@ input[type=number]::-webkit-outer-spin-button {
 .main-content {
   display: block;
   margin-top: 80px;
-  position: relative;
+  /* position: relative; */
   height: 100%;
   overflow-y: auto;
 }
@@ -191,17 +186,39 @@ tr.line td {
 }
 
 @-webkit-keyframes pulsate {
-  0% { opacity: 0; }
-  10% { opacity: 0.2; }
-  20% { opacity: 0.4; }
-  30% { opacity: 0.6; }
-  40% { opacity: 0.8; }
-  50% { opacity: 1; }
-  60% { opacity: 0.8; }
-  70% { opacity: 0.6; }
-  80% { opacity: 0.4; }
-  90% { opacity: 0.2; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.2;
+  }
+  20% {
+    opacity: 0.4;
+  }
+  30% {
+    opacity: 0.6;
+  }
+  40% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 0.8;
+  }
+  70% {
+    opacity: 0.6;
+  }
+  80% {
+    opacity: 0.4;
+  }
+  90% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 .pulse {

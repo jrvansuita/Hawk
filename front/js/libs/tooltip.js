@@ -21,9 +21,10 @@ class Tooltip {
   }
 
   setInstancesProps(props) {
-    this.instances.forEach(each => {
-      each.setProps(props);
-    });
+    if (this.instances && this.instances.length)
+      this.instances?.forEach(each => {
+        each?.setProps?.(props);
+      });
   }
 
   setDefaults() {

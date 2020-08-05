@@ -58,6 +58,14 @@
   margin: 0 !important;
 }
 
+table {
+  width: 100%;
+}
+
+.order-item table {
+  padding-left: 4px;
+}
+
 .order-item {
   padding: 6px 6px 6px 3px;
   margin-bottom: 5px;
@@ -81,10 +89,6 @@
 
 .input-holder > div {
   padding-right: 15px;
-}
-
-table {
-  width: 100%;
 }
 
 .menu-dots {
@@ -132,8 +136,9 @@ table {
   flex: 1;
   margin-right: 15px;
   margin-left: 15px;
-  height: auto;
   max-height: 80%;
+  overflow: auto;
+  height: fit-content;
 }
 
 .table-header th {
@@ -156,6 +161,10 @@ table {
   text-align: center;
 }
 
+.table-orders tr td {
+  width: 45px;
+}
+
 .table-header td:first-child {
   border-top-left-radius: 4px;
 }
@@ -164,16 +173,16 @@ table {
   background-color: #ddd6d757;
 }
 
-.table-orders tr td {
-  width: 45px;
-}
-
 .content-scroll {
   /* overflow-x: unset; */
-  margin-top: 0px;
-  padding-top: 0px;
+  margin-top: 0;
+  padding-top: 0;
 }
 
 .content-table {
   height: 100%;
+}
+
+.brand-value {
+  font-weight: bolder;
 }

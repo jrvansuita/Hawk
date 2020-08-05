@@ -1,164 +1,114 @@
 <html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/front/css/layout/menu.css" />
+    <link rel="stylesheet" type="text/css" href="/front/css/layout/general.css" />
+    <script type="text/javascript" src="/front/js/libs/menu-controller.js"></script>
+    <script type="text/javascript" src="/util/local.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/front/js/control/menu.js"></script>
+    <script type="text/javascript" src="/util/string.js"></script>
+    <script type="text/javascript" src="/util/date.js"></script>
+    <script type="text/javascript" src="/util/number.js"></script>
+    <script type="text/javascript" src="/util/util.js"></script>
+    <script type="text/javascript" src="/util/array.js"></script>
+    <script type="text/javascript" src="/util/float.js"></script>
+    <script type="text/javascript" src="/util/sett.js"></script>
+    <script type="text/javascript" src="/param"></script>
+    <script type="text/javascript" src="/front/js/control/general.js"></script>
+    <script type="text/javascript" src="/front/js/libs/file-loader.js"></script>
 
-<head>
-  <link rel="stylesheet" type="text/css" href="/front/css/layout/menu.css">
-  <link rel="stylesheet" type="text/css" href="/front/css/layout/general.css">
+    <link href="//fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
 
+    <title>Hawk</title>
+    <link rel="icon" href="/img/icon/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/img/icon/favicon.ico" type="image/x-icon" />
+  </head>
 
-  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <script type="text/javascript" src="/front/js/control/menu.js"></script>
-  <script type="text/javascript" src="/util/string.js"></script>
-  <script type="text/javascript" src="/util/date.js"></script>
-  <script type="text/javascript" src="/util/number.js"></script>
-  <script type="text/javascript" src="/util/util.js"></script>
-  <script type="text/javascript" src="/util/array.js"></script>
-  <script type="text/javascript" src="/util/float.js"></script>
-  <script type="text/javascript" src="/util/sett.js"></script>
-  <script type="text/javascript" src="/param"></script>
-  <script type="text/javascript" src="/front/js/control/general.js"></script>
-  <script type="text/javascript" src="/front/js/libs/file-loader.js"></script>
+  <body>
+    <script type="text/javascript" class="hidable-script">
+      window.loggedUser = <%- JSON.stringify(loggedUser || null) %>
+      window._params = <%- JSON.stringify(Params.export() || null) %>
+    </script>
 
-  <link href="//fonts.googleapis.com/css?family=Roboto" rel='stylesheet' type='text/css'>
+    <nav class="main-menu-nav">
+      <div class="start-jobs">
+        <% var img = '/img/icon/bi.png'; if (!process.env.IS_PRODUCTION){ img = '/img/maintenance.png'; } if (global.eccoConnErrors){ img = '/img/api-error.png'; } %>
+        <img src="<%=img%>" id="logo" title="<%=global.eccoConnError? 'Erro ao conectar e receber dados via API' : 'Hawk' %>" />
+      </div>
 
-  <title>Hawk</title>
-  <link rel="icon" href="/img/icon/favicon.ico" type="image/x-icon" />
-  <link rel="shortcut icon" href="/img/icon/favicon.ico" type="image/x-icon" />
-
-
-</head>
-
-<body>
-  <script type="text/javascript" class="hidable-script">
-  window.loggedUser = <%- JSON.stringify(loggedUser || null) %>
-  window._params = <%- JSON.stringify(Params.export() || null) %>
-</script>
-
-
-<nav id="main-menu">
-
-  <div class=" start-jobs">
-
-    <%
-    var img = '/img/icon/hawk.png';
-
-    if (!process.env.IS_PRODUCTION){
-      img = '/img/maintenance.png';
-    }
-
-    if (global.eccoConnErrors){
-      img = '/img/api-error.png';
-    }
-    %>
-    <img src="<%=img%>" id="logo" title="<%=global.eccoConnError? 'Erro ao conectar e receber dados via API' : 'Hawk' %>"/>
-  </div>
-
-  <ul id="nav">
-
-    <%if (Menu.has(loggedUser, 'picking')){%>
-      <li class="menu-item">
-        <a href="/picking">
-          <div class="menu-button title">
-            Picking
-          </div>
-        </a>
-      </li>
-      <%}%>
-
-
-
-      <%if (Menu.has(loggedUser, 'packing')){%>
-        <li class="menu-item">
+      <ul class="main-menu-ul">
+        <%if (Menu.has(loggedUser, 'picking')){%>
+        <li class="menu-item" sub="picking-menu">
+          <a href="/picking">
+            <div class="menu-button title">
+              <span class="menu-label">Picking</span>
+            </div>
+          </a>
+        </li>
+        <%}%> <%if (Menu.has(loggedUser, 'packing')){%>
+        <li class="menu-item" sub="packing-menu">
           <a href="/packing">
             <div class="menu-button title">
-              Packing
+              <span class="menu-label">Packing</span>
+            </div>
+          </a>
+        </li>
+        <%}%> <%if (Menu.has(loggedUser, 'pendência')){%> <%if (Sett.get(locals.loggedUser,2)){%>
+        <li class="menu-item" sub="pending-menu">
+          <a href="/pending">
+            <div class="menu-button title">
+              <span class="menu-label">Pendência</span>
+            </div>
+          </a>
+        </li>
+        <%}%> <%}%> <%if (Menu.has(loggedUser, 'performance')){%>
+        <li class="menu-item" sub="performance-menu">
+          <a href="/performance/profile">
+            <div class="menu-button title">
+              <span class="menu-label">Performance</span>
+            </div>
+          </a>
+        </li>
+        <%}%> <%if (Menu.has(loggedUser, 'atendimento')){%>
+        <li class="menu-item" sub="customer-menu">
+          <a href="/customer-service/client">
+            <div class="menu-button title">
+              <span class="menu-label">Atendimento</span>
+            </div>
+          </a>
+        </li>
+        <%}%> <%if (Menu.has(loggedUser, 'estoque')){%>
+        <li class="menu-item" sub="stock-menu">
+          <a href="/product/page">
+            <div class="menu-button title">
+              <span class="menu-label">Estoque</span>
+            </div>
+          </a>
+        </li>
+        <%}%> <%if (Menu.has(loggedUser, 'histórico')){%>
+        <li class="menu-item">
+          <a href="/history">
+            <div class="menu-button title">
+              <span class="menu-label">Histórico</span>
+            </div>
+          </a>
+        </li>
+        <%}%> <%if (Menu.has(loggedUser, 'Configurações')){%>
+        <li class="menu-item">
+          <a href="/settings">
+            <div class="menu-button title">
+              <span class="menu-label">Configurações</span>
             </div>
           </a>
         </li>
         <%}%>
+      </ul>
 
-        <%if (Menu.has(loggedUser, 'pendência')){%>
-          <%if (Sett.get(locals.loggedUser,2)){%>
-            <li class="menu-item ">
-              <a href="/pending">
-                <div class="menu-button title">
-                  Pendência
-                </div>
-              </a>
-            </li>
-            <%}%>
-            <%}%>
+      <div class="user-logged-holder">
+        <img src="<%=loggedUser ? loggedUser.avatar : 'default' %>" class="user-logged-img circle shadow" onerror="this.src='/img/avatar.png'" />
 
-
-            <%if (Menu.has(loggedUser, 'performance')){%>
-              <li class="menu-item ">
-                <a href="/performance/profile">
-                  <div class="menu-button title">
-                    Performance
-                  </div>
-                </a>
-              </li>
-              <%}%>
-
-
-              <%if (Menu.has(loggedUser, 'atendimento')){%>
-                <li class="menu-item ">
-                  <a href="/customer-service/client">
-                    <div class="menu-button title">
-                      Atendimento
-                    </div>
-                  </a>
-                </li>
-              <%}%>
-
-                <%if (Menu.has(loggedUser, 'estoque')){%>
-                  <li class="menu-item ">
-                    <a href="/product/page">
-                      <div class="menu-button title">
-                        Estoque
-                      </div>
-                    </a>
-                  </li>
-                  <%}%>
-
-
-                  <%if (Menu.has(loggedUser, 'histórico')){%>
-                    <li class="menu-item ">
-                      <a href="/history">
-                        <div class="menu-button title">
-                          Histórico
-                        </div>
-                      </a>
-                    </li>
-                    <%}%>
-
-
-
-
-                    <%if (Menu.has(loggedUser, 'Configurações')){%>
-                      <li class="menu-item ">
-                        <a href="/settings">
-                          <div class="menu-button title">
-                            Configurações
-                          </div>
-                        </a>
-                      </li>
-                      <%}%>
-
-
-                    </ul>
-
-                    <div class=" user-logged-holder">
-
-                      <img src="<%=loggedUser ? loggedUser.avatar : 'default' %>" class="user-logged-img circle shadow" onerror="this.src='/img/avatar.png'"/>
-
-                      <label class="title user-logged-name"><%= loggedUser ? loggedUser.name : 'No User' %> </label>
-
-
-                    </div>
-                  </nav>
-
-
-
-                </body>
-
-                </html>
+        <label class="title user-logged-name"><%= loggedUser ? loggedUser.name : 'No User' %> </label>
+      </div>
+    </nav>
+  </body>
+</html>

@@ -38,11 +38,11 @@ class RangeDatePicker {
     return { from: new Date(this.from).getTime(), to: new Date(this.to).getTime() };
   }
 
-  setDates(from, to) {
-    this.from = from ? new Date(parseInt(from)) : new Date();
-    this.to = to ? new Date(parseInt(to)) : new Date();
-    return this;
-  }
+  // setDates(from, to) {
+  //   this.from = from ? new Date(from) : new Date();
+  //   this.to = to ? new Date(to) : new Date();
+  //   return this;
+  // }
 
   setPos(leftPicker = -185, rightPicker = -50) {
     this.leftPickerPos = leftPicker;
@@ -60,13 +60,18 @@ class RangeDatePicker {
     return this;
   }
 
-  _setDates(from, to) {
-    this.from = from;
-    this.to = to;
-    this.dateInputBegin.val(Dat.format(from));
-    this.dateInputEnd.val(Dat.format(to));
-    this.dateInputBegin.data('begin', new Date(from).getTime());
-    this.dateInputEnd.data('end', new Date(to).getTime());
+  setDates(from, to) {
+    this.from = from ? new Date(from) : new Date();
+    this.to = to ? new Date(to) : new Date();
+
+    //change interface
+    if (this.dateInputBegin && this.dateInputEnd) {
+      this.dateInputBegin.val(Dat.format(this.from));
+      this.dateInputEnd.val(Dat.format(this.to));
+      this.dateInputBegin.data('begin', this.from.getTime());
+      this.dateInputEnd.data('end', this.to.getTime());
+    }
+    return this;
   }
 
   _build() {
@@ -74,14 +79,8 @@ class RangeDatePicker {
     this.beginHolder = $('<div>').addClass('material-input-holder');
     this.endHolder = $('<div>').addClass('material-input-holder');
 
-    this.dateInputBegin = $('<input>')
-      .attr('id', 'date-begin')
-      .attr(this._setOptionsForInput(this.beginTitle, this.from))
-      .css('z-index', '9');
-    this.dateInputEnd = $('<input>')
-      .attr('id', 'date-end')
-      .attr(this._setOptionsForInput(this.endTitle, this.to))
-      .css('z-index', '9');
+    this.dateInputBegin = $('<input>').attr('id', 'date-begin').attr(this._setOptionsForInput(this.beginTitle, this.from)).css('z-index', '9');
+    this.dateInputEnd = $('<input>').attr('id', 'date-end').attr(this._setOptionsForInput(this.endTitle, this.to)).css('z-index', '9');
 
     this.span = $('<span>').addClass('bar');
     this.label = $('<label>');
@@ -101,10 +100,12 @@ class RangeDatePicker {
     if (this.menuOptions) this._createMenuOptions();
 
     if (this.showArrows) this._arrowsDate();
+
+    this.setDates(this.from, this.to);
   }
 
   _setOptionsForInput(title, dateValue) {
-    var options = { required: 'required', title: title, maxlength: 8, value: Dat.format(dateValue) || Dat.format(Dat.today()) };
+    var options = { required: 'required', title: title, maxlength: 8, value: Dat.format(new Date(dateValue)) || Dat.format(Dat.today()) };
     return options;
   }
 
@@ -113,13 +114,37 @@ class RangeDatePicker {
     var $rightArrow = $('<img>').addClass('date-arrow right-arrow').attr('src', '/img/right.png');
 
     $leftArrow.click(() => {
-      this._setDates(Dat.rollDay(this.from, -1), Dat.rollDay(this.to, -1));
+      this.setDates(Dat.rollDay(this.from, -1), Dat.rollDay(this.to, -1));
     });
     $rightArrow.click(() => {
-      this._setDates(Dat.rollDay(this.from, 1), Dat.rollDay(this.to, 1));
+      this.setDates(Dat.rollDay(this.from, 1), Dat.rollDay(this.to, 1));
     });
 
     this.holderEl.prepend($leftArrow).append($rightArrow);
+  }
+
+  setToday() {
+    return this.setDates(Dat.today(), Dat.today());
+  }
+
+  setYesterday() {
+    return this.setDates(Dat.yesterday(), Dat.yesterday());
+  }
+
+  setThisWeek() {
+    return this.setDates(Dat.firstDayCurrentWeek(), Dat.lastDayCurrentWeek());
+  }
+
+  setLastWeek() {
+    return this.setDates(Dat.firstDayLastWeek(), Dat.lastDayLastWeek());
+  }
+
+  setThisMonth() {
+    return this.setDates(Dat.firstDayOfMonth(), Dat.lastDayOfMonth());
+  }
+
+  setLastMonth() {
+    return this.setDates(Dat.firstDayOfLastMonth(), Dat.lastDayOfLastMonth());
   }
 
   _createMenuOptions() {
@@ -127,22 +152,22 @@ class RangeDatePicker {
 
     Dropdown.on(this.dateMenu)
       .item(null, 'Hoje', () => {
-        this._setDates(Dat.today(), Dat.today());
+        this.setToday();
       })
       .item(null, 'Ontem', () => {
-        this._setDates(Dat.yesterday(), Dat.yesterday());
+        this.setYesterday();
       })
       .item(null, 'Essa Semana', () => {
-        this._setDates(Dat.firstDayCurrentWeek(), Dat.lastDayCurrentWeek());
+        this.setThisWeek();
       })
       .item(null, 'Última Semana', () => {
-        this._setDates(Dat.firstDayLastWeek(), Dat.lastDayLastWeek());
+        this.setLastWeek();
       })
       .item(null, 'Este Mês', () => {
-        this._setDates(Dat.firstDayOfMonth(), Dat.lastDayOfMonth());
+        this.setThisMonth();
       })
       .item(null, 'Último Mês', () => {
-        this._setDates(Dat.firstDayOfLastMonth(), Dat.lastDayOfLastMonth());
+        this.setLastMonth();
       });
 
     this.holderEl.append(this.dateMenu);
@@ -178,7 +203,7 @@ class RangeDatePicker {
         if (this.onRangeChange) {
           this.onRangeChange(this.from, this.to);
         }
-        this._setDates(this.from, this.to);
+        this.setDates(this.from, this.to);
       })
       .setOnOpen(() => {
         if ($('.gj-picker').first().css('display') === 'none') {

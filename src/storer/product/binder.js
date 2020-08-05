@@ -40,12 +40,12 @@ class ProductBinder {
 
     var handler = new AttributesHandler();
 
-    map.forEach((each) => {
+    map.forEach(each => {
       if (this[each.key]) {
         var items = handler.filter(each.key, this[each.key]).get();
 
         if (items) {
-          [].concat(items).forEach((eachItem) => {
+          [].concat(items).forEach(eachItem => {
             result.push({ id: eachItem.idAttr || eachItem.id, valor: eachItem.tag ? eachItem.id : this[each.key] });
           });
         }
@@ -213,7 +213,7 @@ class ProductBinder {
     if ((this._Skus || this.selectedSizeGroup) && this.codigo) {
       var changedData = !this.faixa_de_idade || (this.selectedSizeGroup && this.selectedSizeGroup != this.lastSelectedSizeGroup);
       this.sizes =
-        this?._Skus?.map((each) => {
+        this?._Skus?.map(each => {
           return each.codigo.split('-').pop();
         }) || [];
 
@@ -227,7 +227,7 @@ class ProductBinder {
         }
 
         var rows = (await Enum.on('PROD-TAM-ATTR').get())?.items;
-        rows.forEach((each) => {
+        rows.forEach(each => {
           if (each.default || Arr.includesAll(each.name.split(','), this.sizes.join(','))) {
             this.Idade = each.value.split(',');
             this.age_group = each.icon;
@@ -246,11 +246,17 @@ class ProductBinder {
     } else {
       var currentCharacteristics = [this.Material, this.Departamento, this.Cor, this.sizeDescription, this.Marca, this.Fabricante, this.Ocasiao, this.Genero, this.Estacao].filter(Boolean);
 
-      if (currentCharacteristics.length) {
+      if (this.postDesc) {
+        this.conteudo = this.postDesc;
+      } else if (currentCharacteristics.length) {
         var higherProbabilityMatch = await Enum.on('AUTO-DESC-CAD-PROD', true).best(currentCharacteristics);
         var template = await new TemplateBuilder(higherProbabilityMatch?.value).useSampleData().get();
         this.conteudo = template.content;
+      }
 
+      if (this.postCompDesc) {
+        this.descricaoComplementar = this.postCompDesc;
+      } else if (currentCharacteristics.length) {
         this.descricaoComplementar = (await Enum.on('AUTO-DESC-C-CAD-PROD', true).best(currentCharacteristics)).description;
       }
     }
@@ -315,7 +321,7 @@ class ProductBinder {
 
   getChilds() {
     var childs = [];
-    this._Skus.forEach((each) => {
+    this._Skus.forEach(each => {
       childs.push(this.getChildBy(each));
     });
 
@@ -334,7 +340,7 @@ module.exports = ProductBinder;
 
 var tag = 'refresh-product';
 
-global.io.on('connection', (socket) => {
+global.io.on('connection', socket => {
   socket.on(tag, async (id, data) => {
     global.io.sockets.emit(tag, id, await ProductBinder.create(data).body());
   });

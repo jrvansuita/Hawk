@@ -4,21 +4,24 @@ class ComboBox {
 
     this.element = element;
     this.setLimit(5);
+    this.setData(data);
 
+    this.method = method;
+  }
+
+  setData(data) {
     if (data instanceof Array) {
       this.objects = data;
     } else if (typeof data === 'string') {
       this.path = data;
     } else if (typeof data === 'object' && data !== null) {
-      this.objects = Object.keys(data).map((key) => {
+      this.objects = Object.keys(data).map(key => {
         return {
           val: data[key],
           key: key,
         };
       });
     }
-
-    this.method = method;
   }
 
   fromEnum(tag) {
@@ -84,7 +87,7 @@ class ComboBox {
 
     this.element.autocomplete('close');
 
-    this.element.one('keyup', (e) => {
+    this.element.one('keyup', e => {
       if (e.which == 13) {
         this.element.val('');
         this.element.focus();
@@ -117,7 +120,7 @@ class ComboBox {
       $.ajax({
         url: this.path,
         type: this.method || 'get',
-        success: (response) => {
+        success: response => {
           this._prepareResponse(response);
           this._handleData(callback);
         },
@@ -190,7 +193,6 @@ class ComboBox {
         if (this._callOnChangeBySelectingListItem) this.element.trigger('change');
 
         this.select(ui.item);
-        console.log('Select: ' + ui.item);
       },
     };
 
@@ -219,5 +221,10 @@ class ComboBox {
     }
 
     return $('<li>').append($('<div>').append(img, $('<span>').text(item.label)));
+  }
+
+  destroy() {
+    this.data = [];
+    this.method = null;
   }
 }

@@ -27,6 +27,7 @@ $(document).ready(() => {
   dataPicker.holder('.date-filters-holder', false)
     .setTitles('Data de Início', 'Data de Fim')
     .setPos(-72, 0)
+    .setDates(Dat.firstDayOfMonth(), Dat.lastDayOfMonth())
     .load()
 })
 
@@ -55,8 +56,8 @@ function createOrdersList(parent, orders, showAvatar) {
 
       // infos
       var number = $('<span>').text(each.number).addClass('info-value green-title')
-      var season = $('<label>').text(each.season).addClass('mini-red-circle right')
-      var brand = $('<label>').text(each.brand).addClass('info-value')
+      var season = $('<label>').text(each.season).addClass('mini-red-circle right').css('background', Util.strToColor(each.season + '00'))
+      var brand = $('<label>').text(each.brand).addClass('info-value brand-value')
       var manufacturer = $('<label>').text(Str.short(each.manufacturer, 10)).addClass('info-value')
       var date = $('<label>').text(Dat.format(new Date(each.date))).addClass('info-value')
       var userImg = $('<img>').attr('src', each.user.avatar).addClass('mini-avatar shadow circle')
@@ -111,7 +112,6 @@ function bindFinishedDropdown(el) {
   var drop = Dropdown.on(el)
 
   drop.item('/img/delete.png', 'Excluir', (helper) => {
-    console.log(helper)
     _post('/stock/delete-order', { orderId: helper.data.id }, (_err, res) => {
       window.location.reload()
     })
@@ -175,7 +175,7 @@ function createFinishedTable(data) {
     var manufacturer = $('<td>').text(each.manufacturer)
     var brand = $('<td>').text(each.manufacturer)
     var user = $('<td>').text(each.user.name)
-    var menuHolder = $('<div>').addClass('menu-dots')
+    var menuHolder = $('<div>').addClass('menu-dots').data('id', each.id)
     var menu = $('<td>').append(menuHolder)
     trLine.append(date, number, manufacturer, brand, user, menu)
 

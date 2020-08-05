@@ -87,7 +87,7 @@ function openOptionsMenu (line, e) {
   $('.icon-dots').each((index, each) => {
     Dropdown.on(each)
       .item('../img/not-visible.png', 'Visualizar', (helper) => {
-        window.open('templates-viewer?id=' + helper.data.id, '_blank')
+        window.open('viewer?id=' + helper.data.id, '_blank')
       })
       .item('../img/duplicate.png', 'Duplicar', (helper) => {
         duplicateItem(helper.data.id)

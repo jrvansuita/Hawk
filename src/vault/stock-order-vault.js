@@ -1,10 +1,12 @@
 const StockOrder = require('../bean/stock-order.js')
+const GDriveUpload = require('../gdrive/gdrive-api')
 
 module.exports = class {
   static storeFromScreen(params, callback) {
+    console.log(params);
     params.user = { name: params.user.name, avatar: params.user.avatar, id: params.user.id }
 
-    var order = new StockOrder(params.id, params.user, params.number, params.manufacturer, params.brand, params.season, params.year, new Date(params.date))
+    var order = new StockOrder(params.id, params.user, params.number, params.manufacturer, params.brand, params.season, params.year, new Date(params.date), params.attachs.split(','))
 
     order.upsert((_err, doc) => {
       callback(doc)
@@ -17,5 +19,9 @@ module.exports = class {
       order.remove()
       callback()
     })
+  }
+
+  static uploadAttach(file, callback) {
+    new GDriveUpload().setMedia(file).upload(callback)
   }
 }
