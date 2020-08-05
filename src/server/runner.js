@@ -34,6 +34,7 @@ module.exports = class ServerRunner {
     this.express.use(
       fileUpload({
         limits: { fileSize: 50 * 1024 * 1024 },
+        useTempFiles: true
       })
     );
   }

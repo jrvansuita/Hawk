@@ -128,12 +128,9 @@ module.exports = class ProductRoutes extends Routes {
 
     this._post('/new-order', (req, res) => {
       req.body.user = req.session.loggedUser;
-
-      console.log(req.files);
-
-      // StockOrderVault.storeFromScreen(req.body, order => {
-      //   res.redirect('/stock/panel');
-      // });
+      StockOrderVault.storeFromScreen(req.body, order => {
+        res.redirect('/stock/panel');
+      });
     });
 
     this._get('/stock-order-attr', (req, res) => {
@@ -152,6 +149,12 @@ module.exports = class ProductRoutes extends Routes {
       new StockOrderProvider().search(req.query, data => {
         this._resp().sucess(res, data);
       });
+    });
+
+    this._post('/order-attach-upload', (req, res) => {
+      StockOrderVault.uploadAttach(req.files.attach, fileId => {
+        this._resp().sucess(res, fileId)
+     })
     });
   }
 };

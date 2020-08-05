@@ -56,8 +56,8 @@ function createOrdersList(parent, orders, showAvatar) {
 
       // infos
       var number = $('<span>').text(each.number).addClass('info-value green-title')
-      var season = $('<label>').text(each.season).addClass('mini-red-circle right')
-      var brand = $('<label>').text(each.brand).addClass('info-value')
+      var season = $('<label>').text(each.season).addClass('mini-red-circle right').css('background', Util.strToColor(each.season + '00'))
+      var brand = $('<label>').text(each.brand).addClass('info-value brand-value')
       var manufacturer = $('<label>').text(Str.short(each.manufacturer, 10)).addClass('info-value')
       var date = $('<label>').text(Dat.format(new Date(each.date))).addClass('info-value')
       var userImg = $('<img>').attr('src', each.user.avatar).addClass('mini-avatar shadow circle')

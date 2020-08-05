@@ -8,11 +8,11 @@ module.exports = class GDriveApi {
         console.log(this);
     }
 
-    setMedia(fileName, filePath, fileType) {
-        this.fileMetadata = { name: fileName, parents: [Params.getGDriveFolder()] }
+    setMedia(file) {
+        this.fileMetadata = { name: file.name, parents: [Params.getGDriveFolder()] }
         this.file = {
-            mimeType: fileType,
-            body: fs.createReadStream(filePath)
+            mimeType: file.mimetype,
+            body: fs.createReadStream(file.tempFilePath)
         }
         return this
     }
@@ -24,12 +24,13 @@ module.exports = class GDriveApi {
             this.drive.files.create({
                 resource: this.fileMetadata,
                 media: this.file,
-                fields: 'id'
+                fields: 'id, name, webViewLink'
             }, function (err, file) {
                 if (err) {
                     console.error(err);
                 } else {
-                    callback(file.data.id);
+                    console.log(file.data);
+                    callback(file.data);
                 }
             });
         })

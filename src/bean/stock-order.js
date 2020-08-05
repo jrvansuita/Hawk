@@ -1,7 +1,7 @@
 const DataAccess = require('../mongoose/data-access')
 
 module.exports = class StockOrder extends DataAccess {
-  constructor (id, user, number, manufacturer, brand, season, year, date) {
+  constructor (id, user, number, manufacturer, brand, season, year, date, attachs) {
     super()
     this.id = id || Util.id()
     this.status = 0
@@ -12,6 +12,7 @@ module.exports = class StockOrder extends DataAccess {
     this.brand = Str.def(brand)
     this.season = Str.def(season)
     this.year = Str.def(year)
+    this.attachs = attachs || []
   }
 
   static getKey () {

@@ -6,15 +6,8 @@ module.exports = class {
     console.log(params);
     params.user = { name: params.user.name, avatar: params.user.avatar, id: params.user.id }
 
-    var order = new StockOrder(params.id, params.user, params.number, params.manufacturer, params.brand, params.season, params.year, new Date(params.date))
+    var order = new StockOrder(params.id, params.user, params.number, params.manufacturer, params.brand, params.season, params.year, new Date(params.date), params.attachs.split(','))
 
-    // if (params.attach) {
-    //   new GDriveUpload()
-    //     .setMedia(params.attach, params.attach, 'image/png')
-    //     .go((id) => {
-    //     console.log(id);
-    //   })
-    // }
     order.upsert((_err, doc) => {
       callback(doc)
     })
@@ -26,5 +19,9 @@ module.exports = class {
       order.remove()
       callback()
     })
+  }
+
+  static uploadAttach(file, callback) {
+    new GDriveUpload().setMedia(file).upload(callback)
   }
 }

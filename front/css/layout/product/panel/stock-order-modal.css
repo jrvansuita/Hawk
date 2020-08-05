@@ -27,3 +27,11 @@
   width: 30px;
   cursor: pointer;
 }
+
+#img-upload {
+  display: flex;
+}
+
+.files {
+  margin-left: 10px;
+}

@@ -39,17 +39,23 @@
           <label>Estação</label>
         </div>
         <input type="text" name="date" id="date-hidden" style="display: none;" />
+        <input type="text" name="attachs" id="attachs-hidden" style="display: none;" />
         <div class="material-input-holder">
           <input type="text" id="date-picker" id="date" required autocomplete="off" />
           <span class="bar"></span>
           <label>Data de Entrega</label>
         </div>
       </div>
-      <div class="input-holder">
-        <img class="mini-img" id="upload" src="/img/attach.png" alt="Incluir Anexo" />
-        <input type="file" id="input-upload" name="attach" style="display: none;" />
-        <label class="button shadow" id="save" tabindex="0">Agendar pedido</label>
-      </div>
+    <div class="input-holder">
+      <label class="button shadow" id="save" tabindex="0">Agendar pedido</label>
+    </div>
     </div>
   </form>
+      <form id="img-upload">
+        <img class="mini-img" id="upload-img" src="/img/attach.png" alt="Incluir Anexo" />
+        <input type="file" id="input-upload" name="attach" style="display: none;" />
+        <div class="files">
+      
+        </div>
+      </form>
 </div>
