@@ -68,19 +68,18 @@
 }
 
 /* On Menu Active */
-.focus-menu.menu-item,
+.active-menu.menu-item,
 .menu-item:hover {
   background-color: #00000014;
 }
 
-.focus-menu.menu-item .menu-label,
-.menu-item .menu-label:hover {
+.active-menu.menu-item .menu-label,
+.menu-item:hover .menu-label {
   color: white;
   border-bottom: 2px solid #fff;
 }
 
 .sub-menu-nav {
-  padding-left: 70px;
   position: fixed;
   width: 100%;
   top: 50px;
