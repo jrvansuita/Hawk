@@ -52,7 +52,7 @@ function showPendingItemModal(el) {
   el.addClass('mini-item-modal dense-shadow');
   el.find('.closable').fadeIn(200);
 
-  changeFontSize(el, 2);
+  Util.changeFontSize(el, 2);
 
   el.parent()
     .unbind('click')
@@ -67,7 +67,7 @@ function hidePedingItemModal() {
   el.parent().removeClass('modal');
   el.removeClass('mini-item-modal dense-shadow');
   el.find('.closable').remove();
-  changeFontSize(el, -2);
+  Util.changeFontSize(el, -2);
   $('#user-id').focus();
   el.find('.menu-dots-pending').empty().hide();
 }
@@ -378,21 +378,6 @@ function execute(path, pending, onSucess) {
       $('.error').text(error.responseText).fadeIn().delay(1000).fadeOut();
     }
   );
-}
-
-function changeFontSize(els, direction) {
-  els.find('span,label').each(function (i, e) {
-    $(e).css('font-size', parseInt($(e).css('font-size')) + direction);
-  });
-
-  els.find('.avatar-img').each(function (i, e) {
-    $(e).css('width', parseInt($(e).css('width')) + direction * 4);
-    $(e).css('height', parseInt($(e).css('height')) + direction * 4);
-  });
-
-  els.css('padding-left', parseInt(els.css('padding-left')) + direction * 4);
-  els.css('padding-right', parseInt(els.css('padding-right')) + direction * 4);
-  els.css('padding-top', parseInt(els.css('padding-top')) + direction * 2);
 }
 
 function isBlocked(pending) {

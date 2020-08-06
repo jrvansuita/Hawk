@@ -60,10 +60,13 @@
 
 table {
   width: 100%;
+  border-collapse: collapse;
 }
 
 .order-item table {
-  padding-left: 4px;
+  padding-left: 7px;
+  padding-right: 7px;
+  border-collapse: collapse;
 }
 
 .order-item {
@@ -95,6 +98,7 @@ table {
   width: fit-content;
   height: fit-content;
   float: right;
+  display: none;
 }
 
 .avatar-holder {
@@ -155,14 +159,15 @@ table {
 }
 
 .line-order td {
-  padding: 5px 8px;
+  padding: 8px 8px;
   font-size: 13px;
   cursor: pointer;
   text-align: center;
 }
 
 .table-orders tr td {
-  width: 45px;
+  max-width: 45px;
+  padding-left: 7px;
 }
 
 .table-header td:first-child {
@@ -184,5 +189,34 @@ table {
 }
 
 .brand-value {
-  font-weight: bolder;
+  font-weight: 700;
+}
+
+.new-order-modal {
+  display: none;
+}
+
+.order-modal-content {
+  width: 400px;
+  height: min-content;
+  position: fixed;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding-bottom: 70px;
+  padding: 6px;
+}
+
+.view-attach {
+  width: 20px;
+}
+
+.view-attach:hover {
+  transform: scale(1.2);
+}
+
+.line-order {
+  border-left: 3px solid #009485;
 }

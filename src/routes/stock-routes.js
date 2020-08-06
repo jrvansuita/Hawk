@@ -128,7 +128,7 @@ module.exports = class ProductRoutes extends Routes {
 
     this._post('/new-order', (req, res) => {
       req.body.user = req.session.loggedUser;
-      StockOrderVault.storeFromScreen(req.body, order => {
+      StockOrderVault.storeFromScreen(req.body?.data || req.body, order => {
         res.redirect('/stock/panel');
       });
     });
@@ -143,6 +143,10 @@ module.exports = class ProductRoutes extends Routes {
 
     this._post('/update-order-status', (req, res) => {
       new StockOrderHandler().updateStatus(req.body.orderId, req.session.loggedUser, this._resp().redirect(res));
+    });
+
+    this._post('/update-order', (req, res) => {
+      new StockOrderHandler().sto(req.body.orderId, req.session.loggedUser, this._resp().redirect(res));
     });
 
     this._get('/get-orders', (req, res) => {

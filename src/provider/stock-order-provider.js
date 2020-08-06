@@ -13,7 +13,7 @@ module.exports = class StockOrderProvider {
 
   getAll(callback) {
     StockOrder.findAll((_err, orders) => {
-      callback(this._filterOrders(orders))
+      callback(orders)
     })
   }
 
@@ -35,7 +35,7 @@ module.exports = class StockOrderProvider {
       this.getOrdersPages(query, query.page, query.limit, callback)
     } else {
       StockOrder.find(this.getDataQuery(query), (_err, docs) => {
-        callback(this._filterOrders(docs))
+        callback(docs)
       })
     }
   }
@@ -56,7 +56,7 @@ module.exports = class StockOrderProvider {
 
   getOrdersPages(query, page, limit, callback) {
     StockOrder.paginate({ status: query.status }, page, '-date', parseInt(limit), (_err, data) => {
-      callback(this._filterOrders(data))
+      callback(data)
     })
   }
 }

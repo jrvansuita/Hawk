@@ -5,15 +5,9 @@ new Initilizer()
   .begin()
   .then(async () => {
     const GDrive = require('./src/gdrive/gdrive-api')
+    const ProductBoard = require('./src/performance/product-board-email')
 
-    var filePath = '/Users/admin/Downloads/Pasta Sem Título/CB701li.png';
-
-    new GDrive().download('1b2WcHMPe6XgEU0etyh6jAywhMnqM1RBF')
-
-    // new GDrive().setMedia('TesteUP', filePath, 'image/png').upload((id) => {
-    //   console.log(id);
-    // })
-
-    // console.log(Params.getGDriveCredentials());
-    // console.log(Params.getGDriveToken());
+    new ProductBoard().go((data) => {
+      console.log(data);
+    })
   });

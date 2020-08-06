@@ -352,6 +352,21 @@ var Util = {
 
   isTokenOk: (user) => {
     return user.token && (user.token.length > 100)
+  },
+
+  changeFontSize(els, direction) {
+    els.find('span,label').each(function (i, e) {
+      $(e).css('font-size', parseInt($(e).css('font-size')) + direction);
+    });
+
+    els.find('.avatar-img').each(function (i, e) {
+      $(e).css('width', parseInt($(e).css('width')) + direction * 4);
+      $(e).css('height', parseInt($(e).css('height')) + direction * 4);
+    });
+
+    els.css('padding-left', parseInt(els.css('padding-left')) + direction * 4);
+    els.css('padding-right', parseInt(els.css('padding-right')) + direction * 4);
+    els.css('padding-top', parseInt(els.css('padding-top')) + direction * 2);
   }
 
 }

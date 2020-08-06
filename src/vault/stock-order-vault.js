@@ -3,10 +3,11 @@ const GDriveUpload = require('../gdrive/gdrive-api')
 
 module.exports = class {
   static storeFromScreen(params, callback) {
-    console.log(params);
+    params.attachs = Array.isArray(params.attachs) ? params.attachs : params.attachs.split(',')
+
     params.user = { name: params.user.name, avatar: params.user.avatar, id: params.user.id }
 
-    var order = new StockOrder(params.id, params.user, params.number, params.manufacturer, params.brand, params.season, params.year, new Date(params.date), params.attachs.split(','))
+    var order = new StockOrder(params.id, params.status, params.user, params.number, params.manufacturer, params.brand, params.season, params.year, new Date(params.date), params.attachs)
 
     order.upsert((_err, doc) => {
       callback(doc)
