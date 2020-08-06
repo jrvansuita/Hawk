@@ -191,7 +191,7 @@ module.exports = class DataAccess {
   }
 
   static removeAll(query, callback) {
-    this.staticAccess().deleteMany(query, err => {
+    this.staticAccess().deleteMany(query, (err) => {
       if (callback) {
         callback(err);
       }
@@ -199,7 +199,7 @@ module.exports = class DataAccess {
   }
 
   static remove(object, callback) {
-    this.staticAccess().findOneAndRemove(this.staticAccess().getKeyQuery(this.staticAccess().getKeyVal(object)), err => {
+    this.staticAccess().findOneAndRemove(this.staticAccess().getKeyQuery(this.staticAccess().getKeyVal(object)), (err) => {
       if (callback) {
         callback(err);
       }
@@ -212,25 +212,29 @@ module.exports = class DataAccess {
     fields = [].concat(fields);
     values = [].concat(values);
 
-    fields.forEach(eachField => {
-      values.forEach(eachValue => {
-        var condition = {};
-
-        if (eachValue == '') {
+    fields.forEach((eachField) => {
+      values.forEach((eachValue) => {
+        if (eachValue === '') {
+          var condition = {};
           condition[eachField] = { $in: [null, ''] };
+          results.push(condition);
         } else {
-          condition[eachField] = {
-            $regex: scapeRegCharts(eachValue),
-
-            $options: 'i',
-          };
+          results.push(DataAccess.regexpComp(eachField, eachValue));
         }
-
-        results.push(condition);
       });
     });
 
     return { $or: results };
+  }
+
+  static regexpComp(field, value) {
+    var result = {};
+
+    result[field] = {
+      $regex: scapeRegCharts(value),
+      $options: 'i',
+    };
+    return result;
   }
 
   static range(field, min, max, parseDate) {
@@ -302,7 +306,7 @@ module.exports = class DataAccess {
   }
 
   remove(callback) {
-    this.classAccess().findOneAndRemove(this.getPKQuery(), err => {
+    this.classAccess().findOneAndRemove(this.getPKQuery(), (err) => {
       if (callback) {
         callback(err);
       }

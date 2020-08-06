@@ -2,8 +2,6 @@ const DashboardProvider = require('./dashboard-provider.js');
 
 const SaleStock = require('../../bean/sale-stock.js');
 
-var temp = {};
-
 module.exports = class StockDashboardProvider extends DashboardProvider.Handler {
   delete(callback) {
     SaleStock.removeAll(this.getDataQuery(), callback);
@@ -20,7 +18,7 @@ module.exports = class StockDashboardProvider extends DashboardProvider.Handler 
       });
     };
 
-    if (this.getDaysDif() == 0) {
+    if (this.getDaysDif() === 0) {
       resume(null, null);
     } else {
       SaleStock.byDayChart(this.getDataQuery(), resume);
@@ -52,7 +50,7 @@ class StockDash extends DashboardProvider.Helper {
     this.stockCounter = {};
     this.daysCounter = {};
 
-    rows.forEach(each => {
+    rows.forEach((each) => {
       this.total += each.total;
       this.items += each.quantity;
       this.cost += each.cost;
@@ -69,7 +67,7 @@ class StockDash extends DashboardProvider.Helper {
       this.handleArr(each, 'brand', this.handleCustom);
 
       if (each.quantity_sizes) {
-        Object.keys(each.quantity_sizes).forEach(key => {
+        Object.keys(each.quantity_sizes).forEach((key) => {
           this.handleArr({ size: key, quantity: each.quantity_sizes[key] }, 'size', this.handleCustom);
         });
       }
@@ -99,7 +97,7 @@ class StockDash extends DashboardProvider.Helper {
     this.score = this.sumScore / this.count;
     delete this.sumScore;
 
-    Object.keys(this.arrs).forEach(name => {
+    Object.keys(this.arrs).forEach((name) => {
       this.objectToArr(name, 'items');
     });
 

@@ -4,6 +4,10 @@ const DataAccess = require('../../mongoose/data-access.js');
 var temp = {};
 
 class DashboardProviderHandler {
+  constructor(user) {
+    this.user = user;
+  }
+
   maybe(sessionQueryId) {
     this.sessionQueryId = sessionQueryId;
     return this;
@@ -34,7 +38,7 @@ class DashboardProviderHandler {
     }
 
     if (this.query.filters) {
-      Object.keys(this.query.filters).forEach(key => {
+      Object.keys(this.query.filters).forEach((key) => {
         and.push({ [key]: { $gte: Floa.def(this.query.filters[key][0]), $lte: Floa.def(this.query.filters[key][1]) } });
       });
     }
@@ -44,10 +48,16 @@ class DashboardProviderHandler {
     }
 
     if (this.query.attrs) {
-      Object.keys(this.query.attrs).forEach(key => {
+      Object.keys(this.query.attrs).forEach((key) => {
         and.push(DataAccess.or(key, this.query.attrs[key].toString().split('|')));
       });
     }
+
+    if (this?.user?.manufacturer) {
+      and.push(DataAccess.regexpComp('manufacturer', this.user.manufacturer));
+    }
+
+    console.log(JSON.stringify(and));
 
     return { $and: and };
   }

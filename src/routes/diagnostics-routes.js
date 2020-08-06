@@ -1,18 +1,18 @@
-const Routes = require('./_route.js')
-const ProductDiagnostics = require('../diagnostics/product-diagnostics.js')
-const DiagnosticsProvider = require('../diagnostics/diagnostics-provider.js')
+const Routes = require('./_route.js');
+const ProductDiagnostics = require('../diagnostics/product-diagnostics.js');
+const DiagnosticsProvider = require('../diagnostics/diagnostics-provider.js');
 
 module.exports = class ProductRoutes extends Routes {
   mainPath() {
-    return '/diagnostics'
+    return '/diagnostics';
   }
 
   attach() {
-    this._page('', (req, res) => {
+    this.page('', (req, res) => {
       new DiagnosticsProvider().sums((data, types) => {
-        res.render('product/diagnostics/diagnostics', { sums: data, types: types })
-      })
-    })
+        res.render('product/diagnostics/diagnostics', { sums: data, types: types });
+      });
+    });
 
     /**
      * @api {post} /diagnostics/check Check Product Fixes
@@ -36,23 +36,23 @@ module.exports = class ProductRoutes extends Routes {
      *  ]
      */
 
-    this._post('/check', (req, res) => {
+    this.post('/check', (req, res) => {
       new ProductDiagnostics().resync(req.body.sku, req.body.forceFather, () => {
         new DiagnosticsProvider().groupped(true).loadBySku(req.body.sku, (all, product) => {
-          res.status(200).send(all)
-        })
-      })
-    })._api()
+          res.status(200).send(all);
+        });
+      });
+    }).api();
 
-    this._post('/run', (req, res) => {
+    this.post('/run', (req, res) => {
       if (req.body.refresh) {
-        new ProductDiagnostics().refresh(req.body.brand, req.body.type)
+        new ProductDiagnostics().refresh(req.body.brand, req.body.type);
       } else {
-        new ProductDiagnostics().sync()
+        new ProductDiagnostics().sync();
       }
 
-      res.status(200).send('Ok')
-    })
+      res.status(200).send('Ok');
+    });
 
     /**
      * @api {get} /diagnostics/fixes Product Diagnostics Fixes
@@ -72,29 +72,29 @@ module.exports = class ProductRoutes extends Routes {
      *    ]
      */
 
-    this._get('/fixes', (req, res) => {
-      var provider = new DiagnosticsProvider().groupped(req.query.groupped)
+    this.get('/fixes', (req, res) => {
+      var provider = new DiagnosticsProvider().groupped(req.query.groupped);
 
       if (req.query.type) {
         provider.loadByType(req.query.type, (all) => {
-          this._resp().sucess(res, all)
-        })
+          this._resp().success(res, all);
+        });
       } else {
         provider.findBySku(req.query.sku, async (data) => {
-          this._resp().sucess(res, data)
-        })
+          this._resp().success(res, data);
+        });
       }
-    })._apiRead()
+    }).apiRead();
 
-    this._get('/fixes-dialog', (req, res) => {
+    this.get('/fixes-dialog', (req, res) => {
       new DiagnosticsProvider().groupped(true).loadBySku(req.query.sku, (all, product) => {
-        res.render('product/diagnostics/diagnostics-dialog', { data: all, product: product })
-      })
-    })
+        res.render('product/diagnostics/diagnostics-dialog', { data: all, product: product });
+      });
+    });
 
-    this._post('/remove', (req, res) => {
-      new ProductDiagnostics().remove(req.body.sku)
-      res.status(200).send('Ok')
-    })
+    this.post('/remove', (req, res) => {
+      new ProductDiagnostics().remove(req.body.sku);
+      res.status(200).send('Ok');
+    });
   }
-}
+};

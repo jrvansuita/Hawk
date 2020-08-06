@@ -1,5 +1,6 @@
 <nav class="sub-menu-nav">
   <ul class="sub-menu-ul">
+    <%if (locals.loggedUser.type == 0){%>
     <li class="menu-item">
       <a href="/performance/profile">
         <div class="menu-button title">
@@ -15,8 +16,7 @@
         </div>
       </a>
     </li>
-
-    <%if (Sett.get(locals.loggedUser,6)){%>
+    <%}%> <%if (Sett.get(locals.loggedUser, 6, 0)){%>
     <li class="menu-item">
       <a href="/performance/manage-points">
         <div class="menu-button title">
