@@ -1,8 +1,9 @@
 const Params = require('../vars/params.js');
 const File = require('../file/file.js');
 const buffer = require('buffer/').Buffer;
+const UserType = require('../bean/enums/user-type');
 
-module.exports = class ServerMidlewares {
+module.exports = class ServerMiddleware {
   constructor(express) {
     this.express = express;
     this.userLoader = require('../provider/user-provider.js');
@@ -21,21 +22,26 @@ module.exports = class ServerMidlewares {
     // Generic Rules
     routeStack.use('*', this.getGenericRouteRule());
 
-    // Api and Market Rules
-    routeStack.use('/market/*', this.getMarketAuthRouteRule());
+    // Api Rules
     routeStack.use('/api/*', this.getApiAuthRouteRule());
 
     // Web Backend Rules
     routeStack.get('*', this.getLoginRedirectRouteRule());
     routeStack.post('*', this.getPostCheckUserRouteRule());
 
+    // Market Rules
+    routeStack.use('*', this.getMarketAuthRouteRule());
+
+    // Market Rules
+    routeStack.use('*', this.getGenericScapeStackRouteRule());
+
     this.express.use(routeStack);
   }
 
   welcome() {
     this.express.get('/', (req, res) => {
-      if (req.session.lastpath && req.session.lastpath !== '/') {
-        res.redirect(req.session.lastpath);
+      if (req.session.lastPath && req.session.lastPath !== '/') {
+        res.redirect(req.session.lastPath);
       } else {
         res.redirect('/login/welcome');
       }
@@ -43,13 +49,13 @@ module.exports = class ServerMidlewares {
   }
 
   getRoutes() {
-    return new File('src/routes').getFolderFilesPaths('.js').filter(e => {
+    return new File('src/routes').getFolderFilesPaths('.js').filter((e) => {
       return !e.startsWith('_');
     });
   }
 
   routes() {
-    this.getRoutes().forEach(file => {
+    this.getRoutes().forEach((file) => {
       var Clazz = require('../routes/' + file);
 
       new Clazz(this.express).attach();
@@ -58,8 +64,21 @@ module.exports = class ServerMidlewares {
 
   getMarketAuthRouteRule() {
     return (req, res, next) => {
-      console.log('Market');
-      next('router');
+      var user = req.session.loggedUser;
+      var path = res.locals.path;
+
+      // Se for fornecedor
+      if (user?.type === UserType.MANUFACTURER) {
+        if (global._marketAccess[path]) {
+          next();
+        } else {
+          console.error('Market No Access: ' + path);
+
+          res.status(401).send({ error: 'You do not have access to see this!' });
+        }
+      } else {
+        next();
+      }
     };
   }
 
@@ -107,7 +126,8 @@ module.exports = class ServerMidlewares {
         }
       }
 
-      next('router');
+      // next('router');
+      next();
     };
   }
 
@@ -115,7 +135,8 @@ module.exports = class ServerMidlewares {
     return (req, res, next) => {
       if (req.session.loggedUserID || req.path.includes('/login')) {
         res.locals.loggedUser = req.session.loggedUser;
-        next('router');
+        // next('router');
+        next();
       } else {
         res.status(401).send({ error: 'Web Backend not logged' });
       }
@@ -128,12 +149,18 @@ module.exports = class ServerMidlewares {
         console.log(`${req.method}: ${req.originalUrl}`);
       }
 
-      //this.printAllRoutes();
+      // this.printAllRoutes();
 
       res.locals.query = req.query;
       res.locals.url = req.originalUrl;
       res.locals.path = req.baseUrl || req.path;
       next();
+    };
+  }
+
+  getGenericScapeStackRouteRule() {
+    return (req, res, next) => {
+      next('router');
     };
   }
 

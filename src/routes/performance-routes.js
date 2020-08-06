@@ -1,31 +1,31 @@
-const Routes = require('./_route.js')
-const UsersProvider = require('../provider/user-provider.js')
-const MaganePoints = require('../handler/manage-points-handler.js')
-const SaleDashboardProvider = require('../provider/performance/sale-dashboard-provider.js')
-const StockDashboardProvider = require('../provider/performance/stock-dashboard-provider.js')
-const Cost = require('../bean/cost.js')
-const Enum = require('../bean/enumerator.js')
+const Routes = require('./_route.js');
+const UsersProvider = require('../provider/user-provider.js');
+const MaganePoints = require('../handler/manage-points-handler.js');
+const SaleDashboardProvider = require('../provider/performance/sale-dashboard-provider.js');
+const StockDashboardProvider = require('../provider/performance/stock-dashboard-provider.js');
+const Cost = require('../bean/cost.js');
+const Enum = require('../bean/enumerator.js');
 
 module.exports = class PerformanceRoutes extends Routes {
   mainPath() {
-    return '/performance'
+    return '/performance';
   }
 
   attach() {
-    this._get('/profiles', (req, res) => {
-      this._resp().sucess(res, UsersProvider.getAllUsers())
-    }).skipLogin()
+    this.get('/profiles', (req, res) => {
+      this._resp().success(res, UsersProvider.getAllUsers());
+    }).skipLogin();
 
-    this._page('/manage-points', (req, res) => {
+    this.page('/manage-points', (req, res) => {
       if (this._checkPermissionOrGoBack(req, res, 6)) {
-        res.render('performance/manage-points')
+        res.render('performance/manage-points');
       }
-    })
+    });
 
-    this._page('/profile', (req, res) => {
-      var from = global.Dat.query(req.query.from, Dat.firstDayOfMonth())
-      var to = global.Dat.query(req.query.to, Dat.lastDayOfMonth())
-      var userId = req.query.userid || req.session.loggedUserID
+    this.page('/profile', (req, res) => {
+      var from = global.Dat.query(req.query.from, Dat.firstDayOfMonth());
+      var to = global.Dat.query(req.query.to, Dat.lastDayOfMonth());
+      var userId = req.query.userid || req.session.loggedUserID;
 
       require('../provider/ProfilePerformanceProvider.js').onUserPerformance(from, to, userId, res.locals.loggedUser.full, function (user, charts, indicators) {
         res.render('performance/profile', {
@@ -33,26 +33,26 @@ module.exports = class PerformanceRoutes extends Routes {
           charts: charts,
           indicators: indicators,
           showCalendarFilter: true,
-          hideEmptyCharts: true
-        })
-      })
-    })
+          hideEmptyCharts: true,
+        });
+      });
+    });
 
-    this._post('/points', (req, res) => {
-      MaganePoints.balance(res.locals.loggedUser, req.body.data, this._resp().redirect(res))
-    })
+    this.post('/points', (req, res) => {
+      MaganePoints.balance(res.locals.loggedUser, req.body.data, this._resp().redirect(res));
+    });
 
-    this._post('/balance-packing-to-picking', (req, res) => {
-      MaganePoints.packingRemovingPointsFromPicker(res.locals.loggedUser, req.body.picker, req.body.points, req.body.saleNumber, this._resp().redirect(res))
-    })
+    this.post('/balance-packing-to-picking', (req, res) => {
+      MaganePoints.packingRemovingPointsFromPicker(res.locals.loggedUser, req.body.picker, req.body.points, req.body.saleNumber, this._resp().redirect(res));
+    });
 
     /** Sale Dashboard Performance **/
 
-    this._page('/sales-dashboard', async (req, res) => {
+    this.page('/sales-dashboard', async (req, res) => {
       res.render('performance/sales-dashboard', {
-        paymentTypes: await Enum.on('PAY-TYPES').get(true)
-      })
-    })
+        paymentTypes: await Enum.on('PAY-TYPES').get(true),
+      });
+    });
 
     /**
      * @api {post} /performance/sales-dashboard-data Sales Information
@@ -82,32 +82,32 @@ module.exports = class PerformanceRoutes extends Routes {
      *   ... many others
      * }
      */
-    this._post('/sales-dashboard-data', (req, res) => {
+    this.post('/sales-dashboard-data', (req, res) => {
       new SaleDashboardProvider()
         .with(req.body, true)
         .maybe(req.session.salesDashQueryId)
         .setOnError((err) => {
-          this._resp().error(res, err)
+          this._resp().error(res, err);
         })
         .setOnResult((result) => {
-          req.session.salesDashQueryId = result.id
-          this._resp().sucess(res, result)
+          req.session.salesDashQueryId = result.id;
+          this._resp().success(res, result);
         })
-        .load()
-    })._api()
+        .load();
+    }).api();
 
-    this._post('/sales-dashboard-cost', (req, res) => {
+    this.post('/sales-dashboard-cost', (req, res) => {
       Cost.put(req.body.tag, req.body.val, (_err, docs) => {
-        this._resp().sucess(res, docs)
-      })
-    })
+        this._resp().success(res, docs);
+      });
+    });
 
     /** Sale Dashboard Performance **/
 
     /** Stock Dashboard Performance **/
-    this._page('/stock-dashboard', (req, res) => {
-      res.render('performance/stock-dashboard')
-    })
+    this.page('/stock-dashboard', (req, res) => {
+      res.render('performance/stock-dashboard');
+    }).market();
 
     /**
      * @api {post} /performance/stock-dashboard-data Stock Information
@@ -139,28 +139,30 @@ module.exports = class PerformanceRoutes extends Routes {
      * }
      */
 
-    this._post('/stock-dashboard-data', (req, res) => {
-      new StockDashboardProvider()
+    this.post('/stock-dashboard-data', (req, res) => {
+      new StockDashboardProvider(res.locals.loggedUser)
         .with(req.body, true)
         .maybe(req.session.stockDashQueryId)
         .setOnError((err) => {
-          this._resp().error(res, err)
+          this._resp().error(res, err);
         })
         .setOnResult((result) => {
-          req.session.stockDashQueryId = result.id
-          this._resp().sucess(res, result)
+          req.session.stockDashQueryId = result.id;
+          this._resp().success(res, result);
         })
-        .load()
-    })._api()
+        .load();
+    })
+      .api()
+      .market();
 
     /** Stock Dashboard Performance **/
 
-    this._post('/stock-dashboard-delete', (req, res) => {
+    this.post('/stock-dashboard-delete', (req, res) => {
       new StockDashboardProvider().with(req.body).delete((err, data) => {
-        console.log(data)
-        console.log(err)
-        this._resp().sucess(res, data)
-      })
-    })
+        console.log(data);
+        console.log(err);
+        this._resp().success(res, data);
+      });
+    });
   }
-}
+};

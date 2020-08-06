@@ -1,52 +1,54 @@
-const Routes = require('./_route.js')
-const UsersProvider = require('../provider/user-provider.js')
-const User = require('../bean/user.js')
-const CustomerPasswordEmail = require('../customer/password-email/password-forget-email.js')
+const Routes = require('./_route.js');
+const UsersProvider = require('../provider/user-provider.js');
+const User = require('../bean/user.js');
+const CustomerPasswordEmail = require('../customer/password-email/password-forget-email.js');
 
 module.exports = class LoginRoutes extends Routes {
   mainPath() {
-    return '/login'
+    return '/login';
   }
 
   attach() {
-    this._get('', (req, res) => {
-      res.render('login/login')
-    }).skipLogin()
+    this.get('', (req, res) => {
+      res.render('login/login');
+    }).skipLogin();
 
-    this._get('/welcome', (req, res) => {
-      res.render('login/welcome')
-    }).skipLogin()
+    this.get('/welcome', (req, res) => {
+      res.render('login/welcome');
+    })
+      .skipLogin()
+      .market();
 
-    this._post('', (req, res) => {
-      var user
+    this.post('', (req, res) => {
+      var user;
 
       if (req.body.access === undefined) {
-        req.session.loggedUserID = 0
+        req.session.loggedUserID = 0;
       } else {
-        UsersProvider.checkUser(req.body.access, req.body.pass)
-        user = UsersProvider.get(req.body.access)
+        UsersProvider.checkUser(req.body.access, req.body.pass);
+        user = UsersProvider.get(req.body.access);
 
         // Cria um password, caso não tenha nenhum para o usuário
         if (!user.pass) {
-          user.pass = req.body.pass
-          User.upsert({ id: user.id }, user)
+          user.pass = req.body.pass;
+          User.upsert({ id: user.id }, user);
         }
 
-        UsersProvider.checkCanLogin(user, true)
+        UsersProvider.checkCanLogin(user, true);
 
-        req.session.loggedUserID = user.id
+        req.session.loggedUserID = user.id;
       }
 
       if (user) {
-        res.status(200).send(user)
+        res.status(200).send(user);
       } else {
-        req.session = null
-        res.status(200).send(null)
+        req.session = null;
+        res.status(200).send(null);
       }
-    })._api()
+    }).api();
 
-    this._post('/reset-password', (req, res) => {
-      new CustomerPasswordEmail().go(req.body.email, () => {})
-    }).skipLogin()
+    this.post('/reset-password', (req, res) => {
+      new CustomerPasswordEmail().go(req.body.email, () => {});
+    }).skipLogin();
   }
-}
+};

@@ -1,5 +1,6 @@
 var _cors = {};
 global._apiWrites = {};
+global._marketAccess = { '/': true };
 
 module.exports = class {
   constructor(app) {
@@ -10,34 +11,39 @@ module.exports = class {
     return '';
   }
 
-  _page(path, callback) {
-    return this._register('get', '', path, (req, ...params) => {
+  page(path, callback) {
+    return this.register('get', '', path, (req, ...params) => {
       callback(req, ...params);
       req.session.lastPath = path;
     });
   }
 
-  _get(...params) {
-    return this._register('get', '', ...params);
+  get(...params) {
+    return this.register('get', '', ...params);
   }
 
-  _post(...params) {
-    return this._register('post', '', ...params);
+  post(...params) {
+    return this.register('post', '', ...params);
   }
 
-  _api(...params) {
-    this._apiWrite(...params);
+  api(...params) {
+    return this.apiWrite(...params);
   }
 
-  _apiWrite(...params) {
-    return this._apiRead(...params).writeAccess();
+  apiWrite(...params) {
+    return this.apiRead(...params).writeAccess();
   }
 
-  _apiRead(method, path, callback) {
-    return this._register(method || this.lastMethod, '/api', path || this.lastPath, callback || this.lastCallBack, false, true);
+  apiRead(method, path, callback) {
+    return this.register(method || this.lastMethod, '/api', path || this.lastPath, callback || this.lastCallBack, false, true);
   }
 
-  _register(method, prefix, path, callback) {
+  market() {
+    global._marketAccess[this.lastPath] = true;
+    return this;
+  }
+
+  register(method, prefix, path, callback) {
     method = method || this.lastMethod;
 
     if (!prefix) {
@@ -68,17 +74,17 @@ module.exports = class {
   }
 
   writeAccess() {
-    global._apiWrites[[].concat(this.lastPath).join('')] = true;
+    global._apiWrites[this.lastPath] = true;
     return this;
   }
 
   cors() {
-    _cors[[].concat(this.lastPath).join('')] = true;
+    _cors[this.lastPath] = true;
     return this;
   }
 
-  _applyCors(paths, res) {
-    if (_cors[[].concat(paths).join('')]) {
+  _applyCors(path, res) {
+    if (_cors[path]) {
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     }
@@ -120,11 +126,11 @@ var Response = {
     if (e) {
       this.error(res, e);
     } else {
-      this.sucess(res, r);
+      this.success(res, r);
     }
   },
 
-  sucess(res, r) {
+  success(res, r) {
     if (typeof r === 'number') {
       r = r.toString();
     }

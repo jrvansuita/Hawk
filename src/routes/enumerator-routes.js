@@ -1,22 +1,22 @@
-const Routes = require('./_route.js')
-const EnumeratorVault = require('../vault/enumerator-vault.js')
-const Enumerator = require('../bean/enumerator.js')
+const Routes = require('./_route.js');
+const EnumeratorVault = require('../vault/enumerator-vault.js');
+const Enumerator = require('../bean/enumerator.js');
 
 module.exports = class EnumeratorRoutes extends Routes {
   mainPath() {
-    return '/enum'
+    return '/enum';
   }
 
   attach() {
-    this._page('/enumerators', (req, res) => {
+    this.page('/enumerators', (req, res) => {
       Enumerator.findAll((_err, all) => {
         var selected = all.find((e) => {
-          return e.id == req.query.id
-        })
+          return e.id == req.query.id;
+        });
 
-        res.render('enumerator/enumerators', { selected: selected || {}, all: all })
-      })
-    })
+        res.render('enumerator/enumerators', { selected: selected || {}, all: all });
+      });
+    });
 
     /**
      * @api {get} /enum Enumerator
@@ -25,26 +25,26 @@ module.exports = class EnumeratorRoutes extends Routes {
      * @apiParam {String} [keys] true if want to get it mapped
      */
 
-    this._get('', async (req, res) => {
-      res.send(await Enumerator.on(req.query.tag).get(!!req.query.keys))
-    })._apiRead()
+    this.get('', async (req, res) => {
+      res.send(await Enumerator.on(req.query.tag).get(!!req.query.keys));
+    }).apiRead();
 
-    this._post('/enumerators', (req, res) => {
+    this.post('/enumerators', (req, res) => {
       EnumeratorVault.storeFromScreen(req.body, (id) => {
-        res.status(200).send(id.toString())
-      })
-    })
+        res.status(200).send(id.toString());
+      });
+    });
 
-    this._post('/delete', (req, res) => {
+    this.post('/delete', (req, res) => {
       Enumerator.delete(req.body.id, () => {
-        res.sendStatus(200)
-      })
-    })
+        res.sendStatus(200);
+      });
+    });
 
-    this._post('/duplicate', (req, res) => {
+    this.post('/duplicate', (req, res) => {
       Enumerator.duplicate(req.body.id, (data) => {
-        res.send(data)
-      })
-    })
+        res.send(data);
+      });
+    });
   }
-}
+};
