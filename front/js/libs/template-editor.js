@@ -173,6 +173,7 @@ class TemplateEditor {
       key: 'AV:4~?3xROKLJKYHROLDXDR@d2YYGR_Bc1A8@5@4:1B2D2F2F1?1?2A3@1C1',
       placeholderText: 'Escreva alguma coisa...',
       htmlRemoveTags: ['script'],
+      htmlAllowedAttrs: ['title', 'href', 'alt', 'src', 'style', 'class', 'id', 'name', 'placeholder', 'value', 'media'],
 
       // Define new inline styles.
       inlineClasses: {
@@ -215,6 +216,7 @@ class TemplateEditor {
       this.editor = new FroalaEditor(selector, this.getDefaultOptions(), () => {
         // Remover selo Froala
         $("p[data-f-id='pbf']").remove();
+        $('[fr-original-style]').remove();
 
         resolve(this.editor);
       });

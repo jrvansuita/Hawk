@@ -126,7 +126,7 @@ $(document).ready(() => {
 
   createCombo();
 
-  Dropdown.on('.icon-dots',)
+  Dropdown.on('.icon-dots', true, true)
   .item('/img/loader/refresh.svg', 'Recarregar Fabricantes', (helper) => {
     var $fatherManufac = $('#manufac').parent()
     var $ImgRefresh = $('<img>').attr('src', '/img/loader/circle.svg').addClass('mini-icon-button')
