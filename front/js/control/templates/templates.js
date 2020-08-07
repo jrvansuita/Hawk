@@ -50,6 +50,7 @@ $(document).ready(() => {
   $('.add-new').click(() => {
     goTo(null)
   })
+  codeHtmlArea()
 })
 
 function saveClick () {
@@ -71,7 +72,7 @@ function save () {
     id: selected.id,
     name: $('#name').val(),
     subject: $('#subject').val(),
-    content: editor.html.get(),
+    content: $('#temp-text').val() ? $('#temp-text').val() : editor.html.get(),
     usage: getUsage(),
     type: templateType
   }
@@ -97,6 +98,23 @@ function openOptionsMenu (line, e) {
           deleteItem(helper.data.id)
         }
       })
+  })
+}
+
+function codeHtmlArea() {
+  var textArea = $('<textarea>').attr('id', 'temp-text').addClass('text-insert shadow').addClass('closed')
+
+  Dropdown.on('.code-mode', true, true)
+  .item('https://i.imgur.com/5PjyYg6.png', 'Editor em Texto', (helper) => {
+      $('.main-bottom').append(textArea.toggleClass('closed'))
+      $('#editor').hide()
+
+      if (textArea.hasClass('closed')) {
+        $('#editor').show()
+        $('#coding').hide()
+      } else {
+        $('#coding').show()
+      }
   })
 }
 

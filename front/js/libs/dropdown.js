@@ -41,7 +41,7 @@ class Dropdown {
     $(this.holder).append(this.dropdown)
     // still not visible on some windows
     if (this.notVisible == true) {
-      this.dropdown.css('left', '-155px')
+      this.dropdown.addClass('set-drop-position')
     }
   }
 

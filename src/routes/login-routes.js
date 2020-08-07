@@ -11,7 +11,9 @@ module.exports = class LoginRoutes extends Routes {
   attach() {
     this.get('', (req, res) => {
       res.render('login/login');
-    }).skipLogin();
+    })
+      .skipLogin()
+      .market();
 
     this.get('/welcome', (req, res) => {
       res.render('login/welcome');

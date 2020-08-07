@@ -51,7 +51,7 @@
         </div>
       </div>
 
-      <%if(locals?.loggedUser?.full){%>
+      <%if(locals?.loggedUser?.full || locals?.loggedUser?.setts?.[20]){%>
       <div class="totalization shadow">
         <div class="col stock"><span class="super">Estoque</span><span class="value"></span></div>
 
@@ -65,7 +65,7 @@
 
         <div class="col marg"><span class="super">Margem</span><span class="value"></span></div>
 
-        <div class="col tcost"><span class="super">Total de Custo</span><span class="value"></span></div>
+        <div class="col tcost"><span class="super">Custo Total</span><span class="value"></span></div>
 
         <div class="col tsell"><span class="super">Total de Venda</span><span class="value"></span></div>
       </div>

@@ -12,7 +12,7 @@ module.exports = class TemplateRoutes extends Routes {
 
   attach() {
     var templateRedirect = async (req, res, all, type) => {
-      var selected = all.find((e) => {
+      var selected = all.find(e => {
         return e.id === parseInt(req.query.id);
       });
 
@@ -39,7 +39,7 @@ module.exports = class TemplateRoutes extends Routes {
     this.get('/viewer', (req, res) => {
       Templates.refresh(req.query.id);
 
-      new TemplateBuilder(req.query.id).useSampleData().build((template) => {
+      new TemplateBuilder(req.query.id).useSampleData().build(template => {
         res.writeHead(200, {
           'Content-Type': 'text/html',
           'Content-Length': template.content.length,
@@ -48,10 +48,11 @@ module.exports = class TemplateRoutes extends Routes {
       });
     })
       .skipLogin()
-      .cors();
+      .cors()
+      .market();
 
     this.post('', (req, res) => {
-      TemplateVault.storeFromScreen(req.body, (id) => {
+      TemplateVault.storeFromScreen(req.body, id => {
         res.status(200).send(id.toString());
       });
     });
@@ -63,7 +64,7 @@ module.exports = class TemplateRoutes extends Routes {
     });
 
     this.post('/duplicate', (req, res) => {
-      Templates.duplicate(req.body.id, (data) => {
+      Templates.duplicate(req.body.id, data => {
         res.send(data);
       });
     });
@@ -71,10 +72,10 @@ module.exports = class TemplateRoutes extends Routes {
     this.post('/img-uploader', (req, res) => {
       new ImageSaver()
         .setBase64Image(req.files.file.data.toString('base64'))
-        .setOnSuccess((data) => {
+        .setOnSuccess(data => {
           this._resp().success(res, { link: data.link });
         })
-        .setOnError((data) => {
+        .setOnError(data => {
           this._resp().error(res, data.message);
         })
         .upload();

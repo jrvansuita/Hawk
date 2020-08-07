@@ -1,5 +1,4 @@
 module.exports = {
-
   invoice_today: 'Packing Hoje',
   invoice_yesterday: 'Packing Ontem',
   invoice_current_week: 'Packing da semana atual',
@@ -45,6 +44,6 @@ module.exports = {
 
   customer_email_sending: 'Foi enviado {0} para o email {1} referente ao pedido {2}',
 
-  sale_status_update_obs: '[Hawk - Atendimento] - {0} | Status do pedido {1} alterado para {2} por {3}'
-
-}
+  sale_status_update_obs: '[Hawk - Atendimento] - {0} | Status do pedido {1} alterado para {2} por {3}',
+  user_cant_login_now: 'Usuário {0}  - {1} não está habilitado para logar neste momento!',
+};

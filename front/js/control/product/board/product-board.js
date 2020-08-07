@@ -37,7 +37,7 @@ function buildRangeSlider({ data, query }) {
     .setTitle('Preço de custo')
     .setPrefix('R$')
     .setRange(data.smallestCost, data.greaterCost)
-    .setOnSlideStop(range => {
+    .setOnSlideStop((range) => {
       costRangeFilter = range;
     })
     .build();
@@ -51,7 +51,7 @@ function buildRangeSlider({ data, query }) {
     .setTitle('Preço de Venda')
     .setPrefix('R$')
     .setRange(data.smallestPrice, data.greaterPrice)
-    .setOnSlideStop(range => {
+    .setOnSlideStop((range) => {
       priceRangeFilter = range;
     })
     .build();
@@ -83,21 +83,6 @@ function getQueryData() {
 
   return result;
 }
-
-// function getFilters() {
-//   var filters = {};
-
-//   $('.range-slider-holder').each(function () {
-//     var attr = $(this).data('attr');
-//     var min = $(this).attr('data-min');
-//     var max = $(this).attr('data-max');
-
-//     filters[attr] = [min, max];
-//   });
-//   if (Object.keys(filters).length) return filters;
-
-//   return undefined;
-// }
 
 function handleResult(data) {
   loadingPattern(false);
@@ -140,11 +125,15 @@ function buildTotalBox(data) {
     .info('Marcas', data.brand.length, null, null, 'tags')
     .info('Cores', data.color.length, null, null, 'color')
     .group('Custo de Estoque', null, 'gray')
-    .info('Valor', Num.format(data.cost))
-    .info('Ticket', Num.money(data.tkmCost))
-    .info('Un. Venda', Num.money(data.value / data.total))
-    .info('Markup', Floa.abs(data.markup, 2))
-    .info('Venda', Num.format(data.value));
+    .info('Custo Total', Num.format(data.cost))
+    .info('Un. Custo', Num.money(data.tkmCost));
+
+  if (window.loggedUser?.type === 0) {
+    box
+      .info('Markup', Floa.abs(data.markup, 2))
+      .info('Un. Venda', Num.money(data.value / data.total))
+      .info('Total Venda', Num.format(data.value));
+  }
 
   box.build();
 }
@@ -152,7 +141,7 @@ function buildTotalBox(data) {
 function buildYearsBox(data) {
   var box = new BoxBuilder();
   box.group('Coleções', data.year.length, '');
-  data.year.forEach(each => {
+  data.year.forEach((each) => {
     box.square(each.name, each.total, Num.percent((each.total * 100) / data.total, true), Num.format(each.count), 'year', each.name, data.year[0].total, null, null, each.balance);
   });
   box.build();
@@ -162,7 +151,7 @@ function buildGenderBox(data) {
   var box = new BoxBuilder();
 
   box.group('Gêneros', data.gender.length, '');
-  data.gender.forEach(each => {
+  data.gender.forEach((each) => {
     box.square(Str.capitalize(each.name), each.total, Num.percent((each.total * 100) / data.total, true), Num.format(each.count), 'gender', each.name, data.gender[0].total, null, null, each.balance);
   });
   box.build();
@@ -172,7 +161,7 @@ function buildSeasonBox(data) {
   var box = new BoxBuilder();
 
   box.group('Estações', data.season.length);
-  data.season.forEach(each => {
+  data.season.forEach((each) => {
     box.square(Str.capitalize(each.name), each.total, Num.percent((each.total * 100) / data.total, true), Num.format(each.count), 'season', each.name, data.season[0].total, null, null, each.balance);
   });
 
@@ -182,8 +171,19 @@ function buildSeasonBox(data) {
 function buildCategoryBox(data) {
   var box = new BoxBuilder('3/5').group('Categorias', data.category.length).hidableItems(15);
 
-  data.category.forEach(each => {
-    box.square(Str.capitalize(each.name), each.total, Num.percent((each.total * 100) / data.total, true), Num.format(each.count), 'category', each.name, data.category[0].total, null, null, each.balance);
+  data.category.forEach((each) => {
+    box.square(
+      Str.capitalize(each.name),
+      each.total,
+      Num.percent((each.total * 100) / data.total, true),
+      Num.format(each.count),
+      'category',
+      each.name,
+      data.category[0].total,
+      null,
+      null,
+      each.balance
+    );
   });
 
   box.build();
@@ -193,7 +193,7 @@ function buildColorsBox(data) {
   var box = new BoxBuilder('3/5');
 
   box.group('Cores', data.color.length).hidableItems(15);
-  data.color.forEach(each => {
+  data.color.forEach((each) => {
     box.square(Str.capitalize(each.name), each.total, Num.percent((each.total * 100) / data.total, true), Num.format(each.count), 'color', each.name, data.color[0].total, null, null, each.balance);
   });
 
@@ -203,8 +203,19 @@ function buildColorsBox(data) {
 function buildManufacturerBox(data) {
   var box = new BoxBuilder('1/3').group('Fabricante', data.manufacturer.length).hidableItems(15);
 
-  data.manufacturer.forEach(each => {
-    box.square(Str.capitalize(each.name), each.total, Num.percent((each.total * 100) / data.total, true), Num.format(each.count), 'manufacturer', each.name, data.manufacturer[0].total, null, null, each.balance);
+  data.manufacturer.forEach((each) => {
+    box.square(
+      Str.capitalize(each.name),
+      each.total,
+      Num.percent((each.total * 100) / data.total, true),
+      Num.format(each.count),
+      'manufacturer',
+      each.name,
+      data.manufacturer[0].total,
+      null,
+      null,
+      each.balance
+    );
   });
   box.build();
 }
@@ -212,7 +223,7 @@ function buildManufacturerBox(data) {
 function buildBrandBox(data) {
   var box = new BoxBuilder('3/5').group('Marcas', data.brand.length).hidableItems(15);
 
-  data.brand.forEach(each => {
+  data.brand.forEach((each) => {
     box.square(Str.capitalize(each.name), each.total, Num.percent((each.total * 100) / data.total, true), Num.format(each.count), 'brand', each.name, data.brand[0].total, null, null, each.balance);
   });
   box.build();
@@ -221,12 +232,12 @@ function buildBrandBox(data) {
 function buildProductsBox(data) {
   var box = new BoxBuilder('1/5').group('Produtos', data.sku.length);
 
-  data.sku.forEach(each => {
+  data.sku.forEach((each) => {
     var click = () => {
       window.open('/product/url-redirect?sku=' + each.name, '_blank');
     };
 
-    var subDblClick = e => {
+    var subDblClick = (e) => {
       e.stopPropagation();
       window.open('/product/page?sku=' + each.name, '_blank');
     };
@@ -259,8 +270,8 @@ function buildProductsBox(data) {
 
 function bindImagePreview() {
   $('.box-img').each(function (e) {
-    new ImagePreview($(this)).delay(700).hover(self => {
-      _get('/product/image', { sku: $(this).parent().data('sku') }, product => {
+    new ImagePreview($(this)).delay(700).hover((self) => {
+      _get('/product/image', { sku: $(this).parent().data('sku') }, (product) => {
         self.show(product.image);
       });
     });
@@ -269,7 +280,7 @@ function bindImagePreview() {
 
 function bindTooltipManufacturer() {
   new Tooltip('.box-img-col')
-    .propsOnShow(el => ({ content: $(el).data('manufacturer') }))
+    .propsOnShow((el) => ({ content: $(el).data('manufacturer') }))
     .autoHide(10000)
     .load();
 }

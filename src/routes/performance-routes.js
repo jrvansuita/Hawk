@@ -86,10 +86,10 @@ module.exports = class PerformanceRoutes extends Routes {
       new SaleDashboardProvider()
         .with(req.body, true)
         .maybe(req.session.salesDashQueryId)
-        .setOnError((err) => {
+        .setOnError(err => {
           this._resp().error(res, err);
         })
-        .setOnResult((result) => {
+        .setOnResult(result => {
           req.session.salesDashQueryId = result.id;
           this._resp().success(res, result);
         })
@@ -143,10 +143,10 @@ module.exports = class PerformanceRoutes extends Routes {
       new StockDashboardProvider(res.locals.loggedUser)
         .with(req.body, true)
         .maybe(req.session.stockDashQueryId)
-        .setOnError((err) => {
+        .setOnError(err => {
           this._resp().error(res, err);
         })
-        .setOnResult((result) => {
+        .setOnResult(result => {
           req.session.stockDashQueryId = result.id;
           this._resp().success(res, result);
         })

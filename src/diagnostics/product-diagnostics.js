@@ -9,7 +9,7 @@ module.exports = class ProductDiagnostics {
     this.startTime = new Date();
   }
 
-  _analizeProducts(product, stocks, callback) {
+  _analyzeProducts(product, stocks, callback) {
     this.productsAnalyzed++;
     var attrBundle = getProductAttrBundle(product);
 
@@ -148,7 +148,7 @@ module.exports = class ProductDiagnostics {
               .stockHistory(sku)
               .go(stocks => {
                 // Analyze the product
-                this._analizeProducts(product, stocks, () => {
+                this._analyzeProducts(product, stocks, () => {
                   callback();
                 });
               });
@@ -329,7 +329,7 @@ function isCostPriceMistake(product) {
   var cost = parseFloat(product.precoCusto);
   var price = parseFloat(product.preco);
 
-  return cost === 0 || price / cost < 1.2;
+  return cost === 0 || price / cost < 1.2 || !isPricesConsistency(product);
 }
 
 function isDepartmentMissing(attrNames) {
@@ -399,4 +399,18 @@ function isAssociated(product) {
   }
 
   return true;
+}
+
+var pricesTemp = {};
+var costsTemp = {};
+
+function isPricesConsistency(product) {
+  var sku = product.codigo.split('-')[0];
+  var price = product.preco;
+  var cost = product.precoCusto;
+
+  if (!pricesTemp[sku]) pricesTemp[sku] = price;
+  if (!costsTemp[sku]) costsTemp[sku] = cost;
+
+  return pricesTemp[sku] == price && costsTemp[sku] == cost;
 }

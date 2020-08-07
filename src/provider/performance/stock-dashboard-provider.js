@@ -54,6 +54,7 @@ class StockDash extends DashboardProvider.Helper {
       this.total += each.total;
       this.items += each.quantity;
       this.cost += each.cost;
+
       this.stockCounter[each.sku] = each.stock;
       this.daysCounter[Dat.format(each.date)] = true;
 

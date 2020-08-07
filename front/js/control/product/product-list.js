@@ -12,14 +12,14 @@ function loadFromMemory() {
   }
 
   if (window.memoryQuery.attrs) {
-    Object.keys(window.memoryQuery.attrs).forEach(key => {
+    Object.keys(window.memoryQuery.attrs).forEach((key) => {
       var value = window.memoryQuery.attrs[key];
       var attr = key;
 
-      value.split('|').forEach(each => {
+      value.split('|').forEach((each) => {
         tagsHandler.place(Str.capitalize(each), attr);
 
-        //selectAndPlaceTag(Str.capitalize(each), attr);
+        // selectAndPlaceTag(Str.capitalize(each), attr);
       });
     });
   }
@@ -58,10 +58,10 @@ $(document).ready(() => {
   });
 
   Dropdown.on($('.menu-dots'))
-    .item('/img/copy.png', 'Copiar Skus', helper => {
+    .item('/img/copy.png', 'Copiar Skus', (helper) => {
       var val = '';
       if (Object.keys(selectedSkus).length > 0) {
-        Object.keys(selectedSkus).forEach(item => {
+        Object.keys(selectedSkus).forEach((item) => {
           val += '\n' + item;
         });
       } else {
@@ -72,24 +72,27 @@ $(document).ready(() => {
 
       Util.copySeleted(val);
     })
-    .item('/img/mockup.png', 'Gerar Mockups', helper => {
+    .item('/img/mockup.png', 'Gerar Mockups', (helper) => {
       new MockupSelector()
-        .onSelect(id => {
+        .onSelect((id) => {
           window.open('/mockup/build-multiple?skus=' + Object.keys(selectedSkus) + '&mockId=' + id, '_blank');
         })
         .show();
     })
-    .item('/img/photo.png', 'Baixar Imagens', helper => {
+    .item('/img/photo.png', 'Baixar Imagens', (helper) => {
       if (Object.keys(selectedSkus).length > 0) {
         window.open('/stock/multiple-imgs?skus=' + Object.keys(selectedSkus), '_blank');
       }
     })
-    .item('/img/print.png', 'Imprimir Relatório', helper => {
+    .item('/img/print.png', 'Imprimir Relatório', (helper) => {
       if (Object.keys(selectedSkus).length > 0) {
         window.open('/stock/list-export?skus=' + Object.keys(selectedSkus));
       } else {
         window.open('/stock/list-export');
       }
+    })
+    .setOnDynamicShow(() => {
+      return { 1: window.loggedUser?.type !== 1 };
     });
 
   setTimeout(() => {
@@ -116,18 +119,18 @@ function emptyList() {
 }
 
 function getDataQuery() {
-  let result = {
+  const result = {
     value: $('#search-input').val(),
     attrs: tagsHandler.get(),
     noQuantity: $('#show-no-quantity').is(':checked'),
   };
 
   if (window.memoryQuery.filters.price != null) {
-    result['filters'] = { price: window.memoryQuery.filters.price, ...result['filters'] };
+    result.filters = { price: window.memoryQuery.filters.price, ...result.filters };
   }
 
   if (window.memoryQuery.filters.cost != null) {
-    result['filters'] = { cost: window.memoryQuery.filters.cost, ...result['filters'] };
+    result.filters = { cost: window.memoryQuery.filters.cost, ...result.filters };
   }
 
   return result;
@@ -144,7 +147,7 @@ function loadList() {
         page: page,
         query: getDataQuery(),
       },
-      result => {
+      (result) => {
         showAll = result.data.length === 0;
         loading = false;
         result.data.forEach((each, index) => {
@@ -165,19 +168,42 @@ function loadList() {
 }
 
 function showMessageTotals(info) {
-  if (info && window.loggedUser.full) {
-    $('.totalization .stock > .value').text(window.Num.points(info.sum_quantity) + ' items');
-    $('.totalization .skus > .value').text(window.Num.points(info.count));
-    $('.totalization .sell > .value').text(window.Num.money(info.sum_sell / info.sum_quantity));
-    $('.totalization .cost > .value').text(window.Num.money(info.sum_cost / info.sum_quantity));
+  var userType = window.loggedUser.type;
+  var show = window.loggedUser.full || !!window.loggedUser.setts[20];
 
-    $('.totalization .mark > .value').text(window.Floa.abs(info.sum_sell / info.sum_cost, 2));
-    $('.totalization .marg > .value').text(window.Num.percent(100 - (info.sum_cost / info.sum_sell) * 100, 2));
+  if (info && show) {
+    $('.totalization .stock')
+      .show()
+      .find('.value')
+      .text(window.Num.points(info.sum_quantity) + ' items');
 
-    $('.totalization .tsell > .value').text(window.Num.money(info.sum_sell));
-    $('.totalization .tcost > .value').text(window.Num.money(info.sum_cost));
+    $('.totalization .skus').show().find('.value').text(window.Num.points(info.count));
 
-    $('.totalization').toggle(window.loggedUser.full);
+    $('.totalization .cost')
+      .show()
+      .find('.value')
+      .text(window.Num.money(info.sum_cost / info.sum_quantity));
+
+    $('.totalization .tcost').show().find('.value').text(window.Num.money(info.sum_cost));
+
+    if (userType === 0) {
+      $('.totalization .sell')
+        .show()
+        .find('.value')
+        .text(window.Num.money(info.sum_sell / info.sum_quantity));
+      $('.totalization .mark')
+        .show()
+        .find('.value')
+        .text(window.Floa.abs(info.sum_sell / info.sum_cost, 2));
+
+      $('.totalization .marg')
+        .show()
+        .find('.value')
+        .text(window.Num.percent(100 - (info.sum_cost / info.sum_sell) * 100, 2));
+      $('.totalization .tsell').show().find('.value').text(window.Num.money(info.sum_sell));
+    }
+
+    $('.totalization').toggle(show).css('display', 'flex');
   }
 
   $('#totals').text(info ? window.Num.points(info.sum_quantity) + ' items e ' + window.Num.points(info.count) + ' skus' : 'Nenhum produto encontrado.');
@@ -207,8 +233,8 @@ function createImgProduct(product, index) {
     .addClass('counter-circle')
     .append(productsListCount + 1);
 
-  new ImagePreview(img).hover(self => {
-    _get('/product/image', { sku: product.sku }, product => {
+  new ImagePreview(img).hover((self) => {
+    _get('/product/image', { sku: product.sku }, (product) => {
       self.show(product.image);
     });
   });
@@ -272,7 +298,7 @@ function createTitle(product) {
 
   var diagIcon = $('<img>').addClass('diag-alert').attr('src', '/img/alert.png');
 
-  _get('/diagnostics/fixes', { sku: product.sku, groupped: true }, all => {
+  _get('/diagnostics/fixes', { sku: product.sku, grouped: true }, (all) => {
     if (all.length > 0) {
       diagIcon.fadeIn();
       diagIcon.click(() => {
@@ -291,7 +317,7 @@ function createTags(product) {
 
   var $cat = [];
   if (product.category) {
-    product.category.split(',').forEach(each => {
+    product.category.split(',').forEach((each) => {
       $cat.push(createClickableTag(each.trim(), 'category'));
     });
   }
@@ -303,7 +329,7 @@ function createTags(product) {
 
   var $age = [];
   if (product.age) {
-    product.age.split(',').forEach(each => {
+    product.age.split(',').forEach((each) => {
       $age.push(createClickableTag(each.trim(), 'age'));
     });
   }
@@ -344,7 +370,7 @@ function createClickableTag(value, attr) {
       } else {
         tagsHandler.place(value, attr);
 
-        //selectAndPlaceTag(value, attr);
+        // selectAndPlaceTag(value, attr);
       }
 
       $('#search-button').focus();
@@ -386,7 +412,7 @@ function applyTagColor(tag) {
   if (attr) {
     var color;
 
-    Colors.items.forEach(each => {
+    Colors.items.forEach((each) => {
       if (attr == 'color' && each.name == value) {
         color = each.value;
         if (!color || Util.colorBrightness(color) > 230) {
@@ -463,7 +489,7 @@ function bindRangeSlider({ info, query }) {
     .setRange(info.smaller_cost, info.greater_cost)
     .setTitle('Filtrar por Custo')
     .setPrefix('R$')
-    .setOnSlideStop(val => {
+    .setOnSlideStop((val) => {
       window.memoryQuery.filters.cost = val;
     })
     .build();
@@ -472,7 +498,7 @@ function bindRangeSlider({ info, query }) {
     .setRange(info.smaller_sell, info.greater_sell)
     .setTitle('Filtrar por Preço')
     .setPrefix('R$')
-    .setOnSlideStop(val => {
+    .setOnSlideStop((val) => {
       window.memoryQuery.filters.price = val;
     })
     .build();

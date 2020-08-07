@@ -1,42 +1,40 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-<head>
-  <meta charset="utf-8">
-  <title>Relatório</title>
-  <link rel="icon" href="/img/icon/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="/front/css/layout/product/product-list-export.css">
-  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <script type="text/javascript" src="/front/js/control/product/product-list-export.js"></script>
-  <script type="text/javascript" src="/util/number.js"></script>
-  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
-  <script type="text/javascript" src="/front/js/libs/JsBarcode.all.min.js"></script>
+  <head>
+    <meta charset="utf-8" />
+    <title>Relatório</title>
+    <link rel="icon" href="/img/icon/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="/front/css/layout/product/product-list-export.css" />
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/front/js/control/product/product-list-export.js"></script>
+    <script type="text/javascript" src="/util/number.js"></script>
+    <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+    <script type="text/javascript" src="/front/js/libs/JsBarcode.all.min.js"></script>
 
-  <script>
-  window.data = <%- JSON.stringify(data)%>
-  window.eans = <%- JSON.stringify(eans)%>
-  </script>
-</head>
-<body>
-  <div class="top">
-    <div class="ifr">
-      <iframe frameborder='0' src="templates-viewer?id=84155975" width="100%" scrolling="no" ></iframe>
+    <script>
+      window.data = <%- JSON.stringify(data)%>
+      window.eans = <%- JSON.stringify(eans)%>
+    </script>
+  </head>
+  <body>
+    <div class="top">
+      <div class="ifr">
+        <iframe frameborder="0" src="/templates/viewer?id=84155975" width="100%" scrolling="no"></iframe>
+      </div>
+      <div class="impress-rel">
+        <h1>Relatório de Produtos</h1>
+        <p>Data da Impressão: <%=Dat.formatwTime(new Date())%></p>
+        <span>Usuário: <%=loggedUser.name%></span>
+      </div>
     </div>
-    <div class="impress-rel">
-      <h1>Relatório de Produtos</h1>
-      <p>Data da Impressão: <%=Dat.formatwTime(new Date())%></p>
-      <span>Usuário: <%=loggedUser.name%></span>
-    </div>
-  </div>
 
-  <div class="product">
-    <table style="">
-
-      <%data.forEach((item)=>{%>
+    <div class="product">
+      <table style="">
+        <%data.forEach((item)=>{%>
 
         <tr class="filtered-item">
-
           <td class="item-information">
-            <img class="image-export filter" src="<%=item.image%>" onerror="this.src='/img/product-placeholder.png'">
+            <img class="image-export filter" src="<%=item.image%>" onerror="this.src='/img/product-placeholder.png'" />
           </td>
 
           <td class="item-description">
@@ -51,32 +49,21 @@
                 <li class="item-manufac"><%=item.manufacturer%></li>
               </ul>
             </div>
-
           </td>
 
           <td class="child-information">
-            <%
-            if(item.associates){
+            <% if(item.associates){ var skus = item.associates.split(','); skus.forEach((sku)=>{%>
 
+            <div class="child-item" data-sku="<%=sku%>">
+              <span><%=sku%></span>
+              <svg id="barcode"></svg>
+            </div>
 
-              var skus = item.associates.split(',');
-
-              skus.forEach((sku)=>{%>
-
-                <div class="child-item" data-sku="<%=sku%>">
-                  <span><%=sku%></span>
-                  <svg id="barcode"></svg>
-                </div>
-
-
-                <%});}%>
-              </td>
-            </tr>
-            <%})%>
-          </table>
-
-        </div>
-
-
-      </body>
-      </html>
+            <%});}%>
+          </td>
+        </tr>
+        <%})%>
+      </table>
+    </div>
+  </body>
+</html>

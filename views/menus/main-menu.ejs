@@ -19,9 +19,12 @@
 
     <link href="//fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
 
-    <title>Hawk</title>
+    <title>Boutique Infantil</title>
     <link rel="icon" href="/img/icon/favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="/img/icon/favicon.ico" type="image/x-icon" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/icon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/img/icon/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/icon/favicon-16x16.png" />
   </head>
 
   <body>
@@ -33,13 +36,13 @@
     <nav class="main-menu-nav">
       <div class="start-jobs">
         <% var img = '/img/icon/bi.png'; if (!process.env.IS_PRODUCTION){ img = '/img/maintenance.png'; } if (global.eccoConnErrors){ img = '/img/api-error.png'; } %>
-        <img src="<%=img%>" id="logo" title="<%=global.eccoConnError? 'Erro ao conectar e receber dados via API' : 'Hawk' %>" />
+        <img src="<%=img%>" id="logo" title="<%=global.eccoConnError? 'Erro ao conectar e receber dados via API' : 'Boutique Infantil' %>" />
       </div>
 
       <ul class="main-menu-ul">
         <%if (Menu.has(loggedUser, 'picking')){%>
         <li class="menu-item" sub="picking-menu">
-          <a href="/picking">
+          <a href="#">
             <div class="menu-button title">
               <span class="menu-label">Picking</span>
             </div>
@@ -47,7 +50,7 @@
         </li>
         <%}%> <%if (Menu.has(loggedUser, 'packing')){%>
         <li class="menu-item" sub="packing-menu">
-          <a href="/packing">
+          <a href="#">
             <div class="menu-button title">
               <span class="menu-label">Packing</span>
             </div>
@@ -55,7 +58,7 @@
         </li>
         <%}%> <%if (Menu.has(loggedUser, 'pendência')){%> <%if (Sett.get(locals.loggedUser,2)){%>
         <li class="menu-item" sub="pending-menu">
-          <a href="/pending">
+          <a href="#">
             <div class="menu-button title">
               <span class="menu-label">Pendência</span>
             </div>
@@ -63,7 +66,7 @@
         </li>
         <%}%> <%}%> <%if (Menu.has(loggedUser, 'performance')){%>
         <li class="menu-item" sub="performance-menu">
-          <a href="/performance/profile">
+          <a href="#">
             <div class="menu-button title">
               <span class="menu-label">Performance</span>
             </div>
@@ -71,7 +74,7 @@
         </li>
         <%}%> <%if (Menu.has(loggedUser, 'atendimento')){%>
         <li class="menu-item" sub="customer-menu">
-          <a href="/customer-service/client">
+          <a href="#">
             <div class="menu-button title">
               <span class="menu-label">Atendimento</span>
             </div>
@@ -79,14 +82,14 @@
         </li>
         <%}%> <%if (Menu.has(loggedUser, 'estoque')){%>
         <li class="menu-item" sub="stock-menu">
-          <a href="/product/page">
+          <a href="#">
             <div class="menu-button title">
               <span class="menu-label">Estoque</span>
             </div>
           </a>
         </li>
         <%}%> <%if (Menu.has(loggedUser, 'histórico')){%>
-        <li class="menu-item">
+        <li class="menu-item fixed-menu" sub="history-menu">
           <a href="/history">
             <div class="menu-button title">
               <span class="menu-label">Histórico</span>
@@ -94,7 +97,7 @@
           </a>
         </li>
         <%}%> <%if (Menu.has(loggedUser, 'Configurações')){%>
-        <li class="menu-item">
+        <li class="menu-item fixed-menu" sub="settings-menu">
           <a href="/settings">
             <div class="menu-button title">
               <span class="menu-label">Configurações</span>
