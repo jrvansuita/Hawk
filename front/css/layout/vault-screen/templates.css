@@ -42,8 +42,8 @@
 
 .code-mode {
   position: relative;
-  right: -104px;
-  top: 17px;
+  right: -101px;
+  top: 9px;
   float: right;
 }
 
@@ -51,8 +51,8 @@
   position: relative;
   font-size: 13px;
   float: right;
-  top: 80px;
-  right: 50px;
+  top: -20px;
+  right: 187px;
   color: #9c9c9c;
   display: none;
 }

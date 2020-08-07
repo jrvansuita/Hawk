@@ -102,19 +102,30 @@ function openOptionsMenu (line, e) {
 }
 
 function codeHtmlArea() {
-  var textArea = $('<textarea>').attr('id', 'temp-text').addClass('text-insert shadow').addClass('closed')
+  var textArea = $('<textarea>').attr('id', 'temp-text').addClass('text-insert shadow closed')
+  $('.main-bottom').append(textArea)
 
+  // var coder = $('<label>').attr('id', 'coding').addClass('flickers')
+  // var closed = textArea.hasClass('closed')
+  textArea.val(window.selected.content)
+
+  menuEditor()
+}
+
+function menuEditor() {
   Dropdown.on('.code-mode', true, true)
-  .item('https://i.imgur.com/5PjyYg6.png', 'Editor em Texto', (helper) => {
-      $('.main-bottom').append(textArea.toggleClass('closed'))
+  .item('https://i.imgur.com/5PjyYg6.png', 'Editor HTML', (helper) => {
+      // $('.main-bottom').append(coder.text('Codifing...'), textArea.toggleClass('closed'))
       $('#editor').hide()
-
-      if (textArea.hasClass('closed')) {
-        $('#editor').show()
-        $('#coding').hide()
-      } else {
-        $('#coding').show()
-      }
+      $('#temp-text').show()
+  }).setOnDynamicShow(() => {
+    return { 1: $('#texp-text').css('display') === 'none' }
+  })
+  .item('https://i.imgur.com/w4PtW3K.jpg', 'Froala Editor', (helper) => {
+    $('#editor').show()
+    $('#temp-text').hide()
+  }).setOnDynamicShow(() => {
+    return { 1: $('#editor').css('display') === 'none' }
   })
 }
 
