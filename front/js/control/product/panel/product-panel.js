@@ -8,7 +8,7 @@ $(document).ready(() => {
   console.log(orders)
 
   $('#new-button').click(() => {
-    showNewOrderModal()
+    showNewOrderModal(true)
   })
 
   $('#search-input').on('keyup', function (e) {
@@ -17,7 +17,7 @@ $(document).ready(() => {
     }
   })
 
-  placeOrders(window.orders)
+  buildOrdersColumns(window.orders)
 
   getFinishedOrders()
   bindScrollLoad()
@@ -32,53 +32,34 @@ $(document).ready(() => {
 
   $('.order-item').click(function (e) {
     e.stopPropagation()
-    orderItemClick(e.currentTarget)
+   orderItemClick(e.currentTarget)
   })
 })
 
-function showNewOrderModal() {
+function showNewOrderModal(clear) {
+  if (clear) clearModal()
+
   $('.new-order-modal').show()
   bindHideModal()
 }
 
-function bindHideModal(miniModal) {
+function bindHideModal() {
   var modal = document.querySelector('.modal-holder')
   window.onclick = e => {
-    if (e.target === modal) {
-      if (miniModal) {
-        hideOrderModal()
-      } else {
-        $(modal).hide()
-      }
-    }
+    if (e.target === modal) $(modal).hide()
   }
-}
-
-function hideOrderModal() {
-  var el = $('.order-modal-content')
-  Util.changeFontSize(el, -2)
-  $('.clickable-mini-item').removeClass('order-modal-content')
-  $('.hiddable-menu').hide()
-  $('.clickable-mini-item').addClass('order-item')
-  $('.main-order-holder').removeClass('modal-holder')
-  $('.date-value').unbind('click').removeClass('datepicker')
-  removeItemsModal()
-}
-
-function removeItemsModal() {
-  $('.removable').remove()
 }
 
 function createOrdersList(parent, orders, showAvatar) {
   if (orders?.length) {
     parent.empty()
     orders.forEach((each) => {
+      var menuDots = $('<div>').addClass('menu-dots')
       var table = $('<table>').attr('width', '100%').addClass('table-orders')
       var mainOrderHolder = $('<div>').addClass('main-order-holder')
       var holder = $('<div>').addClass('shadow order-item clickable-mini-item').data({ id: each.id, status: each.status })
 
-      if (each.status === 0) holder.addClass('awaiting')
-      else holder.addClass('in-progress')
+      each.status === 0 ? holder.addClass('awaiting') : holder.addClass('in-progress')
 
       // infos
       var number = $('<span>').text(each.number).addClass('info-value green-title copiable')
@@ -99,8 +80,9 @@ function createOrdersList(parent, orders, showAvatar) {
 
       var trTwo = $('<tr>').append($('<td>').append(manufacturer), $('<td>').append(date), $('<td>').append(delivery))
 
-      mainOrderHolder.append(holder.append(table.append(trOne, trTwo)))
+      mainOrderHolder.append(holder.append(table.append(trOne, trTwo), menuDots))
       parent.append(mainOrderHolder)
+      bindOrdersDropdown(menuDots, each)
     })
   }
 }
@@ -150,7 +132,7 @@ function searchOrder() {
   }, (data) => {
     emptyList()
 
-    placeOrders(data)
+    buildOrdersColumns(data)
   })
 }
 
@@ -158,7 +140,7 @@ function emptyList() {
   $('.list-content').empty()
 }
 
-function placeOrders(data) {
+function buildOrdersColumns(data) {
   createOrdersList($('.awaiting-col .list-content'), filterOrders(data, 0))
   createOrdersList($('.in-progress-col .list-content'), filterOrders(data, 1), true)
 
@@ -224,62 +206,25 @@ function bindScrollLoad() {
 }
 
 function orderItemClick(el) {
-  if (!$(el).hasClass('order-modal-content')) {
-    var id = $(el).data('id')
-    var orderItem = $(el)
-    orderItem.addClass('order-modal-content')
-    $(el).parent().addClass('modal-holder')
+  var id = $(el).data('id')
+  var order = window.orders.filter((e) => { return e.id === id })
 
-    var order = window.orders.filter((e) => { return e.id === id })
-
-    bindHideModal(true)
-
-    buildOrderItemModal(orderItem.find('.table-orders'), order[0])
-    Util.changeFontSize(orderItem, 2)
-  }
+  bindInfoOrderModal(order[0])
 }
 
-function buildOrderItemModal(table, orderData) {
-  table.find('.date-value').addClass('datepicker')
-  bindEditOrder(orderData)
-
-  var menu = table.find('.menu-dots')
-  menu.show()
-
-  bindOrdersDropdown(menu, orderData)
-
-  var tr = $('<tr>').addClass('removable dotted-line')
-
-  if (orderData?.attachs.length) {
-    var span = $('<span>').addClass('info-value').text('Anexos')
-    tr.append($('<td>').append(span))
-    var row = $('<tr>').addClass('removable')
-    var attachs = $('<td>')
-    orderData.attachs.forEach((each) => {
-      var $img = $('<img>').attr({ src: '/img/attach.png', attachid: each }).addClass('view-attach').click(viewAttach)
-      row.append(attachs.append($img))
+function bindInfoOrderModal(order) {
+  clearModal()
+  $('#new-stock-order').find('input').each((index, input) => {
+    Object.keys(order).forEach((each) => {
+      if ($(input).attr('id') === each) $(input).val(order[each])
     })
-  }
-
-  table.append(tr, row)
-}
-
-function viewAttach() {
-  window.open('https://drive.google.com/file/d/' + $(this).attr('attachid'), '_blank')
-}
-
-function bindEditOrder(data) {
-  new DatePicker()
-    .holder('.datepicker', true)
-    .setOnChange((parsed, date) => {
-      data.date = date
-      editOrder(data)
-    })
-    .load()
-}
-
-function editOrder(data) {
-  _post('/stock/new-order', { data: data }, (_err, res) => {
-    window.location.reload()
   })
+
+  $('#date-picker').val(Dat.format(new Date(order.date)))
+  $('#date-hidden').val(order.date)
+  uploadsLinks = order.attachs
+  $('#save').text('Salvar Pedido')
+  $('.register-title').text('Editar Pedido')
+  bindAttachsInfo(order.attachs)
+  showNewOrderModal()
 }

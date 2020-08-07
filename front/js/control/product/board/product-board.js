@@ -74,11 +74,11 @@ function getQueryData() {
   };
 
   if (priceRangeFilter != null) {
-    result['filters'] = { price: priceRangeFilter, ...result['filters'] };
+    result.filters = { price: priceRangeFilter, ...result.filters };
   }
 
   if (costRangeFilter != null) {
-    result['filters'] = { cost: costRangeFilter, ...result['filters'] };
+    result.filters = { cost: costRangeFilter, ...result.filters };
   }
 
   return result;
@@ -104,7 +104,7 @@ function handleResult(data) {
   setAttrsAndValue(data.query.value, data.query.attrs);
   setUrlId(data.id);
 
-  buildRangeSlider(data);
+  // buildRangeSlider(data);
   buildBoxes(data.data);
 }
 

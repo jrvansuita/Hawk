@@ -2,7 +2,7 @@ var uploadsLinks = []
 
 $(document).ready(() => {
   $('#save').click(() => {
-    if (checkFormBeforeSave()) $('#new-stock-order').submit()
+    if (checkFormBeforeSave()) saveNewOrder()
   })
 
   $('.input-combo').each((index, el) => {
@@ -21,7 +21,7 @@ $(document).ready(() => {
 
 function checkFormBeforeSave() {
   var isOk = false
-  $('.material-input-holder input').each((i, each) => {
+  $('#new-stock-order').find('input').each((i, each) => {
     isOk = checkMaterialInput($(each))
   })
   return isOk
@@ -77,17 +77,58 @@ function handleUploadSubmit() {
 }
 
 function handleUploadResult(data) {
-  uploadsLinks.push(data.id)
-  $('#attachs-hidden').val(uploadsLinks)
+  uploadsLinks.push({ id: data.id, name: data.name })
+  bindAttachsInfo(data)
+}
 
-  var $span = $('<span>')
-  $('.files').append($span.html(data.name + '<br>'))
+function bindAttachsInfo(data) {
+  if (Array.isArray(data)) {
+    data.forEach((each) => {
+      var $span = $('<span>').addClass('file-info')
+      $('.files').append($span.html(each.name + '<br>').attr('file-id', each.id).click(viewAttach))
+    })
+  } else {
+    var $span = $('<span>').addClass('file-info')
+    $('.files').append($span.html(data.name + '<br>').attr('file-id', data.id).click(viewAttach))
+  }
 }
 
 function setLoading(isLoading) {
   if (isLoading) {
     $('#upload-img').attr('src', '/img/loader/circle.svg');
   } else {
-    $('#upload-img').attr('src', '/img/attach.png');
+    $('#upload-img').attr('src', '/img/create-doc.png');
   }
+}
+
+function saveNewOrder() {
+  _post('/stock/new-order', { data: buildFormData() }, (result) => {
+    window.location.reload()
+  })
+}
+
+function buildFormData() {
+  var data = {}
+  $('#new-stock-order').find('input').each((index, each) => {
+    data[$(each).attr('name')] = $(each).val()
+  })
+
+  data.attachs = uploadsLinks
+
+  return data
+}
+
+function viewAttach() {
+  window.open('https://drive.google.com/file/d/' + $(this).attr('file-id'), '_blank')
+}
+
+function clearModal() {
+  $('#new-stock-order').find('input').each((index, input) => {
+    $(input).val('')
+  })
+  $('#year').val(new Date().getFullYear() + 1)
+  $('#save').text('Agendar Pedido')
+  $('.register-title').text('Agendar novo Pedido')
+  $('.files').empty()
+  uploadsLinks = []
 }

@@ -37,15 +37,18 @@
   width: fit-content;
   max-height: 90%;
   display: block;
+  overflow: auto;
 }
 
 .col-content {
   margin-left: 15px;
-  max-width: 300px;
+
+  /* max-width: 300px; */
   min-width: 260px;
   width: fit-content;
   padding: 15px;
   display: block;
+  height: 100%;
 }
 
 .col-header {
@@ -98,7 +101,6 @@ table {
   width: fit-content;
   height: fit-content;
   float: right;
-  display: none;
 }
 
 .avatar-holder {
@@ -143,6 +145,10 @@ table {
   max-height: 80%;
   overflow: auto;
   height: fit-content;
+}
+
+.in-progress table tr td {
+  max-width: 65px;
 }
 
 .table-header th {
@@ -219,4 +225,8 @@ table {
 
 .line-order {
   border-left: 3px solid #009485;
+}
+
+.list-content {
+  padding-right: 3px;
 }
