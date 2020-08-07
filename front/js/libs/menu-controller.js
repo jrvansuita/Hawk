@@ -93,7 +93,7 @@ class MenuController {
   markMenuItemAsSelected(tagName, menu, def) {
     var tagValue = Local.getStr(tagName) || def;
 
-    const selected = menu == this.mainMenu ? menu.find('[sub="' + tagValue + '"]') : menu.find('a[href*="' + tagValue + '"]').parent('li');
+    const selected = menu == this.mainMenu ? menu.find('[sub="' + tagValue + '"]') : menu.find('a[href="' + tagValue + '"]').parent('li');
     selected.addClass('active-menu');
     return selected;
   }
