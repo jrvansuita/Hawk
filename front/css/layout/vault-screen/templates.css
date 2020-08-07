@@ -19,3 +19,75 @@
   width: 20px !important;
   height: 20px !important;
 }
+
+.text-insert {
+  position: relative;
+  top: 0;
+  z-index: 9999999;
+  width: 80%;
+  height: -webkit-fill-available;
+  left: 165px;
+  border-radius: 5px;
+  background: #ffffffe0;
+  border: 1px solid #dcdcdc;
+}
+
+.main-bottom {
+  margin-top: 30px;
+}
+
+.closed {
+  display: none;
+}
+
+.code-mode {
+  position: relative;
+  right: -104px;
+  top: 17px;
+  float: right;
+}
+
+#coding {
+  position: relative;
+  font-size: 13px;
+  float: right;
+  top: 80px;
+  right: 50px;
+  color: #9c9c9c;
+  display: none;
+}
+
+.set-drop-position {
+  right: 130px;
+}
+
+.flickers {
+  -webkit-animation: flickers 3.5s steps(100, start) infinite both;
+  animation: flickers 3.5s steps(100, start) infinite both;
+}
+
+@-webkit-keyframes flickers {
+  0%,
+  50%,
+  100% {
+    opacity: 1;
+  }
+
+  25%,
+  75% {
+    opacity: 0;
+  }
+}
+
+@keyframes flickers {
+  0%,
+  50%,
+  100% {
+    opacity: 1;
+  }
+
+  25%,
+  75% {
+    opacity: 0;
+  }
+}

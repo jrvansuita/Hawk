@@ -179,6 +179,7 @@ module.exports = class TemplateBuilder {
         template.content = this.processVariables(template.content);
       }
 
+      console.log(template.content);
       template.content = this.htmlFormatting(template.content);
 
       callback(template);

@@ -35,7 +35,7 @@ function refreshManufacturerList() {
     $fatherManufac.append($ImgRefresh.addClass('refresh-manufac'))
 
     callManufacturerRestorer()
-  }).onMouseLeave()
+  })
 }
 
 function callManufacturerRestorer() {
