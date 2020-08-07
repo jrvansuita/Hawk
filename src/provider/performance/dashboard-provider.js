@@ -53,12 +53,12 @@ class DashboardProviderHandler {
       });
     }
 
-    console.log(this?.user?.manufacturer);
+    // console.log(this?.user?.manufacturer);
     if (this?.user?.manufacturer) {
       and.push(DataAccess.regexpComp('manufacturer', this.user.manufacturer));
     }
 
-    console.log(JSON.stringify(and));
+    // console.log(JSON.stringify(and));
 
     return { $and: and };
   }
