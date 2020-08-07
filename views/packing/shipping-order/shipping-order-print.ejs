@@ -79,7 +79,7 @@
   </head>
 
   <body>
-    <% shippingOrder._NotasFiscais var volTotal = shippingOrder._NotasFiscais.reduce((prev, e)=>{return parseInt(e.qtdVolumes) + prev},0); %>
+    <% var volTotal = shippingOrder._NotasFiscais.reduce((prev, e)=>{return parseInt(e.qtdVolumes) + prev},0); %>
 
     <table class="top">
       <tr>
