@@ -64,67 +64,39 @@ function onHandleResult(result) {
 
 function buildBoxes(results) {
   var data = results.data;
-  window.data = results.data;
 
-  var box = new BoxBuilder()
-    .group('Faturamento', Num.points(data.items) + (data.daysCount > 1 ? ' em ' + data.daysCount + ' dias' : ''), 'min-col')
-    .info('Valor', Num.money(data.total), 'high-val')
-    .info('Ticket', Num.money(data.tkm))
-    .info('Markup', Floa.abs(data.markup, 2))
-    .info('Skus', Num.points(data.skusCount || 0))
-    .info('Disponível', Num.points(data.sumStock) + ' itens')
-    .info('Faturado', Num.percent(data.percSold))
-    .info('Abrangência', Math.max(1, Num.int(data.stockCoverage)) + ' Dia(s)')
-    .info('Score', Floa.abs(data.score, 2))
-    .group(null, null, 'gray min-col')
-    .info('Custo', Num.money(data.cost))
-    .info('Ticket', Num.money(data.tkmCost))
-    .info('Margem Bruta', Num.percent((data.profit * 100) / data.total), data.profit ? 'green-val' : 'red-val')
-    .info('Lucro Bruto', Num.money(data.profit), data.profit ? 'green-val' : 'red-val');
-  box.build();
+  loadMainBoard(results.data);
 
   var box = new BoxBuilder().group('Estações', data.season.length);
-  data.season.forEach(each => {
+  data.season.forEach((each) => {
     box.square(each.name, each.items, Num.percent((each.items * 100) / data.items, true), Num.format(each.total), 'season', each.name, data.season[0].items);
   });
 
   box.group('Gêneros', data.gender.length, 'gray');
-  data.gender.forEach(each => {
+  data.gender.forEach((each) => {
     box.square(each.name, each.items, Num.percent((each.items * 100) / data.items, true), Num.format(each.total), 'gender', each.name, data.gender[0].items);
   });
   box.build();
 
   var box = new BoxBuilder('3/5').group('Categorias', data.category.length).hidableItems(15);
-  data.category.forEach(each => {
+  data.category.forEach((each) => {
     box.square(each.name, each.items, Num.percent((each.items * 100) / data.items, true), Num.format(each.total), 'category', each.name, data.category[0].items);
   });
   box.build();
 
   if (data.size && data.size.length) {
     box.group('Tamanhos', data.size.length, 'gray').hidableItems(10);
-    data.size.forEach(each => {
+    data.size.forEach((each) => {
       box.square(each.name, each.items, Num.percent((each.items * 100) / data.items, true), null, null, null, data.size[0].items);
     });
   }
 
   if (data.chart && data.chart.length > 1) {
-    var box = new BoxBuilder().group('Receita do Período', Num.money(data.total)).group(null, null, 'gray');
-
-    var row = box.get();
-
-    new StockDashChart(row, data.chart).field({ label: 'Receita', tag: 'sum_total', color: '#3e55ff' }).field({ label: 'Lucro', tag: 'sum_profit', color: '#03c184' }).field({ label: 'Custo', tag: 'sum_cost', color: '#f98929' }).load();
-
-    box.build();
-
-    var box = new BoxBuilder().group('Estoque do Período', Num.points(data.sumStock)).group(null, null, 'gray');
-    var row = box.get();
-    new StockDashChart(row, data.chart).field({ label: 'Disponibilidade', tag: 'sum_stock', color: '#03c184' }).field({ label: 'Estoque Faturado', tag: 'sum_quantity', color: '#996ef4' }).field({ label: 'Faturado (%)', tag: 'perc_sold', color: '#25d4f3' }).load();
-
-    box.build();
+    loadCharts(data);
   }
 
   var box = new BoxBuilder('1/3').group('Fabricantes', data.manufacturer.length).hidableItems(20);
-  data.manufacturer.forEach(each => {
+  data.manufacturer.forEach((each) => {
     var markup = each.total / each.cost;
     var subLevel = markup > 2.19 ? 1 : markup < 1.8 ? -1 : 0;
     box.square(each.name, each.items, Floa.abs(each.sumScore / each.count, 2), Floa.abs(markup, 2), 'manufacturer', each.name, data.manufacturer[0].items, true, subLevel);
@@ -132,7 +104,7 @@ function buildBoxes(results) {
   box.build();
 
   var box = new BoxBuilder('3/5').group('Marcas', data.brand.length).hidableItems(15);
-  data.brand.forEach(each => {
+  data.brand.forEach((each) => {
     box.square(each.name, each.items, Num.percent((each.items * 100) / data.items, true), Num.format(each.total), 'brand', each.name, data.brand[0].items);
   });
   box.build();
@@ -146,8 +118,8 @@ function buildBoxes(results) {
 
 function bindImagePreview() {
   $('.box-img').each(function (e) {
-    new ImagePreview($(this)).delay(700).hover(self => {
-      _get('/product/image', { sku: $(this).parent().data('sku') }, product => {
+    new ImagePreview($(this)).delay(700).hover((self) => {
+      _get('/product/image', { sku: $(this).parent().data('sku') }, (product) => {
         self.show(product.image);
       });
     });
@@ -156,15 +128,15 @@ function bindImagePreview() {
 
 function bindTooltipManufacturer() {
   new Tooltip('.box-img-col')
-    .propsOnShow(el => ({ content: $(el).data('manufacturer') }))
+    .propsOnShow((el) => ({ content: $(el).data('manufacturer') }))
     .autoHide(10000)
     .load();
 }
 
 function buildSkusBox(data) {
   if (data.sku) {
-    var scoreStyling = each => {
-      return $score => {
+    var scoreStyling = (each) => {
+      return ($score) => {
         var color = each.score > 10 ? '#09c164' : each.score >= 6 ? '#0eb7a6' : false;
         if (color) return $score.css('background', color).css('transform', 'scale(1)');
         if (each.score <= 4) {
@@ -174,12 +146,12 @@ function buildSkusBox(data) {
     };
 
     var box = new BoxBuilder('1/5').specialClass('skus-grid').group('Produtos', data.sku.length);
-    data.sku.forEach(each => {
+    data.sku.forEach((each) => {
       var click = () => {
         window.open('/product/url-redirect?sku=' + each.name, '_blank');
       };
 
-      var subDblClick = e => {
+      var subDblClick = (e) => {
         e.stopPropagation();
         window.open('/product/page?sku=' + each.name, '_blank');
       };
@@ -219,4 +191,77 @@ function toggleOrderInfo(order) {
   var msg = order === 'asc' ? 'Crescente' : 'Decrescente';
 
   new Tooltip('.arrow-order', msg).autoHide(10000).load();
+}
+
+function loadMainBoard(data) {
+  if (window.loggedUser?.type === 0) {
+    new BoxBuilder()
+      .group('Faturamento', Num.points(data.items) + (data.daysCount > 1 ? ' em ' + data.daysCount + ' dias' : ''), 'min-col')
+      .info('Valor', Num.money(data.total), 'high-val')
+      .info('Ticket', Num.money(data.tkm))
+      .info('Markup', Floa.abs(data.markup, 2))
+      .info('Skus', Num.points(data.skusCount || 0))
+      .info('Disponível', Num.points(data.sumStock) + ' itens')
+      .info('Faturado', Num.percent(data.percSold))
+      .info('Abrangência', Math.max(1, Num.int(data.stockCoverage)) + ' Dia(s)')
+      .info('Score Geral', Floa.abs(data.score, 2))
+      .group(null, null, 'gray min-col')
+      .info('Custo', Num.money(data.cost))
+      .info('Ticket', Num.money(data.tkmCost))
+      .info('Margem Bruta', Num.percent((data.profit * 100) / data.total), data.profit ? 'green-val' : 'red-val')
+      .info('Lucro Bruto', Num.money(data.profit), data.profit ? 'green-val' : 'red-val')
+      .build();
+  } else {
+    new BoxBuilder()
+      .group('Estoque', Num.points(data.items) + (data.daysCount > 1 ? ' em ' + data.daysCount + ' dias' : ''), 'min-col')
+      .info('Disponível', Num.points(data.sumStock) + ' itens')
+      .info('Skus', Num.points(data.skusCount || 0))
+      .info('Faturado', Num.percent(data.percSold))
+      .info('Abrangência', Math.max(1, Num.int(data.stockCoverage)) + ' Dia(s)')
+      .info('Score Geral', Floa.abs(data.score, 2))
+      .group(null, null, 'gray min-col')
+      .info('Receita Total', Num.money(data.cost))
+      .info('Média Un.', Num.money(data.tkmCost))
+      .build();
+  }
+}
+
+function loadCharts(data) {
+  if (window.loggedUser?.type === 0) {
+    var box = new BoxBuilder().group('Receita do Período', Num.money(data.total)).group(null, null, 'gray');
+
+    var row = box.get();
+
+    new StockDashChart(row, data.chart)
+      .field({ label: 'Receita', tag: 'sum_total', color: '#3e55ff' })
+      .field({ label: 'Lucro', tag: 'sum_profit', color: '#03c184' })
+      .field({ label: 'Custo', tag: 'sum_cost', color: '#f98929' })
+      .load();
+
+    box.build();
+
+    var box = new BoxBuilder().group('Estoque do Período', Num.points(data.sumStock)).group(null, null, 'gray');
+    var row = box.get();
+    new StockDashChart(row, data.chart)
+      .field({ label: 'Disponibilidade', tag: 'sum_stock', color: '#03c184' })
+      .field({ label: 'Estoque Faturado', tag: 'sum_quantity', color: '#996ef4' })
+      .field({ label: 'Faturado (%)', tag: 'perc_sold', color: '#25d4f3' })
+      .load();
+
+    box.build();
+  } else {
+    var box = new BoxBuilder().group('Receita do Período', Num.money(data.cost)).group(null, null, 'gray');
+
+    var row = box.get();
+
+    new StockDashChart(row, data.chart).field({ label: 'Custo', tag: 'sum_cost', color: '#f98929' }).load();
+
+    box.build();
+
+    var box = new BoxBuilder().group('Estoque do Período', Num.points(data.sumStock)).group(null, null, 'gray');
+    var row = box.get();
+    new StockDashChart(row, data.chart).field({ label: 'Estoque Faturado', tag: 'sum_quantity', color: '#996ef4' }).field({ label: 'Faturado (%)', tag: 'perc_sold', color: '#25d4f3' }).load();
+
+    box.build();
+  }
 }
