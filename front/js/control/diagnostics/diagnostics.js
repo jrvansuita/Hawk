@@ -4,9 +4,7 @@ $(document).ready(() => {
       showSkuFixesDialog($('#search').val());
     } else {
       showLoading();
-      _post('/diagnostics/run', {}, () => {
-        console.log('rodou');
-      });
+      _post('/diagnostics/run', {}, () => {});
     }
   });
 
@@ -22,14 +20,11 @@ $(document).ready(() => {
     .item('/img/restart.png', 'Atualizar Problemas', helper => {
       showLoading();
 
-      _post('/diagnostics/run', { refresh: true }, () => {
-        console.log('rodou');
-      });
+      _post('/diagnostics/run', { refresh: true }, () => {});
     });
 
   new Broadcast('product-diagnostics').onReceive(result => {
     var msg = 'Foram avaliados ' + result.productsAnalyzed + ' skus e foram encontrados ' + result.fixesFound + ' problemas.';
-    console.log(msg);
 
     $('.errors-msg').text(msg);
     startIntervalTimer(result.startTime);
@@ -113,9 +108,7 @@ function buildIndRows(rows) {
       .item('/img/restart.png', 'Atualizar Marca', helper => {
         showLoading('Carregando produtos...');
         var type = $('.ind-item.active').data('type');
-        _post('/diagnostics/run', { refresh: true, brand: brand, type: type }, () => {
-          console.log('rodou');
-        });
+        _post('/diagnostics/run', { refresh: true, brand: brand, type: type }, () => {});
       });
 
     var $brandTitle = $('<span>').addClass('brand-title').append($brandLabel, $brandMenu, $brandTotal);

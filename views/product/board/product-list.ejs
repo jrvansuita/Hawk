@@ -51,7 +51,7 @@
         </div>
       </div>
 
-      <%if(locals?.loggedUser?.full){%>
+      <%if(locals?.loggedUser?.full || locals?.loggedUser?.setts?.[20]){%>
       <div class="totalization shadow">
         <div class="col stock"><span class="super">Estoque</span><span class="value"></span></div>
 

@@ -7,7 +7,6 @@ module.exports = class ProductBoardProvider extends DashboardProvider.Handler {
   }
 
   _onLoadData(callback) {
-    console.log(JSON.stringify(this.getDataQuery()));
     Product.findAndSort(this.getDataQuery(), 'quantity', (_err, data) => {
       callback(_err, new ProductBoardHelper(data, this.query.showSkus));
     });

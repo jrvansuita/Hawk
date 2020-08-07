@@ -1,6 +1,9 @@
 class MenuController {
   constructor() {
-    this.initialDefaultHref = '/product/page';
+    this.defaultMain = 'stock-menu';
+    this.defaultSub = 'stock/product-board';
+
+    this.mainMenuTag = 'main-menu';
 
     this.mainMenu = $('.main-menu-nav');
     this.subMenu = $('.sub-menu-nav');
@@ -14,7 +17,7 @@ class MenuController {
 
   buildCurrentSubMenuOptions(subMenuName, mainMenuItem) {
     this.previewSubMenu = $('<div>').load('/sub-menu?sub=' + subMenuName, () => {
-      this.bindMenuItemClick({ menu: this.previewSubMenu, tag: this.getSubMenuTag(mainMenuItem), selMainItem: mainMenuItem });
+      this.bindMenuItemClick({ menu: this.previewSubMenu, tag: mainMenuItem.attr('sub'), selMainItem: mainMenuItem });
 
       this.previewSubMenu.hover(
         () => {
@@ -32,14 +35,11 @@ class MenuController {
     return 'main-menu-nav';
   }
 
-  getSubMenuTag(mainMenuItemSelected) {
-    return 'sub' + mainMenuItemSelected.find('a').attr('href').split('/').join('-');
-  }
-
   showPreviewSubMenuOptions(menuItem) {
     var subMenuName = menuItem.attr('sub');
+    var hasSubMenu = !menuItem.hasClass('fixed-menu');
 
-    if (!!subMenuName && this.selectedMain.attr('sub') !== subMenuName) {
+    if (!!subMenuName && hasSubMenu && this.selectedMain.attr('sub') !== subMenuName) {
       this.destroySubMenuOptions();
       this.buildCurrentSubMenuOptions(subMenuName, menuItem);
 
@@ -85,33 +85,41 @@ class MenuController {
 
   bindMenuItemClick({ menu, tag, selMainItem }) {
     menu.find('.menu-item').click(function () {
-      console.log(tag + ': ' + $(this).find('a').attr('href'));
-      Local.set(tag, $(this).find('a').attr('href'));
+      Local.set(tag, $(this).attr('sub') || $(this).find('a').attr('href'));
       if (selMainItem) selMainItem.trigger('click');
     });
   }
 
-  markMenuItemAsSelected(getTag, menu) {
-    var hrefPath = Local.getStr(getTag()) || this.initialDefaultHref;
+  markMenuItemAsSelected(tagName, menu, def) {
+    var tagValue = Local.getStr(tagName) || def;
 
-    const selected = menu.find('a[href*="' + hrefPath + '"]').parent('li');
+    const selected = menu == this.mainMenu ? menu.find('[sub="' + tagValue + '"]') : menu.find('a[href*="' + tagValue + '"]').parent('li');
     selected.addClass('active-menu');
     return selected;
   }
 
-  bind() {
-    this.selectedMain = this.markMenuItemAsSelected(this.getMainMenuTag.bind(this), this.mainMenu);
-    this.selectedSub = this.markMenuItemAsSelected(() => {
-      return this.getSubMenuTag(this.selectedMain);
-    }, this.subMenu);
+  rewriteMainMenuItemsUrls() {
+    this.mainMenu.find('.menu-item').each((i, each) => {
+      var savedHref = Local.getStr($(each).attr('sub'));
 
-    this.bindMenuItemClick({ menu: this.mainMenu, tag: this.getMainMenuTag() });
+      if (savedHref) {
+        $(each).find('a').attr('href', savedHref);
+      }
+    });
+  }
+
+  bind() {
+    this.selectedMain = this.markMenuItemAsSelected(this.mainMenuTag, this.mainMenu, this.defaultMain);
+    this.selectedSub = this.markMenuItemAsSelected(this.selectedMain.attr('sub'), this.subMenu, this.defaultSub);
+
+    this.bindMenuItemClick({ menu: this.mainMenu, tag: this.mainMenuTag });
     this.bindMenuItemClick({
       menu: this.subMenu,
-      tag: this.getSubMenuTag(this.selectedMain),
+      tag: this.selectedMain.attr('sub'),
       selMainItem: this.selectedMain,
     });
 
     this.bindMenuItemHover(this.mainMenu);
+    this.rewriteMainMenuItemsUrls();
   }
 }

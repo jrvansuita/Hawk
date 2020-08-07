@@ -17,7 +17,7 @@ module.exports = class ProductRoutes extends Routes {
       .cors();
 
     this.get('/image-redirect', (req, res) => {
-      ProductHandler.getImage(req.query.sku, (product) => {
+      ProductHandler.getImage(req.query.sku, product => {
         res.set('Cache-Control', 'public, max-age=86400'); // 1day
         res.redirect(product && product.image ? product.image : req.query.def);
       });
@@ -27,7 +27,7 @@ module.exports = class ProductRoutes extends Routes {
       .market();
 
     this.get('/url-redirect', (req, res) => {
-      ProductHandler.getImage(req.query.sku, (product) => {
+      ProductHandler.getImage(req.query.sku, product => {
         res.set('Cache-Control', 'public, max-age=86400'); // 1day
         res.redirect(product && product.url ? product.url : req.query.def);
       });
@@ -44,11 +44,11 @@ module.exports = class ProductRoutes extends Routes {
 
     this.get('/skus', (req, res) => {
       ProductHandler.getSkus(req.query.skus, req.query.order, this._resp().redirect(res));
-    });
+    }).market();
 
     this.get('/stock-history', (req, res) => {
       ProductHandler.getStockHistory(req.query.sku, this._resp().redirect(res));
-    });
+    }).market();
 
     this.get('/search-autocomplete', (req, res) => {
       ProductHandler.searchAutoComplete(req.query.typing, this._resp().redirect(res));
@@ -63,18 +63,18 @@ module.exports = class ProductRoutes extends Routes {
     this.page('/page', (req, res) => {
       var skuOrEan = req.query.sku || req.query.ean;
 
-      ProductLaws.load(skuOrEan, (result) => {
+      ProductLaws.load(skuOrEan, result => {
         res.render('product/stock/product', {
           product: result,
         });
       });
-    });
+    }).market();
 
     this.get('/print-locals', (req, res) => {
       if (req.query.product) {
         res.render('product/printing/local-list', { product: req.query.product });
       } else {
-        ProductHandler.getBySku(req.query.sku, false, (result) => {
+        ProductHandler.getBySku(req.query.sku, false, result => {
           res.render('product/printing/local-list', {
             product: result,
           });
@@ -126,7 +126,7 @@ module.exports = class ProductRoutes extends Routes {
     });
 
     this.get('/barcode', (req, res) => {
-      ProductHandler.get(req.query.sku, false, (result) => {
+      ProductHandler.get(req.query.sku, false, result => {
         res.render('product/printing/barcode', {
           product: result,
         });

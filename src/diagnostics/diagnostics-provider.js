@@ -3,7 +3,7 @@ const Fix = require('../bean/fix.js');
 const Enum = require('../bean/enumerator.js');
 
 module.exports = class DiagnosticsProvider {
-  groupped(s) {
+  grouped(s) {
     this.doGroups = s;
     return this;
   }

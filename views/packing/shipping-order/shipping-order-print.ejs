@@ -1,143 +1,117 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-<head>
-  <meta charset="utf-8">
-  <title><%=Util.transportName(shippingOrder.transportador) + ' | Coleta ' + shippingOrder.numeroColeta%> </title>
+  <head>
+    <meta charset="utf-8" />
+    <title><%=Util.transportName(shippingOrder.transportador) + ' | Coleta ' + shippingOrder.numeroColeta%></title>
 
-  <link rel="icon" href="/img/icon/favicon.ico" type="image/x-icon" />
-  <link rel="shortcut icon" href="/img/icon/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="/img/icon/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/img/icon/favicon.ico" type="image/x-icon" />
 
-  <script class="hidable-script">
-  window.shippingOrder = <%- JSON.stringify(shippingOrder || null) %>
-  </script>
+    <script class="hidable-script">
+      window.shippingOrder = <%- JSON.stringify(shippingOrder || null) %>
+    </script>
 
+    <style>
+      .big {
+        font-weight: 800;
+        font-size: 22px;
+      }
 
-  <style>
-  .big {
-    font-weight: 800;
-    font-size: 22px;
-  }
+      .bold {
+        font-weight: 800;
+        font-size: 18px;
+      }
 
-  .bold {
-    font-weight: 800;
-    font-size: 18px;
-  }
+      td,
+      span {
+        font-size: 15px;
+        font-weight: 500;
+        font-family: sans-serif;
+      }
 
-  td,
-  span {
-    font-size: 15px;
-    font-weight: 500;
-    font-family: sans-serif;
-  }
+      .top {
+        padding-bottom: 17px;
+        border-bottom: 1px solid #989898;
+      }
 
-  .top {
-    padding-bottom: 17px;
-    border-bottom: 1px solid #989898;
-  }
+      .holder {
+        padding: 10px 0;
+        width: 100%;
+      }
 
-  .holder {
-    padding: 10px 0;
-    width: 100%;
-  }
+      table tr {
+        page-break-inside: avoid;
+      }
 
-  table tr {
-    page-break-inside: avoid;
-  }
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
 
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
+      td {
+        padding: 12px 5px;
+      }
 
-  td {
-    padding: 12px 5px;
-  }
+      table {
+        width: 100%;
+        max-width: 100%;
+        background-color: transparent;
+        border-collapse: collapse;
+        border-spacing: 0;
+      }
 
-  table {
-    width: 100%;
-    max-width: 100%;
-    background-color: transparent;
-    border-collapse: collapse;
-    border-spacing: 0;
-  }
+      .transp img {
+        width: 30px;
+        height: 30px;
+        margin-bottom: -10px;
+      }
 
-  .transp img {
-    width: 30px;
-    height: 30px;
-    margin-bottom: -10px;
-  }
+      .vol-inc {
+        border: 2px solid black;
+        padding: 4px 6px;
+      }
 
-  .vol-inc {
-    border: 2px solid black;
-    padding: 4px 6px;
-  }
+      .bkg-row td {
+        font-size: 17px;
+        font-weight: bold;
+        background-color: #e2e2e2;
+      }
+    </style>
+  </head>
 
-  .bkg-row td {
-    font-size: 17px;
-    font-weight: bold;
-    background-color: #e2e2e2;
-  }
-  </style>
+  <body>
+    <% shippingOrder._NotasFiscais var volTotal = shippingOrder._NotasFiscais.reduce((prev, e)=>{return parseInt(e.qtdVolumes) + prev},0); %>
 
-</head>
-
-<body>
-
-  <%
-
-  shippingOrder._NotasFiscais
-
-  var volTotal = shippingOrder._NotasFiscais.reduce((prev, e)=>{return parseInt(e.qtdVolumes) + prev},0);
-  %>
-
-
-
-
-  <table class="top">
-    <tr>
-
-      <td><iframe frameborder='0' src="templates-viewer?id=84155975" width="100%" scrolling="no"></iframe></td>
-      <td>
-        <p class="big">Coleta: <%=shippingOrder.numeroColeta%></p>
-        <p class="transp"> <img src="<%=transports[Util.transportName(shippingOrder.transportador).toLowerCase()].icon%>"/> <%=shippingOrder.transportador%></p>
-        <p>Data da Ordem: <%=Dat.format(new Date(shippingOrder.data))%></p>
-        <p>Data da Impressão: <%=Dat.formatwTime(new Date())%></p>
-
-      </td>
-      <td style="text-align: right;">
-        <p>Minuta de Despacho [Usuário: <%=shippingOrder.usuario_criacao%>]</p>
-        <p class="bold"><%=volTotal + ' Volumes'%></p>
-      </td>
-    </tr>
-  </table>
-
-  <div class="holder">
-
-
-
-    <table>
-      <tr class="bkg-row">
-        <td>Nota Fiscal</td>
-        <td>Pedido</td>
-        <td>Ordem de Compra</td>
-        <td>Data</td>
-        <td>Cliente</td>
-        <td>Valor</td>
-        <td>Peso</td>
-        <td>Volumes</td>
-        <td>Destino</td>
+    <table class="top">
+      <tr>
+        <td><iframe frameborder="0" src="/templates/viewer?id=84155975" width="100%" scrolling="no"></iframe></td>
+        <td>
+          <p class="big">Coleta: <%=shippingOrder.numeroColeta%></p>
+          <p class="transp"><img src="<%=transports[Util.transportName(shippingOrder.transportador).toLowerCase()].icon%>" /> <%=shippingOrder.transportador%></p>
+          <p>Data da Ordem: <%=Dat.format(new Date(shippingOrder.data))%></p>
+          <p>Data da Impressão: <%=Dat.formatwTime(new Date())%></p>
+        </td>
+        <td style="text-align: right;">
+          <p>Minuta de Despacho [Usuário: <%=shippingOrder.usuario_criacao%>]</p>
+          <p class="bold"><%=volTotal + ' Volumes'%></p>
+        </td>
       </tr>
+    </table>
 
-      <%
+    <div class="holder">
+      <table>
+        <tr class="bkg-row">
+          <td>Nota Fiscal</td>
+          <td>Pedido</td>
+          <td>Ordem de Compra</td>
+          <td>Data</td>
+          <td>Cliente</td>
+          <td>Valor</td>
+          <td>Peso</td>
+          <td>Volumes</td>
+          <td>Destino</td>
+        </tr>
 
-      var val = 0;
-      var wei = 0;
-
-      shippingOrder._NotasFiscais.sort((a, b) => a.numero.localeCompare(b.numero)).forEach((each)=>{
-
-        val += parseFloat(each.totalFaturado);
-        wei += parseFloat(each.pesoTransportadora);
-
-        %>
+        <% var val = 0; var wei = 0; shippingOrder._NotasFiscais.sort((a, b) => a.numero.localeCompare(b.numero)).forEach((each)=>{ val += parseFloat(each.totalFaturado); wei += parseFloat(each.pesoTransportadora); %>
 
         <tr>
           <td><span class="bold"><%=each.numero%></span></td>
@@ -156,7 +130,6 @@
 
         <%});%>
 
-
         <tr class="bkg-row">
           <td></td>
           <td></td>
@@ -168,10 +141,7 @@
           <td><%=volTotal%></td>
           <td></td>
         </tr>
-
       </table>
-
     </div>
-
   </body>
-  </html>
+</html>

@@ -140,11 +140,11 @@ function buildTotalBox(data) {
     .info('Marcas', data.brand.length, null, null, 'tags')
     .info('Cores', data.color.length, null, null, 'color')
     .group('Custo de Estoque', null, 'gray')
-    .info('Valor', Num.format(data.cost))
-    .info('Ticket', Num.money(data.tkmCost))
-    .info('Un. Venda', Num.money(data.value / data.total))
+    .info('Custo Total', Num.format(data.cost))
+    .info('Un. Custo', Num.money(data.tkmCost))
     .info('Markup', Floa.abs(data.markup, 2))
-    .info('Venda', Num.format(data.value));
+    .info('Un. Venda', Num.money(data.value / data.total))
+    .info('Total Venda', Num.format(data.value));
 
   box.build();
 }

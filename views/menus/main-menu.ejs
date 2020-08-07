@@ -39,7 +39,7 @@
       <ul class="main-menu-ul">
         <%if (Menu.has(loggedUser, 'picking')){%>
         <li class="menu-item" sub="picking-menu">
-          <a href="/picking">
+          <a href="#">
             <div class="menu-button title">
               <span class="menu-label">Picking</span>
             </div>
@@ -47,7 +47,7 @@
         </li>
         <%}%> <%if (Menu.has(loggedUser, 'packing')){%>
         <li class="menu-item" sub="packing-menu">
-          <a href="/packing">
+          <a href="#">
             <div class="menu-button title">
               <span class="menu-label">Packing</span>
             </div>
@@ -55,7 +55,7 @@
         </li>
         <%}%> <%if (Menu.has(loggedUser, 'pendência')){%> <%if (Sett.get(locals.loggedUser,2)){%>
         <li class="menu-item" sub="pending-menu">
-          <a href="/pending">
+          <a href="#">
             <div class="menu-button title">
               <span class="menu-label">Pendência</span>
             </div>
@@ -63,7 +63,7 @@
         </li>
         <%}%> <%}%> <%if (Menu.has(loggedUser, 'performance')){%>
         <li class="menu-item" sub="performance-menu">
-          <a href="/performance/profile">
+          <a href="#">
             <div class="menu-button title">
               <span class="menu-label">Performance</span>
             </div>
@@ -71,7 +71,7 @@
         </li>
         <%}%> <%if (Menu.has(loggedUser, 'atendimento')){%>
         <li class="menu-item" sub="customer-menu">
-          <a href="/customer-service/client">
+          <a href="#">
             <div class="menu-button title">
               <span class="menu-label">Atendimento</span>
             </div>
@@ -79,14 +79,14 @@
         </li>
         <%}%> <%if (Menu.has(loggedUser, 'estoque')){%>
         <li class="menu-item" sub="stock-menu">
-          <a href="/product/page">
+          <a href="#">
             <div class="menu-button title">
               <span class="menu-label">Estoque</span>
             </div>
           </a>
         </li>
         <%}%> <%if (Menu.has(loggedUser, 'histórico')){%>
-        <li class="menu-item">
+        <li class="menu-item fixed-menu" sub="history-menu">
           <a href="/history">
             <div class="menu-button title">
               <span class="menu-label">Histórico</span>
@@ -94,7 +94,7 @@
           </a>
         </li>
         <%}%> <%if (Menu.has(loggedUser, 'Configurações')){%>
-        <li class="menu-item">
+        <li class="menu-item fixed-menu" sub="settings-menu">
           <a href="/settings">
             <div class="menu-button title">
               <span class="menu-label">Configurações</span>

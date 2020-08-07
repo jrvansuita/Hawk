@@ -50,7 +50,7 @@
   window.sortSelected = <%- JSON.stringify(sortSelected || null) %>
 
 
-  window.userSetts = <%- JSON.stringify(locals.loggedUser ? locals.loggedUser.setts ? locals.loggedUser.setts : {} : {}) %>
+  window.userSetts = <%- JSON.stringify(locals?.loggedUser?.setts ?? {}) %>
   </script>
 
   <%  include ../menus/picking-menu %>

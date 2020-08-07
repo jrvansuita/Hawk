@@ -38,7 +38,7 @@ module.exports = class ProductRoutes extends Routes {
 
     this.post('/check', (req, res) => {
       new ProductDiagnostics().resync(req.body.sku, req.body.forceFather, () => {
-        new DiagnosticsProvider().groupped(true).loadBySku(req.body.sku, (all, product) => {
+        new DiagnosticsProvider().grouped(true).loadBySku(req.body.sku, (all, product) => {
           res.status(200).send(all);
         });
       });
@@ -73,21 +73,23 @@ module.exports = class ProductRoutes extends Routes {
      */
 
     this.get('/fixes', (req, res) => {
-      var provider = new DiagnosticsProvider().groupped(req.query.groupped);
+      var provider = new DiagnosticsProvider().grouped(req.query.grouped);
 
       if (req.query.type) {
-        provider.loadByType(req.query.type, (all) => {
+        provider.loadByType(req.query.type, all => {
           this._resp().success(res, all);
         });
       } else {
-        provider.findBySku(req.query.sku, async (data) => {
+        provider.findBySku(req.query.sku, async data => {
           this._resp().success(res, data);
         });
       }
-    }).apiRead();
+    })
+      .apiRead()
+      .market();
 
     this.get('/fixes-dialog', (req, res) => {
-      new DiagnosticsProvider().groupped(true).loadBySku(req.query.sku, (all, product) => {
+      new DiagnosticsProvider().grouped(true).loadBySku(req.query.sku, (all, product) => {
         res.render('product/diagnostics/diagnostics-dialog', { data: all, product: product });
       });
     });

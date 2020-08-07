@@ -90,6 +90,9 @@ $(document).ready(() => {
       } else {
         window.open('/stock/list-export');
       }
+    })
+    .setOnDynamicShow(() => {
+      return { 1: window.loggedUser.type !== 1 };
     });
 
   setTimeout(() => {
@@ -165,7 +168,9 @@ function loadList() {
 }
 
 function showMessageTotals(info) {
-  if (info && window.loggedUser.full) {
+  var show = window.loggedUser.full || !!window.loggedUser.setts[20];
+
+  if (info && show) {
     $('.totalization .stock > .value').text(window.Num.points(info.sum_quantity) + ' items');
     $('.totalization .skus > .value').text(window.Num.points(info.count));
     $('.totalization .sell > .value').text(window.Num.money(info.sum_sell / info.sum_quantity));
@@ -177,7 +182,7 @@ function showMessageTotals(info) {
     $('.totalization .tsell > .value').text(window.Num.money(info.sum_sell));
     $('.totalization .tcost > .value').text(window.Num.money(info.sum_cost));
 
-    $('.totalization').toggle(window.loggedUser.full);
+    $('.totalization').toggle(show);
   }
 
   $('#totals').text(info ? window.Num.points(info.sum_quantity) + ' items e ' + window.Num.points(info.count) + ' skus' : 'Nenhum produto encontrado.');
@@ -272,7 +277,7 @@ function createTitle(product) {
 
   var diagIcon = $('<img>').addClass('diag-alert').attr('src', '/img/alert.png');
 
-  _get('/diagnostics/fixes', { sku: product.sku, groupped: true }, all => {
+  _get('/diagnostics/fixes', { sku: product.sku, grouped: true }, all => {
     if (all.length > 0) {
       diagIcon.fadeIn();
       diagIcon.click(() => {
