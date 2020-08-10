@@ -1,46 +1,131 @@
+const EccosysStorer = require('../eccosys/eccosys-storer.js');
+const EccosysProvider = require('../eccosys/eccosys-provider.js');
 const Product = require('../bean/product.js');
-const ProductHandler = require('../handler/product-handler.js');
-const ProductImageProvider = require('../provider/product-image-provider.js');
+const MagentoCalls = require('../magento/magento-calls.js');
 
 module.exports = {
-  load(eanOrSku, callback) {
-    if (eanOrSku) {
-      this.get(eanOrSku, true, callback);
-    } else {
-      // eslint-disable-next-line standard/no-callback-literal
-      callback({});
-    }
+  updateLocal(sku, newLocal, user, device, callback) {
+    device = device || 'Desktop';
+
+    this.getBySku(sku, false, (product) => {
+      newLocal = newLocal.toUpperCase();
+
+      // Reduzir a obs
+      var lines = product.obs.split('\n');
+      lines = lines.slice(lines.length - 15, lines.length);
+
+      lines = lines.join('\n');
+
+      var body = {
+        codigo: product.codigo,
+        localizacao: newLocal,
+        obs: lines + '\n' + user.name + ' | ' + device + ' | ' + newLocal + ' | ' + Dat.format(new Date()) + '| Localização',
+      };
+
+      new EccosysStorer().product().update(body).go(callback);
+    });
   },
 
-  get(eanOrSku, father, callback) {
-    ProductHandler.get(eanOrSku, father, (product) => {
-      if (product) {
-        handleAttrs(product, callback);
-      } else {
-        // eslint-disable-next-line standard/no-callback-literal
-        callback({
-          selected: eanOrSku,
-          error: 'Nenhum produto com o(s) código(s) informado(s) foi encontrado.',
+  updateNCM(sku, newNCM, user, callback) {
+    this.getBySku(sku, false, (product) => {
+      newNCM = newNCM.trim();
+      var lines = product.obs;
+
+      var body = {
+        codigo: product.codigo,
+        cf: newNCM,
+        obs: lines + '\n' + user.name + ' | Desktop | ' + newNCM + ' | ' + Dat.format(new Date()) + '| NCM',
+      };
+
+      new EccosysStorer().product().update(body).go(callback);
+    });
+  },
+
+  updateStock(sku, stock, user, device, callback) {
+    device = device || 'Desktop';
+    stock = !isNaN(parseInt(stock)) ? parseInt(stock) : 0;
+
+    /** Realiza a alteracao de estoque no eccosys **/
+    this.getBySku(sku, false, (product) => {
+      var body = {
+        codigo: product.codigo,
+        quantidade: Math.abs(stock),
+        es: stock < 0 ? 'S' : 'E',
+        obs: device + ' - ' + user.name,
+        // Manter o mesmo preço
+        custoLancamento: product.precoCusto,
+        preco: product.preco,
+      };
+
+      /** Realiza a alteracao de estoque no eccosys **/
+      new EccosysStorer().stock(product.codigo, body).go(callback);
+
+      /** Realiza a alteracao de estoque no magento **/
+      if (global.Params.updateProductStockMagento()) {
+        new MagentoCalls().productStock(product.codigo).then((data) => {
+          if (data.length === 1) {
+            var stockMagento = Math.max(parseFloat(data[0].qty) + stock, 0);
+            new MagentoCalls().updateProductStock(product.codigo, stockMagento);
+
+            /** Realiza a alteracao no Mongodb **/
+            Product.upsert({ sku: product.codigo.split('-')[0] }, { quantity: stockMagento });
+          }
         });
+      }
+
+      /** Realiza a alteracao de estoque no magento **/
+    });
+  },
+
+  updateWeight(sku, weight, user, callback) {
+    weight = Floa.floa(weight);
+
+    this.getBySku(sku, false, (product) => {
+      var lines = product.obs;
+
+      var body = {
+        codigo: product.codigo,
+        pesoLiq: Math.abs(weight),
+        pesoBruto: Math.abs(weight),
+        obs: lines + '\n' + user.name + ' | Desktop | ' + Floa.weight(weight) + ' | ' + Dat.format(new Date()) + '| Peso',
+      };
+
+      new EccosysStorer().product().update(body).go(callback);
+
+      if (Params.updateProductWeightMagento()) {
+        new MagentoCalls().updateProductWeight(product.codigo, weight);
       }
     });
   },
 
-  updateLocal(sku, newLocal, user, callback) {
-    ProductHandler.updateLocal(sku, newLocal, user, callback);
+  active(sku, active, user, callback) {
+    this.getBySku(sku, true, (product) => {
+      var skus = [product ? product.codigo : sku];
+      if (product && product._Skus && product._Skus.length > 0) {
+        skus = skus.concat(
+          product._Skus.map((s) => {
+            return s.codigo;
+          })
+        );
+      }
+
+      this.activeSingle(skus, active, user, callback);
+    });
+  },
+
+  activeSingle(sku, active, user, callback) {
+    new EccosysProvider().skus(sku).go((products) => {
+      var body = [];
+
+      products.forEach((each) => {
+        body.push({
+          codigo: each.codigo,
+          situacao: active ? 'A' : 'I',
+          obs: each.obs + '\n' + user.name + ' | Desktop | ' + (active ? 'Ativo' : 'Inativo') + ' | ' + Dat.format(new Date()) + '| Situação',
+        });
+      });
+
+      new EccosysStorer().product().update(body).go(callback);
+    });
   },
 };
-
-function handleAttrs(product, callback) {
-  new ProductImageProvider().getImage(product.codigo, (img) => {
-    // Get the product Image
-    product.img = img;
-
-    // Handle the products attirbutes
-    // product._Atributos.forEach((attr)=>{
-    //  product[attr.descricao] = attr.valor;
-    // });
-
-    callback(product);
-  });
-}

@@ -1,5 +1,5 @@
+const ProductImageProvider = require('../provider/product-image-provider.js');
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
-const Product = require('../bean/product.js');
 
 module.exports = class ProductProvider {
   constructor(user, log) {
@@ -7,8 +7,9 @@ module.exports = class ProductProvider {
     this.api = new EccosysProvider(log);
   }
 
-  isEan(ean) {
-    return Num.isEan(ean);
+  withImage(loadImage = true) {
+    this.loadImage = loadImage;
+    return this;
   }
 
   setEan(ean) {
@@ -22,18 +23,28 @@ module.exports = class ProductProvider {
     return this;
   }
 
+  setSkus(skus, order) {
+    this.skus = skus;
+    this.order = order;
+    return this;
+  }
+
   _getQuery() {
     if (this.ean) {
       return this.ean;
     } else if (this.sku) {
       return this.father ? this.sku.split('-')[0] : this.sku;
     }
+
+    return undefined;
   }
 
   _prepare(product, callback) {
     var result = {};
 
     if (product) {
+      console.log(this?.user?.manufacturer);
+      console.log(product.Fabricante);
       if (this?.user?.manufacturer) {
         if (product.Fabricante !== this?.user?.manufacturer) {
           result.error = Const.product_cant_load_by_this_user;
@@ -43,14 +54,49 @@ module.exports = class ProductProvider {
       result.error = Const.none_product_found;
     }
 
-    result = { ...result, selected: this.sku, ...product };
+    result.selected = this.sku;
+
+    if (!result.error) {
+      result = { ...result, ...product };
+    }
 
     callback(result);
   }
 
-  get(callback) {
-    this.api.product(this._getQuery()).go((product) => {
-      this._prepare(product, callback);
+  _decodeLetterSizeProduct(size) {
+    var sizes = ['RN', 'P', 'M', 'G', 'GG', 'XXG'];
+    var index = sizes.indexOf(size);
+    return Num.def(index > -1 ? index - 100 : size);
+  }
+
+  _order(products) {
+    return products.sort((a, b) => {
+      return this._decodeLetterSizeProduct(a.codigo.split('-')[1]) - this._decodeLetterSizeProduct(b.codigo.split('-')[1]);
     });
+  }
+
+  _checkLoadWithImage(product, callback) {
+    if (this.loadImage && !product.error) {
+      new ProductImageProvider().getImage(product.codigo, (img) => {
+        product.img = img;
+        callback(product);
+      });
+    } else {
+      callback(product);
+    }
+  }
+
+  get(callback) {
+    if (this._getQuery()) {
+      this.api.product(this._getQuery()).go((product) => {
+        this._prepare(product, (product) => {
+          this._checkLoadWithImage(product, callback);
+        });
+      });
+    } else {
+      this.api.skus(this.skus).go((products) => {
+        this.order ? callback(this._order(products)) : callback(products);
+      });
+    }
   }
 };

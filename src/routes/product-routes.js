@@ -1,6 +1,6 @@
 const Routes = require('./_route.js');
-const ProductLaws = require('../laws/product-laws.js');
 const ProductHandler = require('../handler/product-handler.js');
+const ProductLaws = require('../laws/product-laws.js');
 const ProductProvider = require('../provider/product-provider.js');
 const ProductImageProvider = require('../provider/product-image-provider.js');
 
@@ -41,12 +41,11 @@ module.exports = class ProductRoutes extends Routes {
     /* ---- Get Product ---- */
 
     this.get('/child', (req, res) => {
-      new ProductProvider().setSku(req.query.sku).get(this._resp().redirect(res));
-      // ProductHandler.getBySku(req.query.sku, false, this._resp().redirect(res));
+      new ProductProvider(res.locals.loggedUser).setSku(req.query.sku).get(this._resp().redirect(res));
     });
 
     this.get('/skus', (req, res) => {
-      ProductHandler.getSkus(req.query.skus, req.query.order, this._resp().redirect(res));
+      new ProductProvider(res.locals.loggedUser).setSkus(req.query.skus, req.query.order).get(this._resp().redirect(res));
     }).market();
 
     this.get('/stock-history', (req, res) => {
@@ -58,26 +57,29 @@ module.exports = class ProductRoutes extends Routes {
     });
 
     this.get('', (req, res) => {
-      ProductLaws.get(req.query.sku || req.query.ean, false, this._resp().redirect(res));
+      new ProductProvider(res.locals.loggedUser).setSku(req.query.sku, false).setEan(req.query.ean, req.query.order).get(this._resp().redirect(res));
     }).apiRead();
 
     /* ---- Render ---- */
 
     this.page('/page', (req, res) => {
-      var skuOrEan = req.query.sku || req.query.ean;
-
-      ProductLaws.load(skuOrEan, (result) => {
-        res.render('product/stock/product', {
-          product: result,
+      new ProductProvider(res.locals.loggedUser)
+        .withImage()
+        .setSku(req.query.sku, true)
+        .setEan(req.query.ean, req.query.order)
+        .get((product) => {
+          console.log(product);
+          res.render('product/stock/product', {
+            product: product,
+          });
         });
-      });
     }).market();
 
     this.get('/print-locals', (req, res) => {
       if (req.query.product) {
         res.render('product/printing/local-list', { product: req.query.product });
       } else {
-        ProductHandler.getBySku(req.query.sku, false, (result) => {
+        new ProductProvider(res.locals.loggedUser).setSku(req.query.sku, false).get((result) => {
           res.render('product/printing/local-list', {
             product: result,
           });
@@ -87,14 +89,14 @@ module.exports = class ProductRoutes extends Routes {
 
     this.post('/active', (req, res) => {
       if (req.body.forceSingle) {
-        ProductHandler.activeSingle(req.body.sku, req.body.active, req.body.user, this._resp().redirect(res));
+        ProductLaws.activeSingle(req.body.sku, req.body.active, req.body.user, this._resp().redirect(res));
       } else {
-        ProductHandler.active(req.body.sku, req.body.active, req.body.user, this._resp().redirect(res));
+        ProductLaws.active(req.body.sku, req.body.active, req.body.user, this._resp().redirect(res));
       }
     });
 
     this.post('/local', (req, res) => {
-      ProductHandler.updateLocal(req.body.sku, req.body.local, req.body.user, req.query.device || req.headers.device, this._resp().redirect(res));
+      ProductLaws.updateLocal(req.body.sku, req.body.local, req.body.user, req.query.device || req.headers.device, this._resp().redirect(res));
     }).api();
 
     /**
@@ -117,23 +119,26 @@ module.exports = class ProductRoutes extends Routes {
      */
 
     this.post('/stock', (req, res) => {
-      ProductHandler.updateStock(req.body.sku, req.body.stock, req.body.user, req.query.device || req.headers.device, this._resp().redirect(res));
+      ProductLaws.updateStock(req.body.sku, req.body.stock, req.body.user, req.query.device || req.headers.device, this._resp().redirect(res));
     }).api();
 
     this.post('/ncm', (req, res) => {
-      ProductHandler.updateNCM(req.body.sku, req.body.ncm, res.locals.loggedUser, this._resp().redirect(res));
+      ProductLaws.updateNCM(req.body.sku, req.body.ncm, res.locals.loggedUser, this._resp().redirect(res));
     });
 
     this.post('/weight', (req, res) => {
-      ProductHandler.updateWeight(req.body.sku, req.body.weight, req.body.user, this._resp().redirect(res));
+      ProductLaws.updateWeight(req.body.sku, req.body.weight, req.body.user, this._resp().redirect(res));
     });
 
     this.get('/barcode', (req, res) => {
-      ProductHandler.get(req.query.sku, false, (result) => {
-        res.render('product/printing/barcode', {
-          product: result,
+      new ProductProvider(res.locals.loggedUser)
+        .setSku(req.query.sku, false)
+        .setEan(req.query.ean)
+        .get((result) => {
+          res.render('product/printing/barcode', {
+            product: result,
+          });
         });
-      });
     });
   }
 };
