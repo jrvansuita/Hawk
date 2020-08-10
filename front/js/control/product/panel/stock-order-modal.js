@@ -20,9 +20,9 @@ $(document).ready(() => {
 })
 
 function checkFormBeforeSave() {
-  var isOk = false
-  $('#new-stock-order').find('input').each((i, each) => {
-    isOk = checkMaterialInput($(each))
+  var isOk = true
+  $('#new-stock-order').find('.order-input').each((i, each) => {
+    isOk = isOk && checkMaterialInput($(each))
   })
   return isOk
 }

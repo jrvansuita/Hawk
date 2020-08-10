@@ -187,7 +187,8 @@ table {
 .content-scroll {
   /* overflow-x: unset; */
   margin-top: 0;
-  padding-top: 0;
+  padding: 0;
+  margin: 0;
 }
 
 .content-table {
