@@ -129,8 +129,13 @@ module.exports = class ProductRoutes extends Routes {
     });
 
     this.post('/new-order', (req, res) => {
+<<<<<<< HEAD
       req.body.user = req.session.loggedUser;
       StockOrderVault.storeFromScreen(req.body?.data || req.body, (order) => {
+=======
+      req.body.data.user = req.session.loggedUser;
+      StockOrderVault.storeFromScreen(req.body.data, (order) => {
+>>>>>>> 31d0ed7f66b3202c25d1020bbd22458b6f37b89e
         res.redirect('/stock/panel');
       });
     });

@@ -15,7 +15,6 @@
   left: 0;
   right: 0;
   padding: 20px;
-  padding-bottom: 70px;
 }
 
 .input-holder {
@@ -26,6 +25,9 @@
 .mini-img {
   width: 30px;
   cursor: pointer;
+  max-width: 30px;
+  height: 30px;
+  max-height: 30px;
 }
 
 .upload-holder {
@@ -44,5 +46,13 @@
 
 .files span {
   font-size: 12px;
-  color: #6b6767;
+  color: #868686;
+}
+
+.file-info {
+  cursor: pointer;
+}
+
+.file-info:hover {
+  color: #616161;
 }

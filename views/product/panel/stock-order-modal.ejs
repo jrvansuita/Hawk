@@ -7,41 +7,39 @@
   <div>
     <label class="register-title">Agendar novo Pedido</label>
   </div>
-  <form action="/stock/new-order" id="new-stock-order" method="post" enctype="multipart/form-data">
+  <form id="new-stock-order" enctype="multipart/form-data">
     <div class="form-content">
       <div class="input-holder">
         <div class="material-input-holder">
-          <input type="text" id="number" name="number" required autocomplete="off" />
+          <input class="order-input"type="text" id="number" name="number" required autocomplete="off" />
           <span class="bar"></span>
           <label>Número do Pedido</label>
         </div>
         <div class="material-input-holder">
-          <input class="input-combo" data-attr="Fabricante" type="text" id="manufacturer" name="manufacturer" required autocomplete="off" />
+          <input class="input-combo order-input" data-attr="Fabricante" type="text" id="manufacturer" name="manufacturer" required autocomplete="off" />
 
           <span class="bar"></span>
           <label>Fabricante</label>
         </div>
         <div class="material-input-holder">
-          <input class="input-combo" type="text" id="brand" data-attr="Marca" name="brand" required autocomplete="off" />
+          <input class="input-combo order-input" type="text" id="brand" data-attr="Marca" name="brand" required autocomplete="off" />
           <span class="bar"></span>
           <label>Marca</label>
         </div>
       </div>
       <div class="input-holder">
         <div class="material-input-holder">
-          <input data-attr="Coleção" type="text" id="year" name="year" required autocomplete="off" value="<%=new Date().getFullYear() + 1%>" disabled />
+          <input class="order-input" data-attr="Coleção" type="text" id="year" name="year" required autocomplete="off" value="<%=new Date().getFullYear() + 1%>" disabled/>
           <span class="bar"></span>
           <label>Coleção</label>
         </div>
         <div class="material-input-holder">
-          <input class="input-combo" data-attr="Estacao" type="text" id="season" name="season" required autocomplete="off" />
+          <input class="input-combo order-input" data-attr="Estacao" type="text" id="season" name="season" required autocomplete="off" />
           <span class="bar"></span>
           <label>Estação</label>
         </div>
-        <input type="text" name="date" id="date-hidden" style="display: none;" />
-        <input type="text" name="attachs" id="attachs-hidden" style="display: none;" />
         <div class="material-input-holder">
-          <input type="text" id="date-picker" id="date" required autocomplete="off" />
+          <input class="order-input" type="text" id="date-picker" id="date" required autocomplete="off" />
           <span class="bar"></span>
           <label>Data de Entrega</label>
         </div>
@@ -50,14 +48,21 @@
       <label class="button shadow" id="save" tabindex="0">Agendar pedido</label>
     </div>
     </div>
+
+    <input type="text" name="date" id="date-hidden" style="display: none;" />
+    <input type="text" name="attachs" id="attachs-hidden" style="display: none;" />
+    <input type="text" name="id" id="id" style="display: none;" />
+    <input type="text" name="status" id="status" style="display: none;" />
   </form>
-      <form id="img-upload">
-        <label>Inserir anexos</label><br>
-        <div class="upload-holder">
-            <img class="mini-img" id="upload-img" src="/img/attach.png" alt="Incluir Anexo" />
+      <div class="form-content">
+        <form id="img-upload">
+          <label>Inserir anexos</label><br>
+          <div class="upload-holder">
+            <img class="mini-img" id="upload-img" src="/img/create-doc.png" alt="Incluir Anexo" />
             <input type="file" id="input-upload" name="attach" style="display: none;" />
             <div class="files"></div>
-        </div>
-       
-      </form>
+          </div>
+        
+        </form>
+      </div>
 </div>

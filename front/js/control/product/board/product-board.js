@@ -89,7 +89,7 @@ function handleResult(data) {
   setAttrsAndValue(data.query.value, data.query.attrs);
   setUrlId(data.id);
 
-  buildRangeSlider(data);
+  // buildRangeSlider(data);
   buildBoxes(data.data);
 }
 

@@ -7,10 +7,11 @@ const SCOPES = ['https://www.googleapis.com/auth/drive'];
 const TOKEN_PATH = 'token.json';
 
 module.exports = class GDriveConnect {
-    callGDriveApi(callback) {
-        if (callback) {
-            this.authorize(JSON.parse(Params.getGDriveCredentials()), callback)
-        }
+    go(callback) {
+        fs.readFile('credentials.json', (err, content) => {
+            if (err) return console.log('Error loading client secret file:', err);
+            if (callback) { this.authorize(JSON.parse(content), callback); }
+        });
     }
 
     authorize(credentials, callback) {
@@ -18,8 +19,11 @@ module.exports = class GDriveConnect {
         const oAuth2Client = new google.auth.OAuth2(
             client_id, client_secret, redirect_uris[0]);
 
-        oAuth2Client.setCredentials(JSON.parse(Params.getGDriveToken()));
-        callback(oAuth2Client)
+        fs.readFile(TOKEN_PATH, (err, token) => {
+            if (err) return this.getAccessToken(oAuth2Client, callback);
+            oAuth2Client.setCredentials(JSON.parse(token));
+            callback(oAuth2Client);
+        });
     }
 
     getAccessToken(oAuth2Client, callback) {
@@ -37,7 +41,6 @@ module.exports = class GDriveConnect {
             oAuth2Client.getToken(code, (err, token) => {
                 if (err) return console.error('Error retrieving access token', err);
                 oAuth2Client.setCredentials(token);
-                // Store the token to disk for later program executions
                 fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
                     if (err) return console.error(err);
                     console.log('Token stored to', TOKEN_PATH);
