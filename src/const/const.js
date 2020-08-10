@@ -35,8 +35,10 @@ module.exports = {
   no_token: 'Usuário sem token definido para esta funcionalidade!',
 
   api_not_available: 'API Eccosys indisponível no momento. Erro: {0}',
-  sale_was_confirmed_mundi: 'Foi realizada a confirmação de pagamento do pedido {0} pela Mundipagg\nForma de Pagamento: {1}\nOrdem de Compra: {2} Data do Pedido: {3} Data de Vencimento: {4} Data do Pagamento: {5}',
-  sale_was_unconfirmed_mundi: 'Foi realizado o cancelamento do pedido {0} pela Mundipagg. O pagamento não foi capturado até o vencimento\nForma de Pagamento: {1}\nOrdem de Compra: {2} Data do Pedido: {3} Data de Vencimento: {4}',
+  sale_was_confirmed_mundi:
+    'Foi realizada a confirmação de pagamento do pedido {0} pela Mundipagg\nForma de Pagamento: {1}\nOrdem de Compra: {2} Data do Pedido: {3} Data de Vencimento: {4} Data do Pagamento: {5}',
+  sale_was_unconfirmed_mundi:
+    'Foi realizado o cancelamento do pedido {0} pela Mundipagg. O pagamento não foi capturado até o vencimento\nForma de Pagamento: {1}\nOrdem de Compra: {2} Data do Pedido: {3} Data de Vencimento: {4}',
 
   from_to: 'De {0} Até {1}',
   user_already_on_picking: 'O usuário {0} já tem um pedido em processo de picking.',
@@ -46,4 +48,6 @@ module.exports = {
 
   sale_status_update_obs: '[Hawk - Atendimento] - {0} | Status do pedido {1} alterado para {2} por {3}',
   user_cant_login_now: 'Usuário {0}  - {1} não está habilitado para logar neste momento!',
+  product_cant_load_by_this_user: 'Este produto não pode ser visualizado neste usuário.',
+  none_product_found: 'Nenhum produto com o(s) código(s) informado(s) foi encontrado.',
 };

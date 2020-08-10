@@ -13,9 +13,9 @@ module.exports = {
   },
 
   getByEan(ean, callback) {
-    new EccosysProvider().product(ean).go(eanProduct => {
+    new EccosysProvider().product(ean).go((eanProduct) => {
       if (eanProduct) {
-        this.getSkus(getFatherSku(eanProduct.codigo), true, data => {
+        this.getSkus(getFatherSku(eanProduct.codigo), true, (data) => {
           eanProduct._Skus = data[0]._Skus;
           handleCallback(callback, eanProduct, ean);
         });
@@ -26,39 +26,20 @@ module.exports = {
   },
 
   getSkus(skus, idOrder, callback) {
-    new EccosysProvider(false).skus(skus).go(products => {
+    new EccosysProvider(false).skus(skus).go((products) => {
       idOrder ? callback(this._orderProducts(products)) : callback(products);
     });
   },
 
   getBySku(sku, father, callback) {
-    new EccosysProvider(false).product(father ? getFatherSku(sku) : sku).go(product => {
+    new EccosysProvider(false).product(father ? getFatherSku(sku) : sku).go((product) => {
       handleCallback(callback, product, sku);
     });
   },
 
-  getImage(sku, callback) {
-    if (sku) {
-      sku = getFatherSku(sku);
-      var found = productsDataCache[sku];
-
-      if (found) {
-        callback(found);
-      } else {
-        Product.get(sku, product => {
-          putAndControlDataCache(sku, product);
-
-          callback(productsDataCache[sku]);
-        });
-      }
-    } else {
-      callback();
-    }
-  },
-
   getStockHistory(sku, callback) {
     if (sku) {
-      new EccosysProvider().stockHistory(sku).go(rows => {
+      new EccosysProvider().stockHistory(sku).go((rows) => {
         callback(rows);
       });
     } else {
@@ -69,7 +50,7 @@ module.exports = {
   updateLocal(sku, newLocal, user, device, callback) {
     device = device || 'Desktop';
 
-    this.getBySku(sku, false, product => {
+    this.getBySku(sku, false, (product) => {
       newLocal = newLocal.toUpperCase();
 
       // Reduzir a obs
@@ -89,7 +70,7 @@ module.exports = {
   },
 
   updateNCM(sku, newNCM, user, callback) {
-    this.getBySku(sku, false, product => {
+    this.getBySku(sku, false, (product) => {
       newNCM = newNCM.trim();
       var lines = product.obs;
 
@@ -108,7 +89,7 @@ module.exports = {
     stock = !isNaN(parseInt(stock)) ? parseInt(stock) : 0;
 
     /** Realiza a alteracao de estoque no eccosys **/
-    this.getBySku(sku, false, product => {
+    this.getBySku(sku, false, (product) => {
       var body = {
         codigo: product.codigo,
         quantidade: Math.abs(stock),
@@ -124,7 +105,7 @@ module.exports = {
 
       /** Realiza a alteracao de estoque no magento **/
       if (global.Params.updateProductStockMagento()) {
-        new MagentoCalls().productStock(product.codigo).then(data => {
+        new MagentoCalls().productStock(product.codigo).then((data) => {
           if (data.length === 1) {
             var stockMagento = Math.max(parseFloat(data[0].qty) + stock, 0);
             new MagentoCalls().updateProductStock(product.codigo, stockMagento);
@@ -142,7 +123,7 @@ module.exports = {
   updateWeight(sku, weight, user, callback) {
     weight = Floa.floa(weight);
 
-    this.getBySku(sku, false, product => {
+    this.getBySku(sku, false, (product) => {
       var lines = product.obs;
 
       var body = {
@@ -161,11 +142,11 @@ module.exports = {
   },
 
   active(sku, active, user, callback) {
-    this.getBySku(sku, true, product => {
+    this.getBySku(sku, true, (product) => {
       var skus = [product ? product.codigo : sku];
       if (product && product._Skus && product._Skus.length > 0) {
         skus = skus.concat(
-          product._Skus.map(s => {
+          product._Skus.map((s) => {
             return s.codigo;
           })
         );
@@ -176,10 +157,10 @@ module.exports = {
   },
 
   activeSingle(sku, active, user, callback) {
-    new EccosysProvider().skus(sku).go(products => {
+    new EccosysProvider().skus(sku).go((products) => {
       var body = [];
 
-      products.forEach(each => {
+      products.forEach((each) => {
         body.push({
           codigo: each.codigo,
           situacao: active ? 'A' : 'I',
@@ -214,27 +195,6 @@ function handleCallback(callback, product, selected) {
 
 function getFatherSku(sku) {
   return sku ? sku.split('-')[0] : sku;
-}
-
-var productsDataCache = [];
-
-function putAndControlDataCache(sku, product) {
-  if (product) {
-    product = product.toObject();
-    delete product.__v;
-    delete product._id;
-
-    productsDataCache[sku] = product;
-
-    var arr = Object.keys(productsDataCache);
-    if (arr.length > 2000) {
-      arr.slice(2000, arr.length - 1).forEach(i => {
-        delete productsDataCache[i];
-      });
-    }
-  } else {
-    productsDataCache[sku] = {};
-  }
 }
 
 function decodeLetterSizeProduct(size) {

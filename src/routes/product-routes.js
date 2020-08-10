@@ -1,6 +1,8 @@
 const Routes = require('./_route.js');
 const ProductLaws = require('../laws/product-laws.js');
 const ProductHandler = require('../handler/product-handler.js');
+const ProductProvider = require('../provider/product-provider.js');
+const ProductImageProvider = require('../provider/product-image-provider.js');
 
 module.exports = class ProductRoutes extends Routes {
   mainPath() {
@@ -11,13 +13,13 @@ module.exports = class ProductRoutes extends Routes {
     /* ---- Redirects ---- */
 
     this.get('/image', (req, res) => {
-      ProductHandler.getImage(req.query.sku, this._resp().redirect(res));
+      new ProductImageProvider().getImage(req.query.sku, this._resp().redirect(res));
     })
       .skipLogin()
       .cors();
 
     this.get('/image-redirect', (req, res) => {
-      ProductHandler.getImage(req.query.sku, product => {
+      new ProductImageProvider().getImage(req.query.sku, (product) => {
         res.set('Cache-Control', 'public, max-age=86400'); // 1day
         res.redirect(product && product.image ? product.image : req.query.def);
       });
@@ -27,7 +29,7 @@ module.exports = class ProductRoutes extends Routes {
       .market();
 
     this.get('/url-redirect', (req, res) => {
-      ProductHandler.getImage(req.query.sku, product => {
+      new ProductImageProvider().getImage(req.query.sku, (product) => {
         res.set('Cache-Control', 'public, max-age=86400'); // 1day
         res.redirect(product && product.url ? product.url : req.query.def);
       });
@@ -39,7 +41,8 @@ module.exports = class ProductRoutes extends Routes {
     /* ---- Get Product ---- */
 
     this.get('/child', (req, res) => {
-      ProductHandler.getBySku(req.query.sku, false, this._resp().redirect(res));
+      new ProductProvider().setSku(req.query.sku).get(this._resp().redirect(res));
+      // ProductHandler.getBySku(req.query.sku, false, this._resp().redirect(res));
     });
 
     this.get('/skus', (req, res) => {
@@ -63,7 +66,7 @@ module.exports = class ProductRoutes extends Routes {
     this.page('/page', (req, res) => {
       var skuOrEan = req.query.sku || req.query.ean;
 
-      ProductLaws.load(skuOrEan, result => {
+      ProductLaws.load(skuOrEan, (result) => {
         res.render('product/stock/product', {
           product: result,
         });
@@ -74,7 +77,7 @@ module.exports = class ProductRoutes extends Routes {
       if (req.query.product) {
         res.render('product/printing/local-list', { product: req.query.product });
       } else {
-        ProductHandler.getBySku(req.query.sku, false, result => {
+        ProductHandler.getBySku(req.query.sku, false, (result) => {
           res.render('product/printing/local-list', {
             product: result,
           });
@@ -126,7 +129,7 @@ module.exports = class ProductRoutes extends Routes {
     });
 
     this.get('/barcode', (req, res) => {
-      ProductHandler.get(req.query.sku, false, result => {
+      ProductHandler.get(req.query.sku, false, (result) => {
         res.render('product/printing/barcode', {
           product: result,
         });

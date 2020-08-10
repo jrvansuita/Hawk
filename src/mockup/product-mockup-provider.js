@@ -1,124 +1,129 @@
-const ProductHandler = require('../handler/product-handler.js')
-const ProductUrlProvider = require('../provider/product-url-provider.js')
-const ProductMockupBuilder = require('../mockup/product-mockup-builder.js')
-const File = require('../file/file.js')
-const Zip = require('../file/zip.js')
-const Mock = require('../bean/mock.js')
+const ProductUrlProvider = require('../provider/product-url-provider.js');
+const ProductImageProvider = require('../provider/product-image-provider.js');
+const ProductMockupBuilder = require('../mockup/product-mockup-builder.js');
+const File = require('../file/file.js');
+const Zip = require('../file/zip.js');
+const Mock = require('../bean/mock.js');
 
-var _productCache = {}
+var _productCache = {};
 
 class ProductMockupProvider {
-  constructor (skus) {
-    this.skus = skus
-    this.folder = './front/_mockups/'
+  constructor(skus) {
+    this.skus = skus;
+    this.folder = './front/_mockups/';
   }
 
-  with (mockData) {
+  with(mockData) {
     if (typeof mockData === 'object') {
-      this.mock = mockData
+      this.mock = mockData;
     } else {
-      this.mockId = mockData
+      this.mockId = mockData;
     }
 
-    return this
+    return this;
   }
 
-  loadProduct (sku) {
+  loadProduct(sku) {
     return new Promise((resolve, reject) => {
       if (_productCache[sku]) {
-        resolve(_productCache[sku])
+        resolve(_productCache[sku]);
       } else {
-        ProductHandler.getImage(sku, (product) => {
+        new ProductImageProvider().getImage(sku, (product) => {
           if (product) {
-            new ProductUrlProvider().from(product.url).then((onlineValues) => {
-              product.online = onlineValues
-              _productCache[sku] = product
-              resolve(product)
-            }).catch(e => {
-              resolve(product)
-            })
+            new ProductUrlProvider()
+              .from(product.url)
+              .then((onlineValues) => {
+                product.online = onlineValues;
+                _productCache[sku] = product;
+                resolve(product);
+              })
+              .catch((e) => {
+                resolve(product);
+              });
           } else {
-            resolve(product)
+            resolve(product);
           }
-        })
+        });
       }
-    })
+    });
   }
 
-  loadProductImage (sku) {
+  loadProductImage(sku) {
     return new Promise((resolve, reject) => {
-      this.loadProduct(sku)
-        .then((product) => {
-          var builder = new ProductMockupBuilder()
+      this.loadProduct(sku).then((product) => {
+        var builder = new ProductMockupBuilder();
 
-          if (this.mockId) { builder.setMockupId(this.mockId) } else if (this.mock) { builder.setMockup(this.mock) }
+        if (this.mockId) {
+          builder.setMockupId(this.mockId);
+        } else if (this.mock) {
+          builder.setMockup(this.mock);
+        }
 
-          builder.setProduct(product)
-            .setOnFinishedListener((canva) => {
-              resolve(canva)
-            })
-            .load()
-        })
-    })
+        builder
+          .setProduct(product)
+          .setOnFinishedListener((canva) => {
+            resolve(canva);
+          })
+          .load();
+      });
+    });
   }
 
-  _canvasToFile (sku, canvas, callback) {
+  _canvasToFile(sku, canvas, callback) {
     new File(this.folder)
       .setName(sku + '.png')
       .fromCanvas(canvas)
-      .save(callback)
+      .save(callback);
   }
 
-  _zipFiles (files, callback) {
-    new Zip()
-      .setName('mockups')
-      .setPath(this.folder)
-      .setFiles(files)
-      .setOnError(callback)
-      .run(callback)
+  _zipFiles(files, callback) {
+    new Zip().setName('mockups').setPath(this.folder).setFiles(files).setOnError(callback).run(callback);
   }
 
-  loadMultipleProductImages (skus) {
+  loadMultipleProductImages(skus) {
     return new Promise((resolve, reject) => {
-      var files = []
+      var files = [];
 
       var load = (callback) => {
-        var sku = skus[skus.length - 1]
-        skus.pop()
+        var sku = skus[skus.length - 1];
+        skus.pop();
 
         if (sku) {
           this.loadProductImage(sku).then((canvas) => {
             this._canvasToFile(sku, canvas, (file) => {
-              files.push(file)
-              load()
-            })
-          })
+              files.push(file);
+              load();
+            });
+          });
         } else {
-          this._zipFiles(files, resolve)
+          this._zipFiles(files, resolve);
         }
-      }
+      };
 
-      load()
-    })
+      load();
+    });
   }
 
-  load () {
+  load() {
     if (Array.isArray(this.skus)) {
-      return this.loadMultipleProductImages(this.skus)
+      return this.loadMultipleProductImages(this.skus);
     } else {
-      return this.loadProductImage(this.skus)
+      return this.loadProductImage(this.skus);
     }
   }
 }
 
-module.exports = ProductMockupProvider
+module.exports = ProductMockupProvider;
 
-var tag = 'refresh-mockup'
+var tag = 'refresh-mockup';
 
 global.io.on('connection', (socket) => {
   socket.on(tag, async (id, data) => {
-    new ProductMockupProvider(data.sku).with(Mock.from(data.params)).load().then(canvas => {
-      global.io.sockets.emit(tag, id, canvas.toDataURL('image/jpeg'))
-    })
-  })
-})
+    new ProductMockupProvider(data.sku)
+      .with(Mock.from(data.params))
+      .load()
+      .then((canvas) => {
+        global.io.sockets.emit(tag, id, canvas.toDataURL('image/jpeg'));
+      });
+  });
+});

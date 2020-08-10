@@ -1,73 +1,109 @@
-const ProductHandler = require('../handler/product-handler.js')
-const ProductImageBuilder = require('../builder/product-image-builder.js')
-const File = require('../file/file.js')
-const Zip = require('../file/zip.js')
+const ProductImageBuilder = require('../builder/product-image-builder.js');
+const File = require('../file/file.js');
+const Zip = require('../file/zip.js');
+const Product = require('../bean/product.js');
 
 module.exports = class {
-  constructor (skus) {
-    this.skus = skus
-    this.folder = './front/product_images/'
+  constructor(skus) {
+    this.skus = skus;
+    this.folder = './front/product_images/';
   }
 
-  loadProductImage (sku) {
+  getImage(sku, callback) {
+    if (sku) {
+      sku = sku.split('-')[0];
+
+      var found = productsDataCache[sku];
+
+      if (found) {
+        callback(found);
+      } else {
+        Product.get(sku, (product) => {
+          putAndControlDataCache(sku, product);
+
+          callback(productsDataCache[sku]);
+        });
+      }
+    } else {
+      callback();
+    }
+  }
+
+  loadProductImage(sku) {
     return new Promise((resolve, reject) => {
-      ProductHandler.getImage(sku, (product) => {
+      this.getImage(sku, (product) => {
         new ProductImageBuilder()
           .setProduct(product)
           .setOnFinishedListener((canvas) => {
-            resolve(canvas)
+            resolve(canvas);
           })
-          .load()
-      })
-    })
+          .load();
+      });
+    });
   }
 
-  _canvasToFile (sku, canvas, callback) {
+  _canvasToFile(sku, canvas, callback) {
     new File()
       .setName(sku + '.png')
       .setFolder(this.folder)
       .fromCanvas(canvas)
-      .save(callback)
+      .save(callback);
   }
 
-  _zipFiles (files, callback) {
-    new Zip()
-      .setName('imagens')
-      .setPath(this.folder)
-      .setFiles(files)
-      .setOnError(callback)
-      .run(callback)
+  _zipFiles(files, callback) {
+    new Zip().setName('imagens').setPath(this.folder).setFiles(files).setOnError(callback).run(callback);
   }
 
-  loadMultipleProductImages (skus) {
+  loadMultipleProductImages(skus) {
     return new Promise((resolve, reject) => {
-      var files = []
+      var files = [];
 
       var load = (callback) => {
-        var sku = skus[skus.length - 1]
-        skus.pop()
+        var sku = skus[skus.length - 1];
+        skus.pop();
 
         if (sku) {
           this.loadProductImage(sku).then((canvas) => {
             this._canvasToFile(sku, canvas, (file) => {
-              files.push(file)
-              load()
-            })
-          })
+              files.push(file);
+              load();
+            });
+          });
         } else {
-          this._zipFiles(files, resolve)
+          this._zipFiles(files, resolve);
         }
-      }
+      };
 
-      load()
-    })
+      load();
+    });
   }
 
-  load () {
+  load() {
     if (Array.isArray(this.skus)) {
-      return this.loadMultipleProductImages(this.skus)
+      return this.loadMultipleProductImages(this.skus);
     } else {
-      return this.loadProductImage(this.skus)
+      return this.loadProductImage(this.skus);
     }
+  }
+};
+
+var productsDataCache = [];
+
+function putAndControlDataCache(sku, product) {
+  if (product) {
+    product = product.toObject();
+    delete product.__v;
+    delete product._id;
+
+    productsDataCache[sku] = product;
+
+    var arr = Object.keys(productsDataCache);
+    if (arr.length > 4000) {
+      arr.slice(4000, arr.length - 1).forEach((i) => {
+        delete productsDataCache[i];
+      });
+    }
+  } else {
+    productsDataCache[sku] = {};
   }
 }
