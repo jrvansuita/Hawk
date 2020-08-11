@@ -1,10 +1,10 @@
 const DataAccess = require('../mongoose/data-access')
 
 module.exports = class StockOrder extends DataAccess {
-  constructor (id, status, user, number, manufacturer, brand, season, year, date, attachs) {
+  constructor(id, status, user, number, manufacturer, brand, season, year, date, attachs) {
     super()
-    this.id = id || Util.id()
-    this.status = status || 0
+    this.id = parseInt(id) || Util.id()
+    this.status = parseInt(status) || 0
     this.user = user || {}
     this.date = Dat.def(date)
     this.number = Str.def(number)

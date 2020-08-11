@@ -129,8 +129,8 @@ module.exports = class ProductRoutes extends Routes {
     });
 
     this.post('/new-order', (req, res) => {
-      req.body.user = req.session.loggedUser;
-      StockOrderVault.storeFromScreen(req.body?.data || req.body, order => {
+      req.body.data.user = req.session.loggedUser;
+      StockOrderVault.storeFromScreen(req.body?.data, order => {
         res.redirect('/stock/panel');
       });
     });
@@ -156,6 +156,12 @@ module.exports = class ProductRoutes extends Routes {
     this.post('/order-attach-upload', (req, res) => {
       StockOrderVault.uploadAttach(req.files.attach, fileId => {
         this._resp().success(res, fileId);
+      });
+    });
+
+    this.post('/order-attach-delete', (req, res) => {
+      StockOrderVault.deleteAttach(req.body.fileId, (result) => {
+        this._resp().success(res, result);
       });
     });
   }

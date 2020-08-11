@@ -76,21 +76,36 @@ function handleUploadSubmit() {
   })
 }
 
+function deleteAttach() {
+  var fileId = $(this).data('fileId')
+  $.ajax({
+    type: 'POST',
+    url: '/stock/order-attach-delete',
+    data: { fileId: fileId },
+    success: (data) => {
+      uploadsLinks.filter((each, index) => {
+        if (each.id === fileId) { uploadsLinks.splice(index, 1) }
+      })
+      $(this).parent().remove()
+      $('#save').focus()
+    }
+  })
+}
+
 function handleUploadResult(data) {
   uploadsLinks.push({ id: data.id, name: data.name })
-  bindAttachsInfo(data)
+  bindAttachsInfo(uploadsLinks)
 }
 
 function bindAttachsInfo(data) {
-  if (Array.isArray(data)) {
-    data.forEach((each) => {
-      var $span = $('<span>').addClass('file-info')
-      $('.files').append($span.html(each.name + '<br>').attr('file-id', each.id).click(viewAttach))
+  $('.files').empty()
+
+  data.forEach((each) => {
+      var $holder = $('<div>')
+      var $name = $('<span>').text(each.name).attr('file-id', each.id).click(viewAttach).addClass('file-info')
+      var $delete = $('<img>').attr('src', '/img/delete-minus.png').addClass('upload-delete').data('fileId', each.id).click(deleteAttach)
+    $('.files').append($holder.append($name, $delete))
     })
-  } else {
-    var $span = $('<span>').addClass('file-info')
-    $('.files').append($span.html(data.name + '<br>').attr('file-id', data.id).click(viewAttach))
-  }
 }
 
 function setLoading(isLoading) {

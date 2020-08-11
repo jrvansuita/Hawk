@@ -35,4 +35,21 @@ module.exports = class GDriveApi {
             });
         })
     }
+
+    delete(fileId, callback) {
+        new GDriveConnect().go((auth) => {
+            this.drive = google.drive({ version: 'v3', auth });
+
+            this.drive.files.delete({
+                fileId: fileId
+            }, function (err, file) {
+                if (err) {
+                    console.error(err);
+                } else {
+                    console.log('Anexo Excluído');
+                    callback()
+                }
+            });
+        })
+    }
 }

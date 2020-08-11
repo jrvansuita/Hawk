@@ -7,7 +7,16 @@ module.exports = class {
 
     params.user = { name: params.user.name, avatar: params.user.avatar, id: params.user.id }
 
-    var order = new StockOrder(params.id, params.status, params.user, params.number, params.manufacturer, params.brand, params.season, params.year, new Date(params.date), params.attachs)
+    var order = new StockOrder(params.id,
+      params.status,
+      params.user,
+      params.number,
+      params.manufacturer,
+      params.brand,
+      params.season,
+      params.year,
+      new Date(params.date),
+      params.attachs)
 
     order.upsert((_err, doc) => {
       callback(doc)
@@ -24,5 +33,9 @@ module.exports = class {
 
   static uploadAttach(file, callback) {
     new GDriveUpload().setMedia(file).upload(callback)
+  }
+
+  static deleteAttach(fileId, callback) {
+    new GDriveUpload().delete(fileId, callback)
   }
 }
