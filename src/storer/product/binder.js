@@ -2,6 +2,7 @@ const AttributesHandler = require('../../handler/attributes-handler');
 const SkuGen = require('../../bean/sku-gen.js');
 const Enum = require('../../bean/enumerator.js');
 const TemplateBuilder = require('../../template/template-builder.js');
+const ManufacturerHandler = require('../../handler/manufacturer-handler.js');
 
 class ProductBinder {
   static create(data) {
@@ -58,10 +59,11 @@ class ProductBinder {
   async body() {
     await this._identification();
     await this._defaults();
-    this._attributes();
+    await this._attributes();
     this._prices();
     await this._sizing();
     await this._descriptions();
+
     await this._obs();
 
     return this;
@@ -178,12 +180,16 @@ class ProductBinder {
     this.visibility = 'Não Visível Individualmente'; // 'Catálogo, Busca';
   }
 
-  _attributes() {
+  async _attributes() {
     if (this.Departamento && !this['Coleção']) {
       var all = new AttributesHandler().filter('colecao').get();
       if (all && all.length > 0) {
         this['Coleção'] = all.slice(-1)[0].description;
       }
+    }
+
+    if (this.Fabricante) {
+      this.idFornecedor = await new ManufacturerHandler().get(this.Fabricante);
     }
   }
 
@@ -224,11 +230,14 @@ class ProductBinder {
           this.sizeDescription = sel.description;
           this.sizes = sel.value.split(',');
           this._Skus = this.buildSkuSizes(this.sizes);
+        } else {
+          this.sizeDescription = this['Faixa de Idade'];
+          this.selectedSizeGroup = this.sizeDescription;
         }
 
         var rows = (await Enum.on('PROD-TAM-ATTR').get())?.items;
         rows.forEach(each => {
-          if (each.default || Arr.includesAll(each.name.split(','), this.sizes.join(','))) {
+          if (each.default || this.sizeDescription == each.name || Arr.includesAll(each.name.split(','), this.sizes.join(','))) {
             this.Idade = each.value.split(',');
             this.age_group = each.icon;
             this.faixa_de_idade = each.description;

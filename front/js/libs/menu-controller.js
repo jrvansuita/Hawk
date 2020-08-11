@@ -99,13 +99,16 @@ class MenuController {
   }
 
   rewriteMainMenuItemsUrls() {
-    this.mainMenu.find('.menu-item').each((i, each) => {
-      var savedHref = Local.getStr($(each).attr('sub'));
+    this.mainMenu
+      .find('.menu-item')
+      .not('.fixed-menu')
+      .each((i, each) => {
+        var savedHref = Local.getStr($(each).attr('sub'));
 
-      if (savedHref) {
-        $(each).find('a').attr('href', savedHref);
-      }
-    });
+        if (savedHref) {
+          $(each).find('a').attr('href', savedHref);
+        }
+      });
   }
 
   bind() {
@@ -113,6 +116,7 @@ class MenuController {
     this.selectedSub = this.markMenuItemAsSelected(this.selectedMain.attr('sub'), this.subMenu, this.defaultSub);
 
     this.bindMenuItemClick({ menu: this.mainMenu, tag: this.mainMenuTag });
+
     this.bindMenuItemClick({
       menu: this.subMenu,
       tag: this.selectedMain.attr('sub'),
@@ -120,6 +124,7 @@ class MenuController {
     });
 
     this.bindMenuItemHover(this.mainMenu);
+
     this.rewriteMainMenuItemsUrls();
   }
 }

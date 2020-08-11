@@ -1,4 +1,3 @@
-// const EccosysStorer = require('../../eccosys/eccosys-storer.js')
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
 
 module.exports = class AttributesHandler {
