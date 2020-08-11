@@ -1,8 +1,8 @@
 const Routes = require('./_route.js');
 const ShippingOrderProvider = require('../provider/shipping-order-provider.js');
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
-const EccosysStorer = require('../eccosys/eccosys-storer.js');
 const TransportLaws = require('../laws/transport-laws.js');
+const ShippingOrderHandler = require('../handler/shipping-order-handler.js');
 const Enum = require('../bean/enumerator.js');
 
 module.exports = class ShippingOrderRoutes extends Routes {
@@ -44,24 +44,19 @@ module.exports = class ShippingOrderRoutes extends Routes {
     });
 
     this.post('/new', (req, res) => {
-      new EccosysStorer()
-        .shippingOrder(res.locals.loggedUser)
-        .insert(req.body.data)
-        .go((data) => {
-          var id = Num.extract(data);
-
-          ShippingOrderProvider.get({ id: id }, (oc) => {
-            this._resp().success(res, oc);
-          });
+      new ShippingOrderHandler(res.locals.loggedUser).create(req.body.data, (id) => {
+        ShippingOrderProvider.get({ id: id }, (oc) => {
+          this._resp().success(res, oc);
         });
+      });
     });
 
     this.post('/save', (req, res) => {
       try {
-        new EccosysStorer()
-          .shippingOrder(res.locals.loggedUser)
-          .update(req.body.id, req.body.nfs)
-          .go((data) => {
+        new ShippingOrderHandler(res.locals.loggedUser)
+          .setId(req.body.id)
+          .setNfs(req.body.nfs)
+          .save((data) => {
             this._resp().success(res, data);
           });
       } catch (e) {
@@ -75,13 +70,8 @@ module.exports = class ShippingOrderRoutes extends Routes {
       });
     });
 
-    this.post('/colected', (req, res) => {
-      new EccosysStorer()
-        .shippingOrder(res.locals.loggedUser)
-        .colected(req.body.id)
-        .go((r) => {
-          this._resp().success(res, r);
-        });
+    this.post('/collected', (req, res) => {
+      new ShippingOrderHandler(res.locals.loggedUser).setId(req.body.id).collected();
     });
   }
 };
