@@ -7,7 +7,7 @@ module.exports = {
   updateLocal(sku, newLocal, user, device, callback) {
     device = device || 'Desktop';
 
-    this.getBySku(sku, false, (product) => {
+    this._getBySku(sku, false, (product) => {
       newLocal = newLocal.toUpperCase();
 
       // Reduzir a obs
@@ -27,7 +27,7 @@ module.exports = {
   },
 
   updateNCM(sku, newNCM, user, callback) {
-    this.getBySku(sku, false, (product) => {
+    this._getBySku(sku, false, (product) => {
       newNCM = newNCM.trim();
       var lines = product.obs;
 
@@ -46,7 +46,7 @@ module.exports = {
     stock = !isNaN(parseInt(stock)) ? parseInt(stock) : 0;
 
     /** Realiza a alteracao de estoque no eccosys **/
-    this.getBySku(sku, false, (product) => {
+    this._getBySku(sku, false, (product) => {
       var body = {
         codigo: product.codigo,
         quantidade: Math.abs(stock),
@@ -80,7 +80,7 @@ module.exports = {
   updateWeight(sku, weight, user, callback) {
     weight = Floa.floa(weight);
 
-    this.getBySku(sku, false, (product) => {
+    this._getBySku(sku, false, (product) => {
       var lines = product.obs;
 
       var body = {
@@ -99,7 +99,7 @@ module.exports = {
   },
 
   active(sku, active, user, callback) {
-    this.getBySku(sku, true, (product) => {
+    this._getBySku(sku, true, (product) => {
       var skus = [product ? product.codigo : sku];
       if (product && product._Skus && product._Skus.length > 0) {
         skus = skus.concat(
@@ -128,4 +128,15 @@ module.exports = {
       new EccosysStorer().product().update(body).go(callback);
     });
   },
+
+  /* Verificar */
+  _getBySku(sku, father, callback) {
+      new EccosysProvider(false).product(father ? this.getFatherSku(sku) : sku).go((product) => {
+        callback(product)
+      });
+  },
+
+  _getFatherSku(sku) {
+    return sku ? sku.split('-')[0] : sku;
+  }
 };
