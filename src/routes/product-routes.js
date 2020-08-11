@@ -57,7 +57,7 @@ module.exports = class ProductRoutes extends Routes {
     });
 
     this.get('', (req, res) => {
-      new ProductProvider(res.locals.loggedUser).setSku(req.query.sku, false).setEan(req.query.ean, req.query.order).get(this._resp().redirect(res));
+      new ProductProvider(res.locals.loggedUser).withImage().setSku(req.query.sku, false).setEan(req.query.ean, req.query.order).get(this._resp().redirect(res));
     }).apiRead();
 
     /* ---- Render ---- */
