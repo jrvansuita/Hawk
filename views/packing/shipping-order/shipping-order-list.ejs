@@ -1,103 +1,80 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+  <% include ../../menus/main-menu %>
 
-<%  include ../../menus/main-menu %>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="/front/css/layout/shipping-order-list.css" />
 
-<head>
-  <meta charset="utf-8">
-  <link rel="stylesheet" type="text/css" href="/front/css/layout/shipping-order-list.css">
+    <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css" />
 
-  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
+    <script type="text/javascript" src="/front/js/control/shipping-order/shipping-order-list.js"></script>
+    <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
+    <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
+    <script type="text/javascript" src="/front/js/libs/range-date-picker.js"></script>
+    <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+  </head>
+  <body>
+    <script class="hidable-script">
+      window.transportList = <%- JSON.stringify(transportList || null) %>
+      window.memoryQuery = <%- JSON.stringify(locals?.shippingListQuery ?? {}) %>
+    </script>
 
-  <script type="text/javascript" src="/front/js/control/shipping-order/shipping-order-list.js"></script>
-  <script type="text/javascript" src="/front/js/libs/dropdown.js"></script>
-  <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
-  <script type="text/javascript" src="/front/js/libs/range-date-picker.js"></script>
-  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+    <% include ../../menus/packing-menu %>
 
-</head>
-<body>
+    <div class="main">
+      <div class="top shadow">
+        <div class="search-box">
+          <img class="icon-open is-open" src="../img/arrow-down.png" alt="Abrir seletor" />
 
-  <script class="hidable-script">
-  window.transportList = <%- JSON.stringify(transportList || null) %>
-  window.memoryQuery = <%- JSON.stringify(locals.shippingListQuery ? locals.shippingListQuery : {}) %>
-  </script>
+          <span class="loading">
+            <img src="/img/loader/circle.svg" class="loading-circle" />
+            <label>Carregando...</label>
+          </span>
 
-  <%  include ../../menus/packing-menu %>
+          <span class="selectors">
+            <div class="material-input-holder">
+              <input type="text" id="transport" autocomplete="off" required />
+              <span class="bar"></span>
+              <label>Transportadora</label>
+            </div>
 
+            <div class="material-input-holder">
+              <input type="text" id="situation" autocomplete="off" required />
+              <span class="bar"></span>
+              <label>Situação</label>
+            </div>
 
+            <div class="material-input-holder">
+              <input type="text" id="user" autocomplete="off" required />
+              <span class="bar"></span>
+              <label>Usuário</label>
+            </div>
 
-  <div class="main">
-
-    <div class="top shadow">
-
-
-      <div class="search-box">
-
-        <img class="icon-open is-open"  src="../img/arrow-down.png" alt="Abrir seletor">
-
-        <span class="loading">
-          <img src="/img/loader/circle.svg" class="loading-circle"/>
-          <label>Carregando...</label>
-        </span>
-
-        <span class="selectors">
-          <div class="material-input-holder">
-            <input type="text" id="transport" autocomplete="off" required/>
-            <span class="bar"></span>
-            <label>Transportadora</label>
-          </div>
-
-          <div class="material-input-holder">
-            <input type="text" id="situation" autocomplete="off" required/>
-            <span class="bar"></span>
-            <label>Situação</label>
-          </div>
-
-          <div class="material-input-holder">
-            <input type="text" id="user" autocomplete="off" required/>
-            <span class="bar"></span>
-            <label>Usuário</label>
-          </div>
-
-          <div class="date-filter-holder"></div>
-        </span>
-        <div class="button-holders">
+            <div class="date-filter-holder"></div>
+          </span>
+          <div class="button-holders">
             <label class="button shadow" id="search-button">Buscar</label>
             <label class="new button shadow" id="start-new">Iniciar</label>
+          </div>
         </div>
-
       </div>
 
-
-
+      <div class="content-scroll">
+        <table class="content shadow" width="100%">
+          <tr id="header">
+            <td>Número</td>
+            <td>Data</td>
+            <td>Transportadora</td>
+            <td>Usuário</td>
+            <td>Valor</td>
+            <td>Volumes</td>
+            <td>Destinos</td>
+            <td>Situação</td>
+            <td></td>
+          </tr>
+        </table>
+      </div>
     </div>
-
-
-    <div class="content-scroll">
-      <table class="content shadow" width="100%">
-
-        <tr id="header">
-          <td>Número</td>
-          <td>Data</td>
-          <td>Transportadora</td>
-          <td>Usuário</td>
-          <td>Valor</td>
-          <td>Volumes</td>
-          <td>Destinos</td>
-          <td>Situação</td>
-          <td></td>
-        </tr>
-
-
-
-
-
-
-      </table>
-    </div>
-
-  </div>
-
-</body>
+  </body>
 </html>

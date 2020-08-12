@@ -1,157 +1,135 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-<%  include ../menus/main-menu %>
+  <% include ../menus/main-menu %>
 
-<head>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/front/css/layout/main-settings.css" />
+    <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css" />
+    <link rel="stylesheet" type="text/css" href="/front/css/libs/material-checkbox.css" />
+    <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
+    <script type="text/javascript" src="/front/js/control/main-settings.js"></script>
+    <script type="text/javascript" src="/front/js/libs/combobox.js"></script>
 
+    <script type="text/javascript" class="hidable-script">
+      window._fullparams = <%- JSON.stringify(fullparams || null) %>
+    </script>
+  </head>
 
-  <link rel="stylesheet" type="text/css" href="/front/css/layout/main-settings.css">
-  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-input.css">
-  <link rel="stylesheet" type="text/css" href="/front/css/libs/material-checkbox.css">
-  <script type="text/javascript" src="/front/js/libs/request-helper.js"></script>
-  <script type="text/javascript" src="/front/js/control/main-settings.js"></script>
-<script type="text/javascript" src="/front/js/libs/combobox.js"></script>
+  <body>
+    <table class="main-table">
+      <tr>
+        <td>
+          <div class="box shadow">
+            <span class="box-title">
+              <label>Acesso</label>
+            </span>
 
+            <div class="box-content">
+              <div class="material-input-holder">
+                <input type="text" id="production-url" maxlength="200" autocomplete="off" required />
+                <span class="bar"></span>
+                <label>Url de Produção</label>
+              </div>
 
-<script type="text/javascript" class="hidable-script">
-    window._fullparams = <%- JSON.stringify(fullparams || null) %>
-  </script>
-</head>
+              <div class="material-input-holder">
+                <input type="text" id="work-time-range" maxlength="5" autocomplete="off" required />
+                <span class="bar"></span>
+                <label>Horário de Trabalho</label>
+              </div>
 
+              <div class="material-input-holder">
+                <input type="text" id="access-time-renew" maxlength="10" autocomplete="off" required />
+                <span class="bar"></span>
+                <label>Renovar Tempo de Acesso</label>
+              </div>
 
-<body>
-
-  <table class="main-table">
-
-    <tr>
-
-
-      <td>
-        <div class="box shadow">
-          <span class="box-title">
-            <label>Acesso</label>
-          </span>
-
-          <div class="box-content">
-
-            <div class="material-input-holder">
-              <input type="text" id="prodution-url" maxlength="200"  autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Url de Produção</label>
+              <label class="button shadow renew-time">Renovar</label>
             </div>
-
-            <div class="material-input-holder">
-              <input type="text" id="work-time-range" maxlength="5"  autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Horário de Trabalho</label>
-            </div>
-
-            <div class="material-input-holder">
-              <input type="text" id="access-time-renew" maxlength="10" autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Renovar Tempo de Acesso</label>
-            </div>
-
-            <label class="button shadow renew-time">Renovar</label>
-
-
           </div>
-        </div>
-      </td>
+        </td>
 
-      <td>
-        <div class="box shadow">
-          <span class="box-title">
-            <label>Pendências</label>
-          </span>
+        <td>
+          <div class="box shadow">
+            <span class="box-title">
+              <label>Pendências</label>
+            </span>
 
-          <div class="box-content">
-            <label class="pure-material-checkbox">
-              <input type="checkbox" id="auto-block-pending">
-              <span>Bloquear pendências recém adicionadas</span>
-            </label>
+            <div class="box-content">
+              <label class="pure-material-checkbox">
+                <input type="checkbox" id="auto-block-pending" />
+                <span>Bloquear pendências recém adicionadas</span>
+              </label>
 
-            <div class="material-input-holder">
-              <input type="number" id="time-block-pending" maxlength="6"
-              onkeypress="return Num.isNumberKey(event);"  autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Tempo de Bloqueio (ms)</label>
+              <div class="material-input-holder">
+                <input type="number" id="time-block-pending" maxlength="6" onkeypress="return Num.isNumberKey(event);" autocomplete="off" required />
+                <span class="bar"></span>
+                <label>Tempo de Bloqueio (ms)</label>
+              </div>
             </div>
-
-
           </div>
-        </div>
-      </td>
+        </td>
 
+        <td>
+          <div class="box shadow">
+            <span class="box-title">
+              <label>Produto</label>
+            </span>
 
-      <td>
-        <div class="box shadow">
-          <span class="box-title">
-            <label>Produto</label>
-          </span>
+            <div class="box-content">
+              <label class="pure-material-checkbox">
+                <input type="checkbox" id="update-product-weight-magento" />
+                <span>Sincronizar Peso do produto com o Magento</span>
+              </label>
 
-          <div class="box-content">
-            <label class="pure-material-checkbox">
-              <input type="checkbox" id="update-product-weight-magento">
-              <span>Sincronizar Peso do produto com o Magento</span>
-            </label>
-
-            <label class="pure-material-checkbox">
-              <input type="checkbox" id="update-product-stock-magento">
-              <span>Sincronizar Estoque do produto com o Magento</span>
-            </label>
-
-
-          </div>
-        </div>
-      </td>
-
-      <td>
-        <div class="box shadow">
-          <span class="box-title">
-            <label>Desenvolvimento</label>
-          </span>
-
-          <div class="box-content">
-            <div class="material-input-holder">
-              <input type="number" id="dev-max-sales-picking" maxlength="3"
-              onkeypress="return Num.isNumberKey(event);"  autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Max. Pedidos no Picking</label>
+              <label class="pure-material-checkbox">
+                <input type="checkbox" id="update-product-stock-magento" />
+                <span>Sincronizar Estoque do produto com o Magento</span>
+              </label>
             </div>
-            <label class="pure-material-checkbox">
-              <input type="checkbox" id="enable-jobs-on-dev">
-              <span>Habilitar tarefas</span>
-            </label>
           </div>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="box shadow">
-          <span class="box-title">
-            <label>Difal</label>
-          </span>
+        </td>
 
-          <div class="box-content">
+        <td>
+          <div class="box shadow">
+            <span class="box-title">
+              <label>Desenvolvimento</label>
+            </span>
 
-            <div class="material-input-holder">
-              <input type="text" id="difal-ufs" autocomplete="off" required/>
-              <span class="bar"></span>
-              <label>Estados de Difal</label>
+            <div class="box-content">
+              <div class="material-input-holder">
+                <input type="number" id="dev-max-sales-picking" maxlength="3" onkeypress="return Num.isNumberKey(event);" autocomplete="off" required />
+                <span class="bar"></span>
+                <label>Max. Pedidos no Picking</label>
+              </div>
+              <label class="pure-material-checkbox">
+                <input type="checkbox" id="enable-jobs-on-dev" />
+                <span>Habilitar tarefas</span>
+              </label>
             </div>
-
-
-            <label class="pure-material-checkbox">
-              <input type="checkbox" id="active-difal-oc">
-              <span>Ativar validação de Difal nas Ordem de Coletas</span>
-            </label>
-
-
           </div>
-        </div>
-      </td>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="box shadow">
+            <span class="box-title">
+              <label>Difal</label>
+            </span>
+
+            <div class="box-content">
+              <div class="material-input-holder">
+                <input type="text" id="difal-ufs" autocomplete="off" required />
+                <span class="bar"></span>
+                <label>Estados de Difal</label>
+              </div>
+
+              <label class="pure-material-checkbox">
+                <input type="checkbox" id="active-difal-oc" />
+                <span>Ativar validação de Difal nas Ordem de Coletas</span>
+              </label>
+            </div>
+          </div>
+        </td>
         <td>
           <div class="box shadow">
             <span class="box-title">
@@ -159,26 +137,20 @@
             </span>
 
             <div class="box-content">
-
               <div class="material-input-holder">
-                <input type="text" id="performance-emails" autocomplete="off" required/>
+                <input type="text" id="performance-emails" autocomplete="off" required />
                 <span class="bar"></span>
                 <label>Emails para o relatório</label>
               </div>
 
               <label class="pure-material-checkbox">
-                <input type="checkbox" id="active-performance-report">
+                <input type="checkbox" id="active-performance-report" />
                 <span>Enviar relatório diário</span>
               </label>
-
             </div>
           </div>
         </td>
-    </tr>
-
-
-  </table>
-
-
-</body>
+      </tr>
+    </table>
+  </body>
 </html>

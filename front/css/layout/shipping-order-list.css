@@ -152,7 +152,7 @@
   border-left: solid 3px #ddea00;
 }
 
-.colected-item td:first-child {
+.collected-item td:first-child {
   border-left: solid 3px #6ada9c;
 }
 
@@ -160,7 +160,7 @@
   background-color: #ddd6d757;
 }
 
-.ship-status.colected {
+.ship-status.collected {
   color: green;
   font-weight: bolder;
 }
