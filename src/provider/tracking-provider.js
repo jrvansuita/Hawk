@@ -23,9 +23,10 @@ module.exports = class TrackingProvider {
 
   findTrackingData(callback) {
     var url = Params.trackingUrl().replace('__sale__', this.saleNumber);
-
+    console.log(url);
     var options = {
       url: url,
+
       // hostname: 'www.boutiqueinfantil.com.br',
       // localAddress: '202.1.1.1',
       headers: {
