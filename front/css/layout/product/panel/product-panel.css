@@ -12,11 +12,6 @@
   top: 0;
 }
 
-#save {
-  position: absolute;
-  right: 10px;
-}
-
 .columns {
   display: flex;
   height: 70%;

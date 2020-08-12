@@ -164,5 +164,9 @@ module.exports = class ProductRoutes extends Routes {
         this._resp().success(res, result);
       });
     });
+
+    this.get('/scheduling', (req, res) => {
+        res.render('product/panel/scheduling');
+    });
   }
 };

@@ -159,7 +159,7 @@ function loadList() {
 
         window.data = result;
         console.log(result);
-        bindRangeSlider(result);
+        // bindRangeSlider(result);
         showMessageTotals(result.info);
         bindCopyable();
       }
