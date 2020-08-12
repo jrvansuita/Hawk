@@ -26,7 +26,7 @@ module.exports = class ShippingOrderHandler {
     this.storer
       .shippingOrder(this.user)
       .insert(body)
-      .go(data => {
+      .go((data) => {
         var id = Num.extract(data);
 
         callback(id);
@@ -41,7 +41,7 @@ module.exports = class ShippingOrderHandler {
     this.storer
       .shippingOrder(this.user)
       .collected(this.id)
-      .go(data => {
+      .go((data) => {
         callback(data);
         this.updateSaleStatus({ id: this.id });
       });
@@ -63,7 +63,7 @@ module.exports = class ShippingOrderHandler {
 
     this.magentoCalls
       .sale(saleNumber)
-      .then(sale => {
+      .then((sale) => {
         if (Arr.isIn(['separation', 'complete', 'processing'], sale.status)) {
           this.magentoCalls.salesOrderUpdate(body);
         } else {
@@ -72,7 +72,7 @@ module.exports = class ShippingOrderHandler {
 
         callback();
       })
-      .catch(e => {
+      .catch((e) => {
         History.error(e, this.historyTitle, JSON.stringify(data), this.user);
 
         callback();
@@ -80,7 +80,7 @@ module.exports = class ShippingOrderHandler {
   }
 
   updateEccoSale(data, msg, callback) {
-    new SaleLoader(data.numeroPedido).setOnError(callback).run(sale => {
+    new SaleLoader(data.numeroPedido).setOnError(callback).run((sale) => {
       var body = {
         situacaoSecundaria: 8, // Despachado
         numeroPedido: data.numeroPedido,
@@ -99,7 +99,6 @@ module.exports = class ShippingOrderHandler {
           .go(() => {
             callback();
             History.notify(this.user, this.historyTitle, msg, this.historyTag);
-            //console.log(data.numeroDaOrdemDeCompra + ' - ' + data.numeroPedido);
           });
       } else {
         callback();
@@ -116,11 +115,11 @@ module.exports = class ShippingOrderHandler {
   }
 
   updateSaleStatus(query, onTerminate) {
-    new EccosysProvider().shippingOrder(query).go(data => {
+    new EccosysProvider().shippingOrder(query).go((data) => {
       var nfs = data._NotasFiscais;
 
       if (nfs.length) {
-        var runner = index => {
+        var runner = (index) => {
           if (nfs[index]) {
             this.updateEachSale(nfs[index], () => {
               runner(++index);

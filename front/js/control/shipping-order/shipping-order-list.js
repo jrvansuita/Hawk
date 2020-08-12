@@ -17,9 +17,9 @@ function initialize() {
 $(document).ready(() => {
   situationPicker = new ComboBox($('#situation'), situationsArr);
   situationPicker.setAutoShowOptions().load(() => {
-    if (memoryQuery.situation) {
+    if (window.memoryQuery.situation) {
       situationPicker.selectByFilter((a) => {
-        return a.id == parseInt(memoryQuery.situation);
+        return a.id == parseInt(window.memoryQuery.situation);
       });
     }
   });
@@ -34,8 +34,8 @@ $(document).ready(() => {
       return { text: data.val, img: window.transportList.icons[data.val.toLocaleLowerCase()]?.icon };
     })
     .load(() => {
-      if (memoryQuery.transport) {
-        $('#transport').val(memoryQuery.transport);
+      if (window.memoryQuery.transport) {
+        $('#transport').val(window.memoryQuery.transport);
       }
     });
 
@@ -46,14 +46,14 @@ $(document).ready(() => {
     })
     .load()
     .then((binder) => {
-      if (memoryQuery.user) {
-        $('#user').val(memoryQuery.user);
+      if (window.memoryQuery.user) {
+        $('#user').val(window.memoryQuery.user);
       }
     });
 
   rangeDatepicker = new RangeDatePicker();
 
-  rangeDatepicker.holder('.date-filter-holder').setTitles('Data de Início', 'Data de Fim').setPos(-70, -30).setDates(memoryQuery?.begin, memoryQuery?.end).load();
+  rangeDatepicker.holder('.date-filter-holder').setTitles('Data de Início', 'Data de Fim').setPos(-70, -30).setDates(Num.def(window.memoryQuery?.begin), Num.def(window.memoryQuery?.end)).load();
 
   initialize();
   $('#transport, #user, #situation').on('keyup', function (e) {
