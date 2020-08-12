@@ -154,10 +154,6 @@ var __ParamsHandler = {
       return this.get('tracking-url');
     },
 
-    trackingUrlExt() {
-      return this.get('tracking-url-ext');
-    },
-
     getResponseSecret() {
       return this.get('getresponse-key');
     },
@@ -216,8 +212,13 @@ var __ParamsHandler = {
     activeDifalControlOC() {
       return this.get('active-difal-oc');
     },
+
     difalUfs() {
       return this.get('difal-ufs');
+    },
+
+    trackingUrlExt() {
+      return this.get('tracking-url-ext');
     },
   },
 };
