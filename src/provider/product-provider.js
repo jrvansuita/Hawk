@@ -99,15 +99,11 @@ module.exports = class ProductProvider {
 
   get(callback) {
     if (this._getQuery()) {
-      if (this.ean) {
-        this._loadByEan(callback)
-      } else {
         this.api.product(this._getQuery()).go((product) => {
           this._prepare(product, (product) => {
             this._checkLoadWithImage(product, callback);
           });
         });
-      }
     } else {
       this.api.skus(this.skus).go((products) => {
         this.order ? callback(this._order(products)) : callback(products);
