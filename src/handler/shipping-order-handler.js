@@ -90,7 +90,7 @@ module.exports = class ShippingOrderHandler {
       if (sale.situacao === '1' && sale.situacaoSecundaria !== '8') {
         if (sale.deliveryTime) {
           var addDays = sale.deliveryTime + Math.trunc(sale.deliveryTime / 7) * 2;
-          body.dataEntrega = Dat.rollDay(null, addDays);
+          body.dataPrevista = Dat.rollDay(null, addDays);
         }
 
         new EccosysStorer()
