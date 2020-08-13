@@ -1,4 +1,5 @@
 const Product = require('../bean/product.js');
+const DataAccess = require('../mongoose/data-access.js');
 
 module.exports = class ProductListProvider {
   constructor(user) {
@@ -23,10 +24,12 @@ module.exports = class ProductListProvider {
           seachValue = '^' + value; // + '$'
         }
 
-        attrs[key] = {
-          $regex: seachValue,
-          $options: 'i',
-        };
+          console.log(attrs[key]);
+         attrs[key] = DataAccess.regexpComp(key, seachValue)[key]
+        // attrs[key] = {
+        //   $regex: seachValue,
+        //   $options: 'i',
+        // };
       }
     }
 

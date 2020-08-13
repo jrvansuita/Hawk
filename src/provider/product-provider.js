@@ -86,13 +86,24 @@ module.exports = class ProductProvider {
     }
   }
 
-  get(callback) {
-    if (this._getQuery()) {
-      this.api.product(this._getQuery()).go((product) => {
+  _loadByEan(callback) {
+    this.api.product(this._getQuery()).go((childProduct) => {
+      this.sku = childProduct.codigo
+      this.api.product(this.sku.split('-')[0]).go((product) => {
         this._prepare(product, (product) => {
           this._checkLoadWithImage(product, callback);
         });
-      });
+      })
+    })
+  }
+
+  get(callback) {
+    if (this._getQuery()) {
+        this.api.product(this._getQuery()).go((product) => {
+          this._prepare(product, (product) => {
+            this._checkLoadWithImage(product, callback);
+          });
+        });
     } else {
       this.api.skus(this.skus).go((products) => {
         this.order ? callback(this._order(products)) : callback(products);
