@@ -24,7 +24,6 @@ module.exports = class {
   }
 
   static delete(orderId, callback) {
-    console.log(orderId)
     StockOrder.findByKey(orderId, (_err, order) => {
       order.remove()
       callback()
