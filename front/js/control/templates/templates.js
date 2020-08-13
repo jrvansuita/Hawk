@@ -72,7 +72,7 @@ function save () {
     id: selected.id,
     name: $('#name').val(),
     subject: $('#subject').val(),
-    content: $('#temp-text').val() ? $('#temp-text').val() : editor.html.get(),
+    content: $('#temp-text').is(':visible') ? $('#temp-text').val() : editor.html.get(),
     usage: getUsage(),
     type: templateType
   }
@@ -105,21 +105,25 @@ function codeHtmlArea() {
   var textArea = $('<textarea>').attr('id', 'temp-text').addClass('text-insert shadow closed')
   $('.main-bottom').append(textArea)
 
-  // var coder = $('<label>').attr('id', 'coding').addClass('flickers')
-  // var closed = textArea.hasClass('closed')
-  textArea.val(window.selected.content)
+  var coder = $('<label>').attr('id', 'coding').addClass('flickers')
 
-  menuEditor()
+  if (window.selected.content.includes('<style>')) {
+    $('#editor').hide()
+    $('#temp-text').show()
+    textArea.val(window.selected.content)
+  } else {
+    textArea.val('')
+  }
+
+  menuEditor(coder)
 }
 
-function menuEditor() {
+function menuEditor(coder) {
   Dropdown.on('.code-mode', true, true)
   .item('https://i.imgur.com/5PjyYg6.png', 'Editor HTML', (helper) => {
-      // $('.main-bottom').append(coder.text('Codifing...'), textArea.toggleClass('closed'))
       $('#editor').hide()
       $('#temp-text').show()
-  }).setOnDynamicShow(() => {
-    return { 1: $('#texp-text').css('display') === 'none' }
+      $('.main-bottom').append(coder.text('Codifing...'), $('#temp-text').toggleClass('closed'))
   })
   .item('https://i.imgur.com/w4PtW3K.jpg', 'Froala Editor', (helper) => {
     $('#editor').show()
