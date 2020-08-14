@@ -22,3 +22,8 @@
 .arrow-asc {
   transform: rotate(180deg);
 }
+
+.button-area {
+  display: flex;
+  align-items: center;
+}
