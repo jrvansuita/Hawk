@@ -23,7 +23,17 @@ $(document).ready(() => {
     $(this).toggleClass('arrow-asc');
     $(this).data('order', $(this).data('order') === 'asc' ? 'desc' : 'asc');
   });
+
+  Dropdown.on('.detailed-menu')
+    .item('/img/paper.png', 'Visão Detalhada', detailedView)
 });
+
+function detailedView() {
+  _post('/performance/stock-dashboard-detailed', getQueryData(), (data) => {
+    window.detailed = data.data
+    window.open('/performance/stock/detailed-view')
+  })
+}
 
 function onSearchData(id) {
   loadingPattern(true);
@@ -47,6 +57,7 @@ function getQueryData() {
 }
 
 function onHandleResult(result) {
+  console.log(result.data)
   loadingPattern(false);
   setAttrsAndValue(result.query.value, result.query.attrs);
   toggleOrderInfo(result.query.order);

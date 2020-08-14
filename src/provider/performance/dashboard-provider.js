@@ -4,9 +4,9 @@ const DataAccess = require('../../mongoose/data-access.js');
 var temp = {};
 
 class DashboardProviderHandler {
-  constructor(user) {
+  constructor(user, useCache) {
     this.user = user;
-    this.useCache = !this?.user?.manufacturer;
+    this.useCache = useCache
   }
 
   maybe(sessionQueryId) {
@@ -95,7 +95,7 @@ class DashboardProviderHandler {
       } else {
         var found = this._findByQueryHash();
         // [cache] Tenta pegar pelo hash da query
-        if (found) {
+        if (found && this.useCache) {
           this.onResult(found);
         } else {
           // Busca do zero as informações

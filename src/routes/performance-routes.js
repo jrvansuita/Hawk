@@ -140,7 +140,7 @@ module.exports = class PerformanceRoutes extends Routes {
      */
 
     this.post('/stock-dashboard-data', (req, res) => {
-      new StockDashboardProvider(res.locals.loggedUser)
+      new StockDashboardProvider(false, res.locals.loggedUser, true)
         .with(req.body, true)
         .maybe(req.session.stockDashQueryId)
         .setOnError(err => {
@@ -164,5 +164,18 @@ module.exports = class PerformanceRoutes extends Routes {
         this._resp().success(res, data);
       });
     });
+
+    this.post('/stock-dashboard-detailed', (req, res) => {
+      new StockDashboardProvider(true, res.locals.loggedUser, false)
+        .with(req.body)
+        .setOnResult((result) => {
+          this._resp().success(res, result);
+        })
+      .load()
+    }).market()
+
+    this.page('/stock/detailed-view', (req, res) => {
+      res.render('performance/detailed-view')
+    }).market()
   }
 };
