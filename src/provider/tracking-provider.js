@@ -1,4 +1,6 @@
+/* eslint-disable standard/no-callback-literal */
 const SaleLoader = require('../loader/sale-loader.js');
+const Enum = require('../bean/enumerator.js');
 
 const request = require('request');
 
@@ -23,12 +25,9 @@ module.exports = class TrackingProvider {
 
   findTrackingData(callback) {
     var url = Params.trackingUrl().replace('__sale__', this.saleNumber);
-    console.log(url);
+
     var options = {
       url: url,
-
-      // hostname: 'www.boutiqueinfantil.com.br',
-      // localAddress: '202.1.1.1',
       headers: {
         accept: 'application/json',
         origin: 'https://boutiqueinfantil.com.br',
@@ -42,22 +41,56 @@ module.exports = class TrackingProvider {
         return;
       }
 
-      console.log('STATUS: ' + res.statusCode);
-      console.log(res.req.headers);
-      console.log(body);
-
       callback(body);
     });
+  }
+
+  async buildResult(sale, trackingData) {
+    trackingData = JSON.parse(trackingData);
+
+    var result = { tracking: trackingData?.dados ?? trackingData };
+
+    var {
+      deliveryTime,
+      dataEntrega,
+      dataPrevista,
+      numeroPedido,
+      totalVenda,
+      transport,
+      paymentType,
+      dataFaturamento,
+      data,
+      numeroNotaFiscal,
+      pedidoColetado,
+      observacaoInterna,
+      _OutroEndereco,
+    } = sale;
+
+    result.sale = {
+      transport,
+      paymentType,
+      deliveryTime,
+      deliveryDate: dataEntrega,
+      expectedDate: dataPrevista,
+      invoiceDate: dataFaturamento,
+      buyDate: data,
+      nf: numeroNotaFiscal,
+      saleNumber: numeroPedido,
+      saleSent: pedidoColetado,
+      total: totalVenda,
+      obs: observacaoInterna,
+      destiny: _OutroEndereco,
+      icon: await Enum.on('TRANSPORT-IMGS').hunt(transport.toLowerCase(), 'value'),
+    };
+
+    return result;
   }
 
   get(callback) {
     if (this.saleNumber) {
       this.findSale((sale) => {
-        this.findTrackingData((data) => {
-          //   console.log(sale);
-          //   console.log(data);
-
-          callback();
+        this.findTrackingData(async (data) => {
+          callback(await this.buildResult(sale, data));
         });
       });
     } else {
