@@ -1,8 +1,6 @@
 const EccosysStorer = require('../eccosys/eccosys-storer.js');
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
-const MagentoCalls = require('../magento/magento-calls.js');
-const History = require('../bean/history.js');
-const SaleLoader = require('../loader/sale-loader.js');
+const SaleStatusHandler = require('../handler/sale-status-handler.js');
 
 module.exports = class ShippingOrderHandler {
   constructor(user, log) {
@@ -47,71 +45,33 @@ module.exports = class ShippingOrderHandler {
       });
   }
 
-  updateMagentoSale(data, msg, callback) {
-    var saleNumber = data.numeroDaOrdemDeCompra.split('-')[0];
-
-    if (!this.magentoCalls) {
-      this.magentoCalls = new MagentoCalls();
-    }
-
-    var body = {
-      orderIncrementId: saleNumber,
-      status: 'ip_shipped',
-      comment: msg,
-      notify: true,
-    };
-
-    this.magentoCalls
-      .sale(saleNumber)
-      .then((sale) => {
-        if (Arr.isIn(['separation', 'complete', 'processing'], sale.status)) {
-          this.magentoCalls.salesOrderUpdate(body);
-        } else {
-          History.info(this.user, this.historyTitle, Const.sale_status_not_updated_collected_only_magento.format(saleNumber, sale.status), this.historyTag);
-        }
-
-        callback();
+  updateEachSale(data, next) {
+    new SaleStatusHandler(data.numeroPedido)
+      .history(this.historyTag, this.historyTitle)
+      .status()
+      .as()
+      .shipped()
+      .setUser(this.user)
+      .setOnNeedErpUpdate((sale) => {
+        return sale.situacao === '1' && sale.situacaoSecundaria !== '8';
       })
-      .catch((e) => {
-        History.error(e, this.historyTitle, JSON.stringify(data), this.user);
-
-        callback();
-      });
-  }
-
-  updateEccoSale(data, msg, callback) {
-    new SaleLoader(data.numeroPedido).setOnError(callback).run((sale) => {
-      var body = {
-        situacaoSecundaria: 8, // Despachado
-        numeroPedido: data.numeroPedido,
-        pedidoColetado: true,
-      };
-
-      if (sale.situacao === '1' && sale.situacaoSecundaria !== '8') {
-        if (sale.deliveryTime) {
-          var addDays = sale.deliveryTime + Math.trunc(sale.deliveryTime / 7) * 2;
-          body.dataPrevista = Dat.rollDay(null, addDays);
-        }
-
-        new EccosysStorer()
-          .sale()
-          .update([body])
-          .go(() => {
-            callback();
-            History.notify(this.user, this.historyTitle, msg, this.historyTag);
-          });
-      } else {
-        callback();
-      }
-    });
-  }
-
-  updateEachSale(data, callback) {
-    var msg = '[Hawk]: ' + Const.sale_collected.format(data.numeroDaOrdemDeCompra);
-
-    this.updateEccoSale(data, msg, () => {
-      this.updateMagentoSale(data, msg, callback);
-    });
+      .body((sale) => {
+        return {
+          situacaoSecundaria: 8, // Despachado
+          pedidoColetado: true,
+          dataPrevista: sale.deliveryTime ? Dat.rollDay(null, sale.deliveryTime + Math.trunc(sale.deliveryTime / 7) * 2) : null,
+        };
+      })
+      .setHistoryMessage((sale) => {
+        return Const.sale_collected.format(sale.numeroPedido);
+      })
+      .setCommentMessage((sale) => {
+        return Const.sale_collected.format(sale.numeroDaOrdemDeCompra);
+      })
+      .setOnNeedStoreUpdate((storeSale) => {
+        return Arr.isIn(['separation', 'complete', 'processing'], storeSale.status);
+      })
+      .run(next);
   }
 
   updateSaleStatus(query, onTerminate) {
