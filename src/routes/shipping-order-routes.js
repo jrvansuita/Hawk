@@ -81,6 +81,8 @@ module.exports = class ShippingOrderRoutes extends Routes {
       new TrackingProvider(req.query.sale).get((data) => {
         this._resp().success(res, data);
       });
-    });
+    })
+      .skipLogin()
+      .cors();
   }
 };
