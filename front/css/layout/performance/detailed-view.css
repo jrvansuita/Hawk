@@ -1,0 +1,15 @@
+.master-info {
+  display: flex;
+}
+
+iframe {
+  flex: 1;
+}
+
+.manufac-details {
+  flex: 2;
+}
+
+.manufac-details span {
+  display: block;
+}
