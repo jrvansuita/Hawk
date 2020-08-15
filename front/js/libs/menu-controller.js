@@ -1,3 +1,5 @@
+var __cachedMenus;
+
 class MenuController {
   constructor() {
     this.defaultMain = 'stock-menu';
@@ -15,20 +17,42 @@ class MenuController {
     this.selectedSub = null;
   }
 
-  buildCurrentSubMenuOptions(subMenuName, mainMenuItem) {
-    this.previewSubMenu = $('<div>').load('/sub-menu?sub=' + subMenuName, () => {
-      this.bindMenuItemClick({ menu: this.previewSubMenu, tag: mainMenuItem.attr('sub'), selMainItem: mainMenuItem });
+  showBoundSubMenu() {
+    $('body').append(this.previewSubMenu);
 
-      this.previewSubMenu.hover(
-        () => {
-          this.isHoveringSeenSubMenu = true;
-        },
-        () => {
-          this.isHoveringSeenSubMenu = false;
-          this.destroySubMenuOptions();
-        }
-      );
-    });
+    this.previewSubMenu.hide().fadeIn(200);
+  }
+
+  bindSubMenuControls(tag, mainMenuItem) {
+    this.bindMenuItemClick({ menu: this.previewSubMenu, tag: tag, selMainItem: mainMenuItem });
+
+    this.previewSubMenu.hover(
+      () => {
+        this.isHoveringSeenSubMenu = true;
+      },
+      () => {
+        this.isHoveringSeenSubMenu = false;
+        this.destroySubMenuOptions();
+      }
+    );
+  }
+
+  buildCurrentSubMenuOptions(subMenuName, mainMenuItem) {
+    var tag = mainMenuItem.attr('sub');
+    this.previewSubMenu = __cachedMenus?.[tag];
+
+    if (this.previewSubMenu) {
+      this.showBoundSubMenu();
+      this.bindSubMenuControls(tag, mainMenuItem);
+    } else {
+      $('<div>').load('/sub-menu?sub=' + subMenuName, (data) => {
+        this.previewSubMenu = $(data);
+        this.showBoundSubMenu();
+        this.bindSubMenuControls(tag, mainMenuItem);
+
+        __cachedMenus = { ...__cachedMenus, [tag]: this.previewSubMenu };
+      });
+    }
   }
 
   getMainMenuTag() {
@@ -38,20 +62,17 @@ class MenuController {
   showPreviewSubMenuOptions(menuItem) {
     var subMenuName = menuItem.attr('sub');
     var hasSubMenu = !menuItem.hasClass('fixed-menu');
+    this.destroySubMenuOptions();
 
     if (!!subMenuName && hasSubMenu && this.selectedMain.attr('sub') !== subMenuName) {
-      this.destroySubMenuOptions();
       this.buildCurrentSubMenuOptions(subMenuName, menuItem);
-
-      $('body').append(this.previewSubMenu);
-    } else {
-      this.destroySubMenuOptions();
     }
   }
 
   destroySubMenuOptions() {
     if (this.previewSubMenu) {
       this.previewSubMenu.remove();
+      this.previewSubMenu = null;
     }
   }
 

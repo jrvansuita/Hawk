@@ -130,6 +130,13 @@ function onBindViewsListeners() {
     });
 }
 
+function editorArea() {
+  var textArea = $('<textarea>').attr('id', 'temp-text').addClass('text-insert shadow closed')
+
+    $('.description-editor').hide()
+    $('.editor-holder').append(textArea.val(product.conteudo))
+}
+
 function onInitializeScreenControls() {
   $('.delete').toggle(product.id != undefined);
 
@@ -329,7 +336,6 @@ function checkBeforeStore() {
 
 function onProductStored(data) {
   putSkuUrlParams();
-
   setTimeout(() => {
     $('.loading-holder').hide();
     window.location.reload();

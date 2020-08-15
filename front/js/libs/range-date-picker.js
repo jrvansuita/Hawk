@@ -64,7 +64,7 @@ class RangeDatePicker {
     this.from = from ? new Date(from) : new Date();
     this.to = to ? new Date(to) : new Date();
 
-    //change interface
+    // change interface
     if (this.dateInputBegin && this.dateInputEnd) {
       this.dateInputBegin.val(Dat.format(this.from));
       this.dateInputEnd.val(Dat.format(this.to));
@@ -190,7 +190,7 @@ class RangeDatePicker {
         }
       })
       .load()
-      .then(binder => {
+      .then((binder) => {
         this.fromPicker = binder;
         this.onFinishedLoadingEachDatePicker();
       });
@@ -214,7 +214,7 @@ class RangeDatePicker {
         this.fromPicker.close();
       })
       .load()
-      .then(binder => {
+      .then((binder) => {
         this.toPicker = binder;
         this.onFinishedLoadingEachDatePicker();
       });

@@ -158,7 +158,7 @@ function loadList() {
         tagsHandler.placeAll(result.query.attrs);
 
         window.data = result;
-        console.log(result);
+
         bindRangeSlider(result);
         showMessageTotals(result.info);
         bindCopyable();

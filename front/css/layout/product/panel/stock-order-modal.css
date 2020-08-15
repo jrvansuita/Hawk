@@ -66,3 +66,12 @@
 .upload-delete:hover {
   transform: scale(1.2);
 }
+
+#save {
+  position: absolute;
+  right: 10px;
+}
+
+.form-content {
+  padding: 15px;
+}

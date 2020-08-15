@@ -3,6 +3,11 @@ const DashboardProvider = require('./dashboard-provider.js');
 const SaleStock = require('../../bean/sale-stock.js');
 
 module.exports = class StockDashboardProvider extends DashboardProvider.Handler {
+  constructor(detailedView = false, user, cache) {
+    super(user, cache);
+    this.detailedView = detailedView;
+  }
+
   delete(callback) {
     SaleStock.removeAll(this.getDataQuery(), callback);
   }
@@ -26,17 +31,24 @@ module.exports = class StockDashboardProvider extends DashboardProvider.Handler 
   }
 
   _onParseData(rows, chart, daysCount) {
-    return { ...new StockDash(rows, this.query.showSkus, this.query.order), ...{ chart: chart } };
+    return {
+      ...new StockDash(rows,
+        this.query.showSkus,
+        this.query.order,
+        this.detailedView),
+      ...{ chart: chart }
+    };
   }
 };
 
 class StockDash extends DashboardProvider.Helper {
-  constructor(rows, loadSkusCount, order) {
+  constructor(rows, loadSkusCount, order, detailedView) {
     super();
     this.count = rows.length;
     this.arrs = {};
     this.loadSkusCount = loadSkusCount === undefined ? 25 : loadSkusCount;
     this.order = order;
+    this.detailedView = detailedView;
 
     this.rolling(rows);
     this.finals();
@@ -73,9 +85,7 @@ class StockDash extends DashboardProvider.Helper {
         });
       }
 
-      if (this.loadSkusCount) {
-        this.handleArr(each, 'sku', this.handleCustomSku);
-      }
+      this.handleArr(each, 'sku', this.handleCustomSku);
     });
   }
 
@@ -105,7 +115,8 @@ class StockDash extends DashboardProvider.Helper {
     if (this.sku) {
       if (this.order === 'asc') this.sku.reverse();
       this.skusCount = this.sku.length;
-      this.sku.splice(this.loadSkusCount);
+
+      this.detailedView ? this.handleCustomDetailed(this.sku) : this.sku.splice(this.loadSkusCount);
     }
 
     delete this.arrs;
@@ -126,6 +137,30 @@ class StockDash extends DashboardProvider.Helper {
     result.manufacturer = item.manufacturer;
     result.score = result.score ? (result.score + item.score) / 2 : item.score;
     result.stock = item.stock;
+
+    result.itemCost = item.cost / item.quantity
+    result.category = item.category
+
+    if (item.quantity_sizes) {
+      Object.keys(item.quantity_sizes).forEach((key) => {
+        if (!result.sizes) result.sizes = {}
+        if (!result.sizes[key]) result.sizes[key] = 0
+        result.sizes[key] = result.sizes[key] ? result.sizes[key] + item.quantity_sizes[key] : item.quantity_sizes[key]
+      })
+    }
+  }
+
+  handleCustomDetailed(items) {
+    this.detailed = {}
+    this.detailed.categories = {}
+    this.detailed.items = this.items
+    this.detailed.valueTotal = this.total
+    this.detailed.dates = { from: Object.keys(this.daysCounter)[0], to: Object.keys(this.daysCounter)[--this.daysCount] }
+
+    items.forEach((each) => {
+      if (!this.detailed.categories[each.category]) this.detailed.categories[each.category] = []
+      this.detailed.categories[each.category].push(each)
+    })
   }
 
   /* - Calculo de score de vendas por quantidade parcial de estoque no dia - */

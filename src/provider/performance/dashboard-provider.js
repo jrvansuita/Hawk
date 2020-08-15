@@ -4,8 +4,9 @@ const DataAccess = require('../../mongoose/data-access.js');
 var temp = {};
 
 class DashboardProviderHandler {
-  constructor(user) {
+  constructor(user, useCache) {
     this.user = user;
+    this.useCache = useCache
   }
 
   maybe(sessionQueryId) {
@@ -21,6 +22,7 @@ class DashboardProviderHandler {
       this.query.begin = query.begin ? query.begin : Dat.today().begin().getTime();
       this.query.end = query.end ? query.end : Dat.today().end().getTime();
     }
+
     return this;
   }
 
@@ -29,38 +31,42 @@ class DashboardProviderHandler {
   }
 
   getDataQuery() {
-    var and = [];
+    if (!this.buildedQuery) {
+      var and = [];
 
-    if (this.query.begin) {
-      and.push(DataAccess.range('date', this.query.begin, this.query.end, true));
-    } else {
-      and.push({ quantity: { $gt: 0 } });
+      if (this.query.begin) {
+        and.push(DataAccess.range('date', this.query.begin, this.query.end, true));
+      } else {
+        and.push({ quantity: { $gt: 0 } });
+      }
+
+      if (this.query.filters) {
+        Object.keys(this.query.filters).forEach((key) => {
+          and.push({ [key]: { $gte: Floa.def(this.query.filters[key][0]), $lte: Floa.def(this.query.filters[key][1]) } });
+        });
+      }
+
+      if (this.query.value && this.query.value.length) {
+        and.push(DataAccess.or(this._getSearchQueryFields(), this.query.value));
+      }
+
+      if (this.query.attrs) {
+        Object.keys(this.query.attrs).forEach((key) => {
+          and.push(DataAccess.or(key, this.query.attrs[key].toString().split('|')));
+        });
+      }
+
+      // console.log(this?.user?.manufacturer);
+      if (this?.user?.manufacturer) {
+        and.push(DataAccess.regexpComp('manufacturer', this.user.manufacturer));
+      }
+
+      this.buildedQuery = { $and: and };
+
+      // console.log(this.buildedQuery);
     }
 
-    if (this.query.filters) {
-      Object.keys(this.query.filters).forEach((key) => {
-        and.push({ [key]: { $gte: Floa.def(this.query.filters[key][0]), $lte: Floa.def(this.query.filters[key][1]) } });
-      });
-    }
-
-    if (this.query.value && this.query.value.length) {
-      and.push(DataAccess.or(this._getSearchQueryFields(), this.query.value));
-    }
-
-    if (this.query.attrs) {
-      Object.keys(this.query.attrs).forEach((key) => {
-        and.push(DataAccess.or(key, this.query.attrs[key].toString().split('|')));
-      });
-    }
-
-    // console.log(this?.user?.manufacturer);
-    if (this?.user?.manufacturer) {
-      and.push(DataAccess.regexpComp('manufacturer', this.user.manufacturer));
-    }
-
-    // console.log(JSON.stringify(and));
-
-    return { $and: and };
+    return this.buildedQuery;
   }
 
   setOnResult(onResult) {
@@ -80,7 +86,7 @@ class DashboardProviderHandler {
 
   load(callback) {
     if (this.onResult) {
-      if (this.query.id && temp[this.query.id]) {
+      if (this.query.id && temp[this.query.id] && this.useCache) {
         // [cache] Tenta pegar pelo ID enviado
         this.onResult(temp[this.query.id]);
       } else if (Object.keys(this.query).length === 0 && this.sessionQueryId && temp[this.sessionQueryId]) {
@@ -89,7 +95,7 @@ class DashboardProviderHandler {
       } else {
         var found = this._findByQueryHash();
         // [cache] Tenta pegar pelo hash da query
-        if (found) {
+        if (found && this.useCache) {
           this.onResult(found);
         } else {
           // Busca do zero as informações
@@ -106,11 +112,11 @@ class DashboardProviderHandler {
   }
 
   _findByQueryHash() {
-    return temp[hash(this.query)];
+    return temp[hash(this.getDataQuery())];
   }
 
   _keepTemp(data) {
-    var id = hash(this.query);
+    var id = hash(this.getDataQuery());
     data = { id: id, query: this.query, data: data };
     temp[id] = data;
     return data;

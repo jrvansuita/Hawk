@@ -16,6 +16,7 @@ module.exports = class ProductRoutes extends Routes {
       new ProductImageProvider().getImage(req.query.sku, this._resp().redirect(res));
     })
       .skipLogin()
+      .market()
       .cors();
 
     this.get('/image-redirect', (req, res) => {
