@@ -193,9 +193,7 @@ function onSizesRefreshed() {
 }
 
 function onOtherBindingRules() {
-  if (product?.conteudo?.includes('<style>')) {
-
-  } else if (window.editor) {
+if (window.editor) {
     $('#html-editor').remove()
     $('.description-editor').show()
     window.editor.html.set(product.conteudo);
