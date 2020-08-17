@@ -23,12 +23,12 @@ module.exports = class JobFeedXmlProducts extends Job {
   }
 
   _handleAllSkus(callback) {
-    FeedXml.get(xml => {
+    FeedXml.get((xml) => {
       if (xml) {
         var current = -1;
         var items = xml.feed.item;
 
-        var innerHandleAllSkus = onFinished => {
+        var innerHandleAllSkus = (onFinished) => {
           current++;
 
           if (current == items.length) {
@@ -49,12 +49,12 @@ module.exports = class JobFeedXmlProducts extends Job {
 
   _handleEachSku(data, callback) {
     if (FeedXml.val(data, 'sku').includes('-')) {
-      //É produto filho, não faz nada com ele
-      //Produtos filhos nem deveriam estar no feed
+      // É produto filho, não faz nada com ele
+      // Produtos filhos nem deveriam estar no feed
       callback();
     } else {
       var product = this.getXmlItemLoaded(data);
-      Product.get(product.sku, responseProduct => {
+      Product.get(product.sku, (responseProduct) => {
         product.newStock = product.quantity - (responseProduct ? responseProduct.quantity : product.quantity);
         product.sync = true;
 
@@ -92,7 +92,8 @@ module.exports = class JobFeedXmlProducts extends Job {
       FeedXml.val(item, 'manufacturer'),
       FeedXml.val(item, 'visible').includes('true'),
       FeedXml.val(item, 'associates'),
-      FeedXml.val(item, 'child_weight') || FeedXml.val(item, 'weight')
+      FeedXml.val(item, 'child_weight') || FeedXml.val(item, 'weight'),
+      FeedXml.val(item, 'category')
     );
   }
 
