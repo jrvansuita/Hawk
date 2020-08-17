@@ -323,13 +323,13 @@ function bindDropdowns(data) {
         .onItemSelect((status) => {
           new SaleStatusObsDialog('Adicionar Observação').make((obs) => {
             helper.loading(true);
-            _post('/customer-service/sale-status-change', { sale: data.oc, status: status, user: loggedUser, obs: obs }, (result) => {
-              if (result.sucess != null || result == true) {
-                errorTooltip.hideDelay(3000).showSuccess('Status Alterado');
-                helper.loading(false);
-              } else {
+            _post('/customer-service/sale-status-change', { sale: data.oc, status: status, user: loggedUser, obs: obs }, result => {
+              if (result.error != null) {
                 helper.error();
                 errorTooltip.hideDelay(3000).showError('Erro ao cancelar NFe');
+              } else {
+                errorTooltip.hideDelay(3000).showSuccess('Status Alterado');
+                helper.loading(false);
               }
             });
           });

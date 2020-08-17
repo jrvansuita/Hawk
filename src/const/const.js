@@ -46,7 +46,7 @@ module.exports = {
 
   customer_email_sending: 'Foi enviado {0} para o email {1} referente ao pedido {2}',
 
-  sale_status_update_obs: '[Hawk - Atendimento] - {0} | Status do pedido {1} alterado para {2} por {3}',
+  sale_status_update_obs: '{0} | Status do pedido {1} alterado para {2} por {3}',
   sale_collected: 'Foi realizado o despacho do pedido {0} pelo setor de expedição. O pedido encontra-se embalado e com a NF-e gerada e já despachado para o transportador.',
 
   // sale_status_not_updated_collected_only_magento: 'O pedido {0} não foi colocado como despachado porque ele estava com status {1} no magento.',

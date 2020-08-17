@@ -80,7 +80,7 @@ module.exports = class ProductDiagnostics {
       this._storeFix(product, 'COLOR');
     }
 
-    if (isDepartmentMissing(attrBundle.names)) {
+    if (isDepartmentMissing(attrBundle.names, product)) {
       this._storeFix(product, 'DEPARTMENT');
     }
 
@@ -130,15 +130,15 @@ module.exports = class ProductDiagnostics {
 
   _checkSingleSku(sku, callback) {
     // Remove all from this sku
-    Fix.removeAll({ sku: sku }, err => {
+    Fix.removeAll({ sku: sku }, (err) => {
       // Capture the eccosys product
-      new EccosysProvider().product(sku).go(product => {
+      new EccosysProvider().product(sku).go((product) => {
         // Product doesnt exists anymore Or is inactive
         if (!product || product.situacao == 'I') {
           callback();
         } else {
           // Capture feed product
-          Product.get(sku, feedProduct => {
+          Product.get(sku, (feedProduct) => {
             product.feedProduct = feedProduct;
 
             // Capture stock history
@@ -146,7 +146,7 @@ module.exports = class ProductDiagnostics {
               .limit(15)
               .order('DESC')
               .stockHistory(sku)
-              .go(stocks => {
+              .go((stocks) => {
                 // Analyze the product
                 this._analyzeProducts(product, stocks, () => {
                   callback();
@@ -192,9 +192,9 @@ module.exports = class ProductDiagnostics {
   _loadChildProducts(sku, callback) {
     sku = sku.split('-')[0];
 
-    new EccosysProvider().product(sku).go(product => {
+    new EccosysProvider().product(sku).go((product) => {
       var skus = product._Skus
-        ? product._Skus.map(i => {
+        ? product._Skus.map((i) => {
             return i.codigo;
           })
         : [];
@@ -204,7 +204,7 @@ module.exports = class ProductDiagnostics {
 
   _resyncStoredSkus(brandName, type) {
     var handler = (_err, docs) => {
-      var skus = [...new Set(docs.map(i => i.sku))];
+      var skus = [...new Set(docs.map((i) => i.sku))];
 
       this._checkRangeSku(skus, 0, () => {});
     };
@@ -230,7 +230,7 @@ module.exports = class ProductDiagnostics {
     sku = sku.toString();
 
     if (forceByFather) {
-      this._loadChildProducts(sku, skus => {
+      this._loadChildProducts(sku, (skus) => {
         this._checkRangeSku(skus, 0, () => {
           callback();
         });
@@ -244,16 +244,16 @@ module.exports = class ProductDiagnostics {
 
   remove(sku) {
     // Remove all from this sku
-    Fix.removeSkuAll(sku.toString(), err => {});
+    Fix.removeSkuAll(sku.toString(), (err) => {});
   }
 };
 
 function getProductAttrBundle(product) {
   var result = {
-    names: product._Atributos.map(i => {
+    names: product._Atributos.map((i) => {
       return i.descricao;
     }),
-    values: product._Atributos.map(i => {
+    values: product._Atributos.map((i) => {
       return i.valor;
     }),
   };
@@ -267,7 +267,7 @@ function isWeightProblem(product, checkMagento) {
 
   if (!isMissing && checkMagento) {
     if (product.feedProduct && product.feedProduct.associates && product.feedProduct.weight) {
-      var index = product.feedProduct.associates.split(',').findIndex(e => {
+      var index = product.feedProduct.associates.split(',').findIndex((e) => {
         return e == product.codigo;
       });
       var weight = Floa.def(product.feedProduct.weight.split(',')[index], 0);
@@ -332,8 +332,11 @@ function isCostPriceMistake(product) {
   return cost === 0 || price / cost < 1.2 || !isPricesConsistency(product);
 }
 
-function isDepartmentMissing(attrNames) {
-  return !attrNames.includes('Departamento');
+function isDepartmentMissing(attrNames, product) {
+  var category = product?.feedProduct?.storeCategory?.trim();
+  var department = product?.feedProduct?.category?.trim();
+
+  return !attrNames.includes('Departamento') || !category || !department;
 }
 
 function isGenderMissing(attrBundle, product) {
@@ -357,7 +360,7 @@ function isPhotoMissing(product) {
 }
 
 function hasSales(stocks, daysOffSales) {
-  var filter = i => {
+  var filter = (i) => {
     return parseFloat(i.quantidade) < 0 && parseInt(i.idOrigem) > 0;
   };
 

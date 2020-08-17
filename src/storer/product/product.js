@@ -59,11 +59,11 @@ module.exports = class ProductStorer {
     this.storer
       .product()
       .upsert(data.id == undefined, data)
-      .go(response => this._onStoringResponseHandler(data, response, callback));
+      .go((response) => this._onStoringResponseHandler(data, response, callback));
   }
 
   _onChildProductUpsert(_data, callback) {
-    this._onBeforeUpsertChildProduct(_data, data => {
+    this._onBeforeUpsertChildProduct(_data, (data) => {
       this._onProductUpsert(data, callback);
     });
   }
@@ -74,7 +74,7 @@ module.exports = class ProductStorer {
     var isChild = sku.includes('-');
 
     if (isNew && isChild) {
-      this.provider.product(sku).go(found => {
+      this.provider.product(sku).go((found) => {
         if (found && found.id) {
           data.id = found.id;
           data.gtin = found.gtin;

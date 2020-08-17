@@ -1,5 +1,29 @@
 module.exports = class Product extends DataAccess {
-  constructor(sku, name, brand, url, image, price, fromPrice, cost, discount, category, gender, color, quantity, newStock, sync, age, year, season, manufacturer, visble, associates, weight) {
+  constructor(
+    sku,
+    name,
+    brand,
+    url,
+    image,
+    price,
+    fromPrice,
+    cost,
+    discount,
+    category,
+    gender,
+    color,
+    quantity,
+    newStock,
+    sync,
+    age,
+    year,
+    season,
+    manufacturer,
+    visible,
+    associates,
+    weight,
+    storeCategory
+  ) {
     super();
 
     this.sku = Str.def(sku);
@@ -18,7 +42,11 @@ module.exports = class Product extends DataAccess {
     this.discount = Floa.def(discount);
 
     this.brand = Str.def(brand).trim();
+    // Este é o departamento do produto
     this.category = Str.def(category);
+    // Este é a categoria atribuída ao produto
+    this.storeCategory = Str.def(storeCategory);
+
     this.gender = Str.def(gender).trim();
     this.color = Str.def(color).trim();
     this.quantity = Num.def(quantity);
@@ -31,7 +59,7 @@ module.exports = class Product extends DataAccess {
     this.manufacturer = Str.def(manufacturer).trim();
     this.weight = Str.def(weight);
 
-    this.visible = !!visble;
+    this.visible = !!visible;
     this.associates = Str.def(associates);
   }
 
@@ -86,7 +114,7 @@ module.exports = class Product extends DataAccess {
     var result = {};
     var query = { sync: true, newStock: newStockLevel > 0 ? { $gt: newStockLevel } : { $lt: newStockLevel } };
 
-    props.forEach(eachProp => {
+    props.forEach((eachProp) => {
       result[eachProp] = [{ $group: { _id: '$' + eachProp, count: { $sum: 1 }, stock: { $sum: { $abs: '$newStock' } } } }];
     });
     result.total = [{ $group: { _id: null, stock: { $sum: { $abs: '$newStock' } } } }];

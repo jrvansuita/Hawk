@@ -212,6 +212,11 @@ module.exports = class SaleStatusHandler {
     return this;
   }
 
+  setNfeJustification(message) {
+    this.nfeJustification = message;
+    return this;
+  }
+
   setOnNeedErpUpdate(callback) {
     this.onNeedErpUpdate = callback;
     return this;
@@ -225,7 +230,7 @@ module.exports = class SaleStatusHandler {
     }
 
     if (this.obsMessage) {
-      body.obs = this.sale.obs + '\n' + (typeof this.obsMessage === 'function' ? this.obsMessage(this.sale) : this.obsMessage);
+      body.observacaoInterna = this.sale.observacaoInterna + '\n' + (typeof this.obsMessage === 'function' ? this.obsMessage(this.sale) : this.obsMessage);
     }
 
     return { ...body, numeroPedido: this.sale.numeroPedido };
@@ -243,6 +248,7 @@ module.exports = class SaleStatusHandler {
       .run((sale) => {
         this.sale = sale;
         this.sale.oc = this.sale.numeroDaOrdemDeCompra.split('-')[0];
+        this.sale.nfe = sale.numeroNotaFiscal
         callback(!this.onNeedErpUpdate || (this.onNeedErpUpdate && this.onNeedErpUpdate(this.sale)));
       });
   }
@@ -296,6 +302,18 @@ module.exports = class SaleStatusHandler {
     if (callback) callback();
   }
 
+  cancelNfe(user, number, justification, callback) {
+    var body = {
+      justificativa: this.prefix + justification
+    }
+    new EccosysStorer().cancelNfe(user, number, body).go((res) => { callback(res) })
+  }
+
+  _cancelNfe(response, callback) {
+    if (response.error) History.notify(this.user.id, 'Tela do Atendimento', '{0}'.format(response.error[0].erro), 'Falha')
+    if (callback) callback(response)
+  }
+
   run(callback) {
     this._loadEccoSale((needUpdate) => {
       if (needUpdate) {
@@ -310,7 +328,13 @@ module.exports = class SaleStatusHandler {
         }
       });
 
-      if (callback) callback(this.sale);
+      if (this.sale.nfe) {
+        this.cancelNfe(this.user, this.sale.nfe, this.nfeJustification, (nfeResponse) => {
+          this._cancelNfe(nfeResponse, callback)
+        })
+      } else {
+        if (callback) callback(this.sale);
+      }
     });
   }
 };
