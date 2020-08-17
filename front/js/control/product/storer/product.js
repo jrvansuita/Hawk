@@ -113,11 +113,14 @@ function onBindViewsListeners() {
     });
 }
 
-function editorArea() {
-  var textArea = $('<textarea>').attr('id', 'temp-text').addClass('text-insert shadow closed')
+function htmlEditor() {
+  var htmlEditor = $('#html-editor')
 
+  if (!htmlEditor.length) {
+    htmlEditor = $('<textarea>').attr('id', 'html-editor').addClass('text-insert shadow closed')
+  }
     $('.description-editor').hide()
-    $('.editor-holder').append(textArea.val(product.conteudo))
+  $('.editor-holder').append(htmlEditor.val(product.conteudo))
 }
 
 function onInitializeScreenControls() {
@@ -159,7 +162,7 @@ function onBindComboBoxes() {
 
 function getData() {
   product.precoCusto = Num.moneyVal($('#cost').val());
-  product.conteudo = window.editor.html.get();
+  product.conteudo = $('#html-editor').val() ? $('#html-editor').val() : window.editor.html.get();
   product.user = loggedUser;
 
   return product;
@@ -190,7 +193,11 @@ function onSizesRefreshed() {
 }
 
 function onOtherBindingRules() {
-  if (window.editor) {
+  if (product?.conteudo?.includes('<style>')) {
+    htmlEditor()
+  } else if (window.editor) {
+    $('#html-editor').remove()
+    $('.description-editor').show()
     window.editor.html.set(product.conteudo);
   }
   $('.discount').text(Num.percent(product.discount, true));
