@@ -237,11 +237,14 @@ module.exports = class SaleStatusHandler {
   }
 
   _loadEccoSale(callback) {
-    new SaleLoader(this.sale).setOnError(this.onError).run((sale) => {
-      this.sale = sale;
-      this.sale.oc = this.sale.numeroDaOrdemDeCompra.split('-')[0];
-      callback(!this.onNeedErpUpdate || (this.onNeedErpUpdate && this.onNeedErpUpdate(this.sale)));
-    });
+    new SaleLoader(this.sale)
+      .setOnError(this.onError)
+      .loadClient()
+      .run((sale) => {
+        this.sale = sale;
+        this.sale.oc = this.sale.numeroDaOrdemDeCompra.split('-')[0];
+        callback(!this.onNeedErpUpdate || (this.onNeedErpUpdate && this.onNeedErpUpdate(this.sale)));
+      });
   }
 
   _updateEccoSale(callback) {
@@ -307,7 +310,7 @@ module.exports = class SaleStatusHandler {
         }
       });
 
-      if (callback) callback();
+      if (callback) callback(this.sale);
     });
   }
 };
