@@ -242,12 +242,15 @@ module.exports = class SaleStatusHandler {
   }
 
   _loadEccoSale(callback) {
-    new SaleLoader(this.sale).setOnError(this.onError).run((sale) => {
-      this.sale = sale;
-      this.sale.oc = this.sale.numeroDaOrdemDeCompra.split('-')[0];
-      this.sale.nfe = sale.numeroNotaFiscal
-      callback(!this.onNeedErpUpdate || (this.onNeedErpUpdate && this.onNeedErpUpdate(this.sale)));
-    });
+    new SaleLoader(this.sale)
+      .setOnError(this.onError)
+      .loadClient()
+      .run((sale) => {
+        this.sale = sale;
+        this.sale.oc = this.sale.numeroDaOrdemDeCompra.split('-')[0];
+        this.sale.nfe = sale.numeroNotaFiscal
+        callback(!this.onNeedErpUpdate || (this.onNeedErpUpdate && this.onNeedErpUpdate(this.sale)));
+      });
   }
 
   _updateEccoSale(callback) {
@@ -306,6 +309,11 @@ module.exports = class SaleStatusHandler {
     new EccosysStorer().cancelNfe(user, number, body).go((res) => { callback(res) })
   }
 
+  _cancelNfe(response, callback) {
+    if (response.error) History.notify(this.user.id, 'Tela do Atendimento', '{0}'.format(response.error[0].erro), 'Falha')
+    if (callback) callback(response)
+  }
+
   run(callback) {
     this._loadEccoSale((needUpdate) => {
       if (needUpdate) {
@@ -322,11 +330,10 @@ module.exports = class SaleStatusHandler {
 
       if (this.sale.nfe) {
         this.cancelNfe(this.user, this.sale.nfe, this.nfeJustification, (nfeResponse) => {
-          if (nfeResponse.error) History.notify(this.user.id, 'Tela do Atendimento', '{0}'.format(nfeResponse.error[0].erro), 'Falha')
-          callback(nfeResponse)
+          this._cancelNfe(nfeResponse, callback)
         })
       } else {
-        if (callback) callback();
+        if (callback) callback(this.sale);
       }
     });
   }

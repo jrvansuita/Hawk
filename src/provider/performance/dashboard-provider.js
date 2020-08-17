@@ -6,7 +6,7 @@ var temp = {};
 class DashboardProviderHandler {
   constructor(user, useCache) {
     this.user = user;
-    this.useCache = useCache
+    this.useCache = useCache;
   }
 
   maybe(sessionQueryId) {
@@ -21,6 +21,11 @@ class DashboardProviderHandler {
     if (initializeDates) {
       this.query.begin = query.begin ? query.begin : Dat.today().begin().getTime();
       this.query.end = query.end ? query.end : Dat.today().end().getTime();
+    }
+
+    // console.log(this?.user?.manufacturer);
+    if (this?.user?.manufacturer) {
+      this.query.userManufacturer = this.user.manufacturer;
     }
 
     return this;
@@ -56,14 +61,11 @@ class DashboardProviderHandler {
         });
       }
 
-      // console.log(this?.user?.manufacturer);
-      if (this?.user?.manufacturer) {
-        and.push(DataAccess.regexpComp('manufacturer', this.user.manufacturer));
+      if (this.query.userManufacturer) {
+        and.push(DataAccess.regexpComp('manufacturer', this.query.userManufacturer));
       }
 
       this.buildedQuery = { $and: and };
-
-      // console.log(this.buildedQuery);
     }
 
     return this.buildedQuery;
@@ -112,11 +114,11 @@ class DashboardProviderHandler {
   }
 
   _findByQueryHash() {
-    return temp[hash(this.getDataQuery())];
+    return temp[hash(this.query)];
   }
 
   _keepTemp(data) {
-    var id = hash(this.getDataQuery());
+    var id = hash(this.query);
     data = { id: id, query: this.query, data: data };
     temp[id] = data;
     return data;

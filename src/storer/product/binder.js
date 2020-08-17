@@ -259,8 +259,10 @@ class ProductBinder {
         this.conteudo = this.postDesc;
       } else if (currentCharacteristics.length) {
         var higherProbabilityMatch = await Enum.on('AUTO-DESC-CAD-PROD', true).best(currentCharacteristics);
-        var template = await new TemplateBuilder(higherProbabilityMatch?.value).useSampleData().get();
-        this.conteudo = template.content;
+        if (higherProbabilityMatch?.value) {
+          var template = await new TemplateBuilder(higherProbabilityMatch?.value).useSampleData().get();
+          this.conteudo = template.content;
+        }
       }
 
       if (this.postCompDesc) {

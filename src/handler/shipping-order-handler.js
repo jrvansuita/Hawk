@@ -1,6 +1,7 @@
 const EccosysStorer = require('../eccosys/eccosys-storer.js');
 const EccosysProvider = require('../eccosys/eccosys-provider.js');
 const SaleStatusHandler = require('../handler/sale-status-handler.js');
+const CustomerSendEmailHandler = require('../customer/customer-send-email-handler.js');
 
 module.exports = class ShippingOrderHandler {
   constructor(user, log) {
@@ -71,7 +72,11 @@ module.exports = class ShippingOrderHandler {
       .setOnNeedStoreUpdate((storeSale) => {
         return Arr.isIn(['separation', 'complete', 'processing'], storeSale.status);
       })
-      .run(next);
+      .run((sale) => {
+        new CustomerSendEmailHandler(this.user.id).sendEmailTracking({ cliente: sale.client, oc: sale.oc });
+
+        next();
+      });
   }
 
   updateSaleStatus(query, onTerminate) {

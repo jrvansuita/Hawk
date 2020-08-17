@@ -117,7 +117,7 @@ function htmlEditor() {
   var htmlEditor = $('#html-editor')
 
   if (!htmlEditor.length) {
-    htmlEditor = $('<textarea>').attr('id', 'html-editor').addClass('text-insert shadow closed')
+    htmlEditor = $('<textarea>').attr('id', 'html-editor').addClass('text-insert closed')
   }
     $('.description-editor').hide()
   $('.editor-holder').append(htmlEditor.val(product.conteudo))
@@ -193,9 +193,7 @@ function onSizesRefreshed() {
 }
 
 function onOtherBindingRules() {
-  if (product?.conteudo?.includes('<style>')) {
-    htmlEditor()
-  } else if (window.editor) {
+if (window.editor) {
     $('#html-editor').remove()
     $('.description-editor').show()
     window.editor.html.set(product.conteudo);

@@ -6,7 +6,7 @@ $(document).ready(() => {
 
   $('.sale-viewer-holder').css('border-top', 'none');
 
-  loadCompletSaleData(data => {
+  loadCompletSaleData((data) => {
     bindSaleInfoViewer(data.data);
   });
 
@@ -132,7 +132,7 @@ function bindSaleItens(data) {
     return 0;
   });
 
-  data.items.reverse().forEach(item => {
+  data.items.reverse().forEach((item) => {
     // tabela de itens
     var $saleItensHolder = $('<tr>').addClass('sale-itens-information');
 
@@ -226,13 +226,13 @@ function bindSaleHistory(data) {
 
   comments = data.comments.erp.split(/\n/g);
 
-  comments.reverse().forEach(each => {
+  comments.reverse().forEach((each) => {
     var $comment = $('<p>').addClass('ecco-comments');
     $comment.text(each);
     $commentsEccosysTable.append($comment);
   });
 
-  data.comments.store.forEach(each => {
+  data.comments.store.forEach((each) => {
     var $commentsTr = $('<tr>').addClass('comments');
     var $commentsDate = $('<td>').addClass('comment-date');
     var $commentsTd = $('<td>');
@@ -257,15 +257,15 @@ function bindSaleHistory(data) {
 }
 
 function hoverProductImage(holder, sku) {
-  new ImagePreview(holder).hover(self => {
-    _get('/product/image', { sku: sku }, product => {
+  new ImagePreview(holder).hover((self) => {
+    _get('/product/image', { sku: sku }, (product) => {
       self.show(product.image);
     });
   });
 }
 
 function loadCompletSaleData(callback) {
-  _get('/customer-service/sale', { saleNumber: saleNumber }, data => {
+  _get('/customer-service/sale', { saleNumber: saleNumber }, (data) => {
     window.data = data.data;
     window.provisorio = data.provisorio;
     callback(data);
@@ -283,7 +283,7 @@ function bindDropdowns(data) {
       dropdown.item('/img/envelop.png', 'Enviar Boleto por Email', function (helper) {
         helper.loading(true);
 
-        _post('/customer-service/email-boleto', { cliente: data.client, oc: data.oc, linkBoleto: data.payment.boleto, userid: loggedUser.id }, result => {
+        _post('/customer-service/email-boleto', { cliente: data.client, oc: data.oc, linkBoleto: data.payment.boleto, userid: loggedUser.id }, (result) => {
           helper.finished(result);
         });
       });
@@ -297,7 +297,7 @@ function bindDropdowns(data) {
     .item('/img/envelop.png', 'Enviar Rastreio por Email', function (helper) {
       helper.loading(true);
 
-      _post('/customer-service/email-tracking', { cliente: data.client, oc: data.oc, tracking: Params.trackingUrlExt() + data.oc, userid: loggedUser.id }, result => {
+      _post('/customer-service/email-tracking', { cliente: data.client, oc: data.oc, userid: loggedUser.id }, (result) => {
         helper.finished(result);
       });
     });
@@ -305,10 +305,10 @@ function bindDropdowns(data) {
   var drop = Dropdown.on($('.sale-header-dots'));
 
   if (data.nf != null) {
-    drop.item('/img/envelop.png', 'Enviar NF', helper => {
+    drop.item('/img/envelop.png', 'Enviar NF', (helper) => {
       helper.loading(true);
 
-      _post('/customer-service/email-danfe', { cliente: data.client, oc: data.oc, nfNumber: data.nf, userid: loggedUser.id }, result => {
+      _post('/customer-service/email-danfe', { cliente: data.client, oc: data.oc, nfNumber: data.nf, userid: loggedUser.id }, (result) => {
         helper.finished(result);
       });
     });
@@ -320,11 +320,19 @@ function bindDropdowns(data) {
   if (data.status != 'canceled' && data.status != 'ip_delivered') {
     drop.item('/img/gear.png', 'Alterar Status do Pedido', function (helper) {
       new SaleStatusDialog(data.status)
-        .onItemSelect(status => {
-          new SaleStatusObsDialog('Adicionar Observação').make(obs => {
+        .onItemSelect((status) => {
+          new SaleStatusObsDialog('Adicionar Observação').make((obs) => {
             helper.loading(true);
+<<<<<<< HEAD
             _post('/customer-service/sale-status-change', { sale: data.oc, status: status, user: loggedUser, obs: obs }, result => {
               if (result.error != null) {
+=======
+            _post('/customer-service/sale-status-change', { sale: data.oc, status: status, user: loggedUser, obs: obs }, (result) => {
+              if (result.sucess != null || result == true) {
+                errorTooltip.hideDelay(3000).showSuccess('Status Alterado');
+                helper.loading(false);
+              } else {
+>>>>>>> 5d3f2f498a737f419cd890ebdb888adac7cba745
                 helper.error();
                 errorTooltip.hideDelay(3000).showError('Erro ao cancelar NFe');
               } else {

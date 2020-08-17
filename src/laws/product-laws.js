@@ -131,12 +131,12 @@ module.exports = {
 
   /* Verificar */
   _getBySku(sku, father, callback) {
-      new EccosysProvider(false).product(father ? this.getFatherSku(sku) : sku).go((product) => {
-        callback(product)
-      });
+    new EccosysProvider(false).product(father ? this._getFatherSku(sku) : sku).go((product) => {
+      callback(product);
+    });
   },
 
   _getFatherSku(sku) {
     return sku ? sku.split('-')[0] : sku;
-  }
+  },
 };
