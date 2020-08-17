@@ -117,7 +117,7 @@ function htmlEditor() {
   var htmlEditor = $('#html-editor')
 
   if (!htmlEditor.length) {
-    htmlEditor = $('<textarea>').attr('id', 'html-editor').addClass('text-insert shadow closed')
+    htmlEditor = $('<textarea>').attr('id', 'html-editor').addClass('text-insert closed')
   }
     $('.description-editor').hide()
   $('.editor-holder').append(htmlEditor.val(product.conteudo))
