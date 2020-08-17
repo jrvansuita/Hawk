@@ -5,6 +5,10 @@ module.exports = class AttributesHandler {
     return CacheAttrs.isCached();
   }
 
+  clearCache(callback) {
+    return CacheAttrs.clearCache(callback)
+  }
+
   filter(description, options) {
     this.descriptionOrTag = description;
     this.options = options;
@@ -20,8 +24,8 @@ module.exports = class AttributesHandler {
     }
   }
 
-  load(callback) {
-    CacheAttrs.load(() => {
+  load(callback, useCache) {
+    CacheAttrs.load(useCache, () => {
       if (callback) callback(this.get());
     });
 
@@ -34,6 +38,12 @@ var CacheAttrs = {
   map: undefined,
   isChanging: false,
   listeners: [],
+
+  clearCache(callback) {
+    this.cache = undefined;
+    this.map = undefined;
+    callback()
+  },
 
   isCached() {
     return this.cache != undefined;
@@ -93,8 +103,8 @@ var CacheAttrs = {
     this.listeners = [];
   },
 
-  load(callback, refreshCache = false) {
-    if (!refreshCache && this.isCached()) {
+  load(useCache, callback) {
+    if (useCache && this.isCached()) {
       callback(this.cache);
     } else {
       this.listeners.push(callback);

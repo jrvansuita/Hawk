@@ -40,8 +40,10 @@ module.exports = class ServerMiddleware {
 
   welcome() {
     this.express.get('/', (req, res) => {
-      if (req.session.lastPath && req.session.lastPath !== '/') {
-        res.redirect(req.session.lastPath);
+      var lst = req.session.lastPath;
+
+      if (!!lst && lst !== '/') {
+        res.redirect(lst);
       } else {
         res.redirect('/login/welcome');
       }
@@ -49,13 +51,13 @@ module.exports = class ServerMiddleware {
   }
 
   getRoutes() {
-    return new File('src/routes').getFolderFilesPaths('.js').filter((e) => {
+    return new File('src/routes').getFolderFilesPaths('.js').filter(e => {
       return !e.startsWith('_');
     });
   }
 
   routes() {
-    this.getRoutes().forEach((file) => {
+    this.getRoutes().forEach(file => {
       var Clazz = require('../routes/' + file);
 
       new Clazz(this.express).attach();

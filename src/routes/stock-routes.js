@@ -10,6 +10,7 @@ const ProductBoardProvider = require('../provider/board/product-board-provider.j
 const StockOrderVault = require('../vault/stock-order-vault');
 const StockOrderProvider = require('../provider/stock-order-provider');
 const StockOrderHandler = require('../handler/stock-order-handler.js');
+const AttributesHandler = require('../handler/attributes-handler.js')
 
 module.exports = class ProductRoutes extends Routes {
   mainPath() {
@@ -100,6 +101,10 @@ module.exports = class ProductRoutes extends Routes {
 
     this.get('/storer-attr', (req, res) => {
       new ProductStorer().searchAttr(req.query.attr, this._resp().redirect(res), req.query.useCache);
+    });
+
+    this.post('/refresh-attrs', (req, res) => {
+      new AttributesHandler().clearCache(this._resp().redirect(res))
     });
 
     /** --------------  Product Board -------------- **/

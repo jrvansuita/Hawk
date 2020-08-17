@@ -17,7 +17,7 @@ module.exports = class ProductStorer {
   }
 
   searchAttr(description, callback, useCache = true) {
-    new AttributesHandler().filter(description).load(callback, !useCache);
+    new AttributesHandler().filter(description).load(callback, useCache);
   }
 
   setOnFinished(callback) {

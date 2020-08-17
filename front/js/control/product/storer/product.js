@@ -29,22 +29,9 @@ function onRefresh() {
 
 function refreshManufacturerList() {
   Dropdown.on('.manufacturer-dots', true, true)
-  .item('/img/loader/refresh.svg', 'Recarregar Fabricantes', (helper) => {
-    var $fatherManufac = $('.manufacturer-dots').parent()
-    var $ImgRefresh = $('<img>').attr('src', '/img/loader/circle.svg').addClass('mini-icon-button')
-    $fatherManufac.append($ImgRefresh.addClass('refresh-manufac'))
-
-    callManufacturerRestorer()
+  .item('/img/loader/refresh.svg', 'Recarregar Atributos', (helper) => {
+    _post('/stock/refresh-attrs', () => {})
   })
-}
-
-function callManufacturerRestorer() {
-  comboRefresh.setData('')
-  onBindComboBoxes()
-
-  setTimeout(() => {
-    $('.refresh-manufac').attr('src', '/img/checked.png').fadeOut(3000)
-  }, 2000)
 }
 
 function bindComboBox(el, data, limit) {
@@ -58,10 +45,6 @@ function bindComboBox(el, data, limit) {
       return { text: item.description.trim(), value: item.value };
     })
     .load();
-
-    setTimeout(() => {
-      $('.refresh-manufac').remove()
-    }, 5000)
 }
 
 function onBindViewsListeners() {
@@ -130,6 +113,16 @@ function onBindViewsListeners() {
     });
 }
 
+function htmlEditor() {
+  var htmlEditor = $('#html-editor')
+
+  if (!htmlEditor.length) {
+    htmlEditor = $('<textarea>').attr('id', 'html-editor').addClass('text-insert shadow closed')
+  }
+    $('.description-editor').hide()
+  $('.editor-holder').append(htmlEditor.val(product.conteudo))
+}
+
 function onInitializeScreenControls() {
   $('.delete').toggle(product.id != undefined);
 
@@ -169,7 +162,7 @@ function onBindComboBoxes() {
 
 function getData() {
   product.precoCusto = Num.moneyVal($('#cost').val());
-  product.conteudo = window.editor.html.get();
+  product.conteudo = $('#html-editor').val() ? $('#html-editor').val() : window.editor.html.get();
   product.user = loggedUser;
 
   return product;
@@ -200,7 +193,11 @@ function onSizesRefreshed() {
 }
 
 function onOtherBindingRules() {
-  if (window.editor) {
+  if (product?.conteudo?.includes('<style>')) {
+    htmlEditor()
+  } else if (window.editor) {
+    $('#html-editor').remove()
+    $('.description-editor').show()
     window.editor.html.set(product.conteudo);
   }
   $('.discount').text(Num.percent(product.discount, true));
@@ -329,7 +326,6 @@ function checkBeforeStore() {
 
 function onProductStored(data) {
   putSkuUrlParams();
-
   setTimeout(() => {
     $('.loading-holder').hide();
     window.location.reload();
