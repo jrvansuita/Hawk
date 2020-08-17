@@ -212,6 +212,11 @@ module.exports = class SaleStatusHandler {
     return this;
   }
 
+  setNfeJustification(message) {
+    this.nfeJustification = message;
+    return this;
+  }
+
   setOnNeedErpUpdate(callback) {
     this.onNeedErpUpdate = callback;
     return this;
@@ -225,7 +230,7 @@ module.exports = class SaleStatusHandler {
     }
 
     if (this.obsMessage) {
-      body.obs = this.sale.obs + '\n' + (typeof this.obsMessage === 'function' ? this.obsMessage(this.sale) : this.obsMessage);
+      body.observacaoInterna = this.sale.observacaoInterna + '\n' + (typeof this.obsMessage === 'function' ? this.obsMessage(this.sale) : this.obsMessage);
     }
 
     return { ...body, numeroPedido: this.sale.numeroPedido };
@@ -240,6 +245,7 @@ module.exports = class SaleStatusHandler {
     new SaleLoader(this.sale).setOnError(this.onError).run((sale) => {
       this.sale = sale;
       this.sale.oc = this.sale.numeroDaOrdemDeCompra.split('-')[0];
+      this.sale.nfe = sale.numeroNotaFiscal
       callback(!this.onNeedErpUpdate || (this.onNeedErpUpdate && this.onNeedErpUpdate(this.sale)));
     });
   }
@@ -293,6 +299,13 @@ module.exports = class SaleStatusHandler {
     if (callback) callback();
   }
 
+  cancelNfe(user, number, justification, callback) {
+    var body = {
+      justificativa: this.prefix + justification
+    }
+    new EccosysStorer().cancelNfe(user, number, body).go((res) => { callback(res) })
+  }
+
   run(callback) {
     this._loadEccoSale((needUpdate) => {
       if (needUpdate) {
@@ -307,7 +320,14 @@ module.exports = class SaleStatusHandler {
         }
       });
 
-      if (callback) callback();
+      if (this.sale.nfe) {
+        this.cancelNfe(this.user, this.sale.nfe, this.nfeJustification, (nfeResponse) => {
+          if (nfeResponse.error) History.notify(this.user.id, 'Tela do Atendimento', '{0}'.format(nfeResponse.error[0].erro), 'Falha')
+          callback(nfeResponse)
+        })
+      } else {
+        if (callback) callback();
+      }
     });
   }
 };
