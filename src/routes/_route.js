@@ -14,7 +14,9 @@ module.exports = class {
   page(path, callback) {
     return this.register('get', '', path, (req, ...params) => {
       callback(req, ...params);
-      req.session.lastPath = path;
+
+      req.session.lastPath = req.path;
+      console.log(req.session.lastPath);
     });
   }
 
