@@ -113,7 +113,7 @@ function onBindViewsListeners() {
     });
 }
 
-functi {
+function htmlEditor() {
   var htmlEditor = $('#html-editor')
 
   if (!htmlEditor.length) {
@@ -194,6 +194,7 @@ function onSizesRefreshed() {
 
 function onOtherBindingRules() {
   if (product?.conteudo?.includes('<style>')) {
+
   } else if (window.editor) {
     $('#html-editor').remove()
     $('.description-editor').show()
