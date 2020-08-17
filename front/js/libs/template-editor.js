@@ -172,8 +172,8 @@ class TemplateEditor {
       attribution: false,
       key: 'AV:4~?3xROKLJKYHROLDXDR@d2YYGR_Bc1A8@5@4:1B2D2F2F1?1?2A3@1C1',
       placeholderText: 'Escreva alguma coisa...',
-      htmlRemoveTags: ['script'],
-      htmlAllowedAttrs: ['title', 'href', 'alt', 'src', 'style', 'class', 'id', 'name', 'placeholder', 'value', 'media'],
+      //htmlRemoveTags: ['script'],
+      //htmlAllowedAttrs: ['title', 'href', 'alt', 'src', 'style', 'class', 'id', 'name', 'placeholder', 'value', 'media'],
 
       // Define new inline styles.
       inlineClasses: {
@@ -205,7 +205,7 @@ class TemplateEditor {
 
     options = { ...options, ...this.getImageUploadOptions(), ...this.getEvents() };
 
-    console.log(options);
+    //console.log(options);
 
     return options;
   }
@@ -215,13 +215,13 @@ class TemplateEditor {
     return new Promise((resolve, reject) => {
       this.editor = new FroalaEditor(selector, this.getDefaultOptions(), () => {
         // Remover selo Froala
-        $("p[data-f-id='pbf']").remove();
-        $('[fr-original-style]').remove();
+        //$("p[data-f-id='pbf']").remove();
+        //$('[fr-original-style]').remove();
 
         resolve(this.editor);
       });
     });
   }
 
-  hide() {}
+  //hide() {}
 }
