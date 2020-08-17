@@ -127,23 +127,10 @@ $(document).ready(() => {
   createCombo();
 
   Dropdown.on('.icon-dots', true, true)
-  .item('/img/loader/refresh.svg', 'Recarregar Fabricantes', (helper) => {
-    var $fatherManufac = $('#manufac').parent()
-    var $ImgRefresh = $('<img>').attr('src', '/img/loader/circle.svg').addClass('mini-icon-button')
-
-    $fatherManufac.append($ImgRefresh.addClass('refresh-manufac'))
-    callRefreshManufacturer()
+    .item('/img/loader/refresh.svg', 'Recarregar Fabricantes', (helper) => {
+      _post('/stock/refresh-attrs', () => { })
   }).onMouseLeave()
 })
-
-function callRefreshManufacturer() {
-  comboManufacturer.setData('')
-  createCombo()
-
-  setTimeout(() => {
-    $('.refresh-manufac').attr('src', '/img/checked.png').fadeOut(3000)
-  }, 2000)
-}
 
 function createCombo() {
   comboManufacturer = new ComboBox($('#manufac'), '/stock/storer-attr?attr=Fabricante');
@@ -155,13 +142,7 @@ function createCombo() {
     })
     .setOnItemSelect((item, index) => {
       $('#manufac').val(item.value);
-    })
-
-    .load()
-
-    setTimeout(() => {
-      $('.refresh-manufac').remove()
-    }, 5000)
+    }).load()
 }
 function showAvatarCropper() {
   $('.avatar-holder').width(300).height(300);

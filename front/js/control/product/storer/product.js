@@ -29,22 +29,9 @@ function onRefresh() {
 
 function refreshManufacturerList() {
   Dropdown.on('.manufacturer-dots', true, true)
-  .item('/img/loader/refresh.svg', 'Recarregar Fabricantes', (helper) => {
-    var $fatherManufac = $('.manufacturer-dots').parent()
-    var $ImgRefresh = $('<img>').attr('src', '/img/loader/circle.svg').addClass('mini-icon-button')
-    $fatherManufac.append($ImgRefresh.addClass('refresh-manufac'))
-
-    callManufacturerRestorer()
+  .item('/img/loader/refresh.svg', 'Recarregar Atributos', (helper) => {
+    _post('/stock/refresh-attrs', () => {})
   })
-}
-
-function callManufacturerRestorer() {
-  comboRefresh.setData('')
-  onBindComboBoxes()
-
-  setTimeout(() => {
-    $('.refresh-manufac').attr('src', '/img/checked.png').fadeOut(3000)
-  }, 2000)
 }
 
 function bindComboBox(el, data, limit) {
@@ -58,10 +45,6 @@ function bindComboBox(el, data, limit) {
       return { text: item.description.trim(), value: item.value };
     })
     .load();
-
-    setTimeout(() => {
-      $('.refresh-manufac').remove()
-    }, 5000)
 }
 
 function onBindViewsListeners() {

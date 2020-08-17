@@ -5,6 +5,10 @@ module.exports = class AttributesHandler {
     return CacheAttrs.isCached();
   }
 
+  clearCache(callback) {
+    return CacheAttrs.clearCache(callback)
+  }
+
   filter(description, options) {
     this.descriptionOrTag = description;
     this.options = options;
@@ -35,13 +39,10 @@ var CacheAttrs = {
   isChanging: false,
   listeners: [],
 
-  clearCache() {
+  clearCache(callback) {
     this.cache = undefined;
     this.map = undefined;
-  },
-
-  refreshAttrs() {
-
+    callback()
   },
 
   isCached() {
