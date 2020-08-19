@@ -1,15 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+.all {
+  font-family: 'Open Sans', sans-serif;
+}
+
 .master-info {
   display: flex;
+  border-bottom: 1px solid #cecece70;
 }
 
 iframe {
-  flex: 1;
+  width: 25%;
 }
 
 .manufac-details {
   flex: 2;
+  text-align: center;
+}
+
+.manufac-details h1 {
+  margin: 2px;
 }
 
 .manufac-details span {
   display: block;
+  margin: 20px;
+  font-size: 18px;
+}
+
+.lasts-details {
+  flex: 2;
+  text-align: center;
+}
+
+.date {
+  display: inline-block;
+  margin: 10px 30px 0 30px;
+  font-size: 18px;
+}
+
+.brands {
+  width: fit-content;
+  margin: auto;
+  line-height: 15px;
+}
+
+.brands h3 {
+  margin: 12px 0 12px 0;
+}
+
+.brands p {
+  font-size: 14px;
 }

@@ -45,7 +45,7 @@ module.exports = class Enumerator extends DataAccess {
   }
 
   async _getMap() {
-    return this.get().then((data) => {
+    return this.get().then(data => {
       return data?.items?.reduce((o, item) => {
         o[item[this.mapProp || 'value']] = item;
         return o;
@@ -84,12 +84,12 @@ module.exports = class Enumerator extends DataAccess {
 
   // Find a matching for given value basing of enum.items
   async hunt(value, prop = 'name') {
-    return this.get().then((data) => {
+    return this.get().then(data => {
       var def;
-      var r = data?.items?.find((each) => {
+      var r = data?.items?.find(each => {
         def = each.default ? each : def;
         return (
-          each?.[prop]?.split(',')?.some((part) => {
+          each?.[prop]?.split(',')?.some(part => {
             return part.trim() === value.trim();
           }) || (this.useDef ? def : null)
         );
@@ -100,13 +100,13 @@ module.exports = class Enumerator extends DataAccess {
 
   // Find the best match for given array basing of enum.items
   async best(arrValue, prop = 'name') {
-    return this.get().then((data) => {
+    return this.get().then(data => {
       var def;
-      var r = data?.items?.reduce(
+      var selected = data?.items?.reduce(
         (result, each) => {
           def = each.default ? each : def;
 
-          var cns = each?.[prop]?.split(',')?.map((s) => s.trim());
+          var cns = each?.[prop]?.split(',')?.map(s => s.trim());
           var compare = Arr.matchCompare(cns, arrValue);
 
           compare.item = each;
@@ -116,7 +116,9 @@ module.exports = class Enumerator extends DataAccess {
         { matches: 0, waste: 100 }
       );
 
-      return r.item || (this.useDef ? def : null);
+      var result = selected.matches == 0 && this.useDef && def ? def : selected?.item;
+
+      return result;
     });
   }
 };
