@@ -31,7 +31,9 @@ module.exports = class ProductDiagnostics {
     } else if (isMoreThanXDaysRegistered(product, 3)) {
       if (!hasSales(stocks, 7)) {
         if (hasStock(product, true)) {
-          if (!isVisible(product)) {
+          if (isMagentoProblem(product)) {
+            this._storeFix(product, 'MAGENTO_PROBLEM');
+          } else if (!isVisible(product)) {
             this._storeFix(product, 'NOT_VISIBLE');
           }
 
@@ -308,7 +310,7 @@ function hasLocalNoStock(product, stocks) {
 }
 
 function isMagentoProblem(product) {
-  return !product.feedProduct || (product.feedProduct && product.feedProduct.quantity == 0);
+  return !product.feedProduct || (product.feedProduct && product.feedProduct.quantity === 0);
 }
 
 function isMoreThanXDaysRegistered(product, days) {
