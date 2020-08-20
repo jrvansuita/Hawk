@@ -1,41 +1,40 @@
-
 module.exports = class SaleStock extends DataAccess {
-  constructor (sku, total, cost, quantity, stock, size, manufacturer, brand, category, gender, season) {
-    super()
-    this.sku = Str.def(sku)
-    this.date = Dat.today()
-    this.total = Floa.def(total)
-    this.cost = Floa.def(cost)
-    this.quantity = Num.def(quantity)
-    this.stock = Num.def(stock) || 1
-    this.size = Str.def(size)
-    this.quantity_sizes = {}
+  constructor(sku, total, cost, quantity, stock, size, manufacturer, brand, category, gender, season) {
+    super();
+    this.sku = Str.def(sku);
+    this.date = Dat.today();
+    this.total = Floa.def(total);
+    this.cost = Floa.def(cost);
+    this.quantity = Num.def(quantity);
+    this.stock = Num.def(stock) || 1;
+    this.size = Str.def(size);
+    this.quantity_sizes = {};
 
-    this.manufacturer = Str.def(manufacturer)
-    this.brand = Str.def(brand)
-    this.category = Str.def(category)
-    this.gender = Str.def(gender)
-    this.season = Str.def(season)
+    this.manufacturer = Str.def(manufacturer);
+    this.brand = Str.def(brand);
+    this.category = Str.def(category);
+    this.gender = Str.def(gender);
+    this.season = Str.def(season);
   }
 
-  static getKey () {
-    return ['sku', 'date']
+  static getKey() {
+    return ['sku', 'date'];
   }
 
-  static from (item, product) {
-    var skuParts = item.codigo.split('-')
+  static from(item, product) {
+    var skuParts = item.codigo.split('-');
 
     if (product.category) {
-      product.category = product.category.split(',').pop().trim()
+      product.category = product.category.split(',').pop().trim();
     }
 
-    var sku = skuParts[0]
-    sku = sku || item.codigo
+    var sku = skuParts[0];
+    sku = sku || item.codigo;
 
     return new SaleStock(
       sku,
       Math.abs(parseFloat(item.valorTotal)),
-      parseFloat(item.cost),
+      parseFloat(product.cost), // parseFloat(item.cost),
       Num.def(item.quantidade),
       Num.def(product.quantity),
       skuParts[1],
@@ -44,18 +43,18 @@ module.exports = class SaleStock extends DataAccess {
       product.category || item.category,
       item.gender,
       item.season
-    )
+    );
   }
 
-  save (callback) {
+  save(callback) {
     var incData = {
       total: this.total,
       cost: this.cost,
-      quantity: this.quantity
-    }
+      quantity: this.quantity,
+    };
 
     if (this.size.length) {
-      incData['quantity_sizes.' + this.size] = this.quantity
+      incData['quantity_sizes.' + this.size] = this.quantity;
     }
 
     var upsertData = {
@@ -64,82 +63,87 @@ module.exports = class SaleStock extends DataAccess {
       category: this.category,
       gender: this.gender,
       season: this.season,
-      $inc: incData
-    }
+      $inc: incData,
+    };
 
     // Se o stock estiver vazio, o produto ainda nao foi importado pela integracao
     // Ainda nao existe no db, entao seta a quantidade que vendeu
     if (this.stock) {
-      upsertData.stock = this.stock
+      upsertData.stock = this.stock;
     } else {
-      incData.stock = this.quantity
+      incData.stock = this.quantity;
     }
 
     SaleStock.upsert(this.getPKQuery(), upsertData, (err, doc) => {
       if (callback) {
-        callback(err, doc)
+        callback(err, doc);
       }
-    })
+    });
   }
 
-  static byDayChart (query, callback) {
-    SaleStock.aggregate([{
-      $match: query
-    },
-    {
-      $group: {
-        _id: {
-          year: {
-            $year: '$date'
+  static byDayChart(query, callback) {
+    SaleStock.aggregate(
+      [
+        {
+          $match: query,
+        },
+        {
+          $group: {
+            _id: {
+              year: {
+                $year: '$date',
+              },
+              month: {
+                $month: '$date',
+              },
+              day: {
+                $dayOfMonth: '$date',
+              },
+            },
+            sum_total: {
+              $sum: '$total',
+            },
+            sum_cost: {
+              $sum: '$cost',
+            },
+            sum_quantity: {
+              $sum: '$quantity',
+            },
+
+            sum_stock: {
+              // $sum: "$stock"
+              // Retorna o que for maior
+              $sum: { $max: ['$stock', '$quantity'] },
+            },
+
+            sum_profit: {
+              $sum: { $subtract: ['$total', '$cost'] },
+            },
           },
-          month: {
-            $month: '$date'
-          },
-          day: {
-            $dayOfMonth: '$date'
-          }
-        },
-        sum_total: {
-          $sum: '$total'
-        },
-        sum_cost: {
-          $sum: '$cost'
-        },
-        sum_quantity: {
-          $sum: '$quantity'
         },
 
-        sum_stock: {
-          // $sum: "$stock"
-          // Retorna o que for maior
-          $sum: { $max: ['$stock', '$quantity'] }
+        {
+          $addFields: {
+            //  perc_sold : { $sum: { $multiply: [{$divide: ["$sum_quantity", "$sum_stock"]} , 100]} },
+
+            perc_sold: { $sum: { $divide: [{ $multiply: ['$sum_quantity', 100] }, '$sum_stock'] } },
+          },
         },
 
-        sum_profit: {
-          $sum: { $subtract: ['$total', '$cost'] }
+        {
+          /* sort descending (latest subscriptions first) */
+          $sort: {
+            '_id.year': 1,
+            '_id.month': 1,
+            '_id.day': 1,
+          },
+        },
+      ],
+      function (err, res) {
+        if (callback) {
+          callback(err, res);
         }
       }
-    },
-
-    {
-      $addFields:
-      {
-        //  perc_sold : { $sum: { $multiply: [{$divide: ["$sum_quantity", "$sum_stock"]} , 100]} },
-
-        perc_sold: { $sum: { $divide: [{ $multiply: ['$sum_quantity', 100] }, '$sum_stock'] } }
-      }
-    },
-
-    {
-      /* sort descending (latest subscriptions first) */
-      $sort: {
-        '_id.year': 1,
-        '_id.month': 1,
-        '_id.day': 1
-      }
-    }],
-    function (err, res) {
-      if (callback) { callback(err, res) }
-    })
+    );
   }
-}
+};
