@@ -25,7 +25,7 @@ module.exports = class SaleLoader {
     if (!this.innerAttrsLoaded && this.sale) {
       this.innerAttrsLoaded = true
       this.sale.transport = Util.transportName(this.sale.transportador)
-      this.sale.paymentType = 'Não Encontrato'
+      this.sale.paymentType = 'Não Encontrado'
 
       this.sale.observacaoInterna.split('\n').forEach((eachLine) => {
         if (eachLine.includes('dias')) {
@@ -119,7 +119,6 @@ module.exports = class SaleLoader {
             this.sale.itemsQuantity = items.reduce(function (a, b) {
               return a + parseFloat(b.quantidade)
             }, 0)
-
             this._callbackHit(onCallNext, onCallOuter)
           })
       } else {
