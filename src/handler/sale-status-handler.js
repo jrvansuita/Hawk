@@ -213,7 +213,7 @@ module.exports = class SaleStatusHandler {
   }
 
   setNfeJustification(message) {
-    this.nfeJustification = message;
+    this.nfeJustification = this.prefix + message;
     return this;
   }
 
@@ -268,6 +268,11 @@ module.exports = class SaleStatusHandler {
     this.onNeedStoreUpdate = callback;
     return this;
   }
+
+  checkNfNeedCancel() {
+    this.checkNfCancel = true
+    return this;
+}
 
   _loadMagentoSale(callback) {
     if (this.onNeedStoreUpdate !== undefined) {
@@ -328,10 +333,12 @@ module.exports = class SaleStatusHandler {
         }
       });
 
-      if (this.sale.nfe) {
-        this.cancelNfe(this.user, this.sale.nfe, this.nfeJustification, (nfeResponse) => {
-          this._cancelNfe(nfeResponse, callback)
-        })
+      if (this.checkNfCancel) {
+        if (this.sale.nfe) {
+          this.cancelNfe(this.user, this.sale.nfe, this.nfeJustification, (nfeResponse) => {
+            this._cancelNfe(nfeResponse, callback)
+          })
+        }
       } else {
         if (callback) callback(this.sale);
       }
