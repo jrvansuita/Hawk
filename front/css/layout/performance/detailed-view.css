@@ -73,7 +73,6 @@ iframe {
 .tb-holder th {
   width: 120px;
   padding: 15px;
-  border-left: 2px solid #d8d8d8;
   position: sticky;
   top: 0;
   z-index: 99999;
@@ -126,6 +125,16 @@ iframe {
   padding: 10px;
 }
 
+.subtotal {
+  display: inline-block;
+  margin-right: 20px;
+  margin-left: 20px;
+  text-align: end;
+  position: relative;
+  left: 30%;
+  font-size: 17px;
+}
+
 .footer-details {
   text-align: center;
 }
@@ -139,3 +148,59 @@ iframe {
 }
 
 tr:nth-child(even) { background-color: #f2f2f2; }
+
+@media print {
+  .tb-holder {
+    border-spacing: 0 !important;
+    background: #f7f7f7;
+    position: relative;
+    width: 910px;
+  }
+
+  iframe {
+    width: 40%;
+    margin-bottom: 20px;
+    height: 170px;
+  }
+
+  .manufac-details h1 {
+    font-size: 15px;
+  }
+
+  .manufac-details {
+    flex: 1;
+  }
+
+  .manufac-details span {
+    margin-bottom: 2px;
+  }
+
+  .brands p {
+    margin-left: 10px;
+  }
+
+  .tb-holder th {
+    border: 1px solid;
+  }
+
+  .line-itens td {
+    border: 1px solid;
+  }
+
+  .tb-holder th:first-child,
+  .tb-holder td:first-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .tb-holder th:last-child,
+  .tb-holder td:last-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .subtotal {
+    left: 20%;
+    margin: 5px 5px 20px 5px;
+  }
+}

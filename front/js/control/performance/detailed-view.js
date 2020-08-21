@@ -1,15 +1,16 @@
 var data = window.opener.detailed
 
 $(document).ready(() => {
+    console.log(data);
     data.ordenedSizes = orderByLetters(orderSizes(data.size))
     masterDetails()
     buildTableItens()
-    footerDetaisl()
+    footerDetails()
 })
 
 function masterDetails() {
     var companyManu = $('<h1>').text(data.manufacturer[0].name)
-    var totalPrice = $('<span>').text(Num.money(data.total))
+    var totalPrice = $('<span>').text(Num.money(data.cost))
     var skuCount = $('<span>').text('Peças:' + ' ' + Num.parse(data.items).replace(',00', ''))
 
     $('.manufac-details').append(companyManu, totalPrice, skuCount)
@@ -38,13 +39,21 @@ function masterDetails() {
 
         buildHeadTable(thead)
 
+        var costTotal = 0
+        var sizeTotal = 0
+
         itemDetail[e].forEach((each) => {
             var $tr = $('<tr>').addClass('line-itens')
             var sku = $('<td>').append($('<p>').text(each.name))
             var soldSizes = $('<td>').text(each.items).addClass('total-itens')
             var itemCost = $('<td>').text(Num.money(each.itemCost)).addClass('item-cost')
-            var valueSold = $('<td>').text(Num.money(each.total)).addClass('value-sold')
+            var value = each.items * each.itemCost
+            var valueSold = $('<td>').text(Num.money(parseInt(each.items) * Number(each.itemCost))).addClass('value-sold')
 
+            costTotal += value
+            sizeTotal += each.items
+
+            console.log(each.items.length);
             $tr.append(sku)
 
             data.ordenedSizes.forEach((s) => {
@@ -55,8 +64,11 @@ function masterDetails() {
 
             sizesBuilder($tr, each.sizes);
         })
+        var subSize = $('<p>').text('Total Tamanho: ' + sizeTotal).addClass('subtotal')
+        var subVal = $('<p>').text('Total Custo: ' + Num.money(costTotal)).addClass('subtotal')
 
-        $('.master-itens').append($div.append($('<h2>').text(e), holder))
+        console.log();
+        $('.master-itens').append($div.append($('<h2>').text(e), holder, subSize, subVal))
      })
  }
 
@@ -83,10 +95,10 @@ function masterDetails() {
 
  function orderSizes(sizes) {
     sizes.sort(function (a, b) {
-        if (a.name > b.name) {
+        if (parseInt(a.name) > parseInt(b.name)) {
           return 1;
         }
-        if (a.name < b.name) {
+        if (parseInt(a.name) < parseInt(b.name)) {
           return -1;
         }
         return 0;
@@ -95,7 +107,7 @@ function masterDetails() {
  }
 
  function orderByLetters(sizes) {
-    var sizes = sizes.map((e) => { return e.name })
+    var sizes = sizes.map((e) => { return e.name.toUpperCase() })
 
     var s = ['RN', 'P', 'M', 'G', 'GG']
     var result = []
@@ -109,8 +121,8 @@ function masterDetails() {
     return [...new Set(result.concat(sizes))];
  }
 
- function footerDetaisl() {
-    var finalPrice = $('<p>').text('Total de Venda:' + ' ' + Num.money(data.total))
+ function footerDetails() {
+    var finalPrice = $('<p>').text('Total de Venda:' + ' ' + Num.money(data.cost))
     var finalCount = $('<p>').text('Total de Peças:' + ' ' + Num.parse(data.items).replace(',00', ''))
 
     $('.footer-details').append(finalPrice, finalCount)
