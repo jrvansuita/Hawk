@@ -82,7 +82,7 @@ module.exports = class ProductDiagnostics {
       this._storeFix(product, 'COLOR');
     }
 
-    if (isDepartmentMissing(attrBundle.names, product)) {
+    if (hasStock(product) && isDepartmentMissing(attrBundle.names, product)) {
       this._storeFix(product, 'DEPARTMENT');
     }
 
@@ -335,10 +335,12 @@ function isCostPriceMistake(product) {
 }
 
 function isDepartmentMissing(attrNames, product) {
-  var category = product?.feedProduct?.storeCategory?.trim();
+  // Essa verificação dava problema por conta que os filhos não são adicionados em categorias
+  // Comentado em 21/08
+  // var category = product?.feedProduct?.storeCategory?.trim();
   var department = product?.feedProduct?.category?.trim();
 
-  return !attrNames.includes('Departamento') || !category || !department;
+  return !attrNames.includes('Departamento') || /*! category || */ !department;
 }
 
 function isGenderMissing(attrBundle, product) {
