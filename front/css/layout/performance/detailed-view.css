@@ -63,7 +63,7 @@ iframe {
   border-spacing: 0 15px;
   background: #f7f7f7;
   position: relative;
-  padding: 0 50px;
+  padding: 20px 80px;
 }
 
 .tb-holder thead {
@@ -100,7 +100,7 @@ iframe {
 }
 
 .line-itens {
-  /* filter: drop-shadow(2px 4px 3px rgba(0, 0, 0, 0.1)); */
+  filter: drop-shadow(2px 4px 3px rgba(0, 0, 0, 0.1));
   background: #fff;
 }
 

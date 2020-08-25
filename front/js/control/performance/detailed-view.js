@@ -1,7 +1,6 @@
 var data = window.opener.detailed
 
 $(document).ready(() => {
-    console.log(data);
     data.ordenedSizes = orderByLetters(orderSizes(data.size))
     masterDetails()
     buildTableItens()
@@ -53,7 +52,6 @@ function masterDetails() {
             costTotal += value
             sizeTotal += each.items
 
-            console.log(each.items.length);
             $tr.append(sku)
 
             data.ordenedSizes.forEach((s) => {
@@ -67,7 +65,6 @@ function masterDetails() {
         var subSize = $('<p>').text('Total Tamanho: ' + sizeTotal).addClass('subtotal')
         var subVal = $('<p>').text('Total Custo: ' + Num.money(costTotal)).addClass('subtotal')
 
-        console.log();
         $('.master-itens').append($div.append($('<h2>').text(e), holder, subSize, subVal))
      })
  }
@@ -103,6 +100,7 @@ function masterDetails() {
         }
         return 0;
       });
+
       return sizes
  }
 
