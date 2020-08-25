@@ -17,6 +17,7 @@ module.exports = class SaleCustomerHandler {
       .setStatus(body.status)
       .setObsMessage(obs)
       .setCommentMessage(obs)
+      .checkNfNeedCancel()
       .setNfeJustification(body.obs)
       .setOnNeedStoreUpdate((storeSale) => {
         return body.status !== storeSale.status;
