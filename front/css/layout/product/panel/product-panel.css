@@ -69,8 +69,8 @@ table {
 
 .order-item {
   padding: 6px 6px 6px 3px;
-  margin-bottom: 5px;
   display: flex;
+  margin: 5px 0;
 }
 
 .header-title {
@@ -84,18 +84,11 @@ table {
   padding: 10px;
 }
 
-.form-content {
-  padding: 15px;
-}
-
-.input-holder > div {
-  padding-right: 15px;
-}
-
 .menu-dots {
   width: fit-content;
   height: fit-content;
   float: right;
+  margin-right: 4px;
 }
 
 .avatar-holder {
@@ -134,12 +127,12 @@ table {
 }
 
 .right-holder {
-  flex: 1;
   margin-right: 15px;
   margin-left: 15px;
   max-height: 80%;
   overflow: auto;
   height: fit-content;
+  flex: 1;
 }
 
 .in-progress table tr td {
@@ -180,14 +173,16 @@ table {
 }
 
 .content-scroll {
-  /* overflow-x: unset; */
-  margin-top: 0;
-  padding: 0;
   margin: 0;
+  width: auto;
 }
 
 .content-table {
   height: 100%;
+  width: fit-content;
+  float: right;
+  margin: 1px;
+  border-radius: 5px;
 }
 
 .brand-value {
@@ -225,4 +220,12 @@ table {
 
 .list-content {
   padding-right: 3px;
+}
+
+.button-area {
+  margin-right: 10px;
+}
+
+.date-filters-holder {
+  margin: 0 15px;
 }

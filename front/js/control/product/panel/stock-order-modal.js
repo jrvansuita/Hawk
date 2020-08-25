@@ -103,7 +103,7 @@ function bindAttachsInfo(data) {
   data.forEach((each) => {
       var $holder = $('<div>')
       var $name = $('<span>').text(each.name).attr('file-id', each.id).click(viewAttach).addClass('file-info')
-      var $delete = $('<img>').attr('src', '/img/delete-minus.png').addClass('upload-delete').data('fileId', each.id).click(deleteAttach)
+    var $delete = $('<img>').attr('src', '/img/block.png').addClass('upload-delete').data('fileId', each.id).click(deleteAttach)
     $('.files').append($holder.append($name, $delete))
     })
 }

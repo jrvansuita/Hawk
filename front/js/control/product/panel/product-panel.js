@@ -70,7 +70,7 @@ function createOrdersList(parent, orders, showAvatar) {
       var userImg = $('<img>').attr('src', each.user.avatar).addClass('mini-avatar shadow circle')
       var delivery = $('<span>').text(calculateDelivery(each.date)).addClass('info-value right')
 
-      var trOne = $('<tr>').append($('<td>').append(number), $('<td>').append(brand), $('<td>').append($('<div>').addClass('menu-dots hiddable-menu'), season))
+      var trOne = $('<tr>').append($('<td>').append(number), $('<td>').append(brand), $('<td>').append(season))
 
       if (showAvatar) {
         var tdAvatar = $('<td>').css('max-width', '33px')

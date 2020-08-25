@@ -142,7 +142,7 @@ module.exports = class ProductRoutes extends Routes {
 
     this.get('/stock-order-attr', (req, res) => {
       new StockOrderProvider().searchAttr(req.query.attr, this._resp().redirect(res));
-    });
+    }).market();
 
     this.post('/delete-order', (req, res) => {
       StockOrderVault.delete(req.body.orderId, this._resp().redirect(res));
@@ -171,7 +171,7 @@ module.exports = class ProductRoutes extends Routes {
     });
 
     this.get('/scheduling', (req, res) => {
-        res.render('product/panel/scheduling');
-    });
+      res.render('product/panel/scheduling');
+    }).market();
   }
 };
