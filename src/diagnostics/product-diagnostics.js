@@ -335,7 +335,7 @@ function isCostPriceMistake(product) {
 }
 
 function isDepartmentMissing(attrNames, product) {
-  var hasCategory = !product?.codigo?.includes('-') ? !!product?.feedProduct?.storeCategory?.trim() : true;
+  var hasCategory = !product?.codigo?.includes('-') && product?.feedProduct ? !!product?.feedProduct?.storeCategory?.trim() : true;
   var hasDepartment = !!product?.feedProduct?.category?.trim();
 
   return !attrNames.includes('Departamento') || !hasCategory || !hasDepartment;
