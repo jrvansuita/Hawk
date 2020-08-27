@@ -34,8 +34,7 @@ module.exports = class SaleStock extends DataAccess {
     return new SaleStock(
       sku,
       Math.abs(parseFloat(item.valorTotal)),
-      // parseFloat(product.cost),
-      parseFloat(product.cost * item.quantidade), // parseFloat(item.cost),
+      parseFloat(product.cost), // parseFloat(item.cost),
       Num.def(item.quantidade),
       Num.def(product.quantity),
       skuParts[1],
@@ -50,7 +49,8 @@ module.exports = class SaleStock extends DataAccess {
   save(callback) {
     var incData = {
       total: this.total,
-      cost: this.cost,
+      // ele incrementa o custo com o valor atual no banco
+      // cost: this.cost,
       quantity: this.quantity,
     };
 
@@ -65,6 +65,8 @@ module.exports = class SaleStock extends DataAccess {
       gender: this.gender,
       season: this.season,
       $inc: incData,
+      // custo não é incrementado
+      cost: this.cost,
     };
 
     // Se o stock estiver vazio, o produto ainda nao foi importado pela integracao
