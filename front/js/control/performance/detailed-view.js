@@ -83,7 +83,8 @@ function masterDetails() {
  function sizesBuilder(holder, sizes) {
     Object.keys(sizes).forEach((key) => {
         holder.find('td').each((index, each) => {
-            if (key == $(each).attr('size')) {
+            console.log($(each).attr('size'))
+            if (key.toUpperCase() == $(each).attr('size')) {
                 $(each).text(sizes[key])
             } else if ($(each).text().length === 0) { $(each).text('-') }
         })
