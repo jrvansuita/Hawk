@@ -139,9 +139,18 @@ function setLoading(isLoading) {
 }
 
 function saveNewOrder() {
-  _post('/stock/new-order', { data: buildFormData() }, (result) => {
-    window.location.reload()
+  $.ajax({
+    type: 'POST',
+    url: '/stock/new-order',
+    data: buildFormData(),
+    success: (data) => {
+      window.location.reload()
+    }
   })
+
+  // _post('/stock/new-order', { data: buildFormData() }, (result) => {
+  //   window.location.reload()
+  // })
 }
 
 function buildFormData() {

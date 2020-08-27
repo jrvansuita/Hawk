@@ -134,11 +134,11 @@ module.exports = class ProductRoutes extends Routes {
     });
 
     this.post('/new-order', (req, res) => {
-      req.body.data.user = req.session.loggedUser;
-      StockOrderVault.storeFromScreen(req.body?.data, order => {
-        res.redirect('/stock/panel');
+      req.body.user = req.session.loggedUser;
+      StockOrderVault.storeFromScreen(req.body, order => {
+        this._resp().success(res, order);
       });
-    });
+    }).market();
 
     this.get('/stock-order-attr', (req, res) => {
       new StockOrderProvider().searchAttr(req.query.attr, this._resp().redirect(res));
@@ -162,7 +162,7 @@ module.exports = class ProductRoutes extends Routes {
       StockOrderVault.uploadAttach(req.files.attach, fileId => {
         this._resp().success(res, fileId);
       });
-    });
+    }).market();
 
     this.post('/order-attach-delete', (req, res) => {
       StockOrderVault.deleteAttach(req.body.fileId, (result) => {

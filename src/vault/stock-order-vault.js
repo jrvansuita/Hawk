@@ -3,7 +3,9 @@ const GDriveUpload = require('../gdrive/gdrive-api')
 
 module.exports = class {
   static storeFromScreen(params, callback) {
-    params.attachs = Array.isArray(params.attachs) ? params.attachs : params.attachs.split(',')
+    if (params.attachs) {
+      params.attachs = Array.isArray(params.attachs) ? params.attachs : params.attachs.split(',')
+    }
 
     params.user = { name: params.user.name, avatar: params.user.avatar, id: params.user.id }
 
