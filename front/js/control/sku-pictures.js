@@ -210,19 +210,7 @@ function showSkuError(msg) {
 }
 
 function addProduct(sku) {
-  $('.skus-box').append(getToastItem(sku, sku));
-}
-
-function getToastItem(label, data, clazz) {
-  var toast = $('<span>').addClass('toast-item').data('val', data).addClass(clazz).text(label);
-
-  if (!clazz) {
-    toast.click(() => {
-      toast.remove();
-    });
-  }
-
-  return toast;
+  $('.skus-box').append(Util.getToastItem(sku, sku));
 }
 
 function getInstaId() {

@@ -20,6 +20,7 @@ module.exports = class User extends DataAccess {
     this.type = Num.def(type, UserType.EMPLOYEE) // UserType.EMPLOYEE
     this.office = Str.def(office)
     this.manufacturer = Str.def(manufacturer) // Guarda o nome do fornecedor associado
+    this.brands = []
   }
 
   static getKey() {

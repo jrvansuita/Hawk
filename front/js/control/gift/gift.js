@@ -119,19 +119,7 @@ function handleProduct (sku) {
 }
 
 function addProduct (sku) {
-  $('.skus-box').append(getToastItem(sku, sku))
-}
-
-function getToastItem (label, data, clazz) {
-  var toast = $('<span>').addClass('toast-item').data('val', data).addClass(clazz).text(label)
-
-  if (!clazz) {
-    toast.click(() => {
-      toast.remove()
-    })
-  }
-
-  return toast
+  $('.skus-box').append(Util.getToastItem(sku, sku))
 }
 
 function showSkuError (msg) {
@@ -185,9 +173,9 @@ function addCondition (attr, sign, value) {
   }
 
   var group = $('<div>').addClass('cond-group')
-    .append(getToastItem(label, attr, 'attr'))
-    .append(getToastItem(signLabel, sign, 'sign'))
-    .append(getToastItem(valueLabel, value, 'value'))
+    .append(Util.getToastItem(label, attr, 'attr'))
+    .append(Util.getToastItem(signLabel, sign, 'sign'))
+    .append(Util.getToastItem(valueLabel, value, 'value'))
 
   group.click(() => {
     group.remove()

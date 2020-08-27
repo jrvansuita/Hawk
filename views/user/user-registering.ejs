@@ -86,7 +86,6 @@
                 
 
 
-
               </div>
             </div>
 
@@ -104,12 +103,20 @@
                 <input type="number" id="type"  class="input-val simple-material-input" placeholder="Tipo de Usuário" name="type" value="<%=user ? user.type : ''%>" autocomplete="off"/ style="display: none;">
                 <input type="text" id="office"  class="input-val simple-material-input" placeholder="Tipo de Usuário" name="office" value="<%=user ? user.office : ''%>" autocomplete="off"/>
                 
+                
               </div>
             </div>
 
-
           </div>
+          <%if(user.type === 1){%>
+          <div class="user-brands">
+            <input class="simple-material-input brand-input" type="text" placeholder="Marcas"/>
+            <input class="simple-material-input" id="brands" name="brands" type="text" placeholder="Marcas" style="display: none;">
+            <div class="sel-box">
 
+            </div>
+          </div>
+          <%}%>
 
           <label class="token-label"> Token de Usuário </label>
           <textarea class="input-val simple-material-input" id="token" placeholder="Token" name="token"  rows="5" title="Token de acesso a API"><%=user ? user.token : ''%></textarea>

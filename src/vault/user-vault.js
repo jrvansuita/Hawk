@@ -43,6 +43,8 @@ module.exports = class {
       }
     })
 
+      user.brands = params.brands ? params.brands.split('|') : []
+
     // Se o Usuario não tem permissão para alterar as próprias configurações
     // Todas as configs não serão setadas. Elimitar o atributo setts para não sobreescrever tudo
     if (Object.keys(user.setts).length === 0) {

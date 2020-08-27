@@ -5,10 +5,7 @@ $(document).ready(() => {
     if (checkFormBeforeSave()) saveNewOrder()
   })
 
-  $('.input-combo').each((index, el) => {
-    var attr = $(el).data('attr')
-    bindComboBox($(el), attr)
-  })
+  bindComboBox()
 
   $('#upload-img').click(function () {
     $('#input-upload').click()
@@ -28,10 +25,35 @@ function checkFormBeforeSave() {
 }
 
 function bindComboBox(el, data, limit) {
+  if (loggedUser.type === 1) {
+    buildCombo($('#season'), 'Estacao')
+    $('#manufacturer').attr('disabled', true).val(loggedUser.manufacturer)
+    buildBrandsFromUser()
+  } else {
+    $('.input-combo').each((index, el) => {
+      var attr = $(el).data('attr')
+      buildCombo($(el), attr)
+    })
+  }
+}
+
+function buildBrandsFromUser() {
+ var combo = new ComboBox($('#brand'), loggedUser.brands)
+    .setAutoShowOptions(true)
+    .setOnItemBuild((item, index) => {
+      return { text: item, value: item }
+    })
+
+  if (loggedUser.brands.length === 1) {
+    $('#brand').val(loggedUser.brands[0])
+  }
+  combo.load()
+}
+
+function buildCombo(el, data) {
   var url = '/stock/stock-order-attr?attr=' + data
   new ComboBox(el, url)
     .setAutoShowOptions(true)
-    .setLimit(limit)
     .setOnItemBuild((item, index) => {
       return { text: item.description.trim(), value: item.value }
     }).load()

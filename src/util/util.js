@@ -367,6 +367,19 @@ var Util = {
     els.css('padding-left', parseInt(els.css('padding-left')) + direction * 4);
     els.css('padding-right', parseInt(els.css('padding-right')) + direction * 4);
     els.css('padding-top', parseInt(els.css('padding-top')) + direction * 2);
+  },
+
+  getToastItem(label, data, clazz, click) {
+    var toast = $('<span>').addClass('toast-item').data('val', data).addClass(clazz).text(label);
+
+    if (!clazz) {
+      toast.click(() => {
+        toast.remove();
+        if (click) click()
+      });
+    }
+
+    return toast;
   }
 
 }

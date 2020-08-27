@@ -48,14 +48,15 @@
         </div>
       </a>
     </li>
-    <%}%>
-    <li class="menu-item">
-      <a href="/stock/scheduling">
-        <div class="menu-button title">
-          <span class="menu-label">Agendamento</span>
-        </div>
-      </a>
-    </li>
-    <%}%>
+    <%}%><%}%>
+    <%if(locals.loggedUser.type === 1 || locals.loggedUser.full){%>
+        <li class="menu-item">
+          <a href="/stock/scheduling">
+            <div class="menu-button title">
+              <span class="menu-label">Agendamento</span>
+            </div>
+          </a>
+        </li>
+        <%}%>
   </ul>
 </nav>

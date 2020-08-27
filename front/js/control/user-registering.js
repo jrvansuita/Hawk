@@ -4,6 +4,11 @@ var passPlaceHolder = 'Impossível Decifrar';
 var comboManufaturer;
 
 $(document).ready(() => {
+  if (selectedUser.type === 1) {
+    bindBrandCombo()
+    placeBrandTags()
+  }
+
   new ComboBox($('#user-search'), '/performance/profiles')
     .setAutoShowOptions()
     .setOnItemBuild((user, index) => {
@@ -302,4 +307,43 @@ function loadMenuOpts() {
 
     $('.menus-opts-inner').append(createCheckboxElement(null, 'menu-' + name.toLowerCase(), name, checked || selectedUser.full, selectedUser.full));
   });
+}
+
+function bindBrandCombo() {
+  new ComboBox($('.brand-input'), '/stock/stock-order-attr?attr=Marca')
+    .setAutoShowOptions()
+    .setOnItemBuild((brand, index) => {
+      return { text: brand.description.trim(), value: brand.value };
+    })
+    .setOnItemSelect((brand, index) => {
+      if (Arr.notIn(checkBrand(), brand.value)) {
+        $('.sel-box').append(Util.getToastItem(brand.value, brand.value, null, getBrandList))
+        getBrandList()
+      }
+    })
+    .load()
+}
+
+function getBrandList() {
+  var value
+  $('.sel-box span').each((i, each) => {
+    value = value ? value + '|' + $(each).text() : $(each).text()
+  })
+  $('#brands').val(value)
+}
+
+function placeBrandTags() {
+  if (selectedUser.brands) {
+    selectedUser.brands.forEach((each) => {
+      $('.sel-box').append(Util.getToastItem(each, each, null, getBrandList))
+    })
+  }
+}
+
+function checkBrand() {
+  return $('.sel-box .toast-item')
+    .map(function () {
+      return $(this).data('val');
+    })
+    .get();
 }
