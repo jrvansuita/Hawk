@@ -2,7 +2,7 @@ module.exports = class SaleStock extends DataAccess {
   constructor(sku, total, cost, quantity, stock, size, manufacturer, brand, category, gender, season) {
     super();
     this.sku = Str.def(sku);
-    this.date = Dat.today();
+    this.date = Dat.tomorrow(); // Dat.today();
     this.total = Floa.def(total);
     this.cost = Floa.def(cost);
     this.quantity = Num.def(quantity);
@@ -34,7 +34,7 @@ module.exports = class SaleStock extends DataAccess {
     return new SaleStock(
       sku,
       Math.abs(parseFloat(item.valorTotal)),
-      parseFloat(product.cost), // parseFloat(item.cost),
+      parseFloat(product.cost) * Num.def(item.quantidade), // parseFloat(item.cost),
       Num.def(item.quantidade),
       Num.def(product.quantity),
       skuParts[1],
@@ -49,8 +49,7 @@ module.exports = class SaleStock extends DataAccess {
   save(callback) {
     var incData = {
       total: this.total,
-      // ele incrementa o custo com o valor atual no banco
-      // cost: this.cost,
+      cost: this.cost,
       quantity: this.quantity,
     };
 
@@ -65,8 +64,6 @@ module.exports = class SaleStock extends DataAccess {
       gender: this.gender,
       season: this.season,
       $inc: incData,
-      // custo não é incrementado
-      cost: this.cost,
     };
 
     // Se o stock estiver vazio, o produto ainda nao foi importado pela integracao
