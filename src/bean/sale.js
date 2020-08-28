@@ -2,7 +2,7 @@ module.exports = class Sale extends DataAccess {
   constructor(number, date, deliveryTime, freightValue, transport, total, productCost, quantityItems, uf, city, paymentType, coupom, discount, repurchase, weight) {
     super();
     this.number = Str.def(number);
-    this.date = Dat.tomorrow(); // Dat.def(date)
+    this.date = Dat.def(date);
 
     this.deliveryTime = Num.def(deliveryTime);
     this.freightValue = Floa.def(freightValue);

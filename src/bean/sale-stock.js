@@ -2,7 +2,7 @@ module.exports = class SaleStock extends DataAccess {
   constructor(sku, total, cost, quantity, stock, size, manufacturer, brand, category, gender, season) {
     super();
     this.sku = Str.def(sku);
-    this.date = Dat.tomorrow(); // Dat.today();
+    this.date = Dat.today();
     this.total = Floa.def(total);
     this.cost = Floa.def(cost);
     this.quantity = Num.def(quantity);
