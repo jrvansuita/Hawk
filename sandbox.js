@@ -1,12 +1,36 @@
 const Initilizer = require('./src/_init/initializer.js');
+const Dat = require('./src/util/date.js');
+const Num = require('./src/util/number.js');
 
 new Initilizer()
   .setSandboxMode(true)
   .begin()
   .then(async () => {
-    const SaleKeeper = require('./src/loader/sale-keeper.js');
-
-    new SaleKeeper('942830').requestClient().save((sale) => {});
+    // const SaleKeeper = require('./src/loader/sale-keeper.js');
+    // const SaleStock = require('./src/bean/sale-stock.js');
+    // SaleStock.find(
+    //   {
+    //     date: {
+    //       $gte: Dat.yesterday().begin(),
+    //       $lte: Dat.today().end(),
+    //     },
+    //   },
+    //   (_err, doc) => {
+    //     doc.forEach((each) => {
+    //       // if (each.manufacturer.includes('Sapek')) {
+    //       console.log('------------------------------');
+    //       var markup = Floa.abs(each.total / each.cost, 2);
+    //       console.log('[' + each.sku + '] Venda: ' + Num.money(each.total) + ' | Custo: ' + Num.money(each.cost) + ' = ' + markup);
+    //       if (Num.def(markup) > 3) {
+    //         // SaleStock.find({ sku: each.sku, date: each.date }, (_err, doc) => {
+    //         //   console.log(doc);
+    //         // });
+    //         SaleStock.upsert({ sku: each.sku, date: each.date }, { cost: each.cost * each.quantity });
+    //       }
+    //       // }
+    //     });
+    //     // console.log(doc);
+    // new SaleKeeper('942830').requestClient().save((sale) => {});
   });
 
 // const SaleStatusHandler = require('./src/handler/sale-status-handler.js');
