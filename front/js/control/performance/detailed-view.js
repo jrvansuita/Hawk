@@ -43,7 +43,8 @@ function masterDetails() {
 
         itemDetail[e].forEach((each) => {
             var $tr = $('<tr>').addClass('line-itens')
-            var sku = $('<td>').append($('<p>').text(each.name))
+            var $img = $('<img>').addClass('image-product')
+            var sku = $('<td>').append($('<div>').append($img, $('<p>').text(each.name).addClass('sku')).addClass('col-name'))
             var soldSizes = $('<td>').text(each.items).addClass('total-itens')
             var itemCost = $('<td>').text(Num.money(each.itemCost)).addClass('item-cost')
             var value = each.items * each.itemCost
@@ -52,6 +53,7 @@ function masterDetails() {
             costTotal += value
             sizeTotal += each.items
 
+            showPictures($img, each.name)
             $tr.append(sku)
 
             data.ordenedSizes.forEach((s) => {
@@ -83,7 +85,7 @@ function masterDetails() {
  function sizesBuilder(holder, sizes) {
     Object.keys(sizes).forEach((key) => {
         holder.find('td').each((index, each) => {
-            console.log($(each).attr('size'))
+            // console.log($(each).attr('size'))
             if (key.toUpperCase() == $(each).attr('size')) {
                 $(each).text(sizes[key])
             } else if ($(each).text().length === 0) { $(each).text('-') }
@@ -125,4 +127,15 @@ function masterDetails() {
     var finalCount = $('<p>').text('Total de Peças:' + ' ' + Num.parse(data.items).replace(',00', ''))
 
     $('.footer-details').append(finalPrice, finalCount)
+ }
+
+ function showPictures($img, sku) {
+    $('#pic-show').click(() => {
+        $img.attr('src', '/product/image-redirect?sku=' + sku).toggleClass('visible')
+        if ($img.css('display') !== 'none') {
+            $('#pic-show').empty().text('Ocultar Fotos')
+        } else {
+            $('#pic-show').empty().text('Mostrar Fotos')
+        }
+    })
  }

@@ -19,10 +19,11 @@ body {
 
 .error {
   display: none;
-  margin-bottom: 15px;
+  /* margin-bottom: 15px; */
   font-size: 13px;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
+  /* padding-bottom: 20px; */
+  /* margin-bottom: 20px; */
+  padding-top: 20px;
 }
 
 .login-els {
@@ -62,7 +63,7 @@ body {
 }
 
 .sub-title {
-  position: absolute;
+  /* position: absolute; */
   top: 270px;
   left: 0;
   right: 0;
@@ -71,6 +72,7 @@ body {
   /* text-shadow: 2px 2px 5px #d1eae6; */
   font-size: 18px;
   font-weight: bold;
+  /* display: none; */
 }
 
 .forget,
