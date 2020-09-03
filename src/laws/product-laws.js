@@ -43,6 +43,7 @@ module.exports = {
 
   updateStock(sku, stock, user, device, callback) {
     device = device || 'Desktop';
+
     stock = !isNaN(parseInt(stock)) ? parseInt(stock) : 0;
 
     /** Realiza a alteracao de estoque no eccosys **/
@@ -68,7 +69,7 @@ module.exports = {
             new MagentoCalls().updateProductStock(product.codigo, stockMagento);
 
             /** Realiza a alteracao no Mongodb **/
-            Product.upsert({ sku: product.codigo.split('-')[0] }, { quantity: stockMagento });
+            Product.upsert({ sku: product.codigo.split('-')[0] }, { $inc: { quantity: stock } });
           }
         });
       }
