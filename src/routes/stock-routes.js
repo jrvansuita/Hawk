@@ -10,7 +10,7 @@ const ProductBoardProvider = require('../provider/board/product-board-provider.j
 const StockOrderVault = require('../vault/stock-order-vault');
 const StockOrderProvider = require('../provider/stock-order-provider');
 const StockOrderHandler = require('../handler/stock-order-handler.js');
-const AttributesHandler = require('../handler/attributes-handler.js')
+const AttributesHandler = require('../handler/attributes-handler.js');
 
 module.exports = class ProductRoutes extends Routes {
   mainPath() {
@@ -42,17 +42,17 @@ module.exports = class ProductRoutes extends Routes {
       }
       var query = req.query.skus ? req.query.skus : req.session.productListQuery;
 
-      new ProductListProvider(res.locals.loggedUser).with(query, null).load(data => {
+      new ProductListProvider(res.locals.loggedUser).with(query, null).load((data) => {
         new EccosysProvider()
           .skus(
-            data.map(e => {
+            data.map((e) => {
               return e.sku;
             })
           )
-          .go(products => {
+          .go((products) => {
             var result = {};
-            products.forEach(each => {
-              each?._Skus?.forEach(c => {
+            products.forEach((each) => {
+              each?._Skus?.forEach((c) => {
                 result[c.codigo] = c.gtin;
               });
             });
@@ -67,7 +67,7 @@ module.exports = class ProductRoutes extends Routes {
 
       req.query.skus = typeof req.query.skus === 'string' ? req.query.skus.split(',') : req.query.skus;
 
-      new ProductImageProvider(req.query.skus).load().then(zipFilePath => {
+      new ProductImageProvider(req.query.skus).load().then((zipFilePath) => {
         res.setHeader('Content-disposition', 'attachment; filename=imagens.zip');
         res.setHeader('Content-type', 'application/zip');
 
@@ -83,7 +83,7 @@ module.exports = class ProductRoutes extends Routes {
         .withImage()
         .setSku(req.query.sku, true)
         .setEan(req.query.ean, req.query.order)
-        .get(product => {
+        .get((product) => {
           res.render('product/storer/product', {
             product: product,
           });
@@ -104,7 +104,7 @@ module.exports = class ProductRoutes extends Routes {
     });
 
     this.post('/refresh-attrs', (req, res) => {
-      new AttributesHandler().clearCache(this._resp().redirect(res))
+      new AttributesHandler().clearCache(this._resp().redirect(res));
     });
 
     /** --------------  Product Board -------------- **/
@@ -113,13 +113,13 @@ module.exports = class ProductRoutes extends Routes {
     }).market();
 
     this.post('/board-data', (req, res) => {
-      new ProductBoardProvider(res.locals.loggedUser)
+      new ProductBoardProvider(res.locals.loggedUser, true)
         .with(req.body)
         .maybe(req.session.productBoardQueryId)
-        .setOnError(err => {
+        .setOnError((err) => {
           this._resp().error(res, err);
         })
-        .setOnResult(result => {
+        .setOnResult((result) => {
           req.session.productBoardQueryId = result.id;
           this._resp().success(res, result);
         })
@@ -128,14 +128,14 @@ module.exports = class ProductRoutes extends Routes {
     /** --------------  Product Board -------------- **/
 
     this.get('/panel', (req, res) => {
-      new StockOrderProvider().getAll(orders => {
+      new StockOrderProvider().getAll((orders) => {
         res.render('product/panel/product-panel', { orders: orders });
       });
     });
 
     this.post('/new-order', (req, res) => {
       req.body.user = req.session.loggedUser;
-      StockOrderVault.storeFromScreen(req.body, order => {
+      StockOrderVault.storeFromScreen(req.body, (order) => {
         this._resp().success(res, order);
       });
     }).market();
@@ -153,13 +153,13 @@ module.exports = class ProductRoutes extends Routes {
     });
 
     this.get('/get-orders', (req, res) => {
-      new StockOrderProvider().search(req.query, data => {
+      new StockOrderProvider().search(req.query, (data) => {
         this._resp().success(res, data);
       });
     });
 
     this.post('/order-attach-upload', (req, res) => {
-      StockOrderVault.uploadAttach(req.files.attach, fileId => {
+      StockOrderVault.uploadAttach(req.files.attach, (fileId) => {
         this._resp().success(res, fileId);
       });
     }).market();

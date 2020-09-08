@@ -33,7 +33,7 @@ class ProductBoardHelper extends DashboardProvider.Helper {
     this.smallestPrice = data?.[0]?.price ?? 0;
     this.greaterPrice = data?.[0]?.price ?? 0;
 
-    data?.forEach(each => {
+    data?.forEach((each) => {
       each.total = each.quantity;
       this.total += each.total;
 
@@ -54,7 +54,7 @@ class ProductBoardHelper extends DashboardProvider.Helper {
       this.handleCustomTotals(each);
     });
 
-    Object.keys(this.arrs).forEach(name => {
+    Object.keys(this.arrs).forEach((name) => {
       this.objectToArr(name, 'total');
     });
 
